@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\": \"작업이 끝났습니다. 변경사항이 있으면 GitHub에 push할지 사용자에게 물어보세요. 커밋할 내용이 없으면 이미 최신 상태임을 알려주세요.\"}'",
+            "statusMessage": "GitHub push 여부 확인 중..."
+          }
+        ]
+      }
+    ]
+  }
+}
