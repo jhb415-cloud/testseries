@@ -209,21 +209,6 @@
   animation: fadeIn 0.5s ease forwards;
 }
 
-/* ── 광고 플레이스홀더 ── */
-.ad-placeholder-box {
-  background: #1e293b;
-  border: 2px dashed #334155;
-  border-radius: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #475569;
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
-  padding: 1rem;
-}
-
 /* ── 스트룹 텍스트 (색상 강제 적용) ── */
 .stroop-red    { color: #ef4444 !important; }
 .stroop-blue   { color: #3b82f6 !important; }
