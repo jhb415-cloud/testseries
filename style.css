@@ -1,0 +1,236 @@
+/* v0.0.1 | 5-in-1 Dashboard SPA — style.css */
+
+/* ── 기본 리셋 & 페이드인 애니메이션 ── */
+* { box-sizing: border-box; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.fade-in {
+  animation: fadeIn 0.35s ease forwards;
+}
+
+/* ── 사이드바 ── */
+#sidebar {
+  transition: transform 0.3s ease;
+}
+
+#sidebar.mobile-open {
+  transform: translateX(0) !important;
+}
+
+.nav-item {
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #cbd5e1;
+}
+
+.nav-item:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+}
+
+/* ── 타임 게이지 바 (스트룹 테스트) ── */
+@keyframes gaugeReduce {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
+#time-gauge-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #22c55e, #eab308, #ef4444);
+  transition: background 0.3s;
+}
+
+#time-gauge-bar.running {
+  animation: gaugeReduce linear forwards;
+}
+
+/* ── 프리로더 광고 오버레이 ── */
+#preloader-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.92);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loader-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(99,102,241,0.3);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ── 꿈 해몽 팝업 ── */
+#dream-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  backdrop-filter: blur(2px);
+}
+
+#dream-modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  animation: fadeInScale 0.3s ease forwards;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* ── 카드 호버 ── */
+.service-card {
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+}
+
+/* ── 옵션 버튼 (MBTI / ADHD) ── */
+.option-btn {
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: left;
+  border: 2px solid #334155;
+  border-radius: 0.75rem;
+  padding: 0.85rem 1.2rem;
+  background: #1e293b;
+  color: #cbd5e1;
+  width: 100%;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.option-btn:hover {
+  border-color: #6366f1;
+  background: rgba(99,102,241,0.1);
+  color: #e2e8f0;
+}
+
+.option-btn.selected {
+  border-color: #6366f1;
+  background: rgba(99,102,241,0.2);
+  color: #a5b4fc;
+  font-weight: 600;
+}
+
+/* ── 프로그레스 바 ── */
+.progress-bar-track {
+  background: #1e293b;
+  border-radius: 999px;
+  height: 6px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  transition: width 0.4s ease;
+}
+
+/* ── 결과 티어 배지 ── */
+.tier-badge {
+  display: inline-block;
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+/* ── 모바일 오버레이 ── */
+#sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 40;
+  display: none;
+}
+
+#sidebar-overlay.active {
+  display: block;
+}
+
+/* ── 스크롤바 스타일 ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #0f172a; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* ── 더미 그래프 바 ── */
+.dummy-bar {
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, #6366f1, #4338ca);
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* ── 광고 플레이스홀더 ── */
+.ad-placeholder-box {
+  background: #1e293b;
+  border: 2px dashed #334155;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  padding: 1rem;
+}
+
+/* ── 스트룹 텍스트 (색상 강제 적용) ── */
+.stroop-red    { color: #ef4444 !important; }
+.stroop-blue   { color: #3b82f6 !important; }
+.stroop-green  { color: #22c55e !important; }
+.stroop-yellow { color: #eab308 !important; }
+.stroop-purple { color: #a855f7 !important; }
+
+/* ── 반응형 그리드 보조 ── */
+@media (max-width: 640px) {
+  .service-card {
+    font-size: 0.9rem;
+  }
+}
