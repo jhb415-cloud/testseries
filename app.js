@@ -1,4 +1,4 @@
-/* v0.0.12 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.13 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -11,6 +11,7 @@ window.App = {
     adhd: { nickname: '', answers: [], step: 0 },
     fortune: { zodiac: '', year: null },
     reaction: { nickname: '', difficulty: null, round: 0, totalRounds: 0, times: [], fouls: 0, delayTimer: null, stimulusAt: 0, phase: 'idle' },
+    memdigit: { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle' },
   },
 
   /* ─── 내비게이션 ─── */
@@ -1221,6 +1222,257 @@ function reactionHandleClick(e) {
 }
 
 /* ══════════════════════════════════════════════════
+   🔢 숫자 기억력 테스트 (v0.0.13~)
+   - 적응형 난이도: 맞히면 다음 라운드 자릿수 +1, 틀리면 -1 (staircase 방식)
+   - 어려움 모드는 암기 후 3초간 "방해 단계"를 넣어 작업기억 간섭 부여
+══════════════════════════════════════════════════ */
+const MEMDIGIT_CONFIG = {
+  easy:   { label: '쉬움',   rounds: 6,  startLen: 3, perDigitMs: 900, minLen: 2, maxLen: 8,  distractor: false },
+  normal: { label: '보통',   rounds: 8,  startLen: 4, perDigitMs: 700, minLen: 3, maxLen: 9,  distractor: false },
+  hard:   { label: '어려움', rounds: 10, startLen: 5, perDigitMs: 500, minLen: 3, maxLen: 10, distractor: true  },
+};
+
+function initMemdigit() {
+  if (App.state.memdigit.delayTimer) clearTimeout(App.state.memdigit.delayTimer);
+  App.state.memdigit = { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle' };
+  renderMemdigitView('start');
+}
+
+function renderMemdigitView(view) {
+  const container = document.getElementById('memdigit-container');
+  const state = App.state.memdigit;
+
+  if (view === 'start') {
+    container.innerHTML = `
+      <div class="max-w-md mx-auto text-center">
+        <div class="text-6xl mb-4">🔢</div>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">숫자 기억력 테스트</h2>
+        <p class="text-slate-400 mb-6">화면에 나타나는 숫자를 순서대로 외운 뒤<br>그대로 입력하세요. 틀리면 자릿수가 줄어들어요!</p>
+        <input id="memdigit-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="memdigitStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
+            🟢 쉬움<br><span class="text-xs font-normal opacity-70">3자리부터</span>
+          </button>
+          <button onclick="memdigitStart('normal')" class="bg-amber-800/50 hover:bg-amber-700/70 border border-amber-600 text-amber-300 font-bold py-3 rounded-xl transition text-sm">
+            🟡 보통<br><span class="text-xs font-normal opacity-70">4자리부터</span>
+          </button>
+          <button onclick="memdigitStart('hard')" class="bg-rose-800/50 hover:bg-rose-700/70 border border-rose-600 text-rose-300 font-bold py-3 rounded-xl transition text-sm">
+            🔴 어려움<br><span class="text-xs font-normal opacity-70">5자리+방해</span>
+          </button>
+        </div>
+      </div>`;
+  }
+
+  else if (view === 'round') {
+    container.innerHTML = `
+      <div class="max-w-md mx-auto">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-slate-400 text-sm">${state.nickname} 님 · ${MEMDIGIT_CONFIG[state.difficulty].label}</span>
+          <span id="memdigit-round-counter" class="text-cyan-400 font-bold text-sm">${state.round + 1} / ${state.totalRounds}</span>
+        </div>
+        <div class="progress-bar-track mb-6">
+          <div id="memdigit-progress-fill" class="progress-bar-fill" style="width:${Math.round((state.round / state.totalRounds) * 100)}%"></div>
+        </div>
+        <div id="memdigit-display" class="rounded-2xl h-40 flex items-center justify-center bg-slate-800 border-2 border-slate-600 mb-6">
+          <span id="memdigit-display-text" class="text-6xl font-black text-slate-100 tracking-widest"></span>
+        </div>
+        <div id="memdigit-input-area"></div>
+        <p id="memdigit-feedback" class="text-center text-slate-500 text-sm mt-4 min-h-6"></p>
+      </div>`;
+    memdigitBeginRound();
+  }
+
+  else if (view === 'result') {
+    const accuracy = Math.round((state.correctRounds / state.totalRounds) * 100);
+    const maxLen = state.maxCorrectLen;
+
+    let tier, tierColor, tierBg, tierMsg;
+    if (maxLen >= 9)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = '천재 아니야? 전화번호는 안 적어도 다 외우겠는데?'; }
+    else if (maxLen >= 8) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '기억력 甲! 오늘 장 볼 목록은 안 적어도 되겠어.'; }
+    else if (maxLen >= 6) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균은 하는 기억력! 그래도 중요한 약속은 메모해두자.'; }
+    else if (maxLen >= 4) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '음... 방금 뭐 외웠더라? 중요한 건 꼭 메모해두는 습관을 들이자.'; }
+    else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 메모 앱이 괜히 있는 게 아니야. 오늘부터 적극 활용하자!'; }
+
+    const shareText = `나의 숫자 기억력은 최대 ${maxLen}자리! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+
+    container.innerHTML = `
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-6">
+          <div class="text-5xl mb-3">🔢</div>
+          <h2 class="text-2xl font-bold text-slate-100 mb-1">${state.nickname} 님의 숫자 기억력</h2>
+          <div class="text-6xl font-black text-slate-100 my-4">${maxLen}<span class="text-2xl text-slate-400">자리</span></div>
+          <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
+            <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
+          </div>
+          <p class="text-slate-300">${tierMsg}</p>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mb-6">
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-cyan-400">${state.correctRounds} / ${state.totalRounds}</div>
+            <div class="text-slate-400 text-xs">정답 라운드</div>
+          </div>
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-slate-300">${accuracy}%</div>
+            <div class="text-slate-400 text-xs">정답률</div>
+          </div>
+        </div>
+
+        <button onclick="shareResult(\`${shareText}\`)"
+          class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
+          📤 내 결과 공유하기
+        </button>
+
+        ${renderPlaceholderUI('memdigit', tier)}
+
+        <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs leading-relaxed">
+          ⚠️ 본 결과는 오락 목적이며 실제 임상 기억력 검사와 다를 수 있습니다.
+        </div>
+        <button onclick="initMemdigit()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
+          다시 측정하기
+        </button>
+      </div>`;
+
+    saveRanking('memdigit', state.nickname, maxLen + '자리 (Tier ' + tier + ')');
+    renderLocalRanking('memdigit-ranking-list', 'memdigit');
+  }
+}
+
+function memdigitStart(difficulty) {
+  const input = document.getElementById('memdigit-nickname');
+  const nickname = input ? input.value.trim() : '';
+  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  const cfg = MEMDIGIT_CONFIG[difficulty];
+  App.state.memdigit = {
+    nickname, difficulty, round: 0, totalRounds: cfg.rounds,
+    currentLen: cfg.startLen, sequence: [], userInput: [],
+    maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle',
+  };
+  renderMemdigitView('round');
+}
+
+function memdigitBeginRound() {
+  const state = App.state.memdigit;
+  const counter = document.getElementById('memdigit-round-counter');
+  const fill = document.getElementById('memdigit-progress-fill');
+  if (counter) counter.textContent = `${state.round + 1} / ${state.totalRounds}`;
+  if (fill) fill.style.width = `${Math.round((state.round / state.totalRounds) * 100)}%`;
+
+  state.sequence = Array.from({ length: state.currentLen }, () => Math.floor(Math.random() * 10));
+  state.userInput = [];
+  state.phase = 'show';
+
+  const inputArea = document.getElementById('memdigit-input-area');
+  if (inputArea) inputArea.innerHTML = '';
+  const feedback = document.getElementById('memdigit-feedback');
+  if (feedback) feedback.textContent = '';
+
+  memdigitFlashDigit(0);
+}
+
+function memdigitFlashDigit(idx) {
+  const state = App.state.memdigit;
+  if (App.state.currentSection !== 'memdigit') return;
+  const cfg = MEMDIGIT_CONFIG[state.difficulty];
+  const displayText = document.getElementById('memdigit-display-text');
+
+  if (idx >= state.sequence.length) {
+    if (cfg.distractor) {
+      if (displayText) { displayText.textContent = '🙈 3초간 다른 생각 금지!'; displayText.className = 'text-2xl font-bold text-slate-400'; }
+      state.delayTimer = setTimeout(() => {
+        if (displayText) { displayText.textContent = ''; displayText.className = 'text-6xl font-black text-slate-100 tracking-widest'; }
+        memdigitShowInputPad();
+      }, 3000);
+    } else {
+      if (displayText) displayText.textContent = '';
+      state.delayTimer = setTimeout(memdigitShowInputPad, 400);
+    }
+    return;
+  }
+
+  if (displayText) displayText.textContent = state.sequence[idx];
+  state.delayTimer = setTimeout(() => {
+    if (displayText) displayText.textContent = '';
+    state.delayTimer = setTimeout(() => memdigitFlashDigit(idx + 1), 200);
+  }, cfg.perDigitMs);
+}
+
+function memdigitShowInputPad() {
+  const state = App.state.memdigit;
+  if (App.state.currentSection !== 'memdigit') return;
+  state.phase = 'input';
+  const area = document.getElementById('memdigit-input-area');
+  if (!area) return;
+  area.innerHTML = `
+    <div id="memdigit-entered" class="mb-3 flex items-center justify-center gap-2 flex-wrap min-h-10"></div>
+    <div class="grid grid-cols-3 gap-2">
+      ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button onclick="memdigitPadTap(${n})" class="option-btn text-center text-xl font-bold">${n}</button>`).join('')}
+      <button onclick="memdigitPadDelete()" class="option-btn text-center text-xl font-bold">⌫</button>
+      <button onclick="memdigitPadTap(0)" class="option-btn text-center text-xl font-bold">0</button>
+      <button onclick="memdigitPadSubmit()" class="bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-bold text-lg">✔</button>
+    </div>`;
+  memdigitRenderEntered();
+}
+
+function memdigitRenderEntered() {
+  const state = App.state.memdigit;
+  const el = document.getElementById('memdigit-entered');
+  if (!el) return;
+  el.innerHTML = state.userInput.length
+    ? state.userInput.map(d => `<span class="w-8 h-8 flex items-center justify-center rounded-lg bg-cyan-700 text-white font-bold text-sm">${d}</span>`).join('')
+    : `<span class="text-slate-500 text-sm">숫자를 입력하세요</span>`;
+}
+
+function memdigitPadTap(n) {
+  const state = App.state.memdigit;
+  if (state.phase !== 'input' || state.userInput.length >= state.sequence.length) return;
+  state.userInput.push(n);
+  memdigitRenderEntered();
+}
+
+function memdigitPadDelete() {
+  const state = App.state.memdigit;
+  if (state.phase !== 'input') return;
+  state.userInput.pop();
+  memdigitRenderEntered();
+}
+
+function memdigitPadSubmit() {
+  const state = App.state.memdigit;
+  if (state.phase !== 'input') return;
+  if (state.userInput.length === 0) { showToast('숫자를 입력해주세요!'); return; }
+
+  const cfg = MEMDIGIT_CONFIG[state.difficulty];
+  const correct = state.userInput.length === state.sequence.length &&
+    state.userInput.every((d, i) => d === state.sequence[i]);
+
+  const feedback = document.getElementById('memdigit-feedback');
+  if (correct) {
+    state.correctRounds++;
+    state.maxCorrectLen = Math.max(state.maxCorrectLen, state.currentLen);
+    state.currentLen = Math.min(state.currentLen + 1, cfg.maxLen);
+    if (feedback) feedback.textContent = '정답! 다음엔 한 자리 더 늘어나요 🎉';
+  } else {
+    state.currentLen = Math.max(state.currentLen - 1, cfg.minLen);
+    if (feedback) feedback.textContent = `아쉬워요! 정답은 ${state.sequence.join('')} 이었어요`;
+  }
+  state.phase = 'idle';
+  state.delayTimer = setTimeout(memdigitAdvance, 1000);
+}
+
+function memdigitAdvance() {
+  if (App.state.currentSection !== 'memdigit') return;
+  const state = App.state.memdigit;
+  state.round++;
+  if (state.round >= state.totalRounds) {
+    App.showLoader(() => renderMemdigitView('result'));
+  } else {
+    memdigitBeginRound();
+  }
+}
+
+/* ══════════════════════════════════════════════════
    확장 Placeholder UI (공통)
 ══════════════════════════════════════════════════ */
 function renderPlaceholderUI(section, value) {
@@ -1335,13 +1587,13 @@ function renderHomeMypage() {
 
   const nickname = getNickname();
   const streak = updateVisitStreak();
-  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction'];
-  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도' };
+  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit'];
+  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력' };
   const doneCount = sections.filter(isDone).length;
 
   // 최근 테스트 기록 모아보기 (섹션별 가장 최근 1건씩)
   const historyItems = [];
-  ['mbti', 'fortune', 'brain', 'adhd', 'reaction'].forEach(sec => {
+  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit'].forEach(sec => {
     const list = JSON.parse(localStorage.getItem('ranking_' + sec) || '[]');
     if (list.length) historyItems.push({ section: sec, ...list[0] });
   });
@@ -1535,6 +1787,7 @@ document.addEventListener('DOMContentLoaded', () => {
     brain: initBrain,
     adhd: initAdhd,
     reaction: initReaction,
+    memdigit: initMemdigit,
     lotto: initLotto,
   };
 
