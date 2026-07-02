@@ -1,4 +1,4 @@
-/* v0.0.1 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.10 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -80,6 +80,47 @@ function copyToClipboard(text) {
   }
 }
 
+/* ── 공유하기 (Web Share API, 지원 안 하면 링크복사로 대체) ──
+   ※ 카카오톡 공유는 별도 JS 키 발급 후 추가 예정 (백로그) */
+function shareResult(text) {
+  if (navigator.share) {
+    navigator.share({ text }).catch(() => {});
+  } else {
+    copyToClipboard(text);
+  }
+}
+
+/* ── 5개 테스트 완주 추적 (마이홈용) ── */
+function markDone(section) {
+  localStorage.setItem('done_' + section, '1');
+}
+function isDone(section) {
+  return localStorage.getItem('done_' + section) === '1';
+}
+
+/* ── 닉네임 저장 (마이홈용) ── */
+function getNickname() {
+  return localStorage.getItem('app_nickname') || '';
+}
+function setNickname(v) {
+  localStorage.setItem('app_nickname', v);
+}
+
+/* ── 연속 방문 스트릭 (하루 1회만 갱신) ── */
+function updateVisitStreak() {
+  const todayStr = new Date().toDateString();
+  const last = localStorage.getItem('last_visit_date');
+  let streak = parseInt(localStorage.getItem('visit_streak') || '0', 10);
+  if (last !== todayStr) {
+    const y = new Date();
+    y.setDate(y.getDate() - 1);
+    streak = (last === y.toDateString()) ? streak + 1 : 1;
+    localStorage.setItem('visit_streak', String(streak));
+    localStorage.setItem('last_visit_date', todayStr);
+  }
+  return streak;
+}
+
 function showToast(msg) {
   const t = document.getElementById('toast');
   if (!t) return;
@@ -95,6 +136,25 @@ function closeMobileSidebar() {
   const ov = document.getElementById('sidebar-overlay');
   sb.classList.remove('mobile-open');
   ov.classList.remove('active');
+}
+
+/* ══════════════════════════════════════════════════
+   🌗 다크/라이트 테마 토글
+══════════════════════════════════════════════════ */
+function applyThemeIcon() {
+  const isLight = document.documentElement.classList.contains('light');
+  const icon = isLight ? '☀️' : '🌙';
+  ['theme-toggle-icon', 'theme-toggle-icon-mobile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = icon;
+  });
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isLight = html.classList.toggle('light');
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  applyThemeIcon();
 }
 
 /* ══════════════════════════════════════════════════
@@ -135,6 +195,8 @@ function initHome() {
   const now = new Date();
   const dateStr = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 (${['일','월','화','수','목','금','토'][now.getDay()]})`;
   document.getElementById('home-date').textContent = dateStr;
+
+  renderHomeMypage();
 }
 
 /* ══════════════════════════════════════════════════
@@ -154,10 +216,10 @@ function renderMbtiView(view) {
     container.innerHTML = `
       <div class="max-w-md mx-auto text-center">
         <div class="text-6xl mb-4">🧠</div>
-        <h2 class="text-2xl font-bold text-white mb-2">성격 파탄 MBTI</h2>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">성격 파탄 MBTI</h2>
         <p class="text-slate-400 mb-6">12문항으로 알아보는 솔직한 성격 분석<br>결과가 팩폭일 수도 있습니다.</p>
         <input id="mbti-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력 (최대 12자)"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 mb-4 focus:outline-none focus:border-violet-500 transition"/>
+          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-violet-500 transition"/>
         <button onclick="mbtiStart()" class="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold py-3 rounded-xl transition">
           테스트 시작하기
         </button>
@@ -176,7 +238,7 @@ function renderMbtiView(view) {
         <div class="progress-bar-track mb-6">
           <div class="progress-bar-fill" style="width:${progress}%"></div>
         </div>
-        <h3 class="text-white text-xl font-semibold mb-6 leading-relaxed">Q${state.step+1}. ${q.q}</h3>
+        <h3 class="text-slate-100 text-xl font-semibold mb-6 leading-relaxed">Q${state.step+1}. ${q.q}</h3>
         <div class="flex flex-col gap-3">
           ${q.a.map((ans, i) => `
             <button class="option-btn" onclick="mbtiAnswer('${ans.axis}')">
@@ -192,18 +254,19 @@ function renderMbtiView(view) {
     state.answers.forEach(a => axes[a]++);
     const type = [axes.E>=axes.I?'E':'I', axes.S>=axes.N?'S':'N', axes.T>=axes.F?'T':'F', axes.J>=axes.P?'J':'P'].join('');
     const result = AppData.mbtiResults[type] || AppData.mbtiResults['INFP'];
+    const shareText = `나는 ${type} - ${result.title}! ${state.nickname} 님의 성격 파탄 테스트 결과, 너도 확인해봐 👉`;
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
         <div class="text-center mb-8">
           <div class="text-5xl mb-3">${result.emoji}</div>
-          <div class="text-4xl font-black text-white mb-1 tracking-widest">${type}</div>
+          <div class="text-4xl font-black text-slate-100 mb-1 tracking-widest">${type}</div>
           <div class="text-violet-400 font-bold text-xl mb-2">${result.title}</div>
           <p class="text-slate-400">${state.nickname} 님의 성격 유형 분석 결과</p>
         </div>
 
         <div class="bg-slate-800 rounded-2xl p-5 mb-4">
-          <h4 class="text-white font-bold mb-2">📌 성격 요약</h4>
+          <h4 class="text-slate-100 font-bold mb-2">📌 성격 요약</h4>
           <p class="text-slate-300 leading-relaxed">${result.desc}</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
@@ -222,12 +285,17 @@ function renderMbtiView(view) {
         </div>
         <div class="text-slate-500 text-xs text-center mb-6">유명인: ${result.famous}</div>
 
+        <button onclick="shareResult(\`${shareText}\`)"
+          class="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-violet-900/40 mb-3">
+          📤 내 결과 공유하기
+        </button>
+
         ${renderPlaceholderUI('mbti', type)}
 
         <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs leading-relaxed">
           ⚠️ 본 결과는 오락 및 자기 이해를 위한 참고 자료이며 전문 심리 진단을 대체하지 않습니다.
         </div>
-        <button onclick="initMbti()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl transition">
+        <button onclick="initMbti()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
           다시 테스트하기
         </button>
       </div>`;
@@ -272,12 +340,12 @@ function renderDreamSearch() {
     <div class="max-w-2xl mx-auto">
       <div class="text-center mb-8">
         <div class="text-5xl mb-3">🌙</div>
-        <h2 class="text-2xl font-bold text-white mb-2">꿈 해몽 검색</h2>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">꿈 해몽 검색</h2>
         <p class="text-slate-400">어젯밤 꿈의 키워드를 입력하세요</p>
       </div>
       <div class="flex gap-2 mb-4">
         <input id="dream-search-input" type="text" placeholder="예: 뱀, 하늘을 날다, 이빨이 빠지다..."
-          class="flex-1 bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition"/>
+          class="flex-1 bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition"/>
         <button onclick="dreamSearch()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-3 rounded-xl transition">검색</button>
       </div>
       <div id="dream-search-results"></div>
@@ -285,7 +353,7 @@ function renderDreamSearch() {
         <p class="text-slate-500 text-sm mb-3">추천 검색어</p>
         <div class="flex flex-wrap gap-2">
           ${suggestions.map(s => `
-            <button onclick="dreamSearchBy('${s}')" class="bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white text-sm px-4 py-2 rounded-full transition">
+            <button onclick="dreamSearchBy('${s}')" class="bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-slate-50 text-sm px-4 py-2 rounded-full transition">
               ${s}
             </button>`).join('')}
         </div>
@@ -308,9 +376,23 @@ function dreamSearchBy(query) {
   if (input) input.value = query;
 
   const terms = query.toLowerCase().split(/\s+/);
-  const results = AppData.dreamData.filter(d => {
-    const allText = [...d.keywords, d.title].join(' ').toLowerCase();
-    return terms.some(t => allText.includes(t));
+
+  // 테마(대표 키워드) + 하위 variants 키워드까지 모두 검색
+  const results = [];
+  AppData.dreamData.forEach((d, tIdx) => {
+    const baseText = [...d.keywords, d.title].join(' ').toLowerCase();
+    const baseMatch = terms.some(t => baseText.includes(t));
+
+    let matchedVariantIdx = null;
+    (d.variants || []).forEach((v, vIdx) => {
+      if (matchedVariantIdx !== null) return;
+      const vText = [...v.keywords, v.title].join(' ').toLowerCase();
+      if (terms.some(t => vText.includes(t))) matchedVariantIdx = vIdx;
+    });
+
+    if (baseMatch || matchedVariantIdx !== null) {
+      results.push({ tIdx, vIdx: matchedVariantIdx });
+    }
   });
 
   const container = document.getElementById('dream-search-results');
@@ -333,61 +415,94 @@ function dreamSearchBy(query) {
   container.innerHTML = `
     <p class="text-slate-500 text-sm mb-3">'${query}' 검색 결과 ${results.length}건</p>
     <div class="flex flex-col gap-3">
-      ${results.map((r, i) => `
-        <div onclick="dreamShowModal(${AppData.dreamData.indexOf(r)})"
+      ${results.map(({tIdx, vIdx}) => {
+        const d = AppData.dreamData[tIdx];
+        const shown = vIdx !== null ? d.variants[vIdx] : d;
+        const badge = vIdx !== null ? `<span class="text-slate-500 text-xs">(${d.title} 중)</span>` : '';
+        return `
+        <div onclick="dreamShowModal(${tIdx}, ${vIdx === null ? 'null' : vIdx})"
           class="bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-blue-600/50 rounded-xl p-4 cursor-pointer transition">
           <div class="flex items-center gap-3">
             <span class="text-2xl">🌙</span>
             <div>
-              <div class="text-white font-semibold">${r.title}</div>
-              <div class="text-blue-400 text-sm">${r.summary}</div>
+              <div class="text-slate-100 font-semibold">${shown.title} ${badge}</div>
+              <div class="text-blue-400 text-sm">${shown.summary || d.summary}</div>
             </div>
             <span class="ml-auto text-slate-500 text-sm">상세보기 →</span>
           </div>
-        </div>`).join('')}
+        </div>`;
+      }).join('')}
     </div>`;
 }
 
-function dreamShowModal(idx) {
-  const d = AppData.dreamData[idx];
+function dreamShowModal(tIdx, vIdx) {
+  const d = AppData.dreamData[tIdx];
   if (!d) return;
 
-  const modal = document.getElementById('dream-modal');
+  // 최초 오픈 시에만 3초 광고 로딩. 이후 칩 클릭(변형 보기)은 로딩 없이 즉시 전환.
+  App.showLoader(() => {
+    document.getElementById('dream-modal').classList.remove('hidden');
+    dreamRenderModal(tIdx, vIdx === undefined ? null : vIdx);
+  });
+}
+
+function dreamRenderModal(tIdx, vIdx) {
+  const d = AppData.dreamData[tIdx];
+  const isVariant = vIdx !== null && vIdx !== undefined && d.variants && d.variants[vIdx];
+  const v = isVariant ? d.variants[vIdx] : null;
+
+  const title = v ? v.title : d.title;
+  const summary = v ? (v.summary || d.summary) : d.summary;
+  const detail = v ? v.detail : d.detail;
+  const lucky = v ? (v.lucky || d.lucky) : d.lucky;
+  const luckyNum = v ? (v.luckyNum || d.luckyNum) : d.luckyNum;
+  const action = v ? (v.action || d.action) : d.action;
+
+  const hasVariants = d.variants && d.variants.length > 0;
   const modalInner = document.getElementById('dream-modal-inner');
+
+  // 마이홈 완주 플래그 + 로또 조합기 연동용 저장
+  markDone('dream');
+  localStorage.setItem('last_dream_luckynum', luckyNum);
+
   modalInner.innerHTML = `
     <div class="modal-content bg-slate-800 rounded-2xl p-6 max-w-lg w-full mx-4 shadow-2xl">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-white font-bold text-xl">${d.title}</h3>
-        <button onclick="dreamCloseModal()" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
+        <h3 class="text-slate-100 font-bold text-xl">${title}</h3>
+        <button onclick="dreamCloseModal()" class="text-slate-400 hover:text-slate-50 text-2xl leading-none">&times;</button>
       </div>
+      ${isVariant ? `<button onclick="dreamRenderModal(${tIdx}, null)" class="text-blue-400 hover:text-blue-300 text-xs mb-3">← '${d.title}' 통합 설명으로</button>` : ''}
       <div class="bg-blue-900/30 border border-blue-700/40 rounded-xl p-3 mb-4">
-        <span class="text-blue-300 font-semibold">✦ ${d.summary}</span>
+        <span class="text-blue-300 font-semibold">✦ ${summary}</span>
       </div>
-      <p class="text-slate-300 leading-relaxed mb-5 text-sm">${d.detail}</p>
-      <div class="grid grid-cols-3 gap-3 mb-5">
+      <p class="text-slate-300 leading-relaxed mb-5 text-sm">${detail}</p>
+      <div class="grid grid-cols-2 gap-3 mb-4">
         <div class="bg-slate-700 rounded-lg p-3 text-center">
           <div class="text-xs text-slate-400 mb-1">행운의 색</div>
-          <div class="text-white font-semibold text-sm">${d.lucky}</div>
+          <div class="text-slate-100 font-semibold text-sm">${lucky}</div>
         </div>
         <div class="bg-slate-700 rounded-lg p-3 text-center">
           <div class="text-xs text-slate-400 mb-1">행운의 숫자</div>
-          <div class="text-white font-semibold text-sm">${d.luckyNum}</div>
-        </div>
-        <div class="bg-slate-700 rounded-lg p-3 text-center">
-          <div class="text-xs text-slate-400 mb-1">오늘의 행동</div>
-          <div class="text-white font-semibold text-xs leading-tight">${d.action.substring(0,14)}…</div>
+          <div class="text-slate-100 font-semibold text-sm">${luckyNum}</div>
         </div>
       </div>
       <div class="bg-indigo-900/30 border border-indigo-700/40 rounded-xl p-3 mb-4">
-        <p class="text-indigo-200 text-sm">${d.action}</p>
+        <div class="text-indigo-300 text-xs font-semibold mb-1">오늘의 행동</div>
+        <p class="text-indigo-200 text-sm">${action}</p>
       </div>
+      ${hasVariants ? `
+      <div class="mb-4">
+        <p class="text-slate-500 text-xs mb-2">🔍 이런 ${d.title.replace(/에 관한 꿈|이 나오는 꿈|가 나오는 꿈|하는 꿈/g,'')} 관련 꿈도 있어요</p>
+        <div class="flex flex-wrap gap-2">
+          ${d.variants.map((vv, i) => `
+            <button onclick="dreamRenderModal(${tIdx}, ${i})"
+              class="text-xs px-3 py-1.5 rounded-full border transition ${isVariant && vIdx === i ? 'bg-blue-600 border-blue-500 text-white' : 'bg-slate-700 border-slate-600 text-slate-300 hover:border-blue-500'}">
+              ${vv.title}
+            </button>`).join('')}
+        </div>
+      </div>` : ''}
       <div class="text-yellow-200/50 text-xs">⚠️ 꿈 해몽은 민속학적 참고 자료이며 학문적 사실이 아닙니다.</div>
     </div>`;
-
-  // 3초 광고 로딩 후 팝업 오픈
-  App.showLoader(() => {
-    modal.classList.remove('hidden');
-  });
 }
 
 function dreamCloseModal() {
@@ -418,10 +533,10 @@ function renderFortuneView(view) {
     container.innerHTML = `
       <div class="max-w-md mx-auto text-center">
         <div class="text-6xl mb-4">🔮</div>
-        <h2 class="text-2xl font-bold text-white mb-2">오늘의 운세</h2>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">오늘의 운세</h2>
         <p class="text-slate-400 mb-6">출생연도를 입력하면 띠를 자동으로 계산해드려요</p>
         <input id="fortune-year-input" type="number" min="1924" max="${currentYear}" placeholder="출생연도 입력 (예: 1995)"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 mb-4 focus:outline-none focus:border-amber-500 transition text-center text-xl tracking-widest"/>
+          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-amber-500 transition text-center text-xl tracking-widest"/>
         <div id="fortune-zodiac-preview" class="text-2xl mb-4 min-h-8"></div>
         <button onclick="fortuneSubmit()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-bold py-3 rounded-xl transition">
           오늘의 운세 확인하기
@@ -458,21 +573,28 @@ function renderFortuneView(view) {
     const scores = fortune.map((_, i) => Math.floor(seededRandom(seed + i * 17) * 3) + 3);
     const starMap = (n) => '★'.repeat(n) + '☆'.repeat(5-n);
     const avgScore = (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1);
+    const shareText = `오늘 ${zodiac}띠 운세 평점 ${avgScore}/5.0! 행운의 숫자는 ${data.luckyNum}. 너도 확인해봐 👉`;
+
+    // 로또 조합기 연동용 저장
+    localStorage.setItem('last_fortune_luckynum', data.luckyNum);
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
         <div class="text-center mb-6">
           <div class="text-5xl mb-2">${data.emoji}</div>
-          <h2 class="text-2xl font-bold text-white">${zodiac}띠 오늘의 운세</h2>
+          <h2 class="text-2xl font-bold text-slate-100">${zodiac}띠 오늘의 운세</h2>
           <p class="text-slate-400 text-sm">${new Date().toLocaleDateString('ko-KR', {year:'numeric',month:'long',day:'numeric'})} 기준</p>
           <div class="mt-2 text-amber-400 text-2xl tracking-widest">${starMap(Math.round(parseFloat(avgScore)))}</div>
           <div class="text-amber-300 font-bold text-lg">${avgScore} / 5.0</div>
+          <div class="inline-block mt-3 bg-amber-900/30 border border-amber-700/40 rounded-full px-4 py-1.5 text-amber-300 text-sm font-semibold">
+            🍀 오늘의 행운 숫자: ${data.luckyNum}
+          </div>
         </div>
         <div class="grid grid-cols-1 gap-4 mb-6">
           ${fortune.map((f, i) => `
             <div class="bg-slate-800 rounded-xl p-4 border border-slate-700">
               <div class="flex items-center justify-between mb-2">
-                <span class="text-white font-bold">${f.title}</span>
+                <span class="text-slate-100 font-bold">${f.title}</span>
                 <span class="text-amber-400 tracking-widest text-sm">${starMap(scores[i])}</span>
               </div>
               <p class="text-emerald-400 text-sm font-semibold mb-1">${f.positive}</p>
@@ -480,12 +602,17 @@ function renderFortuneView(view) {
             </div>`).join('')}
         </div>
 
+        <button onclick="shareResult(\`${shareText}\`)"
+          class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-amber-900/40 mb-3">
+          📤 오늘의 운세 공유하기
+        </button>
+
         ${renderPlaceholderUI('fortune', zodiac)}
 
         <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs leading-relaxed">
           ⚠️ 본 운세는 오락 목적의 참고 자료이며 실제 미래를 예측하지 않습니다.
         </div>
-        <button onclick="initFortune()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl transition">
+        <button onclick="initFortune()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
           다른 연도로 다시 확인
         </button>
       </div>`;
@@ -541,10 +668,10 @@ function renderBrainView(view) {
     container.innerHTML = `
       <div class="max-w-md mx-auto text-center">
         <div class="text-6xl mb-4">⚡</div>
-        <h2 class="text-2xl font-bold text-white mb-2">두뇌 나이 측정기</h2>
-        <p class="text-slate-400 mb-6">스트룹 테스트 — 글자의 뜻이 아닌<br><strong class="text-white">글자 색상</strong>에 해당하는 버튼을 누르세요!</p>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">두뇌 나이 측정기</h2>
+        <p class="text-slate-400 mb-6">스트룹 테스트 — 글자의 뜻이 아닌<br><strong class="text-slate-100">글자 색상</strong>에 해당하는 버튼을 누르세요!</p>
         <input id="brain-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 mb-4 focus:outline-none focus:border-emerald-500 transition"/>
+          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-emerald-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-2 gap-3">
           <button onclick="brainSelectDifficulty('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-4 rounded-xl transition">
@@ -579,11 +706,11 @@ function renderBrainView(view) {
         <div class="text-center mb-8">
           <span class="text-7xl font-black ${q.displayColor.class}">${q.word}</span>
         </div>
-        <p class="text-slate-400 text-center text-sm mb-4">이 글자의 <strong class="text-white">색상</strong>은?</p>
+        <p class="text-slate-400 text-center text-sm mb-4">이 글자의 <strong class="text-slate-100">색상</strong>은?</p>
         <div class="grid grid-cols-2 gap-3">
           ${colors.map(c => `
             <button onclick="brainAnswer('${c.name}')"
-              class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-600 hover:border-emerald-500 text-white font-bold py-4 rounded-xl text-lg transition">
+              class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-600 hover:border-emerald-500 text-slate-100 font-bold py-4 rounded-xl text-lg transition">
               <span class="${c.class} font-black">${c.name}</span>
             </button>`).join('')}
         </div>
@@ -626,8 +753,8 @@ function renderBrainView(view) {
       <div class="max-w-2xl mx-auto">
         <div class="text-center mb-6">
           <div class="text-5xl mb-3">🧠</div>
-          <h2 class="text-2xl font-bold text-white mb-1">${state.nickname} 님의 두뇌 나이</h2>
-          <div class="text-7xl font-black text-white my-4">${brainAge}<span class="text-3xl text-slate-400">세</span></div>
+          <h2 class="text-2xl font-bold text-slate-100 mb-1">${state.nickname} 님의 두뇌 나이</h2>
+          <div class="text-7xl font-black text-slate-100 my-4">${brainAge}<span class="text-3xl text-slate-400">세</span></div>
           <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
             <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
           </div>
@@ -650,9 +777,9 @@ function renderBrainView(view) {
         </div>
 
         <!-- 인증하기 버튼 -->
-        <button onclick="copyToClipboard(\`${shareText}\`)"
+        <button onclick="shareResult(\`${shareText}\`)"
           class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-emerald-900/40 mb-3">
-          📲 내 두뇌 나이 단톡방에 인증하기
+          📲 내 두뇌 나이 공유하기
         </button>
 
         ${renderPlaceholderUI('brain', tier)}
@@ -660,7 +787,7 @@ function renderBrainView(view) {
         <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs">
           ⚠️ 본 결과는 오락 목적이며 의학적 진단을 대체하지 않습니다.
         </div>
-        <button onclick="initBrain()" class="w-full mt-3 bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl transition">
+        <button onclick="initBrain()" class="w-full mt-3 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
           다시 측정하기
         </button>
       </div>`;
@@ -744,10 +871,10 @@ function renderAdhdView(view) {
     container.innerHTML = `
       <div class="max-w-md mx-auto text-center">
         <div class="text-6xl mb-4">⚡</div>
-        <h2 class="text-2xl font-bold text-white mb-2">프로 미루러 (ADHD 성향 진단)</h2>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">프로 미루러 (ADHD 성향 진단)</h2>
         <p class="text-slate-400 mb-6">10문항으로 알아보는 집중력 결핍 성향<br>결과는 전문 진단이 아닌 참고용입니다.</p>
         <input id="adhd-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 mb-4 focus:outline-none focus:border-rose-500 transition"/>
+          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-rose-500 transition"/>
         <button onclick="adhdStart()" class="w-full bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-bold py-3 rounded-xl transition">
           진단 시작하기
         </button>
@@ -766,7 +893,7 @@ function renderAdhdView(view) {
         <div class="progress-bar-track mb-6" style="--from:#f43f5e;--to:#ec4899">
           <div class="h-full rounded-full transition-all" style="width:${progress}%;background:linear-gradient(90deg,#f43f5e,#ec4899)"></div>
         </div>
-        <h3 class="text-white text-xl font-semibold mb-6 leading-relaxed">Q${state.step+1}. ${q.q}</h3>
+        <h3 class="text-slate-100 text-xl font-semibold mb-6 leading-relaxed">Q${state.step+1}. ${q.q}</h3>
         <div class="flex flex-col gap-3">
           ${[['항상 그렇다', 2], ['자주 그렇다', 1], ['가끔 그렇다', 0], ['전혀 아니다', 0]].map(([label, val]) => `
             <button class="option-btn" onclick="adhdAnswer(${val}, '${label}')">
@@ -779,14 +906,15 @@ function renderAdhdView(view) {
   else if (view === 'result') {
     const score = state.answers.reduce((a, b) => a + b, 0);
     const result = adhdResults.find(r => score >= r.range[0] && score <= r.range[1]) || adhdResults[adhdResults.length-1];
+    const shareText = `나는 프로 미루러 등급 ${result.grade} - ${result.title}! ${state.nickname} 님의 진단 점수 ${score}점. 너도 확인해봐 👉`;
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
         <div class="text-center mb-6">
           <div class="text-5xl mb-3">${result.emoji}</div>
-          <div class="text-4xl font-black text-white mb-1">등급 ${result.grade}</div>
+          <div class="text-4xl font-black text-slate-100 mb-1">등급 ${result.grade}</div>
           <div class="text-rose-400 font-bold text-xl mb-2">${result.title}</div>
-          <p class="text-slate-400">${state.nickname} 님의 진단 점수: <strong class="text-white">${score}점</strong> / 20점</p>
+          <p class="text-slate-400">${state.nickname} 님의 진단 점수: <strong class="text-slate-100">${score}점</strong> / 20점</p>
         </div>
 
         <div class="bg-slate-800 rounded-2xl p-5 mb-4">
@@ -806,12 +934,17 @@ function renderAdhdView(view) {
           </ul>
         </div>
 
+        <button onclick="shareResult(\`${shareText}\`)"
+          class="w-full bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-rose-900/40 mb-3">
+          📤 내 결과 공유하기
+        </button>
+
         ${renderPlaceholderUI('adhd', result.grade)}
 
         <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs leading-relaxed">
           ⚠️ 본 결과는 오락 및 자기 이해 목적의 자가 체크리스트이며 전문 의학 진단을 대체하지 않습니다. ADHD가 의심되면 정신건강의학과 전문의와 상담하세요.
         </div>
-        <button onclick="initAdhd()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl transition">
+        <button onclick="initAdhd()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
           다시 진단하기
         </button>
       </div>`;
@@ -891,7 +1024,7 @@ function renderPlaceholderUI(section, value) {
       <div id="${section}-comments-list" class="space-y-2 mb-3 max-h-40 overflow-y-auto"></div>
       <div class="flex gap-2">
         <input id="${section}-comment-input" type="text" maxlength="80" placeholder="결과에 대한 한마디..."
-          class="flex-1 bg-slate-700 border border-slate-600 rounded-xl px-3 py-2 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-violet-500 transition"/>
+          class="flex-1 bg-slate-700 border border-slate-600 rounded-xl px-3 py-2 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-violet-500 transition"/>
         <button onclick="submitComment('${section}')" class="bg-violet-600 hover:bg-violet-500 text-white text-sm font-bold px-4 py-2 rounded-xl transition">등록</button>
       </div>
     </div>
@@ -904,6 +1037,7 @@ function saveRanking(section, nickname, result) {
   const list = JSON.parse(localStorage.getItem(key) || '[]');
   list.unshift({ nickname, result, time: new Date().toLocaleString('ko-KR') });
   localStorage.setItem(key, JSON.stringify(list.slice(0, 10)));
+  markDone(section);
 }
 
 function renderLocalRanking(listId, section) {
@@ -915,7 +1049,7 @@ function renderLocalRanking(listId, section) {
   el.innerHTML = list.map((item, i) => `
     <div class="flex items-center gap-2 bg-slate-700/50 rounded-lg px-3 py-2">
       <span class="text-slate-400 text-xs w-5">${i+1}</span>
-      <span class="text-white text-sm font-semibold flex-1">${item.nickname}</span>
+      <span class="text-slate-100 text-sm font-semibold flex-1">${item.nickname}</span>
       <span class="text-violet-400 text-sm font-bold">${item.result}</span>
       <span class="text-slate-500 text-xs">${item.time}</span>
     </div>`).join('');
@@ -947,9 +1081,185 @@ function renderComments(section) {
 }
 
 /* ══════════════════════════════════════════════════
+   🏡 마이홈 대시보드 (v0.0.10~ 홈 섹션에 통합)
+══════════════════════════════════════════════════ */
+function renderHomeMypage() {
+  const container = document.getElementById('home-mypage-container');
+  if (!container) return;
+
+  const nickname = getNickname();
+  const streak = updateVisitStreak();
+  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd'];
+  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러' };
+  const doneCount = sections.filter(isDone).length;
+
+  // 최근 테스트 기록 모아보기 (섹션별 가장 최근 1건씩)
+  const historyItems = [];
+  ['mbti', 'fortune', 'brain', 'adhd'].forEach(sec => {
+    const list = JSON.parse(localStorage.getItem('ranking_' + sec) || '[]');
+    if (list.length) historyItems.push({ section: sec, ...list[0] });
+  });
+
+  container.innerHTML = `
+    <div class="bg-gradient-to-br from-indigo-900/60 to-indigo-950/40 border border-indigo-700/40 rounded-2xl p-6 mb-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-14 h-14 rounded-full bg-indigo-600 flex items-center justify-center text-2xl font-black text-white shrink-0">
+          ${nickname ? nickname.charAt(0) : '?'}
+        </div>
+        <div class="flex-1">
+          <input id="home-nickname-input" type="text" maxlength="12" value="${nickname}" placeholder="닉네임을 입력하세요"
+            class="bg-transparent border-b border-slate-600 text-slate-100 font-bold text-lg focus:outline-none focus:border-indigo-400 w-full py-1"/>
+        </div>
+        <button onclick="homeSaveNickname()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 py-2 rounded-lg transition">저장</button>
+      </div>
+      <div class="flex items-center gap-2 text-amber-300 text-sm font-semibold">🔥 ${streak}일 연속 방문 중</div>
+    </div>
+
+    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 mb-6">
+      <div class="flex items-center justify-between mb-2">
+        <h4 class="text-slate-300 font-bold">📋 5개 테스트 완주 현황</h4>
+        <span class="text-violet-400 font-bold text-sm">${doneCount} / 5</span>
+      </div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${doneCount/5*100}%"></div></div>
+      <div class="flex flex-wrap gap-2 mt-3">
+        ${sections.map(s => `
+          <span onclick="App.navigate('${s}')" class="cursor-pointer text-xs px-3 py-1.5 rounded-full transition ${isDone(s) ? 'bg-emerald-700/40 text-emerald-300 border border-emerald-600' : 'bg-slate-700 text-slate-500 border border-slate-600 hover:border-slate-500'}">
+            ${isDone(s) ? '✅' : '⬜'} ${sectionLabels[s]}
+          </span>`).join('')}
+      </div>
+    </div>
+
+    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5">
+      <h4 class="text-slate-300 font-bold mb-3">🕓 최근 테스트 기록</h4>
+      ${historyItems.length === 0 ? `
+        <p class="text-slate-500 text-sm text-center py-4">아직 완료한 테스트가 없어요. 테스트를 해보세요!</p>` : `
+        <div class="space-y-2">
+          ${historyItems.map(h => `
+            <div class="flex items-center justify-between bg-slate-700/50 rounded-lg px-3 py-2 gap-2">
+              <span class="text-slate-100 text-sm font-semibold shrink-0">${sectionLabels[h.section]}</span>
+              <span class="text-violet-400 text-sm font-bold flex-1 text-right truncate">${h.result}</span>
+              <span class="text-slate-500 text-xs shrink-0">${h.time}</span>
+            </div>`).join('')}
+        </div>`}
+    </div>`;
+}
+
+function homeSaveNickname() {
+  const input = document.getElementById('home-nickname-input');
+  if (!input) return;
+  setNickname(input.value.trim());
+  showToast('닉네임이 저장되었습니다! 👋');
+  renderHomeMypage();
+}
+
+/* ══════════════════════════════════════════════════
+   🎱 로또 번호 조합기 섹션
+══════════════════════════════════════════════════ */
+function lottoPickSet(seedNums) {
+  const nums = new Set(seedNums || []);
+  while (nums.size < 6) nums.add(Math.floor(Math.random() * 45) + 1);
+  return Array.from(nums).sort((a, b) => a - b);
+}
+
+function lottoRunRandom() {
+  const games = [];
+  for (let i = 0; i < 5; i++) games.push(lottoPickSet());
+  lottoRenderGames(games, '완전 랜덤 조합');
+}
+
+function lottoRunCustom() {
+  const input = document.getElementById('lotto-custom-input');
+  if (!input) return;
+  const nums = input.value.split(',').map(s => parseInt(s.trim(), 10)).filter(n => n >= 1 && n <= 45);
+  const uniqueNums = [...new Set(nums)];
+  if (uniqueNums.length < 1 || uniqueNums.length > 5) {
+    showToast('1~5개의 숫자(1~45)를 콤마로 구분해 입력해주세요!');
+    return;
+  }
+  const games = [];
+  for (let i = 0; i < 5; i++) games.push(lottoPickSet(uniqueNums));
+  lottoRenderGames(games, `직접 지정 (${uniqueNums.join(', ')} 포함)`);
+}
+
+function lottoRunFortunePick() {
+  const fortuneNum = localStorage.getItem('last_fortune_luckynum') || '';
+  const dreamNum = localStorage.getItem('last_dream_luckynum') || '';
+  const pool = [];
+  [fortuneNum, dreamNum].forEach(s => {
+    (s.match(/\d+/g) || []).forEach(n => {
+      const v = parseInt(n, 10);
+      if (v >= 1 && v <= 45 && !pool.includes(v)) pool.push(v);
+    });
+  });
+
+  if (pool.length === 0) {
+    showToast('먼저 오늘의 운세나 꿈 해몽을 확인해보세요! 지금은 랜덤으로 대체할게요.');
+  }
+  const games = [];
+  for (let i = 0; i < 5; i++) games.push(lottoPickSet(pool.slice(0, 5)));
+  lottoRenderGames(games, pool.length ? '오늘의 운세·꿈 행운숫자 연동' : '오늘의 운세·꿈 미확인 (랜덤 대체)');
+}
+
+function lottoRenderGames(games, modeLabel) {
+  const container = document.getElementById('lotto-result');
+  if (!container) return;
+  container.innerHTML = `
+    <p class="text-slate-500 text-sm mb-3">${modeLabel} · 5게임</p>
+    <div class="space-y-2">
+      ${games.map((g, i) => `
+        <div class="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl p-3">
+          <span class="text-slate-500 text-xs w-12 shrink-0">${i + 1}게임</span>
+          <div class="flex gap-2 flex-wrap">
+            ${g.map(n => `<span class="w-8 h-8 flex items-center justify-center rounded-full bg-violet-700 text-white text-xs font-bold">${n}</span>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>
+    <button onclick="copyToClipboard('${games.map(g => g.join('-')).join(' / ')}')" class="mt-4 w-full bg-slate-700 hover:bg-slate-600 text-slate-100 text-sm font-bold py-2 rounded-xl transition">
+      🔗 번호 복사하기
+    </button>`;
+}
+
+function initLotto() {
+  const container = document.getElementById('lotto-container');
+  if (!container) return;
+  container.innerHTML = `
+    <div class="max-w-2xl mx-auto">
+      <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 mb-5">
+        <h2 class="text-slate-100 font-black text-xl mb-1">🎱 로또 번호 조합기</h2>
+        <p class="text-slate-500 text-sm mb-5">원하는 방식으로 번호를 뽑아보세요 (오락 목적)</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+          <button onclick="lottoRunRandom()" class="bg-violet-700 hover:bg-violet-600 text-white font-bold py-3 rounded-xl transition">🎲 완전 랜덤</button>
+          <button onclick="document.getElementById('lotto-custom-box').classList.toggle('hidden')" class="bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">✍️ 숫자 직접 지정</button>
+          <button onclick="lottoRunFortunePick()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition">🔮 오늘의 운세·꿈 연동</button>
+          <button disabled title="추후 실제 당첨번호 데이터 연동 예정" class="bg-slate-800 text-slate-600 font-bold py-3 rounded-xl border border-slate-700 cursor-not-allowed">📊 통계 기반 추천 (준비중)</button>
+        </div>
+        <div id="lotto-custom-box" class="hidden mb-5">
+          <p class="text-slate-400 text-xs mb-2">포함하고 싶은 숫자 1~5개를 콤마로 구분해 입력하세요 (1~45)</p>
+          <div class="flex gap-2">
+            <input id="lotto-custom-input" type="text" placeholder="예: 7, 21, 33"
+              class="flex-1 bg-slate-700 border border-slate-600 rounded-xl px-3 py-2 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-violet-500 transition"/>
+            <button onclick="lottoRunCustom()" class="bg-violet-600 hover:bg-violet-500 text-white text-sm font-bold px-4 py-2 rounded-xl transition">생성</button>
+          </div>
+        </div>
+        <div id="lotto-result"></div>
+      </div>
+      <p class="text-slate-600 text-xs text-center">⚠️ 본 서비스는 오락 목적이며 실제 당첨을 보장하지 않습니다.</p>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
    앱 초기화 (DOMContentLoaded)
 ══════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
+
+  updateVisitStreak();
+
+  /* ── 테마 토글 버튼 ── */
+  applyThemeIcon();
+  ['theme-toggle-btn', 'theme-toggle-btn-mobile'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener('click', toggleTheme);
+  });
 
   /* ── 내비게이션 클릭 이벤트 ── */
   document.querySelectorAll('.nav-item').forEach(item => {
@@ -967,6 +1277,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fortune: initFortune,
     brain: initBrain,
     adhd: initAdhd,
+    lotto: initLotto,
   };
 
   // 초기 섹션 진입 시 초기화

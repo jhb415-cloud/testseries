@@ -1,4 +1,4 @@
-<!-- v0.0.3 | 5-in-1 Dashboard SPA -->
+<!-- v0.0.10 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -6,8 +6,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>5-in-1 테스트 대시보드</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // slate 팔레트를 style.css의 CSS 변수로 remap → html.light 토글만으로 전체 테마 전환
+    // (rgb(var(--x) / <alpha-value>) 포맷을 써야 bg-slate-800/60 같은 opacity modifier가 계속 동작함)
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              50:  'rgb(var(--slate-50) / <alpha-value>)',
+              100: 'rgb(var(--slate-100) / <alpha-value>)',
+              200: 'rgb(var(--slate-200) / <alpha-value>)',
+              300: 'rgb(var(--slate-300) / <alpha-value>)',
+              400: 'rgb(var(--slate-400) / <alpha-value>)',
+              500: 'rgb(var(--slate-500) / <alpha-value>)',
+              600: 'rgb(var(--slate-600) / <alpha-value>)',
+              700: 'rgb(var(--slate-700) / <alpha-value>)',
+              800: 'rgb(var(--slate-800) / <alpha-value>)',
+              900: 'rgb(var(--slate-900) / <alpha-value>)',
+              950: 'rgb(var(--slate-950) / <alpha-value>)',
+            },
+            // 아래 색상들은 "부드러운 강조 박스"(bg-{color}-900/30 + text-{color}-300 조합)에 쓰이는
+            // 특정 shade만 remap. 500/600(버튼/뱃지 원색)은 테마 무관하게 항상 선명해야 하므로 건드리지 않음.
+            blue:    { 700: 'rgb(var(--blue-700) / <alpha-value>)',    900: 'rgb(var(--blue-900) / <alpha-value>)',    300: 'rgb(var(--blue-300) / <alpha-value>)',    400: 'rgb(var(--blue-400) / <alpha-value>)' },
+            indigo:  { 900: 'rgb(var(--indigo-900) / <alpha-value>)',  200: 'rgb(var(--indigo-200) / <alpha-value>)',  300: 'rgb(var(--indigo-300) / <alpha-value>)' },
+            violet:  { 900: 'rgb(var(--violet-900) / <alpha-value>)',  200: 'rgb(var(--violet-200) / <alpha-value>)',  300: 'rgb(var(--violet-300) / <alpha-value>)',  400: 'rgb(var(--violet-400) / <alpha-value>)' },
+            emerald: { 700: 'rgb(var(--emerald-700) / <alpha-value>)', 800: 'rgb(var(--emerald-800) / <alpha-value>)', 900: 'rgb(var(--emerald-900) / <alpha-value>)', 300: 'rgb(var(--emerald-300) / <alpha-value>)', 400: 'rgb(var(--emerald-400) / <alpha-value>)' },
+            rose:    { 700: 'rgb(var(--rose-700) / <alpha-value>)',    800: 'rgb(var(--rose-800) / <alpha-value>)',    900: 'rgb(var(--rose-900) / <alpha-value>)',    300: 'rgb(var(--rose-300) / <alpha-value>)',    400: 'rgb(var(--rose-400) / <alpha-value>)' },
+            amber:   { 900: 'rgb(var(--amber-900) / <alpha-value>)',   300: 'rgb(var(--amber-300) / <alpha-value>)',   400: 'rgb(var(--amber-400) / <alpha-value>)' },
+            yellow:  { 900: 'rgb(var(--yellow-900) / <alpha-value>)',  200: 'rgb(var(--yellow-200) / <alpha-value>)',  300: 'rgb(var(--yellow-300) / <alpha-value>)' },
+          }
+        }
+      }
+    };
+  </script>
   <link rel="stylesheet" href="style.css"/>
   <meta name="description" content="MBTI, 꿈 해몽, 오늘의 운세, 두뇌 나이 측정, ADHD 성향 진단 — 한 곳에서 모두!"/>
+  <script>
+    // 테마 깜빡임(FOUC) 방지: 렌더 전에 저장된 테마를 html에 즉시 반영
+    (function() {
+      if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.classList.add('light');
+      }
+    })();
+  </script>
 </head>
 
 <body class="bg-slate-900 text-slate-100 min-h-screen flex">
@@ -23,9 +65,15 @@
 
   <!-- 로고 -->
   <div class="px-5 py-6 border-b border-slate-800">
-    <div class="flex items-center gap-2 mb-1">
-      <span class="text-2xl">🎯</span>
-      <span class="text-white font-black text-lg tracking-tight">5-in-1 대시보드</span>
+    <div class="flex items-center justify-between gap-2 mb-1">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">🎯</span>
+        <span class="text-slate-100 font-black text-lg tracking-tight">5-in-1 대시보드</span>
+      </div>
+      <button id="theme-toggle-btn" type="button" title="다크/라이트 모드 전환"
+        class="shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-lg transition">
+        <span id="theme-toggle-icon">🌙</span>
+      </button>
     </div>
     <p class="text-slate-500 text-xs">종합 테스트 & 검색 플랫폼</p>
   </div>
@@ -50,11 +98,14 @@
     <div class="nav-item" data-section="adhd">
       <span class="text-lg">🌪️</span> 프로 미루러 (ADHD)
     </div>
+    <div class="nav-item" data-section="lotto">
+      <span class="text-lg">🎱</span> 로또 번호 조합기
+    </div>
   </nav>
 
   <!-- 버전 -->
   <div class="px-5 py-4 border-t border-slate-800">
-    <p class="text-slate-600 text-xs">v0.0.1 · 2026-06-28</p>
+    <p class="text-slate-600 text-xs">v0.0.10 · 2026-07-02</p>
   </div>
 </aside>
 
@@ -65,8 +116,12 @@
 
   <!-- 상단 헤더 (모바일) -->
   <header class="lg:hidden sticky top-0 z-30 bg-slate-950 border-b border-slate-800 px-4 py-3 flex items-center gap-3">
-    <button id="hamburger-btn" class="text-slate-300 hover:text-white text-2xl leading-none">☰</button>
-    <span class="text-white font-bold text-base">5-in-1 대시보드</span>
+    <button id="hamburger-btn" class="text-slate-300 hover:text-slate-50 text-2xl leading-none">☰</button>
+    <span class="text-slate-100 font-bold text-base flex-1">5-in-1 대시보드</span>
+    <button id="theme-toggle-btn-mobile" type="button" title="다크/라이트 모드 전환"
+      class="shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-lg transition">
+      <span id="theme-toggle-icon-mobile">🌙</span>
+    </button>
   </header>
 
   <!-- 콘텐츠 -->
@@ -77,7 +132,7 @@
       <div class="max-w-4xl mx-auto">
         <div class="flex items-center justify-between mb-6">
           <div>
-            <h1 class="text-2xl sm:text-3xl font-black text-white">안녕하세요! 👋</h1>
+            <h1 class="text-2xl sm:text-3xl font-black text-slate-100">안녕하세요! 👋</h1>
             <p id="home-date" class="text-slate-400 text-sm mt-1"></p>
           </div>
         </div>
@@ -95,8 +150,11 @@
           </button>
         </div>
 
+        <!-- 마이홈(닉네임/스트릭/완주현황/최근기록) 통합 영역 -->
+        <div id="home-mypage-container" class="mb-8"></div>
+
         <!-- 서비스 그리드 -->
-        <h2 class="text-white font-bold text-lg mb-4">서비스 바로가기</h2>
+        <h2 class="text-slate-100 font-bold text-lg mb-4">서비스 바로가기</h2>
         <div id="home-service-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
 
       </div>
@@ -137,6 +195,11 @@
       </div>
     </div>
 
+    <!-- ════ 🎱 로또 번호 조합기 섹션 ════ -->
+    <div id="section-lotto" class="section hidden">
+      <div id="lotto-container"></div>
+    </div>
+
   </main><!-- /main -->
 
   <!-- 푸터 -->
@@ -174,7 +237,7 @@
 ════════════════════════════════════════════════ -->
 <div id="toast"
   class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[99999]
-         bg-slate-700 text-white text-sm font-semibold px-5 py-3 rounded-2xl shadow-xl
+         bg-slate-700 text-slate-100 text-sm font-semibold px-5 py-3 rounded-2xl shadow-xl
          transition-opacity duration-500 opacity-0 pointer-events-none">
 </div>
 

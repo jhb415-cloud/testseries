@@ -1,10 +1,70 @@
-/* v0.0.1 | 5-in-1 Dashboard SPA — style.css */
+/* v0.0.10 | 5-in-1 Dashboard SPA — style.css */
 
 /* ── 기본 리셋 & 페이드인 애니메이션 ── */
 * { box-sizing: border-box; }
 
 /* Tailwind CDN 로드 실패 대비: .hidden은 반드시 숨겨야 함 */
 .hidden { display: none !important; }
+
+/* ══════════════════════════════════════════════════
+   🌗 다크/라이트 테마 변수
+   - Tailwind의 slate 팔레트를 아래 CSS 변수로 remap (index.html의 tailwind.config 참고)
+   - 값은 "R G B" 공백구분 트리플릿 (Tailwind opacity modifier인 bg-slate-800/60 등이 동작하려면 필수 포맷)
+   - 기본(html, 다크)은 기존 Tailwind slate 값과 동일 → 다크 모드 외관은 기존과 100% 동일
+   - html.light는 라이트 팔레트로 override (순백 대신 은은한 블루그레이 톤 사용)
+══════════════════════════════════════════════════ */
+html {
+  --slate-50:  248 250 252;
+  --slate-100: 241 245 249;
+  --slate-200: 226 232 240;
+  --slate-300: 203 213 225;
+  --slate-400: 148 163 184;
+  --slate-500: 100 116 139;
+  --slate-600: 71 85 105;
+  --slate-700: 51 65 85;
+  --slate-800: 30 41 59;
+  --slate-900: 15 23 42;
+  --slate-950: 2 6 23;
+
+  --nav-hover-bg: rgba(255,255,255,0.1);
+  --overlay-scrim: rgba(15, 23, 42, 0.92);
+
+  /* 강조 색상(부드러운 박스용 900/800/700 + 텍스트용 400/300/200) — 기본값은 Tailwind 표준값과 동일 */
+  --blue-900: 30 58 138;    --blue-700: 29 78 216;    --blue-400: 96 165 250;   --blue-300: 147 197 253;
+  --indigo-900: 49 46 129;  --indigo-300: 165 180 252; --indigo-200: 199 210 254;
+  --violet-900: 76 29 149;  --violet-400: 167 139 250; --violet-300: 196 181 253; --violet-200: 221 214 254;
+  --emerald-900: 6 78 59;   --emerald-800: 6 95 70;   --emerald-700: 4 120 87;  --emerald-400: 52 211 153; --emerald-300: 110 231 183;
+  --rose-900: 136 19 55;    --rose-800: 159 18 57;    --rose-700: 190 18 60;    --rose-400: 251 113 133;   --rose-300: 253 164 175;
+  --amber-900: 120 53 15;   --amber-400: 251 191 36;  --amber-300: 252 211 77;
+  --yellow-900: 113 63 18;  --yellow-300: 253 224 71; --yellow-200: 254 240 138;
+}
+
+html.light {
+  --slate-50:  26 34 51;
+  --slate-100: 32 42 61;
+  --slate-200: 43 54 80;
+  --slate-300: 59 71 97;
+  --slate-400: 91 103 128;
+  --slate-500: 120 132 156;
+  --slate-600: 154 165 186;
+  --slate-700: 195 203 219;
+  --slate-800: 221 226 236;
+  --slate-900: 238 241 247;
+  --slate-950: 227 232 241;
+
+  --nav-hover-bg: rgba(15, 23, 42, 0.06);
+  --overlay-scrim: rgba(238, 241, 247, 0.92);
+
+  /* 라이트 모드: 박스 배경(900/800/700)은 중간 채도 톤으로 바꿔 옅은 opacity에서도 은은하게 보이도록 하고,
+     텍스트(400/300/200)는 짙은 톤으로 바꿔 옅은 박스 위에서도 대비를 확보 */
+  --blue-900: 96 165 250;    --blue-700: 59 130 246;   --blue-400: 29 78 216;    --blue-300: 30 64 175;
+  --indigo-900: 129 140 248; --indigo-300: 67 56 202;  --indigo-200: 55 48 163;
+  --violet-900: 167 139 250; --violet-400: 109 40 217; --violet-300: 109 40 217; --violet-200: 91 33 182;
+  --emerald-900: 52 211 153; --emerald-800: 16 185 129; --emerald-700: 16 185 129; --emerald-400: 4 120 87; --emerald-300: 6 95 70;
+  --rose-900: 251 113 133;   --rose-800: 244 63 94;    --rose-700: 244 63 94;    --rose-400: 190 18 60;    --rose-300: 159 18 57;
+  --amber-900: 251 191 36;   --amber-400: 180 83 9;    --amber-300: 146 64 14;
+  --yellow-900: 250 204 21;  --yellow-300: 161 98 7;   --yellow-200: 133 77 14;
+}
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
@@ -38,12 +98,12 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.95rem;
-  color: #cbd5e1;
+  color: rgb(var(--slate-300));
 }
 
 .nav-item:hover {
-  background: rgba(255,255,255,0.1);
-  color: #fff;
+  background: var(--nav-hover-bg);
+  color: rgb(var(--slate-50));
 }
 
 .nav-item.active {
@@ -74,7 +134,7 @@
 #preloader-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.92);
+  background: var(--overlay-scrim);
   z-index: 9999;
   display: flex;
   flex-direction: column;
@@ -135,11 +195,11 @@
   transition: all 0.2s ease;
   cursor: pointer;
   text-align: left;
-  border: 2px solid #334155;
+  border: 2px solid rgb(var(--slate-700));
   border-radius: 0.75rem;
   padding: 0.85rem 1.2rem;
-  background: #1e293b;
-  color: #cbd5e1;
+  background: rgb(var(--slate-800));
+  color: rgb(var(--slate-300));
   width: 100%;
   font-size: 0.95rem;
   line-height: 1.5;
@@ -160,7 +220,7 @@
 
 /* ── 프로그레스 바 ── */
 .progress-bar-track {
-  background: #1e293b;
+  background: rgb(var(--slate-700));
   border-radius: 999px;
   height: 6px;
   overflow: hidden;
@@ -198,9 +258,9 @@
 
 /* ── 스크롤바 스타일 ── */
 ::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #0f172a; }
-::-webkit-scrollbar-thumb { background: #334155; border-radius: 999px; }
-::-webkit-scrollbar-thumb:hover { background: #475569; }
+::-webkit-scrollbar-track { background: rgb(var(--slate-900)); }
+::-webkit-scrollbar-thumb { background: rgb(var(--slate-700)); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--slate-600)); }
 
 /* ── 더미 그래프 바 ── */
 .dummy-bar {
