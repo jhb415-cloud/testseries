@@ -1,4 +1,4 @@
-/* v0.0.10 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.11 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -28,7 +28,11 @@ window.App = {
     // 내비 active 처리
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     const active = document.querySelector(`.nav-item[data-section="${sectionId}"]`);
-    if (active) active.classList.add('active');
+    if (active) {
+      active.classList.add('active');
+      const parentGroup = active.closest('.nav-group');
+      if (parentGroup) parentGroup.classList.add('open');
+    }
 
     // 모바일 사이드바 닫기
     closeMobileSidebar();
@@ -1260,6 +1264,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', toggleTheme);
   });
+
+  /* ── 사이드바 "테스트" 그룹 접기/펼치기 ── */
+  const testsGroup = document.getElementById('nav-group-tests');
+  const testsToggle = document.getElementById('nav-group-tests-toggle');
+  if (testsGroup && testsToggle) {
+    if (localStorage.getItem('nav_tests_collapsed') === '1') testsGroup.classList.remove('open');
+    testsToggle.addEventListener('click', () => {
+      const isOpen = testsGroup.classList.toggle('open');
+      localStorage.setItem('nav_tests_collapsed', isOpen ? '0' : '1');
+    });
+  }
 
   /* ── 내비게이션 클릭 이벤트 ── */
   document.querySelectorAll('.nav-item').forEach(item => {

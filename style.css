@@ -1,4 +1,4 @@
-/* v0.0.10 | 5-in-1 Dashboard SPA — style.css */
+/* v0.0.11 | 5-in-1 Dashboard SPA — style.css */
 
 /* ── 기본 리셋 & 페이드인 애니메이션 ── */
 * { box-sizing: border-box; }
@@ -111,6 +111,49 @@ html.light {
   color: #fff;
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+}
+
+/* ── 사이드바 "테스트" 그룹 (접기/펼치기) ── */
+.nav-group-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  color: rgb(var(--slate-300));
+  transition: all 0.2s ease;
+}
+
+.nav-group-header:hover {
+  background: var(--nav-hover-bg);
+  color: rgb(var(--slate-50));
+}
+
+.nav-group-chevron {
+  margin-left: auto;
+  font-size: 0.7rem;
+  transition: transform 0.2s ease;
+}
+
+.nav-group.open .nav-group-chevron {
+  transform: rotate(180deg);
+}
+
+.nav-group-items {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.25s ease;
+}
+
+.nav-group.open .nav-group-items {
+  max-height: 220px;
+}
+
+.nav-subitem {
+  padding-left: 2.4rem;
+  font-size: 0.9rem;
 }
 
 /* ── 타임 게이지 바 (스트룹 테스트) ── */
