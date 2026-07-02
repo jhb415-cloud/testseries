@@ -1,4 +1,4 @@
-/* v0.0.13 | 5-in-1 Dashboard SPA — style.css */
+/* v0.0.14 | 5-in-1 Dashboard SPA — style.css */
 
 /* ── 기본 리셋 & 페이드인 애니메이션 ── */
 * { box-sizing: border-box; }
@@ -148,7 +148,9 @@ html.light {
 }
 
 .nav-group.open .nav-group-items {
-  max-height: 220px;
+  /* 실제 콘텐츠 높이보다 넉넉히 큰 값 — 테스트 목록이 계속 늘어나도(Stage B) 잘리지 않도록 함.
+     사이드바 자체(nav)에 overflow-y-auto가 있어 화면보다 길어지면 그쪽에서 스크롤됨 */
+  max-height: 2000px;
 }
 
 .nav-subitem {

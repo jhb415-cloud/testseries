@@ -1,4 +1,4 @@
-/* v0.0.13 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.14 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -12,6 +12,7 @@ window.App = {
     fortune: { zodiac: '', year: null },
     reaction: { nickname: '', difficulty: null, round: 0, totalRounds: 0, times: [], fouls: 0, delayTimer: null, stimulusAt: 0, phase: 'idle' },
     memdigit: { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle' },
+    seqmem: { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle' },
   },
 
   /* ─── 내비게이션 ─── */
@@ -1473,6 +1474,249 @@ function memdigitAdvance() {
 }
 
 /* ══════════════════════════════════════════════════
+   🧩 순서 기억력 테스트 (v0.0.14~)
+   - 격자 타일이 순서대로 반짝이면, 그 순서 그대로 타일을 탭
+   - 숫자 기억력과 달리 탭할 때마다 즉시 정오답 판정 (Simon-says류 UX)
+   - 어려움은 4x4 격자(더 빽빽하고 헷갈림) + 암기 후 3초 방해단계
+══════════════════════════════════════════════════ */
+const SEQMEM_CONFIG = {
+  easy:   { label: '쉬움',   gridSize: 3, rounds: 6,  startLen: 3, minLen: 2, maxLen: 8,  flashMs: 700, gapMs: 250, distractor: false },
+  normal: { label: '보통',   gridSize: 3, rounds: 8,  startLen: 4, minLen: 3, maxLen: 9,  flashMs: 550, gapMs: 200, distractor: false },
+  hard:   { label: '어려움', gridSize: 4, rounds: 10, startLen: 4, minLen: 3, maxLen: 10, flashMs: 450, gapMs: 150, distractor: true  },
+};
+
+function initSeqmem() {
+  if (App.state.seqmem.delayTimer) clearTimeout(App.state.seqmem.delayTimer);
+  App.state.seqmem = { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle' };
+  renderSeqmemView('start');
+}
+
+function seqmemTileClass(kind) {
+  const base = 'aspect-square rounded-xl border-2 transition-colors duration-150 cursor-pointer';
+  if (kind === 'active')  return `${base} bg-cyan-500 border-cyan-300`;
+  if (kind === 'correct') return `${base} bg-emerald-500 border-emerald-300`;
+  if (kind === 'wrong')   return `${base} bg-rose-500 border-rose-300`;
+  return `${base} bg-slate-800 border-slate-600 hover:border-cyan-500`;
+}
+
+function renderSeqmemView(view) {
+  const container = document.getElementById('seqmem-container');
+  const state = App.state.seqmem;
+
+  if (view === 'start') {
+    container.innerHTML = `
+      <div class="max-w-md mx-auto text-center">
+        <div class="text-6xl mb-4">🧩</div>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">순서 기억력 테스트</h2>
+        <p class="text-slate-400 mb-6">타일이 순서대로 반짝이는 걸 잘 본 뒤<br>같은 순서로 타일을 눌러보세요!</p>
+        <input id="seqmem-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="seqmemStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
+            🟢 쉬움<br><span class="text-xs font-normal opacity-70">3x3, 3칸부터</span>
+          </button>
+          <button onclick="seqmemStart('normal')" class="bg-amber-800/50 hover:bg-amber-700/70 border border-amber-600 text-amber-300 font-bold py-3 rounded-xl transition text-sm">
+            🟡 보통<br><span class="text-xs font-normal opacity-70">3x3, 4칸부터</span>
+          </button>
+          <button onclick="seqmemStart('hard')" class="bg-rose-800/50 hover:bg-rose-700/70 border border-rose-600 text-rose-300 font-bold py-3 rounded-xl transition text-sm">
+            🔴 어려움<br><span class="text-xs font-normal opacity-70">4x4+방해</span>
+          </button>
+        </div>
+      </div>`;
+  }
+
+  else if (view === 'round') {
+    const cfg = SEQMEM_CONFIG[state.difficulty];
+    const gridColsClass = cfg.gridSize === 4 ? 'grid-cols-4' : 'grid-cols-3';
+    const tileCount = cfg.gridSize * cfg.gridSize;
+
+    container.innerHTML = `
+      <div class="max-w-md mx-auto">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-slate-400 text-sm">${state.nickname} 님 · ${cfg.label}</span>
+          <span id="seqmem-round-counter" class="text-cyan-400 font-bold text-sm">${state.round + 1} / ${state.totalRounds}</span>
+        </div>
+        <div class="progress-bar-track mb-6">
+          <div id="seqmem-progress-fill" class="progress-bar-fill" style="width:${Math.round((state.round / state.totalRounds) * 100)}%"></div>
+        </div>
+        <div id="seqmem-grid" class="grid ${gridColsClass} gap-3 max-w-xs mx-auto mb-4">
+          ${Array.from({ length: tileCount }).map((_, i) => `<div id="seqmem-tile-${i}" onclick="seqmemTileTap(${i})" class="${seqmemTileClass('idle')}" style="touch-action:manipulation;"></div>`).join('')}
+        </div>
+        <p id="seqmem-feedback" class="text-center text-slate-500 text-sm mt-2 min-h-6">잘 보고 기억하세요...</p>
+      </div>`;
+    seqmemBeginRound();
+  }
+
+  else if (view === 'result') {
+    const accuracy = Math.round((state.correctRounds / state.totalRounds) * 100);
+    const maxLen = state.maxCorrectLen;
+
+    let tier, tierColor, tierBg, tierMsg;
+    if (maxLen >= 9)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = '이 정도면 뮤지컬 안무도 한 번에 외우겠는데?'; }
+    else if (maxLen >= 8) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '패턴 감각 甲! 길 찾기도 잘하는 편이지?'; }
+    else if (maxLen >= 6) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균은 하는 순서 감각! 헷갈리면 천천히 다시 확인하자.'; }
+    else if (maxLen >= 4) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '음... 순서가 자꾸 헷갈리네. 서두르지 말고 하나씩 짚어가자.'; }
+    else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 원래 급하면 실수하는 법! 다음엔 천천히 되짚어보자~'; }
+
+    const shareText = `나의 순서 기억력은 최대 ${maxLen}칸! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+
+    container.innerHTML = `
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-6">
+          <div class="text-5xl mb-3">🧩</div>
+          <h2 class="text-2xl font-bold text-slate-100 mb-1">${state.nickname} 님의 순서 기억력</h2>
+          <div class="text-6xl font-black text-slate-100 my-4">${maxLen}<span class="text-2xl text-slate-400">칸</span></div>
+          <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
+            <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
+          </div>
+          <p class="text-slate-300">${tierMsg}</p>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mb-6">
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-cyan-400">${state.correctRounds} / ${state.totalRounds}</div>
+            <div class="text-slate-400 text-xs">정답 라운드</div>
+          </div>
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-slate-300">${accuracy}%</div>
+            <div class="text-slate-400 text-xs">정답률</div>
+          </div>
+        </div>
+
+        <button onclick="shareResult(\`${shareText}\`)"
+          class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
+          📤 내 결과 공유하기
+        </button>
+
+        ${renderPlaceholderUI('seqmem', tier)}
+
+        <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs leading-relaxed">
+          ⚠️ 본 결과는 오락 목적이며 실제 임상 기억력 검사와 다를 수 있습니다.
+        </div>
+        <button onclick="initSeqmem()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
+          다시 측정하기
+        </button>
+      </div>`;
+
+    saveRanking('seqmem', state.nickname, maxLen + '칸 (Tier ' + tier + ')');
+    renderLocalRanking('seqmem-ranking-list', 'seqmem');
+  }
+}
+
+function seqmemStart(difficulty) {
+  const input = document.getElementById('seqmem-nickname');
+  const nickname = input ? input.value.trim() : '';
+  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  const cfg = SEQMEM_CONFIG[difficulty];
+  App.state.seqmem = {
+    nickname, difficulty, round: 0, totalRounds: cfg.rounds,
+    currentLen: cfg.startLen, sequence: [], userInput: [],
+    maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle',
+  };
+  renderSeqmemView('round');
+}
+
+function seqmemBeginRound() {
+  const state = App.state.seqmem;
+  const cfg = SEQMEM_CONFIG[state.difficulty];
+  const tileCount = cfg.gridSize * cfg.gridSize;
+  const counter = document.getElementById('seqmem-round-counter');
+  const fill = document.getElementById('seqmem-progress-fill');
+  if (counter) counter.textContent = `${state.round + 1} / ${state.totalRounds}`;
+  if (fill) fill.style.width = `${Math.round((state.round / state.totalRounds) * 100)}%`;
+
+  state.sequence = Array.from({ length: state.currentLen }, () => Math.floor(Math.random() * tileCount));
+  state.userInput = [];
+  state.phase = 'show';
+
+  for (let i = 0; i < tileCount; i++) {
+    const tileEl = document.getElementById(`seqmem-tile-${i}`);
+    if (tileEl) tileEl.className = seqmemTileClass('idle');
+  }
+  const feedback = document.getElementById('seqmem-feedback');
+  if (feedback) feedback.textContent = '잘 보고 기억하세요...';
+
+  seqmemFlashTile(0);
+}
+
+function seqmemFlashTile(idx) {
+  const state = App.state.seqmem;
+  if (App.state.currentSection !== 'seqmem') return;
+  const cfg = SEQMEM_CONFIG[state.difficulty];
+
+  if (idx >= state.sequence.length) {
+    if (cfg.distractor) {
+      const feedback = document.getElementById('seqmem-feedback');
+      if (feedback) feedback.textContent = '🙈 3초간 다른 생각 금지!';
+      state.delayTimer = setTimeout(() => {
+        if (feedback) feedback.textContent = '';
+        seqmemStartInput();
+      }, 3000);
+    } else {
+      state.delayTimer = setTimeout(seqmemStartInput, 400);
+    }
+    return;
+  }
+
+  const tileEl = document.getElementById(`seqmem-tile-${state.sequence[idx]}`);
+  if (tileEl) tileEl.className = seqmemTileClass('active');
+  state.delayTimer = setTimeout(() => {
+    if (tileEl) tileEl.className = seqmemTileClass('idle');
+    state.delayTimer = setTimeout(() => seqmemFlashTile(idx + 1), cfg.gapMs);
+  }, cfg.flashMs);
+}
+
+function seqmemStartInput() {
+  const state = App.state.seqmem;
+  if (App.state.currentSection !== 'seqmem') return;
+  state.phase = 'input';
+  state.userInput = [];
+  const feedback = document.getElementById('seqmem-feedback');
+  if (feedback) feedback.textContent = '순서대로 타일을 눌러보세요';
+}
+
+function seqmemTileTap(idx) {
+  const state = App.state.seqmem;
+  if (state.phase !== 'input') return;
+  const cfg = SEQMEM_CONFIG[state.difficulty];
+  const pos = state.userInput.length;
+  state.userInput.push(idx);
+  const tileEl = document.getElementById(`seqmem-tile-${idx}`);
+  const feedback = document.getElementById('seqmem-feedback');
+
+  if (idx === state.sequence[pos]) {
+    if (tileEl) tileEl.className = seqmemTileClass('correct');
+    if (state.userInput.length === state.sequence.length) {
+      state.correctRounds++;
+      state.maxCorrectLen = Math.max(state.maxCorrectLen, state.currentLen);
+      state.currentLen = Math.min(state.currentLen + 1, cfg.maxLen);
+      state.phase = 'idle';
+      if (feedback) feedback.textContent = '정답! 다음엔 한 칸 더 길어져요 🎉';
+      state.delayTimer = setTimeout(seqmemAdvance, 800);
+    } else {
+      setTimeout(() => { if (tileEl && state.phase === 'input') tileEl.className = seqmemTileClass('idle'); }, 200);
+    }
+  } else {
+    if (tileEl) tileEl.className = seqmemTileClass('wrong');
+    state.currentLen = Math.max(state.currentLen - 1, cfg.minLen);
+    state.phase = 'idle';
+    if (feedback) feedback.textContent = '아쉬워요! 순서가 달랐어요 😵';
+    state.delayTimer = setTimeout(seqmemAdvance, 1000);
+  }
+}
+
+function seqmemAdvance() {
+  if (App.state.currentSection !== 'seqmem') return;
+  const state = App.state.seqmem;
+  state.round++;
+  if (state.round >= state.totalRounds) {
+    App.showLoader(() => renderSeqmemView('result'));
+  } else {
+    seqmemBeginRound();
+  }
+}
+
+/* ══════════════════════════════════════════════════
    확장 Placeholder UI (공통)
 ══════════════════════════════════════════════════ */
 function renderPlaceholderUI(section, value) {
@@ -1587,13 +1831,13 @@ function renderHomeMypage() {
 
   const nickname = getNickname();
   const streak = updateVisitStreak();
-  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit'];
-  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력' };
+  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem'];
+  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력' };
   const doneCount = sections.filter(isDone).length;
 
   // 최근 테스트 기록 모아보기 (섹션별 가장 최근 1건씩)
   const historyItems = [];
-  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit'].forEach(sec => {
+  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem'].forEach(sec => {
     const list = JSON.parse(localStorage.getItem('ranking_' + sec) || '[]');
     if (list.length) historyItems.push({ section: sec, ...list[0] });
   });
@@ -1788,6 +2032,7 @@ document.addEventListener('DOMContentLoaded', () => {
     adhd: initAdhd,
     reaction: initReaction,
     memdigit: initMemdigit,
+    seqmem: initSeqmem,
     lotto: initLotto,
   };
 
