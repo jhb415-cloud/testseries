@@ -1,4 +1,4 @@
-/* v0.0.14 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.15 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -13,6 +13,7 @@ window.App = {
     reaction: { nickname: '', difficulty: null, round: 0, totalRounds: 0, times: [], fouls: 0, delayTimer: null, stimulusAt: 0, phase: 'idle' },
     memdigit: { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle' },
     seqmem: { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle' },
+    colorvision: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', baseColor: '', oddColor: '', oddIndex: 0, tileCount: 0 },
   },
 
   /* ─── 내비게이션 ─── */
@@ -1717,6 +1718,242 @@ function seqmemAdvance() {
 }
 
 /* ══════════════════════════════════════════════════
+   🎨 색각 테스트 (v0.0.15~)
+   - 실제 색맹/색약 임상 검사(이시하라 판)를 흉내내지 않음 — 오해를 줄 수 있어서
+     대신 "미묘하게 다른 색 타일 찾기" 색 구별 감각 게임으로 설계
+   - 격자 크기·색상 차이(delta)·제한시간이 난이도에 따라 함께 빡빡해짐
+══════════════════════════════════════════════════ */
+const COLORVISION_CONFIG = {
+  easy:   { label: '쉬움',   gridSize: 3, rounds: 6,  delta: 42, timeLimitMs: 5000 },
+  normal: { label: '보통',   gridSize: 4, rounds: 8,  delta: 26, timeLimitMs: 4000 },
+  hard:   { label: '어려움', gridSize: 5, rounds: 10, delta: 14, timeLimitMs: 3000 },
+};
+
+function initColorvision() {
+  const s = App.state.colorvision;
+  if (s.timerID) clearTimeout(s.timerID);
+  if (s.delayTimer) clearTimeout(s.delayTimer);
+  App.state.colorvision = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', baseColor: '', oddColor: '', oddIndex: 0, tileCount: 0 };
+  renderColorvisionView('start');
+}
+
+function renderColorvisionView(view) {
+  const container = document.getElementById('colorvision-container');
+  const state = App.state.colorvision;
+
+  if (view === 'start') {
+    container.innerHTML = `
+      <div class="max-w-md mx-auto text-center">
+        <div class="text-6xl mb-4">🎨</div>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">색각 테스트</h2>
+        <p class="text-slate-400 mb-6">격자 안에 미묘하게 다른 색 타일이 하나 숨어있어요.<br>제한시간 안에 찾아서 탭하세요!</p>
+        <input id="colorvision-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="colorvisionStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
+            🟢 쉬움<br><span class="text-xs font-normal opacity-70">3x3, 5초</span>
+          </button>
+          <button onclick="colorvisionStart('normal')" class="bg-amber-800/50 hover:bg-amber-700/70 border border-amber-600 text-amber-300 font-bold py-3 rounded-xl transition text-sm">
+            🟡 보통<br><span class="text-xs font-normal opacity-70">4x4, 4초</span>
+          </button>
+          <button onclick="colorvisionStart('hard')" class="bg-rose-800/50 hover:bg-rose-700/70 border border-rose-600 text-rose-300 font-bold py-3 rounded-xl transition text-sm">
+            🔴 어려움<br><span class="text-xs font-normal opacity-70">5x5, 3초</span>
+          </button>
+        </div>
+      </div>`;
+  }
+
+  else if (view === 'round') {
+    const cfg = COLORVISION_CONFIG[state.difficulty];
+    const gridColsClass = { 3: 'grid-cols-3', 4: 'grid-cols-4', 5: 'grid-cols-5' }[cfg.gridSize];
+
+    container.innerHTML = `
+      <div class="max-w-md mx-auto">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-slate-400 text-sm">${state.nickname} 님 · ${cfg.label}</span>
+          <span id="colorvision-round-counter" class="text-cyan-400 font-bold text-sm">${state.round + 1} / ${state.totalRounds}</span>
+        </div>
+        <div class="progress-bar-track mb-2">
+          <div id="colorvision-progress-fill" class="progress-bar-fill" style="width:${Math.round((state.round / state.totalRounds) * 100)}%"></div>
+        </div>
+        <div id="colorvision-gauge-bar" class="mb-6"></div>
+        <div id="colorvision-grid" class="grid ${gridColsClass} gap-2 max-w-sm mx-auto"></div>
+        <p class="text-center text-slate-500 text-sm mt-4">다른 색 타일을 찾아 탭하세요!</p>
+      </div>`;
+    colorvisionBeginRound();
+  }
+
+  else if (view === 'result') {
+    const avgMs = state.totalTime / state.totalRounds;
+    const accuracy = (state.correctCount / state.totalRounds) * 100;
+    const score = accuracy - (avgMs / 100);
+
+    let tier, tierColor, tierBg, tierMsg;
+    if (score >= 85)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = '이 정도면 색상 코디네이터 해도 되겠는데? 미묘한 색 차이까지 완벽하게 잡아냈어!'; }
+    else if (score >= 70) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '색 감각 甲! 웬만한 색상 미스매치는 다 잡아낼 듯.'; }
+    else if (score >= 55) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균은 하는 색 감각! 애매한 색은 밝은 조명에서 다시 보자.'; }
+    else if (score >= 40) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '음... 비슷한 색은 좀 헷갈리는 편이네. 옷 고를 땐 밝은 데서 확인하자.'; }
+    else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 색보다 디자인 센스가 더 중요하지! 헷갈리면 친구한테 물어보자~'; }
+
+    const shareText = `나의 색 감각 점수는 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+
+    container.innerHTML = `
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-6">
+          <div class="text-5xl mb-3">🎨</div>
+          <h2 class="text-2xl font-bold text-slate-100 mb-1">${state.nickname} 님의 색 감각</h2>
+          <div class="text-6xl font-black text-slate-100 my-4">${accuracy.toFixed(0)}<span class="text-2xl text-slate-400">%</span></div>
+          <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
+            <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
+          </div>
+          <p class="text-slate-300">${tierMsg}</p>
+        </div>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-emerald-400">${state.correctCount}</div>
+            <div class="text-slate-400 text-xs">정답 수</div>
+            <div class="text-slate-500 text-xs">/ ${state.totalRounds}</div>
+          </div>
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-blue-400">${accuracy.toFixed(0)}%</div>
+            <div class="text-slate-400 text-xs">정확도</div>
+          </div>
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-violet-400">${(avgMs / 1000).toFixed(2)}s</div>
+            <div class="text-slate-400 text-xs">평균 반응속도</div>
+          </div>
+        </div>
+
+        <button onclick="shareResult(\`${shareText}\`)"
+          class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
+          📤 내 결과 공유하기
+        </button>
+
+        ${renderPlaceholderUI('colorvision', tier)}
+
+        <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs leading-relaxed">
+          ⚠️ 본 결과는 오락 목적의 색 구별 게임이며 실제 색각(색맹·색약) 임상 검사를 대체하지 않습니다.
+        </div>
+        <button onclick="initColorvision()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
+          다시 측정하기
+        </button>
+      </div>`;
+
+    saveRanking('colorvision', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')');
+    renderLocalRanking('colorvision-ranking-list', 'colorvision');
+  }
+}
+
+function colorvisionStart(difficulty) {
+  const input = document.getElementById('colorvision-nickname');
+  const nickname = input ? input.value.trim() : '';
+  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  const cfg = COLORVISION_CONFIG[difficulty];
+  App.state.colorvision = {
+    nickname, difficulty, round: 0, totalRounds: cfg.rounds,
+    correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle',
+    baseColor: '', oddColor: '', oddIndex: 0, tileCount: cfg.gridSize * cfg.gridSize,
+  };
+  renderColorvisionView('round');
+}
+
+function colorvisionGenerateColors() {
+  const state = App.state.colorvision;
+  const cfg = COLORVISION_CONFIG[state.difficulty];
+  const tileCount = cfg.gridSize * cfg.gridSize;
+  const hue = Math.floor(Math.random() * 360);
+  const sat = 55 + Math.floor(Math.random() * 20);
+  const light = 38 + Math.floor(Math.random() * 15);
+  const oddLight = Math.min(light + cfg.delta, 92);
+
+  state.tileCount = tileCount;
+  state.oddIndex = Math.floor(Math.random() * tileCount);
+  state.baseColor = `hsl(${hue} ${sat}% ${light}%)`;
+  state.oddColor = `hsl(${hue} ${sat}% ${oddLight}%)`;
+}
+
+function colorvisionBeginRound() {
+  const state = App.state.colorvision;
+  const cfg = COLORVISION_CONFIG[state.difficulty];
+  const counter = document.getElementById('colorvision-round-counter');
+  const fill = document.getElementById('colorvision-progress-fill');
+  if (counter) counter.textContent = `${state.round + 1} / ${state.totalRounds}`;
+  if (fill) fill.style.width = `${Math.round((state.round / state.totalRounds) * 100)}%`;
+
+  colorvisionGenerateColors();
+  const grid = document.getElementById('colorvision-grid');
+  if (grid) {
+    grid.innerHTML = Array.from({ length: state.tileCount }, (_, i) => {
+      const color = i === state.oddIndex ? state.oddColor : state.baseColor;
+      return `<div id="colorvision-tile-${i}" onclick="colorvisionTileTap(${i})" class="aspect-square rounded-lg cursor-pointer transition-transform duration-100 hover:scale-95" style="background:${color};touch-action:manipulation;"></div>`;
+    }).join('');
+  }
+
+  state.phase = 'active';
+  const bar = document.getElementById('colorvision-gauge-bar');
+  if (bar) {
+    bar.style.transition = 'none';
+    bar.style.width = '100%';
+    requestAnimationFrame(() => {
+      bar.style.transition = `width ${cfg.timeLimitMs}ms linear`;
+      requestAnimationFrame(() => { bar.style.width = '0%'; });
+    });
+  }
+  state.startTime = performance.now();
+  if (state.timerID) clearTimeout(state.timerID);
+  state.timerID = setTimeout(colorvisionTimeUp, cfg.timeLimitMs);
+}
+
+function colorvisionTileTap(idx) {
+  const state = App.state.colorvision;
+  if (state.phase !== 'active') return;
+  const cfg = COLORVISION_CONFIG[state.difficulty];
+  if (state.timerID) clearTimeout(state.timerID);
+  const elapsed = Math.round(performance.now() - state.startTime);
+  state.phase = 'idle';
+
+  const correctEl = document.getElementById(`colorvision-tile-${state.oddIndex}`);
+  const tappedEl = document.getElementById(`colorvision-tile-${idx}`);
+
+  if (idx === state.oddIndex) {
+    state.correctCount++;
+    state.totalTime += Math.min(elapsed, cfg.timeLimitMs);
+    if (tappedEl) tappedEl.style.outline = '3px solid #22c55e';
+    showToast('✅ 정답!');
+  } else {
+    state.totalTime += cfg.timeLimitMs;
+    if (tappedEl) tappedEl.style.outline = '3px solid #ef4444';
+    if (correctEl) correctEl.style.outline = '3px solid #22c55e';
+    showToast('❌ 오답');
+  }
+  state.delayTimer = setTimeout(colorvisionAdvance, 700);
+}
+
+function colorvisionTimeUp() {
+  const state = App.state.colorvision;
+  if (state.phase !== 'active') return;
+  const cfg = COLORVISION_CONFIG[state.difficulty];
+  state.phase = 'idle';
+  state.totalTime += cfg.timeLimitMs;
+  const correctEl = document.getElementById(`colorvision-tile-${state.oddIndex}`);
+  if (correctEl) correctEl.style.outline = '3px solid #22c55e';
+  showToast('⏱️ 시간 초과!');
+  state.delayTimer = setTimeout(colorvisionAdvance, 700);
+}
+
+function colorvisionAdvance() {
+  if (App.state.currentSection !== 'colorvision') return;
+  const state = App.state.colorvision;
+  state.round++;
+  if (state.round >= state.totalRounds) {
+    App.showLoader(() => renderColorvisionView('result'));
+  } else {
+    colorvisionBeginRound();
+  }
+}
+
+/* ══════════════════════════════════════════════════
    확장 Placeholder UI (공통)
 ══════════════════════════════════════════════════ */
 function renderPlaceholderUI(section, value) {
@@ -1831,13 +2068,13 @@ function renderHomeMypage() {
 
   const nickname = getNickname();
   const streak = updateVisitStreak();
-  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem'];
-  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력' };
+  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision'];
+  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력', colorvision: '색각 테스트' };
   const doneCount = sections.filter(isDone).length;
 
   // 최근 테스트 기록 모아보기 (섹션별 가장 최근 1건씩)
   const historyItems = [];
-  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem'].forEach(sec => {
+  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision'].forEach(sec => {
     const list = JSON.parse(localStorage.getItem('ranking_' + sec) || '[]');
     if (list.length) historyItems.push({ section: sec, ...list[0] });
   });
@@ -2033,6 +2270,7 @@ document.addEventListener('DOMContentLoaded', () => {
     reaction: initReaction,
     memdigit: initMemdigit,
     seqmem: initSeqmem,
+    colorvision: initColorvision,
     lotto: initLotto,
   };
 
