@@ -1,4 +1,4 @@
-/* v0.0.15 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.16 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -14,6 +14,7 @@ window.App = {
     memdigit: { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle' },
     seqmem: { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle' },
     colorvision: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', baseColor: '', oddColor: '', oddIndex: 0, tileCount: 0 },
+    logic: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', answer: 0 },
   },
 
   /* ─── 내비게이션 ─── */
@@ -1954,6 +1955,272 @@ function colorvisionAdvance() {
 }
 
 /* ══════════════════════════════════════════════════
+   🧮 논리력 테스트 (v0.0.16~)
+   - 숫자 규칙(등차/등비/피보나치식)의 다음 값을 4지선다로 맞히기
+   - 시간제한 + 정확도 기반 채점 (색각 테스트와 동일한 공식)
+══════════════════════════════════════════════════ */
+const LOGIC_CONFIG = {
+  easy:   { label: '쉬움',   rounds: 6,  timeLimitMs: 8000, rules: ['add'] },
+  normal: { label: '보통',   rounds: 8,  timeLimitMs: 6000, rules: ['add', 'mul'] },
+  hard:   { label: '어려움', rounds: 10, timeLimitMs: 4500, rules: ['add', 'mul', 'fib'] },
+};
+
+function shuffleArray(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function logicGenerateRound() {
+  const state = App.state.logic;
+  const cfg = LOGIC_CONFIG[state.difficulty];
+  const rule = cfg.rules[Math.floor(Math.random() * cfg.rules.length)];
+  let seq, answer;
+
+  if (rule === 'add') {
+    const start = 1 + Math.floor(Math.random() * 15);
+    const step = 2 + Math.floor(Math.random() * 8);
+    seq = [start, start + step, start + 2 * step, start + 3 * step];
+    answer = start + 4 * step;
+  } else if (rule === 'mul') {
+    const start = 1 + Math.floor(Math.random() * 4);
+    const ratio = 2 + Math.floor(Math.random() * 2);
+    seq = [start, start * ratio, start * ratio ** 2, start * ratio ** 3];
+    answer = start * ratio ** 4;
+  } else {
+    const a = 1 + Math.floor(Math.random() * 5);
+    const b = 1 + Math.floor(Math.random() * 5);
+    seq = [a, b, a + b, a + 2 * b];
+    answer = 2 * a + 3 * b;
+  }
+
+  const options = new Set([answer]);
+  let guard = 0;
+  while (options.size < 4 && guard < 50) {
+    guard++;
+    const spread = Math.max(2, Math.round(Math.abs(answer) * 0.2));
+    const offset = (Math.floor(Math.random() * spread) + 1) * (Math.random() < 0.5 ? -1 : 1);
+    const candidate = answer + offset;
+    if (candidate > 0 && candidate !== answer) options.add(candidate);
+  }
+
+  state.seq = seq;
+  state.answer = answer;
+  state.options = shuffleArray([...options]);
+}
+
+function initLogic() {
+  const s = App.state.logic;
+  if (s.timerID) clearTimeout(s.timerID);
+  if (s.delayTimer) clearTimeout(s.delayTimer);
+  App.state.logic = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', seq: [], answer: 0, options: [] };
+  renderLogicView('start');
+}
+
+function renderLogicView(view) {
+  const container = document.getElementById('logic-container');
+  const state = App.state.logic;
+
+  if (view === 'start') {
+    container.innerHTML = `
+      <div class="max-w-md mx-auto text-center">
+        <div class="text-6xl mb-4">🧮</div>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">논리력 테스트</h2>
+        <p class="text-slate-400 mb-6">숫자들이 나열되어 있어요.<br>규칙을 찾아 다음 숫자를 맞혀보세요!</p>
+        <input id="logic-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="logicStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
+            🟢 쉬움<br><span class="text-xs font-normal opacity-70">등차수열, 8초</span>
+          </button>
+          <button onclick="logicStart('normal')" class="bg-amber-800/50 hover:bg-amber-700/70 border border-amber-600 text-amber-300 font-bold py-3 rounded-xl transition text-sm">
+            🟡 보통<br><span class="text-xs font-normal opacity-70">등차·등비, 6초</span>
+          </button>
+          <button onclick="logicStart('hard')" class="bg-rose-800/50 hover:bg-rose-700/70 border border-rose-600 text-rose-300 font-bold py-3 rounded-xl transition text-sm">
+            🔴 어려움<br><span class="text-xs font-normal opacity-70">+피보나치, 4.5초</span>
+          </button>
+        </div>
+      </div>`;
+  }
+
+  else if (view === 'round') {
+    const cfg = LOGIC_CONFIG[state.difficulty];
+    container.innerHTML = `
+      <div class="max-w-md mx-auto">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-slate-400 text-sm">${state.nickname} 님 · ${cfg.label}</span>
+          <span id="logic-round-counter" class="text-cyan-400 font-bold text-sm">${state.round + 1} / ${state.totalRounds}</span>
+        </div>
+        <div class="progress-bar-track mb-2">
+          <div id="logic-progress-fill" class="progress-bar-fill" style="width:${Math.round((state.round / state.totalRounds) * 100)}%"></div>
+        </div>
+        <div id="logic-gauge-bar" class="mb-6"></div>
+        <div id="logic-seq-display" class="text-center text-3xl sm:text-4xl font-black text-slate-100 mb-8 tracking-wide"></div>
+        <div id="logic-options" class="grid grid-cols-2 gap-3"></div>
+      </div>`;
+    logicBeginRound();
+  }
+
+  else if (view === 'result') {
+    const avgMs = state.totalTime / state.totalRounds;
+    const accuracy = (state.correctCount / state.totalRounds) * 100;
+    const score = accuracy - (avgMs / 100);
+
+    let tier, tierColor, tierBg, tierMsg;
+    if (score >= 85)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = '이 정도면 수학 학원 안 다녀도 되겠는데? 패턴이 다 보이는구나!'; }
+    else if (score >= 70) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '논리력 甲! 숫자 패턴은 거의 다 잡아내네.'; }
+    else if (score >= 55) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균은 하는 논리력! 급하게 풀지 말고 패턴을 천천히 뜯어보자.'; }
+    else if (score >= 40) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '음... 패턴 찾기가 좀 어려운 편이네. 앞뒤 숫자 차이부터 하나씩 계산해보자.'; }
+    else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 계산기는 괜히 있는 게 아니야! 다음엔 천천히 규칙을 찾아보자~'; }
+
+    const shareText = `나의 논리력 점수는 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+
+    container.innerHTML = `
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-6">
+          <div class="text-5xl mb-3">🧮</div>
+          <h2 class="text-2xl font-bold text-slate-100 mb-1">${state.nickname} 님의 논리력</h2>
+          <div class="text-6xl font-black text-slate-100 my-4">${accuracy.toFixed(0)}<span class="text-2xl text-slate-400">%</span></div>
+          <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
+            <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
+          </div>
+          <p class="text-slate-300">${tierMsg}</p>
+        </div>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-emerald-400">${state.correctCount}</div>
+            <div class="text-slate-400 text-xs">정답 수</div>
+            <div class="text-slate-500 text-xs">/ ${state.totalRounds}</div>
+          </div>
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-blue-400">${accuracy.toFixed(0)}%</div>
+            <div class="text-slate-400 text-xs">정확도</div>
+          </div>
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-violet-400">${(avgMs / 1000).toFixed(2)}s</div>
+            <div class="text-slate-400 text-xs">평균 반응속도</div>
+          </div>
+        </div>
+
+        <button onclick="shareResult(\`${shareText}\`)"
+          class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
+          📤 내 결과 공유하기
+        </button>
+
+        ${renderPlaceholderUI('logic', tier)}
+
+        <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs leading-relaxed">
+          ⚠️ 본 결과는 오락 목적이며 실제 지능·논리력 검사를 대체하지 않습니다.
+        </div>
+        <button onclick="initLogic()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
+          다시 측정하기
+        </button>
+      </div>`;
+
+    saveRanking('logic', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')');
+    renderLocalRanking('logic-ranking-list', 'logic');
+  }
+}
+
+function logicStart(difficulty) {
+  const input = document.getElementById('logic-nickname');
+  const nickname = input ? input.value.trim() : '';
+  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  const cfg = LOGIC_CONFIG[difficulty];
+  App.state.logic = {
+    nickname, difficulty, round: 0, totalRounds: cfg.rounds,
+    correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle',
+    seq: [], answer: 0, options: [],
+  };
+  renderLogicView('round');
+}
+
+function logicBeginRound() {
+  const state = App.state.logic;
+  const cfg = LOGIC_CONFIG[state.difficulty];
+  const counter = document.getElementById('logic-round-counter');
+  const fill = document.getElementById('logic-progress-fill');
+  if (counter) counter.textContent = `${state.round + 1} / ${state.totalRounds}`;
+  if (fill) fill.style.width = `${Math.round((state.round / state.totalRounds) * 100)}%`;
+
+  logicGenerateRound();
+  const seqDisplay = document.getElementById('logic-seq-display');
+  if (seqDisplay) seqDisplay.textContent = `${state.seq.join(', ')}, ?`;
+  const optionsEl = document.getElementById('logic-options');
+  if (optionsEl) {
+    optionsEl.innerHTML = state.options.map(opt =>
+      `<button id="logic-opt-${opt}" onclick="logicAnswer(${opt})" class="option-btn text-center text-xl font-bold py-4">${opt}</button>`
+    ).join('');
+  }
+
+  state.phase = 'active';
+  const bar = document.getElementById('logic-gauge-bar');
+  if (bar) {
+    bar.style.transition = 'none';
+    bar.style.width = '100%';
+    requestAnimationFrame(() => {
+      bar.style.transition = `width ${cfg.timeLimitMs}ms linear`;
+      requestAnimationFrame(() => { bar.style.width = '0%'; });
+    });
+  }
+  state.startTime = performance.now();
+  if (state.timerID) clearTimeout(state.timerID);
+  state.timerID = setTimeout(logicTimeUp, cfg.timeLimitMs);
+}
+
+function logicAnswer(opt) {
+  const state = App.state.logic;
+  if (state.phase !== 'active') return;
+  const cfg = LOGIC_CONFIG[state.difficulty];
+  if (state.timerID) clearTimeout(state.timerID);
+  const elapsed = Math.round(performance.now() - state.startTime);
+  state.phase = 'idle';
+
+  const tappedEl = document.getElementById(`logic-opt-${opt}`);
+  const correctEl = document.getElementById(`logic-opt-${state.answer}`);
+
+  if (opt === state.answer) {
+    state.correctCount++;
+    state.totalTime += Math.min(elapsed, cfg.timeLimitMs);
+    if (tappedEl) tappedEl.classList.add('selected');
+    showToast('✅ 정답!');
+  } else {
+    state.totalTime += cfg.timeLimitMs;
+    if (tappedEl) { tappedEl.style.borderColor = '#ef4444'; tappedEl.style.background = 'rgba(239,68,68,0.15)'; }
+    if (correctEl) { correctEl.style.borderColor = '#22c55e'; correctEl.style.background = 'rgba(34,197,94,0.15)'; }
+    showToast('❌ 오답');
+  }
+  state.delayTimer = setTimeout(logicAdvance, 700);
+}
+
+function logicTimeUp() {
+  const state = App.state.logic;
+  if (state.phase !== 'active') return;
+  const cfg = LOGIC_CONFIG[state.difficulty];
+  state.phase = 'idle';
+  state.totalTime += cfg.timeLimitMs;
+  const correctEl = document.getElementById(`logic-opt-${state.answer}`);
+  if (correctEl) { correctEl.style.borderColor = '#22c55e'; correctEl.style.background = 'rgba(34,197,94,0.15)'; }
+  showToast('⏱️ 시간 초과!');
+  state.delayTimer = setTimeout(logicAdvance, 700);
+}
+
+function logicAdvance() {
+  if (App.state.currentSection !== 'logic') return;
+  const state = App.state.logic;
+  state.round++;
+  if (state.round >= state.totalRounds) {
+    App.showLoader(() => renderLogicView('result'));
+  } else {
+    logicBeginRound();
+  }
+}
+
+/* ══════════════════════════════════════════════════
    확장 Placeholder UI (공통)
 ══════════════════════════════════════════════════ */
 function renderPlaceholderUI(section, value) {
@@ -2068,13 +2335,13 @@ function renderHomeMypage() {
 
   const nickname = getNickname();
   const streak = updateVisitStreak();
-  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision'];
-  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력', colorvision: '색각 테스트' };
+  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic'];
+  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력', colorvision: '색각 테스트', logic: '논리력' };
   const doneCount = sections.filter(isDone).length;
 
   // 최근 테스트 기록 모아보기 (섹션별 가장 최근 1건씩)
   const historyItems = [];
-  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision'].forEach(sec => {
+  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic'].forEach(sec => {
     const list = JSON.parse(localStorage.getItem('ranking_' + sec) || '[]');
     if (list.length) historyItems.push({ section: sec, ...list[0] });
   });
@@ -2271,6 +2538,7 @@ document.addEventListener('DOMContentLoaded', () => {
     memdigit: initMemdigit,
     seqmem: initSeqmem,
     colorvision: initColorvision,
+    logic: initLogic,
     lotto: initLotto,
   };
 

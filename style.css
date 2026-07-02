@@ -1,4 +1,4 @@
-/* v0.0.15 | 5-in-1 Dashboard SPA — style.css */
+/* v0.0.16 | 5-in-1 Dashboard SPA — style.css */
 
 /* ── 기본 리셋 & 페이드인 애니메이션 ── */
 * { box-sizing: border-box; }
@@ -177,6 +177,13 @@ html.light {
 
 /* ── 타임 게이지 바 (색각 테스트) — id 충돌 방지를 위해 별도 정의 ── */
 #colorvision-gauge-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #22c55e, #eab308, #ef4444);
+}
+
+/* ── 타임 게이지 바 (논리력 테스트) ── */
+#logic-gauge-bar {
   height: 8px;
   border-radius: 4px;
   background: linear-gradient(90deg, #22c55e, #eab308, #ef4444);
