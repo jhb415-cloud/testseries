@@ -1,4 +1,4 @@
-/* v0.0.11 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.12 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -10,6 +10,7 @@ window.App = {
     brain: { nickname: '', difficulty: null, questions: [], step: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null },
     adhd: { nickname: '', answers: [], step: 0 },
     fortune: { zodiac: '', year: null },
+    reaction: { nickname: '', difficulty: null, round: 0, totalRounds: 0, times: [], fouls: 0, delayTimer: null, stimulusAt: 0, phase: 'idle' },
   },
 
   /* ─── 내비게이션 ─── */
@@ -979,6 +980,247 @@ function adhdAnswer(val) {
 }
 
 /* ══════════════════════════════════════════════════
+   💨 반응속도 테스트 (v0.0.12~)
+   - 쉬움/보통/어려움 3단계. 어려움은 "가짜 신호"(디코이)가 섞여 충동억제 요소가 가미됨
+   - 모바일 터치 지연 최소화를 위해 click 대신 pointerdown 사용 (PRD.md 모바일 우선 원칙 반영)
+══════════════════════════════════════════════════ */
+const REACTION_CONFIG = {
+  easy:   { label: '쉬움',   rounds: 5,  minDelay: 1200, maxDelay: 2800, decoyChance: 0,    foulPenalty: 0 },
+  normal: { label: '보통',   rounds: 7,  minDelay: 900,  maxDelay: 3200, decoyChance: 0,    foulPenalty: 300 },
+  hard:   { label: '어려움', rounds: 10, minDelay: 600,  maxDelay: 3800, decoyChance: 0.3,  foulPenalty: 400 },
+};
+
+function initReaction() {
+  if (App.state.reaction.delayTimer) clearTimeout(App.state.reaction.delayTimer);
+  App.state.reaction = { nickname: '', difficulty: null, round: 0, totalRounds: 0, times: [], fouls: 0, delayTimer: null, stimulusAt: 0, phase: 'idle' };
+  renderReactionView('start');
+}
+
+function renderReactionView(view) {
+  const container = document.getElementById('reaction-container');
+  const state = App.state.reaction;
+
+  if (view === 'start') {
+    container.innerHTML = `
+      <div class="max-w-md mx-auto text-center">
+        <div class="text-6xl mb-4">💨</div>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">반응속도 테스트</h2>
+        <p class="text-slate-400 mb-6">화면이 초록색으로 바뀌는 순간 최대한 빨리 탭하세요!<br>너무 일찍 누르면 반칙이에요.</p>
+        <input id="reaction-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="reactionStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
+            🟢 쉬움<br><span class="text-xs font-normal opacity-70">5회</span>
+          </button>
+          <button onclick="reactionStart('normal')" class="bg-amber-800/50 hover:bg-amber-700/70 border border-amber-600 text-amber-300 font-bold py-3 rounded-xl transition text-sm">
+            🟡 보통<br><span class="text-xs font-normal opacity-70">7회</span>
+          </button>
+          <button onclick="reactionStart('hard')" class="bg-rose-800/50 hover:bg-rose-700/70 border border-rose-600 text-rose-300 font-bold py-3 rounded-xl transition text-sm">
+            🔴 어려움<br><span class="text-xs font-normal opacity-70">10회+가짜신호</span>
+          </button>
+        </div>
+      </div>`;
+  }
+
+  else if (view === 'round') {
+    container.innerHTML = `
+      <div class="max-w-md mx-auto">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-slate-400 text-sm">${state.nickname} 님 · ${REACTION_CONFIG[state.difficulty].label}</span>
+          <span id="reaction-round-counter" class="text-cyan-400 font-bold text-sm">${state.round + 1} / ${state.totalRounds}</span>
+        </div>
+        <div class="progress-bar-track mb-6">
+          <div id="reaction-progress-fill" class="progress-bar-fill" style="width:${Math.round((state.round / state.totalRounds) * 100)}%"></div>
+        </div>
+        <div id="reaction-box"
+          class="select-none rounded-2xl h-64 flex flex-col items-center justify-center text-center cursor-pointer transition-colors duration-100 bg-slate-800 border-2 border-slate-600"
+          style="touch-action:manipulation;">
+          <span id="reaction-box-emoji" class="text-5xl mb-3">⏳</span>
+          <span id="reaction-box-text" class="text-slate-300 font-bold text-lg px-4">잠시 후 초록색으로 바뀌면 탭하세요</span>
+        </div>
+        <p id="reaction-feedback" class="text-center text-slate-500 text-sm mt-4 min-h-6"></p>
+      </div>`;
+
+    const box = document.getElementById('reaction-box');
+    box.addEventListener('pointerdown', reactionHandleClick, { passive: false });
+    reactionBeginRound();
+  }
+
+  else if (view === 'result') {
+    const avgMs = Math.round(state.times.reduce((a, b) => a + b, 0) / state.times.length);
+    const bestMs = Math.min(...state.times);
+    const worstMs = Math.max(...state.times);
+
+    let tier, tierColor, tierBg, tierMsg;
+    if (avgMs <= 220)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = 'F1 레이서 스카우트 제의가 들어올지도? 오늘 하루도 그 반응속도로 다 씹어먹자.'; }
+    else if (avgMs <= 260) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '꽤 빠른데? 오늘 하루도 딱 이 텐션 유지해봐.'; }
+    else if (avgMs <= 320) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균은 하는 편! 그래도 방심은 금물, 딴짓하다 버스 놓치지 말자.'; }
+    else if (avgMs <= 400) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '음... 오늘따라 반응이 좀 느긋하네. 뜨거운 국물 먹을 때 조심하자.'; }
+    else                   { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '어쩔 수 없지, 오늘은 주위를 잘 살피면서 걷자고~'; }
+
+    const shareText = `나의 반응속도는 평균 ${avgMs}ms! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+
+    container.innerHTML = `
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-6">
+          <div class="text-5xl mb-3">💨</div>
+          <h2 class="text-2xl font-bold text-slate-100 mb-1">${state.nickname} 님의 반응속도</h2>
+          <div class="text-6xl font-black text-slate-100 my-4">${avgMs}<span class="text-2xl text-slate-400">ms</span></div>
+          <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
+            <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
+          </div>
+          <p class="text-slate-300">${tierMsg}</p>
+        </div>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-cyan-400">${bestMs}ms</div>
+            <div class="text-slate-400 text-xs">최고 기록</div>
+          </div>
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-slate-300">${worstMs}ms</div>
+            <div class="text-slate-400 text-xs">최저 기록</div>
+          </div>
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-rose-400">${state.fouls}</div>
+            <div class="text-slate-400 text-xs">반칙 횟수</div>
+          </div>
+        </div>
+
+        <button onclick="shareResult(\`${shareText}\`)"
+          class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
+          📤 내 결과 공유하기
+        </button>
+
+        ${renderPlaceholderUI('reaction', tier)}
+
+        <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs leading-relaxed">
+          ⚠️ 본 결과는 오락 목적이며 실제 신경학적 반응속도 측정과 다를 수 있습니다.
+        </div>
+        <button onclick="initReaction()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
+          다시 측정하기
+        </button>
+      </div>`;
+
+    saveRanking('reaction', state.nickname, avgMs + 'ms (Tier ' + tier + ')');
+    renderLocalRanking('reaction-ranking-list', 'reaction');
+  }
+}
+
+function reactionStart(difficulty) {
+  const input = document.getElementById('reaction-nickname');
+  const nickname = input ? input.value.trim() : '';
+  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  const cfg = REACTION_CONFIG[difficulty];
+  App.state.reaction = {
+    nickname, difficulty, round: 0, totalRounds: cfg.rounds,
+    times: [], fouls: 0, delayTimer: null, stimulusAt: 0, phase: 'idle',
+  };
+  renderReactionView('round');
+}
+
+function reactionSetBox(colorClasses, emoji, text) {
+  const box = document.getElementById('reaction-box');
+  if (!box) return;
+  box.className = `select-none rounded-2xl h-64 flex flex-col items-center justify-center text-center cursor-pointer transition-colors duration-100 border-2 ${colorClasses}`;
+  const emojiEl = document.getElementById('reaction-box-emoji');
+  const textEl = document.getElementById('reaction-box-text');
+  if (emojiEl) emojiEl.textContent = emoji;
+  if (textEl) textEl.textContent = text;
+}
+
+function reactionUpdateProgress() {
+  const state = App.state.reaction;
+  const counter = document.getElementById('reaction-round-counter');
+  const fill = document.getElementById('reaction-progress-fill');
+  if (counter) counter.textContent = `${state.round + 1} / ${state.totalRounds}`;
+  if (fill) fill.style.width = `${Math.round((state.round / state.totalRounds) * 100)}%`;
+}
+
+function reactionBeginRound() {
+  const state = App.state.reaction;
+  const cfg = REACTION_CONFIG[state.difficulty];
+  reactionUpdateProgress();
+  state.phase = 'waiting';
+  reactionSetBox('bg-slate-800 border-slate-600', '⏳', '잠시 후 초록색으로 바뀌면 탭하세요');
+
+  const delay = cfg.minDelay + Math.random() * (cfg.maxDelay - cfg.minDelay);
+  const useDecoy = Math.random() < cfg.decoyChance;
+
+  if (useDecoy) {
+    state.delayTimer = setTimeout(() => {
+      state.phase = 'decoy';
+      reactionSetBox('bg-orange-600 border-orange-400', '⚠️', '아직이에요! 누르지 마세요');
+      state.delayTimer = setTimeout(() => {
+        state.phase = 'waiting';
+        reactionSetBox('bg-slate-800 border-slate-600', '⏳', '진짜는 아직...');
+        state.delayTimer = setTimeout(reactionShowStimulus, 400 + Math.random() * 700);
+      }, 500);
+    }, delay * 0.5);
+  } else {
+    state.delayTimer = setTimeout(reactionShowStimulus, delay);
+  }
+}
+
+function reactionShowStimulus() {
+  const state = App.state.reaction;
+  state.phase = 'go';
+  state.stimulusAt = performance.now();
+  reactionSetBox('bg-emerald-500 border-emerald-300', '⚡', '지금 탭하세요!');
+}
+
+function reactionAdvance() {
+  if (App.state.currentSection !== 'reaction') return; // 다른 섹션으로 이동한 경우 타이머 콜백 무시
+  const state = App.state.reaction;
+  state.round++;
+  if (state.round >= state.totalRounds) {
+    App.showLoader(() => renderReactionView('result'));
+  } else {
+    reactionBeginRound();
+  }
+}
+
+function reactionHandleClick(e) {
+  e.preventDefault();
+  const state = App.state.reaction;
+  const cfg = REACTION_CONFIG[state.difficulty];
+  const feedback = document.getElementById('reaction-feedback');
+
+  if (state.phase === 'waiting') {
+    clearTimeout(state.delayTimer);
+    state.fouls++;
+    if (cfg.foulPenalty === 0) {
+      if (feedback) feedback.textContent = '너무 빨랐어요! 다시 기다려주세요 🙈';
+      reactionBeginRound();
+    } else {
+      state.times.push(cfg.foulPenalty + 700);
+      if (feedback) feedback.textContent = '너무 빨랐어요! 반칙 페널티가 적용됐어요 😵';
+      reactionAdvance();
+    }
+    return;
+  }
+
+  if (state.phase === 'decoy') {
+    clearTimeout(state.delayTimer);
+    state.fouls++;
+    state.times.push(cfg.foulPenalty + 700);
+    if (feedback) feedback.textContent = '앗, 가짜 신호였어요! 반칙 😵';
+    reactionAdvance();
+    return;
+  }
+
+  if (state.phase === 'go') {
+    const ms = Math.round(performance.now() - state.stimulusAt);
+    state.times.push(ms);
+    state.phase = 'idle';
+    reactionSetBox('bg-cyan-600 border-cyan-400', '✅', `${ms}ms!`);
+    if (feedback) feedback.textContent = '';
+    state.delayTimer = setTimeout(reactionAdvance, 700);
+    return;
+  }
+}
+
+/* ══════════════════════════════════════════════════
    확장 Placeholder UI (공통)
 ══════════════════════════════════════════════════ */
 function renderPlaceholderUI(section, value) {
@@ -1093,13 +1335,13 @@ function renderHomeMypage() {
 
   const nickname = getNickname();
   const streak = updateVisitStreak();
-  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd'];
-  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러' };
+  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction'];
+  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도' };
   const doneCount = sections.filter(isDone).length;
 
   // 최근 테스트 기록 모아보기 (섹션별 가장 최근 1건씩)
   const historyItems = [];
-  ['mbti', 'fortune', 'brain', 'adhd'].forEach(sec => {
+  ['mbti', 'fortune', 'brain', 'adhd', 'reaction'].forEach(sec => {
     const list = JSON.parse(localStorage.getItem('ranking_' + sec) || '[]');
     if (list.length) historyItems.push({ section: sec, ...list[0] });
   });
@@ -1121,10 +1363,10 @@ function renderHomeMypage() {
 
     <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 mb-6">
       <div class="flex items-center justify-between mb-2">
-        <h4 class="text-slate-300 font-bold">📋 5개 테스트 완주 현황</h4>
-        <span class="text-violet-400 font-bold text-sm">${doneCount} / 5</span>
+        <h4 class="text-slate-300 font-bold">📋 테스트 완주 현황</h4>
+        <span class="text-violet-400 font-bold text-sm">${doneCount} / ${sections.length}</span>
       </div>
-      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${doneCount/5*100}%"></div></div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${doneCount/sections.length*100}%"></div></div>
       <div class="flex flex-wrap gap-2 mt-3">
         ${sections.map(s => `
           <span onclick="App.navigate('${s}')" class="cursor-pointer text-xs px-3 py-1.5 rounded-full transition ${isDone(s) ? 'bg-emerald-700/40 text-emerald-300 border border-emerald-600' : 'bg-slate-700 text-slate-500 border border-slate-600 hover:border-slate-500'}">
@@ -1292,6 +1534,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fortune: initFortune,
     brain: initBrain,
     adhd: initAdhd,
+    reaction: initReaction,
     lotto: initLotto,
   };
 
