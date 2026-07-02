@@ -1,4 +1,4 @@
-/* v0.0.16 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.17 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -15,6 +15,7 @@ window.App = {
     seqmem: { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle' },
     colorvision: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', baseColor: '', oddColor: '', oddIndex: 0, tileCount: 0 },
     logic: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', answer: 0 },
+    impulse: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false },
   },
 
   /* ─── 내비게이션 ─── */
@@ -2221,6 +2222,229 @@ function logicAdvance() {
 }
 
 /* ══════════════════════════════════════════════════
+   🚦 충동억제 테스트 (Go/No-Go, v0.0.17~)
+   - 초록(Go) 신호엔 빠르게 탭, 빨강(No-Go) 신호엔 참기
+   - 성급한 반응(commission error)이 충동성의 핵심 지표
+══════════════════════════════════════════════════ */
+const IMPULSE_CONFIG = {
+  easy:   { label: '쉬움',   rounds: 8,  timeLimitMs: 1300, noGoRatio: 0.25 },
+  normal: { label: '보통',   rounds: 10, timeLimitMs: 950,  noGoRatio: 0.3 },
+  hard:   { label: '어려움', rounds: 12, timeLimitMs: 700,  noGoRatio: 0.35 },
+};
+
+function initImpulse() {
+  const s = App.state.impulse;
+  if (s.timerID) clearTimeout(s.timerID);
+  if (s.delayTimer) clearTimeout(s.delayTimer);
+  App.state.impulse = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false };
+  renderImpulseView('start');
+}
+
+function renderImpulseView(view) {
+  const container = document.getElementById('impulse-container');
+  const state = App.state.impulse;
+
+  if (view === 'start') {
+    container.innerHTML = `
+      <div class="max-w-md mx-auto text-center">
+        <div class="text-6xl mb-4">🚦</div>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">충동억제 테스트</h2>
+        <p class="text-slate-400 mb-6">🟢 초록 신호엔 최대한 빨리 탭!<br>🔴 빨간 신호엔 절대 누르지 말고 참으세요.</p>
+        <input id="impulse-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="impulseStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
+            🟢 쉬움<br><span class="text-xs font-normal opacity-70">8회, 여유있음</span>
+          </button>
+          <button onclick="impulseStart('normal')" class="bg-amber-800/50 hover:bg-amber-700/70 border border-amber-600 text-amber-300 font-bold py-3 rounded-xl transition text-sm">
+            🟡 보통<br><span class="text-xs font-normal opacity-70">10회, 빠름</span>
+          </button>
+          <button onclick="impulseStart('hard')" class="bg-rose-800/50 hover:bg-rose-700/70 border border-rose-600 text-rose-300 font-bold py-3 rounded-xl transition text-sm">
+            🔴 어려움<br><span class="text-xs font-normal opacity-70">12회, 매우빠름</span>
+          </button>
+        </div>
+      </div>`;
+  }
+
+  else if (view === 'round') {
+    const cfg = IMPULSE_CONFIG[state.difficulty];
+    container.innerHTML = `
+      <div class="max-w-md mx-auto">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-slate-400 text-sm">${state.nickname} 님 · ${cfg.label}</span>
+          <span id="impulse-round-counter" class="text-cyan-400 font-bold text-sm">${state.round + 1} / ${state.totalRounds}</span>
+        </div>
+        <div class="progress-bar-track mb-8">
+          <div id="impulse-progress-fill" class="progress-bar-fill" style="width:${Math.round((state.round / state.totalRounds) * 100)}%"></div>
+        </div>
+        <div id="impulse-stimulus" onclick="impulseTap()"
+          class="rounded-full h-56 w-56 mx-auto flex flex-col items-center justify-center cursor-pointer select-none bg-slate-800 border-4 border-slate-600 transition-colors duration-100"
+          style="touch-action:manipulation;">
+          <span id="impulse-stimulus-emoji" class="text-6xl mb-2">⏳</span>
+          <span id="impulse-stimulus-text" class="text-slate-300 font-bold text-lg px-4 text-center">준비하세요...</span>
+        </div>
+        <p id="impulse-feedback" class="text-center text-slate-500 text-sm mt-6 min-h-6"></p>
+      </div>`;
+    impulseBeginRound();
+  }
+
+  else if (view === 'result') {
+    const accuracy = (state.correctCount / state.totalRounds) * 100;
+    const avgGoMs = state.goCount > 0 ? Math.round(state.totalGoTime / state.goCount) : 0;
+
+    let tier, tierColor, tierBg, tierMsg;
+    if (accuracy >= 95)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = '이 정도 자제력이면 다이어트도 성공하겠는데? 완벽한 절제력!'; }
+    else if (accuracy >= 85) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '충동 조절 甲! 웬만한 유혹엔 안 넘어가겠어.'; }
+    else if (accuracy >= 70) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균은 하는 자제력! 급할 때 한 번 더 생각하고 행동하자.'; }
+    else if (accuracy >= 50) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '음... 성급하게 반응하는 편이네. "멈춰서 생각하기"를 연습해보자.'; }
+    else                     { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 원래 사람은 다 충동적이야! 다음엔 한 박자 쉬고 반응해보자~'; }
+
+    const shareText = `나의 충동억제력은 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+
+    container.innerHTML = `
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-6">
+          <div class="text-5xl mb-3">🚦</div>
+          <h2 class="text-2xl font-bold text-slate-100 mb-1">${state.nickname} 님의 충동억제력</h2>
+          <div class="text-6xl font-black text-slate-100 my-4">${accuracy.toFixed(0)}<span class="text-2xl text-slate-400">%</span></div>
+          <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
+            <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
+          </div>
+          <p class="text-slate-300">${tierMsg}</p>
+        </div>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-emerald-400">${state.correctCount}</div>
+            <div class="text-slate-400 text-xs">정답 수</div>
+            <div class="text-slate-500 text-xs">/ ${state.totalRounds}</div>
+          </div>
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-rose-400">${state.commissionErrors}</div>
+            <div class="text-slate-400 text-xs">성급한 반응</div>
+          </div>
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-violet-400">${avgGoMs}ms</div>
+            <div class="text-slate-400 text-xs">평균 반응속도</div>
+          </div>
+        </div>
+
+        <button onclick="shareResult(\`${shareText}\`)"
+          class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
+          📤 내 결과 공유하기
+        </button>
+
+        ${renderPlaceholderUI('impulse', tier)}
+
+        <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs leading-relaxed">
+          ⚠️ 본 결과는 오락 목적이며 실제 임상 충동성·주의력 검사를 대체하지 않습니다.
+        </div>
+        <button onclick="initImpulse()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
+          다시 측정하기
+        </button>
+      </div>`;
+
+    saveRanking('impulse', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')');
+    renderLocalRanking('impulse-ranking-list', 'impulse');
+  }
+}
+
+function impulseStart(difficulty) {
+  const input = document.getElementById('impulse-nickname');
+  const nickname = input ? input.value.trim() : '';
+  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  const cfg = IMPULSE_CONFIG[difficulty];
+  App.state.impulse = {
+    nickname, difficulty, round: 0, totalRounds: cfg.rounds,
+    correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0,
+    startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false,
+  };
+  renderImpulseView('round');
+}
+
+function impulseBeginRound() {
+  const state = App.state.impulse;
+  const cfg = IMPULSE_CONFIG[state.difficulty];
+  const counter = document.getElementById('impulse-round-counter');
+  const fill = document.getElementById('impulse-progress-fill');
+  if (counter) counter.textContent = `${state.round + 1} / ${state.totalRounds}`;
+  if (fill) fill.style.width = `${Math.round((state.round / state.totalRounds) * 100)}%`;
+
+  const feedback = document.getElementById('impulse-feedback');
+  if (feedback) feedback.textContent = '';
+
+  state.isNoGo = Math.random() < cfg.noGoRatio;
+  const stim = document.getElementById('impulse-stimulus');
+  const emoji = document.getElementById('impulse-stimulus-emoji');
+  const text = document.getElementById('impulse-stimulus-text');
+  if (state.isNoGo) {
+    if (stim) stim.className = 'rounded-full h-56 w-56 mx-auto flex flex-col items-center justify-center cursor-pointer select-none bg-rose-500 border-4 border-rose-300 transition-colors duration-100';
+    if (emoji) emoji.textContent = '🛑';
+    if (text) text.textContent = '누르지 마세요!';
+  } else {
+    if (stim) stim.className = 'rounded-full h-56 w-56 mx-auto flex flex-col items-center justify-center cursor-pointer select-none bg-emerald-500 border-4 border-emerald-300 transition-colors duration-100';
+    if (emoji) emoji.textContent = '⚡';
+    if (text) text.textContent = '지금 탭!';
+  }
+
+  state.phase = 'active';
+  state.startTime = performance.now();
+  if (state.timerID) clearTimeout(state.timerID);
+  state.timerID = setTimeout(impulseTimeUp, cfg.timeLimitMs);
+}
+
+function impulseTap() {
+  const state = App.state.impulse;
+  if (state.phase !== 'active') return;
+  if (state.timerID) clearTimeout(state.timerID);
+  state.phase = 'idle';
+  const feedback = document.getElementById('impulse-feedback');
+
+  if (state.isNoGo) {
+    state.commissionErrors++;
+    if (feedback) feedback.textContent = '앗, 참았어야 해요! 성급한 반응 😵';
+    showToast('❌ 성급한 반응!');
+  } else {
+    const ms = Math.round(performance.now() - state.startTime);
+    state.correctCount++;
+    state.goCount++;
+    state.totalGoTime += ms;
+    if (feedback) feedback.textContent = `${ms}ms! 정확해요 ✅`;
+    showToast('✅ 정답!');
+  }
+  state.delayTimer = setTimeout(impulseAdvance, 600);
+}
+
+function impulseTimeUp() {
+  const state = App.state.impulse;
+  if (state.phase !== 'active') return;
+  state.phase = 'idle';
+  const feedback = document.getElementById('impulse-feedback');
+
+  if (state.isNoGo) {
+    state.correctCount++;
+    if (feedback) feedback.textContent = '잘 참았어요! 👍';
+    showToast('✅ 잘 참았어요!');
+  } else {
+    state.omissionErrors++;
+    if (feedback) feedback.textContent = '앗, 놓쳤어요! 😅';
+    showToast('⏱️ 놓쳤어요!');
+  }
+  state.delayTimer = setTimeout(impulseAdvance, 600);
+}
+
+function impulseAdvance() {
+  if (App.state.currentSection !== 'impulse') return;
+  const state = App.state.impulse;
+  state.round++;
+  if (state.round >= state.totalRounds) {
+    App.showLoader(() => renderImpulseView('result'));
+  } else {
+    impulseBeginRound();
+  }
+}
+
+/* ══════════════════════════════════════════════════
    확장 Placeholder UI (공통)
 ══════════════════════════════════════════════════ */
 function renderPlaceholderUI(section, value) {
@@ -2335,13 +2559,13 @@ function renderHomeMypage() {
 
   const nickname = getNickname();
   const streak = updateVisitStreak();
-  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic'];
-  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력', colorvision: '색각 테스트', logic: '논리력' };
+  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse'];
+  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력', colorvision: '색각 테스트', logic: '논리력', impulse: '충동억제' };
   const doneCount = sections.filter(isDone).length;
 
   // 최근 테스트 기록 모아보기 (섹션별 가장 최근 1건씩)
   const historyItems = [];
-  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic'].forEach(sec => {
+  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse'].forEach(sec => {
     const list = JSON.parse(localStorage.getItem('ranking_' + sec) || '[]');
     if (list.length) historyItems.push({ section: sec, ...list[0] });
   });
@@ -2539,6 +2763,7 @@ document.addEventListener('DOMContentLoaded', () => {
     seqmem: initSeqmem,
     colorvision: initColorvision,
     logic: initLogic,
+    impulse: initImpulse,
     lotto: initLotto,
   };
 
