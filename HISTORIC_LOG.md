@@ -4,7 +4,7 @@
 
 ## 세션 #8 — 2026-07-03
 
-### 현재 버전: v0.0.43
+### 현재 버전: v0.0.44
 
 ### 작업 내용
 - 세션 시작 시 사용자가 "어디까지 했지" 재확인 요청 → 세션#7 마지막 메모(사용자가 Stage D/Supabase 착수 의사를 밝혔고, 다음 세션에서 Claude가 사전 준비사항을 설명하기로 함)를 근거로 현재 상태 안내.
@@ -25,13 +25,16 @@
 - **v0.0.42 (Stage D 2단계 + 로또 통계기반)**: 신규 `functions/api/percentile-refresh.js`(POST, `X-Cron-Secret` 헤더로 보호 — 프로젝트에서 `service_role` 키를 쓰는 유일한 지점. Tier 8개 섹션의 `test_results`를 집계해 "해당 등급 이상 비율"을 퍼센타일로 계산 후 `percentile_cache`에 upsert) + `functions/api/lotto-stats.js`(GET, 동행복권 `getLottoNumber` 비공식 엔드포인트에서 최근 30회차를 서버사이드로 가져와 CORS 우회 — 1회차 날짜(2002-12-07) 기준으로 최신 회차를 추정한 뒤 `returnValue !== 'success'`면 하나씩 감소시키며 보정, 30회차는 Cloudflare Functions 무료 플랜 서브요청 한도 50건 안에 여유있게 들어가도록 설정. `caches.default` Cache API로 24시간 엣지 캐싱해 매 요청마다 동행복권을 다시 두드리지 않게 함). `.github/workflows/percentile-cron.yml` 신설(매일 UTC 18:00=KST 03:00, `curl -X POST`로 secret 헤더와 함께 엔드포인트 호출). 클라이언트: 로또 조합기의 기존 "준비중" 비활성 버튼을 `lottoRunStats()`로 교체 — `/api/lotto-stats` 호출 후 `lottoWeightedPick()`이 빈도 가중 랜덤(출현 0회 번호도 최소 확률은 보장하도록 weight+1)으로 5게임 생성. `percentile_cache`는 이미 공개 읽기 RLS라 클라이언트 쪽에 신규 읽기 API를 만들지 않고 기존 `window.sb`로 바로 조회 가능하게 설계.
 - **검증**: `node --check`로 두 Function 파일 문법 확인(Node 24의 ESM 자동 감지로 `export` 구문도 별도 설정 없이 통과). 코드 커밋+푸시 후 Cloudflare Pages 자동배포로 실제 엔드포인트가 살아있는지, 응답 스키마가 예상대로인지는 다음 턴에서 라이브로 확인 예정 — 아직 Cloudflare Pages 환경변수(`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`CRON_SECRET`)와 GitHub Actions 시크릿(`CRON_SECRET`)을 사용자가 등록하지 않아서 `percentile-refresh`는 401을 반환하는 상태, `lotto-stats`는 시크릿이 필요 없어 배포 직후 바로 동작 가능.
 - CLAUDE.md(기능현황표에 카카오 후속검증 내용 추가, Stage D 2단계 행 신설, 로또 통계기반 행을 완료로 변경, 결정사항 로그 갱신, 변경이력 v0.0.42 추가)와 PRD.md(로또 입력/제약사항/9-1 D 항목 갱신) 동시 반영.
+- v0.0.43 배포 후 재확인했는데도 `/api/lotto-stats`가 여전히 500 "error code 1101"을 반환 → `fetchRound()` 바깥(Cache API 등)에서 예외가 나는지 진단하려고 `onRequestGet` 전체를 try/catch로 감싸고 에러 상세(`detail`)를 임시로 노출하는 디버그 커밋을 먼저 배포. 재확인 결과 이번엔 정상적으로 502 JSON 에러가 돌아옴 — v0.0.43 수정 자체는 맞았고 직전 테스트가 배포 전파 완료 전이었던 것으로 판명(Cloudflare Pages 배포 후 실제 반영까지 몇 분 정도 지연될 수 있다는 걸 확인, 다음엔 좀 더 여유있게 기다린 뒤 재확인할 것). `caches.default` 호출도 별도 try/catch로 감싸 캐시 실패 시에도 기능은 계속되도록 보강, 디버그용 `detail` 필드는 확인 끝나서 제거.
+- **v0.0.44 (로또 통계 프록시 크래시 완전 근절)**: 위 진단 과정을 거쳐 이중 try/catch(개별 `fetchRound` + 전체 핸들러)로 최종 정리, 라이브에서 502 JSON 에러 정상 응답 확인. CLAUDE.md 로또 통계기반 행/변경이력 v0.0.44로 갱신.
+- **최종 상태 요약**: 크래시는 완전히 해결됐지만(항상 502 아니면 정상 응답만 반환), dhlottery 실데이터 확보 자체는 여전히 미해결 — 이건 코드 문제가 아니라 원본 사이트의 IP 차단 정책 때문이라 클라이언트 코드 수정만으로는 해결 불가능한 외부 제약. 이 상태를 있는 그대로 사용자에게 보고할 필요.
 
 ### 다음에 이어서 해야 할 작업 리스트
 - [x] Stage D 1단계(익명 인증 + `test_results` 이중 기록) 완료 (v0.0.40)
 - [x] 카카오톡 공유 완료, 라이브 도메인 end-to-end 검증까지 완료 (v0.0.41)
 - [x] Stage D 2단계(퍼센타일 배치 집계) + 로또 통계기반 추천 코드 완료 (v0.0.42)
-- [x] 배포 직후 `curl`로 `/api/lotto-stats` 라이브 점검 → 500 에러 발견, 원인 조사(dhlottery.co.kr이 데이터센터/해외 IP 차단) 후 크래시 방지 방어코드 추가해 502로 안전화 (v0.0.43)
-- [ ] **다음 세션 시작점 ★**: 두 가지 트랙이 남아있음. **①** Cloudflare Pages 프로젝트(`testseries1`) 환경변수에 `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`(Supabase 대시보드 Settings→API에서 secret/service_role 키 확인)/`CRON_SECRET`(임의 문자열 새로 생성) 등록 필요 — Claude에게 값을 절대 공유하지 말고 Cloudflare 대시보드에 직접 입력할 것. 같은 `CRON_SECRET` 값을 GitHub 저장소 Settings→Secrets and variables→Actions에도 등록해야 `.github/workflows/percentile-cron.yml`이 정상 동작. 둘 다 등록되면 `POST /api/percentile-refresh` 수동 호출로 실제 동작 검증, GitHub Actions 수동 실행(workflow_dispatch)으로 cron 경로도 검증 필요. **②** `/api/lotto-stats`는 dhlottery.co.kr의 IP 차단으로 실데이터를 못 가져오는 상태(현재는 랜덤으로 조용히 대체됨) — 사용자에게 이 상황을 보고하고 대안(네이버 파싱 등 신뢰성 낮은 우회 시도 / 기능을 랜덤 대체로 그대로 둘지 / 백로그로 되돌릴지) 방향을 확인해야 함
+- [x] `/api/lotto-stats` 크래시(500) 진단 및 완전 해결, 항상 안전하게 502/정상 응답만 반환하도록 방어 (v0.0.43~v0.0.44)
+- [ ] **다음 세션 시작점 ★**: 두 가지 트랙이 남아있음. **①** Cloudflare Pages 프로젝트(`testseries1`) 환경변수에 `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`(Supabase 대시보드 Settings→API에서 secret/service_role 키 확인)/`CRON_SECRET`(임의 문자열 새로 생성) 등록 필요 — Claude에게 값을 절대 공유하지 말고 Cloudflare 대시보드에 직접 입력할 것. 같은 `CRON_SECRET` 값을 GitHub 저장소 Settings→Secrets and variables→Actions에도 등록해야 `.github/workflows/percentile-cron.yml`이 정상 동작. 둘 다 등록되면 `POST /api/percentile-refresh` 수동 호출로 실제 동작 검증, GitHub Actions 수동 실행(workflow_dispatch)으로 cron 경로도 검증 필요. **②** `/api/lotto-stats`는 dhlottery.co.kr의 IP 차단(데이터센터/해외 IP 대역 차단 추정)으로 실데이터를 못 가져오는 상태(현재는 랜덤으로 조용히 대체됨, 크래시는 없음) — 사용자에게 이 상황을 보고하고 대안(네이버 파싱 등 신뢰성·법적 리스크 있는 우회 시도 / 기능을 랜덤 대체로 그대로 둘지, UI 문구만 정직하게 수정할지 / 백로그로 되돌릴지) 방향을 확인해야 함
 - [x] (제외) 두뇌나이 모바일 터치 지연 보정 — 사용자가 "나중에 문제되면 작업하자"며 우선순위에서 제외 결정. 완전 폐기 아님, PRD 체크리스트에는 여전히 필수 항목으로 남아있음
 - [ ] (보류) 댓글 백엔드 연동 — 모더레이션 정책(신고/금칙어 필터) 설계 없이는 착수 안 하기로 결정, 사용자가 "나중에라도 작업하자"고 재확인(취소 아님)
 - [ ] (보류) Stage E(동물비유카드, 이제 D의 퍼센타일 집계가 완료됐으니 재검토 가능) / Stage G(라이트모드, 프로젝트 전체 최후 고정)

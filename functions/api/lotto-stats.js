@@ -83,7 +83,7 @@ export async function onRequestGet(context) {
     if (cache) context.waitUntil(cache.put(cacheKey, response.clone()));
     return response;
   } catch (e) {
-    return new Response(JSON.stringify({ error: '로또 통계를 처리하는 중 오류가 발생했습니다.', detail: String(e && e.message || e) }), {
+    return new Response(JSON.stringify({ error: '로또 통계를 처리하는 중 오류가 발생했습니다.' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
