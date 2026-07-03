@@ -1,4 +1,4 @@
-/* v0.0.34 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.35 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -833,12 +833,18 @@ function renderFortuneView(view) {
     const data = AppData.fortuneData[zodiac];
     if (!data) { renderFortuneView('input'); return; }
 
-    // 자정 기준 시드 (매일 다른 운세, 같은 날은 동일)
-    const seed = todaySeed() + zodiac.charCodeAt(0);
-    const fortune = data.base;
+    // 24시간(KST) 단위 시드 — 같은 날엔 모든 방문자에게 같은 운세가 뜨도록 함 (오늘의 인생 한마디와 동일한 방식)
+    const zodiacIdx = AppData.zodiacAnimals.indexOf(zodiac);
+    const seed = dailyQuoteSeed() + zodiacIdx * 97;
 
-    // 운 점수 (0~5)를 시드 기반으로 생성
-    const scores = fortune.map((_, i) => Math.floor(seededRandom(seed + i * 17) * 3) + 3);
+    // 카테고리별로 오늘의 variant를 결정론적으로 선택 (v0.0.35~, 띠×카테고리당 최대 7벌 순환)
+    const fortune = data.categories.map((cat, i) => {
+      const vIdx = Math.floor(seededRandom(seed + i * 31) * cat.variants.length);
+      return { title: cat.title, ...cat.variants[vIdx] };
+    });
+
+    // 운 점수 (3~5)를 시드 기반으로 생성 (variant 선택과는 다른 오프셋을 써서 서로 독립적으로 변하게 함)
+    const scores = fortune.map((_, i) => Math.floor(seededRandom(seed + i * 17 + 500) * 3) + 3);
     const starMap = (n) => '★'.repeat(n) + '☆'.repeat(5-n);
     const avgScore = (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1);
     const shareText = `오늘 ${zodiac}띠 운세 평점 ${avgScore}/5.0! 행운의 숫자는 ${data.luckyNum}. 너도 확인해봐 👉`;
