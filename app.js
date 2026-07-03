@@ -1,4 +1,4 @@
-/* v0.0.21 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.22 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -78,6 +78,14 @@ function seededRandom(seed) {
 function todaySeed() {
   const d = new Date();
   return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+}
+
+/* 12시간(KST) 단위 시드 — "오늘의 인생 한마디" 순환용.
+   같은 00:00~11:59 / 12:00~23:59 구간엔 모든 방문자에게 같은 문구가 뜨도록 함 */
+function halfDaySeed() {
+  const kstMs = Date.now() + 9 * 60 * 60 * 1000; // UTC → KST 보정
+  const halfDayMs = 12 * 60 * 60 * 1000;
+  return Math.floor(kstMs / halfDayMs);
 }
 
 function copyToClipboard(text) {
@@ -176,11 +184,12 @@ function toggleTheme() {
 ══════════════════════════════════════════════════ */
 function initHome() {
   const quotes = AppData.quotes;
-  const idx = Math.floor(seededRandom(todaySeed()) * quotes.length);
+  const idx = Math.floor(seededRandom(halfDaySeed()) * quotes.length);
   const quote = quotes[idx];
 
-  document.getElementById('home-quote-text').textContent = `"${quote}"`;
-  document.getElementById('home-copy-btn').onclick = () => copyToClipboard(quote);
+  document.getElementById('home-quote-text').textContent = `"${quote.text}"`;
+  document.getElementById('home-quote-author').textContent = `— ${quote.author} (${quote.role})`;
+  document.getElementById('home-copy-btn').onclick = () => copyToClipboard(`"${quote.text}" — ${quote.author}`);
 
   const cards = [
     { section: 'mbti',    emoji: '🧠', title: '성격 파탄(MBTI)', desc: '12문항으로 알아보는 팩폭 성격 분석', color: 'from-violet-600 to-purple-700' },
