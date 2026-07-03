@@ -1,4 +1,4 @@
-/* v0.0.33 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.34 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -23,6 +23,8 @@ window.App = {
   },
 
   /* ─── 내비게이션 ─── */
+  _sectionHistory: [],
+
   navigate(sectionId) {
     document.querySelectorAll('.section').forEach(s => {
       s.classList.add('hidden');
@@ -32,6 +34,11 @@ window.App = {
     if (!target) return;
     target.classList.remove('hidden');
     requestAnimationFrame(() => target.classList.add('fade-in'));
+
+    if (sectionId !== this.state.currentSection) {
+      this._sectionHistory.push(this.state.currentSection);
+      if (this._sectionHistory.length > 30) this._sectionHistory.shift();
+    }
     this.state.currentSection = sectionId;
     location.hash = sectionId;
 
@@ -44,8 +51,18 @@ window.App = {
       if (parentGroup) parentGroup.classList.add('open');
     }
 
+    // 뒤로가기/홈 플로팅 버튼: 홈 화면에서는 숨김
+    const floatingNav = document.getElementById('floating-nav');
+    if (floatingNav) floatingNav.classList.toggle('hidden', sectionId === 'home');
+
     // 모바일 사이드바 닫기
     closeMobileSidebar();
+  },
+
+  /* ─── 이전 화면으로 이동 (플로팅 뒤로가기 버튼) ─── */
+  goBack() {
+    const prev = this._sectionHistory.length ? this._sectionHistory.pop() : 'home';
+    this.navigate(prev);
   },
 
   /* ─── 3초 광고 프리로더 ─── */
@@ -4038,6 +4055,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (overlay) {
     overlay.addEventListener('click', closeMobileSidebar);
   }
+
+  /* ── 뒤로가기/홈 플로팅 버튼 ── */
+  const floatingBackBtn = document.getElementById('floating-back-btn');
+  const floatingHomeBtn = document.getElementById('floating-home-btn');
+  if (floatingBackBtn) floatingBackBtn.addEventListener('click', () => App.goBack());
+  if (floatingHomeBtn) floatingHomeBtn.addEventListener('click', () => App.navigate('home'));
 
   /* ── 꿈 해몽 모달 배경 클릭 닫기 ── */
   const dreamModal = document.getElementById('dream-modal');
