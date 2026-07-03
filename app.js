@@ -1,4 +1,4 @@
-/* v0.0.17 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.18 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -16,6 +16,7 @@ window.App = {
     colorvision: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', baseColor: '', oddColor: '', oddIndex: 0, tileCount: 0 },
     logic: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', answer: 0 },
     impulse: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false },
+    shortfocus: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false },
   },
 
   /* ─── 내비게이션 ─── */
@@ -2445,6 +2446,229 @@ function impulseAdvance() {
 }
 
 /* ══════════════════════════════════════════════════
+   📱 숏폼 집중력 테스트 ("숏폼 뇌 지수", v0.0.18~)
+   - 충동억제(Go/No-Go) 테스트 엔진을 그대로 재활용, MZ향으로 리스킨
+   - 🔥 꿀잼 콘텐츠엔 빠르게 탭, 📢 광고엔 참기(탭 금지)
+══════════════════════════════════════════════════ */
+const SHORTFOCUS_CONFIG = {
+  easy:   { label: '쉬움',   rounds: 8,  timeLimitMs: 1100, noGoRatio: 0.3 },
+  normal: { label: '보통',   rounds: 10, timeLimitMs: 800,  noGoRatio: 0.35 },
+  hard:   { label: '어려움', rounds: 12, timeLimitMs: 600,  noGoRatio: 0.4 },
+};
+
+function initShortfocus() {
+  const s = App.state.shortfocus;
+  if (s.timerID) clearTimeout(s.timerID);
+  if (s.delayTimer) clearTimeout(s.delayTimer);
+  App.state.shortfocus = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false };
+  renderShortfocusView('start');
+}
+
+function renderShortfocusView(view) {
+  const container = document.getElementById('shortfocus-container');
+  const state = App.state.shortfocus;
+
+  if (view === 'start') {
+    container.innerHTML = `
+      <div class="max-w-md mx-auto text-center">
+        <div class="text-6xl mb-4">📱</div>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">숏폼 집중력 테스트</h2>
+        <p class="text-slate-400 mb-6">당신의 뇌, 아직 숏폼 알고리즘에 잠식되지 않았나요? 🧠<br>🔥 꿀잼 콘텐츠가 뜨면 최대한 빨리 탭!<br>📢 광고가 뜨면 절대 누르지 말고 참으세요.</p>
+        <input id="shortfocus-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <p class="text-slate-400 text-sm mb-3">피드 속도(난이도) 선택</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="shortfocusStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
+            🟢 쉬움<br><span class="text-xs font-normal opacity-70">8회, 여유있음</span>
+          </button>
+          <button onclick="shortfocusStart('normal')" class="bg-amber-800/50 hover:bg-amber-700/70 border border-amber-600 text-amber-300 font-bold py-3 rounded-xl transition text-sm">
+            🟡 보통<br><span class="text-xs font-normal opacity-70">10회, 빠른 스크롤</span>
+          </button>
+          <button onclick="shortfocusStart('hard')" class="bg-rose-800/50 hover:bg-rose-700/70 border border-rose-600 text-rose-300 font-bold py-3 rounded-xl transition text-sm">
+            🔴 어려움<br><span class="text-xs font-normal opacity-70">12회, 초고속 피드</span>
+          </button>
+        </div>
+      </div>`;
+  }
+
+  else if (view === 'round') {
+    const cfg = SHORTFOCUS_CONFIG[state.difficulty];
+    container.innerHTML = `
+      <div class="max-w-md mx-auto">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-slate-400 text-sm">${state.nickname} 님 · ${cfg.label}</span>
+          <span id="shortfocus-round-counter" class="text-cyan-400 font-bold text-sm">${state.round + 1} / ${state.totalRounds}</span>
+        </div>
+        <div class="progress-bar-track mb-8">
+          <div id="shortfocus-progress-fill" class="progress-bar-fill" style="width:${Math.round((state.round / state.totalRounds) * 100)}%"></div>
+        </div>
+        <div id="shortfocus-stimulus" onclick="shortfocusTap()"
+          class="rounded-3xl h-56 w-56 mx-auto flex flex-col items-center justify-center cursor-pointer select-none bg-slate-800 border-4 border-slate-600 transition-colors duration-100"
+          style="touch-action:manipulation;">
+          <span id="shortfocus-stimulus-emoji" class="text-6xl mb-2">📱</span>
+          <span id="shortfocus-stimulus-text" class="text-slate-300 font-bold text-lg px-4 text-center">스크롤 중...</span>
+        </div>
+        <p id="shortfocus-feedback" class="text-center text-slate-500 text-sm mt-6 min-h-6"></p>
+      </div>`;
+    shortfocusBeginRound();
+  }
+
+  else if (view === 'result') {
+    const accuracy = (state.correctCount / state.totalRounds) * 100;
+    const avgGoMs = state.goCount > 0 ? Math.round(state.totalGoTime / state.goCount) : 0;
+
+    let tier, tierColor, tierBg, tierMsg;
+    if (accuracy >= 95)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = '당신의 뇌는 아직 알고리즘에 잠식되지 않았다! 클래식 집중력 보유자 🧠✨'; }
+    else if (accuracy >= 85) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '숏폼 내성 甲! 웬만한 떡밥엔 안 낚이는 타입.'; }
+    else if (accuracy >= 70) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균적인 숏폼 세대 뇌. 광고 몇 개는 낚였을지도? ㅋㅋ'; }
+    else if (accuracy >= 50) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '이미 도파민에 살짝 적응된 뇌... 스크롤 좀 줄여볼까?'; }
+    else                     { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '숏폼 알고리즘의 완벽한 먹잇감 확정 😂 근데 원래 다들 그래, 너만 그런 거 아니야!'; }
+
+    const shareText = `내 숏폼 뇌 지수는 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+
+    container.innerHTML = `
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-6">
+          <div class="text-5xl mb-3">📱</div>
+          <h2 class="text-2xl font-bold text-slate-100 mb-1">${state.nickname} 님의 숏폼 뇌 지수</h2>
+          <div class="text-6xl font-black text-slate-100 my-4">${accuracy.toFixed(0)}<span class="text-2xl text-slate-400">%</span></div>
+          <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
+            <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
+          </div>
+          <p class="text-slate-300">${tierMsg}</p>
+        </div>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-emerald-400">${state.correctCount}</div>
+            <div class="text-slate-400 text-xs">정답 수</div>
+            <div class="text-slate-500 text-xs">/ ${state.totalRounds}</div>
+          </div>
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-rose-400">${state.commissionErrors}</div>
+            <div class="text-slate-400 text-xs">광고에 낚인 횟수</div>
+          </div>
+          <div class="bg-slate-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-violet-400">${avgGoMs}ms</div>
+            <div class="text-slate-400 text-xs">평균 반응속도</div>
+          </div>
+        </div>
+
+        <button onclick="shareResult(\`${shareText}\`)"
+          class="w-full bg-gradient-to-r from-fuchsia-500 to-pink-500 hover:from-fuchsia-400 hover:to-pink-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-fuchsia-900/40 mb-3">
+          📤 내 결과 공유하기
+        </button>
+
+        ${renderPlaceholderUI('shortfocus', tier)}
+
+        <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs leading-relaxed">
+          ⚠️ 본 결과는 오락 목적이며 실제 임상 주의력·집중력 검사를 대체하지 않습니다.
+        </div>
+        <button onclick="initShortfocus()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
+          다시 측정하기
+        </button>
+      </div>`;
+
+    saveRanking('shortfocus', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')');
+    renderLocalRanking('shortfocus-ranking-list', 'shortfocus');
+  }
+}
+
+function shortfocusStart(difficulty) {
+  const input = document.getElementById('shortfocus-nickname');
+  const nickname = input ? input.value.trim() : '';
+  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  const cfg = SHORTFOCUS_CONFIG[difficulty];
+  App.state.shortfocus = {
+    nickname, difficulty, round: 0, totalRounds: cfg.rounds,
+    correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0,
+    startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false,
+  };
+  renderShortfocusView('round');
+}
+
+function shortfocusBeginRound() {
+  const state = App.state.shortfocus;
+  const cfg = SHORTFOCUS_CONFIG[state.difficulty];
+  const counter = document.getElementById('shortfocus-round-counter');
+  const fill = document.getElementById('shortfocus-progress-fill');
+  if (counter) counter.textContent = `${state.round + 1} / ${state.totalRounds}`;
+  if (fill) fill.style.width = `${Math.round((state.round / state.totalRounds) * 100)}%`;
+
+  const feedback = document.getElementById('shortfocus-feedback');
+  if (feedback) feedback.textContent = '';
+
+  state.isNoGo = Math.random() < cfg.noGoRatio;
+  const stim = document.getElementById('shortfocus-stimulus');
+  const emoji = document.getElementById('shortfocus-stimulus-emoji');
+  const text = document.getElementById('shortfocus-stimulus-text');
+  if (state.isNoGo) {
+    if (stim) stim.className = 'rounded-3xl h-56 w-56 mx-auto flex flex-col items-center justify-center cursor-pointer select-none bg-slate-600 border-4 border-slate-400 transition-colors duration-100';
+    if (emoji) emoji.textContent = '📢';
+    if (text) text.textContent = '광고예요, 참으세요!';
+  } else {
+    if (stim) stim.className = 'rounded-3xl h-56 w-56 mx-auto flex flex-col items-center justify-center cursor-pointer select-none bg-fuchsia-500 border-4 border-fuchsia-300 transition-colors duration-100';
+    if (emoji) emoji.textContent = '🔥';
+    if (text) text.textContent = '지금 떴다! 탭!';
+  }
+
+  state.phase = 'active';
+  state.startTime = performance.now();
+  if (state.timerID) clearTimeout(state.timerID);
+  state.timerID = setTimeout(shortfocusTimeUp, cfg.timeLimitMs);
+}
+
+function shortfocusTap() {
+  const state = App.state.shortfocus;
+  if (state.phase !== 'active') return;
+  if (state.timerID) clearTimeout(state.timerID);
+  state.phase = 'idle';
+  const feedback = document.getElementById('shortfocus-feedback');
+
+  if (state.isNoGo) {
+    state.commissionErrors++;
+    if (feedback) feedback.textContent = '앗, 광고에 낚였어요! 😵';
+    showToast('❌ 광고에 낚였어요!');
+  } else {
+    const ms = Math.round(performance.now() - state.startTime);
+    state.correctCount++;
+    state.goCount++;
+    state.totalGoTime += ms;
+    if (feedback) feedback.textContent = `${ms}ms! 딱 걸렸다 ✅`;
+    showToast('✅ 정답!');
+  }
+  state.delayTimer = setTimeout(shortfocusAdvance, 600);
+}
+
+function shortfocusTimeUp() {
+  const state = App.state.shortfocus;
+  if (state.phase !== 'active') return;
+  state.phase = 'idle';
+  const feedback = document.getElementById('shortfocus-feedback');
+
+  if (state.isNoGo) {
+    state.correctCount++;
+    if (feedback) feedback.textContent = '광고 안 눌렀어요! 👍';
+    showToast('✅ 잘 참았어요!');
+  } else {
+    state.omissionErrors++;
+    if (feedback) feedback.textContent = '앗, 놓쳤어요! 😅';
+    showToast('⏱️ 놓쳤어요!');
+  }
+  state.delayTimer = setTimeout(shortfocusAdvance, 600);
+}
+
+function shortfocusAdvance() {
+  if (App.state.currentSection !== 'shortfocus') return;
+  const state = App.state.shortfocus;
+  state.round++;
+  if (state.round >= state.totalRounds) {
+    App.showLoader(() => renderShortfocusView('result'));
+  } else {
+    shortfocusBeginRound();
+  }
+}
+
+/* ══════════════════════════════════════════════════
    확장 Placeholder UI (공통)
 ══════════════════════════════════════════════════ */
 function renderPlaceholderUI(section, value) {
@@ -2559,13 +2783,13 @@ function renderHomeMypage() {
 
   const nickname = getNickname();
   const streak = updateVisitStreak();
-  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse'];
-  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력', colorvision: '색각 테스트', logic: '논리력', impulse: '충동억제' };
+  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus'];
+  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력', colorvision: '색각 테스트', logic: '논리력', impulse: '충동억제', shortfocus: '숏폼 집중력' };
   const doneCount = sections.filter(isDone).length;
 
   // 최근 테스트 기록 모아보기 (섹션별 가장 최근 1건씩)
   const historyItems = [];
-  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse'].forEach(sec => {
+  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus'].forEach(sec => {
     const list = JSON.parse(localStorage.getItem('ranking_' + sec) || '[]');
     if (list.length) historyItems.push({ section: sec, ...list[0] });
   });
@@ -2764,6 +2988,7 @@ document.addEventListener('DOMContentLoaded', () => {
     colorvision: initColorvision,
     logic: initLogic,
     impulse: initImpulse,
+    shortfocus: initShortfocus,
     lotto: initLotto,
   };
 
