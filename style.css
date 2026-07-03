@@ -1,4 +1,4 @@
-/* v0.0.17 | 5-in-1 Dashboard SPA — style.css */
+/* v0.0.33 | 5-in-1 Dashboard SPA — style.css */
 
 /* ── 기본 리셋 & 페이드인 애니메이션 ── */
 * { box-sizing: border-box; }
@@ -133,7 +133,8 @@ html.light {
 
 .nav-group-chevron {
   margin-left: auto;
-  font-size: 0.7rem;
+  font-size: 1.1rem;
+  font-weight: bold;
   transition: transform 0.2s ease;
 }
 
@@ -342,3 +343,19 @@ html.light {
     font-size: 0.9rem;
   }
 }
+
+/* ── 정답/오답 마이크로 애니메이션 (v0.0.33~) ── */
+@keyframes popScale {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+@keyframes shakeX {
+  0%, 100% { transform: translateX(0); }
+  20%  { transform: translateX(-6px); }
+  40%  { transform: translateX(6px); }
+  60%  { transform: translateX(-4px); }
+  80%  { transform: translateX(4px); }
+}
+.anim-pop   { animation: popScale 0.3s ease; }
+.anim-shake { animation: shakeX 0.35s ease; }

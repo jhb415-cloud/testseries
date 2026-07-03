@@ -1,4 +1,4 @@
-/* v0.0.31 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.33 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -181,6 +181,61 @@ function renderChallengeButton(section, nickname, result) {
     </button>`;
 }
 
+/* ══════════════════════════════════════════════════
+   💞 결과 궁합 보기 (v0.0.33~)
+   - 성격/성향 계열 테스트(MBTI, 인싸력) 대상. 친구 대결과 동일한 URL 공유 방식 재사용
+   - 일치율(%)만 제공 — 전체 사용자 중 상위 % 표시는 Stage D(백엔드) 완료 후에나 가능해 이번엔 제외
+══════════════════════════════════════════════════ */
+function shareCompatibility(section, nickname, data, label) {
+  const payload = encodeURIComponent(JSON.stringify({ n: nickname, ...data }));
+  const url = `${location.origin}${location.pathname}#${section}?match=${payload}`;
+  const text = `💞 ${nickname}님이 궁합을 보고 싶어해요! (${label}) 나도 같은 테스트로 궁합 확인하기 👉 ${url}`;
+  shareResult(text);
+}
+
+/* MBTI 궁합: 4개 축(E/I,S/N,T/F,J/P) 중 일치하는 축 비율 */
+function renderMbtiMatchCard(myType, match) {
+  if (!match || !match.type) return '';
+  let sameCount = 0;
+  for (let i = 0; i < 4; i++) if (myType[i] === match.type[i]) sameCount++;
+  const percent = (sameCount / 4 * 100).toFixed(1);
+  return `
+    <div class="bg-slate-800 border border-pink-700/40 rounded-2xl p-5 mb-4 text-center">
+      <h4 class="text-slate-100 font-bold mb-3">💞 궁합 결과</h4>
+      <div class="flex items-center justify-center gap-4 mb-2">
+        <div class="flex-1"><div class="text-slate-500 text-xs mb-1">${match.n}</div><div class="text-slate-100 font-bold tracking-widest">${match.type}</div></div>
+        <div class="text-pink-400 font-black">💞</div>
+        <div class="flex-1"><div class="text-slate-500 text-xs mb-1">나</div><div class="text-slate-100 font-bold tracking-widest">${myType}</div></div>
+      </div>
+      <div class="font-black text-2xl text-pink-400">${percent}% 일치</div>
+    </div>`;
+}
+
+/* 인싸력 궁합: 점수(0~30) 차이가 적을수록 일치율이 높음 */
+function renderInsaMatchCard(myScore, match) {
+  if (!match || match.score === undefined) return '';
+  const diff = Math.abs(myScore - match.score);
+  const percent = Math.max(0, 100 - diff / 30 * 100).toFixed(1);
+  return `
+    <div class="bg-slate-800 border border-pink-700/40 rounded-2xl p-5 mb-4 text-center">
+      <h4 class="text-slate-100 font-bold mb-3">💞 궁합 결과</h4>
+      <div class="flex items-center justify-center gap-4 mb-2">
+        <div class="flex-1"><div class="text-slate-500 text-xs mb-1">${match.n}</div><div class="text-slate-100 font-bold">${match.score}점</div></div>
+        <div class="text-pink-400 font-black">💞</div>
+        <div class="flex-1"><div class="text-slate-500 text-xs mb-1">나</div><div class="text-slate-100 font-bold">${myScore}점</div></div>
+      </div>
+      <div class="font-black text-2xl text-pink-400">${percent}% 일치</div>
+    </div>`;
+}
+
+function renderMatchBanner(match, label) {
+  if (!match) return '';
+  return `
+    <div class="bg-pink-900/30 border border-pink-700/40 rounded-xl p-3 mb-4 text-sm text-pink-200">
+      💞 <strong>${match.n}</strong>님이 궁합을 보고 싶어해요! (${label}) 같은 테스트를 마치면 궁합이 계산돼요
+    </div>`;
+}
+
 /* ── 5개 테스트 완주 추적 (마이홈용) ── */
 function markDone(section) {
   localStorage.setItem('done_' + section, '1');
@@ -210,6 +265,39 @@ function updateVisitStreak() {
     localStorage.setItem('last_visit_date', todayStr);
   }
   return streak;
+}
+
+/* ══════════════════════════════════════════════════
+   🔊 정답/오답 사운드 + 마이크로 애니메이션 (v0.0.33~)
+   - 외부 음원 파일 없이 Web Audio API 오실레이터로 직접 생성 (용량 0, 라이선스 문제 없음)
+══════════════════════════════════════════════════ */
+let sharedAudioCtx = null;
+function playSound(type) {
+  try {
+    if (!sharedAudioCtx) sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = sharedAudioCtx;
+    const freqMap = { correct: 880, wrong: 220, combo: 1320 };
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = freqMap[type] || 440;
+    gain.gain.setValueAtTime(0.001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.15, ctx.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.25);
+  } catch (e) { /* 오디오 미지원 환경은 조용히 무시 */ }
+}
+
+/* 정답/오답 시 카드나 요소에 짧게 붙였다 떼는 마이크로 애니메이션 클래스 */
+function pulseElement(el, kind) {
+  if (!el) return;
+  const cls = kind === 'wrong' ? 'anim-shake' : 'anim-pop';
+  el.classList.remove('anim-pop', 'anim-shake');
+  void el.offsetWidth; // 리플로우 강제로 애니메이션 재시작 보장
+  el.classList.add(cls);
 }
 
 function showToast(msg) {
@@ -317,7 +405,9 @@ function initHome() {
    🧠 MBTI 섹션
 ══════════════════════════════════════════════════ */
 function initMbti() {
-  App.state.mbti = { nickname: '', mode: null, questions: [], answers: [], step: 0 };
+  const match = (App.pendingMatch && App.pendingMatch.section === 'mbti') ? App.pendingMatch.data : null;
+  App.pendingMatch = null;
+  App.state.mbti = { nickname: '', mode: null, questions: [], answers: [], step: 0, match };
   renderMbtiView('start');
 }
 
@@ -331,6 +421,7 @@ function renderMbtiView(view) {
         <div class="text-6xl mb-4">🧠</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">성격 파탄 MBTI</h2>
         <p class="text-slate-400 mb-6">솔직한 성격 분석<br>결과가 팩폭일 수도 있습니다.</p>
+        ${renderMatchBanner(state.match, state.match ? state.match.type : '')}
         <input id="mbti-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력 (최대 12자)"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-violet-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">모드 선택</p>
@@ -415,6 +506,8 @@ function renderMbtiView(view) {
 
         ${axisBarsHtml}
 
+        ${renderMbtiMatchCard(type, state.match)}
+
         <div class="bg-slate-800 rounded-2xl p-5 mb-4">
           <h4 class="text-slate-100 font-bold mb-2">📌 성격 요약</h4>
           <p class="text-slate-300 leading-relaxed">${result.desc}</p>
@@ -438,6 +531,10 @@ function renderMbtiView(view) {
         <button onclick="shareResult(\`${shareText}\`)"
           class="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-violet-900/40 mb-3">
           📤 내 결과 공유하기
+        </button>
+        <button onclick="shareCompatibility('mbti', \`${state.nickname}\`, { type: '${type}' }, '${type}')"
+          class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition mb-3">
+          💞 궁합 보기 링크 보내기
         </button>
 
         ${renderPlaceholderUI('mbti', type)}
@@ -1934,6 +2031,8 @@ function seqmemTileTap(idx) {
 
   if (idx === state.sequence[pos]) {
     if (tileEl) tileEl.className = seqmemTileClass('correct');
+    playSound('correct');
+    pulseElement(tileEl, 'correct');
     if (state.userInput.length === state.sequence.length) {
       state.correctRounds++;
       state.maxCorrectLen = Math.max(state.maxCorrectLen, state.currentLen);
@@ -1946,6 +2045,8 @@ function seqmemTileTap(idx) {
     }
   } else {
     if (tileEl) tileEl.className = seqmemTileClass('wrong');
+    playSound('wrong');
+    pulseElement(tileEl, 'wrong');
     state.currentLen = Math.max(state.currentLen - 1, cfg.minLen);
     state.phase = 'idle';
     if (feedback) feedback.textContent = '아쉬워요! 순서가 달랐어요 😵';
@@ -2676,6 +2777,8 @@ function impulseTap() {
     state.commissionErrors++;
     if (feedback) feedback.textContent = '앗, 참았어야 해요! 성급한 반응 😵';
     showToast('❌ 성급한 반응!');
+    playSound('wrong');
+    pulseElement(feedback, 'wrong');
   } else {
     const ms = Math.round(performance.now() - state.startTime);
     state.correctCount++;
@@ -2683,6 +2786,8 @@ function impulseTap() {
     state.totalGoTime += ms;
     if (feedback) feedback.textContent = `${ms}ms! 정확해요 ✅`;
     showToast('✅ 정답!');
+    playSound('correct');
+    pulseElement(feedback, 'correct');
   }
   state.delayTimer = setTimeout(impulseAdvance, 600);
 }
@@ -2908,6 +3013,8 @@ function shortfocusTap() {
     state.commissionErrors++;
     if (feedback) feedback.textContent = '앗, 광고에 낚였어요! 😵';
     showToast('❌ 광고에 낚였어요!');
+    playSound('wrong');
+    pulseElement(feedback, 'wrong');
   } else {
     const ms = Math.round(performance.now() - state.startTime);
     state.correctCount++;
@@ -2915,6 +3022,8 @@ function shortfocusTap() {
     state.totalGoTime += ms;
     if (feedback) feedback.textContent = `${ms}ms! 딱 걸렸다 ✅`;
     showToast('✅ 정답!');
+    playSound('correct');
+    pulseElement(feedback, 'correct');
   }
   state.delayTimer = setTimeout(shortfocusAdvance, 600);
 }
@@ -2953,7 +3062,9 @@ function shortfocusAdvance() {
    - MBTI/ADHD와 동일한 "문항 → 점수 누적 → 등급" 패턴
 ══════════════════════════════════════════════════ */
 function initInsa() {
-  App.state.insa = { nickname: '', answers: [], step: 0 };
+  const match = (App.pendingMatch && App.pendingMatch.section === 'insa') ? App.pendingMatch.data : null;
+  App.pendingMatch = null;
+  App.state.insa = { nickname: '', answers: [], step: 0, match };
   renderInsaView('start');
 }
 
@@ -2968,6 +3079,7 @@ function renderInsaView(view) {
         <div class="text-6xl mb-4">🎉</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">인싸력 테스트</h2>
         <p class="text-slate-400 mb-6">10문항으로 알아보는 나의 사교성 지수<br>인싸든 아싸든, 다 각자의 매력이 있는 법!</p>
+        ${renderMatchBanner(state.match, state.match ? state.match.score + '점' : '')}
         <input id="insa-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-orange-500 transition"/>
         <button onclick="insaStart()" class="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-400 hover:to-pink-500 text-white font-bold py-3 rounded-xl transition">
@@ -3012,6 +3124,8 @@ function renderInsaView(view) {
           <p class="text-slate-400">${state.nickname} 님의 점수: <strong class="text-slate-100">${score}점</strong> / 30점</p>
         </div>
 
+        ${renderInsaMatchCard(score, state.match)}
+
         <div class="bg-slate-800 rounded-2xl p-5 mb-4">
           <p class="text-slate-300 leading-relaxed">${result.desc}</p>
         </div>
@@ -3032,6 +3146,10 @@ function renderInsaView(view) {
         <button onclick="shareResult(\`${shareText}\`)"
           class="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-400 hover:to-pink-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-orange-900/40 mb-3">
           📤 내 결과 공유하기
+        </button>
+        <button onclick="shareCompatibility('insa', \`${state.nickname}\`, { score: ${score} }, '${score}점')"
+          class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition mb-3">
+          💞 궁합 보기 링크 보내기
         </button>
 
         ${renderPlaceholderUI('insa', result.grade)}
@@ -3206,6 +3324,8 @@ function proverbAnswer(idx) {
   }
   const feedback = document.getElementById('proverb-feedback');
   if (feedback) feedback.textContent = isCorrect ? '정답이에요! 👍' : `아쉬워요! 정답은 "${q.correct}"`;
+  playSound(isCorrect ? 'correct' : 'wrong');
+  pulseElement(correctBtn || document.getElementById(`proverb-opt-${idx}`), isCorrect ? 'correct' : 'wrong');
 
   setTimeout(proverbAdvance, 1400);
 }
@@ -3363,6 +3483,8 @@ function pricequizAnswer(idx) {
   }
   const feedback = document.getElementById('pricequiz-feedback');
   if (feedback) feedback.textContent = isCorrect ? '정답이에요! 👍' : `아쉬워요! 정답은 "${q.correct}"`;
+  playSound(isCorrect ? 'correct' : 'wrong');
+  pulseElement(correctBtn || document.getElementById(`pricequiz-opt-${idx}`), isCorrect ? 'correct' : 'wrong');
 
   setTimeout(pricequizAdvance, 1400);
 }
@@ -3442,6 +3564,54 @@ function saveRanking(section, nickname, result) {
   list.unshift({ nickname, result, time: new Date().toLocaleString('ko-KR') });
   localStorage.setItem(key, JSON.stringify(list.slice(0, 10)));
   markDone(section);
+  addXP(computeXP(result));
+}
+
+/* ══════════════════════════════════════════════════
+   ⭐ 레벨/경험치 시스템 (v0.0.33~)
+   - 모든 테스트가 공통으로 호출하는 saveRanking()에서 한 곳에서만 XP를 적립
+   - Tier(S~D) 채점 테스트는 등급별 차등 XP, 그 외(MBTI/ADHD/인싸력/속담/물가/운세)는 완료 시 고정 XP
+══════════════════════════════════════════════════ */
+const TIER_XP = { S: 30, A: 25, B: 20, C: 15, D: 10 };
+const FLAT_COMPLETION_XP = 15;
+const XP_PER_LEVEL = 100;
+
+function computeXP(result) {
+  const tier = parseTierFromResult(result);
+  return tier ? TIER_XP[tier] : FLAT_COMPLETION_XP;
+}
+
+function addXP(amount) {
+  const cur = parseInt(localStorage.getItem('app_xp') || '0', 10);
+  localStorage.setItem('app_xp', String(cur + amount));
+}
+
+function getLevelInfo() {
+  const xp = parseInt(localStorage.getItem('app_xp') || '0', 10);
+  const level = Math.floor(xp / XP_PER_LEVEL) + 1;
+  const xpInLevel = xp % XP_PER_LEVEL;
+  return { xp, level, xpInLevel };
+}
+
+/* ══════════════════════════════════════════════════
+   🏅 칭호 시스템 (v0.0.33~)
+   - 방문 스트릭·완주 개수·Tier 성적 등 이미 쌓여있는 로컬 기록만으로 계산 (신규 저장소 불필요)
+══════════════════════════════════════════════════ */
+function getLatestResult(section) {
+  const list = JSON.parse(localStorage.getItem('ranking_' + section) || '[]');
+  return list.length ? list[0].result : null;
+}
+
+const BADGES = [
+  { emoji: '🔥', label: '개근왕', check: () => parseInt(localStorage.getItem('visit_streak') || '0', 10) >= 7 },
+  { emoji: '🌟', label: '올라운더', check: () => ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus', 'insa', 'proverb', 'pricequiz'].every(isDone) },
+  { emoji: '🧠', label: '천재 과몰입러', check: () => CHALLENGE_SECTIONS.every(s => { const r = getLatestResult(s); return r && parseTierFromResult(r) === 'S'; }) },
+  { emoji: '🎉', label: '인싸력 만렙', check: () => { const r = getLatestResult('insa'); return r && r.includes('등급 S'); } },
+  { emoji: '📜', label: '지혜로운 어른', check: () => { const r = getLatestResult('proverb'); return r && r.includes('등급 S'); } },
+];
+
+function getEarnedBadges() {
+  return BADGES.filter(b => b.check());
 }
 
 function renderLocalRanking(listId, section) {
@@ -3619,6 +3789,8 @@ function renderHomeMypage() {
   const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus', 'insa', 'proverb', 'pricequiz'];
   const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력', colorvision: '색각 테스트', logic: '논리력', impulse: '충동억제', shortfocus: '숏폼 집중력', insa: '인싸력', proverb: '속담 완성', pricequiz: '그 시절 물가' };
   const doneCount = sections.filter(isDone).length;
+  const { level, xpInLevel } = getLevelInfo();
+  const earnedBadges = getEarnedBadges();
 
   // 최근 테스트 기록 모아보기 (섹션별 가장 최근 1건씩)
   const historyItems = [];
@@ -3639,7 +3811,22 @@ function renderHomeMypage() {
         </div>
         <button onclick="homeSaveNickname()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 py-2 rounded-lg transition">저장</button>
       </div>
-      <div class="flex items-center gap-2 text-amber-300 text-sm font-semibold">🔥 ${streak}일 연속 방문 중</div>
+      <div class="flex items-center gap-2 text-amber-300 text-sm font-semibold mb-3">🔥 ${streak}일 연속 방문 중</div>
+
+      <div class="flex items-center justify-between text-xs text-indigo-200 mb-1">
+        <span class="font-bold">⭐ Lv.${level}</span>
+        <span>${xpInLevel} / ${XP_PER_LEVEL} XP</span>
+      </div>
+      <div class="bg-slate-700/60 rounded-full h-2 overflow-hidden mb-3">
+        <div class="h-full rounded-full bg-gradient-to-r from-indigo-400 to-violet-400" style="width:${xpInLevel}%"></div>
+      </div>
+
+      ${earnedBadges.length ? `
+        <div class="flex flex-wrap gap-2">
+          ${earnedBadges.map(b => `
+            <span class="bg-indigo-800/50 border border-indigo-600 text-indigo-200 text-xs font-semibold px-3 py-1 rounded-full">${b.emoji} ${b.label}</span>`).join('')}
+        </div>` : `
+        <p class="text-slate-500 text-xs">테스트를 완주하면 칭호를 얻을 수 있어요!</p>`}
     </div>
 
     <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 mb-6">
@@ -3868,6 +4055,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const vs = params.get('vs');
     if (vs) {
       try { App.pendingChallenge = { section: hash, data: JSON.parse(vs) }; } catch (e) { App.pendingChallenge = null; }
+    }
+    const match = params.get('match');
+    if (match) {
+      try { App.pendingMatch = { section: hash, data: JSON.parse(match) }; } catch (e) { App.pendingMatch = null; }
     }
   }
   App.navigate(hash in sectionInits ? hash : 'home');
