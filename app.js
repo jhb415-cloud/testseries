@@ -1,4 +1,4 @@
-/* v0.0.19 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.20 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -18,6 +18,7 @@ window.App = {
     impulse: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false },
     shortfocus: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false },
     insa: { nickname: '', answers: [], step: 0 },
+    proverb: { nickname: '', step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [] },
   },
 
   /* ─── 내비게이션 ─── */
@@ -2791,6 +2792,156 @@ function insaAnswer(val) {
 }
 
 /* ══════════════════════════════════════════════════
+   📜 속담 완성 퀴즈 (지혜 테스트, 어르신향, v0.0.20~)
+   - 시간 제한 없음, 정답/오답 모두 긍정적으로 프레이밍
+══════════════════════════════════════════════════ */
+function initProverb() {
+  App.state.proverb = { nickname: '', step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [] };
+  renderProverbView('start');
+}
+
+function renderProverbView(view) {
+  const container = document.getElementById('proverb-container');
+  const { proverbQuestions, proverbResults } = AppData;
+  const state = App.state.proverb;
+
+  if (view === 'start') {
+    container.innerHTML = `
+      <div class="max-w-md mx-auto text-center">
+        <div class="text-6xl mb-4">📜</div>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">속담 완성 퀴즈</h2>
+        <p class="text-slate-400 mb-6">옛 어른들의 지혜, 속담 10문항!<br>시간 제한 없이 편하게 풀어보세요 😊</p>
+        <input id="proverb-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-amber-500 transition"/>
+        <button onclick="proverbStart()" class="w-full bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-bold py-3 rounded-xl transition">
+          퀴즈 시작하기
+        </button>
+      </div>`;
+  }
+
+  else if (view === 'question') {
+    const q = proverbQuestions[state.step];
+    const opts = shuffleArray([q.correct, ...q.decoys]);
+    state.options = opts;
+    state.answerIndex = opts.indexOf(q.correct);
+    state.phase = 'active';
+    const progress = Math.round((state.step / proverbQuestions.length) * 100);
+
+    container.innerHTML = `
+      <div class="max-w-lg mx-auto">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-slate-400 text-sm">${state.nickname} 님</span>
+          <span class="text-amber-400 font-bold text-sm">${state.step + 1} / ${proverbQuestions.length}</span>
+        </div>
+        <div class="progress-bar-track mb-6">
+          <div class="h-full rounded-full transition-all" style="width:${progress}%;background:linear-gradient(90deg,#d97706,#eab308)"></div>
+        </div>
+        <h3 class="text-slate-100 text-xl font-semibold mb-6 leading-relaxed text-center">"${q.front} <span class="text-amber-400">___</span>"</h3>
+        <div id="proverb-options" class="flex flex-col gap-3">
+          ${opts.map((opt, i) => `
+            <button id="proverb-opt-${i}" onclick="proverbAnswer(${i})" class="option-btn">
+              ${opt}
+            </button>`).join('')}
+        </div>
+        <p id="proverb-feedback" class="text-center text-slate-500 text-sm mt-4 min-h-6"></p>
+      </div>`;
+  }
+
+  else if (view === 'result') {
+    const total = proverbQuestions.length;
+    const result = proverbResults.find(r => state.correctCount >= r.range[0] && state.correctCount <= r.range[1]) || proverbResults[proverbResults.length-1];
+    const shareText = `속담 완성 퀴즈 ${state.correctCount}/${total}개 정답! 등급 ${result.grade} - ${result.title}. 너도 도전해봐 👉`;
+
+    container.innerHTML = `
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-6">
+          <div class="text-5xl mb-3">${result.emoji}</div>
+          <div class="text-4xl font-black text-slate-100 mb-1">등급 ${result.grade}</div>
+          <div class="text-amber-400 font-bold text-xl mb-2">${result.title}</div>
+          <p class="text-slate-400">${state.nickname} 님의 점수: <strong class="text-slate-100">${state.correctCount}</strong> / ${total}개</p>
+        </div>
+
+        <div class="bg-slate-800 rounded-2xl p-5 mb-4">
+          <p class="text-slate-300 leading-relaxed">${result.desc}</p>
+        </div>
+        <div class="bg-slate-800 rounded-2xl p-5 mb-4">
+          <p class="text-slate-400 leading-relaxed text-sm">${result.detail}</p>
+        </div>
+
+        <div class="bg-amber-900/30 border border-amber-700/40 rounded-xl p-4 mb-4">
+          <h4 class="text-amber-300 font-bold mb-3">📖 정답 확인</h4>
+          <ul class="space-y-2">
+            ${state.log.map(item => `
+              <li class="flex gap-2 text-sm">
+                <span class="mt-0.5">${item.userCorrect ? '✅' : '❌'}</span>
+                <span class="text-slate-300">"${item.front} <strong class="text-amber-300">${item.correct}</strong>"</span>
+              </li>`).join('')}
+          </ul>
+        </div>
+
+        <button onclick="shareResult(\`${shareText}\`)"
+          class="w-full bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-amber-900/40 mb-3">
+          📤 내 결과 공유하기
+        </button>
+
+        ${renderPlaceholderUI('proverb', result.grade)}
+
+        <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs leading-relaxed">
+          ⚠️ 지역·세대에 따라 다르게 전해지는 속담일 수 있어요. 정답은 재미로만 참고해주세요.
+        </div>
+        <button onclick="initProverb()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
+          다시 풀어보기
+        </button>
+      </div>`;
+
+    saveRanking('proverb', state.nickname, '등급 ' + result.grade + ' (' + state.correctCount + '/' + total + ')');
+    renderLocalRanking('proverb-ranking-list', 'proverb');
+  }
+}
+
+function proverbStart() {
+  const input = document.getElementById('proverb-nickname');
+  const nickname = input ? input.value.trim() : '';
+  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  App.state.proverb = { nickname, step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [] };
+  renderProverbView('question');
+}
+
+function proverbAnswer(idx) {
+  const state = App.state.proverb;
+  if (state.phase !== 'active') return;
+  state.phase = 'idle';
+  const q = AppData.proverbQuestions[state.step];
+  const isCorrect = idx === state.answerIndex;
+  if (isCorrect) state.correctCount++;
+  state.log.push({ front: q.front, correct: q.correct, userCorrect: isCorrect });
+
+  const buttons = document.querySelectorAll('#proverb-options button');
+  buttons.forEach(btn => btn.style.pointerEvents = 'none');
+  const correctBtn = document.getElementById(`proverb-opt-${state.answerIndex}`);
+  if (correctBtn) correctBtn.classList.add('!bg-emerald-700/50', '!border-emerald-500', '!text-emerald-200');
+  if (!isCorrect) {
+    const wrongBtn = document.getElementById(`proverb-opt-${idx}`);
+    if (wrongBtn) wrongBtn.classList.add('!bg-rose-700/50', '!border-rose-500', '!text-rose-200');
+  }
+  const feedback = document.getElementById('proverb-feedback');
+  if (feedback) feedback.textContent = isCorrect ? '정답이에요! 👍' : `아쉬워요! 정답은 "${q.correct}"`;
+
+  setTimeout(proverbAdvance, 1400);
+}
+
+function proverbAdvance() {
+  if (App.state.currentSection !== 'proverb') return;
+  const state = App.state.proverb;
+  state.step++;
+  if (state.step >= AppData.proverbQuestions.length) {
+    App.showLoader(() => renderProverbView('result'));
+  } else {
+    renderProverbView('question');
+  }
+}
+
+/* ══════════════════════════════════════════════════
    확장 Placeholder UI (공통)
 ══════════════════════════════════════════════════ */
 function renderPlaceholderUI(section, value) {
@@ -2905,13 +3056,13 @@ function renderHomeMypage() {
 
   const nickname = getNickname();
   const streak = updateVisitStreak();
-  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus', 'insa'];
-  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력', colorvision: '색각 테스트', logic: '논리력', impulse: '충동억제', shortfocus: '숏폼 집중력', insa: '인싸력' };
+  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus', 'insa', 'proverb'];
+  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력', colorvision: '색각 테스트', logic: '논리력', impulse: '충동억제', shortfocus: '숏폼 집중력', insa: '인싸력', proverb: '속담 완성' };
   const doneCount = sections.filter(isDone).length;
 
   // 최근 테스트 기록 모아보기 (섹션별 가장 최근 1건씩)
   const historyItems = [];
-  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus', 'insa'].forEach(sec => {
+  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus', 'insa', 'proverb'].forEach(sec => {
     const list = JSON.parse(localStorage.getItem('ranking_' + sec) || '[]');
     if (list.length) historyItems.push({ section: sec, ...list[0] });
   });
@@ -3112,6 +3263,7 @@ document.addEventListener('DOMContentLoaded', () => {
     impulse: initImpulse,
     shortfocus: initShortfocus,
     insa: initInsa,
+    proverb: initProverb,
     lotto: initLotto,
   };
 
