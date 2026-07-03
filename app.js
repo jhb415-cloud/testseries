@@ -1,4 +1,4 @@
-/* v0.0.44 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.45 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -4075,7 +4075,7 @@ function initLotto() {
           <button onclick="lottoRunRandom()" class="bg-violet-700 hover:bg-violet-600 text-white font-bold py-3 rounded-xl transition">🎲 완전 랜덤</button>
           <button onclick="document.getElementById('lotto-custom-box').classList.toggle('hidden')" class="bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">✍️ 숫자 직접 지정</button>
           <button onclick="lottoRunFortunePick()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition">🔮 오늘의 운세·꿈 연동</button>
-          <button onclick="lottoRunStats()" class="bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl transition">📊 실제 당첨 통계 기반</button>
+          <button disabled title="데이터 소스 접근 이슈로 점검 중" class="bg-slate-800 text-slate-600 font-bold py-3 rounded-xl border border-slate-700 cursor-not-allowed">📊 통계 기반 추천 (준비중)</button>
         </div>
         <div id="lotto-custom-box" class="hidden mb-5">
           <p class="text-slate-400 text-xs mb-2">포함하고 싶은 숫자 1~5개를 콤마로 구분해 입력하세요 (1~45)</p>

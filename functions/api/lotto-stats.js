@@ -1,4 +1,4 @@
-/* v0.0.44 | 5-in-1 Dashboard SPA — functions/api/lotto-stats.js
+/* v0.0.45 | 5-in-1 Dashboard SPA — functions/api/lotto-stats.js
    로또 통계기반 추천용 프록시. 브라우저에서 dhlottery.co.kr을 직접 호출하면 CORS로 막히기 때문에
    서버(Cloudflare Pages Function)에서 대신 가져와 번호별 출현 빈도만 계산해 돌려줌.
    동행복권 공식 오픈 API가 없어 널리 쓰이는 비공식 엔드포인트(getLottoNumber) 사용 — 언제든 바뀔 수 있음. */
