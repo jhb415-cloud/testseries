@@ -1,4 +1,4 @@
-/* v0.0.30 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.31 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -112,6 +112,75 @@ function shareResult(text) {
   }
 }
 
+/* ══════════════════════════════════════════════════
+   🆚 친구 대결 모드 (v0.0.31~)
+   - Tier(S~D) 채점을 쓰는 8개 테스트(두뇌나이/반응속도/숫자기억/순서기억/색각/논리력/충동억제/숏폼집중력) 대상
+   - 백엔드 없이 URL 파라미터(#{section}?vs=...)에 상대 결과를 담아 공유 → 같은 테스트를 마치면 Tier끼리 비교
+   - Tier 점수 환산은 renderCognitiveRadarCard()의 RADAR_TIER_SCORE와 동일 기준 재사용
+══════════════════════════════════════════════════ */
+const CHALLENGE_TIER_SCORE = { S: 100, A: 80, B: 60, C: 40, D: 20 };
+const CHALLENGE_SECTIONS = ['brain', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus'];
+
+function parseTierFromResult(resultStr) {
+  const m = resultStr && resultStr.match(/Tier ([SABCD])/);
+  return m ? m[1] : null;
+}
+
+/* 결과 화면의 "친구에게 도전장 보내기" 버튼에서 호출 */
+function challengeFriend(section, nickname, result) {
+  const payload = encodeURIComponent(JSON.stringify({ n: nickname, r: result }));
+  const url = `${location.origin}${location.pathname}#${section}?vs=${payload}`;
+  const text = `⚔️ ${nickname}님의 도전장이 도착했습니다! (${result}) 같은 테스트로 나도 겨뤄보기 👉 ${url}`;
+  shareResult(text);
+}
+
+/* 결과 화면에서 state.challenge가 있을 때 VS 비교 카드 HTML 생성 */
+function renderChallengeCompareCard(myResult, challenge) {
+  if (!challenge) return '';
+  const myTier = parseTierFromResult(myResult);
+  const oppTier = parseTierFromResult(challenge.r);
+  const myScore = CHALLENGE_TIER_SCORE[myTier] || 0;
+  const oppScore = CHALLENGE_TIER_SCORE[oppTier] || 0;
+  let verdict, verdictColor;
+  if (myScore > oppScore) { verdict = '🏆 승리!'; verdictColor = 'text-emerald-400'; }
+  else if (myScore < oppScore) { verdict = '😢 아쉬운 패배'; verdictColor = 'text-rose-400'; }
+  else { verdict = '🤝 무승부'; verdictColor = 'text-amber-400'; }
+  return `
+    <div class="bg-slate-800 border border-violet-700/40 rounded-2xl p-5 mb-4 text-center">
+      <h4 class="text-slate-100 font-bold mb-3">⚔️ 친구 대결 결과</h4>
+      <div class="flex items-center justify-center gap-4 mb-2">
+        <div class="flex-1">
+          <div class="text-slate-500 text-xs mb-1">${challenge.n}</div>
+          <div class="text-slate-100 font-bold">${challenge.r}</div>
+        </div>
+        <div class="text-slate-500 font-black">VS</div>
+        <div class="flex-1">
+          <div class="text-slate-500 text-xs mb-1">나</div>
+          <div class="text-slate-100 font-bold">${myResult}</div>
+        </div>
+      </div>
+      <div class="font-black text-lg ${verdictColor}">${verdict}</div>
+    </div>`;
+}
+
+/* 시작 화면에서 state.challenge가 있을 때(도전장 링크로 진입) 보여줄 배너 */
+function renderChallengeBanner(challenge) {
+  if (!challenge) return '';
+  return `
+    <div class="bg-violet-900/30 border border-violet-700/40 rounded-xl p-3 mb-4 text-sm text-violet-200">
+      ⚔️ <strong>${challenge.n}</strong>님의 도전장! 기록: <strong>${challenge.r}</strong> — 같은 조건으로 겨뤄보세요
+    </div>`;
+}
+
+/* 결과 화면 공유 버튼 옆에 넣을 "친구에게 도전장 보내기" 버튼 */
+function renderChallengeButton(section, nickname, result) {
+  return `
+    <button onclick="challengeFriend('${section}', \`${nickname}\`, \`${result}\`)"
+      class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition mb-3">
+      ⚔️ 친구에게 도전장 보내기
+    </button>`;
+}
+
 /* ── 5개 테스트 완주 추적 (마이홈용) ── */
 function markDone(section) {
   localStorage.setItem('done_' + section, '1');
@@ -190,6 +259,8 @@ function initHome() {
   document.getElementById('home-quote-text').textContent = `"${quote.text}"`;
   document.getElementById('home-quote-author').textContent = `— ${quote.author} (${quote.role})`;
   document.getElementById('home-copy-btn').onclick = () => copyToClipboard(`"${quote.text}" — ${quote.author}`);
+
+  renderDailyChallengeCard();
 
   const toolCards = [
     { section: 'dream',   emoji: '🌙', title: '꿈 해몽 검색',    desc: '어젯밤 그 꿈, 무슨 의미일까?',   color: 'from-blue-600 to-indigo-700' },
@@ -751,7 +822,9 @@ const STROOP_CONFIG = {
 
 function initBrain() {
   if (App.state.brain.timerID) clearTimeout(App.state.brain.timerID);
-  App.state.brain = { nickname: '', difficulty: null, questions: [], step: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null };
+  const challenge = (App.pendingChallenge && App.pendingChallenge.section === 'brain') ? App.pendingChallenge.data : null;
+  App.pendingChallenge = null;
+  App.state.brain = { nickname: '', difficulty: null, questions: [], step: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, challenge };
   renderBrainView('start');
 }
 
@@ -765,6 +838,7 @@ function renderBrainView(view) {
         <div class="text-6xl mb-4">⚡</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">두뇌 나이 측정기</h2>
         <p class="text-slate-400 mb-6">스트룹 테스트 — 글자의 뜻이 아닌<br><strong class="text-slate-100">글자 색상</strong>에 해당하는 버튼을 누르세요!</p>
+        ${renderChallengeBanner(state.challenge)}
         <input id="brain-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-emerald-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
@@ -861,6 +935,9 @@ function renderBrainView(view) {
           </div>
           <p class="text-slate-300">${tierMsg[tier]}</p>
         </div>
+
+        ${renderChallengeCompareCard(brainAge + '세 (Tier ' + tier + ')', state.challenge)}
+
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
             <div class="text-2xl font-black text-emerald-400">${state.correctCount}</div>
@@ -882,6 +959,7 @@ function renderBrainView(view) {
           class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-emerald-900/40 mb-3">
           📲 내 두뇌 나이 공유하기
         </button>
+        ${renderChallengeButton('brain', state.nickname, brainAge + '세 (Tier ' + tier + ')')}
 
         ${renderPlaceholderUI('brain', tier)}
 
@@ -1138,7 +1216,9 @@ const REACTION_CONFIG = {
 
 function initReaction() {
   if (App.state.reaction.delayTimer) clearTimeout(App.state.reaction.delayTimer);
-  App.state.reaction = { nickname: '', difficulty: null, round: 0, totalRounds: 0, times: [], fouls: 0, delayTimer: null, stimulusAt: 0, phase: 'idle' };
+  const challenge = (App.pendingChallenge && App.pendingChallenge.section === 'reaction') ? App.pendingChallenge.data : null;
+  App.pendingChallenge = null;
+  App.state.reaction = { nickname: '', difficulty: null, round: 0, totalRounds: 0, times: [], fouls: 0, delayTimer: null, stimulusAt: 0, phase: 'idle', challenge };
   renderReactionView('start');
 }
 
@@ -1152,6 +1232,7 @@ function renderReactionView(view) {
         <div class="text-6xl mb-4">💨</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">반응속도 테스트</h2>
         <p class="text-slate-400 mb-6">화면이 초록색으로 바뀌는 순간 최대한 빨리 탭하세요!<br>너무 일찍 누르면 반칙이에요.</p>
+        ${renderChallengeBanner(state.challenge)}
         <input id="reaction-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
@@ -1218,6 +1299,9 @@ function renderReactionView(view) {
           </div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+
+        ${renderChallengeCompareCard(avgMs + 'ms (Tier ' + tier + ')', state.challenge)}
+
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
             <div class="text-2xl font-black text-cyan-400">${bestMs}ms</div>
@@ -1237,6 +1321,7 @@ function renderReactionView(view) {
           class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
           📤 내 결과 공유하기
         </button>
+        ${renderChallengeButton('reaction', state.nickname, avgMs + 'ms (Tier ' + tier + ')')}
 
         ${renderPlaceholderUI('reaction', tier)}
 
@@ -1380,7 +1465,9 @@ const MEMDIGIT_CONFIG = {
 
 function initMemdigit() {
   if (App.state.memdigit.delayTimer) clearTimeout(App.state.memdigit.delayTimer);
-  App.state.memdigit = { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle' };
+  const challenge = (App.pendingChallenge && App.pendingChallenge.section === 'memdigit') ? App.pendingChallenge.data : null;
+  App.pendingChallenge = null;
+  App.state.memdigit = { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle', challenge };
   renderMemdigitView('start');
 }
 
@@ -1394,6 +1481,7 @@ function renderMemdigitView(view) {
         <div class="text-6xl mb-4">🔢</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">숫자 기억력 테스트</h2>
         <p class="text-slate-400 mb-6">화면에 나타나는 숫자를 순서대로 외운 뒤<br>그대로 입력하세요. 틀리면 자릿수가 줄어들어요!</p>
+        ${renderChallengeBanner(state.challenge)}
         <input id="memdigit-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
@@ -1442,6 +1530,7 @@ function renderMemdigitView(view) {
     else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 메모 앱이 괜히 있는 게 아니야. 오늘부터 적극 활용하자!'; }
 
     const shareText = `나의 숫자 기억력은 최대 ${maxLen}자리! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+    const myResultStr = maxLen + '자리 (Tier ' + tier + ')';
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -1454,6 +1543,9 @@ function renderMemdigitView(view) {
           </div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+
+        ${renderChallengeCompareCard(myResultStr, state.challenge)}
+
         <div class="grid grid-cols-2 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
             <div class="text-2xl font-black text-cyan-400">${state.correctRounds} / ${state.totalRounds}</div>
@@ -1469,6 +1561,7 @@ function renderMemdigitView(view) {
           class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
           📤 내 결과 공유하기
         </button>
+        ${renderChallengeButton('memdigit', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('memdigit', tier)}
 
@@ -1633,7 +1726,9 @@ const SEQMEM_CONFIG = {
 
 function initSeqmem() {
   if (App.state.seqmem.delayTimer) clearTimeout(App.state.seqmem.delayTimer);
-  App.state.seqmem = { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle' };
+  const challenge = (App.pendingChallenge && App.pendingChallenge.section === 'seqmem') ? App.pendingChallenge.data : null;
+  App.pendingChallenge = null;
+  App.state.seqmem = { nickname: '', difficulty: null, round: 0, totalRounds: 0, currentLen: 0, sequence: [], userInput: [], maxCorrectLen: 0, correctRounds: 0, delayTimer: null, phase: 'idle', challenge };
   renderSeqmemView('start');
 }
 
@@ -1655,6 +1750,7 @@ function renderSeqmemView(view) {
         <div class="text-6xl mb-4">🧩</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">순서 기억력 테스트</h2>
         <p class="text-slate-400 mb-6">타일이 순서대로 반짝이는 걸 잘 본 뒤<br>같은 순서로 타일을 눌러보세요!</p>
+        ${renderChallengeBanner(state.challenge)}
         <input id="seqmem-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
@@ -1706,6 +1802,7 @@ function renderSeqmemView(view) {
     else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 원래 급하면 실수하는 법! 다음엔 천천히 되짚어보자~'; }
 
     const shareText = `나의 순서 기억력은 최대 ${maxLen}칸! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+    const myResultStr = maxLen + '칸 (Tier ' + tier + ')';
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -1718,6 +1815,9 @@ function renderSeqmemView(view) {
           </div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+
+        ${renderChallengeCompareCard(myResultStr, state.challenge)}
+
         <div class="grid grid-cols-2 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
             <div class="text-2xl font-black text-cyan-400">${state.correctRounds} / ${state.totalRounds}</div>
@@ -1733,6 +1833,7 @@ function renderSeqmemView(view) {
           class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
           📤 내 결과 공유하기
         </button>
+        ${renderChallengeButton('seqmem', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('seqmem', tier)}
 
@@ -1879,7 +1980,9 @@ function initColorvision() {
   const s = App.state.colorvision;
   if (s.timerID) clearTimeout(s.timerID);
   if (s.delayTimer) clearTimeout(s.delayTimer);
-  App.state.colorvision = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', baseColor: '', oddColor: '', oddIndex: 0, tileCount: 0 };
+  const challenge = (App.pendingChallenge && App.pendingChallenge.section === 'colorvision') ? App.pendingChallenge.data : null;
+  App.pendingChallenge = null;
+  App.state.colorvision = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', baseColor: '', oddColor: '', oddIndex: 0, tileCount: 0, challenge };
   renderColorvisionView('start');
 }
 
@@ -1893,6 +1996,7 @@ function renderColorvisionView(view) {
         <div class="text-6xl mb-4">🎨</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">색각 테스트</h2>
         <p class="text-slate-400 mb-6">격자 안에 미묘하게 다른 색 타일이 하나 숨어있어요.<br>제한시간 안에 찾아서 탭하세요!</p>
+        ${renderChallengeBanner(state.challenge)}
         <input id="colorvision-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
@@ -1943,6 +2047,7 @@ function renderColorvisionView(view) {
     else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 색보다 디자인 센스가 더 중요하지! 헷갈리면 친구한테 물어보자~'; }
 
     const shareText = `나의 색 감각 점수는 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+    const myResultStr = accuracy.toFixed(0) + '% (Tier ' + tier + ')';
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -1955,6 +2060,9 @@ function renderColorvisionView(view) {
           </div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+
+        ${renderChallengeCompareCard(myResultStr, state.challenge)}
+
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
             <div class="text-2xl font-black text-emerald-400">${state.correctCount}</div>
@@ -1975,6 +2083,7 @@ function renderColorvisionView(view) {
           class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
           📤 내 결과 공유하기
         </button>
+        ${renderChallengeButton('colorvision', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('colorvision', tier)}
 
@@ -2162,7 +2271,9 @@ function initLogic() {
   const s = App.state.logic;
   if (s.timerID) clearTimeout(s.timerID);
   if (s.delayTimer) clearTimeout(s.delayTimer);
-  App.state.logic = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', seq: [], answer: 0, options: [] };
+  const challenge = (App.pendingChallenge && App.pendingChallenge.section === 'logic') ? App.pendingChallenge.data : null;
+  App.pendingChallenge = null;
+  App.state.logic = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', seq: [], answer: 0, options: [], challenge };
   renderLogicView('start');
 }
 
@@ -2176,6 +2287,7 @@ function renderLogicView(view) {
         <div class="text-6xl mb-4">🧮</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">논리력 테스트</h2>
         <p class="text-slate-400 mb-6">숫자들이 나열되어 있어요.<br>규칙을 찾아 다음 숫자를 맞혀보세요!</p>
+        ${renderChallengeBanner(state.challenge)}
         <input id="logic-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
@@ -2224,6 +2336,7 @@ function renderLogicView(view) {
     else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 계산기는 괜히 있는 게 아니야! 다음엔 천천히 규칙을 찾아보자~'; }
 
     const shareText = `나의 논리력 점수는 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+    const myResultStr = accuracy.toFixed(0) + '% (Tier ' + tier + ')';
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -2236,6 +2349,9 @@ function renderLogicView(view) {
           </div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+
+        ${renderChallengeCompareCard(myResultStr, state.challenge)}
+
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
             <div class="text-2xl font-black text-emerald-400">${state.correctCount}</div>
@@ -2256,6 +2372,7 @@ function renderLogicView(view) {
           class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
           📤 내 결과 공유하기
         </button>
+        ${renderChallengeButton('logic', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('logic', tier)}
 
@@ -2382,7 +2499,9 @@ function initImpulse() {
   const s = App.state.impulse;
   if (s.timerID) clearTimeout(s.timerID);
   if (s.delayTimer) clearTimeout(s.delayTimer);
-  App.state.impulse = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false };
+  const challenge = (App.pendingChallenge && App.pendingChallenge.section === 'impulse') ? App.pendingChallenge.data : null;
+  App.pendingChallenge = null;
+  App.state.impulse = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false, challenge };
   renderImpulseView('start');
 }
 
@@ -2396,6 +2515,7 @@ function renderImpulseView(view) {
         <div class="text-6xl mb-4">🚦</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">충동억제 테스트</h2>
         <p class="text-slate-400 mb-6">🟢 초록 신호엔 최대한 빨리 탭!<br>🔴 빨간 신호엔 절대 누르지 말고 참으세요.</p>
+        ${renderChallengeBanner(state.challenge)}
         <input id="impulse-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
@@ -2447,6 +2567,7 @@ function renderImpulseView(view) {
     else                     { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 원래 사람은 다 충동적이야! 다음엔 한 박자 쉬고 반응해보자~'; }
 
     const shareText = `나의 충동억제력은 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+    const myResultStr = accuracy.toFixed(0) + '% (Tier ' + tier + ')';
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -2459,6 +2580,9 @@ function renderImpulseView(view) {
           </div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+
+        ${renderChallengeCompareCard(myResultStr, state.challenge)}
+
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
             <div class="text-2xl font-black text-emerald-400">${state.correctCount}</div>
@@ -2479,6 +2603,7 @@ function renderImpulseView(view) {
           class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
           📤 내 결과 공유하기
         </button>
+        ${renderChallengeButton('impulse', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('impulse', tier)}
 
@@ -2606,7 +2731,9 @@ function initShortfocus() {
   const s = App.state.shortfocus;
   if (s.timerID) clearTimeout(s.timerID);
   if (s.delayTimer) clearTimeout(s.delayTimer);
-  App.state.shortfocus = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false };
+  const challenge = (App.pendingChallenge && App.pendingChallenge.section === 'shortfocus') ? App.pendingChallenge.data : null;
+  App.pendingChallenge = null;
+  App.state.shortfocus = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false, challenge };
   renderShortfocusView('start');
 }
 
@@ -2620,6 +2747,7 @@ function renderShortfocusView(view) {
         <div class="text-6xl mb-4">📱</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">숏폼 집중력 테스트</h2>
         <p class="text-slate-400 mb-6">당신의 뇌, 아직 숏폼 알고리즘에 잠식되지 않았나요? 🧠<br>🔥 꿀잼 콘텐츠가 뜨면 최대한 빨리 탭!<br>📢 광고가 뜨면 절대 누르지 말고 참으세요.</p>
+        ${renderChallengeBanner(state.challenge)}
         <input id="shortfocus-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">피드 속도(난이도) 선택</p>
@@ -2671,6 +2799,7 @@ function renderShortfocusView(view) {
     else                     { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '숏폼 알고리즘의 완벽한 먹잇감 확정 😂 근데 원래 다들 그래, 너만 그런 거 아니야!'; }
 
     const shareText = `내 숏폼 뇌 지수는 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+    const myResultStr = accuracy.toFixed(0) + '% (Tier ' + tier + ')';
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -2683,6 +2812,9 @@ function renderShortfocusView(view) {
           </div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+
+        ${renderChallengeCompareCard(myResultStr, state.challenge)}
+
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
             <div class="text-2xl font-black text-emerald-400">${state.correctCount}</div>
@@ -2703,6 +2835,7 @@ function renderShortfocusView(view) {
           class="w-full bg-gradient-to-r from-fuchsia-500 to-pink-500 hover:from-fuchsia-400 hover:to-pink-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-fuchsia-900/40 mb-3">
           📤 내 결과 공유하기
         </button>
+        ${renderChallengeButton('shortfocus', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('shortfocus', tier)}
 
@@ -3352,6 +3485,50 @@ function renderComments(section) {
 }
 
 /* ══════════════════════════════════════════════════
+   🔥 오늘의 챌린지 (v0.0.31~)
+   - 오늘의 한마디와 동일한 날짜 시드 방식으로, 13개 "테스트" 중 매일 다른 3개를 홈에 노출해 재방문 유도
+══════════════════════════════════════════════════ */
+const DAILY_CHALLENGE_POOL = ['mbti', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus', 'insa', 'proverb', 'pricequiz'];
+const DAILY_CHALLENGE_META = {
+  mbti: { emoji: '🧠', label: '성격 파탄(MBTI)' }, brain: { emoji: '⚡', label: '두뇌 나이' }, adhd: { emoji: '🌪️', label: '프로 미루러' },
+  reaction: { emoji: '💨', label: '반응속도' }, memdigit: { emoji: '🔢', label: '숫자 기억력' }, seqmem: { emoji: '🧩', label: '순서 기억력' },
+  colorvision: { emoji: '🎨', label: '색각' }, logic: { emoji: '📊', label: '논리력' }, impulse: { emoji: '🚦', label: '충동억제' },
+  shortfocus: { emoji: '📱', label: '숏폼 집중력' }, insa: { emoji: '🎉', label: '인싸력' }, proverb: { emoji: '📜', label: '속담 완성' }, pricequiz: { emoji: '🧾', label: '그 시절 물가' },
+};
+
+function getDailyChallengeTests() {
+  const seed = todaySeed();
+  return DAILY_CHALLENGE_POOL
+    .map((s, i) => ({ s, r: seededRandom(seed + i * 37) }))
+    .sort((a, b) => a.r - b.r)
+    .map(x => x.s)
+    .slice(0, 3);
+}
+
+function renderDailyChallengeCard() {
+  const container = document.getElementById('home-daily-challenge');
+  if (!container) return;
+  const picks = getDailyChallengeTests();
+  container.innerHTML = `
+    <div class="bg-gradient-to-br from-fuchsia-900/40 to-indigo-900/40 border border-fuchsia-700/40 rounded-2xl p-5">
+      <h4 class="text-slate-100 font-bold mb-1">🔥 오늘의 챌린지</h4>
+      <p class="text-slate-400 text-xs mb-3">매일 바뀌는 추천 테스트 3가지, 오늘 다 깨보세요!</p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        ${picks.map(s => {
+          const meta = DAILY_CHALLENGE_META[s];
+          const done = isDone(s);
+          return `
+            <div onclick="App.navigate('${s}')" class="cursor-pointer bg-slate-800/70 hover:bg-slate-700/70 border border-slate-700 rounded-xl p-3 text-center transition">
+              <div class="text-2xl mb-1">${meta.emoji}</div>
+              <div class="text-slate-100 text-sm font-semibold">${meta.label}</div>
+              <div class="text-xs mt-1 ${done ? 'text-emerald-400' : 'text-slate-500'}">${done ? '✅ 완료' : '도전하기 →'}</div>
+            </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
    🕸️ 종합 인지 프로필 (레이더 차트, v0.0.29~)
    - 7개 인지테스트(두뇌나이/반응속도/숫자기억/순서기억/색각/논리력/충동억제) Tier를 0~100으로 환산해 시각화
    - 숏폼집중력은 충동억제와 동일 엔진이라 중복 측정 방지 차원에서 축에서 제외
@@ -3684,7 +3861,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ── hash 기반 초기 라우팅 ── */
-  const hash = location.hash.replace('#', '') || 'home';
+  const rawHash = location.hash.replace('#', '') || 'home';
+  const [hash, hashQuery] = rawHash.split('?');
+  if (hashQuery) {
+    const params = new URLSearchParams(hashQuery);
+    const vs = params.get('vs');
+    if (vs) {
+      try { App.pendingChallenge = { section: hash, data: JSON.parse(vs) }; } catch (e) { App.pendingChallenge = null; }
+    }
+  }
   App.navigate(hash in sectionInits ? hash : 'home');
 
   /* ── hashchange 이벤트 (뒤로가기/앞으로가기) ── */
