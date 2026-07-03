@@ -1,4 +1,4 @@
-/* v0.0.18 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.19 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -17,6 +17,7 @@ window.App = {
     logic: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', answer: 0 },
     impulse: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false },
     shortfocus: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false },
+    insa: { nickname: '', answers: [], step: 0 },
   },
 
   /* ─── 내비게이션 ─── */
@@ -2669,6 +2670,127 @@ function shortfocusAdvance() {
 }
 
 /* ══════════════════════════════════════════════════
+   🎉 인싸력 테스트 (10문항 사교성 성향 퀴즈, MZ향, v0.0.19~)
+   - MBTI/ADHD와 동일한 "문항 → 점수 누적 → 등급" 패턴
+══════════════════════════════════════════════════ */
+function initInsa() {
+  App.state.insa = { nickname: '', answers: [], step: 0 };
+  renderInsaView('start');
+}
+
+function renderInsaView(view) {
+  const container = document.getElementById('insa-container');
+  const { insaQuestions, insaResults } = AppData;
+  const state = App.state.insa;
+
+  if (view === 'start') {
+    container.innerHTML = `
+      <div class="max-w-md mx-auto text-center">
+        <div class="text-6xl mb-4">🎉</div>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">인싸력 테스트</h2>
+        <p class="text-slate-400 mb-6">10문항으로 알아보는 나의 사교성 지수<br>인싸든 아싸든, 다 각자의 매력이 있는 법!</p>
+        <input id="insa-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-orange-500 transition"/>
+        <button onclick="insaStart()" class="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-400 hover:to-pink-500 text-white font-bold py-3 rounded-xl transition">
+          테스트 시작하기
+        </button>
+      </div>`;
+  }
+
+  else if (view === 'question') {
+    const q = insaQuestions[state.step];
+    const progress = Math.round((state.step / insaQuestions.length) * 100);
+    container.innerHTML = `
+      <div class="max-w-lg mx-auto">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-slate-400 text-sm">${state.nickname} 님</span>
+          <span class="text-orange-400 font-bold text-sm">${state.step + 1} / ${insaQuestions.length}</span>
+        </div>
+        <div class="progress-bar-track mb-6">
+          <div class="h-full rounded-full transition-all" style="width:${progress}%;background:linear-gradient(90deg,#f97316,#ec4899)"></div>
+        </div>
+        <h3 class="text-slate-100 text-xl font-semibold mb-6 leading-relaxed">Q${state.step+1}. ${q.q}</h3>
+        <div class="flex flex-col gap-3">
+          ${[['항상 그렇다', 3], ['자주 그렇다', 2], ['가끔 그렇다', 1], ['전혀 아니다', 0]].map(([label, val]) => `
+            <button class="option-btn" onclick="insaAnswer(${val})">
+              ${label}
+            </button>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  else if (view === 'result') {
+    const score = state.answers.reduce((a, b) => a + b, 0);
+    const result = insaResults.find(r => score >= r.range[0] && score <= r.range[1]) || insaResults[insaResults.length-1];
+    const shareText = `나는 인싸력 등급 ${result.grade} - ${result.title}! ${state.nickname} 님의 점수 ${score}점. 너도 확인해봐 👉`;
+
+    container.innerHTML = `
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-6">
+          <div class="text-5xl mb-3">${result.emoji}</div>
+          <div class="text-4xl font-black text-slate-100 mb-1">등급 ${result.grade}</div>
+          <div class="text-orange-400 font-bold text-xl mb-2">${result.title}</div>
+          <p class="text-slate-400">${state.nickname} 님의 점수: <strong class="text-slate-100">${score}점</strong> / 30점</p>
+        </div>
+
+        <div class="bg-slate-800 rounded-2xl p-5 mb-4">
+          <p class="text-slate-300 leading-relaxed">${result.desc}</p>
+        </div>
+        <div class="bg-slate-800 rounded-2xl p-5 mb-4">
+          <p class="text-slate-400 leading-relaxed text-sm">${result.detail}</p>
+        </div>
+        <div class="bg-orange-900/30 border border-orange-700/40 rounded-xl p-4 mb-4">
+          <h4 class="text-orange-300 font-bold mb-3">💡 ${state.nickname} 님을 위한 인간관계 꿀팁</h4>
+          <ul class="space-y-2">
+            ${result.tips.map(tip => `
+              <li class="flex gap-2 text-slate-300 text-sm">
+                <span class="text-orange-400 mt-0.5">▸</span>
+                <span>${tip}</span>
+              </li>`).join('')}
+          </ul>
+        </div>
+
+        <button onclick="shareResult(\`${shareText}\`)"
+          class="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-400 hover:to-pink-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-orange-900/40 mb-3">
+          📤 내 결과 공유하기
+        </button>
+
+        ${renderPlaceholderUI('insa', result.grade)}
+
+        <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs leading-relaxed">
+          ⚠️ 본 결과는 오락 및 자기 이해 목적의 성향 체크리스트이며, 어떤 유형도 옳고 그름이 없습니다.
+        </div>
+        <button onclick="initInsa()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
+          다시 테스트하기
+        </button>
+      </div>`;
+
+    saveRanking('insa', state.nickname, '등급 ' + result.grade + ' (' + score + '점)');
+    renderLocalRanking('insa-ranking-list', 'insa');
+  }
+}
+
+function insaStart() {
+  const nickname = document.getElementById('insa-nickname').value.trim();
+  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  App.state.insa.nickname = nickname;
+  App.state.insa.answers = [];
+  App.state.insa.step = 0;
+  renderInsaView('question');
+}
+
+function insaAnswer(val) {
+  const state = App.state.insa;
+  state.answers.push(val);
+  state.step++;
+  if (state.step >= AppData.insaQuestions.length) {
+    App.showLoader(() => renderInsaView('result'));
+  } else {
+    renderInsaView('question');
+  }
+}
+
+/* ══════════════════════════════════════════════════
    확장 Placeholder UI (공통)
 ══════════════════════════════════════════════════ */
 function renderPlaceholderUI(section, value) {
@@ -2783,13 +2905,13 @@ function renderHomeMypage() {
 
   const nickname = getNickname();
   const streak = updateVisitStreak();
-  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus'];
-  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력', colorvision: '색각 테스트', logic: '논리력', impulse: '충동억제', shortfocus: '숏폼 집중력' };
+  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus', 'insa'];
+  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력', colorvision: '색각 테스트', logic: '논리력', impulse: '충동억제', shortfocus: '숏폼 집중력', insa: '인싸력' };
   const doneCount = sections.filter(isDone).length;
 
   // 최근 테스트 기록 모아보기 (섹션별 가장 최근 1건씩)
   const historyItems = [];
-  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus'].forEach(sec => {
+  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus', 'insa'].forEach(sec => {
     const list = JSON.parse(localStorage.getItem('ranking_' + sec) || '[]');
     if (list.length) historyItems.push({ section: sec, ...list[0] });
   });
@@ -2989,6 +3111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     logic: initLogic,
     impulse: initImpulse,
     shortfocus: initShortfocus,
+    insa: initInsa,
     lotto: initLotto,
   };
 
