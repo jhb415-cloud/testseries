@@ -4,7 +4,7 @@
 
 ## 세션 #8 — 2026-07-03
 
-### 현재 버전: v0.0.41
+### 현재 버전: v0.0.42
 
 ### 작업 내용
 - 세션 시작 시 사용자가 "어디까지 했지" 재확인 요청 → 세션#7 마지막 메모(사용자가 Stage D/Supabase 착수 의사를 밝혔고, 다음 세션에서 Claude가 사전 준비사항을 설명하기로 함)를 근거로 현재 상태 안내.
@@ -20,14 +20,20 @@
 - **v0.0.41 (카카오톡 공유)**: Kakao Developers에서 앱("과몰입 연구소", ID 1503406) 생성 → JavaScript 키 발급 → Web 플랫폼 도메인(`https://testseries1.pages.dev`) 등록까지 사용자 스크린샷을 보며 실시간 안내. 최근 개편된 Kakao Developers UI 때문에 "Web 플랫폼 등록" 위치를 몇 차례 잘못 짚었음(일반→고급→카카오로그인 순으로 헤맴) — 사용자가 "최근 내용을 제대로 찾아보고 알려줘"라고 지적해 WebSearch+WebFetch로 공식 문서를 재확인, 정확한 경로("앱 > 플랫폼 키" 페이지에서 **"Default JS Key" 박스 자체를 클릭**하면 열리는 "JavaScript SDK 도메인" 입력창)를 찾아 안내 — 이 UI 구조는 향후 세션에서도 유효하니 기억해둘 것. 코드: `index.html`에 Kakao JS SDK CDN(v2.8.1) 스크립트 추가(SRI `integrity` 해시는 문서에 텍스트로 없어서 `curl`+`openssl dgst -sha384`로 직접 계산), 신규 `kakao-share.js`(`Kakao.init()` + `shareToKakao(text)`, `Kakao.Share.sendDefault({objectType:'text', link:{webUrl,mobileWebUrl}})` 사용, 실패 시 토스트로 조용히 처리). 기존 "📤 내 결과 공유하기" 버튼 14곳(모든 결과 화면) 바로 아래에 동일 `shareText`를 재사용하는 "💬 카카오톡 공유" 버튼을 Node 스크립트로 일괄 삽입(문자열 치환 정규식이 처음엔 이스케이프된 백틱(`` \` ``) 패턴을 못 찾아 0건 치환되는 실수가 있었음 — app.js 소스 자체가 템플릿 리터럴 안에 `\`${shareText}\`` 형태로 이스케이프돼 있다는 걸 확인 후 마커 문자열 수정해 14건 정상 치환).
 - **검증**: Playwright로 Kakao SDK 로드+`Kakao.isInitialized()===true` 확인(도메인 등록 자체는 `Kakao.init()` 단계에서 검증되지 않고 실제 API 호출 시점에 걸리므로 로컬 도메인에서도 init은 성공). 구조가 다른 두 테스트(MBTI=선택형 즉시진행, 속담완성=1.4초 피드백 딜레이형)에서 각각 닉네임 입력→모드/문제 진행→결과화면까지 실제로 완주시켜 "카카오톡 공유" 버튼이 정상 렌더링되고 클릭 시 콘솔 에러 없음을 확인. 단, 실제 카카오톡 앱으로 전송되는 것까지의 완전한 end-to-end는 로컬/Codespaces 도메인이 화이트리스트에 없어 이번 세션에서는 불가능 — 실제 도메인 배포 후 재확인 필요.
 - CLAUDE.md(기능현황표 카카오톡 공유 행을 완료로 변경, 결정사항 로그 갱신, 변경이력 v0.0.41 추가)와 PRD.md(9-1 D 항목 각주에서 카카오 분리 언급) 동시 반영.
+- 사용자가 Cloudflare Pages 대시보드 스크린샷("testseries1", `testseries1.pages.dev`, `jhb415-cloud/testseries` GitHub 연동, v0.0.41 커밋이 1분 전에 이미 자동배포됨)을 보내며 "그 도메인 맞지?" 확인 요청 → 카카오에 등록한 도메인과 정확히 일치함을 확인. Playwright로 실제 라이브 도메인에서 카카오톡 공유 버튼 클릭 → `accounts.kakao.com` 로그인 팝업이 `sharer.kakao.com/picker/link?app_key=...&short_key=...`로 정상 오픈되는 것까지 end-to-end 검증(도메인 화이트리스트 통과 확인).
+- 사용자가 "다음단계로 가보자 구도 잡아줘봐"라고 요청 → Stage D 2단계(퍼센타일 집계)+로또 통계기반을 하나의 Cloudflare Pages Functions 인프라로 묶는 구조를 먼저 설계해 제시(별도 API 서버 없이 기존 Pages 프로젝트에 `functions/` 폴더만 추가하면 같이 자동배포됨). AskUserQuestion으로 ①스케줄링 방식(**GitHub Actions cron, 추천안** — Cloudflare Worker+Cron Trigger를 별도로 새로 만들지 않고 이미 쓰는 GitHub 저장소 재사용) ②로또 데이터 소스(**동행복권 비공식 엔드포인트 사용, 추천안** — PRD 기존 방침) 확정.
+- **v0.0.42 (Stage D 2단계 + 로또 통계기반)**: 신규 `functions/api/percentile-refresh.js`(POST, `X-Cron-Secret` 헤더로 보호 — 프로젝트에서 `service_role` 키를 쓰는 유일한 지점. Tier 8개 섹션의 `test_results`를 집계해 "해당 등급 이상 비율"을 퍼센타일로 계산 후 `percentile_cache`에 upsert) + `functions/api/lotto-stats.js`(GET, 동행복권 `getLottoNumber` 비공식 엔드포인트에서 최근 30회차를 서버사이드로 가져와 CORS 우회 — 1회차 날짜(2002-12-07) 기준으로 최신 회차를 추정한 뒤 `returnValue !== 'success'`면 하나씩 감소시키며 보정, 30회차는 Cloudflare Functions 무료 플랜 서브요청 한도 50건 안에 여유있게 들어가도록 설정. `caches.default` Cache API로 24시간 엣지 캐싱해 매 요청마다 동행복권을 다시 두드리지 않게 함). `.github/workflows/percentile-cron.yml` 신설(매일 UTC 18:00=KST 03:00, `curl -X POST`로 secret 헤더와 함께 엔드포인트 호출). 클라이언트: 로또 조합기의 기존 "준비중" 비활성 버튼을 `lottoRunStats()`로 교체 — `/api/lotto-stats` 호출 후 `lottoWeightedPick()`이 빈도 가중 랜덤(출현 0회 번호도 최소 확률은 보장하도록 weight+1)으로 5게임 생성. `percentile_cache`는 이미 공개 읽기 RLS라 클라이언트 쪽에 신규 읽기 API를 만들지 않고 기존 `window.sb`로 바로 조회 가능하게 설계.
+- **검증**: `node --check`로 두 Function 파일 문법 확인(Node 24의 ESM 자동 감지로 `export` 구문도 별도 설정 없이 통과). 코드 커밋+푸시 후 Cloudflare Pages 자동배포로 실제 엔드포인트가 살아있는지, 응답 스키마가 예상대로인지는 다음 턴에서 라이브로 확인 예정 — 아직 Cloudflare Pages 환경변수(`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`CRON_SECRET`)와 GitHub Actions 시크릿(`CRON_SECRET`)을 사용자가 등록하지 않아서 `percentile-refresh`는 401을 반환하는 상태, `lotto-stats`는 시크릿이 필요 없어 배포 직후 바로 동작 가능.
+- CLAUDE.md(기능현황표에 카카오 후속검증 내용 추가, Stage D 2단계 행 신설, 로또 통계기반 행을 완료로 변경, 결정사항 로그 갱신, 변경이력 v0.0.42 추가)와 PRD.md(로또 입력/제약사항/9-1 D 항목 갱신) 동시 반영.
 
 ### 다음에 이어서 해야 할 작업 리스트
 - [x] Stage D 1단계(익명 인증 + `test_results` 이중 기록) 완료 (v0.0.40)
-- [x] 카카오톡 공유 완료 (v0.0.41) — 단, 실제 카카오톡 전송 end-to-end는 배포 후 재확인 필요
-- [ ] **다음 세션 시작점 ★**: 사용자가 "Stage D 2단계랑 로또 통계기반은 같이 작업하자"고 확정 — 둘 다 `service_role`/외부 API를 쓰는 Cloudflare Functions 서버 인프라가 선행되어야 해서 함께 묶어 진행. Stage D 2단계는 퍼센타일 배치 집계(→ "결과 궁합 보기" 상위% 노출, Stage E 재검토로 이어짐), 로또 통계기반은 실제 당첨번호 프록시. 착수 전 사이트가 실제로 Cloudflare Pages에 배포돼있는지부터 확인 필요(PRD Definition of Done에 `testseries1.pages.dev` 배포가 아직 미체크 상태)
+- [x] 카카오톡 공유 완료, 라이브 도메인 end-to-end 검증까지 완료 (v0.0.41)
+- [x] Stage D 2단계(퍼센타일 배치 집계) + 로또 통계기반 추천 코드 완료 (v0.0.42)
+- [ ] **다음 세션 시작점 ★**: Cloudflare Pages 프로젝트(`testseries1`) 환경변수에 `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`(Supabase 대시보드 Settings→API에서 secret/service_role 키 확인)/`CRON_SECRET`(임의 문자열 새로 생성) 등록 필요 — Claude에게 값을 절대 공유하지 말고 Cloudflare 대시보드에 직접 입력할 것. 같은 `CRON_SECRET` 값을 GitHub 저장소 Settings→Secrets and variables→Actions에도 등록해야 `.github/workflows/percentile-cron.yml`이 정상 동작. 둘 다 등록되면 `POST /api/percentile-refresh` 수동 호출로 실제 동작 검증, GitHub Actions 수동 실행(workflow_dispatch)으로 cron 경로도 검증 필요. `/api/lotto-stats`는 시크릿 불필요하니 배포 직후 바로 `curl`로 응답 확인 가능
 - [x] (제외) 두뇌나이 모바일 터치 지연 보정 — 사용자가 "나중에 문제되면 작업하자"며 우선순위에서 제외 결정. 완전 폐기 아님, PRD 체크리스트에는 여전히 필수 항목으로 남아있음
 - [ ] (보류) 댓글 백엔드 연동 — 모더레이션 정책(신고/금칙어 필터) 설계 없이는 착수 안 하기로 결정, 사용자가 "나중에라도 작업하자"고 재확인(취소 아님)
-- [ ] (보류) Stage E(동물비유카드, D의 퍼센타일 집계 의존) / Stage G(라이트모드, 프로젝트 전체 최후 고정)
+- [ ] (보류) Stage E(동물비유카드, 이제 D의 퍼센타일 집계가 완료됐으니 재검토 가능) / Stage G(라이트모드, 프로젝트 전체 최후 고정)
 - [ ] QA 테스트로 남은 `test_results` row(user_id `9fd10300...`) 정리는 사용자 판단에 맡김(필요시 SQL Editor에서 직접 delete)
 
 ---

@@ -1,0 +1,15 @@
+name: Percentile Refresh Cron
+
+on:
+  schedule:
+    - cron: '0 18 * * *'   # 매일 UTC 18:00 = KST 03:00
+  workflow_dispatch: {}
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call percentile-refresh endpoint
+        run: |
+          curl -sf -X POST https://testseries1.pages.dev/api/percentile-refresh \
+            -H "X-Cron-Secret: ${{ secrets.CRON_SECRET }}"
