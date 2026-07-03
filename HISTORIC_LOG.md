@@ -4,7 +4,7 @@
 
 ## 세션 #8 — 2026-07-03
 
-### 현재 버전: v0.0.42
+### 현재 버전: v0.0.43
 
 ### 작업 내용
 - 세션 시작 시 사용자가 "어디까지 했지" 재확인 요청 → 세션#7 마지막 메모(사용자가 Stage D/Supabase 착수 의사를 밝혔고, 다음 세션에서 Claude가 사전 준비사항을 설명하기로 함)를 근거로 현재 상태 안내.
@@ -30,7 +30,8 @@
 - [x] Stage D 1단계(익명 인증 + `test_results` 이중 기록) 완료 (v0.0.40)
 - [x] 카카오톡 공유 완료, 라이브 도메인 end-to-end 검증까지 완료 (v0.0.41)
 - [x] Stage D 2단계(퍼센타일 배치 집계) + 로또 통계기반 추천 코드 완료 (v0.0.42)
-- [ ] **다음 세션 시작점 ★**: Cloudflare Pages 프로젝트(`testseries1`) 환경변수에 `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`(Supabase 대시보드 Settings→API에서 secret/service_role 키 확인)/`CRON_SECRET`(임의 문자열 새로 생성) 등록 필요 — Claude에게 값을 절대 공유하지 말고 Cloudflare 대시보드에 직접 입력할 것. 같은 `CRON_SECRET` 값을 GitHub 저장소 Settings→Secrets and variables→Actions에도 등록해야 `.github/workflows/percentile-cron.yml`이 정상 동작. 둘 다 등록되면 `POST /api/percentile-refresh` 수동 호출로 실제 동작 검증, GitHub Actions 수동 실행(workflow_dispatch)으로 cron 경로도 검증 필요. `/api/lotto-stats`는 시크릿 불필요하니 배포 직후 바로 `curl`로 응답 확인 가능
+- [x] 배포 직후 `curl`로 `/api/lotto-stats` 라이브 점검 → 500 에러 발견, 원인 조사(dhlottery.co.kr이 데이터센터/해외 IP 차단) 후 크래시 방지 방어코드 추가해 502로 안전화 (v0.0.43)
+- [ ] **다음 세션 시작점 ★**: 두 가지 트랙이 남아있음. **①** Cloudflare Pages 프로젝트(`testseries1`) 환경변수에 `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`(Supabase 대시보드 Settings→API에서 secret/service_role 키 확인)/`CRON_SECRET`(임의 문자열 새로 생성) 등록 필요 — Claude에게 값을 절대 공유하지 말고 Cloudflare 대시보드에 직접 입력할 것. 같은 `CRON_SECRET` 값을 GitHub 저장소 Settings→Secrets and variables→Actions에도 등록해야 `.github/workflows/percentile-cron.yml`이 정상 동작. 둘 다 등록되면 `POST /api/percentile-refresh` 수동 호출로 실제 동작 검증, GitHub Actions 수동 실행(workflow_dispatch)으로 cron 경로도 검증 필요. **②** `/api/lotto-stats`는 dhlottery.co.kr의 IP 차단으로 실데이터를 못 가져오는 상태(현재는 랜덤으로 조용히 대체됨) — 사용자에게 이 상황을 보고하고 대안(네이버 파싱 등 신뢰성 낮은 우회 시도 / 기능을 랜덤 대체로 그대로 둘지 / 백로그로 되돌릴지) 방향을 확인해야 함
 - [x] (제외) 두뇌나이 모바일 터치 지연 보정 — 사용자가 "나중에 문제되면 작업하자"며 우선순위에서 제외 결정. 완전 폐기 아님, PRD 체크리스트에는 여전히 필수 항목으로 남아있음
 - [ ] (보류) 댓글 백엔드 연동 — 모더레이션 정책(신고/금칙어 필터) 설계 없이는 착수 안 하기로 결정, 사용자가 "나중에라도 작업하자"고 재확인(취소 아님)
 - [ ] (보류) Stage E(동물비유카드, 이제 D의 퍼센타일 집계가 완료됐으니 재검토 가능) / Stage G(라이트모드, 프로젝트 전체 최후 고정)

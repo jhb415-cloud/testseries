@@ -1,4 +1,4 @@
-/* v0.0.42 | 5-in-1 Dashboard SPA — functions/api/percentile-refresh.js
+/* v0.0.43 | 5-in-1 Dashboard SPA — functions/api/percentile-refresh.js
    Stage D 2단계: Tier(S~D) 채점 8개 테스트의 test_results를 집계해 percentile_cache에 upsert.
    service_role 키를 쓰는 유일한 지점 — GitHub Actions cron이 X-Cron-Secret 헤더로만 호출 가능하도록 보호.
    퍼센타일 정의: 해당 등급 "이상"을 받은 사람 비율 (예: S등급 10% → S등급은 상위 10%) */
