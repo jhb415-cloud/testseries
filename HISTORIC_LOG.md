@@ -2,6 +2,29 @@
 
 ---
 
+## 세션 #8 — 2026-07-03
+
+### 현재 버전: v0.0.40
+
+### 작업 내용
+- 세션 시작 시 사용자가 "어디까지 했지" 재확인 요청 → 세션#7 마지막 메모(사용자가 Stage D/Supabase 착수 의사를 밝혔고, 다음 세션에서 Claude가 사전 준비사항을 설명하기로 함)를 근거로 현재 상태 안내.
+- 사용자가 "지금까지 안내했던 내용(Supabase/보안/로그인)을 전체적으로 제안해달라"고 요청 → PRD.md 9-1 Stage D/E 로드맵을 다시 확인하고, 스키마 설계 방향/인증 방식(익명 UID vs 소셜 vs 하이브리드)/보안 고려사항/마이그레이션 전략을 정리해 설명. AskUserQuestion으로 인증 방식(**익명 UID, 추천안 채택**)과 착수 시점(**스키마·보안정책을 먼저 구체화한 뒤 프로젝트 생성 안내부터**, 사용자가 GitHub으로 Supabase 계정에 이미 로그인돼있음을 알려줌) 확인.
+- 사용자가 "댓글기능은 나중에 넣자, 괜히 욕만 먹을 것 같음"이라고 요청 → `comments` 테이블/쿨다운 트리거를 최종 스키마에서 제외 결정. 이 스코프 결정은 향후 세션에서도 참고해야 해서 메모리(`project_stage_d_backend.md`)에 저장.
+- 확정 SQL(`profiles`/`test_results`/`percentile_cache` + RLS)을 제공하고, Supabase 대시보드에서 프로젝트 생성 → SQL 실행 → Anonymous Sign-in 활성화 → API 키 확인까지 사용자가 보낸 스크린샷을 보며 실시간으로 다음 클릭 지점을 안내(Organization 유지/GitHub 연동 스킵/비밀번호 자동생성/리전 Asia-Pacific/Security 체크박스 3개 중 "Enable automatic RLS" 추가 체크 권장). 도중 Supabase가 API 키 체계를 anon/service_role → **Publishable/Secret key**로 개편한 것을 확인해 새 UI에 맞게 안내를 조정했고, Data API URL 위치도 새 UI("Data API" 좌측 메뉴) 기준으로 재안내.
+- Publishable key(`sb_publishable_...`)와 Project URL(`https://yovwvcjuadfieprvsooo.supabase.co`) 확보 후 코드 작업 착수: `index.html`에 `@supabase/supabase-js` CDN 스크립트 + 신규 `supabase-client.js` 추가(`window.sb` 클라이언트, 페이지 로드 시 자동 `signInAnonymously()`, `syncResultToSupabase()` 헬퍼). `app.js`의 모든 테스트가 공통 호출하는 `saveRanking()` 맨 끝에 한 줄만 추가해 로컬스토리지는 그대로 유지한 채 Supabase에도 결과를 이중 기록(기존 15개 테스트 로직 무변경, PRD 마이그레이션 방침대로 1단계만 우선 구현).
+- **검증**: 로컬 `python -m http.server` + 캐시된 npx playwright로, 실제로 생성된 Supabase 프로젝트를 대상으로 (1) 페이지 로드 시 익명 세션이 자동 수립되는지 (2) `saveRanking('reaction', ...)` 호출 후 `profiles`/`test_results`에 실제 row가 RLS를 통과해 정상 insert되는지(tier 파싱도 정확히 'S'로 저장됨 확인) (3) 로컬스토리지 `ranking_reaction` 기록도 그대로 유지되는지, 3가지를 실제 계정으로 end-to-end 확인. 콘솔 에러 없음. **주의**: 검증 과정에서 QA용 테스트 row 1개(user_id `9fd10300-815b-494d-b7b3-4bcc0e334d4d`, section `reaction`)가 실제 프로덕션 `test_results` 테이블에 남아있음 — anon(publishable) 키로는 delete 정책이 없어 앱에서 지울 수 없고, 필요하면 사용자가 Supabase SQL Editor에서 직접 삭제해야 함.
+- CLAUDE.md(기능현황표에 Stage D 행 추가, 댓글 백로그 각주 갱신, 진행중 결정사항 로그 갱신, 변경이력 v0.0.40 추가)와 PRD.md(9-1 D/E 항목을 "보류"→"착수함"으로 갱신) 동시 반영.
+
+### 다음에 이어서 해야 할 작업 리스트
+- [x] Stage D 1단계(익명 인증 + `test_results` 이중 기록) 완료 (v0.0.40)
+- [ ] **다음 세션 시작점 ★**: Stage D 2단계 — 퍼센타일 배치 집계(서버가 `percentile_cache`에 write, `service_role` 키가 필요해 Cloudflare Functions 같은 서버 환경 구축이 선행되어야 함) 논의. 이게 끝나야 "결과 궁합 보기"의 상위% 랭킹 노출, Stage E(동물비유카드)를 재검토할 수 있음
+- [ ] (백로그) 카카오톡 공유(Kakao Developers 키 발급 필요 — Stage D 인증에 소셜 로그인을 하이브리드로 붙일 때 같이 진행하면 효율적) / 로또 통계기반 추천(Cloudflare Functions 구축 필요, Stage D 2단계와 인프라 공유 가능)
+- [ ] (보류) 댓글 백엔드 연동 — 모더레이션 정책(신고/금칙어 필터) 설계 없이는 착수 안 하기로 결정(사용자 요청)
+- [ ] (보류) Stage E(동물비유카드, D의 퍼센타일 집계 의존) / Stage G(라이트모드, 프로젝트 전체 최후 고정)
+- [ ] QA 테스트로 남은 `test_results` row(user_id `9fd10300...`) 정리는 사용자 판단에 맡김(필요시 SQL Editor에서 직접 delete)
+
+---
+
 ## 세션 #7 — 2026-07-03
 
 ### 현재 버전: v0.0.39

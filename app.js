@@ -1,4 +1,4 @@
-/* v0.0.39 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.40 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -3609,6 +3609,7 @@ function saveRanking(section, nickname, result) {
   localStorage.setItem(key, JSON.stringify(list.slice(0, 10)));
   markDone(section);
   addXP(computeXP(result));
+  if (typeof syncResultToSupabase === 'function') syncResultToSupabase(section, nickname, result);
 }
 
 /* ══════════════════════════════════════════════════

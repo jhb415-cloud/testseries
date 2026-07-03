@@ -1,4 +1,4 @@
-<!-- v0.0.39 | 5-in-1 Dashboard SPA -->
+<!-- v0.0.40 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>과몰입 연구소</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script>
     // slate 팔레트를 style.css의 CSS 변수로 remap → html.light 토글만으로 전체 테마 전환
     // (rgb(var(--x) / <alpha-value>) 포맷을 써야 bg-slate-800/60 같은 opacity modifier가 계속 동작함)
@@ -146,7 +147,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4 border-t border-slate-800">
-    <p class="text-slate-600 text-xs">v0.0.39 · 2026-07-03</p>
+    <p class="text-slate-600 text-xs">v0.0.40 · 2026-07-03</p>
   </div>
 </aside>
 
@@ -375,6 +376,7 @@
 </div>
 
 <script src="data.js"></script>
+<script src="supabase-client.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
