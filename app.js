@@ -1,4 +1,4 @@
-/* v0.0.37 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.38 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -3235,13 +3235,13 @@ function insaAnswer(val) {
    - 시간 제한 없음, 정답/오답 모두 긍정적으로 프레이밍
 ══════════════════════════════════════════════════ */
 function initProverb() {
-  App.state.proverb = { nickname: '', step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [] };
+  App.state.proverb = { nickname: '', step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [], questions: [] };
   renderProverbView('start');
 }
 
 function renderProverbView(view) {
   const container = document.getElementById('proverb-container');
-  const { proverbQuestions, proverbResults } = AppData;
+  const { proverbResults } = AppData;
   const state = App.state.proverb;
 
   if (view === 'start') {
@@ -3249,7 +3249,7 @@ function renderProverbView(view) {
       <div class="max-w-md mx-auto text-center">
         <div class="text-6xl mb-4">📜</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">속담 완성 퀴즈</h2>
-        <p class="text-slate-400 mb-6">옛 어른들의 지혜, 속담 10문항!<br>시간 제한 없이 편하게 풀어보세요 😊</p>
+        <p class="text-slate-400 mb-6">옛 어른들의 지혜, 속담 10문항!<br>매번 다른 문제가 나와요. 시간 제한 없이 편하게 풀어보세요 😊</p>
         <input id="proverb-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-amber-500 transition"/>
         <button onclick="proverbStart()" class="w-full bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-bold py-3 rounded-xl transition">
@@ -3259,18 +3259,18 @@ function renderProverbView(view) {
   }
 
   else if (view === 'question') {
-    const q = proverbQuestions[state.step];
+    const q = state.questions[state.step];
     const opts = shuffleArray([q.correct, ...q.decoys]);
     state.options = opts;
     state.answerIndex = opts.indexOf(q.correct);
     state.phase = 'active';
-    const progress = Math.round((state.step / proverbQuestions.length) * 100);
+    const progress = Math.round((state.step / state.questions.length) * 100);
 
     container.innerHTML = `
       <div class="max-w-lg mx-auto">
         <div class="flex items-center justify-between mb-2">
           <span class="text-slate-400 text-sm">${state.nickname} 님</span>
-          <span class="text-amber-400 font-bold text-sm">${state.step + 1} / ${proverbQuestions.length}</span>
+          <span class="text-amber-400 font-bold text-sm">${state.step + 1} / ${state.questions.length}</span>
         </div>
         <div class="progress-bar-track mb-6">
           <div class="h-full rounded-full transition-all" style="width:${progress}%;background:linear-gradient(90deg,#d97706,#eab308)"></div>
@@ -3287,7 +3287,7 @@ function renderProverbView(view) {
   }
 
   else if (view === 'result') {
-    const total = proverbQuestions.length;
+    const total = state.questions.length;
     const result = proverbResults.find(r => state.correctCount >= r.range[0] && state.correctCount <= r.range[1]) || proverbResults[proverbResults.length-1];
     const shareText = `속담 완성 퀴즈 ${state.correctCount}/${total}개 정답! 등급 ${result.grade} - ${result.title}. 너도 도전해봐 👉`;
 
@@ -3343,7 +3343,8 @@ function proverbStart() {
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
-  App.state.proverb = { nickname, step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [] };
+  const questions = shuffleArray(AppData.proverbQuestions).slice(0, 10);
+  App.state.proverb = { nickname, step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [], questions };
   renderProverbView('question');
 }
 
@@ -3351,7 +3352,7 @@ function proverbAnswer(idx) {
   const state = App.state.proverb;
   if (state.phase !== 'active') return;
   state.phase = 'idle';
-  const q = AppData.proverbQuestions[state.step];
+  const q = state.questions[state.step];
   const isCorrect = idx === state.answerIndex;
   if (isCorrect) state.correctCount++;
   state.log.push({ front: q.front, correct: q.correct, userCorrect: isCorrect });
@@ -3376,7 +3377,7 @@ function proverbAdvance() {
   if (App.state.currentSection !== 'proverb') return;
   const state = App.state.proverb;
   state.step++;
-  if (state.step >= AppData.proverbQuestions.length) {
+  if (state.step >= state.questions.length) {
     App.showLoader(() => renderProverbView('result'));
   } else {
     renderProverbView('question');
@@ -3388,13 +3389,13 @@ function proverbAdvance() {
    - 시간 제한 없음, 실제 물가 통계 기반, 정답/오답 모두 긍정적으로 프레이밍
 ══════════════════════════════════════════════════ */
 function initPricequiz() {
-  App.state.pricequiz = { nickname: '', step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [] };
+  App.state.pricequiz = { nickname: '', step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [], questions: [] };
   renderPricequizView('start');
 }
 
 function renderPricequizView(view) {
   const container = document.getElementById('pricequiz-container');
-  const { priceQuizQuestions, priceQuizResults } = AppData;
+  const { priceQuizResults } = AppData;
   const state = App.state.pricequiz;
 
   if (view === 'start') {
@@ -3402,7 +3403,7 @@ function renderPricequizView(view) {
       <div class="max-w-md mx-auto text-center">
         <div class="text-6xl mb-4">🧾</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">그 시절 물가 맞히기</h2>
-        <p class="text-slate-400 mb-6">추억의 그 시절 물가, 10문항!<br>시간 제한 없이 편하게 풀어보세요 😊</p>
+        <p class="text-slate-400 mb-6">추억의 그 시절 물가, 10문항!<br>매번 다른 문제가 나와요. 시간 제한 없이 편하게 풀어보세요 😊</p>
         <input id="pricequiz-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-amber-500 transition"/>
         <button onclick="pricequizStart()" class="w-full bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-bold py-3 rounded-xl transition">
@@ -3412,18 +3413,18 @@ function renderPricequizView(view) {
   }
 
   else if (view === 'question') {
-    const q = priceQuizQuestions[state.step];
+    const q = state.questions[state.step];
     const opts = shuffleArray([q.correct, ...q.decoys]);
     state.options = opts;
     state.answerIndex = opts.indexOf(q.correct);
     state.phase = 'active';
-    const progress = Math.round((state.step / priceQuizQuestions.length) * 100);
+    const progress = Math.round((state.step / state.questions.length) * 100);
 
     container.innerHTML = `
       <div class="max-w-lg mx-auto">
         <div class="flex items-center justify-between mb-2">
           <span class="text-slate-400 text-sm">${state.nickname} 님</span>
-          <span class="text-amber-400 font-bold text-sm">${state.step + 1} / ${priceQuizQuestions.length}</span>
+          <span class="text-amber-400 font-bold text-sm">${state.step + 1} / ${state.questions.length}</span>
         </div>
         <div class="progress-bar-track mb-6">
           <div class="h-full rounded-full transition-all" style="width:${progress}%;background:linear-gradient(90deg,#d97706,#eab308)"></div>
@@ -3443,7 +3444,7 @@ function renderPricequizView(view) {
   }
 
   else if (view === 'result') {
-    const total = priceQuizQuestions.length;
+    const total = state.questions.length;
     const result = priceQuizResults.find(r => state.correctCount >= r.range[0] && state.correctCount <= r.range[1]) || priceQuizResults[priceQuizResults.length-1];
     const shareText = `그 시절 물가 맞히기 ${state.correctCount}/${total}개 정답! 등급 ${result.grade} - ${result.title}. 너도 도전해봐 👉`;
 
@@ -3502,7 +3503,8 @@ function pricequizStart() {
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
-  App.state.pricequiz = { nickname, step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [] };
+  const questions = shuffleArray(AppData.priceQuizQuestions).slice(0, 10);
+  App.state.pricequiz = { nickname, step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [], questions };
   renderPricequizView('question');
 }
 
@@ -3510,7 +3512,7 @@ function pricequizAnswer(idx) {
   const state = App.state.pricequiz;
   if (state.phase !== 'active') return;
   state.phase = 'idle';
-  const q = AppData.priceQuizQuestions[state.step];
+  const q = state.questions[state.step];
   const isCorrect = idx === state.answerIndex;
   if (isCorrect) state.correctCount++;
   state.log.push({ year: q.year, itemName: q.item, correct: q.correct, note: q.note, userCorrect: isCorrect });
@@ -3535,7 +3537,7 @@ function pricequizAdvance() {
   if (App.state.currentSection !== 'pricequiz') return;
   const state = App.state.pricequiz;
   state.step++;
-  if (state.step >= AppData.priceQuizQuestions.length) {
+  if (state.step >= state.questions.length) {
     App.showLoader(() => renderPricequizView('result'));
   } else {
     renderPricequizView('question');
