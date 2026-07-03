@@ -1,4 +1,4 @@
-/* v0.0.36 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.37 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -90,6 +90,11 @@ window.App = {
 function seededRandom(seed) {
   let x = Math.sin(seed + 1) * 10000;
   return x - Math.floor(x);
+}
+
+/* Tier 등급 코멘트뱅크(v0.0.37~)에서 랜덤으로 하나 골라 반복 노출을 줄이는 용도 */
+function pickOne(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 function todaySeed() {
@@ -1041,8 +1046,15 @@ function renderBrainView(view) {
     else if (score >= 40) { brainAge = Math.floor(Math.random() * 7) + 38; tier = 'C'; tierColor = 'text-violet-300'; tierBg = 'bg-violet-900/40 border-violet-600'; }
     else { brainAge = Math.floor(Math.random() * 10) + 50; tier = 'D'; tierColor = 'text-rose-300'; tierBg = 'bg-rose-900/40 border-rose-600'; }
 
-    const tierMsg = { S: '초인급 두뇌! 신호등 대왕', A: '날카로운 집중력의 소유자', B: '평균 이상의 반응속도', C: '약간 느린 처리 속도, 충분히 개선 가능!', D: '오늘 컨디션이 안 좋은 날? 다시 도전해보세요!' };
-    const shareText = `나의 두뇌 나이는 ${brainAge}세! 정확도 ${accuracy.toFixed(0)}%, 평균 반응속도 ${(avgMs/1000).toFixed(2)}초. 티어: ${tier} - ${tierMsg[tier]}`;
+    const tierMsgBank = {
+      S: ['초인급 두뇌! 신호등 대왕', '뇌 나이가 아니라 뇌 IQ 아니야? 압도적인 처리속도!', '이 정도면 뇌를 국가대표로 등록해야 하는 거 아닐까?'],
+      A: ['날카로운 집중력의 소유자', '또래보다 훨씬 젊은 뇌! 이 컨디션 계속 유지해봐', '순발력 甲! 색깔 함정에 거의 안 걸리네'],
+      B: ['평균 이상의 반응속도', '무난하게 잘 하고 있어, 딱 평균 뇌 나이', '나쁘지 않은데? 조금만 더 집중하면 등급 업 가능'],
+      C: ['약간 느린 처리 속도, 충분히 개선 가능!', '오늘따라 살짝 헷갈렸나봐, 다음엔 색깔에 더 집중해보자', '생각보다 함정에 잘 걸리는 편이네, 연습하면 금방 는다'],
+      D: ['오늘 컨디션이 안 좋은 날? 다시 도전해보세요!', '괜찮아, 뇌도 워밍업이 필요해! 몇 판 더 해보자', '오늘은 컨디션 난이도가 좀 셌나봐, 낮은 난이도부터 다시 가보자']
+    };
+    const tierMsg = pickOne(tierMsgBank[tier]);
+    const shareText = `나의 두뇌 나이는 ${brainAge}세! 정확도 ${accuracy.toFixed(0)}%, 평균 반응속도 ${(avgMs/1000).toFixed(2)}초. 티어: ${tier} - ${tierMsg}`;
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -1053,7 +1065,7 @@ function renderBrainView(view) {
           <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
             <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
           </div>
-          <p class="text-slate-300">${tierMsg[tier]}</p>
+          <p class="text-slate-300">${tierMsg}</p>
         </div>
 
         ${renderChallengeCompareCard(brainAge + '세 (Tier ' + tier + ')', state.challenge)}
@@ -1400,11 +1412,12 @@ function renderReactionView(view) {
     const worstMs = Math.max(...state.times);
 
     let tier, tierColor, tierBg, tierMsg;
-    if (avgMs <= 220)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = 'F1 레이서 스카우트 제의가 들어올지도? 오늘 하루도 그 반응속도로 다 씹어먹자.'; }
-    else if (avgMs <= 260) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '꽤 빠른데? 오늘 하루도 딱 이 텐션 유지해봐.'; }
-    else if (avgMs <= 320) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균은 하는 편! 그래도 방심은 금물, 딴짓하다 버스 놓치지 말자.'; }
-    else if (avgMs <= 400) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '음... 오늘따라 반응이 좀 느긋하네. 뜨거운 국물 먹을 때 조심하자.'; }
-    else                   { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '어쩔 수 없지, 오늘은 주위를 잘 살피면서 걷자고~'; }
+    if (avgMs <= 220)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = ['F1 레이서 스카우트 제의가 들어올지도? 오늘 하루도 그 반응속도로 다 씹어먹자.', '게임 프로게이머 해도 되겠는데? 손이 눈보다 빠르다', '번개보다 빠른 반응속도, 오늘 하루 무적모드 발동']; }
+    else if (avgMs <= 260) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = ['꽤 빠른데? 오늘 하루도 딱 이 텐션 유지해봐.', '순발력 甲! 웬만한 잽은 다 피하겠어', '빠릿빠릿한데? 오늘 중요한 순간 놓치지 않겠어']; }
+    else if (avgMs <= 320) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = ['평균은 하는 편! 그래도 방심은 금물, 딴짓하다 버스 놓치지 말자.', '평범한데 무난한 반응속도, 나쁘지 않아', '중간은 가는 편! 조금만 더 집중하면 상위권']; }
+    else if (avgMs <= 400) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = ['음... 오늘따라 반응이 좀 느긋하네. 뜨거운 국물 먹을 때 조심하자.', '살짝 굼뜬 편이네, 커피 한 잔 어때?', '반응이 느긋한 날인가봐, 무리한 운전은 피하자']; }
+    else                   { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['어쩔 수 없지, 오늘은 주위를 잘 살피면서 걷자고~', '오늘은 몸이 로딩 중인가봐, 푹 쉬고 다시 도전해보자', '괜찮아, 반응속도보다 안전이 최고지! 천천히 가자']; }
+    tierMsg = pickOne(tierMsg);
 
     const shareText = `나의 반응속도는 평균 ${avgMs}ms! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
 
@@ -1643,11 +1656,12 @@ function renderMemdigitView(view) {
     const maxLen = state.maxCorrectLen;
 
     let tier, tierColor, tierBg, tierMsg;
-    if (maxLen >= 9)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = '천재 아니야? 전화번호는 안 적어도 다 외우겠는데?'; }
-    else if (maxLen >= 8) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '기억력 甲! 오늘 장 볼 목록은 안 적어도 되겠어.'; }
-    else if (maxLen >= 6) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균은 하는 기억력! 그래도 중요한 약속은 메모해두자.'; }
-    else if (maxLen >= 4) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '음... 방금 뭐 외웠더라? 중요한 건 꼭 메모해두는 습관을 들이자.'; }
-    else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 메모 앱이 괜히 있는 게 아니야. 오늘부터 적극 활용하자!'; }
+    if (maxLen >= 9)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = ['천재 아니야? 전화번호는 안 적어도 다 외우겠는데?', '이 정도면 카드 번호도 한 번에 외우겠는데?', '인간 계산기 아니야? 숫자 암기력 최상위 클래스']; }
+    else if (maxLen >= 8) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = ['기억력 甲! 오늘 장 볼 목록은 안 적어도 되겠어.', '숫자에 강한 편! 비밀번호 까먹을 일은 없겠다', '암기력 상위권! 잔소리처럼 반복 안 해도 기억하겠어']; }
+    else if (maxLen >= 6) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = ['평균은 하는 기억력! 그래도 중요한 약속은 메모해두자.', '평범하게 잘 외우는 편, 나쁘지 않아', '무난한 기억력! 중요한 건 그래도 두 번 확인하자']; }
+    else if (maxLen >= 4) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = ['음... 방금 뭐 외웠더라? 중요한 건 꼭 메모해두는 습관을 들이자.', '숫자가 좀 헷갈리는 편이네, 천천히 끊어서 외워보자', '살짝 아쉬운 기억력, 반복하면 금방 늘어']; }
+    else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['괜찮아, 메모 앱이 괜히 있는 게 아니야. 오늘부터 적극 활용하자!', '오늘따라 숫자가 안 외워지나봐, 컨디션 탓일지도', '괜찮아, 숫자보다 사람 얼굴 잘 기억하면 그게 더 중요하지']; }
+    tierMsg = pickOne(tierMsg);
 
     const shareText = `나의 숫자 기억력은 최대 ${maxLen}자리! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
     const myResultStr = maxLen + '자리 (Tier ' + tier + ')';
@@ -1915,11 +1929,12 @@ function renderSeqmemView(view) {
     const maxLen = state.maxCorrectLen;
 
     let tier, tierColor, tierBg, tierMsg;
-    if (maxLen >= 9)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = '이 정도면 뮤지컬 안무도 한 번에 외우겠는데?'; }
-    else if (maxLen >= 8) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '패턴 감각 甲! 길 찾기도 잘하는 편이지?'; }
-    else if (maxLen >= 6) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균은 하는 순서 감각! 헷갈리면 천천히 다시 확인하자.'; }
-    else if (maxLen >= 4) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '음... 순서가 자꾸 헷갈리네. 서두르지 말고 하나씩 짚어가자.'; }
-    else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 원래 급하면 실수하는 법! 다음엔 천천히 되짚어보자~'; }
+    if (maxLen >= 9)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = ['이 정도면 뮤지컬 안무도 한 번에 외우겠는데?', '댄스 챌린지 동작도 한 번 보면 바로 따라하겠는데?', '패턴 마스터! 게임 콤보도 순식간에 외우겠어']; }
+    else if (maxLen >= 8) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = ['패턴 감각 甲! 길 찾기도 잘하는 편이지?', '순서 감각이 좋은 편! 요리 레시피도 잘 따라하겠어', '패턴 인식력 甲! 복잡한 순서도 곧잘 기억하네']; }
+    else if (maxLen >= 6) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = ['평균은 하는 순서 감각! 헷갈리면 천천히 다시 확인하자.', '무난하게 잘 기억하는 편, 나쁘지 않아', '평균적인 순서 감각! 조금만 더 집중하면 늘겠어']; }
+    else if (maxLen >= 4) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = ['음... 순서가 자꾸 헷갈리네. 서두르지 말고 하나씩 짚어가자.', '순서가 살짝 꼬이는 편이네, 하나씩 눈으로 따라가보자', '패턴이 복잡하면 좀 헷갈리는 편, 천천히 익혀보자']; }
+    else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['괜찮아, 원래 급하면 실수하는 법! 다음엔 천천히 되짚어보자~', '오늘은 순서가 유독 안 외워지네, 컨디션이 문제였을지도', '괜찮아, 다음엔 힌트 삼아 소리 내서 순서를 되뇌어보자']; }
+    tierMsg = pickOne(tierMsg);
 
     const shareText = `나의 순서 기억력은 최대 ${maxLen}칸! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
     const myResultStr = maxLen + '칸 (Tier ' + tier + ')';
@@ -2164,11 +2179,12 @@ function renderColorvisionView(view) {
     const score = accuracy - (avgMs / 100);
 
     let tier, tierColor, tierBg, tierMsg;
-    if (score >= 85)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = '이 정도면 색상 코디네이터 해도 되겠는데? 미묘한 색 차이까지 완벽하게 잡아냈어!'; }
-    else if (score >= 70) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '색 감각 甲! 웬만한 색상 미스매치는 다 잡아낼 듯.'; }
-    else if (score >= 55) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균은 하는 색 감각! 애매한 색은 밝은 조명에서 다시 보자.'; }
-    else if (score >= 40) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '음... 비슷한 색은 좀 헷갈리는 편이네. 옷 고를 땐 밝은 데서 확인하자.'; }
-    else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 색보다 디자인 센스가 더 중요하지! 헷갈리면 친구한테 물어보자~'; }
+    if (score >= 85)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = ['이 정도면 색상 코디네이터 해도 되겠는데? 미묘한 색 차이까지 완벽하게 잡아냈어!', '디자이너 뺨치는 색 구별력! 팔레트 감별사 해도 되겠어', '미세한 톤 차이까지 다 잡아내네, 눈이 진짜 예리하다']; }
+    else if (score >= 70) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = ['색 감각 甲! 웬만한 색상 미스매치는 다 잡아낼 듯.', '색 보는 눈이 좋은 편! 인테리어 컬러 고를 때 믿음직하겠어', '웬만한 색 조합 실수는 안 하겠는데?']; }
+    else if (score >= 55) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = ['평균은 하는 색 감각! 애매한 색은 밝은 조명에서 다시 보자.', '평범하게 잘 구별하는 편, 나쁘지 않아', '무난한 색 감각! 헷갈리는 색은 두 번 보면 확실해져']; }
+    else if (score >= 40) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = ['음... 비슷한 색은 좀 헷갈리는 편이네. 옷 고를 땐 밝은 데서 확인하자.', '비슷한 톤은 좀 헷갈리는 편이네, 화면 밝기를 올려서 다시 보자', '살짝 아쉬운 색 구별력, 연습하면 나아질 거야']; }
+    else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['괜찮아, 색보다 디자인 센스가 더 중요하지! 헷갈리면 친구한테 물어보자~', '오늘은 색이 유독 비슷하게 보였나봐, 조명 탓일 수도', '괜찮아, 색 감각보다 취향이 더 중요하지! 다음에 다시 도전해보자']; }
+    tierMsg = pickOne(tierMsg);
 
     const shareText = `나의 색 감각 점수는 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
     const myResultStr = accuracy.toFixed(0) + '% (Tier ' + tier + ')';
@@ -2453,11 +2469,12 @@ function renderLogicView(view) {
     const score = accuracy - (avgMs / 100);
 
     let tier, tierColor, tierBg, tierMsg;
-    if (score >= 85)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = '이 정도면 수학 학원 안 다녀도 되겠는데? 패턴이 다 보이는구나!'; }
-    else if (score >= 70) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '논리력 甲! 숫자 패턴은 거의 다 잡아내네.'; }
-    else if (score >= 55) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균은 하는 논리력! 급하게 풀지 말고 패턴을 천천히 뜯어보자.'; }
-    else if (score >= 40) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '음... 패턴 찾기가 좀 어려운 편이네. 앞뒤 숫자 차이부터 하나씩 계산해보자.'; }
-    else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 계산기는 괜히 있는 게 아니야! 다음엔 천천히 규칙을 찾아보자~'; }
+    if (score >= 85)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = ['이 정도면 수학 학원 안 다녀도 되겠는데? 패턴이 다 보이는구나!', '수능 만점자 포스, 숫자 패턴이 그냥 보이는 수준', '이 정도면 암산왕 등극이지, 규칙이 눈에 딱딱 들어오네']; }
+    else if (score >= 70) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = ['논리력 甲! 숫자 패턴은 거의 다 잡아내네.', '논리적 사고력이 탄탄한 편! 복잡한 규칙도 곧잘 풀어내', '숫자 감각 甲! 패턴 찾는 속도가 빠른 편이야']; }
+    else if (score >= 55) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = ['평균은 하는 논리력! 급하게 풀지 말고 패턴을 천천히 뜯어보자.', '평범하게 잘 푸는 편, 나쁘지 않은 논리력', '무난한 패턴 감각! 조금만 더 연습하면 등급 업']; }
+    else if (score >= 40) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = ['음... 패턴 찾기가 좀 어려운 편이네. 앞뒤 숫자 차이부터 하나씩 계산해보자.', '패턴이 살짝 복잡하면 헷갈리는 편이네, 차분히 계산해보자', '숫자 규칙 찾기가 좀 어려운 편, 반복하면 감이 잡힐 거야']; }
+    else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['괜찮아, 계산기는 괜히 있는 게 아니야! 다음엔 천천히 규칙을 찾아보자~', '오늘은 숫자가 유독 안 풀렸나봐, 컨디션 탓일지도', '괜찮아, 논리력보다 창의력이 더 중요한 순간도 많아!']; }
+    tierMsg = pickOne(tierMsg);
 
     const shareText = `나의 논리력 점수는 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
     const myResultStr = accuracy.toFixed(0) + '% (Tier ' + tier + ')';
@@ -2684,11 +2701,12 @@ function renderImpulseView(view) {
     const avgGoMs = state.goCount > 0 ? Math.round(state.totalGoTime / state.goCount) : 0;
 
     let tier, tierColor, tierBg, tierMsg;
-    if (accuracy >= 95)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = '이 정도 자제력이면 다이어트도 성공하겠는데? 완벽한 절제력!'; }
-    else if (accuracy >= 85) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '충동 조절 甲! 웬만한 유혹엔 안 넘어가겠어.'; }
-    else if (accuracy >= 70) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균은 하는 자제력! 급할 때 한 번 더 생각하고 행동하자.'; }
-    else if (accuracy >= 50) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '음... 성급하게 반응하는 편이네. "멈춰서 생각하기"를 연습해보자.'; }
-    else                     { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '괜찮아, 원래 사람은 다 충동적이야! 다음엔 한 박자 쉬고 반응해보자~'; }
+    if (accuracy >= 95)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = ['이 정도 자제력이면 다이어트도 성공하겠는데? 완벽한 절제력!', '명상 고수 아니야? 흔들림 없는 완벽한 절제력', '이 정도 참을성이면 세일 기간에도 지갑 안전하겠는데?']; }
+    else if (accuracy >= 85) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = ['충동 조절 甲! 웬만한 유혹엔 안 넘어가겠어.', '자제력이 탄탄한 편! 웬만한 충동엔 잘 안 흔들려', '절제력 甲! 참을 때와 행동할 때를 잘 구분하네']; }
+    else if (accuracy >= 70) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = ['평균은 하는 자제력! 급할 때 한 번 더 생각하고 행동하자.', '평범하게 잘 참는 편, 나쁘지 않은 자제력', '무난한 충동 조절! 조금만 더 신중해지면 완벽']; }
+    else if (accuracy >= 50) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = ['음... 성급하게 반응하는 편이네. "멈춰서 생각하기"를 연습해보자.', '급할 때 성급하게 반응하는 편이네, 한 박자 쉬어가보자', '충동을 참기가 살짝 어려운 편, 연습하면 나아질 거야']; }
+    else                     { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['괜찮아, 원래 사람은 다 충동적이야! 다음엔 한 박자 쉬고 반응해보자~', '오늘따라 유독 급했나봐, 컨디션 탓일 수도', '괜찮아, 다음엔 신호가 뜨기 전에 손을 살짝 떼고 기다려보자']; }
+    tierMsg = pickOne(tierMsg);
 
     const shareText = `나의 충동억제력은 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
     const myResultStr = accuracy.toFixed(0) + '% (Tier ' + tier + ')';
@@ -2920,11 +2938,12 @@ function renderShortfocusView(view) {
     const avgGoMs = state.goCount > 0 ? Math.round(state.totalGoTime / state.goCount) : 0;
 
     let tier, tierColor, tierBg, tierMsg;
-    if (accuracy >= 95)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = '당신의 뇌는 아직 알고리즘에 잠식되지 않았다! 클래식 집중력 보유자 🧠✨'; }
-    else if (accuracy >= 85) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = '숏폼 내성 甲! 웬만한 떡밥엔 안 낚이는 타입.'; }
-    else if (accuracy >= 70) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = '평균적인 숏폼 세대 뇌. 광고 몇 개는 낚였을지도? ㅋㅋ'; }
-    else if (accuracy >= 50) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = '이미 도파민에 살짝 적응된 뇌... 스크롤 좀 줄여볼까?'; }
-    else                     { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = '숏폼 알고리즘의 완벽한 먹잇감 확정 😂 근데 원래 다들 그래, 너만 그런 거 아니야!'; }
+    if (accuracy >= 95)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = ['당신의 뇌는 아직 알고리즘에 잠식되지 않았다! 클래식 집중력 보유자 🧠✨', '알고리즘도 못 뚫는 강철 집중력, 광고 스킵 신 아니야?', '숏폼 마스터! 낚시 콘텐츠는 다 걸러내는 수준']; }
+    else if (accuracy >= 85) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = ['숏폼 내성 甲! 웬만한 떡밥엔 안 낚이는 타입.', '웬만한 떡밥엔 안 낚이는 편! 집중력 상위권', '숏폼 내성이 강한 편, 광고 구분을 잘 해내네']; }
+    else if (accuracy >= 70) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = ['평균적인 숏폼 세대 뇌. 광고 몇 개는 낚였을지도? ㅋㅋ', '평범한 숏폼 세대 뇌, 몇 개는 낚였어도 괜찮아', '무난한 집중력! 조금만 더 신경 쓰면 안 낚이겠어']; }
+    else if (accuracy >= 50) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = ['이미 도파민에 살짝 적응된 뇌... 스크롤 좀 줄여볼까?', '도파민에 살짝 적응된 듯, 스크롤 타임을 조금 줄여볼까', '광고에 몇 번 낚인 편이네, 다음엔 조금 더 침착하게']; }
+    else                     { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['숏폼 알고리즘의 완벽한 먹잇감 확정 😂 근데 원래 다들 그래, 너만 그런 거 아니야!', '오늘은 알고리즘한테 완전히 낚였나봐, 다음엔 정신 바짝 차려보자', '괜찮아, 숏폼 앞에서 안 낚이는 사람이 어딨어! 다들 그래']; }
+    tierMsg = pickOne(tierMsg);
 
     const shareText = `내 숏폼 뇌 지수는 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
     const myResultStr = accuracy.toFixed(0) + '% (Tier ' + tier + ')';

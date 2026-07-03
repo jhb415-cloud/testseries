@@ -1,4 +1,4 @@
-/* v0.0.36 | 5-in-1 Dashboard SPA — data.js */
+/* v0.0.37 | 5-in-1 Dashboard SPA — data.js */
 window.AppData = {
 
   /* ══════════════════════════════════════
