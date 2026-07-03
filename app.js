@@ -1,4 +1,4 @@
-/* v0.0.29 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.30 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -191,28 +191,48 @@ function initHome() {
   document.getElementById('home-quote-author').textContent = `— ${quote.author} (${quote.role})`;
   document.getElementById('home-copy-btn').onclick = () => copyToClipboard(`"${quote.text}" — ${quote.author}`);
 
-  const cards = [
-    { section: 'mbti',    emoji: '🧠', title: '성격 파탄(MBTI)', desc: '12문항으로 알아보는 팩폭 성격 분석', color: 'from-violet-600 to-purple-700' },
+  const toolCards = [
     { section: 'dream',   emoji: '🌙', title: '꿈 해몽 검색',    desc: '어젯밤 그 꿈, 무슨 의미일까?',   color: 'from-blue-600 to-indigo-700' },
     { section: 'fortune', emoji: '🔮', title: '오늘의 운세',      desc: '띠별 오늘 하루 운세 확인',        color: 'from-amber-500 to-orange-600' },
-    { section: 'brain',   emoji: '⚡', title: '두뇌 나이 측정기', desc: '스트룹 테스트로 내 두뇌 나이는?', color: 'from-emerald-500 to-teal-600' },
-    { section: 'adhd',    emoji: '🌪️', title: '프로 미루러',     desc: 'ADHD 성향 10문항 자가 진단',      color: 'from-rose-500 to-pink-600' },
+    { section: 'lotto',   emoji: '🎱', title: '로또 번호 조합기', desc: '랜덤·직접지정·운세연동 4가지 모드', color: 'from-yellow-500 to-amber-600' },
   ];
 
-  const grid = document.getElementById('home-service-grid');
-  grid.innerHTML = '';
-  cards.forEach(c => {
-    const div = document.createElement('div');
-    div.className = `service-card bg-gradient-to-br ${c.color} rounded-2xl p-5 text-white shadow-lg`;
-    div.innerHTML = `
-      <div class="text-4xl mb-3">${c.emoji}</div>
-      <h3 class="font-bold text-lg mb-1">${c.title}</h3>
-      <p class="text-sm opacity-80">${c.desc}</p>
-      <div class="mt-4 text-xs font-semibold opacity-90 uppercase tracking-widest">시작하기 →</div>
-    `;
-    div.onclick = () => App.navigate(c.section);
-    grid.appendChild(div);
-  });
+  const testCards = [
+    { section: 'mbti',        emoji: '🧠',  title: '성격 파탄(MBTI)',   desc: '간단/정밀 2모드로 알아보는 팩폭 성격 분석', color: 'from-violet-600 to-purple-700' },
+    { section: 'brain',       emoji: '⚡',  title: '두뇌 나이 측정기',   desc: '스트룹 테스트, 3단계 난이도',            color: 'from-emerald-500 to-teal-600' },
+    { section: 'adhd',        emoji: '🌪️', title: '프로 미루러',        desc: 'ADHD 성향 자가진단, 간단/정밀 2모드',     color: 'from-rose-500 to-pink-600' },
+    { section: 'reaction',    emoji: '💨',  title: '반응속도 테스트',    desc: '쉬움~어려움, 가짜신호까지 등장',          color: 'from-sky-500 to-blue-600' },
+    { section: 'memdigit',    emoji: '🔢',  title: '숫자 기억력 테스트', desc: '적응형 자릿수, 탭 키패드로 도전',        color: 'from-cyan-500 to-teal-600' },
+    { section: 'seqmem',      emoji: '🧩',  title: '순서 기억력 테스트', desc: '격자 타일 순서 암기, 즉시 판정',         color: 'from-teal-500 to-emerald-600' },
+    { section: 'colorvision', emoji: '🎨',  title: '색각 테스트',        desc: '미묘하게 다른 색 타일 찾기',              color: 'from-pink-500 to-rose-600' },
+    { section: 'logic',       emoji: '📊',  title: '논리력 테스트',      desc: '숫자 규칙 다음 값 맞히기 4지선다',        color: 'from-indigo-500 to-blue-600' },
+    { section: 'impulse',     emoji: '🚦',  title: '충동억제 테스트',    desc: 'Go/No-Go, 성급한 반응을 참아라',         color: 'from-orange-500 to-red-600' },
+    { section: 'shortfocus',  emoji: '📱',  title: '숏폼 집중력 테스트', desc: '꿀잼 콘텐츠엔 탭, 광고는 참기',           color: 'from-fuchsia-500 to-pink-600' },
+    { section: 'insa',        emoji: '🎉',  title: '인싸력 테스트',      desc: '10문항 사교성 성향 퀴즈 (MZ향)',          color: 'from-orange-500 to-pink-600' },
+    { section: 'proverb',     emoji: '📜',  title: '속담 완성 퀴즈',     desc: '시간 제한 없는 지혜 나눔 테스트',         color: 'from-amber-600 to-yellow-600' },
+    { section: 'pricequiz',   emoji: '🧾',  title: '그 시절 물가 맞히기', desc: '실제 물가 통계 기반 향수 트리비아',       color: 'from-yellow-600 to-amber-700' },
+  ];
+
+  const renderGrid = (gridId, cards) => {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    grid.innerHTML = '';
+    cards.forEach(c => {
+      const div = document.createElement('div');
+      div.className = `service-card bg-gradient-to-br ${c.color} rounded-2xl p-5 text-white shadow-lg cursor-pointer`;
+      div.innerHTML = `
+        <div class="text-4xl mb-3">${c.emoji}</div>
+        <h3 class="font-bold text-lg mb-1">${c.title}</h3>
+        <p class="text-sm opacity-80">${c.desc}</p>
+        <div class="mt-4 text-xs font-semibold opacity-90 uppercase tracking-widest">시작하기 →</div>
+      `;
+      div.onclick = () => App.navigate(c.section);
+      grid.appendChild(div);
+    });
+  };
+
+  renderGrid('home-tool-grid', toolCards);
+  renderGrid('home-service-grid', testCards);
 
   // 오늘 날짜 표시
   const now = new Date();
@@ -240,7 +260,7 @@ function renderMbtiView(view) {
         <div class="text-6xl mb-4">🧠</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">성격 파탄 MBTI</h2>
         <p class="text-slate-400 mb-6">솔직한 성격 분석<br>결과가 팩폭일 수도 있습니다.</p>
-        <input id="mbti-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력 (최대 12자)"
+        <input id="mbti-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력 (최대 12자)"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-violet-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">모드 선택</p>
         <div class="grid grid-cols-2 gap-3">
@@ -368,6 +388,7 @@ function renderMbtiView(view) {
 function mbtiStart(mode) {
   const nickname = document.getElementById('mbti-nickname').value.trim();
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  setNickname(nickname);
   const state = App.state.mbti;
   state.nickname = nickname;
   state.mode = mode;
@@ -744,7 +765,7 @@ function renderBrainView(view) {
         <div class="text-6xl mb-4">⚡</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">두뇌 나이 측정기</h2>
         <p class="text-slate-400 mb-6">스트룹 테스트 — 글자의 뜻이 아닌<br><strong class="text-slate-100">글자 색상</strong>에 해당하는 버튼을 누르세요!</p>
-        <input id="brain-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+        <input id="brain-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-emerald-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-3">
@@ -880,6 +901,7 @@ function renderBrainView(view) {
 function brainSelectDifficulty(difficulty) {
   const nickname = document.getElementById('brain-nickname').value.trim();
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  setNickname(nickname);
   const state = App.state.brain;
   state.nickname = nickname;
   state.difficulty = difficulty;
@@ -955,7 +977,7 @@ function renderAdhdView(view) {
         <div class="text-6xl mb-4">⚡</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">프로 미루러 (ADHD 성향 진단)</h2>
         <p class="text-slate-400 mb-6">집중력 결핍 성향 자가 체크<br>결과는 전문 진단이 아닌 참고용입니다.</p>
-        <input id="adhd-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+        <input id="adhd-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-rose-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">모드 선택</p>
         <div class="grid grid-cols-2 gap-3">
@@ -1082,6 +1104,7 @@ function renderAdhdView(view) {
 function adhdStart(mode) {
   const nickname = document.getElementById('adhd-nickname').value.trim();
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  setNickname(nickname);
   const state = App.state.adhd;
   state.nickname = nickname;
   state.mode = mode;
@@ -1129,7 +1152,7 @@ function renderReactionView(view) {
         <div class="text-6xl mb-4">💨</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">반응속도 테스트</h2>
         <p class="text-slate-400 mb-6">화면이 초록색으로 바뀌는 순간 최대한 빨리 탭하세요!<br>너무 일찍 누르면 반칙이에요.</p>
-        <input id="reaction-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+        <input id="reaction-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-2">
@@ -1234,6 +1257,7 @@ function reactionStart(difficulty) {
   const input = document.getElementById('reaction-nickname');
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  setNickname(nickname);
   const cfg = REACTION_CONFIG[difficulty];
   App.state.reaction = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -1370,7 +1394,7 @@ function renderMemdigitView(view) {
         <div class="text-6xl mb-4">🔢</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">숫자 기억력 테스트</h2>
         <p class="text-slate-400 mb-6">화면에 나타나는 숫자를 순서대로 외운 뒤<br>그대로 입력하세요. 틀리면 자릿수가 줄어들어요!</p>
-        <input id="memdigit-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+        <input id="memdigit-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-2">
@@ -1465,6 +1489,7 @@ function memdigitStart(difficulty) {
   const input = document.getElementById('memdigit-nickname');
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  setNickname(nickname);
   const cfg = MEMDIGIT_CONFIG[difficulty];
   App.state.memdigit = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -1630,7 +1655,7 @@ function renderSeqmemView(view) {
         <div class="text-6xl mb-4">🧩</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">순서 기억력 테스트</h2>
         <p class="text-slate-400 mb-6">타일이 순서대로 반짝이는 걸 잘 본 뒤<br>같은 순서로 타일을 눌러보세요!</p>
-        <input id="seqmem-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+        <input id="seqmem-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-2">
@@ -1728,6 +1753,7 @@ function seqmemStart(difficulty) {
   const input = document.getElementById('seqmem-nickname');
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  setNickname(nickname);
   const cfg = SEQMEM_CONFIG[difficulty];
   App.state.seqmem = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -1867,7 +1893,7 @@ function renderColorvisionView(view) {
         <div class="text-6xl mb-4">🎨</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">색각 테스트</h2>
         <p class="text-slate-400 mb-6">격자 안에 미묘하게 다른 색 타일이 하나 숨어있어요.<br>제한시간 안에 찾아서 탭하세요!</p>
-        <input id="colorvision-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+        <input id="colorvision-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-2">
@@ -1969,6 +1995,7 @@ function colorvisionStart(difficulty) {
   const input = document.getElementById('colorvision-nickname');
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  setNickname(nickname);
   const cfg = COLORVISION_CONFIG[difficulty];
   App.state.colorvision = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -2149,7 +2176,7 @@ function renderLogicView(view) {
         <div class="text-6xl mb-4">🧮</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">논리력 테스트</h2>
         <p class="text-slate-400 mb-6">숫자들이 나열되어 있어요.<br>규칙을 찾아 다음 숫자를 맞혀보세요!</p>
-        <input id="logic-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+        <input id="logic-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-2">
@@ -2249,6 +2276,7 @@ function logicStart(difficulty) {
   const input = document.getElementById('logic-nickname');
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  setNickname(nickname);
   const cfg = LOGIC_CONFIG[difficulty];
   App.state.logic = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -2368,7 +2396,7 @@ function renderImpulseView(view) {
         <div class="text-6xl mb-4">🚦</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">충동억제 테스트</h2>
         <p class="text-slate-400 mb-6">🟢 초록 신호엔 최대한 빨리 탭!<br>🔴 빨간 신호엔 절대 누르지 말고 참으세요.</p>
-        <input id="impulse-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+        <input id="impulse-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-2">
@@ -2471,6 +2499,7 @@ function impulseStart(difficulty) {
   const input = document.getElementById('impulse-nickname');
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  setNickname(nickname);
   const cfg = IMPULSE_CONFIG[difficulty];
   App.state.impulse = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -2591,7 +2620,7 @@ function renderShortfocusView(view) {
         <div class="text-6xl mb-4">📱</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">숏폼 집중력 테스트</h2>
         <p class="text-slate-400 mb-6">당신의 뇌, 아직 숏폼 알고리즘에 잠식되지 않았나요? 🧠<br>🔥 꿀잼 콘텐츠가 뜨면 최대한 빨리 탭!<br>📢 광고가 뜨면 절대 누르지 말고 참으세요.</p>
-        <input id="shortfocus-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+        <input id="shortfocus-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">피드 속도(난이도) 선택</p>
         <div class="grid grid-cols-3 gap-2">
@@ -2694,6 +2723,7 @@ function shortfocusStart(difficulty) {
   const input = document.getElementById('shortfocus-nickname');
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  setNickname(nickname);
   const cfg = SHORTFOCUS_CONFIG[difficulty];
   App.state.shortfocus = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -2805,7 +2835,7 @@ function renderInsaView(view) {
         <div class="text-6xl mb-4">🎉</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">인싸력 테스트</h2>
         <p class="text-slate-400 mb-6">10문항으로 알아보는 나의 사교성 지수<br>인싸든 아싸든, 다 각자의 매력이 있는 법!</p>
-        <input id="insa-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+        <input id="insa-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-orange-500 transition"/>
         <button onclick="insaStart()" class="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-400 hover:to-pink-500 text-white font-bold py-3 rounded-xl transition">
           테스트 시작하기
@@ -2889,6 +2919,7 @@ function renderInsaView(view) {
 function insaStart() {
   const nickname = document.getElementById('insa-nickname').value.trim();
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  setNickname(nickname);
   App.state.insa.nickname = nickname;
   App.state.insa.answers = [];
   App.state.insa.step = 0;
@@ -2926,7 +2957,7 @@ function renderProverbView(view) {
         <div class="text-6xl mb-4">📜</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">속담 완성 퀴즈</h2>
         <p class="text-slate-400 mb-6">옛 어른들의 지혜, 속담 10문항!<br>시간 제한 없이 편하게 풀어보세요 😊</p>
-        <input id="proverb-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+        <input id="proverb-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-amber-500 transition"/>
         <button onclick="proverbStart()" class="w-full bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-bold py-3 rounded-xl transition">
           퀴즈 시작하기
@@ -3018,6 +3049,7 @@ function proverbStart() {
   const input = document.getElementById('proverb-nickname');
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  setNickname(nickname);
   App.state.proverb = { nickname, step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [] };
   renderProverbView('question');
 }
@@ -3076,7 +3108,7 @@ function renderPricequizView(view) {
         <div class="text-6xl mb-4">🧾</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">그 시절 물가 맞히기</h2>
         <p class="text-slate-400 mb-6">추억의 그 시절 물가, 10문항!<br>시간 제한 없이 편하게 풀어보세요 😊</p>
-        <input id="pricequiz-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
+        <input id="pricequiz-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-amber-500 transition"/>
         <button onclick="pricequizStart()" class="w-full bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-bold py-3 rounded-xl transition">
           퀴즈 시작하기
@@ -3174,6 +3206,7 @@ function pricequizStart() {
   const input = document.getElementById('pricequiz-nickname');
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
+  setNickname(nickname);
   App.state.pricequiz = { nickname, step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [] };
   renderPricequizView('question');
 }

@@ -1,10 +1,10 @@
-<!-- v0.0.29 | 5-in-1 Dashboard SPA -->
+<!-- v0.0.30 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>5-in-1 테스트 대시보드</title>
+  <title>과몰입 연구소</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     // slate 팔레트를 style.css의 CSS 변수로 remap → html.light 토글만으로 전체 테마 전환
@@ -41,7 +41,7 @@
     };
   </script>
   <link rel="stylesheet" href="style.css"/>
-  <meta name="description" content="MBTI, 꿈 해몽, 오늘의 운세, 두뇌 나이 측정, ADHD 성향 진단 — 한 곳에서 모두!"/>
+  <meta name="description" content="과몰입 연구소 — 재미로 시작했다가 뼈 맞고 공유하는 종합 테스트 모음"/>
   <script>
     // 테마 깜빡임(FOUC) 방지: 렌더 전에 저장된 테마를 html에 즉시 반영
     (function() {
@@ -68,14 +68,14 @@
     <div class="flex items-center justify-between gap-2 mb-1">
       <div class="flex items-center gap-2">
         <span class="text-2xl">🎯</span>
-        <span class="text-slate-100 font-black text-lg tracking-tight">5-in-1 대시보드</span>
+        <span class="text-slate-100 font-black text-lg tracking-tight">과몰입 연구소</span>
       </div>
       <button id="theme-toggle-btn" type="button" title="다크/라이트 모드 전환"
         class="shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-lg transition">
         <span id="theme-toggle-icon">🌙</span>
       </button>
     </div>
-    <p class="text-slate-500 text-xs">종합 테스트 & 검색 플랫폼</p>
+    <p class="text-slate-500 text-xs">재미로 시작했다가 뼈 맞고 공유하는 종합 테스트 모음</p>
   </div>
 
   <!-- 메뉴 -->
@@ -146,7 +146,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4 border-t border-slate-800">
-    <p class="text-slate-600 text-xs">v0.0.29 · 2026-07-03</p>
+    <p class="text-slate-600 text-xs">v0.0.30 · 2026-07-03</p>
   </div>
 </aside>
 
@@ -158,7 +158,7 @@
   <!-- 상단 헤더 (모바일) -->
   <header class="lg:hidden sticky top-0 z-30 bg-slate-950 border-b border-slate-800 px-4 py-3 flex items-center gap-3">
     <button id="hamburger-btn" class="text-slate-300 hover:text-slate-50 text-2xl leading-none">☰</button>
-    <span class="text-slate-100 font-bold text-base flex-1">5-in-1 대시보드</span>
+    <span class="text-slate-100 font-bold text-base flex-1">과몰입 연구소</span>
     <button id="theme-toggle-btn-mobile" type="button" title="다크/라이트 모드 전환"
       class="shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-lg transition">
       <span id="theme-toggle-icon-mobile">🌙</span>
@@ -195,8 +195,12 @@
         <!-- 마이홈(닉네임/스트릭/완주현황/최근기록) 통합 영역 -->
         <div id="home-mypage-container" class="mb-8"></div>
 
-        <!-- 서비스 그리드 -->
-        <h2 class="text-slate-100 font-bold text-lg mb-4">서비스 바로가기</h2>
+        <!-- 서비스 그리드: 도구 -->
+        <h2 class="text-slate-100 font-bold text-lg mb-4">🎯 바로 써먹는 도구</h2>
+        <div id="home-tool-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
+
+        <!-- 서비스 그리드: 테스트 모음 -->
+        <h2 class="text-slate-100 font-bold text-lg mb-4">🧪 테스트 모음</h2>
         <div id="home-service-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
 
       </div>
@@ -316,7 +320,7 @@
 
   <!-- 푸터 -->
   <footer class="border-t border-slate-800 px-6 py-4 text-slate-600 text-xs text-center">
-    © 2026 5-in-1 Dashboard · 본 플랫폼의 모든 테스트 결과는 오락 목적이며 전문 진단을 대체하지 않습니다.
+    © 2026 과몰입 연구소 · 본 플랫폼의 모든 테스트 결과는 오락 목적이며 전문 진단을 대체하지 않습니다.
   </footer>
 </div><!-- /main content -->
 
