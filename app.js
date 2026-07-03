@@ -1,4 +1,4 @@
-/* v0.0.28 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.29 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -3319,6 +3319,85 @@ function renderComments(section) {
 }
 
 /* ══════════════════════════════════════════════════
+   🕸️ 종합 인지 프로필 (레이더 차트, v0.0.29~)
+   - 7개 인지테스트(두뇌나이/반응속도/숫자기억/순서기억/색각/논리력/충동억제) Tier를 0~100으로 환산해 시각화
+   - 숏폼집중력은 충동억제와 동일 엔진이라 중복 측정 방지 차원에서 축에서 제외
+   - 외부 차트 라이브러리 없이 순수 SVG로 렌더링 (빌드 도구 없는 프로젝트 구조에 맞춤)
+══════════════════════════════════════════════════ */
+const RADAR_AXES = [
+  { key: 'brain',       label: '두뇌나이', emoji: '🧠' },
+  { key: 'reaction',    label: '반응속도', emoji: '⚡' },
+  { key: 'memdigit',    label: '숫자기억', emoji: '🔢' },
+  { key: 'seqmem',      label: '순서기억', emoji: '🧩' },
+  { key: 'colorvision', label: '색각',     emoji: '🎨' },
+  { key: 'logic',       label: '논리력',   emoji: '📊' },
+  { key: 'impulse',     label: '충동억제', emoji: '🚦' },
+];
+const RADAR_TIER_SCORE = { S: 100, A: 80, B: 60, C: 40, D: 20 };
+const RADAR_MIN_DONE = 5;
+
+function renderCognitiveRadarCard() {
+  const axes = RADAR_AXES.map(a => {
+    const list = JSON.parse(localStorage.getItem('ranking_' + a.key) || '[]');
+    const m = list.length && list[0].result.match(/Tier ([SABCD])/);
+    return { ...a, score: m ? RADAR_TIER_SCORE[m[1]] : 0, done: !!m };
+  });
+  const doneCount = axes.filter(a => a.done).length;
+
+  if (doneCount < RADAR_MIN_DONE) {
+    return `
+      <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 mb-6 text-center">
+        <h4 class="text-slate-300 font-bold mb-2">🕸️ 종합 인지 프로필</h4>
+        <p class="text-slate-500 text-sm mb-3">인지테스트 7종(두뇌나이·반응속도·숫자기억·순서기억·색각·논리력·충동억제) 중 ${RADAR_MIN_DONE}개 이상 완료하면 나만의 인지 프로필이 열립니다.</p>
+        <div class="text-violet-400 font-bold text-lg mb-1">${doneCount} / ${RADAR_AXES.length}</div>
+        <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${doneCount/RADAR_AXES.length*100}%"></div></div>
+      </div>`;
+  }
+
+  const n = axes.length;
+  const cx = 190, cy = 190, R = 90;
+  const angle = i => -Math.PI / 2 + i * (2 * Math.PI / n);
+  const pointAt = (i, ratio) => {
+    const a = angle(i);
+    return [cx + R * ratio * Math.cos(a), cy + R * ratio * Math.sin(a)];
+  };
+
+  const gridPolygons = [0.25, 0.5, 0.75, 1].map(ratio => {
+    const pts = axes.map((_, i) => pointAt(i, ratio).join(',')).join(' ');
+    return `<polygon points="${pts}" fill="none" class="stroke-slate-600" stroke-width="1"/>`;
+  }).join('');
+
+  const axisLines = axes.map((_, i) => {
+    const [x, y] = pointAt(i, 1);
+    return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" class="stroke-slate-600" stroke-width="1"/>`;
+  }).join('');
+
+  const dataPoints = axes.map((a, i) => pointAt(i, a.score / 100).join(',')).join(' ');
+
+  const labels = axes.map((a, i) => {
+    const [x, y] = pointAt(i, 1.25);
+    let anchor = 'middle';
+    if (x < cx - 10) anchor = 'end';
+    else if (x > cx + 10) anchor = 'start';
+    return `<text x="${x}" y="${y}" text-anchor="${anchor}" dominant-baseline="middle" class="fill-slate-300" font-size="12">${a.emoji} ${a.label}</text>`;
+  }).join('');
+
+  return `
+    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 mb-6">
+      <h4 class="text-slate-300 font-bold mb-3">🕸️ 종합 인지 프로필</h4>
+      <div class="flex justify-center">
+        <svg viewBox="0 0 380 380" class="w-full max-w-xs">
+          ${gridPolygons}
+          ${axisLines}
+          <polygon points="${dataPoints}" class="fill-violet-500/25 stroke-violet-500" stroke-width="2"/>
+          ${labels}
+        </svg>
+      </div>
+      <p class="text-slate-500 text-xs text-center mt-2">각 축은 최근 기록 기준 (S=100 · A=80 · B=60 · C=40 · D=20)</p>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
    🏡 마이홈 대시보드 (v0.0.10~ 홈 섹션에 통합)
 ══════════════════════════════════════════════════ */
 function renderHomeMypage() {
@@ -3366,6 +3445,8 @@ function renderHomeMypage() {
           </span>`).join('')}
       </div>
     </div>
+
+    ${renderCognitiveRadarCard()}
 
     <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5">
       <h4 class="text-slate-300 font-bold mb-3">🕓 최근 테스트 기록</h4>
