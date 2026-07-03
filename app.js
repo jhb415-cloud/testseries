@@ -1,4 +1,4 @@
-/* v0.0.26 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.28 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -226,13 +226,12 @@ function initHome() {
    🧠 MBTI 섹션
 ══════════════════════════════════════════════════ */
 function initMbti() {
-  App.state.mbti = { nickname: '', answers: [], step: 0 };
+  App.state.mbti = { nickname: '', mode: null, questions: [], answers: [], step: 0 };
   renderMbtiView('start');
 }
 
 function renderMbtiView(view) {
   const container = document.getElementById('mbti-container');
-  const { mbtiQuestions } = AppData;
   const state = App.state.mbti;
 
   if (view === 'start') {
@@ -240,23 +239,31 @@ function renderMbtiView(view) {
       <div class="max-w-md mx-auto text-center">
         <div class="text-6xl mb-4">🧠</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">성격 파탄 MBTI</h2>
-        <p class="text-slate-400 mb-6">12문항으로 알아보는 솔직한 성격 분석<br>결과가 팩폭일 수도 있습니다.</p>
+        <p class="text-slate-400 mb-6">솔직한 성격 분석<br>결과가 팩폭일 수도 있습니다.</p>
         <input id="mbti-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력 (최대 12자)"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-violet-500 transition"/>
-        <button onclick="mbtiStart()" class="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold py-3 rounded-xl transition">
-          테스트 시작하기
-        </button>
+        <p class="text-slate-400 text-sm mb-3">모드 선택</p>
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="mbtiStart('simple')" class="bg-violet-800/50 hover:bg-violet-700/70 border border-violet-600 text-violet-300 font-bold py-4 rounded-xl transition">
+            <div class="text-2xl mb-1">⚡</div>
+            간단 모드<br><span class="text-xs font-normal opacity-70">12문항</span>
+          </button>
+          <button onclick="mbtiStart('precise')" class="bg-purple-800/50 hover:bg-purple-700/70 border border-purple-600 text-purple-300 font-bold py-4 rounded-xl transition">
+            <div class="text-2xl mb-1">🔬</div>
+            정밀 모드<br><span class="text-xs font-normal opacity-70">24문항 · 축 비율 제공</span>
+          </button>
+        </div>
       </div>`;
   }
 
   else if (view === 'question') {
-    const q = mbtiQuestions[state.step];
-    const progress = Math.round((state.step / mbtiQuestions.length) * 100);
+    const q = state.questions[state.step];
+    const progress = Math.round((state.step / state.questions.length) * 100);
     container.innerHTML = `
       <div class="max-w-lg mx-auto">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-slate-400 text-sm">${state.nickname} 님의 테스트</span>
-          <span class="text-violet-400 font-bold text-sm">${state.step + 1} / ${mbtiQuestions.length}</span>
+          <span class="text-slate-400 text-sm">${state.nickname} 님의 테스트 · ${state.mode === 'precise' ? '정밀' : '간단'}</span>
+          <span class="text-violet-400 font-bold text-sm">${state.step + 1} / ${state.questions.length}</span>
         </div>
         <div class="progress-bar-track mb-6">
           <div class="progress-bar-fill" style="width:${progress}%"></div>
@@ -279,6 +286,33 @@ function renderMbtiView(view) {
     const result = AppData.mbtiResults[type] || AppData.mbtiResults['INFP'];
     const shareText = `나는 ${type} - ${result.title}! ${state.nickname} 님의 성격 파탄 테스트 결과, 너도 확인해봐 👉`;
 
+    // 정밀 모드 전용: 축별 비율 바 (답변 개수만으로 계산, 별도 데이터 불필요)
+    let axisBarsHtml = '';
+    if (state.mode === 'precise') {
+      const pairs = [['E','I','indigo'], ['S','N','emerald'], ['T','F','amber'], ['J','P','rose']];
+      axisBarsHtml = `
+        <div class="bg-slate-800 rounded-2xl p-5 mb-4">
+          <h4 class="text-slate-100 font-bold mb-3">📊 축별 성향 비율 (정밀 모드)</h4>
+          <div class="flex flex-col gap-3">
+            ${pairs.map(([a, b]) => {
+              const total = axes[a] + axes[b];
+              const pa = total ? Math.round((axes[a] / total) * 100) : 50;
+              const pb = 100 - pa;
+              return `
+                <div>
+                  <div class="flex justify-between text-xs text-slate-400 mb-1">
+                    <span>${a} ${pa}%</span><span>${b} ${pb}%</span>
+                  </div>
+                  <div class="bg-slate-700 rounded-full h-2 overflow-hidden flex">
+                    <div class="bg-violet-500 h-full" style="width:${pa}%"></div>
+                    <div class="bg-slate-500 h-full" style="width:${pb}%"></div>
+                  </div>
+                </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+    }
+
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
         <div class="text-center mb-8">
@@ -287,6 +321,8 @@ function renderMbtiView(view) {
           <div class="text-violet-400 font-bold text-xl mb-2">${result.title}</div>
           <p class="text-slate-400">${state.nickname} 님의 성격 유형 분석 결과</p>
         </div>
+
+        ${axisBarsHtml}
 
         <div class="bg-slate-800 rounded-2xl p-5 mb-4">
           <h4 class="text-slate-100 font-bold mb-2">📌 성격 요약</h4>
@@ -329,12 +365,15 @@ function renderMbtiView(view) {
   }
 }
 
-function mbtiStart() {
+function mbtiStart(mode) {
   const nickname = document.getElementById('mbti-nickname').value.trim();
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  App.state.mbti.nickname = nickname;
-  App.state.mbti.answers = [];
-  App.state.mbti.step = 0;
+  const state = App.state.mbti;
+  state.nickname = nickname;
+  state.mode = mode;
+  state.questions = mode === 'precise' ? AppData.mbtiQuestions.concat(AppData.mbtiQuestionsExtra) : AppData.mbtiQuestions;
+  state.answers = [];
+  state.step = 0;
   renderMbtiView('question');
 }
 
@@ -342,7 +381,7 @@ function mbtiAnswer(axis) {
   const state = App.state.mbti;
   state.answers.push(axis);
   state.step++;
-  if (state.step >= AppData.mbtiQuestions.length) {
+  if (state.step >= state.questions.length) {
     App.showLoader(() => renderMbtiView('result'));
   } else {
     renderMbtiView('question');
@@ -666,16 +705,28 @@ const STROOP_COLORS = {
     { name: '초록', class: 'stroop-green' },
     { name: '노랑', class: 'stroop-yellow' },
   ],
+  medium: [
+    { name: '빨강', class: 'stroop-red' },
+    { name: '파랑', class: 'stroop-blue' },
+    { name: '초록', class: 'stroop-green' },
+    { name: '노랑', class: 'stroop-yellow' },
+    { name: '보라', class: 'stroop-purple' },
+  ],
   hard: [
     { name: '빨강', class: 'stroop-red' },
     { name: '파랑', class: 'stroop-blue' },
     { name: '초록', class: 'stroop-green' },
     { name: '노랑', class: 'stroop-yellow' },
     { name: '보라', class: 'stroop-purple' },
+    { name: '주황', class: 'stroop-orange' },
   ]
 };
-const TOTAL_QUESTIONS = 20;
-const TIME_LIMIT = 4000; // ms
+/* v0.0.28~: 난이도 3단계(쉬움/보통/어려움) — 색상 수뿐 아니라 문항 수·제한시간도 함께 강화 */
+const STROOP_CONFIG = {
+  easy:   { questions: 15, time: 5000, label: '쉬움' },
+  medium: { questions: 20, time: 4000, label: '보통' },
+  hard:   { questions: 25, time: 3000, label: '어려움' },
+};
 
 function initBrain() {
   if (App.state.brain.timerID) clearTimeout(App.state.brain.timerID);
@@ -696,14 +747,18 @@ function renderBrainView(view) {
         <input id="brain-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-emerald-500 transition"/>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-3 gap-3">
           <button onclick="brainSelectDifficulty('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-4 rounded-xl transition">
             <div class="text-2xl mb-1">🟢</div>
-            쉬움 버전<br><span class="text-xs font-normal opacity-70">색상 4개</span>
+            쉬움<br><span class="text-xs font-normal opacity-70">색상 4개 · 15문항</span>
+          </button>
+          <button onclick="brainSelectDifficulty('medium')" class="bg-amber-800/50 hover:bg-amber-700/70 border border-amber-600 text-amber-300 font-bold py-4 rounded-xl transition">
+            <div class="text-2xl mb-1">🟡</div>
+            보통<br><span class="text-xs font-normal opacity-70">색상 5개 · 20문항</span>
           </button>
           <button onclick="brainSelectDifficulty('hard')" class="bg-rose-800/50 hover:bg-rose-700/70 border border-rose-600 text-rose-300 font-bold py-4 rounded-xl transition">
             <div class="text-2xl mb-1">🔴</div>
-            어려움 버전<br><span class="text-xs font-normal opacity-70">색상 5개</span>
+            어려움<br><span class="text-xs font-normal opacity-70">색상 6개 · 25문항</span>
           </button>
         </div>
       </div>`;
@@ -712,13 +767,14 @@ function renderBrainView(view) {
   else if (view === 'question') {
     const q = state.questions[state.step];
     const colors = STROOP_COLORS[state.difficulty];
-    const progress = Math.round((state.step / TOTAL_QUESTIONS) * 100);
+    const cfg = STROOP_CONFIG[state.difficulty];
+    const progress = Math.round((state.step / cfg.questions) * 100);
 
     container.innerHTML = `
       <div class="max-w-md mx-auto">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-slate-400 text-sm">${state.nickname} 님 · ${state.difficulty === 'easy' ? '쉬움' : '어려움'}</span>
-          <span class="text-emerald-400 font-bold text-sm">${state.step + 1} / ${TOTAL_QUESTIONS}</span>
+          <span class="text-slate-400 text-sm">${state.nickname} 님 · ${cfg.label}</span>
+          <span class="text-emerald-400 font-bold text-sm">${state.step + 1} / ${cfg.questions}</span>
         </div>
         <div class="progress-bar-track mb-2">
           <div class="progress-bar-fill" style="width:${progress}%"></div>
@@ -743,21 +799,22 @@ function renderBrainView(view) {
     const bar = document.getElementById('time-gauge-bar');
     if (bar) {
       bar.style.width = '100%';
-      bar.style.transition = `width ${TIME_LIMIT}ms linear`;
+      bar.style.transition = `width ${cfg.time}ms linear`;
       requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.width = '0%'; }));
     }
 
-    // 타이머 설정 (4초 후 자동 오답)
+    // 타이머 설정 (난이도별 제한시간 경과 시 자동 오답)
     state.startTime = Date.now();
     if (state.timerID) clearTimeout(state.timerID);
     state.timerID = setTimeout(() => {
       brainTimeUp();
-    }, TIME_LIMIT);
+    }, cfg.time);
   }
 
   else if (view === 'result') {
-    const avgMs = state.totalTime / TOTAL_QUESTIONS;
-    const accuracy = (state.correctCount / TOTAL_QUESTIONS) * 100;
+    const cfg = STROOP_CONFIG[state.difficulty];
+    const avgMs = state.totalTime / cfg.questions;
+    const accuracy = (state.correctCount / cfg.questions) * 100;
 
     // 두뇌 나이 계산
     let brainAge, tier, tierColor, tierBg;
@@ -787,7 +844,7 @@ function renderBrainView(view) {
           <div class="bg-slate-800 rounded-xl p-4 text-center">
             <div class="text-2xl font-black text-emerald-400">${state.correctCount}</div>
             <div class="text-slate-400 text-xs">정답 수</div>
-            <div class="text-slate-500 text-xs">/ ${TOTAL_QUESTIONS}</div>
+            <div class="text-slate-500 text-xs">/ ${cfg.questions}</div>
           </div>
           <div class="bg-slate-800 rounded-xl p-4 text-center">
             <div class="text-2xl font-black text-blue-400">${accuracy.toFixed(0)}%</div>
@@ -835,8 +892,9 @@ function brainSelectDifficulty(difficulty) {
 
 function generateStroopQuestions(difficulty) {
   const colors = STROOP_COLORS[difficulty];
+  const total = STROOP_CONFIG[difficulty].questions;
   const questions = [];
-  for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+  for (let i = 0; i < total; i++) {
     const word = colors[Math.floor(Math.random() * colors.length)];
     let displayColor = colors[Math.floor(Math.random() * colors.length)];
     // 절반은 일치, 절반은 불일치 (스트룹 효과)
@@ -848,9 +906,10 @@ function generateStroopQuestions(difficulty) {
 
 function brainAnswer(colorName) {
   const state = App.state.brain;
+  const cfg = STROOP_CONFIG[state.difficulty];
   if (state.timerID) clearTimeout(state.timerID);
   const elapsed = Date.now() - state.startTime;
-  state.totalTime += Math.min(elapsed, TIME_LIMIT);
+  state.totalTime += Math.min(elapsed, cfg.time);
   if (colorName === state.questions[state.step].correctColor) {
     state.correctCount++;
     showToast('✅ 정답!');
@@ -862,7 +921,7 @@ function brainAnswer(colorName) {
 
 function brainTimeUp() {
   const state = App.state.brain;
-  state.totalTime += TIME_LIMIT;
+  state.totalTime += STROOP_CONFIG[state.difficulty].time;
   showToast('⏱️ 시간 초과!');
   brainNextQuestion();
 }
@@ -870,7 +929,7 @@ function brainTimeUp() {
 function brainNextQuestion() {
   const state = App.state.brain;
   state.step++;
-  if (state.step >= TOTAL_QUESTIONS) {
+  if (state.step >= STROOP_CONFIG[state.difficulty].questions) {
     App.showLoader(() => renderBrainView('result'));
   } else {
     renderBrainView('question');
@@ -881,13 +940,13 @@ function brainNextQuestion() {
    ⚡ 프로 미루러 (ADHD) 섹션
 ══════════════════════════════════════════════════ */
 function initAdhd() {
-  App.state.adhd = { nickname: '', answers: [], step: 0 };
+  App.state.adhd = { nickname: '', mode: null, questions: [], answers: [], step: 0 };
   renderAdhdView('start');
 }
 
 function renderAdhdView(view) {
   const container = document.getElementById('adhd-container');
-  const { adhdQuestions, adhdResults } = AppData;
+  const { adhdResults } = AppData;
   const state = App.state.adhd;
 
   if (view === 'start') {
@@ -895,31 +954,42 @@ function renderAdhdView(view) {
       <div class="max-w-md mx-auto text-center">
         <div class="text-6xl mb-4">⚡</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">프로 미루러 (ADHD 성향 진단)</h2>
-        <p class="text-slate-400 mb-6">10문항으로 알아보는 집중력 결핍 성향<br>결과는 전문 진단이 아닌 참고용입니다.</p>
+        <p class="text-slate-400 mb-6">집중력 결핍 성향 자가 체크<br>결과는 전문 진단이 아닌 참고용입니다.</p>
         <input id="adhd-nickname" type="text" maxlength="12" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-rose-500 transition"/>
-        <button onclick="adhdStart()" class="w-full bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-bold py-3 rounded-xl transition">
-          진단 시작하기
-        </button>
+        <p class="text-slate-400 text-sm mb-3">모드 선택</p>
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="adhdStart('simple')" class="bg-rose-800/50 hover:bg-rose-700/70 border border-rose-600 text-rose-300 font-bold py-4 rounded-xl transition">
+            <div class="text-2xl mb-1">⚡</div>
+            간단 모드<br><span class="text-xs font-normal opacity-70">10문항</span>
+          </button>
+          <button onclick="adhdStart('precise')" class="bg-pink-800/50 hover:bg-pink-700/70 border border-pink-600 text-pink-300 font-bold py-4 rounded-xl transition">
+            <div class="text-2xl mb-1">🔬</div>
+            정밀 모드<br><span class="text-xs font-normal opacity-70">20문항 · 2개 영역 분리</span>
+          </button>
+        </div>
       </div>`;
   }
 
   else if (view === 'question') {
-    const q = adhdQuestions[state.step];
-    const progress = Math.round((state.step / adhdQuestions.length) * 100);
+    const q = state.questions[state.step];
+    const progress = Math.round((state.step / state.questions.length) * 100);
+    const scaleOptions = state.mode === 'precise'
+      ? [['항상 그렇다', 3], ['자주 그렇다', 2], ['가끔 그렇다', 1], ['전혀 아니다', 0]]
+      : [['항상 그렇다', 2], ['자주 그렇다', 1], ['가끔 그렇다', 0], ['전혀 아니다', 0]];
     container.innerHTML = `
       <div class="max-w-lg mx-auto">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-slate-400 text-sm">${state.nickname} 님</span>
-          <span class="text-rose-400 font-bold text-sm">${state.step + 1} / ${adhdQuestions.length}</span>
+          <span class="text-slate-400 text-sm">${state.nickname} 님 · ${state.mode === 'precise' ? '정밀' : '간단'}</span>
+          <span class="text-rose-400 font-bold text-sm">${state.step + 1} / ${state.questions.length}</span>
         </div>
         <div class="progress-bar-track mb-6" style="--from:#f43f5e;--to:#ec4899">
           <div class="h-full rounded-full transition-all" style="width:${progress}%;background:linear-gradient(90deg,#f43f5e,#ec4899)"></div>
         </div>
         <h3 class="text-slate-100 text-xl font-semibold mb-6 leading-relaxed">Q${state.step+1}. ${q.q}</h3>
         <div class="flex flex-col gap-3">
-          ${[['항상 그렇다', 2], ['자주 그렇다', 1], ['가끔 그렇다', 0], ['전혀 아니다', 0]].map(([label, val]) => `
-            <button class="option-btn" onclick="adhdAnswer(${val}, '${label}')">
+          ${scaleOptions.map(([label, val]) => `
+            <button class="option-btn" onclick="adhdAnswer(${val})">
               ${label}
             </button>`).join('')}
         </div>
@@ -928,8 +998,38 @@ function renderAdhdView(view) {
 
   else if (view === 'result') {
     const score = state.answers.reduce((a, b) => a + b, 0);
-    const result = adhdResults.find(r => score >= r.range[0] && score <= r.range[1]) || adhdResults[adhdResults.length-1];
+    // 정밀 모드(문항당 최대 3점, 10문항×2영역=최대 60점)를 간단 모드 등급표(최대 20점)에 그대로 대입하기 위해 1/3로 환산
+    const gradeScore = state.mode === 'precise' ? Math.round(score / 3) : score;
+    const result = adhdResults.find(r => gradeScore >= r.range[0] && gradeScore <= r.range[1]) || adhdResults[adhdResults.length-1];
+    const maxScore = state.mode === 'precise' ? 60 : 20;
     const shareText = `나는 프로 미루러 등급 ${result.grade} - ${result.title}! ${state.nickname} 님의 진단 점수 ${score}점. 너도 확인해봐 👉`;
+
+    // 정밀 모드 전용: 부주의 / 과잉행동-충동성 영역별 점수 바
+    let domainBarsHtml = '';
+    if (state.mode === 'precise') {
+      const domainSum = (domain) => state.questions.reduce((sum, q, i) => q.domain === domain ? sum + state.answers[i] : sum, 0);
+      const inattention = domainSum('inattention');
+      const hyperactivity = domainSum('hyperactivity');
+      const domains = [
+        { label: '부주의', score: inattention, color: '#f43f5e' },
+        { label: '과잉행동-충동성', score: hyperactivity, color: '#ec4899' },
+      ];
+      domainBarsHtml = `
+        <div class="bg-slate-800 rounded-2xl p-5 mb-4">
+          <h4 class="text-slate-100 font-bold mb-3">📊 영역별 점수 (정밀 모드)</h4>
+          <div class="flex flex-col gap-3">
+            ${domains.map(d => `
+              <div>
+                <div class="flex justify-between text-xs text-slate-400 mb-1">
+                  <span>${d.label}</span><span>${d.score} / 30</span>
+                </div>
+                <div class="bg-slate-700 rounded-full h-2 overflow-hidden">
+                  <div class="h-full rounded-full" style="width:${Math.round(d.score/30*100)}%;background:${d.color}"></div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>`;
+    }
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -937,8 +1037,10 @@ function renderAdhdView(view) {
           <div class="text-5xl mb-3">${result.emoji}</div>
           <div class="text-4xl font-black text-slate-100 mb-1">등급 ${result.grade}</div>
           <div class="text-rose-400 font-bold text-xl mb-2">${result.title}</div>
-          <p class="text-slate-400">${state.nickname} 님의 진단 점수: <strong class="text-slate-100">${score}점</strong> / 20점</p>
+          <p class="text-slate-400">${state.nickname} 님의 진단 점수: <strong class="text-slate-100">${score}점</strong> / ${maxScore}점</p>
         </div>
+
+        ${domainBarsHtml}
 
         <div class="bg-slate-800 rounded-2xl p-5 mb-4">
           <p class="text-slate-300 leading-relaxed">${result.desc}</p>
@@ -977,12 +1079,15 @@ function renderAdhdView(view) {
   }
 }
 
-function adhdStart() {
+function adhdStart(mode) {
   const nickname = document.getElementById('adhd-nickname').value.trim();
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  App.state.adhd.nickname = nickname;
-  App.state.adhd.answers = [];
-  App.state.adhd.step = 0;
+  const state = App.state.adhd;
+  state.nickname = nickname;
+  state.mode = mode;
+  state.questions = mode === 'precise' ? AppData.adhdQuestionsPrecise : AppData.adhdQuestions;
+  state.answers = [];
+  state.step = 0;
   renderAdhdView('question');
 }
 
@@ -990,7 +1095,7 @@ function adhdAnswer(val) {
   const state = App.state.adhd;
   state.answers.push(val);
   state.step++;
-  if (state.step >= AppData.adhdQuestions.length) {
+  if (state.step >= state.questions.length) {
     App.showLoader(() => renderAdhdView('result'));
   } else {
     renderAdhdView('question');
