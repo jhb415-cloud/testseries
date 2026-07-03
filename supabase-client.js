@@ -1,4 +1,4 @@
-/* v0.0.40 | 5-in-1 Dashboard SPA — supabase-client.js
+/* v0.0.41 | 5-in-1 Dashboard SPA — supabase-client.js
    Stage D 1단계: 익명 인증 + test_results 이중 기록(로컬스토리지 유지 + Supabase에도 write)
    anon(publishable) 키는 RLS로 보호되는 공개 키라 하드코딩해도 안전함 — service_role 키는 절대 여기에 넣지 않음 */
 

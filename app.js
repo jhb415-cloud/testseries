@@ -1,4 +1,4 @@
-/* v0.0.40 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.41 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -554,6 +554,10 @@ function renderMbtiView(view) {
           class="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-violet-900/40 mb-3">
           📤 내 결과 공유하기
         </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
+        </button>
         <button onclick="shareCompatibility('mbti', \`${state.nickname}\`, { type: '${type}' }, '${type}')"
           class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition mb-3">
           💞 궁합 보기 링크 보내기
@@ -885,6 +889,10 @@ function renderFortuneView(view) {
           class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-amber-900/40 mb-3">
           📤 오늘의 운세 공유하기
         </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
+        </button>
 
         ${renderPlaceholderUI('fortune', zodiac)}
 
@@ -1091,6 +1099,10 @@ function renderBrainView(view) {
           class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-emerald-900/40 mb-3">
           📲 내 두뇌 나이 공유하기
         </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
+        </button>
         ${renderChallengeButton('brain', state.nickname, brainAge + '세 (Tier ' + tier + ')')}
 
         ${renderPlaceholderUI('brain', tier)}
@@ -1295,6 +1307,10 @@ function renderAdhdView(view) {
           class="w-full bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-rose-900/40 mb-3">
           📤 내 결과 공유하기
         </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
+        </button>
 
         ${renderPlaceholderUI('adhd', result.grade)}
 
@@ -1453,6 +1469,10 @@ function renderReactionView(view) {
         <button onclick="shareResult(\`${shareText}\`)"
           class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
           📤 내 결과 공유하기
+        </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
         </button>
         ${renderChallengeButton('reaction', state.nickname, avgMs + 'ms (Tier ' + tier + ')')}
 
@@ -1694,6 +1714,10 @@ function renderMemdigitView(view) {
         <button onclick="shareResult(\`${shareText}\`)"
           class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
           📤 내 결과 공유하기
+        </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
         </button>
         ${renderChallengeButton('memdigit', state.nickname, myResultStr)}
 
@@ -1968,6 +1992,10 @@ function renderSeqmemView(view) {
           class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
           📤 내 결과 공유하기
         </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
+        </button>
         ${renderChallengeButton('seqmem', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('seqmem', tier)}
@@ -2222,6 +2250,10 @@ function renderColorvisionView(view) {
         <button onclick="shareResult(\`${shareText}\`)"
           class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
           📤 내 결과 공유하기
+        </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
         </button>
         ${renderChallengeButton('colorvision', state.nickname, myResultStr)}
 
@@ -2513,6 +2545,10 @@ function renderLogicView(view) {
           class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
           📤 내 결과 공유하기
         </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
+        </button>
         ${renderChallengeButton('logic', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('logic', tier)}
@@ -2744,6 +2780,10 @@ function renderImpulseView(view) {
         <button onclick="shareResult(\`${shareText}\`)"
           class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
           📤 내 결과 공유하기
+        </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
         </button>
         ${renderChallengeButton('impulse', state.nickname, myResultStr)}
 
@@ -2982,6 +3022,10 @@ function renderShortfocusView(view) {
           class="w-full bg-gradient-to-r from-fuchsia-500 to-pink-500 hover:from-fuchsia-400 hover:to-pink-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-fuchsia-900/40 mb-3">
           📤 내 결과 공유하기
         </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
+        </button>
         ${renderChallengeButton('shortfocus', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('shortfocus', tier)}
@@ -3189,6 +3233,10 @@ function renderInsaView(view) {
           class="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-400 hover:to-pink-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-orange-900/40 mb-3">
           📤 내 결과 공유하기
         </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
+        </button>
         <button onclick="shareCompatibility('insa', \`${state.nickname}\`, { score: ${score} }, '${score}점')"
           class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition mb-3">
           💞 궁합 보기 링크 보내기
@@ -3321,6 +3369,10 @@ function renderProverbView(view) {
         <button onclick="shareResult(\`${shareText}\`)"
           class="w-full bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-amber-900/40 mb-3">
           📤 내 결과 공유하기
+        </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
         </button>
 
         ${renderPlaceholderUI('proverb', result.grade)}
@@ -3481,6 +3533,10 @@ function renderPricequizView(view) {
         <button onclick="shareResult(\`${shareText}\`)"
           class="w-full bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-amber-900/40 mb-3">
           📤 내 결과 공유하기
+        </button>
+        <button onclick="shareToKakao(\`${shareText}\`)"
+          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
+          💬 카카오톡 공유
         </button>
 
         ${renderPlaceholderUI('pricequiz', result.grade)}

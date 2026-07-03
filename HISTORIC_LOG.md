@@ -4,7 +4,7 @@
 
 ## 세션 #8 — 2026-07-03
 
-### 현재 버전: v0.0.40
+### 현재 버전: v0.0.41
 
 ### 작업 내용
 - 세션 시작 시 사용자가 "어디까지 했지" 재확인 요청 → 세션#7 마지막 메모(사용자가 Stage D/Supabase 착수 의사를 밝혔고, 다음 세션에서 Claude가 사전 준비사항을 설명하기로 함)를 근거로 현재 상태 안내.
@@ -14,12 +14,19 @@
 - Publishable key(`sb_publishable_...`)와 Project URL(`https://yovwvcjuadfieprvsooo.supabase.co`) 확보 후 코드 작업 착수: `index.html`에 `@supabase/supabase-js` CDN 스크립트 + 신규 `supabase-client.js` 추가(`window.sb` 클라이언트, 페이지 로드 시 자동 `signInAnonymously()`, `syncResultToSupabase()` 헬퍼). `app.js`의 모든 테스트가 공통 호출하는 `saveRanking()` 맨 끝에 한 줄만 추가해 로컬스토리지는 그대로 유지한 채 Supabase에도 결과를 이중 기록(기존 15개 테스트 로직 무변경, PRD 마이그레이션 방침대로 1단계만 우선 구현).
 - **검증**: 로컬 `python -m http.server` + 캐시된 npx playwright로, 실제로 생성된 Supabase 프로젝트를 대상으로 (1) 페이지 로드 시 익명 세션이 자동 수립되는지 (2) `saveRanking('reaction', ...)` 호출 후 `profiles`/`test_results`에 실제 row가 RLS를 통과해 정상 insert되는지(tier 파싱도 정확히 'S'로 저장됨 확인) (3) 로컬스토리지 `ranking_reaction` 기록도 그대로 유지되는지, 3가지를 실제 계정으로 end-to-end 확인. 콘솔 에러 없음. **주의**: 검증 과정에서 QA용 테스트 row 1개(user_id `9fd10300-815b-494d-b7b3-4bcc0e334d4d`, section `reaction`)가 실제 프로덕션 `test_results` 테이블에 남아있음 — anon(publishable) 키로는 delete 정책이 없어 앱에서 지울 수 없고, 필요하면 사용자가 Supabase SQL Editor에서 직접 삭제해야 함.
 - CLAUDE.md(기능현황표에 Stage D 행 추가, 댓글 백로그 각주 갱신, 진행중 결정사항 로그 갱신, 변경이력 v0.0.40 추가)와 PRD.md(9-1 D/E 항목을 "보류"→"착수함"으로 갱신) 동시 반영.
+- 사용자가 "한번 싹 정리하고 넘어가자 단계별로 말해봐"라고 요청 → Stage D 1단계 작업을 결정/구축/코드/검증/문서 5단계로 요약해 보고.
+- "댓글은 나중에라도 작업하자"는 재확인 요청 → 메모리(`project_stage_d_backend.md`)에 "취소가 아니라 백로그"임을 명시적으로 갱신.
+- "다음단계 진행하자"는 요청이 Stage D 2단계/카카오공유/로또통계 중 무엇인지 모호해 AskUserQuestion으로 확인 → 사용자가 **①카카오톡 공유 먼저 ②Stage D 2단계+로또 통계기반은 나중에 같이 ③두뇌나이 터치 지연 보정은 "나중에 문제되면"으로 백로그에서 제외**를 직접 결정.
+- **v0.0.41 (카카오톡 공유)**: Kakao Developers에서 앱("과몰입 연구소", ID 1503406) 생성 → JavaScript 키 발급 → Web 플랫폼 도메인(`https://testseries1.pages.dev`) 등록까지 사용자 스크린샷을 보며 실시간 안내. 최근 개편된 Kakao Developers UI 때문에 "Web 플랫폼 등록" 위치를 몇 차례 잘못 짚었음(일반→고급→카카오로그인 순으로 헤맴) — 사용자가 "최근 내용을 제대로 찾아보고 알려줘"라고 지적해 WebSearch+WebFetch로 공식 문서를 재확인, 정확한 경로("앱 > 플랫폼 키" 페이지에서 **"Default JS Key" 박스 자체를 클릭**하면 열리는 "JavaScript SDK 도메인" 입력창)를 찾아 안내 — 이 UI 구조는 향후 세션에서도 유효하니 기억해둘 것. 코드: `index.html`에 Kakao JS SDK CDN(v2.8.1) 스크립트 추가(SRI `integrity` 해시는 문서에 텍스트로 없어서 `curl`+`openssl dgst -sha384`로 직접 계산), 신규 `kakao-share.js`(`Kakao.init()` + `shareToKakao(text)`, `Kakao.Share.sendDefault({objectType:'text', link:{webUrl,mobileWebUrl}})` 사용, 실패 시 토스트로 조용히 처리). 기존 "📤 내 결과 공유하기" 버튼 14곳(모든 결과 화면) 바로 아래에 동일 `shareText`를 재사용하는 "💬 카카오톡 공유" 버튼을 Node 스크립트로 일괄 삽입(문자열 치환 정규식이 처음엔 이스케이프된 백틱(`` \` ``) 패턴을 못 찾아 0건 치환되는 실수가 있었음 — app.js 소스 자체가 템플릿 리터럴 안에 `\`${shareText}\`` 형태로 이스케이프돼 있다는 걸 확인 후 마커 문자열 수정해 14건 정상 치환).
+- **검증**: Playwright로 Kakao SDK 로드+`Kakao.isInitialized()===true` 확인(도메인 등록 자체는 `Kakao.init()` 단계에서 검증되지 않고 실제 API 호출 시점에 걸리므로 로컬 도메인에서도 init은 성공). 구조가 다른 두 테스트(MBTI=선택형 즉시진행, 속담완성=1.4초 피드백 딜레이형)에서 각각 닉네임 입력→모드/문제 진행→결과화면까지 실제로 완주시켜 "카카오톡 공유" 버튼이 정상 렌더링되고 클릭 시 콘솔 에러 없음을 확인. 단, 실제 카카오톡 앱으로 전송되는 것까지의 완전한 end-to-end는 로컬/Codespaces 도메인이 화이트리스트에 없어 이번 세션에서는 불가능 — 실제 도메인 배포 후 재확인 필요.
+- CLAUDE.md(기능현황표 카카오톡 공유 행을 완료로 변경, 결정사항 로그 갱신, 변경이력 v0.0.41 추가)와 PRD.md(9-1 D 항목 각주에서 카카오 분리 언급) 동시 반영.
 
 ### 다음에 이어서 해야 할 작업 리스트
 - [x] Stage D 1단계(익명 인증 + `test_results` 이중 기록) 완료 (v0.0.40)
-- [ ] **다음 세션 시작점 ★**: Stage D 2단계 — 퍼센타일 배치 집계(서버가 `percentile_cache`에 write, `service_role` 키가 필요해 Cloudflare Functions 같은 서버 환경 구축이 선행되어야 함) 논의. 이게 끝나야 "결과 궁합 보기"의 상위% 랭킹 노출, Stage E(동물비유카드)를 재검토할 수 있음
-- [ ] (백로그) 카카오톡 공유(Kakao Developers 키 발급 필요 — Stage D 인증에 소셜 로그인을 하이브리드로 붙일 때 같이 진행하면 효율적) / 로또 통계기반 추천(Cloudflare Functions 구축 필요, Stage D 2단계와 인프라 공유 가능)
-- [ ] (보류) 댓글 백엔드 연동 — 모더레이션 정책(신고/금칙어 필터) 설계 없이는 착수 안 하기로 결정(사용자 요청)
+- [x] 카카오톡 공유 완료 (v0.0.41) — 단, 실제 카카오톡 전송 end-to-end는 배포 후 재확인 필요
+- [ ] **다음 세션 시작점 ★**: 사용자가 "Stage D 2단계랑 로또 통계기반은 같이 작업하자"고 확정 — 둘 다 `service_role`/외부 API를 쓰는 Cloudflare Functions 서버 인프라가 선행되어야 해서 함께 묶어 진행. Stage D 2단계는 퍼센타일 배치 집계(→ "결과 궁합 보기" 상위% 노출, Stage E 재검토로 이어짐), 로또 통계기반은 실제 당첨번호 프록시. 착수 전 사이트가 실제로 Cloudflare Pages에 배포돼있는지부터 확인 필요(PRD Definition of Done에 `testseries1.pages.dev` 배포가 아직 미체크 상태)
+- [x] (제외) 두뇌나이 모바일 터치 지연 보정 — 사용자가 "나중에 문제되면 작업하자"며 우선순위에서 제외 결정. 완전 폐기 아님, PRD 체크리스트에는 여전히 필수 항목으로 남아있음
+- [ ] (보류) 댓글 백엔드 연동 — 모더레이션 정책(신고/금칙어 필터) 설계 없이는 착수 안 하기로 결정, 사용자가 "나중에라도 작업하자"고 재확인(취소 아님)
 - [ ] (보류) Stage E(동물비유카드, D의 퍼센타일 집계 의존) / Stage G(라이트모드, 프로젝트 전체 최후 고정)
 - [ ] QA 테스트로 남은 `test_results` row(user_id `9fd10300...`) 정리는 사용자 판단에 맡김(필요시 SQL Editor에서 직접 delete)
 
