@@ -1,4 +1,4 @@
-/* v0.0.22 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.26 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -80,12 +80,12 @@ function todaySeed() {
   return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
 }
 
-/* 12시간(KST) 단위 시드 — "오늘의 인생 한마디" 순환용.
-   같은 00:00~11:59 / 12:00~23:59 구간엔 모든 방문자에게 같은 문구가 뜨도록 함 */
-function halfDaySeed() {
+/* 24시간(KST, 하루) 단위 시드 — "오늘의 인생 한마디" 순환용.
+   같은 날(KST 00:00~23:59)엔 모든 방문자에게 같은 문구가 뜨도록 함 */
+function dailyQuoteSeed() {
   const kstMs = Date.now() + 9 * 60 * 60 * 1000; // UTC → KST 보정
-  const halfDayMs = 12 * 60 * 60 * 1000;
-  return Math.floor(kstMs / halfDayMs);
+  const dayMs = 24 * 60 * 60 * 1000;
+  return Math.floor(kstMs / dayMs);
 }
 
 function copyToClipboard(text) {
@@ -184,7 +184,7 @@ function toggleTheme() {
 ══════════════════════════════════════════════════ */
 function initHome() {
   const quotes = AppData.quotes;
-  const idx = Math.floor(seededRandom(halfDaySeed()) * quotes.length);
+  const idx = Math.floor(seededRandom(dailyQuoteSeed()) * quotes.length);
   const quote = quotes[idx];
 
   document.getElementById('home-quote-text').textContent = `"${quote.text}"`;
