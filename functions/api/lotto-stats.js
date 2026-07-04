@@ -80,7 +80,8 @@ export async function onRequestGet(context) {
     let cacheKey = null;
     try {
       cache = caches.default;
-      cacheKey = new Request('https://cache.internal/lotto-stats');
+      /* v0.1.3~: 응답 스키마가 바뀔 때(recentRounds 추가 등)는 키 버전을 올려 옛 엣지 캐시를 우회할 것 */
+      cacheKey = new Request('https://cache.internal/lotto-stats-v2');
       const cached = await cache.match(cacheKey);
       if (cached) return cached;
     } catch (e) {
