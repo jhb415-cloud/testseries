@@ -35,12 +35,15 @@ function themedCardHTML({ bgFrom, bgTo, accent, badgeBg, badge, emoji, title, su
     .emoji { font-size:200px; line-height:1; margin-bottom:24px; text-align:center; }
     .title {
       font-weight:900; font-size:56px; color:#f1f5f9; text-align:center;
-      max-width:1000px; line-height:1.3; text-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      /* v0.1.1~: 카카오톡 채팅창 미리보기가 1200px 원본보다 좁게 크롭해서 보여줘 텍스트가 좌우로
+         잘리는 문제 발견(실사용 스크린샷) — max-width를 1000→760px로 줄여 안전 여백을 넉넉히 확보.
+         219장 전체(scripts/generate-share-cards.js 재실행)에 적용된 값이라 임의로 되돌리지 말 것 */
+      max-width:760px; line-height:1.3; text-shadow: 0 4px 16px rgba(0,0,0,0.4);
       margin-bottom:20px;
     }
     .tip {
       font-size:28px; color:rgba(241,245,249,0.75); text-align:center;
-      max-width:920px; line-height:1.5;
+      max-width:700px; line-height:1.5;
     }
     .wordmark {
       position:absolute; bottom:36px; font-size:26px; color:rgba(241,245,249,0.55); font-weight:700;
