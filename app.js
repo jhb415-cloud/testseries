@@ -1,4 +1,4 @@
-/* v0.0.49 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.50 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -190,11 +190,8 @@ function shareBand(url, text) {
   window.open(`https://band.us/plugin/share?body=${encodeURIComponent(text + ' ' + url)}&route=${encodeURIComponent(url)}`, '_blank', 'width=600,height=500');
 }
 
-/* 결과 화면 하단에 넣을 아이콘형 공유 버튼 행 — 기존 "결과 공유하기"(Web Share, 텍스트만)+"카카오톡 공유" 두 버튼을 통합 */
-function renderShareRow(section, tier, idx, nickname, resultLabel, shareText) {
-  const shareUrl = buildShareLandingUrl(section, { type: 'result', tier, idx, nickname, result: resultLabel });
-  const imageUrl = `${location.origin}/share-cards/${section}-${tier}-${idx}.jpg`;
-  const kakaoTitle = `${nickname} 님의 테스트 결과가 나왔어요!`;
+/* 공유 아이콘 행 마크업 — Tier 8개 테스트/성향형 7개 테스트가 공용으로 재사용 */
+function shareIconRowHTML(imageUrl, kakaoTitle, shareText, shareUrl) {
   return `
     <div class="flex items-center justify-center gap-3 my-4">
       <button onclick="shareToKakaoCard('${imageUrl}', \`${kakaoTitle}\`, \`${shareText}\`, '${shareUrl}')"
@@ -208,6 +205,21 @@ function renderShareRow(section, tier, idx, nickname, resultLabel, shareText) {
       <button onclick="copyToClipboard('${shareUrl}')"
         class="w-14 h-14 rounded-full bg-slate-700 hover:bg-slate-600 text-slate-100 text-2xl flex items-center justify-center shadow-lg transition" title="링크 복사">🔗</button>
     </div>`;
+}
+
+/* 결과 화면 하단에 넣을 아이콘형 공유 버튼 행 — Tier 채점 8개 테스트 전용(등급+동물카드 인덱스로 이미지 결정) */
+function renderShareRow(section, tier, idx, nickname, resultLabel, shareText) {
+  const shareUrl = buildShareLandingUrl(section, { type: 'result', tier, idx, nickname, result: resultLabel });
+  const imageUrl = `${location.origin}/share-cards/${section}-${tier}-${idx}.jpg`;
+  const kakaoTitle = `${nickname} 님의 테스트 결과가 나왔어요!`;
+  return shareIconRowHTML(imageUrl, kakaoTitle, shareText, shareUrl);
+}
+
+/* 성향형 7개 테스트(MBTI/ADHD/인싸력/속담/물가/운세/꿈해몽) 전용 — 등급/타입/띠/꿈 인덱스 등
+   테스트마다 다른 식별자를 landingParams로 그대로 넘기고, 이미지 URL은 호출부에서 미리 계산해 전달 (v0.0.50~) */
+function renderIdentityShareRow(section, landingParams, imageUrl, kakaoTitle, shareText) {
+  const shareUrl = buildShareLandingUrl(section, landingParams);
+  return shareIconRowHTML(imageUrl, kakaoTitle, shareText, shareUrl);
 }
 
 /* ══════════════════════════════════════════════════
@@ -580,7 +592,7 @@ function renderMbtiView(view) {
     state.answers.forEach(a => axes[a]++);
     const type = [axes.E>=axes.I?'E':'I', axes.S>=axes.N?'S':'N', axes.T>=axes.F?'T':'F', axes.J>=axes.P?'J':'P'].join('');
     const result = AppData.mbtiResults[type] || AppData.mbtiResults['INFP'];
-    const shareText = `나는 ${type} - ${result.title}! ${state.nickname} 님의 성격 파탄 테스트 결과, 너도 확인해봐 👉`;
+    const shareText = `나 방금 MBTI 해봤는데 ${type} 나왔어! "${result.title}"래ㅋㅋ 너도 해봐 👉`;
 
     // 정밀 모드 전용: 축별 비율 바 (답변 개수만으로 계산, 별도 데이터 불필요)
     let axisBarsHtml = '';
@@ -642,14 +654,7 @@ function renderMbtiView(view) {
         </div>
         <div class="text-slate-500 text-xs text-center mb-6">유명인: ${result.famous}</div>
 
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-violet-900/40 mb-3">
-          📤 내 결과 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderIdentityShareRow('mbti', { mbtiType: type, nickname: state.nickname, result: `${type} - ${result.title}` }, `${location.origin}/share-cards/mbti-${type}.jpg`, `${state.nickname} 님의 MBTI는 ${type}!`, shareText)}
         <button onclick="shareCompatibility('mbti', \`${state.nickname}\`, { type: '${type}' }, '${type}')"
           class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition mb-3">
           💞 궁합 보기 링크 보내기
@@ -828,6 +833,10 @@ function dreamRenderModal(tIdx, vIdx) {
   const action = v ? (v.action || d.action) : d.action;
 
   const hasVariants = d.variants && d.variants.length > 0;
+  const shareText = `나 어제 이런 꿈 꿨어! ${title} — ${summary} 너도 무슨 꿈인지 확인해봐 👉`;
+  const shareRow = renderIdentityShareRow('dream',
+    { dreamIdx: tIdx, dreamTitle: title, nickname: getNickname() || '나', result: shareText },
+    `${location.origin}/share-cards/dream-${tIdx}.jpg`, `내가 꾼 꿈: ${title}`, shareText);
   const modalInner = document.getElementById('dream-modal-inner');
 
   // 마이홈 완주 플래그 + 로또 조합기 연동용 저장
@@ -870,6 +879,7 @@ function dreamRenderModal(tIdx, vIdx) {
             </button>`).join('')}
         </div>
       </div>` : ''}
+      ${shareRow}
       <div class="text-yellow-200/50 text-xs">⚠️ 꿈 해몽은 민속학적 참고 자료이며 학문적 사실이 아닙니다.</div>
     </div>`;
 }
@@ -881,6 +891,12 @@ function dreamCloseModal() {
 /* ══════════════════════════════════════════════════
    🔮 오늘의 운세 섹션
 ══════════════════════════════════════════════════ */
+/* 공유 카드 이미지 파일명(share-cards/fortune-{slug}.jpg)용 — scripts/generate-share-cards.js의 ZODIAC_SLUG와 동일하게 유지할 것 */
+const ZODIAC_SLUG = {
+  쥐: 'rat', 소: 'ox', 호랑이: 'tiger', 토끼: 'rabbit', 용: 'dragon', 뱀: 'snake',
+  말: 'horse', 양: 'goat', 원숭이: 'monkey', 닭: 'rooster', 개: 'dog', 돼지: 'pig',
+};
+
 function initFortune() {
   App.state.fortune = { zodiac: '', year: null };
   renderFortuneView('input');
@@ -948,7 +964,7 @@ function renderFortuneView(view) {
     const scores = fortune.map((_, i) => Math.floor(seededRandom(seed + i * 17 + 500) * 3) + 3);
     const starMap = (n) => '★'.repeat(n) + '☆'.repeat(5-n);
     const avgScore = (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1);
-    const shareText = `오늘 ${zodiac}띠 운세 평점 ${avgScore}/5.0! 행운의 숫자는 ${data.luckyNum}. 너도 확인해봐 👉`;
+    const shareText = `나 오늘 운세 이렇대~ "${fortune[0].positive}" (${zodiac}띠 ⭐${avgScore}/5.0, 행운숫자 ${data.luckyNum}) 너도 확인해봐 👉`;
 
     // 로또 조합기 연동용 저장
     localStorage.setItem('last_fortune_luckynum', data.luckyNum);
@@ -977,14 +993,7 @@ function renderFortuneView(view) {
             </div>`).join('')}
         </div>
 
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-amber-900/40 mb-3">
-          📤 오늘의 운세 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderIdentityShareRow('fortune', { zodiac: ZODIAC_SLUG[zodiac], nickname: getNickname() || '나', result: shareText }, `${location.origin}/share-cards/fortune-${ZODIAC_SLUG[zodiac]}.jpg`, `오늘의 ${zodiac}띠 운세!`, shareText)}
 
         ${renderPlaceholderUI('fortune', zodiac)}
 
@@ -1334,7 +1343,7 @@ function renderAdhdView(view) {
     const gradeScore = state.mode === 'precise' ? Math.round(score / 3) : score;
     const result = adhdResults.find(r => gradeScore >= r.range[0] && gradeScore <= r.range[1]) || adhdResults[adhdResults.length-1];
     const maxScore = state.mode === 'precise' ? 60 : 20;
-    const shareText = `나는 프로 미루러 등급 ${result.grade} - ${result.title}! ${state.nickname} 님의 진단 점수 ${score}점. 너도 확인해봐 👉`;
+    const shareText = `나 ADHD 성향 테스트 해봤는데 ${result.grade}등급 나왔어! "${result.title}" ㅋㅋ 너도 궁금하지 않아? 👉`;
 
     // 정밀 모드 전용: 부주의 / 과잉행동-충동성 영역별 점수 바
     let domainBarsHtml = '';
@@ -1391,14 +1400,7 @@ function renderAdhdView(view) {
           </ul>
         </div>
 
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-rose-900/40 mb-3">
-          📤 내 결과 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderIdentityShareRow('adhd', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/adhd-${result.grade}.jpg`, `${state.nickname} 님의 ADHD 성향 진단 결과`, shareText)}
 
         ${renderPlaceholderUI('adhd', result.grade)}
 
@@ -3266,7 +3268,7 @@ function renderInsaView(view) {
   else if (view === 'result') {
     const score = state.answers.reduce((a, b) => a + b, 0);
     const result = insaResults.find(r => score >= r.range[0] && score <= r.range[1]) || insaResults[insaResults.length-1];
-    const shareText = `나는 인싸력 등급 ${result.grade} - ${result.title}! ${state.nickname} 님의 점수 ${score}점. 너도 확인해봐 👉`;
+    const shareText = `나 인싸력 테스트 해봤는데 ${result.grade}등급 "${result.title}" 나왔어! 너도 해봐 👉`;
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -3296,14 +3298,7 @@ function renderInsaView(view) {
           </ul>
         </div>
 
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-400 hover:to-pink-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-orange-900/40 mb-3">
-          📤 내 결과 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderIdentityShareRow('insa', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/insa-${result.grade}.jpg`, `${state.nickname} 님의 인싸력 테스트 결과`, shareText)}
         <button onclick="shareCompatibility('insa', \`${state.nickname}\`, { score: ${score} }, '${score}점')"
           class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition mb-3">
           💞 궁합 보기 링크 보내기
@@ -3404,7 +3399,7 @@ function renderProverbView(view) {
   else if (view === 'result') {
     const total = state.questions.length;
     const result = proverbResults.find(r => state.correctCount >= r.range[0] && state.correctCount <= r.range[1]) || proverbResults[proverbResults.length-1];
-    const shareText = `속담 완성 퀴즈 ${state.correctCount}/${total}개 정답! 등급 ${result.grade} - ${result.title}. 너도 도전해봐 👉`;
+    const shareText = `나 속담 퀴즈 ${state.correctCount}/${total}개 맞혔어! "${result.title}"래ㅋㅋ 너도 도전해봐 👉`;
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -3433,14 +3428,7 @@ function renderProverbView(view) {
           </ul>
         </div>
 
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-amber-900/40 mb-3">
-          📤 내 결과 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderIdentityShareRow('proverb', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/proverb-${result.grade}.jpg`, `속담 퀴즈 ${state.correctCount}/${total}개 정답!`, shareText)}
 
         ${renderPlaceholderUI('proverb', result.grade)}
 
@@ -3565,7 +3553,7 @@ function renderPricequizView(view) {
   else if (view === 'result') {
     const total = state.questions.length;
     const result = priceQuizResults.find(r => state.correctCount >= r.range[0] && state.correctCount <= r.range[1]) || priceQuizResults[priceQuizResults.length-1];
-    const shareText = `그 시절 물가 맞히기 ${state.correctCount}/${total}개 정답! 등급 ${result.grade} - ${result.title}. 너도 도전해봐 👉`;
+    const shareText = `나 그 시절 물가 퀴즈 ${state.correctCount}/${total}개 맞혔어! "${result.title}"래! 너도 해봐 👉`;
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -3597,14 +3585,7 @@ function renderPricequizView(view) {
           </ul>
         </div>
 
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-amber-900/40 mb-3">
-          📤 내 결과 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderIdentityShareRow('pricequiz', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/pricequiz-${result.grade}.jpg`, `그 시절 물가 퀴즈 ${state.correctCount}/${total}개 정답!`, shareText)}
 
         ${renderPlaceholderUI('pricequiz', result.grade)}
 
