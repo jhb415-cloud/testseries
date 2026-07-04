@@ -386,12 +386,61 @@ html.light {
   pointer-events: none;
   z-index: 5;
 }
-.lottodraw-paddle {
-  position: absolute; left: 50%; top: 50%;
-  height: 10px; border-radius: 5px;
-  background: linear-gradient(90deg, #6b7280, #e5e7eb 28%, #9ca3af 50%, #f3f4f6 72%, #6b7280);
-  box-shadow: 0 0 8px rgba(0,0,0,0.45);
+/* ── 기계 외형 (v0.1.4~, 실제 추첨기 정면 사진 참고) ── */
+.lottodraw-machine {
+  position: relative;
+  margin: 0 auto;
+}
+.lottodraw-ring {
+  /* 구체를 감싸는 원형 프레임 */
+  position: absolute;
+  border-radius: 50%;
+  border: 3px solid rgba(148,163,184,0.35);
+  box-shadow: 0 0 14px rgba(148,163,184,0.12);
+  pointer-events: none;
+  z-index: 1;
+}
+.lottodraw-hole {
+  /* 구체 하단 배출구 */
+  position: absolute; left: 50%; bottom: 0;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 0 0;
+  background: radial-gradient(ellipse at center top, rgba(2,6,23,0.55), rgba(2,6,23,0.15) 75%, transparent);
+  border-top: 1px solid rgba(148,163,184,0.35);
+  pointer-events: none;
+  z-index: 1;
+}
+.lottodraw-neck {
+  /* 구체 아래 배출 튜브(유리) */
+  position: absolute; left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(148,163,184,0.10), rgba(148,163,184,0.22));
+  border: 1px solid rgba(148,163,184,0.45);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
   z-index: 2;
+}
+.lottodraw-ramp {
+  /* 공이 굴러 내려가는 경사 레일 */
+  position: absolute; height: 7px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(148,163,184,0.6), rgba(148,163,184,0.28));
+  box-shadow: 0 3px 0 rgba(148,163,184,0.3), 0 6px 10px rgba(2,6,23,0.35);
+  transform-origin: left center;
+  z-index: 2;
+}
+.lottodraw-stand {
+  /* 받침대(페데스탈) — 유리 구체 뒤로 비쳐 보임 */
+  position: absolute; left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(71,85,105,0.85), rgba(30,41,59,0.95));
+  clip-path: polygon(32% 0, 68% 0, 100% 88%, 100% 100%, 0 100%, 0 88%);
+  border-radius: 4px;
+  z-index: 0;
+}
+.lottodraw-rolling {
+  /* 배출 통로를 굴러가는 공 — 기계 컨테이너 좌표계로 옮겨 심어짐 */
+  z-index: 30;
 }
 .lottodraw-ball {
   position: absolute; left: 0; top: 0;
@@ -402,11 +451,6 @@ html.light {
   will-change: transform;
   z-index: 3;
   user-select: none;
-}
-.lottodraw-ball.lottodraw-exiting {
-  transition: transform 0.36s cubic-bezier(0.5, 0.05, 0.7, 1), opacity 0.36s ease;
-  opacity: 0.1;
-  z-index: 4;
 }
 .lottodraw-fadeout {
   transition: opacity 0.5s ease, transform 0.5s ease;

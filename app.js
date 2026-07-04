@@ -4794,10 +4794,14 @@ const LOTTODRAW_LETTERS = ['A', 'B', 'C', 'D', 'E'];
 const lottoDrawState = {
   session: 0,          // initLottodraw마다 증가 — 이전 rAF 루프/타이머 무효화 토큰
   balls: [], games: [], current: [],
-  drawing: false, fastTimer: null, finished: false,
-  radius: 0, ballR: 0, paddleHalf: 0, paddleAngle: 0, paddleSpeed: 0.045,
-  sphereEl: null, paddleEl: null, canvas: null, shareFile: null,
+  pending: 0,          // 배출 통로를 굴러가는 중(트레이 도착 전)인 공 개수 — 동시 배출 시 슬롯 예약용
+  refilling: false, autoAll: false, fastTimer: null, finished: false,
+  radius: 0, ballR: 0, rampLen: 0, windT: 0,
+  sphereEl: null, machineEl: null, canvas: null,
 };
+
+/* 배출 레일 기울기(도) — 기계 외형과 공 굴림 경로 계산에 공용 */
+const LOTTODRAW_RAMP_DEG = 16;
 
 /* 실제 동행복권 볼 색상 계열의 [밝은색, 기본색, 어두운색] — radial-gradient 입체감용 */
 function lottodrawBallColor(n) {
@@ -4814,24 +4818,32 @@ function initLottodraw() {
   const s = lottoDrawState;
   s.session++;
   if (s.fastTimer) { clearInterval(s.fastTimer); s.fastTimer = null; }
-  s.games = []; s.current = []; s.drawing = false; s.finished = false; s.canvas = null; s.shareFile = null;
+  s.games = []; s.current = []; s.pending = 0;
+  s.refilling = false; s.autoAll = false; s.finished = false; s.canvas = null;
 
   container.innerHTML = `
     <div class="max-w-2xl mx-auto">
       <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 sm:p-6 mb-5">
         <h2 class="text-slate-100 font-black text-xl mb-1">🎰 로또 직접 뽑기</h2>
-        <p class="text-slate-500 text-sm mb-4">돌아가는 추첨기에서 내 손으로 직접 공을 뽑아 5게임(A~E)을 완성해보세요</p>
+        <p class="text-slate-500 text-sm mb-4">추첨기에서 내 손으로 직접 공을 뽑아 5게임(A~E)을 완성해보세요</p>
         ${lottodrawSharedBannerHTML()}
         <div id="lottodraw-stage">
           <p id="lottodraw-progress" class="text-center text-slate-300 font-bold mb-3"></p>
-          <div id="lottodraw-sphere" class="lottodraw-sphere">
-            <div id="lottodraw-paddle" class="lottodraw-paddle"></div>
-            <div class="lottodraw-glare"></div>
+          <div id="lottodraw-machine" class="lottodraw-machine">
+            <div id="lottodraw-stand" class="lottodraw-stand"></div>
+            <div id="lottodraw-ring" class="lottodraw-ring"></div>
+            <div id="lottodraw-sphere" class="lottodraw-sphere">
+              <div class="lottodraw-glare"></div>
+              <div id="lottodraw-hole" class="lottodraw-hole"></div>
+            </div>
+            <div id="lottodraw-neck" class="lottodraw-neck"></div>
+            <div id="lottodraw-ramp" class="lottodraw-ramp"></div>
           </div>
           <div id="lottodraw-tray" class="flex justify-center gap-2 mt-4"></div>
           <div class="grid grid-cols-2 gap-3 mt-4">
             <button onclick="lottodrawDrawOne()" class="bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 rounded-xl transition">⚪ 공 1개 뽑기</button>
-            <button onclick="lottodrawDrawFast()" class="bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-xl transition">⚡ 6구 고속 추출</button>
+            <button onclick="lottodrawDrawFast()" class="bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-xl transition">⚡ 6개 한번에 뽑기</button>
+            <button onclick="lottodrawDrawAll()" class="col-span-2 bg-gradient-to-r from-amber-600 to-rose-600 hover:from-amber-500 hover:to-rose-500 text-white font-bold py-3 rounded-xl transition">🎯 5게임 한번에 다 뽑기</button>
           </div>
           <div id="lottodraw-board" class="mt-5 space-y-1.5"></div>
         </div>
@@ -4841,17 +4853,46 @@ function initLottodraw() {
     </div>`;
 
   s.sphereEl = document.getElementById('lottodraw-sphere');
-  s.paddleEl = document.getElementById('lottodraw-paddle');
+  s.machineEl = document.getElementById('lottodraw-machine');
 
   /* 구체 크기는 화면 폭에 맞춰 결정 (모바일 대응, 이후 리사이즈는 무시) */
   const stage = document.getElementById('lottodraw-stage');
   const size = Math.max(220, Math.min(310, (stage.clientWidth || 320) - 16));
-  s.sphereEl.style.width = size + 'px';
-  s.sphereEl.style.height = size + 'px';
   s.radius = size / 2;
   s.ballR = Math.round(size * 0.052);
-  s.paddleHalf = s.radius * 0.6;
-  s.paddleEl.style.width = (s.paddleHalf * 2) + 'px';
+  s.rampLen = Math.round(size * 0.46);
+  const r = s.ballR;
+  const rampRad = LOTTODRAW_RAMP_DEG * Math.PI / 180;
+  /* 배출 경로 기준점: 목(튜브) 하단에서 공 중심이 지나는 높이 = size + 16 */
+  const machineH = Math.round(size + 16 + s.rampLen * Math.sin(rampRad) + r * 2 + 14);
+
+  s.machineEl.style.width = size + 'px';
+  s.machineEl.style.height = machineH + 'px';
+  s.sphereEl.style.width = size + 'px';
+  s.sphereEl.style.height = size + 'px';
+
+  /* 기계 외형(실제 추첨기 정면 사진 참고: 원형 프레임 + 하단 배출 튜브 + 경사 레일 + 받침대) */
+  const ring = document.getElementById('lottodraw-ring');
+  ring.style.width = (size + 14) + 'px';
+  ring.style.height = (size + 14) + 'px';
+  ring.style.left = '-7px';
+  ring.style.top = '-7px';
+  const hole = document.getElementById('lottodraw-hole');
+  hole.style.width = (r * 2 + 12) + 'px';
+  hole.style.height = (r + 6) + 'px';
+  const neck = document.getElementById('lottodraw-neck');
+  neck.style.width = (r * 2 + 10) + 'px';
+  neck.style.height = '26px';
+  neck.style.top = (size - 6) + 'px';
+  const ramp = document.getElementById('lottodraw-ramp');
+  ramp.style.width = (s.rampLen + 10) + 'px';
+  ramp.style.top = (size + 16 + r - 2) + 'px';
+  ramp.style.left = (size / 2 - 5) + 'px';
+  ramp.style.transform = `rotate(${LOTTODRAW_RAMP_DEG}deg)`;
+  const stand = document.getElementById('lottodraw-stand');
+  stand.style.width = Math.round(size * 0.5) + 'px';
+  stand.style.top = Math.round(size * 0.82) + 'px';
+  stand.style.height = (machineH - Math.round(size * 0.82) - 2) + 'px';
 
   lottodrawResetBalls();
   lottodrawRenderTray();
@@ -4897,23 +4938,37 @@ function lottodrawResetBalls() {
     /* 원 안에 균등 랜덤 배치 (sqrt로 면적 균등 보정) */
     const ang = Math.random() * Math.PI * 2;
     const dist = Math.sqrt(Math.random()) * (R - r - 2);
-    s.balls.push({ n, el, x: Math.cos(ang) * dist, y: Math.sin(ang) * dist, vx: (Math.random() - 0.5) * 3, vy: (Math.random() - 0.5) * 3 });
+    s.balls.push({
+      n, el,
+      x: Math.cos(ang) * dist, y: Math.sin(ang) * dist,
+      vx: (Math.random() - 0.5) * 1.2, vy: (Math.random() - 0.5) * 1.2,
+      phase: Math.random() * Math.PI * 2, // 공마다 다른 바람 위상 — 일제히 같은 방향으로 돌지 않게
+    });
   }
 }
 
-/* 물리 루프 (좌표계: 구체 중심 원점) — 중력, 원형 벽 반사, 회전 패들 휘젓기, 공끼리 탄성 충돌 */
+/* 물리 루프 (좌표계: 구체 중심 원점) — v0.1.4~ 패들 대신 "바람" 방식.
+   실제 추첨기처럼 아래에서 공기를 불어 올리는 상승기류(아래쪽에 있을수록 강함, 세기 랜덤) +
+   천천히 방향이 바뀌는 옆바람 + 공마다 위상이 다른 난기류로 불규칙하게 떠다니게 함.
+   전체 속도 상한도 기존(r*0.75)보다 낮춰(r*0.45) 차분하게 */
 function lottodrawTick(session) {
   const s = lottoDrawState;
   if (session !== s.session || App.state.currentSection !== 'lottodraw' || s.finished) return;
   const R = s.radius, r = s.ballR;
 
-  s.paddleAngle += s.paddleSpeed;
-  if (s.paddleEl) s.paddleEl.style.transform = `translate(-50%,-50%) rotate(${s.paddleAngle}rad)`;
-  const ux = Math.cos(s.paddleAngle), uy = Math.sin(s.paddleAngle);
-  const maxV = r * 0.75; // 프레임당 최대 속도 (터널링 방지)
+  s.windT += 0.008;
+  const crossWind = Math.sin(s.windT * 1.7) * 0.045 + Math.sin(s.windT * 0.6 + 2) * 0.03;
+  const maxV = r * 0.45; // 프레임당 최대 속도 (터널링 방지 겸 전체 속도 다운)
 
   for (const b of s.balls) {
-    b.vy += 0.13; // 중력
+    b.vy += 0.05; // 약한 중력
+    /* 옆바람 + 공별 위상이 다른 소용돌이 + 미세 난기류 */
+    b.vx += crossWind + Math.sin(s.windT * 3 + b.phase) * 0.04 + (Math.random() - 0.5) * 0.1;
+    b.vy += (Math.random() - 0.5) * 0.1;
+    /* 하단 에어제트: 아래쪽에 있을수록 위로 강하게 밀어올림 (세기는 매 프레임 랜덤) */
+    if (b.y > 0) b.vy -= (0.04 + 0.12 * (b.y / R)) * Math.random() * 1.6;
+    /* 공기 저항 — 난기류로 에너지가 계속 쌓이지 않게 감쇠 */
+    b.vx *= 0.99; b.vy *= 0.99;
     b.x += b.vx; b.y += b.vy;
 
     /* 유리 구체 벽 반사 (반발계수 0.75) */
@@ -4923,19 +4978,6 @@ function lottodrawTick(session) {
       const dot = b.vx * nx + b.vy * ny;
       if (dot > 0) { b.vx -= 1.75 * dot * nx; b.vy -= 1.75 * dot * ny; }
       b.x = nx * (R - r); b.y = ny * (R - r);
-    }
-
-    /* 회전 패들(중심 통과 막대)과 충돌 → 패들 표면 속도만큼 접선 방향으로 휘저음 */
-    const t = Math.max(-s.paddleHalf, Math.min(s.paddleHalf, b.x * ux + b.y * uy));
-    let px = b.x - ux * t, py = b.y - uy * t;
-    let pd = Math.hypot(px, py);
-    const minD = r + 6;
-    if (pd < minD) {
-      if (pd < 0.01) { px = -uy; py = ux; pd = 1; }
-      b.x += (px / pd) * (minD - pd);
-      b.y += (py / pd) * (minD - pd);
-      b.vx += -uy * s.paddleSpeed * t * 1.1 + (px / pd) * 0.7;
-      b.vy += ux * s.paddleSpeed * t * 1.1 + (py / pd) * 0.7;
     }
 
     const sp = Math.hypot(b.vx, b.vy);
@@ -4970,39 +5012,93 @@ function lottodrawTick(session) {
   requestAnimationFrame(() => lottodrawTick(session));
 }
 
-/* [버튼 A] 공 1개 뽑기 — 랜덤 공 하나가 구체 하단으로 굴러 나가는 연출 후 트레이에 안착 */
-function lottodrawDrawOne() {
+/* 공 1개를 뽑아 배출 통로(구체 하단 배출구 → 튜브 → 경사 레일)를 굴러 내려간 뒤 트레이 슬롯에 안착시키는 공용 함수.
+   fast=true면 각 구간을 40% 단축(사용자 요청 "1.5배 빠르게"). 여러 공이 통로에 동시에 굴러갈 수 있어
+   슬롯은 pending 카운터로 미리 예약해둔다 */
+function lottodrawDrawBall(fast) {
   const s = lottoDrawState;
-  if (s.finished || s.drawing || s.current.length >= 6 || s.balls.length === 0) return;
-  s.drawing = true;
+  if (s.finished || s.refilling || s.balls.length === 0) return;
+  if (s.current.length + s.pending >= 6) return;
+  const slotIdx = s.current.length + s.pending;
+  s.pending++;
   playSound('tick');
   const idx = Math.floor(Math.random() * s.balls.length);
-  const ball = s.balls.splice(idx, 1)[0]; // 물리 루프 대상에서 제외 → CSS transition이 transform을 이어받음
-  const R = s.radius, r = s.ballR;
-  ball.el.classList.add('lottodraw-exiting');
-  ball.el.style.transform = `translate(${R - r}px, ${R * 2 + 10}px) scale(1.15)`;
+  const ball = s.balls.splice(idx, 1)[0]; // 물리 루프 대상에서 제외
   const session = s.session;
-  setTimeout(() => {
+  lottodrawAnimateExit(ball, slotIdx, fast, () => {
     if (session !== s.session) return;
-    ball.el.remove();
     s.current.push(ball.n);
+    s.pending--;
     playSound('correct');
     lottodrawRenderTray(true);
     lottodrawUpdateProgress();
-    s.drawing = false;
-    if (s.current.length >= 6) lottodrawCompleteGame();
-  }, 380);
+    if (s.current.length >= 6 && s.pending === 0) lottodrawCompleteGame();
+  });
 }
 
-/* [버튼 B] 남은 공 고속 추출 — 6개 찰 때까지 일정 간격 연속 배출 */
+/* 배출 연출: 구체(overflow hidden) 밖으로 나와야 통로가 보이므로 공 엘리먼트를 기계 컨테이너로 옮겨 심고
+   배출구 → 튜브 통과 → 레일 굴러내려감(회전) → 트레이 슬롯 안착 순으로 CSS transition을 체이닝 */
+function lottodrawAnimateExit(ball, slotIdx, fast, done) {
+  const s = lottoDrawState;
+  const session = s.session;
+  const k = fast ? 0.6 : 1;
+  const machine = s.machineEl;
+  const el = ball.el;
+  const r = s.ballR, size = s.radius * 2;
+  const rampRad = LOTTODRAW_RAMP_DEG * Math.PI / 180;
+  machine.appendChild(el);
+  el.classList.add('lottodraw-rolling');
+
+  const setPos = (x, y, rot, ms, ease) => {
+    el.style.transition = ms ? `transform ${ms}ms ${ease || 'linear'}` : 'none';
+    el.style.transform = `translate(${x - r}px, ${y - r}px) rotate(${rot}deg)`;
+  };
+  const t = (fn, ms) => setTimeout(() => { if (session === s.session) fn(); else el.remove(); }, ms);
+
+  /* 시작: 배출구(구체 하단 중앙) */
+  setPos(size / 2, size - r - 4, 0, 0);
+  /* 1) 튜브 통과 낙하 */
+  t(() => setPos(size / 2, size + 16, 100, Math.round(200 * k), 'cubic-bezier(0.4,0,1,1)'), 20);
+  /* 2) 경사 레일을 따라 굴러 내려감 */
+  const rampEndX = size / 2 + s.rampLen * Math.cos(rampRad);
+  const rampEndY = size + 16 + s.rampLen * Math.sin(rampRad);
+  t(() => setPos(rampEndX, rampEndY, 460, Math.round(340 * k), 'cubic-bezier(0.3,0,0.8,1)'), 20 + Math.round(210 * k));
+  /* 3) 레일 끝에서 트레이 슬롯으로 안착 */
+  t(() => {
+    const slot = document.querySelectorAll('#lottodraw-tray > span')[slotIdx];
+    if (slot && machine.isConnected) {
+      const mRect = machine.getBoundingClientRect();
+      const sRect = slot.getBoundingClientRect();
+      setPos(sRect.left - mRect.left + sRect.width / 2, sRect.top - mRect.top + sRect.height / 2, 720, Math.round(260 * k), 'cubic-bezier(0.2,0.6,0.3,1)');
+    }
+  }, 20 + Math.round(560 * k));
+  /* 4) 마무리 — 트레이에 진짜 공을 그리고 연출용 엘리먼트 제거 */
+  t(() => { el.remove(); done(); }, 20 + Math.round(840 * k));
+}
+
+/* [버튼 A] 공 1개 뽑기 (손맛용) */
+function lottodrawDrawOne() {
+  lottodrawDrawBall(false);
+}
+
+/* [버튼 B] 6개 한번에 뽑기 — 남은 슬롯이 찰 때까지 짧은 간격으로 연속 배출(통로에 여러 공이 줄지어 굴러감) */
 function lottodrawDrawFast() {
   const s = lottoDrawState;
-  if (s.finished || s.fastTimer || s.current.length >= 6) return;
-  lottodrawDrawOne();
+  if (s.finished || s.fastTimer || s.refilling) return;
+  if (s.current.length + s.pending >= 6) return;
+  lottodrawDrawBall(true);
   s.fastTimer = setInterval(() => {
-    if (s.finished || s.current.length >= 6) { clearInterval(s.fastTimer); s.fastTimer = null; return; }
-    lottodrawDrawOne();
-  }, 430);
+    if (s.finished || s.refilling || s.current.length + s.pending >= 6) { clearInterval(s.fastTimer); s.fastTimer = null; return; }
+    lottodrawDrawBall(true);
+  }, 280);
+}
+
+/* [버튼 C] 5게임 한번에 다 뽑기 — 게임이 끝날 때마다 자동으로 재충전 후 다음 게임을 이어서 뽑아 영수증까지 직행 */
+function lottodrawDrawAll() {
+  const s = lottoDrawState;
+  if (s.finished || s.autoAll) return;
+  s.autoAll = true;
+  lottodrawDrawFast();
 }
 
 function lottodrawCompleteGame() {
@@ -5022,7 +5118,7 @@ function lottodrawCompleteGame() {
   }
 
   showToast(`${LOTTODRAW_LETTERS[s.games.length - 1]}게임 완료! 공을 다시 채우고 ${LOTTODRAW_LETTERS[s.games.length]}게임을 시작해요`);
-  s.drawing = true; // 재충전 연출 동안 추첨 잠금
+  s.refilling = true; // 재충전 연출 동안 추첨 잠금
   const session = s.session;
   setTimeout(() => {
     if (session !== s.session || App.state.currentSection !== 'lottodraw') return;
@@ -5031,8 +5127,10 @@ function lottodrawCompleteGame() {
     lottodrawRenderTray();
     lottodrawRenderBoard();
     lottodrawUpdateProgress();
-    s.drawing = false;
-  }, 700);
+    s.refilling = false;
+    /* '5게임 한번에 다 뽑기' 모드면 다음 게임을 자동으로 이어서 뽑음 */
+    if (s.autoAll) lottodrawDrawFast();
+  }, s.autoAll ? 350 : 700);
 }
 
 function lottodrawRenderTray(popLast) {
@@ -5081,10 +5179,6 @@ function lottodrawShowReceipt() {
   if (stage) stage.classList.add('hidden');
 
   s.canvas = lottodrawRenderReceiptCanvas(s.games);
-  s.shareFile = null;
-  /* 클릭 시점에 async 지연 없이 바로 File을 넘겨야 navigator.share의 user-activation 요구를
-     만족하기 쉬워짐(특히 iOS Safari) — 영수증이 뜨는 시점에 미리 Blob을 만들어 캐싱해둔다 */
-  s.canvas.toBlob((blob) => { if (blob) s.shareFile = new File([blob], 'lucky-draw.jpg', { type: 'image/jpeg' }); }, 'image/jpeg', 0.92);
 
   const drawn = s.games.map(g => g.join('.')).join('-');
   const shareUrl = buildShareLandingUrl('lottodraw', { drawn, desc: '5게임 30개 번호를 직접 뽑았어요! 나도 추첨기 이용해볼래?' });
@@ -5099,7 +5193,6 @@ function lottodrawShowReceipt() {
         class="mx-auto rounded-xl shadow-2xl border border-slate-700 w-full max-w-xs mb-5 lottodraw-pop"/>
       <div class="space-y-2.5 max-w-xs mx-auto">
         <button onclick="lottodrawSaveImage()" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 rounded-xl transition">📥 이미지 저장</button>
-        <button onclick="lottodrawShareImage()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition">📤 결과 이미지 공유</button>
         ${shareKakaoButtonHTML(`${location.origin}/share-cards/lotto-share.jpg`, kakaoTitle, kakaoDesc, shareUrl)}
         ${shareIconRowHTML(shareText, shareUrl)}
         <button onclick="initLottodraw()" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-bold py-3 rounded-xl transition">🔄 처음부터 다시 뽑기</button>
@@ -5196,27 +5289,6 @@ function lottodrawSaveImage() {
   a.download = `lucky-draw-${Date.now()}.png`;
   document.body.appendChild(a); a.click(); a.remove();
   showToast('📥 영수증 이미지를 저장했어요!');
-}
-
-/* navigator.share files 지원 브라우저는 이미지 자체를 네이티브 공유(카카오톡 포함), 미지원(데스크톱 등)은 저장으로 폴백.
-   v0.1.3~: shareFile을 영수증 렌더링 시점에 미리 만들어둔 걸 그대로 사용 — click 핸들러 안에서 canvas.toBlob의
-   비동기 콜백을 거치면 일부 브라우저(iOS Safari 등)가 user-activation을 잃어 공유 시트가 안 뜨는 문제가 있었음 */
-function lottodrawShareImage() {
-  const s = lottoDrawState;
-  const doShare = (file) => {
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      navigator.share({ files: [file], title: '로또 직접 뽑기 결과', text: '🎰 추첨기에서 내 손으로 직접 뽑은 로또 번호! — 과몰입 연구소' }).catch(() => {});
-    } else {
-      showToast('이 브라우저는 이미지 공유를 지원하지 않아 저장으로 대신할게요');
-      lottodrawSaveImage();
-    }
-  };
-  if (s.shareFile) { doShare(s.shareFile); return; }
-  if (!s.canvas) return;
-  s.canvas.toBlob((blob) => {
-    if (!blob) { lottodrawSaveImage(); return; }
-    doShare(new File([blob], 'lucky-draw.jpg', { type: 'image/jpeg' }));
-  }, 'image/jpeg', 0.92);
 }
 
 /* ══════════════════════════════════════════════════
