@@ -105,6 +105,10 @@ export async function onRequestGet(context) {
     draws.forEach(d => d.numbers.forEach(n => { frequency[n]++; }));
 
     const latest = draws[draws.length - 1];
+    /* v0.1.3~: 최신 회차 1개만 보여주던 것을 최근 5회차로 확대(최신순 정렬) */
+    const recentRounds = draws.slice(-5).reverse().map(d => ({
+      round: d.round, date: d.date, numbers: d.numbers, bonus: d.bonus,
+    }));
     const body = JSON.stringify({
       frequency,
       roundsUsed: draws.length,
@@ -112,6 +116,7 @@ export async function onRequestGet(context) {
       latestDrawDate: latest.date,
       latestNumbers: latest.numbers,
       latestBonus: latest.bonus,
+      recentRounds,
       source,
     });
 

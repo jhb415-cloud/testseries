@@ -13,7 +13,8 @@
 
 const TIER_SECTIONS = ['brain', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus'];
 const IDENTITY_SECTIONS = ['mbti', 'adhd', 'insa', 'proverb', 'pricequiz', 'fortune', 'dream'];
-const VALID_SECTIONS = [...TIER_SECTIONS, ...IDENTITY_SECTIONS];
+const LOTTO_SECTIONS = ['lotto', 'lottodraw'];
+const VALID_SECTIONS = [...TIER_SECTIONS, ...IDENTITY_SECTIONS, ...LOTTO_SECTIONS];
 const CTA_RESULT = '나도 해보기';
 const CTA_CHALLENGE = '⚔️ 도전하기';
 
@@ -24,9 +25,10 @@ function esc(str) {
 /* 공유 프리뷰 화면(#shared-preview)으로 가는 URL 조립. next는 미리보기 버튼을 눌렀을 때 이동할
    실제 목적지 섹션, p는 도전장일 때만 채워지는 vs 페이로드(JSON 문자열, 그대로 두면 URLSearchParams가
    퍼센트 인코딩을 알아서 처리함) */
-function buildPreviewRedirect(origin, { next, rawTitle, rawDescription, imageUrl, cta, vsPayload }) {
+function buildPreviewRedirect(origin, { next, rawTitle, rawDescription, imageUrl, cta, vsPayload, extra }) {
   const params = new URLSearchParams({ section: next, title: rawTitle, desc: rawDescription, image: imageUrl, cta });
   if (vsPayload) params.set('p', vsPayload);
+  if (extra) params.set('extra', extra);
   return `${origin}/#shared-preview?${params.toString()}`;
 }
 
@@ -42,7 +44,7 @@ export async function onRequestGet(context) {
   const rawNickname = url.searchParams.get('nickname') || '익명';
   const origin = url.origin;
 
-  let rawTitle, rawDescription, imageUrl, cta = CTA_RESULT, vsPayload = null;
+  let rawTitle, rawDescription, imageUrl, cta = CTA_RESULT, vsPayload = null, extra = null;
 
   if (TIER_SECTIONS.includes(section)) {
     const type = url.searchParams.get('type') || 'result';
@@ -97,11 +99,27 @@ export async function onRequestGet(context) {
     rawTitle = `꿈 해몽: ${dreamTitle}`;
     rawDescription = result || '이 꿈이 무슨 의미인지 과몰입 연구소에서 확인해보세요 👉';
     imageUrl = `${origin}/share-cards/dream-${dreamIdx}.jpg`;
+  } else if (section === 'lotto') {
+    /* 로또 조합기(완전랜덤/직접지정/운세연동/통계기반) 공용 홍보 링크 — 숫자가 매번 달라 개인화 이미지
+       대신 범용 홍보 이미지 사용, 실제 번호는 카카오 공유 카드 텍스트(클라이언트에서 직접 구성)에만 담김 */
+    rawTitle = '🍀 로또 번호 조합기로 행운의 번호를 뽑아봤어요!';
+    rawDescription = url.searchParams.get('desc') || '나도 로또 번호 조합기로 행운의 번호를 뽑아보세요 👉';
+    imageUrl = `${origin}/share-cards/lotto-share.jpg`;
+    cta = '🎲 나도 뽑아보기';
+  } else if (section === 'lottodraw') {
+    /* 직접 뽑기 게임 — drawn(뽑은 번호)을 그대로 미리보기 화면을 거쳐 #lottodraw로 전달(extra 파라미터),
+       진입 시 기존 lottodrawSharedBannerHTML()이 그대로 복원해 친구 번호 배너를 보여줌 */
+    const drawn = url.searchParams.get('drawn') || '';
+    rawTitle = '🎰 친구가 추첨기에서 직접 뽑은 행운 번호!';
+    rawDescription = url.searchParams.get('desc') || '나도 추첨기에서 직접 내 손으로 뽑아보기 👉';
+    imageUrl = `${origin}/share-cards/lotto-share.jpg`;
+    cta = '🎰 나도 뽑아보기';
+    if (drawn) extra = drawn;
   }
 
   const title = esc(rawTitle);
   const description = esc(rawDescription);
-  const redirectUrl = buildPreviewRedirect(origin, { next: section, rawTitle, rawDescription, imageUrl, cta, vsPayload });
+  const redirectUrl = buildPreviewRedirect(origin, { next: section, rawTitle, rawDescription, imageUrl, cta, vsPayload, extra });
 
   const html = `<!doctype html>
 <html lang="ko"><head>
