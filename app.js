@@ -1,4 +1,4 @@
-/* v0.0.48 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.49 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -100,7 +100,9 @@ function pickOne(arr) {
 /* Stage E: 동물 비유 결과 카드 (v0.0.48~) — Tier 채점 8개 테스트 전용, data.js AppData.animalCards 참고 */
 function pickAnimalCard(section, tier) {
   const pool = AppData.animalCards[section] && AppData.animalCards[section][tier];
-  return pool ? pickOne(pool) : null;
+  if (!pool) return null;
+  const idx = Math.floor(Math.random() * pool.length);
+  return { ...pool[idx], _idx: idx };
 }
 
 function animalCardHTML(card) {
@@ -152,6 +154,63 @@ function shareResult(text) {
 }
 
 /* ══════════════════════════════════════════════════
+   🖼️ 이미지 있는 공유 카드 (v0.0.49~)
+   - Tier 채점 8개 테스트 전용. functions/share/[section].js가 og:image가 박힌 랜딩 페이지를 서빙,
+     실제 접속자는 즉시 해당 테스트(#{section})로 리다이렉트됨.
+   - 카카오 SDK feed 템플릿은 og 태그를 자동으로 읽지 않고 imageUrl을 직접 받아야 해서 별도로 넘김.
+══════════════════════════════════════════════════ */
+function buildShareLandingUrl(section, params) {
+  const qs = new URLSearchParams(params).toString();
+  return `${location.origin}/share/${section}?${qs}`;
+}
+
+function shareToKakaoCard(imageUrl, title, description, shareUrl) {
+  try {
+    if (!window.Kakao || !Kakao.isInitialized()) { showToast('카카오 공유 준비 중입니다. 잠시 후 다시 시도해주세요.'); return; }
+    Kakao.Share.sendDefault({
+      objectType: 'feed',
+      content: { title, description, imageUrl, link: { mobileWebUrl: shareUrl, webUrl: shareUrl } },
+      buttons: [{ title: '나도 테스트하기', link: { mobileWebUrl: shareUrl, webUrl: shareUrl } }],
+    });
+  } catch (e) {
+    console.error('카카오 공유 실패:', e);
+    showToast('카카오 공유에 실패했습니다.');
+  }
+}
+
+function shareFacebook(url) {
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank', 'width=600,height=500');
+}
+
+function shareTwitter(url, text) {
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank', 'width=600,height=500');
+}
+
+function shareBand(url, text) {
+  window.open(`https://band.us/plugin/share?body=${encodeURIComponent(text + ' ' + url)}&route=${encodeURIComponent(url)}`, '_blank', 'width=600,height=500');
+}
+
+/* 결과 화면 하단에 넣을 아이콘형 공유 버튼 행 — 기존 "결과 공유하기"(Web Share, 텍스트만)+"카카오톡 공유" 두 버튼을 통합 */
+function renderShareRow(section, tier, idx, nickname, resultLabel, shareText) {
+  const shareUrl = buildShareLandingUrl(section, { type: 'result', tier, idx, nickname, result: resultLabel });
+  const imageUrl = `${location.origin}/share-cards/${section}-${tier}-${idx}.jpg`;
+  const kakaoTitle = `${nickname} 님의 테스트 결과가 나왔어요!`;
+  return `
+    <div class="flex items-center justify-center gap-3 my-4">
+      <button onclick="shareToKakaoCard('${imageUrl}', \`${kakaoTitle}\`, \`${shareText}\`, '${shareUrl}')"
+        class="w-14 h-14 rounded-full bg-[#FEE500] hover:brightness-95 text-[#191919] text-2xl flex items-center justify-center shadow-lg transition" title="카카오톡 공유">💬</button>
+      <button onclick="shareFacebook('${shareUrl}')"
+        class="w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-black text-xl flex items-center justify-center shadow-lg transition" title="페이스북 공유">f</button>
+      <button onclick="shareTwitter('${shareUrl}', \`${shareText}\`)"
+        class="w-14 h-14 rounded-full bg-slate-900 hover:bg-slate-800 border border-slate-600 text-white font-black text-lg flex items-center justify-center shadow-lg transition" title="X(트위터) 공유">𝕏</button>
+      <button onclick="shareBand('${shareUrl}', \`${shareText}\`)"
+        class="w-14 h-14 rounded-full bg-[#00C73C] hover:brightness-95 text-white font-black text-xs flex items-center justify-center shadow-lg transition" title="밴드 공유">밴드</button>
+      <button onclick="copyToClipboard('${shareUrl}')"
+        class="w-14 h-14 rounded-full bg-slate-700 hover:bg-slate-600 text-slate-100 text-2xl flex items-center justify-center shadow-lg transition" title="링크 복사">🔗</button>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
    🆚 친구 대결 모드 (v0.0.31~)
    - Tier(S~D) 채점을 쓰는 8개 테스트(두뇌나이/반응속도/숫자기억/순서기억/색각/논리력/충동억제/숏폼집중력) 대상
    - 백엔드 없이 URL 파라미터(#{section}?vs=...)에 상대 결과를 담아 공유 → 같은 테스트를 마치면 Tier끼리 비교
@@ -165,16 +224,18 @@ function parseTierFromResult(resultStr) {
   return m ? m[1] : null;
 }
 
-/* 결과 화면의 "친구에게 도전장 보내기" 버튼에서 호출 */
+/* 결과 화면의 "친구에게 도전장 보내기" 버튼에서 호출
+   v0.0.49~: 도전장 링크를 원래의 #{section}?vs=... 대신 공유 랜딩 페이지(/share/{section}?type=challenge&...)로 교체 —
+   카카오톡/문자 등 어디로 공유하든 og:image(공용 VS 카드)가 자동으로 붙어 텍스트만 가던 문제를 해결.
+   랜딩 페이지가 vs= 페이로드를 그대로 복원해 리다이렉트하므로 기존 도전장 판정 로직은 그대로 재사용됨 */
 function challengeFriend(section, nickname, result) {
-  const payload = encodeURIComponent(JSON.stringify({ n: nickname, r: result }));
-  const url = `${location.origin}${location.pathname}#${section}?vs=${payload}`;
+  const url = buildShareLandingUrl(section, { type: 'challenge', nickname, result });
   const text = `⚔️ ${nickname}님의 도전장이 도착했습니다! (${result}) 같은 테스트로 나도 겨뤄보기 👉 ${url}`;
   shareResult(text);
 }
 
-/* 결과 화면에서 state.challenge가 있을 때 VS 비교 카드 HTML 생성 */
-function renderChallengeCompareCard(myResult, challenge) {
+/* 결과 화면에서 state.challenge가 있을 때 VS 비교 카드 HTML 생성 (v0.0.49~ 원점수 그대로 노출 + 결과 이미지 공유 추가) */
+function renderChallengeCompareCard(myResult, challenge, section, myNickname) {
   if (!challenge) return '';
   const myTier = parseTierFromResult(myResult);
   const oppTier = parseTierFromResult(challenge.r);
@@ -184,6 +245,12 @@ function renderChallengeCompareCard(myResult, challenge) {
   if (myScore > oppScore) { verdict = '🏆 승리!'; verdictColor = 'text-emerald-400'; }
   else if (myScore < oppScore) { verdict = '😢 아쉬운 패배'; verdictColor = 'text-rose-400'; }
   else { verdict = '🤝 무승부'; verdictColor = 'text-amber-400'; }
+  const shareUrl = buildShareLandingUrl(section, {
+    type: 'verdict', nickname: myNickname, result: myResult,
+    oppNickname: challenge.n, oppResult: challenge.r, verdict,
+  });
+  const kakaoTitle = `${myNickname} vs ${challenge.n} 대결 결과`;
+  const kakaoDesc = `${myNickname} ${myResult} · ${challenge.n} ${challenge.r} — ${verdict}`;
   return `
     <div class="bg-slate-800 border border-violet-700/40 rounded-2xl p-5 mb-4 text-center">
       <h4 class="text-slate-100 font-bold mb-3">⚔️ 친구 대결 결과</h4>
@@ -198,7 +265,15 @@ function renderChallengeCompareCard(myResult, challenge) {
           <div class="text-slate-100 font-bold">${myResult}</div>
         </div>
       </div>
-      <div class="font-black text-lg ${verdictColor}">${verdict}</div>
+      <div class="font-black text-lg ${verdictColor} mb-3">${verdict}</div>
+      <div class="flex items-center justify-center gap-3">
+        <button onclick="shareToKakaoCard('${location.origin}/share-cards/vs.jpg', \`${kakaoTitle}\`, \`${kakaoDesc}\`, '${shareUrl}')"
+          class="w-12 h-12 rounded-full bg-[#FEE500] hover:brightness-95 text-[#191919] text-xl flex items-center justify-center shadow-lg transition" title="카카오톡 공유">💬</button>
+        <button onclick="shareTwitter('${shareUrl}', \`${kakaoDesc}\`)"
+          class="w-12 h-12 rounded-full bg-slate-900 hover:bg-slate-800 border border-slate-600 text-white font-black flex items-center justify-center shadow-lg transition" title="X(트위터) 공유">𝕏</button>
+        <button onclick="copyToClipboard('${shareUrl}')"
+          class="w-12 h-12 rounded-full bg-slate-700 hover:bg-slate-600 text-slate-100 text-xl flex items-center justify-center shadow-lg transition" title="링크 복사">🔗</button>
+      </div>
     </div>`;
 }
 
@@ -1096,7 +1171,7 @@ function renderBrainView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(brainAge + '세 (Tier ' + tier + ')', state.challenge)}
+        ${renderChallengeCompareCard(brainAge + '세 (Tier ' + tier + ')', state.challenge, 'brain', state.nickname)}
 
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -1114,15 +1189,7 @@ function renderBrainView(view) {
           </div>
         </div>
 
-        <!-- 인증하기 버튼 -->
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-emerald-900/40 mb-3">
-          📲 내 두뇌 나이 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderShareRow('brain', tier, animalCard._idx, state.nickname, brainAge + '세 (Tier ' + tier + ')', shareText)}
         ${renderChallengeButton('brain', state.nickname, brainAge + '세 (Tier ' + tier + ')')}
 
         ${renderPlaceholderUI('brain', tier)}
@@ -1473,7 +1540,7 @@ function renderReactionView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(avgMs + 'ms (Tier ' + tier + ')', state.challenge)}
+        ${renderChallengeCompareCard(avgMs + 'ms (Tier ' + tier + ')', state.challenge, 'reaction', state.nickname)}
 
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -1490,14 +1557,7 @@ function renderReactionView(view) {
           </div>
         </div>
 
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
-          📤 내 결과 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderShareRow('reaction', tier, animalCard._idx, state.nickname, avgMs + 'ms (Tier ' + tier + ')', shareText)}
         ${renderChallengeButton('reaction', state.nickname, avgMs + 'ms (Tier ' + tier + ')')}
 
         ${renderPlaceholderUI('reaction', tier)}
@@ -1726,7 +1786,7 @@ function renderMemdigitView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(myResultStr, state.challenge)}
+        ${renderChallengeCompareCard(myResultStr, state.challenge, 'memdigit', state.nickname)}
 
         <div class="grid grid-cols-2 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -1739,14 +1799,7 @@ function renderMemdigitView(view) {
           </div>
         </div>
 
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
-          📤 내 결과 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderShareRow('memdigit', tier, animalCard._idx, state.nickname, myResultStr, shareText)}
         ${renderChallengeButton('memdigit', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('memdigit', tier)}
@@ -2007,7 +2060,7 @@ function renderSeqmemView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(myResultStr, state.challenge)}
+        ${renderChallengeCompareCard(myResultStr, state.challenge, 'seqmem', state.nickname)}
 
         <div class="grid grid-cols-2 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -2020,14 +2073,7 @@ function renderSeqmemView(view) {
           </div>
         </div>
 
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
-          📤 내 결과 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderShareRow('seqmem', tier, animalCard._idx, state.nickname, myResultStr, shareText)}
         ${renderChallengeButton('seqmem', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('seqmem', tier)}
@@ -2265,7 +2311,7 @@ function renderColorvisionView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(myResultStr, state.challenge)}
+        ${renderChallengeCompareCard(myResultStr, state.challenge, 'colorvision', state.nickname)}
 
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -2283,14 +2329,7 @@ function renderColorvisionView(view) {
           </div>
         </div>
 
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
-          📤 내 결과 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderShareRow('colorvision', tier, animalCard._idx, state.nickname, myResultStr, shareText)}
         ${renderChallengeButton('colorvision', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('colorvision', tier)}
@@ -2563,7 +2602,7 @@ function renderLogicView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(myResultStr, state.challenge)}
+        ${renderChallengeCompareCard(myResultStr, state.challenge, 'logic', state.nickname)}
 
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -2581,14 +2620,7 @@ function renderLogicView(view) {
           </div>
         </div>
 
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
-          📤 내 결과 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderShareRow('logic', tier, animalCard._idx, state.nickname, myResultStr, shareText)}
         ${renderChallengeButton('logic', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('logic', tier)}
@@ -2803,7 +2835,7 @@ function renderImpulseView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(myResultStr, state.challenge)}
+        ${renderChallengeCompareCard(myResultStr, state.challenge, 'impulse', state.nickname)}
 
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -2821,14 +2853,7 @@ function renderImpulseView(view) {
           </div>
         </div>
 
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-cyan-900/40 mb-3">
-          📤 내 결과 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderShareRow('impulse', tier, animalCard._idx, state.nickname, myResultStr, shareText)}
         ${renderChallengeButton('impulse', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('impulse', tier)}
@@ -3048,7 +3073,7 @@ function renderShortfocusView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(myResultStr, state.challenge)}
+        ${renderChallengeCompareCard(myResultStr, state.challenge, 'shortfocus', state.nickname)}
 
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -3066,14 +3091,7 @@ function renderShortfocusView(view) {
           </div>
         </div>
 
-        <button onclick="shareResult(\`${shareText}\`)"
-          class="w-full bg-gradient-to-r from-fuchsia-500 to-pink-500 hover:from-fuchsia-400 hover:to-pink-400 text-white font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-fuchsia-900/40 mb-3">
-          📤 내 결과 공유하기
-        </button>
-        <button onclick="shareToKakao(\`${shareText}\`)"
-          class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold py-3 rounded-xl transition mb-3 flex items-center justify-center gap-2">
-          💬 카카오톡 공유
-        </button>
+        ${renderShareRow('shortfocus', tier, animalCard._idx, state.nickname, myResultStr, shareText)}
         ${renderChallengeButton('shortfocus', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('shortfocus', tier)}
