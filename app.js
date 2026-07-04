@@ -4561,6 +4561,7 @@ function initLotto() {
           <button onclick="document.getElementById('lotto-custom-box').classList.toggle('hidden')" class="bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">✍️ 숫자 직접 지정</button>
           <button onclick="lottoRunFortunePick()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition">🔮 오늘의 운세·꿈 연동</button>
           <button onclick="lottoRunStats()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition">📊 실제 당첨 통계 기반</button>
+          <button onclick="App.navigate('lottodraw')" class="sm:col-span-2 bg-gradient-to-r from-rose-600 to-orange-500 hover:from-rose-500 hover:to-orange-400 text-white font-bold py-3 rounded-xl transition">🎰 직접 뽑기 게임 — 추첨기에서 내 손으로!</button>
         </div>
         <div id="lotto-custom-box" class="hidden mb-5">
           <p class="text-slate-400 text-xs mb-2">포함하고 싶은 숫자 1~5개를 콤마로 구분해 입력하세요 (1~45)</p>
@@ -4574,6 +4575,466 @@ function initLotto() {
       </div>
       <p class="text-slate-600 text-xs text-center">⚠️ 본 서비스는 오락 목적이며 실제 당첨을 보장하지 않습니다.</p>
     </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   🎰 로또 직접 뽑기 게임 (v0.1.2~)
+   - 유리 구체(glassmorphism) 안에서 45개 공이 물리 시뮬레이션(중력/벽·공·패들 충돌)으로
+     상시 튀어다니는 추첨기. 회전 패들이 실제로 공을 휘저음.
+   - 듀얼 컨트롤: [공 1개 뽑기](손맛) / [6구 고속 추출](속도) 두 버튼.
+   - 5게임(A~E) 시퀀스: 6개 뽑으면 1게임 기록 후 공 45개 재충전, E게임까지 반복.
+   - 완료 시 추첨기는 페이드아웃하고 Canvas로 분홍 감열지풍 영수증 이미지를 렌더링,
+     [이미지 저장 / 이미지 공유(navigator.share files) / 링크 복사(?drawn=...&ref=UUID)] 3종 CTA.
+   - 물리 루프는 session 토큰 + currentSection 체크로 섹션 이탈 시 자동 정지.
+══════════════════════════════════════════════════ */
+const LOTTODRAW_LETTERS = ['A', 'B', 'C', 'D', 'E'];
+
+const lottoDrawState = {
+  session: 0,          // initLottodraw마다 증가 — 이전 rAF 루프/타이머 무효화 토큰
+  balls: [], games: [], current: [],
+  drawing: false, fastTimer: null, finished: false,
+  radius: 0, ballR: 0, paddleHalf: 0, paddleAngle: 0, paddleSpeed: 0.045,
+  sphereEl: null, paddleEl: null, canvas: null,
+};
+
+/* 실제 동행복권 볼 색상 계열의 [밝은색, 기본색, 어두운색] — radial-gradient 입체감용 */
+function lottodrawBallColor(n) {
+  if (n <= 10) return ['#ffdc60', '#fbc400', '#b28b00'];
+  if (n <= 20) return ['#9fdcf8', '#69c8f2', '#3f9fd0'];
+  if (n <= 30) return ['#ff9c9c', '#ff7272', '#d94f4f'];
+  if (n <= 40) return ['#c4c9d4', '#9aa2b1', '#6b7280'];
+  return ['#cbe873', '#b0d840', '#84ab24'];
+}
+
+function initLottodraw() {
+  const container = document.getElementById('lottodraw-container');
+  if (!container) return;
+  const s = lottoDrawState;
+  s.session++;
+  if (s.fastTimer) { clearInterval(s.fastTimer); s.fastTimer = null; }
+  s.games = []; s.current = []; s.drawing = false; s.finished = false; s.canvas = null;
+
+  container.innerHTML = `
+    <div class="max-w-2xl mx-auto">
+      <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 sm:p-6 mb-5">
+        <h2 class="text-slate-100 font-black text-xl mb-1">🎰 로또 직접 뽑기</h2>
+        <p class="text-slate-500 text-sm mb-4">돌아가는 추첨기에서 내 손으로 직접 공을 뽑아 5게임(A~E)을 완성해보세요</p>
+        ${lottodrawSharedBannerHTML()}
+        <div id="lottodraw-stage">
+          <p id="lottodraw-progress" class="text-center text-slate-300 font-bold mb-3"></p>
+          <div id="lottodraw-sphere" class="lottodraw-sphere">
+            <div id="lottodraw-paddle" class="lottodraw-paddle"></div>
+            <div class="lottodraw-glare"></div>
+          </div>
+          <div id="lottodraw-tray" class="flex justify-center gap-2 mt-4"></div>
+          <div class="grid grid-cols-2 gap-3 mt-4">
+            <button onclick="lottodrawDrawOne()" class="bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 rounded-xl transition">⚪ 공 1개 뽑기</button>
+            <button onclick="lottodrawDrawFast()" class="bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-xl transition">⚡ 6구 고속 추출</button>
+          </div>
+          <div id="lottodraw-board" class="mt-5 space-y-1.5"></div>
+        </div>
+        <div id="lottodraw-result" class="hidden"></div>
+      </div>
+      <p class="text-slate-600 text-xs text-center">⚠️ 본 게임은 오락 목적이며 실제 복권 구매·당첨과 무관합니다.</p>
+    </div>`;
+
+  s.sphereEl = document.getElementById('lottodraw-sphere');
+  s.paddleEl = document.getElementById('lottodraw-paddle');
+
+  /* 구체 크기는 화면 폭에 맞춰 결정 (모바일 대응, 이후 리사이즈는 무시) */
+  const stage = document.getElementById('lottodraw-stage');
+  const size = Math.max(220, Math.min(310, (stage.clientWidth || 320) - 16));
+  s.sphereEl.style.width = size + 'px';
+  s.sphereEl.style.height = size + 'px';
+  s.radius = size / 2;
+  s.ballR = Math.round(size * 0.043);
+  s.paddleHalf = s.radius * 0.6;
+  s.paddleEl.style.width = (s.paddleHalf * 2) + 'px';
+
+  lottodrawResetBalls();
+  lottodrawRenderTray();
+  lottodrawRenderBoard();
+  lottodrawUpdateProgress();
+
+  const session = s.session;
+  requestAnimationFrame(() => lottodrawTick(session));
+}
+
+/* 공유 링크(#lottodraw?drawn=...)로 들어온 경우 친구가 뽑은 번호 배너 표시 */
+function lottodrawSharedBannerHTML() {
+  const raw = App._lottodrawSharedDrawn || '';
+  if (!raw) return '';
+  const games = raw.split('-').slice(0, 5).map(g =>
+    g.split('.').map(n => parseInt(n, 10)).filter(n => n >= 1 && n <= 45).slice(0, 6)
+  ).filter(g => g.length === 6);
+  if (!games.length) return '';
+  return `
+    <div class="bg-amber-900/30 border border-amber-400/40 rounded-xl p-4 mb-5">
+      <p class="text-amber-300 text-sm font-bold mb-2">🎁 친구가 추첨기에서 직접 뽑은 번호예요</p>
+      <div class="space-y-1.5">
+        ${games.map((g, i) => `
+          <div class="flex items-center gap-1.5">
+            <span class="text-amber-300/70 text-xs font-black w-4">${LOTTODRAW_LETTERS[i]}</span>
+            ${g.map(n => `<span class="w-6 h-6 flex items-center justify-center rounded-full ${lottoBallClass(n)} text-[10px] font-bold">${n}</span>`).join('')}
+          </div>`).join('')}
+      </div>
+      <p class="text-amber-300/80 text-xs mt-2">아래 추첨기에서 나도 직접 뽑아볼 수 있어요!</p>
+    </div>`;
+}
+
+function lottodrawResetBalls() {
+  const s = lottoDrawState;
+  s.balls.forEach(b => b.el.remove());
+  s.balls = [];
+  const R = s.radius, r = s.ballR;
+  for (let n = 1; n <= 45; n++) {
+    const el = document.createElement('div');
+    el.className = 'lottodraw-ball';
+    const [light, base, dark] = lottodrawBallColor(n);
+    el.style.width = el.style.height = (r * 2) + 'px';
+    el.style.fontSize = Math.max(9, Math.round(r * 0.85)) + 'px';
+    el.style.background = `radial-gradient(circle at 32% 28%, #fff 0%, ${light} 22%, ${base} 62%, ${dark} 100%)`;
+    el.textContent = n;
+    s.sphereEl.appendChild(el);
+    /* 원 안에 균등 랜덤 배치 (sqrt로 면적 균등 보정) */
+    const ang = Math.random() * Math.PI * 2;
+    const dist = Math.sqrt(Math.random()) * (R - r - 2);
+    s.balls.push({ n, el, x: Math.cos(ang) * dist, y: Math.sin(ang) * dist, vx: (Math.random() - 0.5) * 3, vy: (Math.random() - 0.5) * 3 });
+  }
+}
+
+/* 물리 루프 (좌표계: 구체 중심 원점) — 중력, 원형 벽 반사, 회전 패들 휘젓기, 공끼리 탄성 충돌 */
+function lottodrawTick(session) {
+  const s = lottoDrawState;
+  if (session !== s.session || App.state.currentSection !== 'lottodraw' || s.finished) return;
+  const R = s.radius, r = s.ballR;
+
+  s.paddleAngle += s.paddleSpeed;
+  if (s.paddleEl) s.paddleEl.style.transform = `translate(-50%,-50%) rotate(${s.paddleAngle}rad)`;
+  const ux = Math.cos(s.paddleAngle), uy = Math.sin(s.paddleAngle);
+  const maxV = r * 0.75; // 프레임당 최대 속도 (터널링 방지)
+
+  for (const b of s.balls) {
+    b.vy += 0.13; // 중력
+    b.x += b.vx; b.y += b.vy;
+
+    /* 유리 구체 벽 반사 (반발계수 0.75) */
+    const d = Math.hypot(b.x, b.y);
+    if (d > R - r) {
+      const nx = b.x / d, ny = b.y / d;
+      const dot = b.vx * nx + b.vy * ny;
+      if (dot > 0) { b.vx -= 1.75 * dot * nx; b.vy -= 1.75 * dot * ny; }
+      b.x = nx * (R - r); b.y = ny * (R - r);
+    }
+
+    /* 회전 패들(중심 통과 막대)과 충돌 → 패들 표면 속도만큼 접선 방향으로 휘저음 */
+    const t = Math.max(-s.paddleHalf, Math.min(s.paddleHalf, b.x * ux + b.y * uy));
+    let px = b.x - ux * t, py = b.y - uy * t;
+    let pd = Math.hypot(px, py);
+    const minD = r + 6;
+    if (pd < minD) {
+      if (pd < 0.01) { px = -uy; py = ux; pd = 1; }
+      b.x += (px / pd) * (minD - pd);
+      b.y += (py / pd) * (minD - pd);
+      b.vx += -uy * s.paddleSpeed * t * 1.1 + (px / pd) * 0.7;
+      b.vy += ux * s.paddleSpeed * t * 1.1 + (py / pd) * 0.7;
+    }
+
+    const sp = Math.hypot(b.vx, b.vy);
+    if (sp > maxV) { b.vx *= maxV / sp; b.vy *= maxV / sp; }
+  }
+
+  /* 공끼리 충돌 — 등질량 탄성(법선 성분 교환) 근사 + 감쇠 */
+  const balls = s.balls, minDist = r * 2;
+  for (let i = 0; i < balls.length; i++) {
+    for (let j = i + 1; j < balls.length; j++) {
+      const a = balls[i], c = balls[j];
+      const dx = c.x - a.x, dy = c.y - a.y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 > 0.0001 && d2 < minDist * minDist) {
+        const dd = Math.sqrt(d2), nx = dx / dd, ny = dy / dd;
+        const overlap = (minDist - dd) / 2;
+        a.x -= nx * overlap; a.y -= ny * overlap;
+        c.x += nx * overlap; c.y += ny * overlap;
+        const rel = (a.vx - c.vx) * nx + (a.vy - c.vy) * ny;
+        if (rel > 0) {
+          const imp = rel * 0.85;
+          a.vx -= imp * nx; a.vy -= imp * ny;
+          c.vx += imp * nx; c.vy += imp * ny;
+        }
+      }
+    }
+  }
+
+  for (const b of s.balls) {
+    b.el.style.transform = `translate(${b.x + R - r}px, ${b.y + R - r}px)`;
+  }
+  requestAnimationFrame(() => lottodrawTick(session));
+}
+
+/* [버튼 A] 공 1개 뽑기 — 랜덤 공 하나가 구체 하단으로 굴러 나가는 연출 후 트레이에 안착 */
+function lottodrawDrawOne() {
+  const s = lottoDrawState;
+  if (s.finished || s.drawing || s.current.length >= 6 || s.balls.length === 0) return;
+  s.drawing = true;
+  playSound('tick');
+  const idx = Math.floor(Math.random() * s.balls.length);
+  const ball = s.balls.splice(idx, 1)[0]; // 물리 루프 대상에서 제외 → CSS transition이 transform을 이어받음
+  const R = s.radius, r = s.ballR;
+  ball.el.classList.add('lottodraw-exiting');
+  ball.el.style.transform = `translate(${R - r}px, ${R * 2 + 10}px) scale(1.15)`;
+  const session = s.session;
+  setTimeout(() => {
+    if (session !== s.session) return;
+    ball.el.remove();
+    s.current.push(ball.n);
+    playSound('correct');
+    lottodrawRenderTray(true);
+    lottodrawUpdateProgress();
+    s.drawing = false;
+    if (s.current.length >= 6) lottodrawCompleteGame();
+  }, 380);
+}
+
+/* [버튼 B] 남은 공 고속 추출 — 6개 찰 때까지 일정 간격 연속 배출 */
+function lottodrawDrawFast() {
+  const s = lottoDrawState;
+  if (s.finished || s.fastTimer || s.current.length >= 6) return;
+  lottodrawDrawOne();
+  s.fastTimer = setInterval(() => {
+    if (s.finished || s.current.length >= 6) { clearInterval(s.fastTimer); s.fastTimer = null; return; }
+    lottodrawDrawOne();
+  }, 430);
+}
+
+function lottodrawCompleteGame() {
+  const s = lottoDrawState;
+  if (s.fastTimer) { clearInterval(s.fastTimer); s.fastTimer = null; }
+  s.games.push([...s.current].sort((a, b) => a - b));
+  lottodrawRenderBoard();
+
+  if (s.games.length >= LOTTODRAW_LETTERS.length) {
+    s.finished = true; // 물리 루프도 이 플래그로 정지
+    playSound('tierS');
+    lottodrawUpdateProgress();
+    const stage = document.getElementById('lottodraw-stage');
+    if (stage) stage.classList.add('lottodraw-fadeout');
+    setTimeout(() => lottodrawShowReceipt(), 550);
+    return;
+  }
+
+  showToast(`${LOTTODRAW_LETTERS[s.games.length - 1]}게임 완료! 공을 다시 채우고 ${LOTTODRAW_LETTERS[s.games.length]}게임을 시작해요`);
+  s.drawing = true; // 재충전 연출 동안 추첨 잠금
+  const session = s.session;
+  setTimeout(() => {
+    if (session !== s.session || App.state.currentSection !== 'lottodraw') return;
+    s.current = [];
+    lottodrawResetBalls();
+    lottodrawRenderTray();
+    lottodrawRenderBoard();
+    lottodrawUpdateProgress();
+    s.drawing = false;
+  }, 700);
+}
+
+function lottodrawRenderTray(popLast) {
+  const s = lottoDrawState;
+  const tray = document.getElementById('lottodraw-tray');
+  if (!tray) return;
+  tray.innerHTML = Array.from({ length: 6 }, (_, i) => {
+    const n = s.current[i];
+    if (n === undefined) return `<span class="w-9 h-9 rounded-full border-2 border-dashed border-slate-600"></span>`;
+    const pop = popLast && i === s.current.length - 1 ? ' lottodraw-pop' : '';
+    return `<span class="w-9 h-9 flex items-center justify-center rounded-full ${lottoBallClass(n)} text-sm font-bold shadow-lg${pop}">${n}</span>`;
+  }).join('');
+}
+
+function lottodrawRenderBoard() {
+  const s = lottoDrawState;
+  const board = document.getElementById('lottodraw-board');
+  if (!board) return;
+  board.innerHTML = LOTTODRAW_LETTERS.map((L, i) => {
+    const done = s.games[i];
+    const isCurrent = i === s.games.length && !s.finished;
+    return `
+      <div class="flex items-center gap-2 rounded-xl px-3 py-2 border ${done ? 'bg-slate-800 border-slate-700' : isCurrent ? 'bg-slate-800/60 border-violet-500/50' : 'bg-slate-800/30 border-slate-700/50'}">
+        <span class="font-black text-sm w-5 ${done ? 'text-emerald-400' : isCurrent ? 'text-violet-400' : 'text-slate-600'}">${L}</span>
+        ${done
+          ? `<div class="flex gap-1.5 flex-wrap">${done.map(n => `<span class="w-7 h-7 flex items-center justify-center rounded-full ${lottoBallClass(n)} text-xs font-bold">${n}</span>`).join('')}</div>`
+          : `<span class="text-xs ${isCurrent ? 'text-violet-300 font-semibold' : 'text-slate-600'}">${isCurrent ? '지금 뽑는 중...' : '대기'}</span>`}
+      </div>`;
+  }).join('');
+}
+
+function lottodrawUpdateProgress() {
+  const s = lottoDrawState;
+  const el = document.getElementById('lottodraw-progress');
+  if (!el) return;
+  if (s.finished) { el.textContent = '🎉 5게임 추첨 완료!'; return; }
+  el.innerHTML = `<span class="text-violet-400">${LOTTODRAW_LETTERS[s.games.length]}게임</span> · ${s.current.length} / 6`;
+}
+
+/* ── 클라이맥스: 영수증 렌더링 + 3종 공유 CTA ── */
+function lottodrawShowReceipt() {
+  const s = lottoDrawState;
+  const stage = document.getElementById('lottodraw-stage');
+  const result = document.getElementById('lottodraw-result');
+  if (!result) return;
+  if (stage) stage.classList.add('hidden');
+
+  s.canvas = lottodrawRenderReceiptCanvas(s.games);
+  result.classList.remove('hidden');
+  result.innerHTML = `
+    <div class="text-center">
+      <img src="${s.canvas.toDataURL('image/png')}" alt="로또 직접 뽑기 영수증"
+        class="mx-auto rounded-xl shadow-2xl border border-slate-700 w-full max-w-xs mb-5 lottodraw-pop"/>
+      <div class="space-y-2.5 max-w-xs mx-auto">
+        <button onclick="lottodrawSaveImage()" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 rounded-xl transition">📥 이미지 저장</button>
+        <button onclick="lottodrawShareImage()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition">📤 결과 이미지 공유</button>
+        <button onclick="lottodrawShareLink()" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">🔗 웹 링크로 공유 (링크 복사)</button>
+        <button onclick="initLottodraw()" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-bold py-3 rounded-xl transition">🔄 처음부터 다시 뽑기</button>
+      </div>
+    </div>`;
+}
+
+/* 다음 토요일(추첨일). 오늘이 토요일이고 추첨 시각(20:35) 이후면 다음 주 토요일 */
+function lottodrawNextSaturday() {
+  const d = new Date();
+  let add = (6 - d.getDay() + 7) % 7;
+  if (add === 0 && d.getHours() >= 21) add = 7;
+  const out = new Date(d);
+  out.setDate(d.getDate() + add);
+  return out;
+}
+
+/* 분홍 감열지풍 영수증을 Canvas로 렌더링 (2x 스케일). 바코드는 뽑은 번호 시드 기반 → 같은 결과면 같은 바코드 */
+function lottodrawRenderReceiptCanvas(games) {
+  const W = 380, H = 575, SCALE = 2;
+  const canvas = document.createElement('canvas');
+  canvas.width = W * SCALE; canvas.height = H * SCALE;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(SCALE, SCALE);
+
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, '#fff5f8'); bg.addColorStop(0.5, '#fdeaf1'); bg.addColorStop(1, '#fce4ee');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+  const now = new Date();
+  const drawDate = lottodrawNextSaturday();
+  /* 회차 추정: 1230회 = 2026-06-27 추첨 기준 주 단위 가산 */
+  const round = 1230 + Math.max(1, Math.round((drawDate - new Date('2026-06-27T20:35:00+09:00')) / (7 * 86400000)));
+  const fmt = (d) => `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')} (${'일월화수목금토'[d.getDay()]})`;
+
+  let y = 44;
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#d61f69';
+  ctx.font = '900 30px sans-serif';
+  ctx.fillText('LOTTO 6/45', W / 2, y); y += 20;
+  ctx.fillStyle = '#9d7484';
+  ctx.font = '12px sans-serif';
+  ctx.fillText('과 몰 입  연 구 소  ·  직 접  뽑 기', W / 2, y); y += 16;
+
+  const dashLine = () => {
+    ctx.strokeStyle = '#e3b7c8'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(22, y); ctx.lineTo(W - 22, y); ctx.stroke(); ctx.setLineDash([]);
+  };
+  dashLine(); y += 26;
+
+  ctx.textAlign = 'left'; ctx.fillStyle = '#5c3a49'; ctx.font = '13px sans-serif';
+  [
+    ['발행일', `${fmt(now)} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`],
+    ['추첨일', fmt(drawDate)],
+    ['회차', `제 ${round} 회 (가상)`],
+  ].forEach(([k, v]) => {
+    ctx.fillText(k, 26, y);
+    ctx.textAlign = 'right'; ctx.fillText(v, W - 26, y); ctx.textAlign = 'left';
+    y += 20;
+  });
+  y += 4; dashLine(); y += 30;
+
+  games.forEach((g, i) => {
+    ctx.fillStyle = '#c2185b';
+    ctx.font = 'bold 20px "Courier New", monospace';
+    ctx.fillText(LOTTODRAW_LETTERS[i], 28, y);
+    ctx.fillStyle = '#3d2430';
+    ctx.font = '13px sans-serif';
+    ctx.fillText('수동', 52, y);
+    ctx.font = 'bold 21px "Courier New", monospace';
+    ctx.fillText(g.map(n => String(n).padStart(2, '0')).join(' '), 100, y);
+    y += 33;
+  });
+  y += 2; dashLine(); y += 24;
+
+  ctx.fillStyle = '#5c3a49'; ctx.font = '13px sans-serif'; ctx.fillText('금액', 26, y);
+  ctx.textAlign = 'right'; ctx.font = 'bold 16px sans-serif'; ctx.fillStyle = '#3d2430';
+  ctx.fillText('₩5,000 (가상)', W - 26, y); ctx.textAlign = 'left';
+  y += 14; dashLine(); y += 26;
+
+  /* 바코드: 시드 LCG로 결정론 생성 */
+  let seed = games.flat().reduce((a, n, i) => (a * 31 + n * (i + 7)) % 2147483647, 7);
+  const rand = () => { seed = (seed * 48271) % 2147483647; return seed / 2147483647; };
+  let bx = 40;
+  ctx.fillStyle = '#33202a';
+  while (bx < W - 40) {
+    const bw = 1 + Math.floor(rand() * 3);
+    if (rand() > 0.42) ctx.fillRect(bx, y, bw, 52);
+    bx += bw + 1 + Math.floor(rand() * 2);
+  }
+  y += 68;
+  ctx.textAlign = 'center'; ctx.font = '12px "Courier New", monospace'; ctx.fillStyle = '#5c3a49';
+  ctx.fillText(Array.from({ length: 5 }, () => String(Math.floor(rand() * 100000)).padStart(5, '0')).join('  '), W / 2, y);
+  y += 28;
+
+  ctx.font = '11px sans-serif'; ctx.fillStyle = '#b48a9c';
+  ctx.fillText('본 영수증은 오락용 이미지이며 실제 복권이 아닙니다', W / 2, y); y += 15;
+  ctx.fillText('행운을 빌어요! 🍀 과몰입 연구소', W / 2, y);
+
+  return canvas;
+}
+
+function lottodrawSaveImage() {
+  const s = lottoDrawState;
+  if (!s.canvas) return;
+  const a = document.createElement('a');
+  a.href = s.canvas.toDataURL('image/png');
+  a.download = `lucky-draw-${Date.now()}.png`;
+  document.body.appendChild(a); a.click(); a.remove();
+  showToast('📥 영수증 이미지를 저장했어요!');
+}
+
+/* navigator.share files 지원 브라우저는 이미지 자체를 네이티브 공유, 미지원(데스크톱 등)은 저장으로 폴백 */
+function lottodrawShareImage() {
+  const s = lottoDrawState;
+  if (!s.canvas) return;
+  s.canvas.toBlob(async (blob) => {
+    if (!blob) { lottodrawSaveImage(); return; }
+    const file = new File([blob], 'lucky-draw.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: '로또 직접 뽑기 결과', text: '🎰 추첨기에서 내 손으로 직접 뽑은 로또 번호! — 과몰입 연구소' });
+      } catch (e) { /* 사용자가 공유 시트를 닫은 경우 — 조용히 무시 */ }
+    } else {
+      showToast('이 브라우저는 이미지 공유를 지원하지 않아 저장으로 대신할게요');
+      lottodrawSaveImage();
+    }
+  }, 'image/png');
+}
+
+/* 리퍼럴 기반 마련용 익명 ID — 최초 1회 생성 후 localStorage에 고정 */
+function lottodrawRefId() {
+  let id = localStorage.getItem('app_ref_id');
+  if (!id) {
+    id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `ref-${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
+    localStorage.setItem('app_ref_id', id);
+  }
+  return id;
+}
+
+function lottodrawShareLink() {
+  const s = lottoDrawState;
+  if (!s.games.length) return;
+  const drawn = s.games.map(g => g.join('.')).join('-');
+  copyToClipboard(`${location.origin}${location.pathname}#lottodraw?drawn=${drawn}&ref=${lottodrawRefId()}`);
 }
 
 /* ══════════════════════════════════════════════════
@@ -4637,6 +5098,7 @@ document.addEventListener('DOMContentLoaded', () => {
     proverb: initProverb,
     pricequiz: initPricequiz,
     lotto: initLotto,
+    lottodraw: initLottodraw,
     'shared-preview': initSharedPreview,
   };
 
@@ -4693,6 +5155,10 @@ document.addEventListener('DOMContentLoaded', () => {
        initSharedPreview()가 나중에 읽을 수 있도록 지금 이 시점에 미리 떼어 저장해둔다 (v0.1.1~) */
     if (hash === 'shared-preview') {
       App._sharedPreviewParams = params;
+    }
+    /* 로또 직접 뽑기 공유 링크(?drawn=...&ref=...)도 같은 이유로 이 시점에 미리 떼어둔다 (v0.1.2~) */
+    if (hash === 'lottodraw') {
+      App._lottodrawSharedDrawn = params.get('drawn') || '';
     }
   }
   App.navigate(hash in sectionInits ? hash : 'home');
