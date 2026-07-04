@@ -1,4 +1,4 @@
-/* v0.0.46 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.47 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -1073,6 +1073,7 @@ function renderBrainView(view) {
           <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
             <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
           </div>
+          <div id="percentile-badge-brain" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
 
@@ -1116,6 +1117,7 @@ function renderBrainView(view) {
       </div>`;
 
     saveRanking('brain', state.nickname, brainAge + '세 (Tier ' + tier + ')');
+    renderPercentileBadge('brain', tier);
     renderLocalRanking('brain-ranking-list', 'brain');
   }
 }
@@ -1446,6 +1448,7 @@ function renderReactionView(view) {
           <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
             <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
           </div>
+          <div id="percentile-badge-reaction" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
 
@@ -1487,6 +1490,7 @@ function renderReactionView(view) {
       </div>`;
 
     saveRanking('reaction', state.nickname, avgMs + 'ms (Tier ' + tier + ')');
+    renderPercentileBadge('reaction', tier);
     renderLocalRanking('reaction-ranking-list', 'reaction');
   }
 }
@@ -1695,6 +1699,7 @@ function renderMemdigitView(view) {
           <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
             <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
           </div>
+          <div id="percentile-badge-memdigit" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
 
@@ -1732,6 +1737,7 @@ function renderMemdigitView(view) {
       </div>`;
 
     saveRanking('memdigit', state.nickname, maxLen + '자리 (Tier ' + tier + ')');
+    renderPercentileBadge('memdigit', tier);
     renderLocalRanking('memdigit-ranking-list', 'memdigit');
   }
 }
@@ -1972,6 +1978,7 @@ function renderSeqmemView(view) {
           <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
             <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
           </div>
+          <div id="percentile-badge-seqmem" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
 
@@ -2009,6 +2016,7 @@ function renderSeqmemView(view) {
       </div>`;
 
     saveRanking('seqmem', state.nickname, maxLen + '칸 (Tier ' + tier + ')');
+    renderPercentileBadge('seqmem', tier);
     renderLocalRanking('seqmem-ranking-list', 'seqmem');
   }
 }
@@ -2226,6 +2234,7 @@ function renderColorvisionView(view) {
           <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
             <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
           </div>
+          <div id="percentile-badge-colorvision" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
 
@@ -2268,6 +2277,7 @@ function renderColorvisionView(view) {
       </div>`;
 
     saveRanking('colorvision', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')');
+    renderPercentileBadge('colorvision', tier);
     renderLocalRanking('colorvision-ranking-list', 'colorvision');
   }
 }
@@ -2520,6 +2530,7 @@ function renderLogicView(view) {
           <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
             <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
           </div>
+          <div id="percentile-badge-logic" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
 
@@ -2562,6 +2573,7 @@ function renderLogicView(view) {
       </div>`;
 
     saveRanking('logic', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')');
+    renderPercentileBadge('logic', tier);
     renderLocalRanking('logic-ranking-list', 'logic');
   }
 }
@@ -2756,6 +2768,7 @@ function renderImpulseView(view) {
           <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
             <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
           </div>
+          <div id="percentile-badge-impulse" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
 
@@ -2798,6 +2811,7 @@ function renderImpulseView(view) {
       </div>`;
 
     saveRanking('impulse', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')');
+    renderPercentileBadge('impulse', tier);
     renderLocalRanking('impulse-ranking-list', 'impulse');
   }
 }
@@ -2997,6 +3011,7 @@ function renderShortfocusView(view) {
           <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
             <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
           </div>
+          <div id="percentile-badge-shortfocus" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
 
@@ -3039,6 +3054,7 @@ function renderShortfocusView(view) {
       </div>`;
 
     saveRanking('shortfocus', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')');
+    renderPercentileBadge('shortfocus', tier);
     renderLocalRanking('shortfocus-ranking-list', 'shortfocus');
   }
 }
@@ -3666,6 +3682,25 @@ function saveRanking(section, nickname, result) {
   markDone(section);
   addXP(computeXP(result));
   if (typeof syncResultToSupabase === 'function') syncResultToSupabase(section, nickname, result);
+}
+
+/* Stage D 2단계 퍼센타일 UI (v0.0.47~) — percentile_cache는 표본 5개 미만인 section+tier는
+   percentile-refresh.js가 애초에 upsert하지 않으므로, row가 없으면 조용히 아무것도 표시하지 않음 */
+async function renderPercentileBadge(section, tier) {
+  try {
+    if (!window.sb) return;
+    const { data, error } = await window.sb
+      .from('percentile_cache')
+      .select('percentile')
+      .eq('section', section)
+      .eq('tier', tier)
+      .maybeSingle();
+    if (error || !data) return;
+    const el = document.getElementById(`percentile-badge-${section}`);
+    if (el) el.innerHTML = `📊 상위 ${data.percentile}% (Tier ${tier} 이상 기록 기준)`;
+  } catch (e) {
+    console.error('퍼센타일 조회 실패:', e);
+  }
 }
 
 /* ══════════════════════════════════════════════════

@@ -1,10 +1,11 @@
-/* v0.0.45 | 5-in-1 Dashboard SPA — functions/api/percentile-refresh.js
+/* v0.0.47 | 5-in-1 Dashboard SPA — functions/api/percentile-refresh.js
    Stage D 2단계: Tier(S~D) 채점 8개 테스트의 test_results를 집계해 percentile_cache에 upsert.
    service_role 키를 쓰는 유일한 지점 — GitHub Actions cron이 X-Cron-Secret 헤더로만 호출 가능하도록 보호.
    퍼센타일 정의: 해당 등급 "이상"을 받은 사람 비율 (예: S등급 10% → S등급은 상위 10%) */
 
 const SECTIONS = ['brain', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus'];
 const TIER_ORDER = ['S', 'A', 'B', 'C', 'D'];
+const MIN_SAMPLE_SIZE = 5; // 클라이언트에 "상위 %"를 노출하려면 섹션당 최소 이 정도 표본은 쌓여야 함
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -29,7 +30,7 @@ export async function onRequestPost(context) {
     if (!res.ok) continue;
     const results = await res.json();
     const total = results.length;
-    if (total === 0) continue;
+    if (total < MIN_SAMPLE_SIZE) continue; // 표본 부족(5개 미만)한 섹션은 퍼센타일을 아예 발행하지 않음
 
     const tierCounts = { S: 0, A: 0, B: 0, C: 0, D: 0 };
     results.forEach(r => { if (tierCounts[r.tier] !== undefined) tierCounts[r.tier]++; });
