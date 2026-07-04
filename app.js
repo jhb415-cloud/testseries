@@ -476,6 +476,17 @@ function pulseElement(el, kind) {
   el.classList.add(cls);
 }
 
+/* v0.1.0~: Tier 8개 테스트 시작화면의 접이식 "어떻게 하나요" 안내 카드 (기본 접힘, 재방문자 방해 없음) */
+function guideCardHTML(steps) {
+  return `
+    <details class="text-left bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4">
+      <summary class="cursor-pointer text-slate-200 font-bold text-sm select-none marker:text-violet-400">어떻게 하나요?</summary>
+      <ol class="list-decimal list-inside text-slate-400 text-sm mt-3 space-y-1">
+        ${steps.map(s => `<li>${s}</li>`).join('')}
+      </ol>
+    </details>`;
+}
+
 /* v0.0.54~: 정답 3연속부터만 표시(매번 뜨면 너무 게임처럼 느껴져서 절제) — Tier 8개 테스트 토스트 문구에 덧붙이는 용도 */
 function comboSuffix(streak) {
   return streak >= 3 ? ` 🔥${streak}연속!` : '';
@@ -529,20 +540,36 @@ function closeMobileSidebar() {
 /* ══════════════════════════════════════════════════
    🌗 다크/라이트 테마 토글
 ══════════════════════════════════════════════════ */
+/* v0.1.0~: 사이드바는 아이콘 토글 대신 다크/라이트 두 버튼을 항상 같이 보여주고, 현재 선택된 쪽을 강조 표시
+   (모바일 헤더는 공간이 좁아 기존 아이콘 토글을 그대로 유지) */
+const THEME_BTN_ACTIVE = ['border-violet-500', 'bg-violet-900/30', 'text-violet-300'];
+const THEME_BTN_IDLE = ['border-slate-700', 'bg-slate-800', 'text-slate-400'];
+
 function applyThemeIcon() {
   const isLight = document.documentElement.classList.contains('light');
-  const icon = isLight ? '☀️' : '🌙';
-  ['theme-toggle-icon', 'theme-toggle-icon-mobile'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = icon;
+
+  const darkBtn = document.getElementById('theme-btn-dark');
+  const lightBtn = document.getElementById('theme-btn-light');
+  [[darkBtn, !isLight], [lightBtn, isLight]].forEach(([btn, active]) => {
+    if (!btn) return;
+    btn.classList.remove(...THEME_BTN_ACTIVE, ...THEME_BTN_IDLE);
+    btn.classList.add(...(active ? THEME_BTN_ACTIVE : THEME_BTN_IDLE));
   });
+
+  const mobileIcon = document.getElementById('theme-toggle-icon-mobile');
+  if (mobileIcon) mobileIcon.textContent = isLight ? '☀️' : '🌙';
+}
+
+function setTheme(mode) {
+  const isLight = mode === 'light';
+  document.documentElement.classList.toggle('light', isLight);
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  applyThemeIcon();
 }
 
 function toggleTheme() {
-  const html = document.documentElement;
-  const isLight = html.classList.toggle('light');
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
-  applyThemeIcon();
+  const isLight = document.documentElement.classList.contains('light');
+  setTheme(isLight ? 'dark' : 'light');
 }
 
 /* ══════════════════════════════════════════════════
@@ -560,39 +587,40 @@ function initHome() {
   renderDailyChallengeCard();
 
   const toolCards = [
-    { section: 'dream',   emoji: '🌙', title: '꿈 해몽 검색',    desc: '어젯밤 그 꿈, 무슨 의미일까?',   color: 'from-blue-600 to-indigo-700' },
-    { section: 'fortune', emoji: '🔮', title: '오늘의 운세',      desc: '띠별 오늘 하루 운세 확인',        color: 'from-amber-500 to-orange-600' },
-    { section: 'lotto',   emoji: '🎱', title: '로또 번호 조합기', desc: '랜덤·직접지정·운세연동 4가지 모드', color: 'from-yellow-500 to-amber-600' },
+    { section: 'dream',   emoji: '🌙', title: '꿈 해몽 검색',    desc: '어젯밤 그 꿈, 무슨 의미일까?' },
+    { section: 'fortune', emoji: '🔮', title: '오늘의 운세',      desc: '띠별 오늘 하루 운세 확인' },
+    { section: 'lotto',   emoji: '🎱', title: '로또 번호 조합기', desc: '랜덤·직접지정·운세연동 4가지 모드' },
   ];
 
   const testCards = [
-    { section: 'mbti',        emoji: '🧠',  title: '성격 파탄(MBTI)',   desc: '간단/정밀 2모드로 알아보는 팩폭 성격 분석', color: 'from-violet-600 to-purple-700' },
-    { section: 'brain',       emoji: '⚡',  title: '두뇌 나이 측정기',   desc: '스트룹 테스트, 3단계 난이도',            color: 'from-emerald-500 to-teal-600' },
-    { section: 'adhd',        emoji: '🌪️', title: '프로 미루러',        desc: 'ADHD 성향 자가진단, 간단/정밀 2모드',     color: 'from-rose-500 to-pink-600' },
-    { section: 'reaction',    emoji: '💨',  title: '반응속도 테스트',    desc: '쉬움~어려움, 가짜신호까지 등장',          color: 'from-sky-500 to-blue-600' },
-    { section: 'memdigit',    emoji: '🔢',  title: '숫자 기억력 테스트', desc: '적응형 자릿수, 탭 키패드로 도전',        color: 'from-cyan-500 to-teal-600' },
-    { section: 'seqmem',      emoji: '🧩',  title: '순서 기억력 테스트', desc: '격자 타일 순서 암기, 즉시 판정',         color: 'from-teal-500 to-emerald-600' },
-    { section: 'colorvision', emoji: '🎨',  title: '색각 테스트',        desc: '미묘하게 다른 색 타일 찾기',              color: 'from-pink-500 to-rose-600' },
-    { section: 'logic',       emoji: '📊',  title: '논리력 테스트',      desc: '숫자 규칙 다음 값 맞히기 4지선다',        color: 'from-indigo-500 to-blue-600' },
-    { section: 'impulse',     emoji: '🚦',  title: '충동억제 테스트',    desc: 'Go/No-Go, 성급한 반응을 참아라',         color: 'from-orange-500 to-red-600' },
-    { section: 'shortfocus',  emoji: '📱',  title: '숏폼 집중력 테스트', desc: '꿀잼 콘텐츠엔 탭, 광고는 참기',           color: 'from-fuchsia-500 to-pink-600' },
-    { section: 'insa',        emoji: '🎉',  title: '인싸력 테스트',      desc: '10문항 사교성 성향 퀴즈 (MZ향)',          color: 'from-orange-500 to-pink-600' },
-    { section: 'proverb',     emoji: '📜',  title: '속담 완성 퀴즈',     desc: '시간 제한 없는 지혜 나눔 테스트',         color: 'from-amber-600 to-yellow-600' },
-    { section: 'pricequiz',   emoji: '🧾',  title: '그 시절 물가 맞히기', desc: '실제 물가 통계 기반 향수 트리비아',       color: 'from-yellow-600 to-amber-700' },
+    { section: 'mbti',        emoji: '🧠',  title: '성격 파탄(MBTI)',   desc: '간단/정밀 2모드로 알아보는 팩폭 성격 분석' },
+    { section: 'brain',       emoji: '⚡',  title: '두뇌 나이 측정기',   desc: '스트룹 테스트, 3단계 난이도' },
+    { section: 'adhd',        emoji: '🌪️', title: '프로 미루러',        desc: 'ADHD 성향 자가진단, 간단/정밀 2모드' },
+    { section: 'reaction',    emoji: '💨',  title: '반응속도 테스트',    desc: '쉬움~어려움, 가짜신호까지 등장' },
+    { section: 'memdigit',    emoji: '🔢',  title: '숫자 기억력 테스트', desc: '적응형 자릿수, 탭 키패드로 도전' },
+    { section: 'seqmem',      emoji: '🧩',  title: '순서 기억력 테스트', desc: '격자 타일 순서 암기, 즉시 판정' },
+    { section: 'colorvision', emoji: '🎨',  title: '색각 테스트',        desc: '미묘하게 다른 색 타일 찾기' },
+    { section: 'logic',       emoji: '📊',  title: '논리력 테스트',      desc: '숫자 규칙 다음 값 맞히기 4지선다' },
+    { section: 'impulse',     emoji: '🚦',  title: '충동억제 테스트',    desc: 'Go/No-Go, 성급한 반응을 참아라' },
+    { section: 'shortfocus',  emoji: '📱',  title: '숏폼 집중력 테스트', desc: '꿀잼 콘텐츠엔 탭, 광고는 참기' },
+    { section: 'insa',        emoji: '🎉',  title: '인싸력 테스트',      desc: '10문항 사교성 성향 퀴즈 (MZ향)' },
+    { section: 'proverb',     emoji: '📜',  title: '속담 완성 퀴즈',     desc: '시간 제한 없는 지혜 나눔 테스트' },
+    { section: 'pricequiz',   emoji: '🧾',  title: '그 시절 물가 맞히기', desc: '실제 물가 통계 기반 향수 트리비아' },
   ];
 
+  /* v0.1.0~: 원색 그라데이션 카드 → 사이트 기본 카드색(slate) 기반 무채색 톤으로 통일 (도구/테스트 그리드 공통) */
   const renderGrid = (gridId, cards) => {
     const grid = document.getElementById(gridId);
     if (!grid) return;
     grid.innerHTML = '';
     cards.forEach(c => {
       const div = document.createElement('div');
-      div.className = `service-card bg-gradient-to-br ${c.color} rounded-2xl p-5 text-white shadow-lg cursor-pointer`;
+      div.className = 'service-card bg-slate-800 border border-slate-700 hover:border-violet-500 rounded-2xl p-5 text-slate-100 shadow cursor-pointer transition';
       div.innerHTML = `
         <div class="text-4xl mb-3">${c.emoji}</div>
-        <h3 class="font-bold text-lg mb-1">${c.title}</h3>
-        <p class="text-sm opacity-80">${c.desc}</p>
-        <div class="mt-4 text-xs font-semibold opacity-90 uppercase tracking-widest">시작하기 →</div>
+        <h3 class="font-bold text-lg mb-1 text-slate-100">${c.title}</h3>
+        <p class="text-sm text-slate-400">${c.desc}</p>
+        <div class="mt-4 text-xs font-semibold text-violet-400 uppercase tracking-widest">시작하기 →</div>
       `;
       div.onclick = () => App.navigate(c.section);
       grid.appendChild(div);
@@ -1167,6 +1195,9 @@ function renderBrainView(view) {
         <div class="text-6xl mb-4">⚡</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">두뇌 나이 측정기</h2>
         <p class="text-slate-400 mb-6">스트룹 테스트 — 글자의 뜻이 아닌<br><strong class="text-slate-100">글자 색상</strong>에 해당하는 버튼을 누르세요!</p>
+        ${guideCardHTML(
+          ['화면에 색깔 글자가 나타나요 (예: 파란색으로 쓰인 "빨강")', '글자의 뜻이 아니라 실제 색상에 해당하는 버튼을 누르세요', '제한시간 안에 최대한 정확하고 빠르게 답할수록 좋아요']
+        )}
         ${renderChallengeBanner(state.challenge)}
         <input id="brain-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-emerald-500 transition"/>
@@ -1574,6 +1605,9 @@ function renderReactionView(view) {
         <div class="text-6xl mb-4">💨</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">반응속도 테스트</h2>
         <p class="text-slate-400 mb-6">화면이 초록색으로 바뀌는 순간 최대한 빨리 탭하세요!<br>너무 일찍 누르면 반칙이에요.</p>
+        ${guideCardHTML(
+          ['화면이 빨간색일 땐 그냥 기다리세요 (너무 빨리 누르면 반칙!)', '초록색으로 바뀌는 순간 화면을 최대한 빨리 탭하세요', '여러 번 반복해서 평균 반응속도를 측정해요']
+        )}
         ${renderChallengeBanner(state.challenge)}
         <input id="reaction-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
@@ -1836,6 +1870,9 @@ function renderMemdigitView(view) {
         <div class="text-6xl mb-4">🔢</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">숫자 기억력 테스트</h2>
         <p class="text-slate-400 mb-6">화면에 나타나는 숫자를 순서대로 외운 뒤<br>그대로 입력하세요. 틀리면 자릿수가 줄어들어요!</p>
+        ${guideCardHTML(
+          ['화면에 숫자가 순서대로 하나씩 나타나요', '다 보여주면 방금 본 순서 그대로 숫자를 입력하세요', '맞히면 자릿수가 늘고, 틀리면 줄어들어요 — 본인 한계까지 도전해보세요']
+        )}
         ${renderChallengeBanner(state.challenge)}
         <input id="memdigit-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
@@ -2114,6 +2151,9 @@ function renderSeqmemView(view) {
         <div class="text-6xl mb-4">🧩</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">순서 기억력 테스트</h2>
         <p class="text-slate-400 mb-6">타일이 순서대로 반짝이는 걸 잘 본 뒤<br>같은 순서로 타일을 눌러보세요!</p>
+        ${guideCardHTML(
+          ['타일이 순서대로 반짝반짝 빛나요, 그 순서를 잘 보세요', '다 보여주면 같은 순서로 타일을 눌러보세요', '맞히면 칸 수가 늘어나요 — 몇 칸까지 기억하는지 도전해보세요']
+        )}
         ${renderChallengeBanner(state.challenge)}
         <input id="seqmem-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
@@ -2371,6 +2411,9 @@ function renderColorvisionView(view) {
         <div class="text-6xl mb-4">🎨</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">색각 테스트</h2>
         <p class="text-slate-400 mb-6">격자 안에 미묘하게 다른 색 타일이 하나 숨어있어요.<br>제한시간 안에 찾아서 탭하세요!</p>
+        ${guideCardHTML(
+          ['격자 안에 타일이 여러 개 있어요, 그중 딱 하나만 미묘하게 색이 달라요', '제한시간 안에 다른 색 타일을 찾아 탭하세요', '정확도와 속도를 함께 채점해요']
+        )}
         ${renderChallengeBanner(state.challenge)}
         <input id="colorvision-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
@@ -2675,6 +2718,9 @@ function renderLogicView(view) {
         <div class="text-6xl mb-4">🧮</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">논리력 테스트</h2>
         <p class="text-slate-400 mb-6">숫자들이 나열되어 있어요.<br>규칙을 찾아 다음 숫자를 맞혀보세요!</p>
+        ${guideCardHTML(
+          ['숫자가 몇 개 나열되어 있어요, 그 안에 숨은 규칙(더하기·곱하기 등)을 찾아보세요', '규칙에 맞는 다음 숫자를 4개 보기 중에서 고르세요', '제한시간 안에 정확히 맞힐수록 등급이 올라가요']
+        )}
         ${renderChallengeBanner(state.challenge)}
         <input id="logic-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
@@ -2916,6 +2962,9 @@ function renderImpulseView(view) {
         <div class="text-6xl mb-4">🚦</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">충동억제 테스트</h2>
         <p class="text-slate-400 mb-6">🟢 초록 신호엔 최대한 빨리 탭!<br>🔴 빨간 신호엔 절대 누르지 말고 참으세요.</p>
+        ${guideCardHTML(
+          ['🟢 초록 신호가 뜨면 최대한 빨리 탭하세요', '🔴 빨간 신호가 뜨면 절대 누르지 말고 참으세요', '성급하게 누른 횟수(참지 못한 횟수)로 채점해요']
+        )}
         ${renderChallengeBanner(state.challenge)}
         <input id="impulse-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
@@ -3165,6 +3214,9 @@ function renderShortfocusView(view) {
         <div class="text-6xl mb-4">📱</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">숏폼 집중력 테스트</h2>
         <p class="text-slate-400 mb-6">당신의 뇌, 아직 숏폼 알고리즘에 잠식되지 않았나요? 🧠<br>🔥 꿀잼 콘텐츠가 뜨면 최대한 빨리 탭!<br>📢 광고가 뜨면 절대 누르지 말고 참으세요.</p>
+        ${guideCardHTML(
+          ['🔥 꿀잼 콘텐츠가 뜨면 최대한 빨리 탭하세요', '📢 광고가 뜨면 절대 누르지 말고 참으세요', '충동억제 테스트와 같은 원리를 숏폼 피드 소재로 바꾼 버전이에요']
+        )}
         ${renderChallengeBanner(state.challenge)}
         <input id="shortfocus-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
@@ -4402,12 +4454,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateVisitStreak();
 
-  /* ── 테마 토글 버튼 ── */
+  /* ── 테마 선택: 사이드바는 다크/라이트 두 버튼, 모바일 헤더는 기존 아이콘 토글 (v0.1.0~) ── */
   applyThemeIcon();
-  ['theme-toggle-btn', 'theme-toggle-btn-mobile'].forEach(id => {
-    const btn = document.getElementById(id);
-    if (btn) btn.addEventListener('click', toggleTheme);
-  });
+  const themeDarkBtn = document.getElementById('theme-btn-dark');
+  const themeLightBtn = document.getElementById('theme-btn-light');
+  if (themeDarkBtn) themeDarkBtn.addEventListener('click', () => setTheme('dark'));
+  if (themeLightBtn) themeLightBtn.addEventListener('click', () => setTheme('light'));
+  const themeMobileBtn = document.getElementById('theme-toggle-btn-mobile');
+  if (themeMobileBtn) themeMobileBtn.addEventListener('click', toggleTheme);
 
   /* ── 효과음 토글 버튼 (v0.0.54~) ── */
   applySoundIcon();

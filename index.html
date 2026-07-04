@@ -1,4 +1,4 @@
-<!-- v0.0.54 | 5-in-1 Dashboard SPA -->
+<!-- v0.1.0 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -77,12 +77,8 @@
         class="sound-toggle-btn shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-lg transition">
         🔊
       </button>
-      <button id="theme-toggle-btn" type="button" title="다크/라이트 모드 전환"
-        class="shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-lg transition">
-        <span id="theme-toggle-icon">🌙</span>
-      </button>
     </div>
-    <p class="text-slate-500 text-xs">재미로 시작했다가 뼈 맞고 공유하는 종합 테스트 모음</p>
+    <p class="text-slate-300 text-sm font-bold leading-snug">재미로 시작했다가 뼈 맞고<br>공유하는 종합 테스트 모음</p>
   </div>
 
   <!-- 메뉴 -->
@@ -94,7 +90,7 @@
     <!-- 테스트 그룹 (접기/펼치기) -->
     <div class="nav-group open" id="nav-group-tests">
       <div class="nav-group-header" id="nav-group-tests-toggle">
-        <span class="text-lg">🧪</span> 테스트
+        <span class="text-lg">🧪</span> 두뇌 테스트존
         <span class="nav-group-chevron">▾</span>
       </div>
       <div class="nav-group-items" id="nav-group-tests-items">
@@ -151,9 +147,23 @@
     </div>
   </nav>
 
+  <!-- 다크/라이트 모드 선택 (v0.1.0~: 아이콘 토글 → 두 버튼 중 고르는 방식, 항상 두 옵션이 같이 보임) -->
+  <div class="px-5 pt-4 border-t border-slate-800">
+    <div class="flex gap-2">
+      <button id="theme-btn-dark" type="button"
+        class="flex-1 px-2 py-2.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1 transition">
+        🌙 다크모드
+      </button>
+      <button id="theme-btn-light" type="button"
+        class="flex-1 px-2 py-2.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1 transition">
+        ☀️ 라이트모드
+      </button>
+    </div>
+  </div>
+
   <!-- 버전 -->
-  <div class="px-5 py-4 border-t border-slate-800">
-    <p class="text-slate-600 text-xs">v0.0.54 · 2026-07-04</p>
+  <div class="px-5 py-4">
+    <p class="text-slate-600 text-xs">v0.1.0 · 2026-07-04</p>
   </div>
 </aside>
 
@@ -182,35 +192,35 @@
     <!-- ════ 🏠 홈 섹션 ════ -->
     <div id="section-home" class="section hidden">
       <div class="max-w-4xl mx-auto">
-        <div class="flex items-center justify-between mb-6">
-          <div>
-            <h1 class="text-2xl sm:text-3xl font-black text-slate-100">안녕하세요! 👋</h1>
-            <p id="home-date" class="text-slate-400 text-sm mt-1"></p>
+
+        <!-- 홈 상단 구분 섹션 (v0.1.1~): 추후 내 정보 요약/로그인 자리로 확장 예정, 현재는 날짜+오늘의 인생 한마디 배치 -->
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-5 sm:p-6 mb-8">
+          <div class="flex items-center justify-between mb-4">
+            <p id="home-date" class="text-slate-400 text-sm"></p>
+          </div>
+          <!-- 오늘의 인생 한마디 (카드 크기는 기존 그대로) -->
+          <div class="bg-gradient-to-br from-violet-900/60 to-indigo-900/60 border border-violet-700/40 rounded-2xl p-6 shadow-lg">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-xl">✨</span>
+              <span class="text-violet-300 font-bold text-sm uppercase tracking-widest">오늘의 인생 한마디</span>
+            </div>
+            <p id="home-quote-text" class="text-white text-xl sm:text-2xl font-semibold leading-relaxed mb-2"></p>
+            <p id="home-quote-author" class="text-violet-300 text-sm font-medium mb-4"></p>
+            <button id="home-copy-btn"
+              class="bg-violet-700/50 hover:bg-violet-600/60 text-violet-200 text-sm font-semibold px-4 py-2 rounded-xl transition">
+              📋 문구 복사
+            </button>
           </div>
         </div>
 
-        <!-- 오늘의 인생 한마디 -->
-        <div class="bg-gradient-to-br from-violet-900/60 to-indigo-900/60 border border-violet-700/40 rounded-2xl p-6 mb-8 shadow-lg">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="text-xl">✨</span>
-            <span class="text-violet-300 font-bold text-sm uppercase tracking-widest">오늘의 인생 한마디</span>
-          </div>
-          <p id="home-quote-text" class="text-white text-xl sm:text-2xl font-semibold leading-relaxed mb-2"></p>
-          <p id="home-quote-author" class="text-violet-300 text-sm font-medium mb-4"></p>
-          <button id="home-copy-btn"
-            class="bg-violet-700/50 hover:bg-violet-600/60 text-violet-200 text-sm font-semibold px-4 py-2 rounded-xl transition">
-            📋 문구 복사
-          </button>
-        </div>
+        <!-- 마이홈(닉네임/스트릭/완주현황/최근기록) 통합 영역 (v0.1.0~: 오늘의 챌린지보다 위로) -->
+        <div id="home-mypage-container" class="mb-8"></div>
 
         <!-- 오늘의 챌린지 (날짜 시드 기반 추천 테스트 3개) -->
         <div id="home-daily-challenge" class="mb-8"></div>
 
-        <!-- 마이홈(닉네임/스트릭/완주현황/최근기록) 통합 영역 -->
-        <div id="home-mypage-container" class="mb-8"></div>
-
         <!-- 서비스 그리드: 도구 -->
-        <h2 class="text-slate-100 font-bold text-lg mb-4">🎯 바로 써먹는 도구</h2>
+        <h2 class="text-slate-100 font-bold text-lg mb-4">🎯 서비스 바로가기</h2>
         <div id="home-tool-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
 
         <!-- 서비스 그리드: 테스트 모음 -->
