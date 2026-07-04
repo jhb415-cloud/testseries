@@ -97,6 +97,18 @@ function pickOne(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+/* v0.1.1~: AI 생성 콘텐츠(꿈해몽 AI 폴백 등)를 innerHTML로 렌더링하기 전 이스케이프.
+   앱 내 나머지 텍스트는 전부 직접 작성한 정적 데이터라 필요 없지만, 외부 API(OpenAI) 응답은
+   프롬프트 인젝션으로 임의 HTML이 섞여 들어올 가능성이 있어 이 경로에만 적용 */
+function escapeHtml(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /* Stage E: 동물 비유 결과 카드 (v0.0.48~) — Tier 채점 8개 테스트 전용, data.js AppData.animalCards 참고 */
 function pickAnimalCard(section, tier) {
   const pool = AppData.animalCards[section] && AppData.animalCards[section][tier];
@@ -885,11 +897,13 @@ function dreamSearchBy(query) {
 
   if (results.length === 0) {
     const suggestions = ['뱀', '하늘을 날다', '이빨이 빠지다', '물', '불'];
+    const safeQuery = escapeHtml(query).replace(/'/g, "\\'");
     container.innerHTML = `
       <div class="text-center py-8">
         <div class="text-4xl mb-3">🔍</div>
-        <p class="text-slate-400 mb-4">'${query}'에 대한 해몽 결과가 없어요.</p>
-        <p class="text-slate-500 text-sm mb-4">다른 키워드로 검색해보세요</p>
+        <p class="text-slate-400 mb-4">'${escapeHtml(query)}'에 대한 해몽 결과가 없어요.</p>
+        <button onclick="dreamAiSearch('${safeQuery}')" class="bg-violet-700 hover:bg-violet-600 text-white text-sm font-bold px-5 py-2.5 rounded-full transition mb-5">🤖 AI 해몽으로 찾아보기</button>
+        <p class="text-slate-500 text-sm mb-4">또는 다른 키워드로 검색해보세요</p>
         <div class="flex flex-wrap gap-2 justify-center">
           ${suggestions.map(s => `<button onclick="dreamSearchBy('${s}')" class="bg-blue-700/30 border border-blue-600/40 text-blue-300 text-sm px-4 py-2 rounded-full hover:bg-blue-700/50 transition">${s}</button>`).join('')}
         </div>
@@ -918,6 +932,70 @@ function dreamSearchBy(query) {
         </div>`;
       }).join('')}
     </div>`;
+}
+
+/* v0.1.1~: PRD 10-4 3단계(AI 폴백). 검색 결과 0건일 때만 노출되는 버튼으로 호출(자동 호출 없음).
+   서버(functions/api/dream-ai.js)가 Supabase dream_ai_cache 캐시 → 없으면 OpenAI 생성 순으로 처리 */
+async function dreamAiSearch(query) {
+  const container = document.getElementById('dream-search-results');
+  if (!container) return;
+  container.innerHTML = `
+    <div class="text-center py-10">
+      <div class="text-4xl mb-3 animate-pulse">🤖</div>
+      <p class="text-slate-400">AI가 '${escapeHtml(query)}' 꿈을 해몽하고 있어요...</p>
+    </div>`;
+
+  try {
+    const res = await fetch('/api/dream-ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query }),
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'AI 해몽 요청 실패');
+    dreamRenderAiModal(query, data);
+  } catch (e) {
+    showToast('AI 해몽을 가져오지 못했어요. 잠시 후 다시 시도해주세요.');
+    dreamSearchBy(query);
+  }
+}
+
+function dreamRenderAiModal(query, data) {
+  App.showLoader(() => {
+    document.getElementById('dream-modal').classList.remove('hidden');
+    const modalInner = document.getElementById('dream-modal-inner');
+    localStorage.setItem('last_dream_luckynum', data.luckyNum || '');
+    markDone('dream');
+
+    modalInner.innerHTML = `
+      <div class="modal-content bg-slate-800 rounded-2xl p-6 max-w-lg w-full mx-4 shadow-2xl">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-slate-100 font-bold text-xl">${escapeHtml(data.title)}</h3>
+          <button onclick="dreamCloseModal()" class="text-slate-400 hover:text-slate-50 text-2xl leading-none">&times;</button>
+        </div>
+        <div class="inline-block bg-violet-900/40 border border-violet-600/40 text-violet-300 text-xs font-semibold px-2 py-1 rounded-full mb-3">🤖 AI 생성 해몽${data.source === 'cache' ? ' (캐시됨)' : ''}</div>
+        <div class="bg-blue-900/30 border border-blue-700/40 rounded-xl p-3 mb-4">
+          <span class="text-blue-300 font-semibold">✦ ${escapeHtml(data.summary)}</span>
+        </div>
+        <p class="text-slate-300 leading-relaxed mb-5 text-sm">${escapeHtml(data.detail)}</p>
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <div class="bg-slate-700 rounded-lg p-3 text-center">
+            <div class="text-xs text-slate-400 mb-1">행운의 색</div>
+            <div class="text-slate-100 font-semibold text-sm">${escapeHtml(data.lucky)}</div>
+          </div>
+          <div class="bg-slate-700 rounded-lg p-3 text-center">
+            <div class="text-xs text-slate-400 mb-1">행운의 숫자</div>
+            <div class="text-slate-100 font-semibold text-sm">${escapeHtml(data.luckyNum)}</div>
+          </div>
+        </div>
+        <div class="bg-indigo-900/30 border border-indigo-700/40 rounded-xl p-3 mb-4">
+          <div class="text-indigo-300 text-xs font-semibold mb-1">오늘의 행동</div>
+          <p class="text-indigo-200 text-sm">${escapeHtml(data.action)}</p>
+        </div>
+        <button onclick="dreamGoToLotto()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition mb-4">🎰 이 행운숫자로 로또 조합하기</button>
+        <div class="text-yellow-200/50 text-xs">⚠️ AI가 생성한 참고용 콘텐츠이며, 민속학적 사실이나 전문적 조언이 아닙니다.</div>
+      </div>`;
+  });
 }
 
 function dreamShowModal(tIdx, vIdx) {
