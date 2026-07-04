@@ -35,6 +35,7 @@ const html = `<!doctype html><html><head><meta charset="utf-8"><style>
   <div class="balls">
     <div class="ball" style="background:radial-gradient(circle at 32% 28%,#fff 0%,#ffdc60 22%,#fbc400 62%,#b28b00 100%);">7</div>
     <div class="ball" style="background:radial-gradient(circle at 32% 28%,#fff 0%,#9fdcf8 22%,#69c8f2 62%,#3f9fd0 100%);">14</div>
+    <div class="ball" style="background:radial-gradient(circle at 32% 28%,#fff 0%,#ff9c9c 22%,#ff7272 62%,#d94f4f 100%);">21</div>
     <div class="ball" style="background:radial-gradient(circle at 32% 28%,#fff 0%,#ff9c9c 22%,#ff7272 62%,#d94f4f 100%);">27</div>
     <div class="ball" style="background:radial-gradient(circle at 32% 28%,#fff 0%,#c4c9d4 22%,#9aa2b1 62%,#6b7280 100%);">33</div>
     <div class="ball" style="background:radial-gradient(circle at 32% 28%,#fff 0%,#cbe873 22%,#b0d840 62%,#84ab24 100%);">41</div>
