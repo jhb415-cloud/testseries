@@ -1,4 +1,4 @@
-/* v0.0.53 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.54 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -415,24 +415,56 @@ function updateVisitStreak() {
    🔊 정답/오답 사운드 + 마이크로 애니메이션 (v0.0.33~)
    - 외부 음원 파일 없이 Web Audio API 오실레이터로 직접 생성 (용량 0, 라이선스 문제 없음)
 ══════════════════════════════════════════════════ */
+/* v0.0.54~: 단순 삐- 소리(정답 880Hz/오답 220Hz 단일톤) → 퀴즈쇼에서 익숙한 "딩동"/완만한 하강음으로 교체.
+   50대 이상도 거부감 없도록 BGM(반복 재생 배경음악)은 넣지 않고 짧은 효과음만 다듬음(사용자 확인 완료). */
 let sharedAudioCtx = null;
+
+function isSoundEnabled() {
+  return localStorage.getItem('sound_enabled') !== '0'; // 기본값: 켜짐
+}
+
+function playTone(ctx, freq, startTime, duration, volume) {
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = 'sine';
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0.001, startTime);
+  gain.gain.exponentialRampToValueAtTime(volume, startTime + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+  osc.start(startTime);
+  osc.stop(startTime + duration);
+}
+
+/* 각 항목: [주파수, 시작 오프셋(초), 길이(초)] */
+const SOUND_SEQUENCES = {
+  correct: [[659, 0, 0.12], [880, 0.09, 0.18]],                              // 딩동(2음 상승)
+  wrong:   [[300, 0, 0.16], [220, 0.13, 0.22]],                              // 완만한 하강 2음(자극적이지 않게)
+  tick:    [[1000, 0, 0.045]],                                               // 타이머 임박 똑딱 소리
+  tierS:   [[523, 0, 0.12], [659, 0.09, 0.12], [784, 0.18, 0.12], [1046, 0.27, 0.4]], // 최고 등급 축하 팡파레
+};
+
 function playSound(type) {
+  if (!isSoundEnabled()) return;
   try {
     if (!sharedAudioCtx) sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const ctx = sharedAudioCtx;
-    const freqMap = { correct: 880, wrong: 220, combo: 1320 };
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.type = 'sine';
-    osc.frequency.value = freqMap[type] || 440;
-    gain.gain.setValueAtTime(0.001, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.15, ctx.currentTime + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.25);
+    const seq = SOUND_SEQUENCES[type] || SOUND_SEQUENCES.correct;
+    seq.forEach(([freq, offset, duration]) => playTone(ctx, freq, ctx.currentTime + offset, duration, 0.15));
   } catch (e) { /* 오디오 미지원 환경은 조용히 무시 */ }
+}
+
+function applySoundIcon() {
+  const icon = isSoundEnabled() ? '🔊' : '🔇';
+  document.querySelectorAll('.sound-toggle-btn').forEach(btn => { btn.textContent = icon; });
+}
+
+function toggleSound() {
+  const enabled = isSoundEnabled();
+  localStorage.setItem('sound_enabled', enabled ? '0' : '1');
+  applySoundIcon();
+  showToast(enabled ? '🔇 효과음을 껐어요' : '🔊 효과음을 켰어요');
 }
 
 /* 정답/오답 시 카드나 요소에 짧게 붙였다 떼는 마이크로 애니메이션 클래스 */
@@ -442,6 +474,33 @@ function pulseElement(el, kind) {
   el.classList.remove('anim-pop', 'anim-shake');
   void el.offsetWidth; // 리플로우 강제로 애니메이션 재시작 보장
   el.classList.add(cls);
+}
+
+/* v0.0.54~: 정답 3연속부터만 표시(매번 뜨면 너무 게임처럼 느껴져서 절제) — Tier 8개 테스트 토스트 문구에 덧붙이는 용도 */
+function comboSuffix(streak) {
+  return streak >= 3 ? ` 🔥${streak}연속!` : '';
+}
+
+/* v0.0.54~: 난이도 선택 직후 "3-2-1 시작!" 카운트다운 연출 후 실제 라운드 시작 콜백 실행 —
+   memdigit/seqmem은 이미 "잘 보고 기억하세요" 식 도입부가 있어 적용하지 않음(중복 연출 방지) */
+function showCountdownThenStart(containerId, startCallback) {
+  const container = document.getElementById(containerId);
+  if (!container) { startCallback(); return; }
+  let count = 3;
+  const render = (label) => {
+    container.innerHTML = `
+      <div class="max-w-md mx-auto text-center py-24">
+        <div class="text-8xl font-black text-violet-400 anim-pop">${label}</div>
+      </div>`;
+  };
+  render(count);
+  const timer = setInterval(() => {
+    count--;
+    if (count > 0) { render(count); return; }
+    if (count === 0) { render('시작!'); return; }
+    clearInterval(timer);
+    startCallback();
+  }, 500);
 }
 
 /* HELL 난이도(Phase 3 로드맵 10-1, v0.0.53~) 진입 전 경고 — 실수로 못 누르게 확인 한 번 거침 */
@@ -1252,6 +1311,7 @@ function renderBrainView(view) {
 
     saveRanking('brain', state.nickname, brainAge + '세 (Tier ' + tier + ')', state.difficulty);
     renderPercentileBadge('brain', tier, state.difficulty);
+    if (tier === 'S') playSound('tierS');
     renderLocalRanking('brain-ranking-list', 'brain');
   }
 }
@@ -1267,7 +1327,7 @@ function brainSelectDifficulty(difficulty) {
   state.step = 0;
   state.correctCount = 0;
   state.totalTime = 0;
-  renderBrainView('question');
+  showCountdownThenStart('brain-container', () => renderBrainView('question'));
 }
 
 function generateStroopQuestions(difficulty) {
@@ -1292,8 +1352,12 @@ function brainAnswer(colorName) {
   state.totalTime += Math.min(elapsed, cfg.time);
   if (colorName === state.questions[state.step].correctColor) {
     state.correctCount++;
-    showToast('✅ 정답!');
+    state.streak = (state.streak || 0) + 1;
+    playSound('correct');
+    showToast('✅ 정답!' + comboSuffix(state.streak));
   } else {
+    state.streak = 0;
+    playSound('wrong');
     showToast('❌ 오답');
   }
   brainNextQuestion();
@@ -1617,6 +1681,7 @@ function renderReactionView(view) {
 
     saveRanking('reaction', state.nickname, avgMs + 'ms (Tier ' + tier + ')', state.difficulty);
     renderPercentileBadge('reaction', tier, state.difficulty);
+    if (tier === 'S') playSound('tierS');
     renderLocalRanking('reaction-ranking-list', 'reaction');
   }
 }
@@ -1631,7 +1696,7 @@ function reactionStart(difficulty) {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
     times: [], fouls: 0, delayTimer: null, stimulusAt: 0, phase: 'idle',
   };
-  renderReactionView('round');
+  showCountdownThenStart('reaction-container', () => renderReactionView('round'));
 }
 
 function reactionSetBox(colorClasses, emoji, text) {
@@ -1704,6 +1769,8 @@ function reactionHandleClick(e) {
   if (state.phase === 'waiting') {
     clearTimeout(state.delayTimer);
     state.fouls++;
+    state.streak = 0;
+    playSound('wrong');
     if (cfg.foulPenalty === 0) {
       if (feedback) feedback.textContent = '너무 빨랐어요! 다시 기다려주세요 🙈';
       reactionBeginRound();
@@ -1718,7 +1785,9 @@ function reactionHandleClick(e) {
   if (state.phase === 'decoy') {
     clearTimeout(state.delayTimer);
     state.fouls++;
+    state.streak = 0;
     state.times.push(cfg.foulPenalty + 700);
+    playSound('wrong');
     if (feedback) feedback.textContent = '앗, 가짜 신호였어요! 반칙 😵';
     reactionAdvance();
     return;
@@ -1728,8 +1797,10 @@ function reactionHandleClick(e) {
     const ms = Math.round(performance.now() - state.stimulusAt);
     state.times.push(ms);
     state.phase = 'idle';
+    state.streak = (state.streak || 0) + 1;
+    playSound('correct');
     reactionSetBox('bg-cyan-600 border-cyan-400', '✅', `${ms}ms!`);
-    if (feedback) feedback.textContent = '';
+    if (feedback) feedback.textContent = comboSuffix(state.streak);
     state.delayTimer = setTimeout(reactionAdvance, 700);
     return;
   }
@@ -1863,6 +1934,7 @@ function renderMemdigitView(view) {
 
     saveRanking('memdigit', state.nickname, maxLen + '자리 (Tier ' + tier + ')', state.difficulty);
     renderPercentileBadge('memdigit', tier, state.difficulty);
+    if (tier === 'S') playSound('tierS');
     renderLocalRanking('memdigit-ranking-list', 'memdigit');
   }
 }
@@ -1981,9 +2053,11 @@ function memdigitPadSubmit() {
     state.correctRounds++;
     state.maxCorrectLen = Math.max(state.maxCorrectLen, state.currentLen);
     state.currentLen = Math.min(state.currentLen + 1, cfg.maxLen);
+    playSound('correct');
     if (feedback) feedback.textContent = '정답! 다음엔 한 자리 더 늘어나요 🎉';
   } else {
     state.currentLen = Math.max(state.currentLen - 1, cfg.minLen);
+    playSound('wrong');
     if (feedback) feedback.textContent = `아쉬워요! 정답은 ${state.sequence.join('')} 이었어요`;
   }
   state.phase = 'idle';
@@ -2141,6 +2215,7 @@ function renderSeqmemView(view) {
 
     saveRanking('seqmem', state.nickname, maxLen + '칸 (Tier ' + tier + ')', state.difficulty);
     renderPercentileBadge('seqmem', tier, state.difficulty);
+    if (tier === 'S') playSound('tierS');
     renderLocalRanking('seqmem-ranking-list', 'seqmem');
   }
 }
@@ -2401,6 +2476,7 @@ function renderColorvisionView(view) {
 
     saveRanking('colorvision', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')', state.difficulty);
     renderPercentileBadge('colorvision', tier, state.difficulty);
+    if (tier === 'S') playSound('tierS');
     renderLocalRanking('colorvision-ranking-list', 'colorvision');
   }
 }
@@ -2416,7 +2492,7 @@ function colorvisionStart(difficulty) {
     correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle',
     baseColor: '', oddColor: '', oddIndex: 0, tileCount: cfg.gridSize * cfg.gridSize,
   };
-  renderColorvisionView('round');
+  showCountdownThenStart('colorvision-container', () => renderColorvisionView('round'));
 }
 
 function colorvisionGenerateColors() {
@@ -2479,13 +2555,19 @@ function colorvisionTileTap(idx) {
 
   if (idx === state.oddIndex) {
     state.correctCount++;
+    state.streak = (state.streak || 0) + 1;
     state.totalTime += Math.min(elapsed, cfg.timeLimitMs);
     if (tappedEl) tappedEl.style.outline = '3px solid #22c55e';
-    showToast('✅ 정답!');
+    pulseElement(tappedEl, 'correct');
+    playSound('correct');
+    showToast('✅ 정답!' + comboSuffix(state.streak));
   } else {
+    state.streak = 0;
     state.totalTime += cfg.timeLimitMs;
     if (tappedEl) tappedEl.style.outline = '3px solid #ef4444';
     if (correctEl) correctEl.style.outline = '3px solid #22c55e';
+    pulseElement(tappedEl, 'wrong');
+    playSound('wrong');
     showToast('❌ 오답');
   }
   state.delayTimer = setTimeout(colorvisionAdvance, 700);
@@ -2696,6 +2778,7 @@ function renderLogicView(view) {
 
     saveRanking('logic', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')', state.difficulty);
     renderPercentileBadge('logic', tier, state.difficulty);
+    if (tier === 'S') playSound('tierS');
     renderLocalRanking('logic-ranking-list', 'logic');
   }
 }
@@ -2711,7 +2794,7 @@ function logicStart(difficulty) {
     correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle',
     seq: [], answer: 0, options: [],
   };
-  renderLogicView('round');
+  showCountdownThenStart('logic-container', () => renderLogicView('round'));
 }
 
 function logicBeginRound() {
@@ -2760,13 +2843,19 @@ function logicAnswer(opt) {
 
   if (opt === state.answer) {
     state.correctCount++;
+    state.streak = (state.streak || 0) + 1;
     state.totalTime += Math.min(elapsed, cfg.timeLimitMs);
     if (tappedEl) tappedEl.classList.add('selected');
-    showToast('✅ 정답!');
+    pulseElement(tappedEl, 'correct');
+    playSound('correct');
+    showToast('✅ 정답!' + comboSuffix(state.streak));
   } else {
+    state.streak = 0;
     state.totalTime += cfg.timeLimitMs;
     if (tappedEl) { tappedEl.style.borderColor = '#ef4444'; tappedEl.style.background = 'rgba(239,68,68,0.15)'; }
     if (correctEl) { correctEl.style.borderColor = '#22c55e'; correctEl.style.background = 'rgba(34,197,94,0.15)'; }
+    pulseElement(tappedEl, 'wrong');
+    playSound('wrong');
     showToast('❌ 오답');
   }
   state.delayTimer = setTimeout(logicAdvance, 700);
@@ -2933,6 +3022,7 @@ function renderImpulseView(view) {
 
     saveRanking('impulse', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')', state.difficulty);
     renderPercentileBadge('impulse', tier, state.difficulty);
+    if (tier === 'S') playSound('tierS');
     renderLocalRanking('impulse-ranking-list', 'impulse');
   }
 }
@@ -2948,7 +3038,7 @@ function impulseStart(difficulty) {
     correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0,
     startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false,
   };
-  renderImpulseView('round');
+  showCountdownThenStart('impulse-container', () => renderImpulseView('round'));
 }
 
 function impulseBeginRound() {
@@ -2991,6 +3081,7 @@ function impulseTap() {
 
   if (state.isNoGo) {
     state.commissionErrors++;
+    state.streak = 0;
     if (feedback) feedback.textContent = '앗, 참았어야 해요! 성급한 반응 😵';
     showToast('❌ 성급한 반응!');
     playSound('wrong');
@@ -3000,7 +3091,8 @@ function impulseTap() {
     state.correctCount++;
     state.goCount++;
     state.totalGoTime += ms;
-    if (feedback) feedback.textContent = `${ms}ms! 정확해요 ✅`;
+    state.streak = (state.streak || 0) + 1;
+    if (feedback) feedback.textContent = `${ms}ms! 정확해요 ✅` + comboSuffix(state.streak);
     showToast('✅ 정답!');
     playSound('correct');
     pulseElement(feedback, 'correct');
@@ -3016,10 +3108,14 @@ function impulseTimeUp() {
 
   if (state.isNoGo) {
     state.correctCount++;
-    if (feedback) feedback.textContent = '잘 참았어요! 👍';
+    state.streak = (state.streak || 0) + 1;
+    playSound('correct');
+    if (feedback) feedback.textContent = '잘 참았어요! 👍' + comboSuffix(state.streak);
     showToast('✅ 잘 참았어요!');
   } else {
     state.omissionErrors++;
+    state.streak = 0;
+    playSound('wrong');
     if (feedback) feedback.textContent = '앗, 놓쳤어요! 😅';
     showToast('⏱️ 놓쳤어요!');
   }
@@ -3175,6 +3271,7 @@ function renderShortfocusView(view) {
 
     saveRanking('shortfocus', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')', state.difficulty);
     renderPercentileBadge('shortfocus', tier, state.difficulty);
+    if (tier === 'S') playSound('tierS');
     renderLocalRanking('shortfocus-ranking-list', 'shortfocus');
   }
 }
@@ -3190,7 +3287,7 @@ function shortfocusStart(difficulty) {
     correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0,
     startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false,
   };
-  renderShortfocusView('round');
+  showCountdownThenStart('shortfocus-container', () => renderShortfocusView('round'));
 }
 
 function shortfocusBeginRound() {
@@ -3233,6 +3330,7 @@ function shortfocusTap() {
 
   if (state.isNoGo) {
     state.commissionErrors++;
+    state.streak = 0;
     if (feedback) feedback.textContent = '앗, 광고에 낚였어요! 😵';
     showToast('❌ 광고에 낚였어요!');
     playSound('wrong');
@@ -3242,7 +3340,8 @@ function shortfocusTap() {
     state.correctCount++;
     state.goCount++;
     state.totalGoTime += ms;
-    if (feedback) feedback.textContent = `${ms}ms! 딱 걸렸다 ✅`;
+    state.streak = (state.streak || 0) + 1;
+    if (feedback) feedback.textContent = `${ms}ms! 딱 걸렸다 ✅` + comboSuffix(state.streak);
     showToast('✅ 정답!');
     playSound('correct');
     pulseElement(feedback, 'correct');
@@ -3258,10 +3357,14 @@ function shortfocusTimeUp() {
 
   if (state.isNoGo) {
     state.correctCount++;
-    if (feedback) feedback.textContent = '광고 안 눌렀어요! 👍';
+    state.streak = (state.streak || 0) + 1;
+    playSound('correct');
+    if (feedback) feedback.textContent = '광고 안 눌렀어요! 👍' + comboSuffix(state.streak);
     showToast('✅ 잘 참았어요!');
   } else {
     state.omissionErrors++;
+    state.streak = 0;
+    playSound('wrong');
     if (feedback) feedback.textContent = '앗, 놓쳤어요! 😅';
     showToast('⏱️ 놓쳤어요!');
   }
@@ -4304,6 +4407,13 @@ document.addEventListener('DOMContentLoaded', () => {
   ['theme-toggle-btn', 'theme-toggle-btn-mobile'].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', toggleTheme);
+  });
+
+  /* ── 효과음 토글 버튼 (v0.0.54~) ── */
+  applySoundIcon();
+  ['sound-toggle-btn', 'sound-toggle-btn-mobile'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener('click', toggleSound);
   });
 
   /* ── 사이드바 "테스트" 그룹 접기/펼치기 ── */
