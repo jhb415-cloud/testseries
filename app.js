@@ -4506,6 +4506,48 @@ function lottoRenderGames(games, modeLabel) {
     </button>`;
 }
 
+/* ══════════════════════════════════════════════════
+   🔗 공유 링크 프리뷰 화면 (v0.1.1~)
+   - 15개 섹션 × 3개 공유 타입(result/challenge/verdict) 전부가 공통으로 거쳐가는 화면.
+     functions/share/[section].js가 #shared-preview?section=...&title=...&desc=...&image=...&cta=...(&p=도전장 페이로드)
+     형태로 리다이렉트하며, 예전처럼 곧바로 테스트 화면으로 보내는 대신 카카오 카드와 동일한
+     이미지+제목+설명을 먼저 보여준 뒤 버튼을 눌러야 실제 테스트로 넘어가게 함.
+   - 섹션마다 따로 화면을 만들지 않고 이 화면 하나를 재사용 — 도전장(challenge)일 때만 p 페이로드를
+     App.pendingChallenge로 복원해 기존 대결 비교 로직(renderChallengeBanner 등)이 그대로 이어짐.
+══════════════════════════════════════════════════ */
+function initSharedPreview() {
+  const container = document.getElementById('shared-preview-container');
+  if (!container) return;
+
+  /* location.hash는 App.navigate()가 이미 '#shared-preview'로 덮어써 쿼리스트링이 사라진 상태라
+     DOMContentLoaded 초기 라우팅 단계에서 미리 떼어둔 App._sharedPreviewParams를 사용한다 */
+  const params = App._sharedPreviewParams || new URLSearchParams();
+  const next = { section: params.get('section') || 'home', p: params.get('p') || '' };
+  App._sharedPreviewNext = next;
+
+  const title = params.get('title') || '과몰입 연구소';
+  const desc = params.get('desc') || '';
+  const image = params.get('image') || '';
+  const cta = params.get('cta') || '나도 해보기';
+
+  container.innerHTML = `
+    <div class="max-w-md mx-auto pt-8 px-4 text-center">
+      ${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(title)}" class="w-full rounded-2xl shadow-2xl mb-5 border border-slate-700" />` : ''}
+      <h2 class="text-slate-100 font-bold text-xl mb-2">${escapeHtml(title)}</h2>
+      <p class="text-slate-400 text-sm mb-6">${escapeHtml(desc)}</p>
+      <button onclick="sharedPreviewProceed()" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-4 rounded-xl transition text-lg">${escapeHtml(cta)}</button>
+    </div>`;
+}
+
+function sharedPreviewProceed() {
+  const next = App._sharedPreviewNext;
+  if (!next) { App.navigate('home'); return; }
+  if (next.p) {
+    try { App.pendingChallenge = { section: next.section, data: JSON.parse(next.p) }; } catch (e) { App.pendingChallenge = null; }
+  }
+  App.navigate(next.section);
+}
+
 function initLotto() {
   const container = document.getElementById('lotto-container');
   if (!container) return;
@@ -4595,6 +4637,7 @@ document.addEventListener('DOMContentLoaded', () => {
     proverb: initProverb,
     pricequiz: initPricequiz,
     lotto: initLotto,
+    'shared-preview': initSharedPreview,
   };
 
   // 초기 섹션 진입 시 초기화
@@ -4645,6 +4688,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const match = params.get('match');
     if (match) {
       try { App.pendingMatch = { section: hash, data: JSON.parse(match) }; } catch (e) { App.pendingMatch = null; }
+    }
+    /* App.navigate()가 곧바로 location.hash = sectionId로 덮어써 쿼리스트링이 사라지므로,
+       initSharedPreview()가 나중에 읽을 수 있도록 지금 이 시점에 미리 떼어 저장해둔다 (v0.1.1~) */
+    if (hash === 'shared-preview') {
+      App._sharedPreviewParams = params;
     }
   }
   App.navigate(hash in sectionInits ? hash : 'home');
