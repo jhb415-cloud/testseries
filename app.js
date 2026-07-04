@@ -4528,7 +4528,10 @@ function lottoRenderGames(games, modeLabel, opts) {
   const highlightSet = new Set(opts.highlight || []);
   const ballHTML = (n) => `<span class="w-11 h-11 flex items-center justify-center rounded-full ${lottoBallClass(n)} text-base font-black${highlightSet.has(n) ? ' ring-2 ring-amber-300' : ''}">${n}</span>`;
 
-  const shareUrl = buildShareLandingUrl('lotto', {});
+  /* v0.1.3~: 실제 뽑은 번호를 drawn 파라미터로 랜딩 페이지까지 전달 —
+     링크를 연 친구가 프리뷰 화면에서 예시 그림이 아닌 진짜 번호(공 UI)를 보게 됨 */
+  const drawn = games.map(g => g.join('.')).join('-');
+  const shareUrl = buildShareLandingUrl('lotto', { drawn });
   const preview = games[0].join('-');
   const kakaoTitle = '🍀 행운의 로또 번호를 뽑았어요!';
   const kakaoDesc = `${modeLabel} · 예: ${preview}`;
@@ -4657,6 +4660,34 @@ function lottoShareResultImage() {
    - 섹션마다 따로 화면을 만들지 않고 이 화면 하나를 재사용 — 도전장(challenge)일 때만 p 페이로드를
      App.pendingChallenge로 복원해 기존 대결 비교 로직(renderChallengeBanner 등)이 그대로 이어짐.
 ══════════════════════════════════════════════════ */
+/* drawn 문자열("1.5.12.23.34.45-2.8...")을 게임 배열로 파싱 — 프리뷰 화면/친구 배너 공용 */
+function lottoParseDrawnGames(raw) {
+  if (!raw) return [];
+  return raw.split('-').slice(0, 5).map(g =>
+    g.split('.').map(n => parseInt(n, 10)).filter(n => n >= 1 && n <= 45).slice(0, 6)
+  ).filter(g => g.length === 6);
+}
+
+/* 프리뷰 화면용: 공유자가 실제로 뽑은 번호를 공 UI로 렌더링(범용 홍보 이미지 대신 진짜 번호를 보여줌) */
+function sharedPreviewLottoBallsHTML(section, raw) {
+  const games = lottoParseDrawnGames(raw);
+  if (!games.length) return '';
+  const label = (i) => section === 'lottodraw' ? LOTTODRAW_LETTERS[i] : `${i + 1}게임`;
+  return `
+    <div class="bg-slate-800/60 border border-amber-400/40 rounded-2xl p-4 mb-5 text-left">
+      <p class="text-amber-300 text-sm font-bold mb-3 text-center">🍀 친구가 뽑은 행운의 번호</p>
+      <div class="space-y-2">
+        ${games.map((g, i) => `
+          <div class="flex items-center gap-2">
+            <span class="text-amber-300/70 text-xs font-black w-12 shrink-0">${label(i)}</span>
+            <div class="flex gap-1.5 flex-wrap">
+              ${g.map(n => `<span class="w-9 h-9 flex items-center justify-center rounded-full ${lottoBallClass(n)} text-sm font-bold">${n}</span>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
 function initSharedPreview() {
   const container = document.getElementById('shared-preview-container');
   if (!container) return;
@@ -4672,9 +4703,12 @@ function initSharedPreview() {
   const image = params.get('image') || '';
   const cta = params.get('cta') || '나도 해보기';
 
+  /* 로또 공유(drawn 페이로드)는 범용 홍보 이미지 대신 실제 뽑은 번호를 공 UI로 보여줌 (v0.1.3~) */
+  const lottoBalls = (next.section === 'lotto' || next.section === 'lottodraw') ? sharedPreviewLottoBallsHTML(next.section, next.extra) : '';
+
   container.innerHTML = `
     <div class="max-w-md mx-auto pt-8 px-4 text-center">
-      ${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(title)}" class="w-full rounded-2xl shadow-2xl mb-5 border border-slate-700" />` : ''}
+      ${lottoBalls || (image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(title)}" class="w-full rounded-2xl shadow-2xl mb-5 border border-slate-700" />` : '')}
       <h2 class="text-slate-100 font-bold text-xl mb-2">${escapeHtml(title)}</h2>
       <p class="text-slate-400 text-sm mb-6">${escapeHtml(desc)}</p>
       <button onclick="sharedPreviewProceed()" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-4 rounded-xl transition text-lg">${escapeHtml(cta)}</button>
@@ -4687,12 +4721,32 @@ function sharedPreviewProceed() {
   if (next.p) {
     try { App.pendingChallenge = { section: next.section, data: JSON.parse(next.p) }; } catch (e) { App.pendingChallenge = null; }
   }
-  /* 로또 직접 뽑기 공유 링크(drawn=...)는 vs 페이로드가 아니라 extra로 전달됨 —
-     initLottodraw()가 참조하는 App._lottodrawSharedDrawn에 그대로 복원 */
+  /* 로또 공유 링크(drawn=...)는 vs 페이로드가 아니라 extra로 전달됨 — 각 섹션의 친구 배너용 상태에 복원 */
   if (next.section === 'lottodraw' && next.extra) {
     App._lottodrawSharedDrawn = next.extra;
   }
+  if (next.section === 'lotto' && next.extra) {
+    App._lottoSharedDrawn = next.extra;
+  }
   App.navigate(next.section);
+}
+
+/* 공유 링크로 진입한 경우 친구가 뽑은 번호 배너 (조합기용, v0.1.3~) */
+function lottoSharedBannerHTML() {
+  const games = lottoParseDrawnGames(App._lottoSharedDrawn || '');
+  if (!games.length) return '';
+  return `
+    <div class="bg-amber-900/30 border border-amber-400/40 rounded-xl p-4 mb-5">
+      <p class="text-amber-300 text-sm font-bold mb-2">🎁 친구가 조합기로 뽑은 번호예요</p>
+      <div class="space-y-1.5">
+        ${games.map((g, i) => `
+          <div class="flex items-center gap-1.5">
+            <span class="text-amber-300/70 text-xs font-black w-12 shrink-0">${i + 1}게임</span>
+            ${g.map(n => `<span class="w-7 h-7 flex items-center justify-center rounded-full ${lottoBallClass(n)} text-xs font-bold">${n}</span>`).join('')}
+          </div>`).join('')}
+      </div>
+      <p class="text-amber-300/80 text-xs mt-2">아래 버튼으로 나도 직접 뽑아볼 수 있어요!</p>
+    </div>`;
 }
 
 function initLotto() {
@@ -4703,6 +4757,7 @@ function initLotto() {
       <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 mb-5">
         <h2 class="text-slate-100 font-black text-xl mb-1">🎱 로또 번호 조합기</h2>
         <p class="text-slate-500 text-sm mb-5">원하는 방식으로 번호를 뽑아보세요 (오락 목적)</p>
+        ${lottoSharedBannerHTML()}
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
           <button onclick="lottoRunRandom()" class="bg-violet-700 hover:bg-violet-600 text-white font-bold py-3 rounded-xl transition">🎲 완전 랜덤</button>
           <button onclick="document.getElementById('lotto-custom-box').classList.toggle('hidden')" class="bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">✍️ 숫자 직접 지정</button>
@@ -4809,11 +4864,7 @@ function initLottodraw() {
 
 /* 공유 링크(#lottodraw?drawn=...)로 들어온 경우 친구가 뽑은 번호 배너 표시 */
 function lottodrawSharedBannerHTML() {
-  const raw = App._lottodrawSharedDrawn || '';
-  if (!raw) return '';
-  const games = raw.split('-').slice(0, 5).map(g =>
-    g.split('.').map(n => parseInt(n, 10)).filter(n => n >= 1 && n <= 45).slice(0, 6)
-  ).filter(g => g.length === 6);
+  const games = lottoParseDrawnGames(App._lottodrawSharedDrawn || '');
   if (!games.length) return '';
   return `
     <div class="bg-amber-900/30 border border-amber-400/40 rounded-xl p-4 mb-5">
@@ -5301,9 +5352,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hash === 'shared-preview') {
       App._sharedPreviewParams = params;
     }
-    /* 로또 직접 뽑기 공유 링크(?drawn=...&ref=...)도 같은 이유로 이 시점에 미리 떼어둔다 (v0.1.2~) */
+    /* 로또 공유 링크(?drawn=...)도 같은 이유로 이 시점에 미리 떼어둔다 (v0.1.2~, v0.1.3에서 조합기도 추가) */
     if (hash === 'lottodraw') {
       App._lottodrawSharedDrawn = params.get('drawn') || '';
+    }
+    if (hash === 'lotto') {
+      App._lottoSharedDrawn = params.get('drawn') || '';
     }
   }
   App.navigate(hash in sectionInits ? hash : 'home');

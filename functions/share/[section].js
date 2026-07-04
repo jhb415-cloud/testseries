@@ -100,12 +100,14 @@ export async function onRequestGet(context) {
     rawDescription = result || '이 꿈이 무슨 의미인지 과몰입 연구소에서 확인해보세요 👉';
     imageUrl = `${origin}/share-cards/dream-${dreamIdx}.jpg`;
   } else if (section === 'lotto') {
-    /* 로또 조합기(완전랜덤/직접지정/운세연동/통계기반) 공용 홍보 링크 — 숫자가 매번 달라 개인화 이미지
-       대신 범용 홍보 이미지 사용, 실제 번호는 카카오 공유 카드 텍스트(클라이언트에서 직접 구성)에만 담김 */
+    /* 로또 조합기(완전랜덤/직접지정/운세연동/통계기반) 공용 홍보 링크 — og:image는 범용 홍보 이미지지만,
+       실제 뽑은 번호(drawn)를 extra로 프리뷰 화면까지 전달해 링크를 연 사람에겐 진짜 번호를 공 UI로 보여줌 */
+    const drawn = url.searchParams.get('drawn') || '';
     rawTitle = '🍀 로또 번호 조합기로 행운의 번호를 뽑아봤어요!';
     rawDescription = url.searchParams.get('desc') || '나도 로또 번호 조합기로 행운의 번호를 뽑아보세요 👉';
     imageUrl = `${origin}/share-cards/lotto-share.jpg`;
     cta = '🎲 나도 뽑아보기';
+    if (drawn) extra = drawn;
   } else if (section === 'lottodraw') {
     /* 직접 뽑기 게임 — drawn(뽑은 번호)을 그대로 미리보기 화면을 거쳐 #lottodraw로 전달(extra 파라미터),
        진입 시 기존 lottodrawSharedBannerHTML()이 그대로 복원해 친구 번호 배너를 보여줌 */
