@@ -1,4 +1,4 @@
-/* v0.0.47 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.48 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -95,6 +95,23 @@ function seededRandom(seed) {
 /* Tier 등급 코멘트뱅크(v0.0.37~)에서 랜덤으로 하나 골라 반복 노출을 줄이는 용도 */
 function pickOne(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
+}
+
+/* Stage E: 동물 비유 결과 카드 (v0.0.48~) — Tier 채점 8개 테스트 전용, data.js AppData.animalCards 참고 */
+function pickAnimalCard(section, tier) {
+  const pool = AppData.animalCards[section] && AppData.animalCards[section][tier];
+  return pool ? pickOne(pool) : null;
+}
+
+function animalCardHTML(card) {
+  if (!card) return '';
+  return `
+        <div class="bg-gradient-to-br from-amber-900/30 to-slate-800 border border-amber-600/40 rounded-2xl p-5 my-4 text-center">
+          <div class="text-xs text-amber-300 mb-2">🐾 나의 동물 비유 카드</div>
+          <div class="text-4xl mb-2">${card.emoji}</div>
+          <div class="text-lg font-black text-slate-100 mb-2">${card.title}</div>
+          <p class="text-slate-300 text-sm">${card.tip}</p>
+        </div>`;
 }
 
 function todaySeed() {
@@ -1062,7 +1079,8 @@ function renderBrainView(view) {
       D: ['오늘 컨디션이 안 좋은 날? 다시 도전해보세요!', '괜찮아, 뇌도 워밍업이 필요해! 몇 판 더 해보자', '오늘은 컨디션 난이도가 좀 셌나봐, 낮은 난이도부터 다시 가보자']
     };
     const tierMsg = pickOne(tierMsgBank[tier]);
-    const shareText = `나의 두뇌 나이는 ${brainAge}세! 정확도 ${accuracy.toFixed(0)}%, 평균 반응속도 ${(avgMs/1000).toFixed(2)}초. 티어: ${tier} - ${tierMsg}`;
+    const animalCard = pickAnimalCard('brain', tier);
+    const shareText = `🐾 나는 ${animalCard.title}! 나의 두뇌 나이는 ${brainAge}세, 정확도 ${accuracy.toFixed(0)}%, 평균 반응속도 ${(avgMs/1000).toFixed(2)}초. 티어: ${tier} - ${tierMsg}`;
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -1076,6 +1094,7 @@ function renderBrainView(view) {
           <div id="percentile-badge-brain" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+        ${animalCardHTML(animalCard)}
 
         ${renderChallengeCompareCard(brainAge + '세 (Tier ' + tier + ')', state.challenge)}
 
@@ -1437,7 +1456,8 @@ function renderReactionView(view) {
     else                   { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['어쩔 수 없지, 오늘은 주위를 잘 살피면서 걷자고~', '오늘은 몸이 로딩 중인가봐, 푹 쉬고 다시 도전해보자', '괜찮아, 반응속도보다 안전이 최고지! 천천히 가자']; }
     tierMsg = pickOne(tierMsg);
 
-    const shareText = `나의 반응속도는 평균 ${avgMs}ms! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+    const animalCard = pickAnimalCard('reaction', tier);
+    const shareText = `🐾 나는 ${animalCard.title}! 나의 반응속도는 평균 ${avgMs}ms, 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -1451,6 +1471,7 @@ function renderReactionView(view) {
           <div id="percentile-badge-reaction" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+        ${animalCardHTML(animalCard)}
 
         ${renderChallengeCompareCard(avgMs + 'ms (Tier ' + tier + ')', state.challenge)}
 
@@ -1687,7 +1708,8 @@ function renderMemdigitView(view) {
     else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['괜찮아, 메모 앱이 괜히 있는 게 아니야. 오늘부터 적극 활용하자!', '오늘따라 숫자가 안 외워지나봐, 컨디션 탓일지도', '괜찮아, 숫자보다 사람 얼굴 잘 기억하면 그게 더 중요하지']; }
     tierMsg = pickOne(tierMsg);
 
-    const shareText = `나의 숫자 기억력은 최대 ${maxLen}자리! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+    const animalCard = pickAnimalCard('memdigit', tier);
+    const shareText = `🐾 나는 ${animalCard.title}! 나의 숫자 기억력은 최대 ${maxLen}자리, 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
     const myResultStr = maxLen + '자리 (Tier ' + tier + ')';
 
     container.innerHTML = `
@@ -1702,6 +1724,7 @@ function renderMemdigitView(view) {
           <div id="percentile-badge-memdigit" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+        ${animalCardHTML(animalCard)}
 
         ${renderChallengeCompareCard(myResultStr, state.challenge)}
 
@@ -1966,7 +1989,8 @@ function renderSeqmemView(view) {
     else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['괜찮아, 원래 급하면 실수하는 법! 다음엔 천천히 되짚어보자~', '오늘은 순서가 유독 안 외워지네, 컨디션이 문제였을지도', '괜찮아, 다음엔 힌트 삼아 소리 내서 순서를 되뇌어보자']; }
     tierMsg = pickOne(tierMsg);
 
-    const shareText = `나의 순서 기억력은 최대 ${maxLen}칸! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+    const animalCard = pickAnimalCard('seqmem', tier);
+    const shareText = `🐾 나는 ${animalCard.title}! 나의 순서 기억력은 최대 ${maxLen}칸, 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
     const myResultStr = maxLen + '칸 (Tier ' + tier + ')';
 
     container.innerHTML = `
@@ -1981,6 +2005,7 @@ function renderSeqmemView(view) {
           <div id="percentile-badge-seqmem" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+        ${animalCardHTML(animalCard)}
 
         ${renderChallengeCompareCard(myResultStr, state.challenge)}
 
@@ -2222,7 +2247,8 @@ function renderColorvisionView(view) {
     else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['괜찮아, 색보다 디자인 센스가 더 중요하지! 헷갈리면 친구한테 물어보자~', '오늘은 색이 유독 비슷하게 보였나봐, 조명 탓일 수도', '괜찮아, 색 감각보다 취향이 더 중요하지! 다음에 다시 도전해보자']; }
     tierMsg = pickOne(tierMsg);
 
-    const shareText = `나의 색 감각 점수는 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+    const animalCard = pickAnimalCard('colorvision', tier);
+    const shareText = `🐾 나는 ${animalCard.title}! 나의 색 감각 점수는 정확도 ${accuracy.toFixed(0)}%, 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
     const myResultStr = accuracy.toFixed(0) + '% (Tier ' + tier + ')';
 
     container.innerHTML = `
@@ -2237,6 +2263,7 @@ function renderColorvisionView(view) {
           <div id="percentile-badge-colorvision" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+        ${animalCardHTML(animalCard)}
 
         ${renderChallengeCompareCard(myResultStr, state.challenge)}
 
@@ -2518,7 +2545,8 @@ function renderLogicView(view) {
     else                  { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['괜찮아, 계산기는 괜히 있는 게 아니야! 다음엔 천천히 규칙을 찾아보자~', '오늘은 숫자가 유독 안 풀렸나봐, 컨디션 탓일지도', '괜찮아, 논리력보다 창의력이 더 중요한 순간도 많아!']; }
     tierMsg = pickOne(tierMsg);
 
-    const shareText = `나의 논리력 점수는 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+    const animalCard = pickAnimalCard('logic', tier);
+    const shareText = `🐾 나는 ${animalCard.title}! 나의 논리력 점수는 정확도 ${accuracy.toFixed(0)}%, 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
     const myResultStr = accuracy.toFixed(0) + '% (Tier ' + tier + ')';
 
     container.innerHTML = `
@@ -2533,6 +2561,7 @@ function renderLogicView(view) {
           <div id="percentile-badge-logic" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+        ${animalCardHTML(animalCard)}
 
         ${renderChallengeCompareCard(myResultStr, state.challenge)}
 
@@ -2756,7 +2785,8 @@ function renderImpulseView(view) {
     else                     { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['괜찮아, 원래 사람은 다 충동적이야! 다음엔 한 박자 쉬고 반응해보자~', '오늘따라 유독 급했나봐, 컨디션 탓일 수도', '괜찮아, 다음엔 신호가 뜨기 전에 손을 살짝 떼고 기다려보자']; }
     tierMsg = pickOne(tierMsg);
 
-    const shareText = `나의 충동억제력은 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+    const animalCard = pickAnimalCard('impulse', tier);
+    const shareText = `🐾 나는 ${animalCard.title}! 나의 충동억제력은 정확도 ${accuracy.toFixed(0)}%, 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
     const myResultStr = accuracy.toFixed(0) + '% (Tier ' + tier + ')';
 
     container.innerHTML = `
@@ -2771,6 +2801,7 @@ function renderImpulseView(view) {
           <div id="percentile-badge-impulse" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+        ${animalCardHTML(animalCard)}
 
         ${renderChallengeCompareCard(myResultStr, state.challenge)}
 
@@ -2999,7 +3030,8 @@ function renderShortfocusView(view) {
     else                     { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['숏폼 알고리즘의 완벽한 먹잇감 확정 😂 근데 원래 다들 그래, 너만 그런 거 아니야!', '오늘은 알고리즘한테 완전히 낚였나봐, 다음엔 정신 바짝 차려보자', '괜찮아, 숏폼 앞에서 안 낚이는 사람이 어딨어! 다들 그래']; }
     tierMsg = pickOne(tierMsg);
 
-    const shareText = `내 숏폼 뇌 지수는 정확도 ${accuracy.toFixed(0)}%! 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
+    const animalCard = pickAnimalCard('shortfocus', tier);
+    const shareText = `🐾 나는 ${animalCard.title}! 내 숏폼 뇌 지수는 정확도 ${accuracy.toFixed(0)}%, 등급 ${tier} - ${tierMsg} 너도 확인해봐 👉`;
     const myResultStr = accuracy.toFixed(0) + '% (Tier ' + tier + ')';
 
     container.innerHTML = `
@@ -3014,6 +3046,7 @@ function renderShortfocusView(view) {
           <div id="percentile-badge-shortfocus" class="text-xs text-violet-300 mt-2"></div>
           <p class="text-slate-300">${tierMsg}</p>
         </div>
+        ${animalCardHTML(animalCard)}
 
         ${renderChallengeCompareCard(myResultStr, state.challenge)}
 
