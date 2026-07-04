@@ -1,4 +1,4 @@
-/* v0.0.52 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.53 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -250,21 +250,27 @@ function parseTierFromResult(resultStr) {
    v0.0.49~: 도전장 링크를 원래의 #{section}?vs=... 대신 공유 랜딩 페이지(/share/{section}?type=challenge&...)로 교체 —
    카카오톡/문자 등 어디로 공유하든 og:image(공용 VS 카드)가 자동으로 붙어 텍스트만 가던 문제를 해결.
    랜딩 페이지가 vs= 페이로드를 그대로 복원해 리다이렉트하므로 기존 도전장 판정 로직은 그대로 재사용됨 */
-function challengeFriend(section, nickname, result) {
-  const url = buildShareLandingUrl(section, { type: 'challenge', nickname, result });
+function challengeFriend(section, nickname, result, difficulty) {
+  const url = buildShareLandingUrl(section, { type: 'challenge', nickname, result, difficulty: difficulty || '' });
   const text = `⚔️ ${nickname}님의 도전장이 도착했습니다! (${result}) 같은 테스트로 나도 겨뤄보기 👉 ${url}`;
   shareResult(text);
 }
 
 /* 결과 화면에서 state.challenge가 있을 때 VS 비교 카드 HTML 생성 (v0.0.49~ 원점수 그대로 노출 + 결과 이미지 공유 추가) */
-function renderChallengeCompareCard(myResult, challenge, section, myNickname) {
+const DIFFICULTY_LABEL = { easy: '쉬움', normal: '보통', hard: '어려움', hell: 'HELL' };
+
+function renderChallengeCompareCard(myResult, challenge, section, myNickname, myDifficulty) {
   if (!challenge) return '';
+  const oppDifficulty = challenge.d || '';
+  const difficultyMismatch = !!(myDifficulty && oppDifficulty && myDifficulty !== oppDifficulty);
+
   const myTier = parseTierFromResult(myResult);
   const oppTier = parseTierFromResult(challenge.r);
   const myScore = CHALLENGE_TIER_SCORE[myTier] || 0;
   const oppScore = CHALLENGE_TIER_SCORE[oppTier] || 0;
   let verdict, verdictColor;
-  if (myScore > oppScore) { verdict = '🏆 승리!'; verdictColor = 'text-emerald-400'; }
+  if (difficultyMismatch) { verdict = '⚖️ 난이도가 달라 직접 비교는 어려워요'; verdictColor = 'text-slate-400'; }
+  else if (myScore > oppScore) { verdict = '🏆 승리!'; verdictColor = 'text-emerald-400'; }
   else if (myScore < oppScore) { verdict = '😢 아쉬운 패배'; verdictColor = 'text-rose-400'; }
   else { verdict = '🤝 무승부'; verdictColor = 'text-amber-400'; }
   const shareUrl = buildShareLandingUrl(section, {
@@ -273,17 +279,19 @@ function renderChallengeCompareCard(myResult, challenge, section, myNickname) {
   });
   const kakaoTitle = `${myNickname} vs ${challenge.n} 대결 결과`;
   const kakaoDesc = `${myNickname} ${myResult} · ${challenge.n} ${challenge.r} — ${verdict}`;
+  const oppDiffTag = oppDifficulty ? ` <span class="text-slate-600">(${DIFFICULTY_LABEL[oppDifficulty] || oppDifficulty})</span>` : '';
+  const myDiffTag = myDifficulty ? ` <span class="text-slate-600">(${DIFFICULTY_LABEL[myDifficulty] || myDifficulty})</span>` : '';
   return `
     <div class="bg-slate-800 border border-violet-700/40 rounded-2xl p-5 mb-4 text-center">
       <h4 class="text-slate-100 font-bold mb-3">⚔️ 친구 대결 결과</h4>
       <div class="flex items-center justify-center gap-4 mb-2">
         <div class="flex-1">
-          <div class="text-slate-500 text-xs mb-1">${challenge.n}</div>
+          <div class="text-slate-500 text-xs mb-1">${challenge.n}${oppDiffTag}</div>
           <div class="text-slate-100 font-bold">${challenge.r}</div>
         </div>
         <div class="text-slate-500 font-black">VS</div>
         <div class="flex-1">
-          <div class="text-slate-500 text-xs mb-1">나</div>
+          <div class="text-slate-500 text-xs mb-1">나${myDiffTag}</div>
           <div class="text-slate-100 font-bold">${myResult}</div>
         </div>
       </div>
@@ -301,16 +309,17 @@ function renderChallengeCompareCard(myResult, challenge, section, myNickname) {
 /* 시작 화면에서 state.challenge가 있을 때(도전장 링크로 진입) 보여줄 배너 */
 function renderChallengeBanner(challenge) {
   if (!challenge) return '';
+  const diffHint = challenge.d ? ` (난이도: <strong>${DIFFICULTY_LABEL[challenge.d] || challenge.d}</strong>으로 도전해야 정확히 비교돼요)` : '';
   return `
     <div class="bg-violet-900/30 border border-violet-700/40 rounded-xl p-3 mb-4 text-sm text-violet-200">
-      ⚔️ <strong>${challenge.n}</strong>님의 도전장! 기록: <strong>${challenge.r}</strong> — 같은 조건으로 겨뤄보세요
+      ⚔️ <strong>${challenge.n}</strong>님의 도전장! 기록: <strong>${challenge.r}</strong>${diffHint} — 같은 조건으로 겨뤄보세요
     </div>`;
 }
 
 /* 결과 화면 공유 버튼 옆에 넣을 "친구에게 도전장 보내기" 버튼 */
-function renderChallengeButton(section, nickname, result) {
+function renderChallengeButton(section, nickname, result, difficulty) {
   return `
-    <button onclick="challengeFriend('${section}', \`${nickname}\`, \`${result}\`)"
+    <button onclick="challengeFriend('${section}', \`${nickname}\`, \`${result}\`, '${difficulty || ''}')"
       class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition mb-3">
       ⚔️ 친구에게 도전장 보내기
     </button>`;
@@ -433,6 +442,12 @@ function pulseElement(el, kind) {
   el.classList.remove('anim-pop', 'anim-shake');
   void el.offsetWidth; // 리플로우 강제로 애니메이션 재시작 보장
   el.classList.add(cls);
+}
+
+/* HELL 난이도(Phase 3 로드맵 10-1, v0.0.53~) 진입 전 경고 — 실수로 못 누르게 확인 한 번 거침 */
+function confirmHellMode(startFnName) {
+  const ok = confirm('🔥 HELL 난이도는 정말 어렵습니다. 십중팔구 실패합니다.\n그래도 도전하시겠습니까?');
+  if (ok) window[startFnName]('hell');
 }
 
 function showToast(msg) {
@@ -1054,13 +1069,25 @@ const STROOP_COLORS = {
     { name: '노랑', class: 'stroop-yellow' },
     { name: '보라', class: 'stroop-purple' },
     { name: '주황', class: 'stroop-orange' },
+  ],
+  hell: [
+    { name: '빨강', class: 'stroop-red' },
+    { name: '파랑', class: 'stroop-blue' },
+    { name: '초록', class: 'stroop-green' },
+    { name: '노랑', class: 'stroop-yellow' },
+    { name: '보라', class: 'stroop-purple' },
+    { name: '주황', class: 'stroop-orange' },
+    { name: '분홍', class: 'stroop-pink' },
+    { name: '하늘', class: 'stroop-sky' },
   ]
 };
-/* v0.0.28~: 난이도 3단계(쉬움/보통/어려움) — 색상 수뿐 아니라 문항 수·제한시간도 함께 강화 */
+/* v0.0.28~: 난이도 3단계(쉬움/보통/어려움) — 색상 수뿐 아니라 문항 수·제한시간도 함께 강화
+   v0.0.53~: HELL 난이도 추가(Tier 채점 8개 테스트 전용, Phase 3 로드맵 10-1) */
 const STROOP_CONFIG = {
   easy:   { questions: 15, time: 5000, label: '쉬움' },
   medium: { questions: 20, time: 4000, label: '보통' },
   hard:   { questions: 25, time: 3000, label: '어려움' },
+  hell:   { questions: 35, time: 1800, label: 'HELL' },
 };
 
 function initBrain() {
@@ -1099,6 +1126,9 @@ function renderBrainView(view) {
             어려움<br><span class="text-xs font-normal opacity-70">색상 6개 · 25문항</span>
           </button>
         </div>
+        <button onclick="confirmHellMode('brainSelectDifficulty')" class="w-full mt-3 bg-gradient-to-r from-red-950 to-black hover:from-red-900 border-2 border-red-600 text-red-400 font-black py-4 rounded-xl transition flex items-center justify-center gap-2">
+          <span class="text-2xl">🔥</span> HELL 난이도 <span class="text-xs font-normal opacity-70">(색상 8개 · 35문항 · 상급자 전용)</span>
+        </button>
       </div>`;
   }
 
@@ -1189,7 +1219,7 @@ function renderBrainView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(brainAge + '세 (Tier ' + tier + ')', state.challenge, 'brain', state.nickname)}
+        ${renderChallengeCompareCard(brainAge + '세 (Tier ' + tier + ')', state.challenge, 'brain', state.nickname, state.difficulty)}
 
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -1208,7 +1238,7 @@ function renderBrainView(view) {
         </div>
 
         ${renderShareRow('brain', tier, animalCard._idx, state.nickname, brainAge + '세 (Tier ' + tier + ')', shareText, animalCard)}
-        ${renderChallengeButton('brain', state.nickname, brainAge + '세 (Tier ' + tier + ')')}
+        ${renderChallengeButton('brain', state.nickname, brainAge + '세 (Tier ' + tier + ')', state.difficulty)}
 
         ${renderPlaceholderUI('brain', tier)}
 
@@ -1220,8 +1250,8 @@ function renderBrainView(view) {
         </button>
       </div>`;
 
-    saveRanking('brain', state.nickname, brainAge + '세 (Tier ' + tier + ')');
-    renderPercentileBadge('brain', tier);
+    saveRanking('brain', state.nickname, brainAge + '세 (Tier ' + tier + ')', state.difficulty);
+    renderPercentileBadge('brain', tier, state.difficulty);
     renderLocalRanking('brain-ranking-list', 'brain');
   }
 }
@@ -1459,6 +1489,7 @@ const REACTION_CONFIG = {
   easy:   { label: '쉬움',   rounds: 5,  minDelay: 1200, maxDelay: 2800, decoyChance: 0,    foulPenalty: 0 },
   normal: { label: '보통',   rounds: 7,  minDelay: 900,  maxDelay: 3200, decoyChance: 0,    foulPenalty: 300 },
   hard:   { label: '어려움', rounds: 10, minDelay: 600,  maxDelay: 3800, decoyChance: 0.3,  foulPenalty: 400 },
+  hell:   { label: 'HELL',   rounds: 15, minDelay: 400,  maxDelay: 4500, decoyChance: 0.45, foulPenalty: 500 },
 };
 
 function initReaction() {
@@ -1494,6 +1525,9 @@ function renderReactionView(view) {
             🔴 어려움<br><span class="text-xs font-normal opacity-70">10회+가짜신호</span>
           </button>
         </div>
+        <button onclick="confirmHellMode('reactionStart')" class="w-full mt-3 bg-gradient-to-r from-red-950 to-black hover:from-red-900 border-2 border-red-600 text-red-400 font-black py-3 rounded-xl transition flex items-center justify-center gap-2 text-sm">
+          <span class="text-xl">🔥</span> HELL 난이도 <span class="text-xs font-normal opacity-70">(15회·가짜신호45%·상급자 전용)</span>
+        </button>
       </div>`;
   }
 
@@ -1551,7 +1585,7 @@ function renderReactionView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(avgMs + 'ms (Tier ' + tier + ')', state.challenge, 'reaction', state.nickname)}
+        ${renderChallengeCompareCard(avgMs + 'ms (Tier ' + tier + ')', state.challenge, 'reaction', state.nickname, state.difficulty)}
 
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -1569,7 +1603,7 @@ function renderReactionView(view) {
         </div>
 
         ${renderShareRow('reaction', tier, animalCard._idx, state.nickname, avgMs + 'ms (Tier ' + tier + ')', shareText, animalCard)}
-        ${renderChallengeButton('reaction', state.nickname, avgMs + 'ms (Tier ' + tier + ')')}
+        ${renderChallengeButton('reaction', state.nickname, avgMs + 'ms (Tier ' + tier + ')', state.difficulty)}
 
         ${renderPlaceholderUI('reaction', tier)}
 
@@ -1581,8 +1615,8 @@ function renderReactionView(view) {
         </button>
       </div>`;
 
-    saveRanking('reaction', state.nickname, avgMs + 'ms (Tier ' + tier + ')');
-    renderPercentileBadge('reaction', tier);
+    saveRanking('reaction', state.nickname, avgMs + 'ms (Tier ' + tier + ')', state.difficulty);
+    renderPercentileBadge('reaction', tier, state.difficulty);
     renderLocalRanking('reaction-ranking-list', 'reaction');
   }
 }
@@ -1710,6 +1744,7 @@ const MEMDIGIT_CONFIG = {
   easy:   { label: '쉬움',   rounds: 6,  startLen: 3, perDigitMs: 900, minLen: 2, maxLen: 8,  distractor: false },
   normal: { label: '보통',   rounds: 8,  startLen: 4, perDigitMs: 700, minLen: 3, maxLen: 9,  distractor: false },
   hard:   { label: '어려움', rounds: 10, startLen: 5, perDigitMs: 500, minLen: 3, maxLen: 10, distractor: true  },
+  hell:   { label: 'HELL',   rounds: 12, startLen: 6, perDigitMs: 350, minLen: 4, maxLen: 12, distractor: true  },
 };
 
 function initMemdigit() {
@@ -1745,6 +1780,9 @@ function renderMemdigitView(view) {
             🔴 어려움<br><span class="text-xs font-normal opacity-70">5자리+방해</span>
           </button>
         </div>
+        <button onclick="confirmHellMode('memdigitStart')" class="w-full mt-3 bg-gradient-to-r from-red-950 to-black hover:from-red-900 border-2 border-red-600 text-red-400 font-black py-3 rounded-xl transition flex items-center justify-center gap-2 text-sm">
+          <span class="text-xl">🔥</span> HELL 난이도 <span class="text-xs font-normal opacity-70">(6자리부터·방해·상급자 전용)</span>
+        </button>
       </div>`;
   }
 
@@ -1797,7 +1835,7 @@ function renderMemdigitView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(myResultStr, state.challenge, 'memdigit', state.nickname)}
+        ${renderChallengeCompareCard(myResultStr, state.challenge, 'memdigit', state.nickname, state.difficulty)}
 
         <div class="grid grid-cols-2 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -1811,7 +1849,7 @@ function renderMemdigitView(view) {
         </div>
 
         ${renderShareRow('memdigit', tier, animalCard._idx, state.nickname, myResultStr, shareText, animalCard)}
-        ${renderChallengeButton('memdigit', state.nickname, myResultStr)}
+        ${renderChallengeButton('memdigit', state.nickname, myResultStr, state.difficulty)}
 
         ${renderPlaceholderUI('memdigit', tier)}
 
@@ -1823,8 +1861,8 @@ function renderMemdigitView(view) {
         </button>
       </div>`;
 
-    saveRanking('memdigit', state.nickname, maxLen + '자리 (Tier ' + tier + ')');
-    renderPercentileBadge('memdigit', tier);
+    saveRanking('memdigit', state.nickname, maxLen + '자리 (Tier ' + tier + ')', state.difficulty);
+    renderPercentileBadge('memdigit', tier, state.difficulty);
     renderLocalRanking('memdigit-ranking-list', 'memdigit');
   }
 }
@@ -1973,6 +2011,7 @@ const SEQMEM_CONFIG = {
   easy:   { label: '쉬움',   gridSize: 3, rounds: 6,  startLen: 3, minLen: 2, maxLen: 8,  flashMs: 700, gapMs: 250, distractor: false },
   normal: { label: '보통',   gridSize: 3, rounds: 8,  startLen: 4, minLen: 3, maxLen: 9,  flashMs: 550, gapMs: 200, distractor: false },
   hard:   { label: '어려움', gridSize: 4, rounds: 10, startLen: 4, minLen: 3, maxLen: 10, flashMs: 450, gapMs: 150, distractor: true  },
+  hell:   { label: 'HELL',   gridSize: 5, rounds: 12, startLen: 5, minLen: 4, maxLen: 12, flashMs: 300, gapMs: 100, distractor: true  },
 };
 
 function initSeqmem() {
@@ -2016,12 +2055,15 @@ function renderSeqmemView(view) {
             🔴 어려움<br><span class="text-xs font-normal opacity-70">4x4+방해</span>
           </button>
         </div>
+        <button onclick="confirmHellMode('seqmemStart')" class="w-full mt-3 bg-gradient-to-r from-red-950 to-black hover:from-red-900 border-2 border-red-600 text-red-400 font-black py-3 rounded-xl transition flex items-center justify-center gap-2 text-sm">
+          <span class="text-xl">🔥</span> HELL 난이도 <span class="text-xs font-normal opacity-70">(5x5·초고속·상급자 전용)</span>
+        </button>
       </div>`;
   }
 
   else if (view === 'round') {
     const cfg = SEQMEM_CONFIG[state.difficulty];
-    const gridColsClass = cfg.gridSize === 4 ? 'grid-cols-4' : 'grid-cols-3';
+    const gridColsClass = { 3: 'grid-cols-3', 4: 'grid-cols-4', 5: 'grid-cols-5' }[cfg.gridSize] || 'grid-cols-3';
     const tileCount = cfg.gridSize * cfg.gridSize;
 
     container.innerHTML = `
@@ -2071,7 +2113,7 @@ function renderSeqmemView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(myResultStr, state.challenge, 'seqmem', state.nickname)}
+        ${renderChallengeCompareCard(myResultStr, state.challenge, 'seqmem', state.nickname, state.difficulty)}
 
         <div class="grid grid-cols-2 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -2085,7 +2127,7 @@ function renderSeqmemView(view) {
         </div>
 
         ${renderShareRow('seqmem', tier, animalCard._idx, state.nickname, myResultStr, shareText, animalCard)}
-        ${renderChallengeButton('seqmem', state.nickname, myResultStr)}
+        ${renderChallengeButton('seqmem', state.nickname, myResultStr, state.difficulty)}
 
         ${renderPlaceholderUI('seqmem', tier)}
 
@@ -2097,8 +2139,8 @@ function renderSeqmemView(view) {
         </button>
       </div>`;
 
-    saveRanking('seqmem', state.nickname, maxLen + '칸 (Tier ' + tier + ')');
-    renderPercentileBadge('seqmem', tier);
+    saveRanking('seqmem', state.nickname, maxLen + '칸 (Tier ' + tier + ')', state.difficulty);
+    renderPercentileBadge('seqmem', tier, state.difficulty);
     renderLocalRanking('seqmem-ranking-list', 'seqmem');
   }
 }
@@ -2231,6 +2273,7 @@ const COLORVISION_CONFIG = {
   easy:   { label: '쉬움',   gridSize: 3, rounds: 6,  delta: 42, timeLimitMs: 5000 },
   normal: { label: '보통',   gridSize: 4, rounds: 8,  delta: 26, timeLimitMs: 4000 },
   hard:   { label: '어려움', gridSize: 5, rounds: 10, delta: 14, timeLimitMs: 3000 },
+  hell:   { label: 'HELL',   gridSize: 6, rounds: 12, delta: 8,  timeLimitMs: 2000 },
 };
 
 function initColorvision() {
@@ -2268,12 +2311,15 @@ function renderColorvisionView(view) {
             🔴 어려움<br><span class="text-xs font-normal opacity-70">5x5, 3초</span>
           </button>
         </div>
+        <button onclick="confirmHellMode('colorvisionStart')" class="w-full mt-3 bg-gradient-to-r from-red-950 to-black hover:from-red-900 border-2 border-red-600 text-red-400 font-black py-3 rounded-xl transition flex items-center justify-center gap-2 text-sm">
+          <span class="text-xl">🔥</span> HELL 난이도 <span class="text-xs font-normal opacity-70">(6x6, 2초, 상급자 전용)</span>
+        </button>
       </div>`;
   }
 
   else if (view === 'round') {
     const cfg = COLORVISION_CONFIG[state.difficulty];
-    const gridColsClass = { 3: 'grid-cols-3', 4: 'grid-cols-4', 5: 'grid-cols-5' }[cfg.gridSize];
+    const gridColsClass = { 3: 'grid-cols-3', 4: 'grid-cols-4', 5: 'grid-cols-5', 6: 'grid-cols-6' }[cfg.gridSize];
 
     container.innerHTML = `
       <div class="max-w-md mx-auto">
@@ -2322,7 +2368,7 @@ function renderColorvisionView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(myResultStr, state.challenge, 'colorvision', state.nickname)}
+        ${renderChallengeCompareCard(myResultStr, state.challenge, 'colorvision', state.nickname, state.difficulty)}
 
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -2341,7 +2387,7 @@ function renderColorvisionView(view) {
         </div>
 
         ${renderShareRow('colorvision', tier, animalCard._idx, state.nickname, myResultStr, shareText, animalCard)}
-        ${renderChallengeButton('colorvision', state.nickname, myResultStr)}
+        ${renderChallengeButton('colorvision', state.nickname, myResultStr, state.difficulty)}
 
         ${renderPlaceholderUI('colorvision', tier)}
 
@@ -2353,8 +2399,8 @@ function renderColorvisionView(view) {
         </button>
       </div>`;
 
-    saveRanking('colorvision', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')');
-    renderPercentileBadge('colorvision', tier);
+    saveRanking('colorvision', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')', state.difficulty);
+    renderPercentileBadge('colorvision', tier, state.difficulty);
     renderLocalRanking('colorvision-ranking-list', 'colorvision');
   }
 }
@@ -2477,6 +2523,7 @@ const LOGIC_CONFIG = {
   easy:   { label: '쉬움',   rounds: 6,  timeLimitMs: 8000, rules: ['add'] },
   normal: { label: '보통',   rounds: 8,  timeLimitMs: 6000, rules: ['add', 'mul'] },
   hard:   { label: '어려움', rounds: 10, timeLimitMs: 4500, rules: ['add', 'mul', 'fib'] },
+  hell:   { label: 'HELL',   rounds: 12, timeLimitMs: 3000, rules: ['add', 'mul', 'fib'] },
 };
 
 function shuffleArray(arr) {
@@ -2561,6 +2608,9 @@ function renderLogicView(view) {
             🔴 어려움<br><span class="text-xs font-normal opacity-70">+피보나치, 4.5초</span>
           </button>
         </div>
+        <button onclick="confirmHellMode('logicStart')" class="w-full mt-3 bg-gradient-to-r from-red-950 to-black hover:from-red-900 border-2 border-red-600 text-red-400 font-black py-3 rounded-xl transition flex items-center justify-center gap-2 text-sm">
+          <span class="text-xl">🔥</span> HELL 난이도 <span class="text-xs font-normal opacity-70">(3초, 상급자 전용)</span>
+        </button>
       </div>`;
   }
 
@@ -2613,7 +2663,7 @@ function renderLogicView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(myResultStr, state.challenge, 'logic', state.nickname)}
+        ${renderChallengeCompareCard(myResultStr, state.challenge, 'logic', state.nickname, state.difficulty)}
 
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -2632,7 +2682,7 @@ function renderLogicView(view) {
         </div>
 
         ${renderShareRow('logic', tier, animalCard._idx, state.nickname, myResultStr, shareText, animalCard)}
-        ${renderChallengeButton('logic', state.nickname, myResultStr)}
+        ${renderChallengeButton('logic', state.nickname, myResultStr, state.difficulty)}
 
         ${renderPlaceholderUI('logic', tier)}
 
@@ -2644,8 +2694,8 @@ function renderLogicView(view) {
         </button>
       </div>`;
 
-    saveRanking('logic', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')');
-    renderPercentileBadge('logic', tier);
+    saveRanking('logic', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')', state.difficulty);
+    renderPercentileBadge('logic', tier, state.difficulty);
     renderLocalRanking('logic-ranking-list', 'logic');
   }
 }
@@ -2754,6 +2804,7 @@ const IMPULSE_CONFIG = {
   easy:   { label: '쉬움',   rounds: 8,  timeLimitMs: 1300, noGoRatio: 0.25 },
   normal: { label: '보통',   rounds: 10, timeLimitMs: 950,  noGoRatio: 0.3 },
   hard:   { label: '어려움', rounds: 12, timeLimitMs: 700,  noGoRatio: 0.35 },
+  hell:   { label: 'HELL',   rounds: 16, timeLimitMs: 450,  noGoRatio: 0.45 },
 };
 
 function initImpulse() {
@@ -2791,6 +2842,9 @@ function renderImpulseView(view) {
             🔴 어려움<br><span class="text-xs font-normal opacity-70">12회, 매우빠름</span>
           </button>
         </div>
+        <button onclick="confirmHellMode('impulseStart')" class="w-full mt-3 bg-gradient-to-r from-red-950 to-black hover:from-red-900 border-2 border-red-600 text-red-400 font-black py-3 rounded-xl transition flex items-center justify-center gap-2 text-sm">
+          <span class="text-xl">🔥</span> HELL 난이도 <span class="text-xs font-normal opacity-70">(16회, 초고속, 상급자 전용)</span>
+        </button>
       </div>`;
   }
 
@@ -2846,7 +2900,7 @@ function renderImpulseView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(myResultStr, state.challenge, 'impulse', state.nickname)}
+        ${renderChallengeCompareCard(myResultStr, state.challenge, 'impulse', state.nickname, state.difficulty)}
 
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -2865,7 +2919,7 @@ function renderImpulseView(view) {
         </div>
 
         ${renderShareRow('impulse', tier, animalCard._idx, state.nickname, myResultStr, shareText, animalCard)}
-        ${renderChallengeButton('impulse', state.nickname, myResultStr)}
+        ${renderChallengeButton('impulse', state.nickname, myResultStr, state.difficulty)}
 
         ${renderPlaceholderUI('impulse', tier)}
 
@@ -2877,8 +2931,8 @@ function renderImpulseView(view) {
         </button>
       </div>`;
 
-    saveRanking('impulse', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')');
-    renderPercentileBadge('impulse', tier);
+    saveRanking('impulse', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')', state.difficulty);
+    renderPercentileBadge('impulse', tier, state.difficulty);
     renderLocalRanking('impulse-ranking-list', 'impulse');
   }
 }
@@ -2992,6 +3046,7 @@ const SHORTFOCUS_CONFIG = {
   easy:   { label: '쉬움',   rounds: 8,  timeLimitMs: 1100, noGoRatio: 0.3 },
   normal: { label: '보통',   rounds: 10, timeLimitMs: 800,  noGoRatio: 0.35 },
   hard:   { label: '어려움', rounds: 12, timeLimitMs: 600,  noGoRatio: 0.4 },
+  hell:   { label: 'HELL',   rounds: 16, timeLimitMs: 400,  noGoRatio: 0.5 },
 };
 
 function initShortfocus() {
@@ -3029,6 +3084,9 @@ function renderShortfocusView(view) {
             🔴 어려움<br><span class="text-xs font-normal opacity-70">12회, 초고속 피드</span>
           </button>
         </div>
+        <button onclick="confirmHellMode('shortfocusStart')" class="w-full mt-3 bg-gradient-to-r from-red-950 to-black hover:from-red-900 border-2 border-red-600 text-red-400 font-black py-3 rounded-xl transition flex items-center justify-center gap-2 text-sm">
+          <span class="text-xl">🔥</span> HELL 난이도 <span class="text-xs font-normal opacity-70">(16회, 반반 확률, 상급자 전용)</span>
+        </button>
       </div>`;
   }
 
@@ -3084,7 +3142,7 @@ function renderShortfocusView(view) {
         </div>
         ${animalCardHTML(animalCard)}
 
-        ${renderChallengeCompareCard(myResultStr, state.challenge, 'shortfocus', state.nickname)}
+        ${renderChallengeCompareCard(myResultStr, state.challenge, 'shortfocus', state.nickname, state.difficulty)}
 
         <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
@@ -3103,7 +3161,7 @@ function renderShortfocusView(view) {
         </div>
 
         ${renderShareRow('shortfocus', tier, animalCard._idx, state.nickname, myResultStr, shareText, animalCard)}
-        ${renderChallengeButton('shortfocus', state.nickname, myResultStr)}
+        ${renderChallengeButton('shortfocus', state.nickname, myResultStr, state.difficulty)}
 
         ${renderPlaceholderUI('shortfocus', tier)}
 
@@ -3115,8 +3173,8 @@ function renderShortfocusView(view) {
         </button>
       </div>`;
 
-    saveRanking('shortfocus', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')');
-    renderPercentileBadge('shortfocus', tier);
+    saveRanking('shortfocus', state.nickname, accuracy.toFixed(0) + '% (Tier ' + tier + ')', state.difficulty);
+    renderPercentileBadge('shortfocus', tier, state.difficulty);
     renderLocalRanking('shortfocus-ranking-list', 'shortfocus');
   }
 }
@@ -3715,19 +3773,21 @@ function renderPlaceholderUI(section, value) {
 }
 
 /* ──── 로컬스토리지 랭킹 ──── */
-function saveRanking(section, nickname, result) {
+function saveRanking(section, nickname, result, difficulty) {
   const key = `ranking_${section}`;
   const list = JSON.parse(localStorage.getItem(key) || '[]');
   list.unshift({ nickname, result, time: new Date().toLocaleString('ko-KR') });
   localStorage.setItem(key, JSON.stringify(list.slice(0, 10)));
   markDone(section);
   addXP(computeXP(result));
-  if (typeof syncResultToSupabase === 'function') syncResultToSupabase(section, nickname, result);
+  if (typeof syncResultToSupabase === 'function') syncResultToSupabase(section, nickname, result, difficulty);
 }
 
 /* Stage D 2단계 퍼센타일 UI (v0.0.47~) — percentile_cache는 표본 5개 미만인 section+tier는
    percentile-refresh.js가 애초에 upsert하지 않으므로, row가 없으면 조용히 아무것도 표시하지 않음 */
-async function renderPercentileBadge(section, tier) {
+/* v0.0.53~: 난이도별로 퍼센타일 풀을 분리(easy/normal/hard/hell 4단계) —
+   difficulty가 없으면(레거시 호출부) 'normal'로 간주해 기존 데이터와 호환 */
+async function renderPercentileBadge(section, tier, difficulty) {
   try {
     if (!window.sb) return;
     const { data, error } = await window.sb
@@ -3735,10 +3795,12 @@ async function renderPercentileBadge(section, tier) {
       .select('percentile')
       .eq('section', section)
       .eq('tier', tier)
+      .eq('difficulty', difficulty || 'normal')
       .maybeSingle();
     if (error || !data) return;
     const el = document.getElementById(`percentile-badge-${section}`);
-    if (el) el.innerHTML = `📊 상위 ${data.percentile}% (Tier ${tier} 이상 기록 기준)`;
+    const diffLabel = difficulty === 'hell' ? ' · HELL' : '';
+    if (el) el.innerHTML = `📊 상위 ${data.percentile}% (Tier ${tier} 이상 기록 기준${diffLabel})`;
   } catch (e) {
     console.error('퍼센타일 조회 실패:', e);
   }

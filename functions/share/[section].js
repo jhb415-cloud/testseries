@@ -1,4 +1,4 @@
-/* v0.0.50 | 5-in-1 Dashboard SPA — functions/share/[section].js
+/* v0.0.53 | 5-in-1 Dashboard SPA — functions/share/[section].js
    공유 랜딩 페이지: 카카오톡/페이스북/트위터/밴드 등에 링크를 붙여넣거나 카카오 SDK로 전달했을 때
    크롤러가 og:image/og:title/og:description을 읽어갈 수 있도록 서버에서 동적으로 렌더링.
    SPA는 해시 라우팅(#brain)이라 서버가 해시를 못 읽으므로, 실제 경로(/share/{section})를 이 용도로 둠.
@@ -36,8 +36,13 @@ export async function onRequestGet(context) {
       title = `⚔️ ${nickname}님의 도전장이 도착했습니다!`;
       description = `기록: ${result} — 같은 테스트로 나도 겨뤄보기 👉`;
       imageUrl = `${origin}/share-cards/vs.jpg`;
-      /* 기존 도전장 판정 로직(App.pendingChallenge)이 #{section}?vs=<JSON> 형태를 그대로 기대하므로 페이로드를 복원 */
-      const payload = encodeURIComponent(JSON.stringify({ n: url.searchParams.get('nickname') || '익명', r: url.searchParams.get('result') || '' }));
+      /* 기존 도전장 판정 로직(App.pendingChallenge)이 #{section}?vs=<JSON> 형태를 그대로 기대하므로 페이로드를 복원.
+         difficulty(d)도 함께 복원해야 난이도 불일치 대결을 클라이언트가 감지할 수 있음(v0.0.53~) */
+      const payload = encodeURIComponent(JSON.stringify({
+        n: url.searchParams.get('nickname') || '익명',
+        r: url.searchParams.get('result') || '',
+        d: url.searchParams.get('difficulty') || '',
+      }));
       redirectUrl = `${origin}/#${section}?vs=${payload}`;
     } else if (type === 'verdict') {
       const result = esc(url.searchParams.get('result') || '');

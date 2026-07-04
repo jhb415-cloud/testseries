@@ -1,4 +1,4 @@
-/* v0.0.46 | 5-in-1 Dashboard SPA — style.css */
+/* v0.0.53 | 5-in-1 Dashboard SPA — style.css */
 
 /* ── 기본 리셋 & 페이드인 애니메이션 ── */
 * { box-sizing: border-box; }
@@ -336,6 +336,8 @@ html.light {
 .stroop-yellow { color: #eab308 !important; }
 .stroop-purple { color: #a855f7 !important; }
 .stroop-orange { color: #f97316 !important; }
+.stroop-pink   { color: #ec4899 !important; }
+.stroop-sky    { color: #0ea5e9 !important; }
 
 /* ── 반응형 그리드 보조 ── */
 @media (max-width: 640px) {

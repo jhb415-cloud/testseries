@@ -1,4 +1,4 @@
-/* v0.0.46 | 5-in-1 Dashboard SPA — supabase-client.js
+/* v0.0.53 | 5-in-1 Dashboard SPA — supabase-client.js
    Stage D 1단계: 익명 인증 + test_results 이중 기록(로컬스토리지 유지 + Supabase에도 write)
    anon(publishable) 키는 RLS로 보호되는 공개 키라 하드코딩해도 안전함 — service_role 키는 절대 여기에 넣지 않음 */
 
@@ -21,8 +21,10 @@ async function ensureAnonSession() {
 }
 ensureAnonSession();
 
-/* saveRanking()에서 호출 — 실패해도 로컬스토리지 기록엔 영향 없도록 항상 catch로 감쌈 */
-async function syncResultToSupabase(section, nickname, result) {
+/* saveRanking()에서 호출 — 실패해도 로컬스토리지 기록엔 영향 없도록 항상 catch로 감쌈
+   difficulty는 Tier 채점 8개 테스트만 실제 값(easy/normal/hard/hell)을 넘기고, 나머지 7개 테스트는 undefined —
+   payload에 그대로 저장해두면 percentile-refresh.js가 난이도별로 나눠 집계할 수 있음 (v0.0.53~) */
+async function syncResultToSupabase(section, nickname, result, difficulty) {
   try {
     const session = await ensureAnonSession();
     if (!session) return;
@@ -35,7 +37,7 @@ async function syncResultToSupabase(section, nickname, result) {
       user_id: userId,
       section,
       tier,
-      payload: { nickname, result },
+      payload: { nickname, result, difficulty: difficulty || null },
     });
   } catch (e) {
     console.error('Supabase 결과 동기화 실패(로컬 기록은 정상 유지됨):', e);
