@@ -5117,9 +5117,12 @@ function lottodrawNextSaturday() {
   return out;
 }
 
-/* 분홍 감열지풍 영수증을 Canvas로 렌더링 (2x 스케일). 바코드는 뽑은 번호 시드 기반 → 같은 결과면 같은 바코드 */
+/* 분홍 감열지풍 영수증을 Canvas로 렌더링 (2x 스케일).
+   v0.1.3~: 실제 복권처럼 보일 수 있다는 법적 리스크 우려로 ①제목을 "행운번호뽑기 6/45"로 변경
+   ②회차 표기 삭제(발행일/추첨일만 유지) ③바코드·바코드 숫자열 삭제, 그 자리에 오락용 고지 문구를
+   2배 크기로 키워 더 잘 보이게 배치 */
 function lottodrawRenderReceiptCanvas(games) {
-  const W = 380, H = 575, SCALE = 2;
+  const W = 380, H = 540, SCALE = 2;
   const canvas = document.createElement('canvas');
   canvas.width = W * SCALE; canvas.height = H * SCALE;
   const ctx = canvas.getContext('2d');
@@ -5131,15 +5134,13 @@ function lottodrawRenderReceiptCanvas(games) {
 
   const now = new Date();
   const drawDate = lottodrawNextSaturday();
-  /* 회차 추정: 1230회 = 2026-06-27 추첨 기준 주 단위 가산 */
-  const round = 1230 + Math.max(1, Math.round((drawDate - new Date('2026-06-27T20:35:00+09:00')) / (7 * 86400000)));
   const fmt = (d) => `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')} (${'일월화수목금토'[d.getDay()]})`;
 
   let y = 44;
   ctx.textAlign = 'center';
   ctx.fillStyle = '#d61f69';
-  ctx.font = '900 30px sans-serif';
-  ctx.fillText('LOTTO 6/45', W / 2, y); y += 20;
+  ctx.font = '900 28px sans-serif';
+  ctx.fillText('행운번호뽑기 6/45', W / 2, y); y += 20;
   ctx.fillStyle = '#9d7484';
   ctx.font = '12px sans-serif';
   ctx.fillText('과 몰 입  연 구 소  ·  직 접  뽑 기', W / 2, y); y += 16;
@@ -5154,7 +5155,6 @@ function lottodrawRenderReceiptCanvas(games) {
   [
     ['발행일', `${fmt(now)} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`],
     ['추첨일', fmt(drawDate)],
-    ['회차', `제 ${round} 회 (가상)`],
   ].forEach(([k, v]) => {
     ctx.fillText(k, 26, y);
     ctx.textAlign = 'right'; ctx.fillText(v, W - 26, y); ctx.textAlign = 'left';
@@ -5178,25 +5178,11 @@ function lottodrawRenderReceiptCanvas(games) {
   ctx.fillStyle = '#5c3a49'; ctx.font = '13px sans-serif'; ctx.fillText('금액', 26, y);
   ctx.textAlign = 'right'; ctx.font = 'bold 16px sans-serif'; ctx.fillStyle = '#3d2430';
   ctx.fillText('₩5,000 (가상)', W - 26, y); ctx.textAlign = 'left';
-  y += 14; dashLine(); y += 26;
+  y += 14; dashLine(); y += 60;
 
-  /* 바코드: 시드 LCG로 결정론 생성 */
-  let seed = games.flat().reduce((a, n, i) => (a * 31 + n * (i + 7)) % 2147483647, 7);
-  const rand = () => { seed = (seed * 48271) % 2147483647; return seed / 2147483647; };
-  let bx = 40;
-  ctx.fillStyle = '#33202a';
-  while (bx < W - 40) {
-    const bw = 1 + Math.floor(rand() * 3);
-    if (rand() > 0.42) ctx.fillRect(bx, y, bw, 52);
-    bx += bw + 1 + Math.floor(rand() * 2);
-  }
-  y += 68;
-  ctx.textAlign = 'center'; ctx.font = '12px "Courier New", monospace'; ctx.fillStyle = '#5c3a49';
-  ctx.fillText(Array.from({ length: 5 }, () => String(Math.floor(rand() * 100000)).padStart(5, '0')).join('  '), W / 2, y);
-  y += 28;
-
-  ctx.font = '11px sans-serif'; ctx.fillStyle = '#b48a9c';
-  ctx.fillText('본 영수증은 오락용 이미지이며 실제 복권이 아닙니다', W / 2, y); y += 15;
+  ctx.textAlign = 'center'; ctx.font = '22px sans-serif'; ctx.fillStyle = '#b48a9c';
+  ctx.fillText('본 영수증은 오락용 이미지이며', W / 2, y); y += 30;
+  ctx.fillText('실제 복권이 아닙니다', W / 2, y); y += 40;
   ctx.fillText('행운을 빌어요! 🍀 과몰입 연구소', W / 2, y);
 
   return canvas;
