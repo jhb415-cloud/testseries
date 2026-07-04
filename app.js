@@ -1,4 +1,4 @@
-/* v0.0.50 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.51 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -190,12 +190,21 @@ function shareBand(url, text) {
   window.open(`https://band.us/plugin/share?body=${encodeURIComponent(text + ' ' + url)}&route=${encodeURIComponent(url)}`, '_blank', 'width=600,height=500');
 }
 
-/* 공유 아이콘 행 마크업 — Tier 8개 테스트/성향형 7개 테스트가 공용으로 재사용 */
-function shareIconRowHTML(imageUrl, kakaoTitle, shareText, shareUrl) {
+/* 카카오톡 공유 전용 대형 버튼 — 가장 많이 눌리길 원하는 채널이라 아이콘 행에서 분리해 최상단에 단독 배치 (v0.0.51~)
+   kakaoDesc는 Kakao 피드 카드가 UI에서 짧게 잘려버리는 문제(긴 shareText를 그대로 쓰면 "···"로 잘림) 때문에
+   별도로 짧게 만든 문구를 받는다 — Twitter/밴드는 글자수 여유가 있어 기존 shareText를 그대로 재사용 */
+function shareKakaoButtonHTML(imageUrl, kakaoTitle, kakaoDesc, shareUrl) {
+  return `
+    <button onclick="shareToKakaoCard('${imageUrl}', \`${kakaoTitle}\`, \`${kakaoDesc}\`, '${shareUrl}')"
+      class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-yellow-900/30 mb-3 flex items-center justify-center gap-2">
+      <span class="text-2xl">💬</span> 카카오톡으로 공유하기
+    </button>`;
+}
+
+/* 카카오 제외 나머지 채널 아이콘 행 — Tier 8개 테스트/성향형 7개 테스트가 공용으로 재사용 */
+function shareIconRowHTML(shareText, shareUrl) {
   return `
     <div class="flex items-center justify-center gap-3 my-4">
-      <button onclick="shareToKakaoCard('${imageUrl}', \`${kakaoTitle}\`, \`${shareText}\`, '${shareUrl}')"
-        class="w-14 h-14 rounded-full bg-[#FEE500] hover:brightness-95 text-[#191919] text-2xl flex items-center justify-center shadow-lg transition" title="카카오톡 공유">💬</button>
       <button onclick="shareFacebook('${shareUrl}')"
         class="w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-black text-xl flex items-center justify-center shadow-lg transition" title="페이스북 공유">f</button>
       <button onclick="shareTwitter('${shareUrl}', \`${shareText}\`)"
@@ -207,19 +216,20 @@ function shareIconRowHTML(imageUrl, kakaoTitle, shareText, shareUrl) {
     </div>`;
 }
 
-/* 결과 화면 하단에 넣을 아이콘형 공유 버튼 행 — Tier 채점 8개 테스트 전용(등급+동물카드 인덱스로 이미지 결정) */
-function renderShareRow(section, tier, idx, nickname, resultLabel, shareText) {
+/* 결과 화면 하단에 넣을 공유 UI — Tier 채점 8개 테스트 전용(등급+동물카드 인덱스로 이미지 결정) */
+function renderShareRow(section, tier, idx, nickname, resultLabel, shareText, animalCard) {
   const shareUrl = buildShareLandingUrl(section, { type: 'result', tier, idx, nickname, result: resultLabel });
   const imageUrl = `${location.origin}/share-cards/${section}-${tier}-${idx}.jpg`;
-  const kakaoTitle = `${nickname} 님의 테스트 결과가 나왔어요!`;
-  return shareIconRowHTML(imageUrl, kakaoTitle, shareText, shareUrl);
+  const kakaoTitle = `${nickname} 님의 결과: 🐾 ${animalCard.title}`;
+  const kakaoDesc = resultLabel;
+  return shareKakaoButtonHTML(imageUrl, kakaoTitle, kakaoDesc, shareUrl) + shareIconRowHTML(shareText, shareUrl);
 }
 
 /* 성향형 7개 테스트(MBTI/ADHD/인싸력/속담/물가/운세/꿈해몽) 전용 — 등급/타입/띠/꿈 인덱스 등
    테스트마다 다른 식별자를 landingParams로 그대로 넘기고, 이미지 URL은 호출부에서 미리 계산해 전달 (v0.0.50~) */
-function renderIdentityShareRow(section, landingParams, imageUrl, kakaoTitle, shareText) {
+function renderIdentityShareRow(section, landingParams, imageUrl, kakaoTitle, kakaoDesc, shareText) {
   const shareUrl = buildShareLandingUrl(section, landingParams);
-  return shareIconRowHTML(imageUrl, kakaoTitle, shareText, shareUrl);
+  return shareKakaoButtonHTML(imageUrl, kakaoTitle, kakaoDesc, shareUrl) + shareIconRowHTML(shareText, shareUrl);
 }
 
 /* ══════════════════════════════════════════════════
@@ -278,9 +288,8 @@ function renderChallengeCompareCard(myResult, challenge, section, myNickname) {
         </div>
       </div>
       <div class="font-black text-lg ${verdictColor} mb-3">${verdict}</div>
+      ${shareKakaoButtonHTML(`${location.origin}/share-cards/vs.jpg`, kakaoTitle, kakaoDesc, shareUrl)}
       <div class="flex items-center justify-center gap-3">
-        <button onclick="shareToKakaoCard('${location.origin}/share-cards/vs.jpg', \`${kakaoTitle}\`, \`${kakaoDesc}\`, '${shareUrl}')"
-          class="w-12 h-12 rounded-full bg-[#FEE500] hover:brightness-95 text-[#191919] text-xl flex items-center justify-center shadow-lg transition" title="카카오톡 공유">💬</button>
         <button onclick="shareTwitter('${shareUrl}', \`${kakaoDesc}\`)"
           class="w-12 h-12 rounded-full bg-slate-900 hover:bg-slate-800 border border-slate-600 text-white font-black flex items-center justify-center shadow-lg transition" title="X(트위터) 공유">𝕏</button>
         <button onclick="copyToClipboard('${shareUrl}')"
@@ -592,7 +601,7 @@ function renderMbtiView(view) {
     state.answers.forEach(a => axes[a]++);
     const type = [axes.E>=axes.I?'E':'I', axes.S>=axes.N?'S':'N', axes.T>=axes.F?'T':'F', axes.J>=axes.P?'J':'P'].join('');
     const result = AppData.mbtiResults[type] || AppData.mbtiResults['INFP'];
-    const shareText = `나 방금 MBTI 해봤는데 ${type} 나왔어! "${result.title}"래ㅋㅋ 너도 해봐 👉`;
+    const shareText = `나 방금 MBTI 해봤는데 ${type} 나왔어! 「${result.title}」래ㅋㅋ 너도 해봐 👉`;
 
     // 정밀 모드 전용: 축별 비율 바 (답변 개수만으로 계산, 별도 데이터 불필요)
     let axisBarsHtml = '';
@@ -654,7 +663,7 @@ function renderMbtiView(view) {
         </div>
         <div class="text-slate-500 text-xs text-center mb-6">유명인: ${result.famous}</div>
 
-        ${renderIdentityShareRow('mbti', { mbtiType: type, nickname: state.nickname, result: `${type} - ${result.title}` }, `${location.origin}/share-cards/mbti-${type}.jpg`, `${state.nickname} 님의 MBTI는 ${type}!`, shareText)}
+        ${renderIdentityShareRow('mbti', { mbtiType: type, nickname: state.nickname, result: `${type} - ${result.title}` }, `${location.origin}/share-cards/mbti-${type}.jpg`, `${state.nickname} 님의 MBTI는 ${type}!`, result.title, shareText)}
         <button onclick="shareCompatibility('mbti', \`${state.nickname}\`, { type: '${type}' }, '${type}')"
           class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition mb-3">
           💞 궁합 보기 링크 보내기
@@ -835,8 +844,8 @@ function dreamRenderModal(tIdx, vIdx) {
   const hasVariants = d.variants && d.variants.length > 0;
   const shareText = `나 어제 이런 꿈 꿨어! ${title} — ${summary} 너도 무슨 꿈인지 확인해봐 👉`;
   const shareRow = renderIdentityShareRow('dream',
-    { dreamIdx: tIdx, dreamTitle: title, nickname: getNickname() || '나', result: shareText },
-    `${location.origin}/share-cards/dream-${tIdx}.jpg`, `내가 꾼 꿈: ${title}`, shareText);
+    { dreamIdx: tIdx, dreamTitle: title, nickname: getNickname() || '나', result: summary },
+    `${location.origin}/share-cards/dream-${tIdx}.jpg`, `내가 꾼 꿈: ${title}`, summary, shareText);
   const modalInner = document.getElementById('dream-modal-inner');
 
   // 마이홈 완주 플래그 + 로또 조합기 연동용 저장
@@ -964,7 +973,7 @@ function renderFortuneView(view) {
     const scores = fortune.map((_, i) => Math.floor(seededRandom(seed + i * 17 + 500) * 3) + 3);
     const starMap = (n) => '★'.repeat(n) + '☆'.repeat(5-n);
     const avgScore = (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1);
-    const shareText = `나 오늘 운세 이렇대~ "${fortune[0].positive}" (${zodiac}띠 ⭐${avgScore}/5.0, 행운숫자 ${data.luckyNum}) 너도 확인해봐 👉`;
+    const shareText = `나 오늘 운세 이렇대~ 「${fortune[0].positive}」 (${zodiac}띠 ⭐${avgScore}/5.0, 행운숫자 ${data.luckyNum}) 너도 확인해봐 👉`;
 
     // 로또 조합기 연동용 저장
     localStorage.setItem('last_fortune_luckynum', data.luckyNum);
@@ -993,7 +1002,7 @@ function renderFortuneView(view) {
             </div>`).join('')}
         </div>
 
-        ${renderIdentityShareRow('fortune', { zodiac: ZODIAC_SLUG[zodiac], nickname: getNickname() || '나', result: shareText }, `${location.origin}/share-cards/fortune-${ZODIAC_SLUG[zodiac]}.jpg`, `오늘의 ${zodiac}띠 운세!`, shareText)}
+        ${renderIdentityShareRow('fortune', { zodiac: ZODIAC_SLUG[zodiac], nickname: getNickname() || '나', result: fortune[0].positive }, `${location.origin}/share-cards/fortune-${ZODIAC_SLUG[zodiac]}.jpg`, `오늘의 ${zodiac}띠 운세!`, fortune[0].positive, shareText)}
 
         ${renderPlaceholderUI('fortune', zodiac)}
 
@@ -1198,7 +1207,7 @@ function renderBrainView(view) {
           </div>
         </div>
 
-        ${renderShareRow('brain', tier, animalCard._idx, state.nickname, brainAge + '세 (Tier ' + tier + ')', shareText)}
+        ${renderShareRow('brain', tier, animalCard._idx, state.nickname, brainAge + '세 (Tier ' + tier + ')', shareText, animalCard)}
         ${renderChallengeButton('brain', state.nickname, brainAge + '세 (Tier ' + tier + ')')}
 
         ${renderPlaceholderUI('brain', tier)}
@@ -1343,7 +1352,7 @@ function renderAdhdView(view) {
     const gradeScore = state.mode === 'precise' ? Math.round(score / 3) : score;
     const result = adhdResults.find(r => gradeScore >= r.range[0] && gradeScore <= r.range[1]) || adhdResults[adhdResults.length-1];
     const maxScore = state.mode === 'precise' ? 60 : 20;
-    const shareText = `나 ADHD 성향 테스트 해봤는데 ${result.grade}등급 나왔어! "${result.title}" ㅋㅋ 너도 궁금하지 않아? 👉`;
+    const shareText = `나 ADHD 성향 테스트 해봤는데 ${result.grade}등급 나왔어! 「${result.title}」 ㅋㅋ 너도 궁금하지 않아? 👉`;
 
     // 정밀 모드 전용: 부주의 / 과잉행동-충동성 영역별 점수 바
     let domainBarsHtml = '';
@@ -1400,7 +1409,7 @@ function renderAdhdView(view) {
           </ul>
         </div>
 
-        ${renderIdentityShareRow('adhd', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/adhd-${result.grade}.jpg`, `${state.nickname} 님의 ADHD 성향 진단 결과`, shareText)}
+        ${renderIdentityShareRow('adhd', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/adhd-${result.grade}.jpg`, `${state.nickname} 님의 ADHD 성향 진단 결과`, `${result.grade}등급 - ${result.title}`, shareText)}
 
         ${renderPlaceholderUI('adhd', result.grade)}
 
@@ -1559,7 +1568,7 @@ function renderReactionView(view) {
           </div>
         </div>
 
-        ${renderShareRow('reaction', tier, animalCard._idx, state.nickname, avgMs + 'ms (Tier ' + tier + ')', shareText)}
+        ${renderShareRow('reaction', tier, animalCard._idx, state.nickname, avgMs + 'ms (Tier ' + tier + ')', shareText, animalCard)}
         ${renderChallengeButton('reaction', state.nickname, avgMs + 'ms (Tier ' + tier + ')')}
 
         ${renderPlaceholderUI('reaction', tier)}
@@ -1801,7 +1810,7 @@ function renderMemdigitView(view) {
           </div>
         </div>
 
-        ${renderShareRow('memdigit', tier, animalCard._idx, state.nickname, myResultStr, shareText)}
+        ${renderShareRow('memdigit', tier, animalCard._idx, state.nickname, myResultStr, shareText, animalCard)}
         ${renderChallengeButton('memdigit', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('memdigit', tier)}
@@ -2075,7 +2084,7 @@ function renderSeqmemView(view) {
           </div>
         </div>
 
-        ${renderShareRow('seqmem', tier, animalCard._idx, state.nickname, myResultStr, shareText)}
+        ${renderShareRow('seqmem', tier, animalCard._idx, state.nickname, myResultStr, shareText, animalCard)}
         ${renderChallengeButton('seqmem', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('seqmem', tier)}
@@ -2331,7 +2340,7 @@ function renderColorvisionView(view) {
           </div>
         </div>
 
-        ${renderShareRow('colorvision', tier, animalCard._idx, state.nickname, myResultStr, shareText)}
+        ${renderShareRow('colorvision', tier, animalCard._idx, state.nickname, myResultStr, shareText, animalCard)}
         ${renderChallengeButton('colorvision', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('colorvision', tier)}
@@ -2622,7 +2631,7 @@ function renderLogicView(view) {
           </div>
         </div>
 
-        ${renderShareRow('logic', tier, animalCard._idx, state.nickname, myResultStr, shareText)}
+        ${renderShareRow('logic', tier, animalCard._idx, state.nickname, myResultStr, shareText, animalCard)}
         ${renderChallengeButton('logic', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('logic', tier)}
@@ -2855,7 +2864,7 @@ function renderImpulseView(view) {
           </div>
         </div>
 
-        ${renderShareRow('impulse', tier, animalCard._idx, state.nickname, myResultStr, shareText)}
+        ${renderShareRow('impulse', tier, animalCard._idx, state.nickname, myResultStr, shareText, animalCard)}
         ${renderChallengeButton('impulse', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('impulse', tier)}
@@ -3093,7 +3102,7 @@ function renderShortfocusView(view) {
           </div>
         </div>
 
-        ${renderShareRow('shortfocus', tier, animalCard._idx, state.nickname, myResultStr, shareText)}
+        ${renderShareRow('shortfocus', tier, animalCard._idx, state.nickname, myResultStr, shareText, animalCard)}
         ${renderChallengeButton('shortfocus', state.nickname, myResultStr)}
 
         ${renderPlaceholderUI('shortfocus', tier)}
@@ -3268,7 +3277,7 @@ function renderInsaView(view) {
   else if (view === 'result') {
     const score = state.answers.reduce((a, b) => a + b, 0);
     const result = insaResults.find(r => score >= r.range[0] && score <= r.range[1]) || insaResults[insaResults.length-1];
-    const shareText = `나 인싸력 테스트 해봤는데 ${result.grade}등급 "${result.title}" 나왔어! 너도 해봐 👉`;
+    const shareText = `나 인싸력 테스트 해봤는데 ${result.grade}등급 「${result.title}」 나왔어! 너도 해봐 👉`;
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -3298,7 +3307,7 @@ function renderInsaView(view) {
           </ul>
         </div>
 
-        ${renderIdentityShareRow('insa', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/insa-${result.grade}.jpg`, `${state.nickname} 님의 인싸력 테스트 결과`, shareText)}
+        ${renderIdentityShareRow('insa', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/insa-${result.grade}.jpg`, `${state.nickname} 님의 인싸력 테스트 결과`, `${result.grade}등급 - ${result.title}`, shareText)}
         <button onclick="shareCompatibility('insa', \`${state.nickname}\`, { score: ${score} }, '${score}점')"
           class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition mb-3">
           💞 궁합 보기 링크 보내기
@@ -3399,7 +3408,7 @@ function renderProverbView(view) {
   else if (view === 'result') {
     const total = state.questions.length;
     const result = proverbResults.find(r => state.correctCount >= r.range[0] && state.correctCount <= r.range[1]) || proverbResults[proverbResults.length-1];
-    const shareText = `나 속담 퀴즈 ${state.correctCount}/${total}개 맞혔어! "${result.title}"래ㅋㅋ 너도 도전해봐 👉`;
+    const shareText = `나 속담 퀴즈 ${state.correctCount}/${total}개 맞혔어! 「${result.title}」래ㅋㅋ 너도 도전해봐 👉`;
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -3428,7 +3437,7 @@ function renderProverbView(view) {
           </ul>
         </div>
 
-        ${renderIdentityShareRow('proverb', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/proverb-${result.grade}.jpg`, `속담 퀴즈 ${state.correctCount}/${total}개 정답!`, shareText)}
+        ${renderIdentityShareRow('proverb', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/proverb-${result.grade}.jpg`, `속담 퀴즈 ${state.correctCount}/${total}개 정답!`, `${result.grade}등급 - ${result.title}`, shareText)}
 
         ${renderPlaceholderUI('proverb', result.grade)}
 
@@ -3553,7 +3562,7 @@ function renderPricequizView(view) {
   else if (view === 'result') {
     const total = state.questions.length;
     const result = priceQuizResults.find(r => state.correctCount >= r.range[0] && state.correctCount <= r.range[1]) || priceQuizResults[priceQuizResults.length-1];
-    const shareText = `나 그 시절 물가 퀴즈 ${state.correctCount}/${total}개 맞혔어! "${result.title}"래! 너도 해봐 👉`;
+    const shareText = `나 그 시절 물가 퀴즈 ${state.correctCount}/${total}개 맞혔어! 「${result.title}」래! 너도 해봐 👉`;
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
@@ -3585,7 +3594,7 @@ function renderPricequizView(view) {
           </ul>
         </div>
 
-        ${renderIdentityShareRow('pricequiz', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/pricequiz-${result.grade}.jpg`, `그 시절 물가 퀴즈 ${state.correctCount}/${total}개 정답!`, shareText)}
+        ${renderIdentityShareRow('pricequiz', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/pricequiz-${result.grade}.jpg`, `그 시절 물가 퀴즈 ${state.correctCount}/${total}개 정답!`, `${result.grade}등급 - ${result.title}`, shareText)}
 
         ${renderPlaceholderUI('pricequiz', result.grade)}
 
