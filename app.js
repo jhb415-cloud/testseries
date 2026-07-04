@@ -1,4 +1,4 @@
-/* v0.0.51 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.52 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -4139,6 +4139,16 @@ async function lottoRunStats() {
   }
 }
 
+/* 실제 동행복권 공식 볼 색상 규칙(v0.0.52~) — 1~10 노랑/11~20 파랑/21~30 빨강/31~40 검정(회색)/41~45 초록.
+   번호 구간에 따라 확 다른 색으로 갈리게 해서 조합 결과가 전부 같은 색 공으로만 보이던 문제 해결 */
+function lottoBallClass(n) {
+  if (n <= 10) return 'bg-yellow-400 text-slate-900';
+  if (n <= 20) return 'bg-blue-500 text-white';
+  if (n <= 30) return 'bg-red-500 text-white';
+  if (n <= 40) return 'bg-slate-700 text-white';
+  return 'bg-emerald-500 text-white';
+}
+
 /* 과거 데이터 확인 패널: 직전 회차 당첨번호 + 최근 30회 최다/최소 출현 번호를 조합 결과 위에 표시 */
 function lottoRenderStatsPanel(data) {
   const container = document.getElementById('lotto-result');
@@ -4149,12 +4159,12 @@ function lottoRenderStatsPanel(data) {
   const cold = [...entries].sort((a, b) => a[1] - b[1] || a[0] - b[0]).slice(0, 7);
   const chip = (n, cnt, cls) => `<span class="px-2 py-1 rounded-lg text-xs font-bold ${cls}">${n} <span class="opacity-60 font-normal">${cnt}회</span></span>`;
   const latestBalls = Array.isArray(data.latestNumbers)
-    ? data.latestNumbers.map(n => `<span class="w-7 h-7 flex items-center justify-center rounded-full bg-slate-700 text-slate-100 text-xs font-bold">${n}</span>`).join('')
+    ? data.latestNumbers.map(n => `<span class="w-7 h-7 flex items-center justify-center rounded-full ${lottoBallClass(n)} text-xs font-bold">${n}</span>`).join('')
     : '';
   container.insertAdjacentHTML('afterbegin', `
     <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-4 mb-4">
       <p class="text-slate-300 text-sm font-bold mb-2">📋 ${data.latestRound}회차 (${data.latestDrawDate}) 당첨번호</p>
-      <div class="flex items-center gap-1.5 flex-wrap mb-3">${latestBalls}${data.latestBonus ? `<span class="text-slate-500 text-xs mx-1">+</span><span class="w-7 h-7 flex items-center justify-center rounded-full bg-amber-600 text-white text-xs font-bold">${data.latestBonus}</span>` : ''}</div>
+      <div class="flex items-center gap-1.5 flex-wrap mb-3">${latestBalls}${data.latestBonus ? `<span class="text-slate-500 text-xs mx-1">+</span><span class="w-7 h-7 flex items-center justify-center rounded-full ${lottoBallClass(data.latestBonus)} text-xs font-bold ring-2 ring-amber-400">${data.latestBonus}</span>` : ''}</div>
       <p class="text-slate-400 text-xs mb-1.5">🔥 최근 ${data.roundsUsed}회 최다 출현</p>
       <div class="flex gap-1.5 flex-wrap mb-3">${hot.map(([n, c]) => chip(n, c, 'bg-rose-900/40 border border-rose-800/40 text-rose-300')).join('')}</div>
       <p class="text-slate-400 text-xs mb-1.5">🧊 최근 ${data.roundsUsed}회 뜸한 번호</p>
@@ -4183,7 +4193,7 @@ function lottoRenderGames(games, modeLabel) {
         <div class="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl p-3">
           <span class="text-slate-500 text-xs w-12 shrink-0">${i + 1}게임</span>
           <div class="flex gap-2 flex-wrap">
-            ${g.map(n => `<span class="w-8 h-8 flex items-center justify-center rounded-full bg-violet-700 text-white text-xs font-bold">${n}</span>`).join('')}
+            ${g.map(n => `<span class="w-8 h-8 flex items-center justify-center rounded-full ${lottoBallClass(n)} text-xs font-bold">${n}</span>`).join('')}
           </div>
         </div>`).join('')}
     </div>
