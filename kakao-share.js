@@ -1,4 +1,4 @@
-/* v0.0.45 | 5-in-1 Dashboard SPA — kakao-share.js */
+/* v0.0.46 | 5-in-1 Dashboard SPA — kakao-share.js */
 
 Kakao.init('0149c1c9d33b66ac289ee90d973cc243');
 

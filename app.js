@@ -1,4 +1,4 @@
-/* v0.0.45 | 5-in-1 Dashboard SPA — app.js */
+/* v0.0.46 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -4017,20 +4017,73 @@ function lottoRunFortunePick() {
   lottoRenderGames(games, pool.length ? '오늘의 운세·꿈 행운숫자 연동' : '오늘의 운세·꿈 미확인 (랜덤 대체)');
 }
 
+/* 통계 데이터 조회: ① 자체 프록시(/api/lotto-stats, 엣지 캐싱) → ② GitHub Pages 미러 직접 조회(CORS 개방).
+   과거 당첨번호는 불변 데이터라 미러만으로도 충분히 정확함 (매주 토요일 추첨 직후 자동 갱신) */
+async function lottoFetchStats() {
+  try {
+    const res = await fetch('/api/lotto-stats');
+    if (res.ok) {
+      const d = await res.json();
+      if (d && d.frequency) return d;
+    }
+  } catch (e) { /* 프록시 실패 시 미러 직접 조회로 계속 */ }
+
+  const res = await fetch('https://smok95.github.io/lotto/results/all.json');
+  if (!res.ok) throw new Error('mirror fetch failed');
+  const all = await res.json();
+  if (!Array.isArray(all) || all.length === 0) throw new Error('mirror data empty');
+  const recent = all.slice(-30);
+  const frequency = {};
+  for (let i = 1; i <= 45; i++) frequency[i] = 0;
+  recent.forEach(d => (d.numbers || []).forEach(n => { frequency[n]++; }));
+  const last = recent[recent.length - 1];
+  return {
+    frequency,
+    roundsUsed: recent.length,
+    latestRound: last.draw_no,
+    latestDrawDate: typeof last.date === 'string' ? last.date.slice(0, 10) : '',
+    latestNumbers: last.numbers,
+    latestBonus: last.bonus_no,
+    source: 'mirror-direct',
+  };
+}
+
 async function lottoRunStats() {
   const container = document.getElementById('lotto-result');
   if (container) container.innerHTML = '<p class="text-slate-500 text-sm text-center py-4">📊 실제 당첨 통계 불러오는 중...</p>';
   try {
-    const res = await fetch('/api/lotto-stats');
-    if (!res.ok) throw new Error('fetch failed');
-    const data = await res.json();
+    const data = await lottoFetchStats();
     const games = [];
     for (let i = 0; i < 5; i++) games.push(lottoWeightedPick(data.frequency));
     lottoRenderGames(games, `실제 당첨번호 통계 기반 (최근 ${data.roundsUsed}회, ${data.latestRound}회차까지)`);
+    lottoRenderStatsPanel(data);
   } catch (e) {
     showToast('통계 데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
     lottoRunRandom();
   }
+}
+
+/* 과거 데이터 확인 패널: 직전 회차 당첨번호 + 최근 30회 최다/최소 출현 번호를 조합 결과 위에 표시 */
+function lottoRenderStatsPanel(data) {
+  const container = document.getElementById('lotto-result');
+  if (!container) return;
+  const entries = [];
+  for (let n = 1; n <= 45; n++) entries.push([n, data.frequency[n] || 0]);
+  const hot = [...entries].sort((a, b) => b[1] - a[1] || a[0] - b[0]).slice(0, 7);
+  const cold = [...entries].sort((a, b) => a[1] - b[1] || a[0] - b[0]).slice(0, 7);
+  const chip = (n, cnt, cls) => `<span class="px-2 py-1 rounded-lg text-xs font-bold ${cls}">${n} <span class="opacity-60 font-normal">${cnt}회</span></span>`;
+  const latestBalls = Array.isArray(data.latestNumbers)
+    ? data.latestNumbers.map(n => `<span class="w-7 h-7 flex items-center justify-center rounded-full bg-slate-700 text-slate-100 text-xs font-bold">${n}</span>`).join('')
+    : '';
+  container.insertAdjacentHTML('afterbegin', `
+    <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-4 mb-4">
+      <p class="text-slate-300 text-sm font-bold mb-2">📋 ${data.latestRound}회차 (${data.latestDrawDate}) 당첨번호</p>
+      <div class="flex items-center gap-1.5 flex-wrap mb-3">${latestBalls}${data.latestBonus ? `<span class="text-slate-500 text-xs mx-1">+</span><span class="w-7 h-7 flex items-center justify-center rounded-full bg-amber-600 text-white text-xs font-bold">${data.latestBonus}</span>` : ''}</div>
+      <p class="text-slate-400 text-xs mb-1.5">🔥 최근 ${data.roundsUsed}회 최다 출현</p>
+      <div class="flex gap-1.5 flex-wrap mb-3">${hot.map(([n, c]) => chip(n, c, 'bg-rose-900/40 border border-rose-800/40 text-rose-300')).join('')}</div>
+      <p class="text-slate-400 text-xs mb-1.5">🧊 최근 ${data.roundsUsed}회 뜸한 번호</p>
+      <div class="flex gap-1.5 flex-wrap">${cold.map(([n, c]) => chip(n, c, 'bg-blue-900/40 border border-blue-700/40 text-blue-300')).join('')}</div>
+    </div>`);
 }
 
 function lottoWeightedPick(frequency) {
@@ -4075,7 +4128,7 @@ function initLotto() {
           <button onclick="lottoRunRandom()" class="bg-violet-700 hover:bg-violet-600 text-white font-bold py-3 rounded-xl transition">🎲 완전 랜덤</button>
           <button onclick="document.getElementById('lotto-custom-box').classList.toggle('hidden')" class="bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">✍️ 숫자 직접 지정</button>
           <button onclick="lottoRunFortunePick()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition">🔮 오늘의 운세·꿈 연동</button>
-          <button disabled title="데이터 소스 접근 이슈로 점검 중" class="bg-slate-800 text-slate-600 font-bold py-3 rounded-xl border border-slate-700 cursor-not-allowed">📊 통계 기반 추천 (준비중)</button>
+          <button onclick="lottoRunStats()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition">📊 실제 당첨 통계 기반</button>
         </div>
         <div id="lotto-custom-box" class="hidden mb-5">
           <p class="text-slate-400 text-xs mb-2">포함하고 싶은 숫자 1~5개를 콤마로 구분해 입력하세요 (1~45)</p>
