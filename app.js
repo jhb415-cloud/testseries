@@ -155,14 +155,13 @@ function copyToClipboard(text) {
   }
 }
 
-/* ── 공유하기 (Web Share API, 지원 안 하면 링크복사로 대체) ──
-   ※ 카카오톡 공유는 별도 JS 키 발급 후 추가 예정 (백로그) */
+/* ── 공유하기(도전장/궁합 링크 복사) ──
+   v0.1.1까지는 navigator.share()로 OS 공유 시트를 띄웠으나, 데스크톱(Windows 등)에서
+   연락처 추가를 유도하는 낯선 공유 UI가 뜨는 게 거부감을 준다는 실제 스크린샷 피드백을 받아
+   항상 클립보드 복사로 통일 — 앱의 다른 공유 버튼(🔗 링크 복사 등)도 전부 이 방식이라 일관성 있고,
+   사용자가 이미 익숙한 "복사해서 카톡/문자에 붙여넣기" 흐름이라 거부감이 적음 */
 function shareResult(text) {
-  if (navigator.share) {
-    navigator.share({ text }).catch(() => {});
-  } else {
-    copyToClipboard(text);
-  }
+  copyToClipboard(text);
 }
 
 /* ══════════════════════════════════════════════════
