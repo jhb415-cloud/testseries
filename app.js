@@ -1,4 +1,4 @@
-/* v0.0.54 | 5-in-1 Dashboard SPA — app.js */
+/* v0.1.1 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -979,6 +979,7 @@ function dreamRenderModal(tIdx, vIdx) {
         <div class="text-indigo-300 text-xs font-semibold mb-1">오늘의 행동</div>
         <p class="text-indigo-200 text-sm">${action}</p>
       </div>
+      <button onclick="dreamGoToLotto()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition mb-4">🎰 이 행운숫자로 로또 조합하기</button>
       ${hasVariants ? `
       <div class="mb-4">
         <p class="text-slate-500 text-xs mb-2">🔍 이런 ${d.title.replace(/에 관한 꿈|이 나오는 꿈|가 나오는 꿈|하는 꿈/g,'')} 관련 꿈도 있어요</p>
@@ -997,6 +998,15 @@ function dreamRenderModal(tIdx, vIdx) {
 
 function dreamCloseModal() {
   document.getElementById('dream-modal').classList.add('hidden');
+}
+
+/* v0.1.1~: 꿈 모달 → 로또 조합기 원클릭 연동. 방금 본 꿈의 행운숫자는 이미
+   dreamRenderModal()에서 last_dream_luckynum에 저장돼있어, 로또 섹션의
+   기존 "오늘의 운세·꿈 연동" 모드(lottoRunFortunePick)를 그대로 재사용해 실행까지 자동화 */
+function dreamGoToLotto() {
+  dreamCloseModal();
+  App.navigate('lotto');
+  lottoRunFortunePick();
 }
 
 /* ══════════════════════════════════════════════════
