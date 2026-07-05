@@ -16,7 +16,7 @@ window.App = {
     colorvision: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', baseColor: '', oddColor: '', oddIndex: 0, tileCount: 0 },
     logic: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, totalTime: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', answer: 0 },
     impulse: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false },
-    shortfocus: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false },
+    shortfocus: { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalHitTime: 0, hitCount: 0, hitLog: [], cards: [], promptCat: null, hasTarget: false, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', streak: 0 },
     insa: { nickname: '', answers: [], step: 0 },
     proverb: { nickname: '', step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [] },
     pricequiz: { nickname: '', step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [] },
@@ -621,7 +621,7 @@ function initHome() {
     { section: 'colorvision', emoji: '🎨',  title: '색각 테스트',        desc: '미묘하게 다른 색 타일 찾기' },
     { section: 'logic',       emoji: '📊',  title: '논리력 테스트',      desc: '숫자 규칙 다음 값 맞히기 4지선다' },
     { section: 'impulse',     emoji: '🚦',  title: '충동억제 테스트',    desc: 'Go/No-Go, 성급한 반응을 참아라' },
-    { section: 'shortfocus',  emoji: '📱',  title: '숏폼 집중력 테스트', desc: '꿀잼 콘텐츠엔 탭, 광고는 참기' },
+    { section: 'shortfocus',  emoji: '📱',  title: '숏폼 집중력 테스트', desc: '피드 속 목표 콘텐츠만 빠르게 찾아 탭' },
     { section: 'insa',        emoji: '🎉',  title: '인싸력 테스트',      desc: '10문항 사교성 성향 퀴즈 (MZ향)' },
     { section: 'proverb',     emoji: '📜',  title: '속담 완성 퀴즈',     desc: '시간 제한 없는 지혜 나눔 테스트' },
     { section: 'pricequiz',   emoji: '🧾',  title: '그 시절 물가 맞히기', desc: '실제 물가 통계 기반 향수 트리비아' },
@@ -2115,7 +2115,28 @@ function memdigitBeginRound() {
   const feedback = document.getElementById('memdigit-feedback');
   if (feedback) feedback.textContent = '';
 
-  memdigitFlashDigit(0);
+  if (state.round === 0) {
+    memdigitCountdown(3);
+  } else {
+    memdigitFlashDigit(0);
+  }
+}
+
+/* v0.1.7~: 첫 라운드 시작 전 3-2-1 카운트다운 + 0.3초 여유 후 첫 숫자 노출(너무 빨리 나온다는 피드백 반영) */
+function memdigitCountdown(count) {
+  const state = App.state.memdigit;
+  if (App.state.currentSection !== 'memdigit') return;
+  const displayText = document.getElementById('memdigit-display-text');
+  if (count > 0) {
+    if (displayText) { displayText.textContent = count; displayText.className = 'text-7xl font-black text-violet-400 anim-pop'; }
+    state.delayTimer = setTimeout(() => memdigitCountdown(count - 1), 500);
+  } else {
+    if (displayText) { displayText.textContent = '시작!'; displayText.className = 'text-4xl font-black text-violet-400 anim-pop'; }
+    state.delayTimer = setTimeout(() => {
+      if (displayText) { displayText.textContent = ''; displayText.className = 'text-6xl font-black text-slate-100 tracking-widest'; }
+      state.delayTimer = setTimeout(() => memdigitFlashDigit(0), 300);
+    }, 500);
+  }
 }
 
 function memdigitFlashDigit(idx) {
@@ -2400,10 +2421,31 @@ function seqmemBeginRound() {
     const tileEl = document.getElementById(`seqmem-tile-${i}`);
     if (tileEl) tileEl.className = seqmemTileClass('idle');
   }
-  const feedback = document.getElementById('seqmem-feedback');
-  if (feedback) feedback.textContent = '잘 보고 기억하세요...';
 
-  seqmemFlashTile(0);
+  if (state.round === 0) {
+    seqmemCountdown(3);
+  } else {
+    const feedback = document.getElementById('seqmem-feedback');
+    if (feedback) { feedback.className = 'text-center text-slate-500 text-sm mt-2 min-h-6'; feedback.textContent = '잘 보고 기억하세요...'; }
+    seqmemFlashTile(0);
+  }
+}
+
+/* v0.1.7~: 첫 라운드 시작 전 3-2-1 카운트다운 + 0.3초 여유 후 첫 타일 노출(너무 빨리 나온다는 피드백 반영) */
+function seqmemCountdown(count) {
+  const state = App.state.seqmem;
+  if (App.state.currentSection !== 'seqmem') return;
+  const feedback = document.getElementById('seqmem-feedback');
+  if (count > 0) {
+    if (feedback) { feedback.className = 'text-center text-3xl font-black text-violet-400 mt-2 min-h-6 anim-pop'; feedback.textContent = count; }
+    state.delayTimer = setTimeout(() => seqmemCountdown(count - 1), 500);
+  } else {
+    if (feedback) { feedback.className = 'text-center text-xl font-black text-violet-400 mt-2 min-h-6 anim-pop'; feedback.textContent = '시작!'; }
+    state.delayTimer = setTimeout(() => {
+      if (feedback) { feedback.className = 'text-center text-slate-500 text-sm mt-2 min-h-6'; feedback.textContent = '잘 보고 기억하세요...'; }
+      state.delayTimer = setTimeout(() => seqmemFlashTile(0), 300);
+    }, 500);
+  }
 }
 
 function seqmemFlashTile(idx) {
@@ -3292,15 +3334,35 @@ function impulseAdvance() {
 }
 
 /* ══════════════════════════════════════════════════
-   📱 숏폼 집중력 테스트 ("숏폼 뇌 지수", v0.0.18~)
-   - 충동억제(Go/No-Go) 테스트 엔진을 그대로 재활용, MZ향으로 리스킨
-   - 🔥 꿀잼 콘텐츠엔 빠르게 탭, 📢 광고엔 참기(탭 금지)
+   📱 숏폼 집중력 테스트 ("피드 낚시 테스트", v0.1.7~ 전면 재설계)
+   - 기존엔 충동억제(Go/No-Go)와 완전히 동일한 단일 원 자극 엔진을 리스킨만 한 상태였음(v0.0.18~v0.1.6)
+   - "숏폼 노출 후 평균 집중 47초" 통계·팝콘브레인 개념과, 실제 CCPT(좌우 버섯/꽃 스폿) 방식을 참고해
+     "여러 콘텐츠 카드 중 목표만 시각 탐색으로 골라내기" 방식으로 재설계 — 충동억제(단일 자극 억제)와
+     겹치지 않는 선택적 주의력 + 시각 탐색 측정
+   - 신규 지표: 전반부/후반부 반응속도를 비교하는 "집중력 저하도"(vigilance decrement)
 ══════════════════════════════════════════════════ */
+const SHORTFOCUS_CATEGORIES = [
+  { key: 'dog',      emoji: '🐶', label: '강아지' },
+  { key: 'cat',      emoji: '🐱', label: '고양이' },
+  { key: 'food',     emoji: '🍕', label: '먹방' },
+  { key: 'dessert',  emoji: '🍰', label: '디저트' },
+  { key: 'game',     emoji: '🎮', label: '게임' },
+  { key: 'music',    emoji: '🎵', label: '음악·댄스' },
+  { key: 'comedy',   emoji: '😂', label: '개그' },
+  { key: 'sports',   emoji: '⚽', label: '스포츠' },
+  { key: 'beauty',   emoji: '💄', label: '뷰티' },
+  { key: 'movie',    emoji: '🎬', label: '영화·드라마' },
+  { key: 'travel',   emoji: '✈️', label: '여행' },
+  { key: 'car',      emoji: '🚗', label: '자동차' },
+  { key: 'study',    emoji: '📚', label: '공부·지식' },
+  { key: 'art',      emoji: '🎨', label: '아트' },
+  { key: 'workout',  emoji: '🏋️', label: '운동' },
+];
 const SHORTFOCUS_CONFIG = {
-  easy:   { label: '쉬움',   rounds: 8,  timeLimitMs: 1100, noGoRatio: 0.3 },
-  normal: { label: '보통',   rounds: 10, timeLimitMs: 800,  noGoRatio: 0.35 },
-  hard:   { label: '어려움', rounds: 12, timeLimitMs: 600,  noGoRatio: 0.4 },
-  hell:   { label: 'HELL',   rounds: 16, timeLimitMs: 400,  noGoRatio: 0.5 },
+  easy:   { label: '쉬움',   rounds: 8,  gridSize: 4, cols: 2, timeLimitMs: 1400, noTargetRatio: 0.25, adTrapRatio: 0 },
+  normal: { label: '보통',   rounds: 10, gridSize: 6, cols: 3, timeLimitMs: 1150, noTargetRatio: 0.3,  adTrapRatio: 0.15 },
+  hard:   { label: '어려움', rounds: 12, gridSize: 8, cols: 4, timeLimitMs: 950,  noTargetRatio: 0.35, adTrapRatio: 0.3 },
+  hell:   { label: 'HELL',   rounds: 16, gridSize: 9, cols: 3, timeLimitMs: 750,  noTargetRatio: 0.45, adTrapRatio: 0.45 },
 };
 
 function initShortfocus() {
@@ -3309,8 +3371,21 @@ function initShortfocus() {
   if (s.delayTimer) clearTimeout(s.delayTimer);
   const challenge = (App.pendingChallenge && App.pendingChallenge.section === 'shortfocus') ? App.pendingChallenge.data : null;
   App.pendingChallenge = null;
-  App.state.shortfocus = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false, challenge };
+  App.state.shortfocus = { nickname: '', difficulty: null, round: 0, totalRounds: 0, correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalHitTime: 0, hitCount: 0, hitLog: [], cards: [], promptCat: null, hasTarget: false, startTime: 0, timerID: null, delayTimer: null, phase: 'idle', streak: 0, challenge };
   renderShortfocusView('start');
+}
+
+function shortfocusCardHTML(card, idx) {
+  const viewCount = Math.floor(Math.random() * 300 + 5);
+  const adBadge = card.isAd ? `<span class="absolute top-1 right-1 bg-slate-900/80 text-slate-400 text-[9px] font-bold px-1.5 py-0.5 rounded">AD</span>` : '';
+  return `
+    <div id="shortfocus-card-${idx}" onclick="shortfocusTap(${idx})"
+      class="relative aspect-square rounded-xl bg-slate-800 border-2 border-slate-600 hover:border-fuchsia-500 flex flex-col items-center justify-center cursor-pointer select-none transition-colors duration-100"
+      style="touch-action:manipulation;">
+      ${adBadge}
+      <span class="text-3xl">${card.cat.emoji}</span>
+      <span class="text-slate-500 text-[10px] mt-1">조회 ${viewCount}만</span>
+    </div>`;
 }
 
 function renderShortfocusView(view) {
@@ -3322,9 +3397,9 @@ function renderShortfocusView(view) {
       <div class="max-w-md mx-auto text-center">
         <div class="text-6xl mb-4">📱</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">숏폼 집중력 테스트</h2>
-        <p class="text-slate-400 mb-6">당신의 뇌, 아직 숏폼 알고리즘에 잠식되지 않았나요? 🧠<br>🔥 꿀잼 콘텐츠가 뜨면 최대한 빨리 탭!<br>📢 광고가 뜨면 절대 누르지 말고 참으세요.</p>
+        <p class="text-slate-400 mb-6">피드에 여러 콘텐츠가 동시에 떠요. 🧠<br>목표 카테고리와 일치하는 콘텐츠만 빠르게 찾아 탭!<br>가짜 광고나 다른 콘텐츠를 잘못 누르면 감점이에요.</p>
         ${guideCardHTML(
-          ['🔥 꿀잼 콘텐츠가 뜨면 최대한 빨리 탭하세요', '📢 광고가 뜨면 절대 누르지 말고 참으세요', '충동억제 테스트와 같은 원리를 숏폼 피드 소재로 바꾼 버전이에요']
+          ['라운드마다 "이번엔 ○○ 찾기" 목표가 먼저 제시돼요', '카드들이 동시에 뜨면 목표와 일치하는 카드만 빠르게 탭하세요', '목표가 이번 피드에 없을 수도 있어요 — 그럴 땐 아무것도 누르지 말고 기다리세요']
         )}
         ${renderChallengeBanner(state.challenge)}
         <input id="shortfocus-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
@@ -3332,17 +3407,17 @@ function renderShortfocusView(view) {
         <p class="text-slate-400 text-sm mb-3">피드 속도(난이도) 선택</p>
         <div class="grid grid-cols-3 gap-2">
           <button onclick="shortfocusStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
-            🟢 쉬움<br><span class="text-xs font-normal opacity-70">8회, 여유있음</span>
+            🟢 쉬움<br><span class="text-xs font-normal opacity-70">2x2, 여유있음</span>
           </button>
           <button onclick="shortfocusStart('normal')" class="bg-amber-800/50 hover:bg-amber-700/70 border border-amber-600 text-amber-300 font-bold py-3 rounded-xl transition text-sm">
-            🟡 보통<br><span class="text-xs font-normal opacity-70">10회, 빠른 스크롤</span>
+            🟡 보통<br><span class="text-xs font-normal opacity-70">2x3, 가짜광고 등장</span>
           </button>
           <button onclick="shortfocusStart('hard')" class="bg-rose-800/50 hover:bg-rose-700/70 border border-rose-600 text-rose-300 font-bold py-3 rounded-xl transition text-sm">
-            🔴 어려움<br><span class="text-xs font-normal opacity-70">12회, 초고속 피드</span>
+            🔴 어려움<br><span class="text-xs font-normal opacity-70">2x4, 초고속 피드</span>
           </button>
         </div>
         <button onclick="confirmHellMode('shortfocusStart')" class="w-full mt-3 bg-gradient-to-r from-red-950 to-black hover:from-red-900 border-2 border-red-600 text-red-400 font-black py-3 rounded-xl transition flex items-center justify-center gap-2 text-sm">
-          <span class="text-xl">🔥</span> HELL 난이도 <span class="text-xs font-normal opacity-70">(16회, 반반 확률, 상급자 전용)</span>
+          <span class="text-xl">🔥</span> HELL 난이도 <span class="text-xs font-normal opacity-70">(3x3, 가짜광고 절반, 상급자 전용)</span>
         </button>
       </div>`;
   }
@@ -3355,30 +3430,39 @@ function renderShortfocusView(view) {
           <span class="text-slate-400 text-sm">${state.nickname} 님 · ${cfg.label}</span>
           <span id="shortfocus-round-counter" class="text-cyan-400 font-bold text-sm">${state.round + 1} / ${state.totalRounds}</span>
         </div>
-        <div class="progress-bar-track mb-8">
+        <div class="progress-bar-track mb-4">
           <div id="shortfocus-progress-fill" class="progress-bar-fill" style="width:${Math.round((state.round / state.totalRounds) * 100)}%"></div>
         </div>
-        <div id="shortfocus-stimulus" onclick="shortfocusTap()"
-          class="rounded-3xl h-56 w-56 mx-auto flex flex-col items-center justify-center cursor-pointer select-none bg-slate-800 border-4 border-slate-600 transition-colors duration-100"
-          style="touch-action:manipulation;">
-          <span id="shortfocus-stimulus-emoji" class="text-6xl mb-2">📱</span>
-          <span id="shortfocus-stimulus-text" class="text-slate-300 font-bold text-lg px-4 text-center">스크롤 중...</span>
-        </div>
-        <p id="shortfocus-feedback" class="text-center text-slate-500 text-sm mt-6 min-h-6"></p>
+        <div id="shortfocus-prompt" class="text-center bg-fuchsia-900/30 border border-fuchsia-700/50 rounded-xl py-2 px-3 mb-4 text-fuchsia-200 font-bold text-sm"></div>
+        <div id="shortfocus-grid" class="grid gap-2 mb-4" style="grid-template-columns:repeat(${cfg.cols}, minmax(0,1fr));"></div>
+        <p id="shortfocus-feedback" class="text-center text-slate-500 text-sm mt-2 min-h-6"></p>
       </div>`;
     shortfocusBeginRound();
   }
 
   else if (view === 'result') {
     const accuracy = (state.correctCount / state.totalRounds) * 100;
-    const avgGoMs = state.goCount > 0 ? Math.round(state.totalGoTime / state.goCount) : 0;
+    const avgHitMs = state.hitCount > 0 ? Math.round(state.totalHitTime / state.hitCount) : 0;
+
+    const half = state.totalRounds / 2;
+    const early = state.hitLog.filter(h => h.round < half).map(h => h.ms);
+    const late = state.hitLog.filter(h => h.round >= half).map(h => h.ms);
+    let decrementText = '';
+    if (early.length >= 2 && late.length >= 2) {
+      const avgEarly = early.reduce((a, b) => a + b, 0) / early.length;
+      const avgLate = late.reduce((a, b) => a + b, 0) / late.length;
+      const pct = Math.round(((avgLate - avgEarly) / avgEarly) * 100);
+      if (pct > 15) decrementText = `⚠️ 후반부 반응이 초반보다 ${pct}% 느려졌어요 — 팝콘브레인 주의! 🍿`;
+      else if (pct < -15) decrementText = `🔥 후반부에 오히려 ${Math.abs(pct)}% 더 빨라졌어요! 완전히 몰입했네요`;
+      else decrementText = `✅ 초반과 후반 집중력 차이가 거의 없어요, 꾸준한 집중력!`;
+    }
 
     let tier, tierColor, tierBg, tierMsg;
-    if (accuracy >= 95)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = ['당신의 뇌는 아직 알고리즘에 잠식되지 않았다! 클래식 집중력 보유자 🧠✨', '알고리즘도 못 뚫는 강철 집중력, 광고 스킵 신 아니야?', '숏폼 마스터! 낚시 콘텐츠는 다 걸러내는 수준']; }
-    else if (accuracy >= 85) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = ['숏폼 내성 甲! 웬만한 떡밥엔 안 낚이는 타입.', '웬만한 떡밥엔 안 낚이는 편! 집중력 상위권', '숏폼 내성이 강한 편, 광고 구분을 잘 해내네']; }
-    else if (accuracy >= 70) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = ['평균적인 숏폼 세대 뇌. 광고 몇 개는 낚였을지도? ㅋㅋ', '평범한 숏폼 세대 뇌, 몇 개는 낚였어도 괜찮아', '무난한 집중력! 조금만 더 신경 쓰면 안 낚이겠어']; }
-    else if (accuracy >= 50) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = ['이미 도파민에 살짝 적응된 뇌... 스크롤 좀 줄여볼까?', '도파민에 살짝 적응된 듯, 스크롤 타임을 조금 줄여볼까', '광고에 몇 번 낚인 편이네, 다음엔 조금 더 침착하게']; }
-    else                     { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['숏폼 알고리즘의 완벽한 먹잇감 확정 😂 근데 원래 다들 그래, 너만 그런 거 아니야!', '오늘은 알고리즘한테 완전히 낚였나봐, 다음엔 정신 바짝 차려보자', '괜찮아, 숏폼 앞에서 안 낚이는 사람이 어딨어! 다들 그래']; }
+    if (accuracy >= 95)      { tier = 'S'; tierColor = 'text-yellow-300';  tierBg = 'bg-yellow-900/40 border-yellow-600';   tierMsg = ['당신의 뇌는 아직 알고리즘에 잠식되지 않았다! 클래식 집중력 보유자 🧠✨', '가짜 광고도, 낚시 썸네일도 다 걸러내는 시각 탐색 최상위권', '숏폼 마스터! 원하는 콘텐츠만 정확히 골라내는 수준']; }
+    else if (accuracy >= 85) { tier = 'A'; tierColor = 'text-emerald-300'; tierBg = 'bg-emerald-900/40 border-emerald-600'; tierMsg = ['숏폼 내성 甲! 웬만한 떡밥엔 안 낚이는 타입.', '여러 콘텐츠 중에서도 목표를 잘 골라내는 편! 집중력 상위권', '숏폼 내성이 강한 편, 가짜 광고 구분을 잘 해내네']; }
+    else if (accuracy >= 70) { tier = 'B'; tierColor = 'text-blue-300';    tierBg = 'bg-blue-900/40 border-blue-600';       tierMsg = ['평균적인 숏폼 세대 뇌. 광고 몇 개는 낚였을지도? ㅋㅋ', '평범한 숏폼 세대 뇌, 몇 개는 낚였어도 괜찮아', '무난한 시각 탐색력! 조금만 더 신경 쓰면 안 낚이겠어']; }
+    else if (accuracy >= 50) { tier = 'C'; tierColor = 'text-violet-300';  tierBg = 'bg-violet-900/40 border-violet-600';   tierMsg = ['이미 도파민에 살짝 적응된 뇌... 스크롤 좀 줄여볼까?', '비슷한 콘텐츠 사이에서 살짝 헷갈리는 편, 스크롤 타임을 줄여볼까', '가짜 광고에 몇 번 낚인 편이네, 다음엔 조금 더 침착하게']; }
+    else                     { tier = 'D'; tierColor = 'text-rose-300';   tierBg = 'bg-rose-900/40 border-rose-600';       tierMsg = ['숏폼 알고리즘의 완벽한 먹잇감 확정 😂 근데 원래 다들 그래, 너만 그런 거 아니야!', '오늘은 알고리즘한테 완전히 낚였나봐, 다음엔 목표를 한 번 더 확인해보자', '괜찮아, 숏폼 앞에서 안 낚이는 사람이 어딨어! 다들 그래']; }
     tierMsg = pickOne(tierMsg);
 
     const animalCard = pickAnimalCard('shortfocus', tier);
@@ -3401,7 +3485,7 @@ function renderShortfocusView(view) {
 
         ${renderChallengeCompareCard(myResultStr, state.challenge, 'shortfocus', state.nickname, state.difficulty)}
 
-        <div class="grid grid-cols-3 gap-3 mb-6">
+        <div class="grid grid-cols-3 gap-3 mb-4">
           <div class="bg-slate-800 rounded-xl p-4 text-center">
             <div class="text-2xl font-black text-emerald-400">${state.correctCount}</div>
             <div class="text-slate-400 text-xs">정답 수</div>
@@ -3409,13 +3493,14 @@ function renderShortfocusView(view) {
           </div>
           <div class="bg-slate-800 rounded-xl p-4 text-center">
             <div class="text-2xl font-black text-rose-400">${state.commissionErrors}</div>
-            <div class="text-slate-400 text-xs">광고에 낚인 횟수</div>
+            <div class="text-slate-400 text-xs">광고·오답에 낚인 횟수</div>
           </div>
           <div class="bg-slate-800 rounded-xl p-4 text-center">
-            <div class="text-2xl font-black text-violet-400">${avgGoMs}ms</div>
+            <div class="text-2xl font-black text-violet-400">${avgHitMs}ms</div>
             <div class="text-slate-400 text-xs">평균 반응속도</div>
           </div>
         </div>
+        ${decrementText ? `<div class="bg-fuchsia-900/20 border border-fuchsia-700/30 rounded-xl p-3 mb-6 text-fuchsia-200 text-sm text-center">${decrementText}</div>` : ''}
 
         ${renderShareRow('shortfocus', tier, animalCard._idx, state.nickname, myResultStr, shareText, animalCard)}
         ${renderChallengeButton('shortfocus', state.nickname, myResultStr, state.difficulty)}
@@ -3445,8 +3530,9 @@ function shortfocusStart(difficulty) {
   const cfg = SHORTFOCUS_CONFIG[difficulty];
   App.state.shortfocus = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
-    correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalGoTime: 0, goCount: 0,
-    startTime: 0, timerID: null, delayTimer: null, phase: 'idle', isNoGo: false,
+    correctCount: 0, commissionErrors: 0, omissionErrors: 0, totalHitTime: 0, hitCount: 0, hitLog: [],
+    cards: [], promptCat: null, hasTarget: false,
+    startTime: 0, timerID: null, delayTimer: null, phase: 'idle', streak: 0,
   };
   showCountdownThenStart('shortfocus-container', () => renderShortfocusView('round'));
 }
@@ -3462,19 +3548,29 @@ function shortfocusBeginRound() {
   const feedback = document.getElementById('shortfocus-feedback');
   if (feedback) feedback.textContent = '';
 
-  state.isNoGo = Math.random() < cfg.noGoRatio;
-  const stim = document.getElementById('shortfocus-stimulus');
-  const emoji = document.getElementById('shortfocus-stimulus-emoji');
-  const text = document.getElementById('shortfocus-stimulus-text');
-  if (state.isNoGo) {
-    if (stim) stim.className = 'rounded-3xl h-56 w-56 mx-auto flex flex-col items-center justify-center cursor-pointer select-none bg-slate-600 border-4 border-slate-400 transition-colors duration-100';
-    if (emoji) emoji.textContent = '📢';
-    if (text) text.textContent = '광고예요, 참으세요!';
-  } else {
-    if (stim) stim.className = 'rounded-3xl h-56 w-56 mx-auto flex flex-col items-center justify-center cursor-pointer select-none bg-fuchsia-500 border-4 border-fuchsia-300 transition-colors duration-100';
-    if (emoji) emoji.textContent = '🔥';
-    if (text) text.textContent = '지금 떴다! 탭!';
+  const promptCat = pickOne(SHORTFOCUS_CATEGORIES);
+  state.promptCat = promptCat;
+  state.hasTarget = Math.random() >= cfg.noTargetRatio;
+
+  const cards = [];
+  if (state.hasTarget) {
+    cards.push({ cat: promptCat, isTarget: true, isAd: false });
+    if (cfg.adTrapRatio > 0 && Math.random() < cfg.adTrapRatio) {
+      cards.push({ cat: promptCat, isTarget: false, isAd: true });
+    }
   }
+  const decoyPool = SHORTFOCUS_CATEGORIES.filter(c => c.key !== promptCat.key);
+  while (cards.length < cfg.gridSize) {
+    cards.push({ cat: pickOne(decoyPool), isTarget: false, isAd: false });
+  }
+  shuffleArray(cards);
+  state.cards = cards;
+
+  const promptEl = document.getElementById('shortfocus-prompt');
+  if (promptEl) promptEl.textContent = `🎯 이번 피드에서 ${promptCat.emoji} ${promptCat.label} 콘텐츠를 찾아 탭하세요!`;
+
+  const gridEl = document.getElementById('shortfocus-grid');
+  if (gridEl) gridEl.innerHTML = cards.map((card, idx) => shortfocusCardHTML(card, idx)).join('');
 
   state.phase = 'active';
   state.startTime = performance.now();
@@ -3482,32 +3578,43 @@ function shortfocusBeginRound() {
   state.timerID = setTimeout(shortfocusTimeUp, cfg.timeLimitMs);
 }
 
-function shortfocusTap() {
+function shortfocusTap(idx) {
   const state = App.state.shortfocus;
   if (state.phase !== 'active') return;
+  const card = state.cards[idx];
   if (state.timerID) clearTimeout(state.timerID);
   state.phase = 'idle';
   const feedback = document.getElementById('shortfocus-feedback');
+  const cardEl = document.getElementById(`shortfocus-card-${idx}`);
 
-  if (state.isNoGo) {
-    state.commissionErrors++;
-    state.streak = 0;
-    if (feedback) feedback.textContent = '앗, 광고에 낚였어요! 😵';
-    showToast('❌ 광고에 낚였어요!');
-    playSound('wrong');
-    pulseElement(feedback, 'wrong');
-  } else {
+  if (card.isTarget) {
     const ms = Math.round(performance.now() - state.startTime);
     state.correctCount++;
-    state.goCount++;
-    state.totalGoTime += ms;
+    state.hitCount++;
+    state.totalHitTime += ms;
+    state.hitLog.push({ round: state.round, ms });
     state.streak = (state.streak || 0) + 1;
-    if (feedback) feedback.textContent = `${ms}ms! 딱 걸렸다 ✅` + comboSuffix(state.streak);
+    if (cardEl) pulseElement(cardEl, 'correct');
+    if (feedback) feedback.textContent = `${ms}ms! 딱 찾았어요 ✅` + comboSuffix(state.streak);
     showToast('✅ 정답!');
     playSound('correct');
-    pulseElement(feedback, 'correct');
+  } else {
+    state.commissionErrors++;
+    state.streak = 0;
+    if (cardEl) pulseElement(cardEl, 'wrong');
+    playSound('wrong');
+    if (card.isAd) {
+      if (feedback) feedback.textContent = '앗, 가짜 광고에 낚였어요! 😵';
+      showToast('❌ 광고 낚임!');
+    } else if (!state.hasTarget) {
+      if (feedback) feedback.textContent = '어? 이번엔 찾는 콘텐츠가 없었어요 😵';
+      showToast('❌ 잘못 탭했어요!');
+    } else {
+      if (feedback) feedback.textContent = '다른 콘텐츠예요! 목표를 다시 확인해보세요 😵';
+      showToast('❌ 오답!');
+    }
   }
-  state.delayTimer = setTimeout(shortfocusAdvance, 600);
+  state.delayTimer = setTimeout(shortfocusAdvance, 650);
 }
 
 function shortfocusTimeUp() {
@@ -3516,20 +3623,20 @@ function shortfocusTimeUp() {
   state.phase = 'idle';
   const feedback = document.getElementById('shortfocus-feedback');
 
-  if (state.isNoGo) {
-    state.correctCount++;
-    state.streak = (state.streak || 0) + 1;
-    playSound('correct');
-    if (feedback) feedback.textContent = '광고 안 눌렀어요! 👍' + comboSuffix(state.streak);
-    showToast('✅ 잘 참았어요!');
-  } else {
+  if (state.hasTarget) {
     state.omissionErrors++;
     state.streak = 0;
     playSound('wrong');
-    if (feedback) feedback.textContent = '앗, 놓쳤어요! 😅';
+    if (feedback) feedback.textContent = '앗, 놓쳤어요! 스크롤이 너무 빨랐나봐요 😅';
     showToast('⏱️ 놓쳤어요!');
+  } else {
+    state.correctCount++;
+    state.streak = (state.streak || 0) + 1;
+    playSound('correct');
+    if (feedback) feedback.textContent = '광고뿐이었네요, 잘 넘겼어요! 👍' + comboSuffix(state.streak);
+    showToast('✅ 잘 넘겼어요!');
   }
-  state.delayTimer = setTimeout(shortfocusAdvance, 600);
+  state.delayTimer = setTimeout(shortfocusAdvance, 650);
 }
 
 function shortfocusAdvance() {
