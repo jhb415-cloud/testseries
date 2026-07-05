@@ -43,8 +43,18 @@ window.App = {
     location.hash = sectionId;
 
     // 내비 active 처리
+    // 심리테스트존 하위메뉴 4개는 전부 data-section="psychtest"를 공유해서(카테고리만 다름)
+    // 단순 조회는 항상 DOM상 첫 번째 항목(캐릭터 테스트)만 골라버리는 버그가 있었음 —
+    // 현재 카테고리(data-psych-category)까지 같이 매칭해서 실제 선택된 항목을 찾도록 수정 (v0.2.9~)
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    const active = document.querySelector(`.nav-item[data-section="${sectionId}"]`);
+    let active;
+    if (sectionId === 'psychtest') {
+      const cat = this.state.psychtest && this.state.psychtest.category;
+      active = document.querySelector(`.nav-item[data-section="psychtest"][data-psych-category="${cat}"]`)
+            || document.querySelector(`.nav-item[data-section="psychtest"]`);
+    } else {
+      active = document.querySelector(`.nav-item[data-section="${sectionId}"]`);
+    }
     if (active) {
       active.classList.add('active');
       const parentGroup = active.closest('.nav-group');
@@ -5937,13 +5947,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ── 내비게이션 클릭 이벤트 ──
-     심리테스트존 하위메뉴는 data-psych-category도 함께 갖고 있어, 섹션 이동 후
-     해당 카테고리 피드를 바로 보여주도록 psychtestNavCategory()를 추가 호출 (v0.2.4~) */
+     심리테스트존 하위메뉴는 data-psych-category도 함께 갖고 있어, psychtestNavCategory()를
+     먼저 호출해 App.state.psychtest.category를 갱신한 뒤 navigate() — 순서가 반대였으면
+     navigate()의 사이드바 active 표시가 갱신 전 카테고리를 참조하게 됨 (v0.2.4~, v0.2.9 순서 수정) */
   document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
       const section = item.dataset.section;
-      App.navigate(section);
       if (item.dataset.psychCategory) psychtestNavCategory(item.dataset.psychCategory);
+      App.navigate(section);
     });
   });
 
