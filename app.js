@@ -84,6 +84,10 @@ window.App = {
   }
 };
 
+/* 애드센스 심사 임시 조치(v0.2.8~): 가짜 통계 그래프 + 제휴 배너(href="#", 미연결) 숨김.
+   심사 승인 후 false로 되돌리면 원상복구됨(관련 코드는 삭제하지 않고 그대로 보존). */
+const ADSENSE_REVIEW_MODE = true;
+
 /* ══════════════════════════════════════════════════
    유틸리티
 ══════════════════════════════════════════════════ */
@@ -4504,6 +4508,7 @@ function renderPlaceholderUI(section, value) {
   return `
   <div class="mt-8 space-y-4">
 
+    ${ADSENSE_REVIEW_MODE ? '' : `
     <!-- ① 통계 비교 지면 (추후 실데이터 교체) -->
     <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5">
       <h4 class="text-slate-300 font-bold mb-1">📊 전체 통계 비교</h4>
@@ -4524,6 +4529,7 @@ function renderPlaceholderUI(section, value) {
       </div>
       <p class="text-slate-500 text-xs mt-1">상위 약 30% 추정 (더미)</p>
     </div>
+    `}
 
     <!-- ② 랭킹 & 공유 지면 -->
     <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5">
@@ -4551,6 +4557,7 @@ function renderPlaceholderUI(section, value) {
       </div>
     </div>
 
+    ${ADSENSE_REVIEW_MODE ? '' : `
     <!-- ④ 제휴 상품 추천 배너 (Phase 4 로드맵 11-4, v0.2.3~)
          강제성 없이(안 눌러도 무방) 결과와 자연스럽게 어울리는 상품을 은근히 노출하는 자리.
          실제 쿠팡파트너스 등 제휴 링크는 가입 후 href만 교체하면 됨(placeholder 상태) —
@@ -4566,6 +4573,7 @@ function renderPlaceholderUI(section, value) {
         <span class="text-amber-400 text-xs font-bold shrink-0">보러가기 →</span>
       </div>
     </a>
+    `}
   </div>`;
 }
 
