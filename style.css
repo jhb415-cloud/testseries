@@ -99,6 +99,7 @@ html.light {
   gap: 0.5rem;
   font-size: 0.95rem;
   color: rgb(var(--slate-300));
+  white-space: nowrap;
 }
 
 .nav-item:hover {
@@ -153,6 +154,7 @@ html.light {
   font-size: 0.95rem;
   color: rgb(var(--slate-300));
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .nav-group-header:hover {

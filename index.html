@@ -1,4 +1,4 @@
-<!-- v0.2.4 | 5-in-1 Dashboard SPA -->
+<!-- v0.2.5 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -158,25 +158,46 @@
       </div>
     </div>
 
-    <div class="nav-item" data-section="balance">
-      <span class="text-lg">⚖️</span> 밸런스 게임
+    <!-- 과몰입 투표소 그룹 (v0.2.5~: 밸런스 게임 + 이상형 월드컵) -->
+    <div class="nav-group open" id="nav-group-vote">
+      <div class="nav-group-header" id="nav-group-vote-toggle">
+        <span class="text-lg">🗳️</span> 과몰입 투표소
+        <span class="nav-group-chevron">▾</span>
+      </div>
+      <div class="nav-group-items" id="nav-group-vote-items">
+        <div class="nav-item nav-subitem" data-section="balance">
+          <span class="text-lg">⚖️</span> 밸런스 게임
+        </div>
+        <div class="nav-item nav-subitem" data-section="worldcup">
+          <span class="text-lg">🏆</span> 이상형 월드컵 <span class="badge-soon-nav">준비중</span>
+        </div>
+      </div>
     </div>
-    <div class="nav-item" data-section="fortune">
-      <span class="text-lg">🔮</span> 오늘의 운세
+
+    <!-- 운명 관측소 그룹 (v0.2.5~: 오늘의 운세 + 꿈 해몽 검색 + 사주/타로/궁합) -->
+    <div class="nav-group open" id="nav-group-destiny">
+      <div class="nav-group-header" id="nav-group-destiny-toggle">
+        <span class="text-lg">🔭</span> 운명 관측소
+        <span class="nav-group-chevron">▾</span>
+      </div>
+      <div class="nav-group-items" id="nav-group-destiny-items">
+        <div class="nav-item nav-subitem" data-section="fortune">
+          <span class="text-lg">🔮</span> 오늘의 운세
+        </div>
+        <div class="nav-item nav-subitem" data-section="dream">
+          <span class="text-lg">🌙</span> 꿈 해몽 검색
+        </div>
+        <div class="nav-item nav-subitem" data-section="fortuneext">
+          <span class="text-lg">🔯</span> 사주/타로/궁합 <span class="badge-soon-nav">준비중</span>
+        </div>
+      </div>
     </div>
-    <div class="nav-item" data-section="fortuneext">
-      <span class="text-lg">🔯</span> 사주 · 타로 · 궁합 <span class="badge-soon-nav">준비중</span>
-    </div>
-    <div class="nav-item" data-section="dream">
-      <span class="text-lg">🌙</span> 꿈 해몽 검색
+
+    <div class="nav-item" data-section="family">
+      <span class="text-lg">🎲</span> 가족오락관 <span class="badge-soon-nav">준비중</span>
     </div>
     <div class="nav-item" data-section="lotto">
       <span class="text-lg">🎱</span> 로또 번호 조합기
-    </div>
-
-    <!-- 가족오락관은 요청 순서 목록에 없어 맨 끝에 배치(전체 준비중, Phase 4 로드맵 11-1) -->
-    <div class="nav-item" data-section="family">
-      <span class="text-lg">🎲</span> 가족오락관 <span class="badge-soon-nav">준비중</span>
     </div>
   </nav>
 
@@ -196,7 +217,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4">
-    <p class="text-slate-600 text-xs">v0.2.4 · 2026-07-05</p>
+    <p class="text-slate-600 text-xs">v0.2.5 · 2026-07-05</p>
   </div>
 </aside>
 
@@ -391,6 +412,9 @@
     </div>
     <div id="section-fortuneext" class="section hidden">
       <div id="fortuneext-container"></div>
+    </div>
+    <div id="section-worldcup" class="section hidden">
+      <div id="worldcup-container"></div>
     </div>
 
     <!-- 공유 링크로 들어왔을 때 실제 테스트 화면 전에 보여주는 공용 프리뷰 (v0.1.1~) -->

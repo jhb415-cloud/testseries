@@ -4483,6 +4483,20 @@ function initFortuneExt() {
 }
 
 /* ══════════════════════════════════════════════════
+   🏆 이상형 월드컵 (v0.2.5~, 과몰입 투표소 그룹 — 전부 준비중)
+══════════════════════════════════════════════════ */
+function initWorldcup() {
+  const container = document.getElementById('worldcup-container');
+  container.innerHTML = `
+    <div class="max-w-2xl mx-auto text-center py-12">
+      <div class="text-5xl mb-4">🏆</div>
+      <h2 class="text-2xl font-black text-slate-100 mb-2">이상형 월드컵</h2>
+      <p class="text-slate-400 mb-6">둘 중 하나를 계속 골라 최종 우승을 가리는 토너먼트, 준비 중이에요</p>
+      <span class="text-xs font-bold text-amber-400 bg-amber-400/10 border border-amber-400/30 px-3 py-1.5 rounded-full">준비중</span>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
    확장 Placeholder UI (공통)
 ══════════════════════════════════════════════════ */
 function renderPlaceholderUI(section, value) {
@@ -5900,8 +5914,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ── 사이드바 그룹 접기/펼치기 (v0.2.4~: 심리테스트존 그룹 추가되며 공용 루프로 일반화,
-       기존 저장 키(nav_tests_collapsed)는 그대로 유지해 하위호환) ── */
-  ['nav-group-tests', 'nav-group-psychtest'].forEach(groupId => {
+       기존 저장 키(nav_tests_collapsed)는 그대로 유지해 하위호환.
+       v0.2.5~: 과몰입 투표소/운명 관측소 그룹 추가 ── */
+  ['nav-group-tests', 'nav-group-psychtest', 'nav-group-vote', 'nav-group-destiny'].forEach(groupId => {
     const group = document.getElementById(groupId);
     const toggle = document.getElementById(groupId + '-toggle');
     if (!group || !toggle) return;
@@ -5954,6 +5969,7 @@ document.addEventListener('DOMContentLoaded', () => {
     balance: initBalance,
     family: initFamily,
     fortuneext: initFortuneExt,
+    worldcup: initWorldcup,
   };
 
   // 초기 섹션 진입 시 초기화
