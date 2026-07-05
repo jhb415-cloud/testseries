@@ -5530,6 +5530,10 @@ document.addEventListener('DOMContentLoaded', () => {
     lotto: initLotto,
     lottodraw: initLottodraw,
     'shared-preview': initSharedPreview,
+    /* 개인정보처리방침/이용약관은 정적 텍스트라 별도 초기화 로직이 필요 없지만, 여기 등록해둬야
+       직접 링크(#privacy 새로고침 등)로 진입해도 home으로 튕기지 않고 정상 라우팅됨 (v0.2.2~) */
+    privacy: () => {},
+    terms: () => {},
   };
 
   // 초기 섹션 진입 시 초기화
