@@ -93,15 +93,16 @@ export async function onRequestGet(context) {
     rawDescription = result || '오늘 내 운세는 어떨까? 과몰입 연구소에서 확인해보세요 👉';
     imageUrl = `${origin}/share-cards/fortune-${zodiacSlug}.jpg`;
   } else if (section === 'dream') {
-    const dreamIdxRaw = url.searchParams.get('dreamIdx');
-    const dreamIdx = /^[0-9]+$/.test(dreamIdxRaw) ? dreamIdxRaw : null;
     const isAiDream = url.searchParams.get('dreamAi') === '1';
     const dreamTitle = url.searchParams.get('dreamTitle') || '꿈 해몽';
     const dreamSummary = url.searchParams.get('dreamSummary') || '';
-    rawTitle = `꿈 해몽: ${dreamTitle}`;
-    rawDescription = dreamSummary || '이 꿈이 무슨 의미인지 과몰입 연구소에서 확인해보세요 👉';
-    /* AI 생성 해몽은 테마 인덱스가 없어 전용 이미지가 없으므로 범용 이미지(dream-0.jpg)로 대체 */
-    imageUrl = dreamIdx !== null ? `${origin}/share-cards/dream-${dreamIdx}.jpg` : `${origin}/share-cards/dream-0.jpg`;
+    /* v0.1.8~: 테마별 174장 이미지(dream-N.jpg)는 AI 해몽(테마 인덱스 없음)에서 항상 dream-0.jpg
+       ("하늘을 나는 꿈")로 나와 "무슨 꿈이든 같은 그림"으로 보이는 문제가 있었음. 꿈 내용은 계속
+       바뀌어 매번 이미지를 맞출 수 없으므로, 정적/AI 해몽 구분 없이 범용 티저 카드 1장(dream-share.jpg)
+       + 고정 문구로 통일 — 실제 꿈 내용은 클릭 후 shared-preview 화면(extra 파라미터)에서 재현됨 */
+    rawTitle = '나 이런 꿈 꿨어';
+    rawDescription = '너도 꿈 꾼거 있으면 찾아볼래?';
+    imageUrl = `${origin}/share-cards/dream-share.jpg`;
     /* v0.1.5~: 공유자가 본 해몽 카드 전체(본문/행운색/행운숫자/오늘의 행동)를 그대로 프리뷰 화면까지
        전달해, 링크를 연 사람이 검색 없이도 공유자와 똑같은 결과를 보게 함(로또의 실제 뽑은 번호
        전달 방식과 동일한 접근 — extra 파라미터 재사용) */

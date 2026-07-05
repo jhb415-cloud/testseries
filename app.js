@@ -980,9 +980,10 @@ function dreamRenderAiModal(query, data) {
     const safeTitle = sanitizeForJsTemplate(data.title);
     const safeSummary = sanitizeForJsTemplate(data.summary);
     const shareText = `나 어제 이런 꿈 꿨어! ${safeTitle} — ${safeSummary} 너도 무슨 꿈인지 확인해봐 👉`;
+    /* v0.1.8~: 정적 해몽과 동일하게 범용 티저 카드+고정 문구로 통일 (dream-0.jpg 오표시 버그 해결) */
     const shareRow = renderIdentityShareRow('dream',
       { dreamAi: 1, dreamTitle: data.title, dreamSummary: data.summary, dreamDetail: data.detail, dreamLucky: data.lucky, dreamLuckyNum: data.luckyNum, dreamAction: data.action, nickname: getNickname() || '나' },
-      `${location.origin}/share-cards/dream-0.jpg`, `AI가 해몽해준 내 꿈: ${safeTitle}`, safeSummary, shareText);
+      `${location.origin}/share-cards/dream-share.jpg`, '나 이런 꿈 꿨어', '너도 꿈 꾼거 있으면 찾아볼래?', shareText);
 
     modalInner.innerHTML = `
       <div class="modal-content bg-slate-800 rounded-2xl p-6 max-w-lg w-full mx-4 shadow-2xl">
@@ -1043,10 +1044,12 @@ function dreamRenderModal(tIdx, vIdx) {
   const shareText = `나 어제 이런 꿈 꿨어! ${title} — ${summary} 너도 무슨 꿈인지 확인해봐 👉`;
   /* v0.1.5~: 공유 링크를 연 사람이 검색 없이도 나와 똑같은 해몽 카드를 그대로 보게끔
      제목/요약뿐 아니라 본문·행운색·행운숫자·오늘의 행동까지 전부 landingParams로 전달
-     (functions/share/[section].js가 이걸 그대로 shared-preview 화면의 extra로 넘김) */
+     (functions/share/[section].js가 이걸 그대로 shared-preview 화면의 extra로 넘김)
+     v0.1.8~: 카카오 카드(이미지+제목+설명)는 꿈마다 달라 매번 이미지를 새로 만들 수 없으므로
+     범용 티저 카드 1장(dream-share.jpg)+고정 문구로 통일, 실제 내용은 클릭 후 화면에서 재현 */
   const shareRow = renderIdentityShareRow('dream',
     { dreamIdx: tIdx, dreamTitle: title, dreamSummary: summary, dreamDetail: detail, dreamLucky: lucky, dreamLuckyNum: luckyNum, dreamAction: action, nickname: getNickname() || '나' },
-    `${location.origin}/share-cards/dream-${tIdx}.jpg`, `내가 꾼 꿈: ${title}`, summary, shareText);
+    `${location.origin}/share-cards/dream-share.jpg`, '나 이런 꿈 꿨어', '너도 꿈 꾼거 있으면 찾아볼래?', shareText);
   const modalInner = document.getElementById('dream-modal-inner');
 
   // 마이홈 완주 플래그 + 로또 조합기 연동용 저장
