@@ -4090,6 +4090,368 @@ function pricequizAdvance() {
 }
 
 /* ══════════════════════════════════════════════════
+   🃏 심리 테스트존 / ⚖️ 밸런스 게임 공용 — 참여수/공감수 카운터
+   (v0.2.3~, Phase 4 로드맵 11-6/11-7) 실제 집계는 백엔드 연동 전까지
+   이 기기의 로컬스토리지 증가분만 base 더미값에 더해 표시 — 노골적 조작 방지 위해
+   화면에는 항상 "추후 실데이터 연동 예정" 문구를 함께 노출한다.
+══════════════════════════════════════════════════ */
+function engagementCount(key, base) {
+  const local = parseInt(localStorage.getItem('engage_' + key) || '0', 10);
+  return base + local;
+}
+function bumpEngagement(key) {
+  const cur = parseInt(localStorage.getItem('engage_' + key) || '0', 10);
+  localStorage.setItem('engage_' + key, cur + 1);
+}
+
+/* ══════════════════════════════════════════════════
+   🃏 심리 테스트존 (v0.2.3~, Phase 4 수익화 로드맵 11-6)
+   - 피드형 목록 → 후킹 포스트 → 짧은 문항 테스트 → 결과+공유 구조 (poomang 레퍼런스 참고)
+   - 지금은 실제 콘텐츠 1개(katokspeed)만 있고 나머지는 피드에서 "준비중"으로 노출
+══════════════════════════════════════════════════ */
+function initPsychtest() {
+  App.state.psychtest = { testId: null, step: 0, answers: [] };
+  renderPsychtestFeed();
+}
+
+function renderPsychtestFeed() {
+  const container = document.getElementById('psychtest-container');
+  const real = AppData.psychTests[0];
+  const comingSoon = [
+    { emoji: '🧊', title: '나의 전생 동물 테스트' },
+    { emoji: '🏢', title: '직장 생존력 테스트' },
+  ];
+  container.innerHTML = `
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl font-black text-slate-100 mb-1">🃏 심리 테스트존</h2>
+      <p class="text-slate-400 mb-6">요즘 뜨는 심리테스트, 계속 업데이트됩니다</p>
+
+      <div class="bg-gradient-to-br from-violet-900/40 to-slate-800 border border-violet-700/40 rounded-2xl p-5 mb-6 cursor-pointer hover:border-violet-500 transition"
+        onclick="psychtestOpenPost('${real.id}')">
+        <div class="flex items-center gap-4">
+          <div class="text-4xl">${real.emoji}</div>
+          <div>
+            <div class="text-violet-300 text-xs font-bold uppercase tracking-widest mb-1">이주의 추천</div>
+            <h3 class="text-slate-100 font-bold text-lg mb-1">${real.title}</h3>
+            <p class="text-slate-400 text-sm">${real.hook}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center cursor-pointer hover:border-violet-500 transition" onclick="psychtestOpenPost('${real.id}')">
+          <div class="text-3xl mb-2">${real.emoji}</div>
+          <p class="text-slate-100 font-semibold text-sm mb-1">${real.title}</p>
+          <p class="text-slate-500 text-xs">▷ ${engagementCount('psychtest-' + real.id + '-plays', 128)}</p>
+        </div>
+        ${comingSoon.map(c => `
+          <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-4 text-center opacity-60 cursor-pointer" onclick="showToast('곧 만나요! 준비중인 콘텐츠예요 🙏')">
+            <div class="text-3xl mb-2">${c.emoji}</div>
+            <p class="text-slate-300 font-semibold text-sm mb-1">${c.title}</p>
+            <p class="text-slate-500 text-xs">🔒 준비중</p>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function psychtestOpenPost(testId) {
+  const t = AppData.psychTests.find(x => x.id === testId);
+  if (!t) return;
+  App.state.psychtest.testId = testId;
+  const container = document.getElementById('psychtest-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <button onclick="renderPsychtestFeed()" class="text-slate-400 hover:text-slate-200 text-sm mb-4">← 목록으로</button>
+      <div class="flex items-start gap-4 mb-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-700/60 to-slate-800 flex items-center justify-center text-2xl shrink-0">${t.emoji}</div>
+        <div>
+          <h2 class="text-slate-100 font-black text-xl mb-1">${t.title}</h2>
+          <p class="text-slate-500 text-xs">과몰입 연구소 · 약 ${t.estMinutes}분 · ▷ ${engagementCount('psychtest-' + t.id + '-plays', 128)}</p>
+        </div>
+      </div>
+      <p class="text-slate-300 leading-relaxed mb-4">${t.hook}</p>
+      <div class="flex gap-2 mb-6">
+        ${t.tags.map(tag => `<span class="bg-slate-700/50 text-slate-300 text-xs px-3 py-1 rounded-full"># ${tag}</span>`).join('')}
+      </div>
+      <button onclick="psychtestStart('${t.id}')" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 rounded-xl transition">
+        테스트 시작
+      </button>
+    </div>`;
+}
+
+function psychtestStart(testId) {
+  bumpEngagement('psychtest-' + testId + '-plays');
+  App.state.psychtest = { testId, step: 0, answers: [] };
+  renderPsychtestQuestion();
+}
+
+function renderPsychtestQuestion() {
+  const state = App.state.psychtest;
+  const t = AppData.psychTests.find(x => x.id === state.testId);
+  const q = t.questions[state.step];
+  const container = document.getElementById('psychtest-container');
+  const progress = Math.round((state.step / t.questions.length) * 100);
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-slate-400 text-sm">${t.title}</span>
+        <span class="text-violet-400 font-bold text-sm">${state.step + 1} / ${t.questions.length}</span>
+      </div>
+      <div class="progress-bar-track mb-6"><div class="h-full rounded-full bg-violet-500 transition-all" style="width:${progress}%"></div></div>
+      <h3 class="text-slate-100 text-xl font-semibold mb-6 leading-relaxed">Q${state.step + 1}. ${q.q}</h3>
+      <div class="flex flex-col gap-3">
+        ${[['바로 답장한다', 0], ['조금 뜸 들이다 답장한다', 1], ['한참 뒤에 생각날 때 답장한다', 2]].map(([label, val]) => `
+          <button class="option-btn" onclick="psychtestAnswer(${val})">${label}</button>`).join('')}
+      </div>
+    </div>`;
+}
+
+function psychtestAnswer(val) {
+  const state = App.state.psychtest;
+  state.answers.push(val);
+  state.step++;
+  const t = AppData.psychTests.find(x => x.id === state.testId);
+  if (state.step >= t.questions.length) {
+    App.showLoader(() => renderPsychtestResult());
+  } else {
+    renderPsychtestQuestion();
+  }
+}
+
+function renderPsychtestResult() {
+  const state = App.state.psychtest;
+  const t = AppData.psychTests.find(x => x.id === state.testId);
+  const score = state.answers.reduce((a, b) => a + b, 0);
+  const result = t.results.find(r => score >= r.range[0] && score <= r.range[1]) || t.results[t.results.length - 1];
+  const nickname = getNickname() || '나';
+  const shareText = `나 「${t.title}」 해봤는데 ${result.title} 나왔어! 너도 해봐 👉`;
+  const funKey = 'psychtest-' + t.id + '-' + result.grade + '-fun';
+
+  const shareRow = renderIdentityShareRow('psychtest',
+    { testId: t.id, grade: result.grade, nickname, result: result.title },
+    `${location.origin}/share-cards/psychtest-${t.id}-${result.grade}.jpg`,
+    `${nickname} 님의 「${t.title}」 결과`, result.title, shareText);
+
+  const container = document.getElementById('psychtest-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <div class="text-center mb-6">
+        <div class="text-5xl mb-3">${result.emoji}</div>
+        <div class="text-violet-400 font-bold text-xl mb-1">${result.title}</div>
+        <p class="text-slate-400 text-sm">${result.desc}</p>
+      </div>
+      <div class="bg-slate-800 rounded-2xl p-5 mb-4">
+        <p class="text-slate-300 leading-relaxed text-sm">${result.detail}</p>
+      </div>
+      <div class="bg-violet-900/30 border border-violet-700/40 rounded-xl p-4 mb-5">
+        <h4 class="text-violet-300 font-bold mb-3">💡 팁</h4>
+        <ul class="space-y-2">
+          ${result.tips.map(tip => `<li class="flex gap-2 text-slate-300 text-sm"><span class="text-violet-400 mt-0.5">▸</span><span>${tip}</span></li>`).join('')}
+        </ul>
+      </div>
+
+      ${shareRow}
+
+      <div class="flex justify-center gap-8 my-6">
+        <button onclick="bumpEngagement('${funKey}'); this.querySelector('.n').textContent = engagementCount('${funKey}', 110);" class="text-center text-xs text-slate-500">
+          <span class="block text-xl mb-1">😂</span>공감돼요<div class="n text-slate-100 font-bold text-xs mt-0.5">${engagementCount(funKey, 110)}</div>
+        </button>
+      </div>
+      <p class="text-slate-600 text-xs text-center mb-6">※ 공감 수는 추후 실데이터 연동 예정 — 현재 이 기기 기준 더미 표시</p>
+
+      <div class="border-t border-slate-700 pt-4 mb-4">
+        <p class="text-slate-300 font-bold text-sm mb-2">댓글 0</p>
+        <p class="text-slate-500 text-xs bg-slate-800 border border-dashed border-slate-700 rounded-lg p-3 text-center">💬 댓글은 로그인 후 작성할 수 있어요 (준비 중)</p>
+      </div>
+
+      <button onclick="renderPsychtestFeed()" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">목록으로</button>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   ⚖️ 밸런스 게임 (v0.2.3~, Phase 4 수익화 로드맵 11-7)
+   - A/B 양자택일 + 다른 사람들의 선택 비율(현재는 더미, 추후 실데이터 연동)
+══════════════════════════════════════════════════ */
+function initBalance() {
+  App.state.balance = { gameId: null, picked: null };
+  renderBalanceFeed();
+}
+
+function renderBalanceFeed() {
+  const container = document.getElementById('balance-container');
+  const real = AppData.balanceGames[0];
+  const comingSoon = [
+    { emoji: '🏝️', title: '무인도에 하나만 vs 아무것도 없이' },
+    { emoji: '⏰', title: '10년 일찍 태어나기 vs 10년 늦게 태어나기' },
+  ];
+  container.innerHTML = `
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl font-black text-slate-100 mb-1">⚖️ 밸런스 게임</h2>
+      <p class="text-slate-400 mb-6">A vs B, 당신의 선택은?</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center cursor-pointer hover:border-emerald-500 transition" onclick="balanceOpenPost('${real.id}')">
+          <div class="text-3xl mb-2">${real.emoji}</div>
+          <p class="text-slate-100 font-semibold text-sm mb-1">${real.title}</p>
+          <p class="text-slate-500 text-xs">▷ ${engagementCount('balance-' + real.id + '-plays', 203)}</p>
+        </div>
+        ${comingSoon.map(c => `
+          <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-4 text-center opacity-60 cursor-pointer" onclick="showToast('곧 만나요! 준비중인 콘텐츠예요 🙏')">
+            <div class="text-3xl mb-2">${c.emoji}</div>
+            <p class="text-slate-300 font-semibold text-sm mb-1">${c.title}</p>
+            <p class="text-slate-500 text-xs">🔒 준비중</p>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function balanceOpenPost(gameId) {
+  const g = AppData.balanceGames.find(x => x.id === gameId);
+  if (!g) return;
+  App.state.balance.gameId = gameId;
+  const container = document.getElementById('balance-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <button onclick="renderBalanceFeed()" class="text-slate-400 hover:text-slate-200 text-sm mb-4">← 목록으로</button>
+      <div class="flex items-start gap-4 mb-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-700/60 to-slate-800 flex items-center justify-center text-2xl shrink-0">${g.emoji}</div>
+        <div>
+          <h2 class="text-slate-100 font-black text-xl mb-1">${g.title}</h2>
+          <p class="text-slate-500 text-xs">과몰입 연구소 · 약 ${g.estMinutes}분 · ▷ ${engagementCount('balance-' + g.id + '-plays', 203)}</p>
+        </div>
+      </div>
+      <p class="text-slate-300 leading-relaxed mb-4">${g.hook}</p>
+      <div class="flex gap-2 mb-6">
+        ${g.tags.map(tag => `<span class="bg-slate-700/50 text-slate-300 text-xs px-3 py-1 rounded-full"># ${tag}</span>`).join('')}
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="balancePick('${g.id}','A')" class="bg-slate-800 border border-slate-700 hover:border-emerald-500 rounded-xl p-5 text-center transition">
+          <div class="text-3xl mb-2">${g.optionA.emoji}</div>
+          <p class="text-slate-100 font-bold text-sm">${g.optionA.label}</p>
+        </button>
+        <button onclick="balancePick('${g.id}','B')" class="bg-slate-800 border border-slate-700 hover:border-rose-500 rounded-xl p-5 text-center transition">
+          <div class="text-3xl mb-2">${g.optionB.emoji}</div>
+          <p class="text-slate-100 font-bold text-sm">${g.optionB.label}</p>
+        </button>
+      </div>
+    </div>`;
+}
+
+function balancePick(gameId, choice) {
+  const g = AppData.balanceGames.find(x => x.id === gameId);
+  if (!g) return;
+  bumpEngagement('balance-' + gameId + '-plays');
+  App.state.balance.picked = choice;
+
+  const pickedOpt = choice === 'A' ? g.optionA : g.optionB;
+  const nickname = getNickname() || '나';
+  const shareText = `나는 「${g.title}」에서 "${pickedOpt.label}" 골랐어! 너라면? 👉`;
+  const shareRow = renderIdentityShareRow('balance',
+    { gameId: g.id, choice, nickname, result: pickedOpt.label },
+    `${location.origin}/share-cards/balance-${g.id}.jpg`,
+    `${nickname} 님의 선택: ${pickedOpt.label}`, g.title, shareText);
+
+  /* 실제 집계는 추후 백엔드 연동 예정 — 지금은 이 기기의 선택 1표만 dummySplitA 기준값에 살짝 반영 */
+  const pickedA = parseInt(localStorage.getItem('balance_pickA_' + gameId) || '0', 10) + (choice === 'A' ? 1 : 0);
+  const pickedB = parseInt(localStorage.getItem('balance_pickB_' + gameId) || '0', 10) + (choice === 'B' ? 1 : 0);
+  localStorage.setItem('balance_pickA_' + gameId, pickedA);
+  localStorage.setItem('balance_pickB_' + gameId, pickedB);
+  const percentA = Math.round((g.dummySplitA * 100 + pickedA * 100) / (100 + pickedA + pickedB));
+
+  const container = document.getElementById('balance-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <div class="text-center mb-6">
+        <div class="text-5xl mb-3">${pickedOpt.emoji}</div>
+        <div class="text-slate-100 font-bold text-xl mb-1">"${pickedOpt.label}"</div>
+        <p class="text-slate-400 text-sm">${pickedOpt.resultText}</p>
+      </div>
+
+      <div class="bg-slate-800 rounded-2xl p-5 mb-5">
+        <p class="text-slate-400 text-xs mb-2">다른 사람들의 선택 <span class="text-slate-600">(추후 실데이터 연동 예정 — 현재 더미 표시)</span></p>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-slate-100 text-sm font-bold w-10">${percentA}%</span>
+          <div class="flex-1 h-3 bg-slate-700 rounded-full overflow-hidden flex">
+            <div class="bg-emerald-500 h-full" style="width:${percentA}%"></div>
+            <div class="bg-rose-500 h-full" style="width:${100 - percentA}%"></div>
+          </div>
+          <span class="text-slate-100 text-sm font-bold w-10 text-right">${100 - percentA}%</span>
+        </div>
+        <div class="flex justify-between text-xs text-slate-500">
+          <span>${g.optionA.label}</span><span>${g.optionB.label}</span>
+        </div>
+      </div>
+
+      ${shareRow}
+
+      <button onclick="renderBalanceFeed()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">목록으로</button>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   🎲 가족오락관 (v0.2.3~, Phase 4 로드맵 11-1 — 메뉴만, 전체 준비중)
+══════════════════════════════════════════════════ */
+const FAMILY_GAMES = [
+  { emoji: '🗣️', name: '이구동성 게임', desc: '한 단어를 여러 명이 동시에 외치면? 맞혀보세요' },
+  { emoji: '🤥', name: '라이어 게임', desc: '거짓말쟁이를 찾아라' },
+  { emoji: '🙅', name: '몸으로 말해요', desc: '제스처만으로 정답 맞히기' },
+  { emoji: '🎯', name: '스피드 퀴즈', desc: '제한시간 안에 설명만 듣고 맞히기' },
+  { emoji: '🎵', name: '삼행시 대결', desc: '주어진 단어로 삼행시 짓기' },
+  { emoji: '🧠', name: '스무고개', desc: '질문 20개 안에 정답 맞히기' },
+  { emoji: '🖐️', name: '손병호 게임', desc: '해당하면 손가락 접기' },
+  { emoji: '🎨', name: '이어그리기', desc: '앞사람 그림을 이어서 완성하기' },
+  { emoji: '📖', name: '끝말잇기 챌린지', desc: '제한시간 안에 끝말잇기 대결' },
+  { emoji: '🎤', name: '노래 제목 맞히기', desc: '초성만 보고 노래 제목 맞히기' },
+];
+
+function initFamily() {
+  const container = document.getElementById('family-container');
+  container.innerHTML = `
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl font-black text-slate-100 mb-1">🎲 가족오락관</h2>
+      <p class="text-slate-400 mb-6">모였을 때 바로 써먹는 온가족 실내게임 10선 — 오프라인 진행법도 함께 안내할 예정이에요</p>
+      <div class="space-y-2">
+        ${FAMILY_GAMES.map(g => `
+          <div class="flex items-center gap-3 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 opacity-70 cursor-pointer hover:border-violet-500 transition"
+            onclick="showToast('가족오락관 콘텐츠는 준비 중이에요 — 곧 만나요! 🙏')">
+            <div class="text-2xl w-9 text-center">${g.emoji}</div>
+            <div class="flex-1">
+              <p class="text-slate-100 font-semibold text-sm">${g.name}</p>
+              <p class="text-slate-500 text-xs">${g.desc}</p>
+            </div>
+            <span class="text-xs font-bold px-3 py-1 rounded-full bg-slate-700/60 text-slate-400 whitespace-nowrap">🔒 준비중</span>
+          </div>`).join('')}
+      </div>
+      <p class="text-slate-600 text-xs mt-4">※ 사이트 방문이 늘어나면 순차적으로 오픈할 예정이에요.</p>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   🔮 사주 · 타로 · 궁합 (v0.2.3~, Phase 4 로드맵 11-8 — 전부 준비중)
+══════════════════════════════════════════════════ */
+function initFortuneExt() {
+  const container = document.getElementById('fortuneext-container');
+  const items = [
+    { emoji: '📜', name: '사주팔자' },
+    { emoji: '🎴', name: '타로 한장뽑기' },
+    { emoji: '💞', name: 'AI 궁합' },
+  ];
+  container.innerHTML = `
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl font-black text-slate-100 mb-1">🔮 사주 · 타로 · 궁합</h2>
+      <p class="text-slate-400 mb-6">오늘의 운세에서 확장되는 콘텐츠, 준비 중이에요</p>
+      <div class="grid grid-cols-3 gap-3">
+        ${items.map(i => `
+          <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 text-center opacity-70 cursor-pointer hover:border-violet-500 transition" onclick="showToast('곧 만나요! 준비중인 콘텐츠예요 🙏')">
+            <div class="text-3xl mb-2">${i.emoji}</div>
+            <p class="text-slate-100 font-semibold text-sm mb-2">${i.name}</p>
+            <span class="text-xs font-bold text-amber-400 bg-amber-400/10 border border-amber-400/30 px-2 py-1 rounded-full">준비중</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
    확장 Placeholder UI (공통)
 ══════════════════════════════════════════════════ */
 function renderPlaceholderUI(section, value) {
@@ -4143,6 +4505,22 @@ function renderPlaceholderUI(section, value) {
         <button onclick="submitComment('${section}')" class="bg-violet-600 hover:bg-violet-500 text-white text-sm font-bold px-4 py-2 rounded-xl transition">등록</button>
       </div>
     </div>
+
+    <!-- ④ 제휴 상품 추천 배너 (Phase 4 로드맵 11-4, v0.2.3~)
+         강제성 없이(안 눌러도 무방) 결과와 자연스럽게 어울리는 상품을 은근히 노출하는 자리.
+         실제 쿠팡파트너스 등 제휴 링크는 가입 후 href만 교체하면 됨(placeholder 상태) —
+         테스트 성격별 타겟팅(11-9)은 이후 카테고리별로 AFFILIATE_BANNERS를 분기해 고도화 예정 -->
+    <a href="#" target="_blank" rel="noopener sponsored"
+      class="block bg-gradient-to-r from-amber-900/20 to-slate-800/60 border border-amber-700/30 hover:border-amber-500/60 rounded-2xl p-4 transition">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl shrink-0">🧠</span>
+        <div class="flex-1 min-w-0">
+          <p class="text-slate-200 text-sm font-semibold">머리가 맑아지는 하루, 이런 것도 있어요</p>
+          <p class="text-slate-500 text-xs">확인해보고 싶다면 살짝 눌러보세요</p>
+        </div>
+        <span class="text-amber-400 text-xs font-bold shrink-0">보러가기 →</span>
+      </div>
+    </a>
   </div>`;
 }
 
@@ -5534,6 +5912,11 @@ document.addEventListener('DOMContentLoaded', () => {
        직접 링크(#privacy 새로고침 등)로 진입해도 home으로 튕기지 않고 정상 라우팅됨 (v0.2.2~) */
     privacy: () => {},
     terms: () => {},
+    /* Phase 4 수익화 로드맵 Now 항목 (v0.2.3~) */
+    psychtest: initPsychtest,
+    balance: initBalance,
+    family: initFamily,
+    fortuneext: initFortuneExt,
   };
 
   // 초기 섹션 진입 시 초기화

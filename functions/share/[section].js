@@ -14,7 +14,9 @@
 const TIER_SECTIONS = ['brain', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus'];
 const IDENTITY_SECTIONS = ['mbti', 'adhd', 'insa', 'proverb', 'pricequiz', 'fortune', 'dream'];
 const LOTTO_SECTIONS = ['lotto', 'lottodraw'];
-const VALID_SECTIONS = [...TIER_SECTIONS, ...IDENTITY_SECTIONS, ...LOTTO_SECTIONS];
+/* Phase 4 수익화 로드맵 11-6/11-7 (v0.2.3~): 심리테스트존/밸런스게임 */
+const FEED_SECTIONS = ['psychtest', 'balance'];
+const VALID_SECTIONS = [...TIER_SECTIONS, ...IDENTITY_SECTIONS, ...LOTTO_SECTIONS, ...FEED_SECTIONS];
 const CTA_RESULT = '나도 해보기';
 const CTA_CHALLENGE = '⚔️ 도전하기';
 
@@ -133,6 +135,22 @@ export async function onRequestGet(context) {
     imageUrl = `${origin}/share-cards/lotto-share.jpg`;
     cta = '🎰 나도 뽑아보기';
     if (drawn) extra = drawn;
+  } else if (section === 'psychtest') {
+    /* 심리테스트존 결과 공유 — testId+grade 조합별 이미지(현재는 katokspeed 1개×3등급뿐,
+       신규 테스트 추가 시 share-cards/psychtest-{testId}-{grade}.jpg를 함께 생성할 것) */
+    const testId = /^[a-z0-9]+$/.test(url.searchParams.get('testId')) ? url.searchParams.get('testId') : 'katokspeed';
+    const grade = /^[ABC]$/.test(url.searchParams.get('grade')) ? url.searchParams.get('grade') : 'A';
+    const result = url.searchParams.get('result') || '';
+    rawTitle = `${rawNickname} 님의 심리테스트 결과`;
+    rawDescription = result || '나도 확인해보고 싶다면? 과몰입 연구소에서 테스트해보세요 👉';
+    imageUrl = `${origin}/share-cards/psychtest-${testId}-${grade}.jpg`;
+  } else if (section === 'balance') {
+    /* 밸런스게임 결과 공유 — 게임별 이미지 1장(선택지와 무관하게 공용, 신규 게임 추가 시 함께 생성) */
+    const gameId = /^[a-z0-9]+$/.test(url.searchParams.get('gameId')) ? url.searchParams.get('gameId') : 'lifeorcash';
+    const result = url.searchParams.get('result') || '';
+    rawTitle = `${rawNickname} 님의 선택은?`;
+    rawDescription = result || '너라면 어떤 걸 고를래? 과몰입 연구소에서 확인해보세요 👉';
+    imageUrl = `${origin}/share-cards/balance-${gameId}.jpg`;
   }
 
   const title = esc(rawTitle);

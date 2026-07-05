@@ -1,4 +1,4 @@
-<!-- v0.2.2 | 5-in-1 Dashboard SPA -->
+<!-- v0.2.3 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -145,6 +145,21 @@
     <div class="nav-item" data-section="lotto">
       <span class="text-lg">🎱</span> 로또 번호 조합기
     </div>
+
+    <!-- Phase 4 수익화 로드맵 신규 메뉴 (v0.2.3~): 심리테스트존/밸런스게임은 일부 실제 콘텐츠 오픈,
+         가족오락관/사주·타로·궁합은 전체 준비중 -->
+    <div class="nav-item" data-section="psychtest">
+      <span class="text-lg">🃏</span> 심리 테스트존
+    </div>
+    <div class="nav-item" data-section="balance">
+      <span class="text-lg">⚖️</span> 밸런스 게임
+    </div>
+    <div class="nav-item" data-section="family">
+      <span class="text-lg">🎲</span> 가족오락관 <span class="badge-soon-nav">준비중</span>
+    </div>
+    <div class="nav-item" data-section="fortuneext">
+      <span class="text-lg">🔮</span> 사주 · 타로 · 궁합 <span class="badge-soon-nav">준비중</span>
+    </div>
   </nav>
 
   <!-- 다크/라이트 모드 선택 (v0.1.0~: 아이콘 토글 → 두 버튼 중 고르는 방식, 항상 두 옵션이 같이 보임) -->
@@ -163,7 +178,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4">
-    <p class="text-slate-600 text-xs">v0.2.2 · 2026-07-05</p>
+    <p class="text-slate-600 text-xs">v0.2.3 · 2026-07-05</p>
   </div>
 </aside>
 
@@ -344,6 +359,20 @@
     <!-- ════ 🎰 로또 직접 뽑기 게임 섹션 (v0.1.2~) ════ -->
     <div id="section-lottodraw" class="section hidden">
       <div id="lottodraw-container"></div>
+    </div>
+
+    <!-- ════ Phase 4 수익화 로드맵 신규 메뉴 (v0.2.3~) ════ -->
+    <div id="section-psychtest" class="section hidden">
+      <div id="psychtest-container"></div>
+    </div>
+    <div id="section-balance" class="section hidden">
+      <div id="balance-container"></div>
+    </div>
+    <div id="section-family" class="section hidden">
+      <div id="family-container"></div>
+    </div>
+    <div id="section-fortuneext" class="section hidden">
+      <div id="fortuneext-container"></div>
     </div>
 
     <!-- 공유 링크로 들어왔을 때 실제 테스트 화면 전에 보여주는 공용 프리뷰 (v0.1.1~) -->

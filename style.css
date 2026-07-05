@@ -113,6 +113,19 @@ html.light {
   box-shadow: 0 4px 12px rgba(99,102,241,0.4);
 }
 
+/* Phase 4 로드맵 신규 메뉴 "준비중" 배지 (v0.2.3~) */
+.badge-soon-nav {
+  margin-left: auto;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: rgb(var(--amber-400));
+  background: rgb(var(--amber-900) / 0.25);
+  border: 1px solid rgb(var(--amber-400) / 0.4);
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
 /* ── 사이드바 "테스트" 그룹 (접기/펼치기) ── */
 .nav-group-header {
   display: flex;
