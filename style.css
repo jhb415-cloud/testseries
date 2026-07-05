@@ -126,6 +126,22 @@ html.light {
   white-space: nowrap;
 }
 
+/* 심리테스트존 카테고리 탭 (v0.2.4~) */
+.cat-tab-btn {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: rgb(var(--slate-700) / 0.5);
+  color: rgb(var(--slate-400));
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.cat-tab-btn.active {
+  background: #7c3aed;
+  color: #fff;
+}
+
 /* ── 사이드바 "테스트" 그룹 (접기/펼치기) ── */
 .nav-group-header {
   display: flex;

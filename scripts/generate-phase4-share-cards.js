@@ -7,6 +7,10 @@
 const path = require('path');
 const { chromium } = require('playwright');
 
+global.window = global;
+require(path.join(__dirname, '..', 'data.js'));
+const AppData = window.AppData;
+
 function themedCardHTML({ bgFrom, bgTo, accent, badgeBg, badge, emoji, title, subtitle, scale = 1 }) {
   const px = (n) => Math.round(n * scale);
   return `<!doctype html><html><head><meta charset="utf-8"><style>
@@ -85,18 +89,17 @@ async function main() {
     throw new Error(`안전영역 검증 실패: ${filename}`);
   };
 
-  // 심리테스트존 — 카톡 답장 속도 테스트, 3개 등급
-  const psychGrades = [
-    { grade: 'A', emoji: '⚡', title: '칼답형', subtitle: '메시지 오는 순간 이미 손이 움직이는 타입!' },
-    { grade: 'B', emoji: '😏', title: '밀당형', subtitle: '적당히 튕기고 적당히 다가가는 밀당의 정석' },
-    { grade: 'C', emoji: '🫧', title: '잠수형', subtitle: '마음은 있는데 표현이 늦는 은근 무심한 척 타입' },
-  ];
-  for (const g of psychGrades) {
-    await shot({ ...PSYCHTEST_THEME, badge: '심리테스트', emoji: g.emoji, title: g.title, subtitle: g.subtitle }, `psychtest-katokspeed-${g.grade}.jpg`);
+  // 심리테스트존 — data.js의 AppData.psychTests를 그대로 순회(콘텐츠 이중 관리 방지, v0.2.4~)
+  for (const t of AppData.psychTests) {
+    for (const r of t.results) {
+      await shot({ ...PSYCHTEST_THEME, badge: '심리테스트', emoji: r.emoji, title: r.title, subtitle: r.desc }, `psychtest-${t.id}-${r.grade}.jpg`);
+    }
   }
 
-  // 밸런스게임 — 평생 안 아프기 vs 지금 10억 (선택 무관 공용 1장)
-  await shot({ ...BALANCE_THEME, badge: '밸런스게임', emoji: '⚖️', title: '평생 안 아프기 vs 지금 10억', subtitle: '당신의 선택은? 나도 골라보기' }, 'balance-lifeorcash.jpg');
+  // 밸런스게임 — data.js의 AppData.balanceGames를 그대로 순회(선택 무관 게임당 공용 1장)
+  for (const g of AppData.balanceGames) {
+    await shot({ ...BALANCE_THEME, badge: '밸런스게임', emoji: g.emoji, title: g.title, subtitle: '당신의 선택은? 나도 골라보기' }, `balance-${g.id}.jpg`);
+  }
 
   await browser.close();
   console.log('Phase 4 공유 이미지 생성 완료');

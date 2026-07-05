@@ -4109,42 +4109,73 @@ function bumpEngagement(key) {
    - 피드형 목록 → 후킹 포스트 → 짧은 문항 테스트 → 결과+공유 구조 (poomang 레퍼런스 참고)
    - 지금은 실제 콘텐츠 1개(katokspeed)만 있고 나머지는 피드에서 "준비중"으로 노출
 ══════════════════════════════════════════════════ */
+/* 카테고리 메타(라벨/이모지) + 잠금 콘텐츠(제목만, 2026-07-05 사용자가 선정 요청한
+   "어그로 있는" 향후 주제) — 카테고리당 정원 3개(오픈 1 + 잠금 2) 운영, 신규 주제는
+   CONTENT_PROMPTS.md의 AI 프롬프트로 생성 후 이 배열에 추가 */
+const PSYCHTEST_CATEGORIES = {
+  character: { label: '캐릭터 테스트', emoji: '🎭' },
+  trait: { label: '성향 테스트', emoji: '🧠' },
+  taste: { label: '취향 테스트', emoji: '🛍️' },
+  national: { label: '국민테스트', emoji: '🇰🇷' },
+};
+const PSYCHTEST_LOCKED = {
+  character: [{ emoji: '🏯', title: '나의 사극 빙의 테스트' }, { emoji: '🦹', title: '나의 빌런 각성 테스트' }],
+  trait: [{ emoji: '🧊', title: 'T의 공감능력 테스트' }, { emoji: '💤', title: '관태기 자가진단 테스트' }],
+  taste: [{ emoji: '🏪', title: '나의 편의점 소비 유형 테스트' }, { emoji: '📺', title: 'OTT 정주행 스타일 테스트' }],
+  national: [{ emoji: '⭐', title: '별자리 성격 테스트' }, { emoji: '🎂', title: '탄생월 성격 테스트' }],
+};
+
 function initPsychtest() {
-  App.state.psychtest = { testId: null, step: 0, answers: [] };
-  renderPsychtestFeed();
+  const category = App.state.psychtest && App.state.psychtest.category || 'trait';
+  App.state.psychtest = { category, testId: null, step: 0, answers: [] };
+  renderPsychtestFeed(category);
 }
 
-function renderPsychtestFeed() {
+/* 사이드바 카테고리 서브메뉴 클릭 시 호출(nav 클릭 핸들러에서 연결) */
+function psychtestNavCategory(category) {
+  App.state.psychtest = { category, testId: null, step: 0, answers: [] };
+  renderPsychtestFeed(category);
+}
+
+function renderPsychtestFeed(category) {
+  category = category || 'trait';
+  App.state.psychtest.category = category;
   const container = document.getElementById('psychtest-container');
-  const real = AppData.psychTests[0];
-  const comingSoon = [
-    { emoji: '🧊', title: '나의 전생 동물 테스트' },
-    { emoji: '🏢', title: '직장 생존력 테스트' },
-  ];
+  const real = AppData.psychTests.find(x => x.category === category);
+  const locked = PSYCHTEST_LOCKED[category] || [];
+
+  const tabsHTML = Object.keys(PSYCHTEST_CATEGORIES).map(key => {
+    const cat = PSYCHTEST_CATEGORIES[key];
+    return `<span class="cat-tab-btn ${key === category ? 'active' : ''}" onclick="psychtestNavCategory('${key}')">${cat.emoji} ${cat.label}</span>`;
+  }).join('');
+
   container.innerHTML = `
     <div class="max-w-2xl mx-auto">
       <h2 class="text-2xl font-black text-slate-100 mb-1">🃏 심리 테스트존</h2>
-      <p class="text-slate-400 mb-6">요즘 뜨는 심리테스트, 계속 업데이트됩니다</p>
+      <p class="text-slate-400 mb-4">요즘 뜨는 심리테스트, 카테고리별로 계속 업데이트됩니다</p>
+      <div class="flex flex-wrap gap-2 mb-6">${tabsHTML}</div>
 
+      ${real ? `
       <div class="bg-gradient-to-br from-violet-900/40 to-slate-800 border border-violet-700/40 rounded-2xl p-5 mb-6 cursor-pointer hover:border-violet-500 transition"
         onclick="psychtestOpenPost('${real.id}')">
         <div class="flex items-center gap-4">
           <div class="text-4xl">${real.emoji}</div>
           <div>
-            <div class="text-violet-300 text-xs font-bold uppercase tracking-widest mb-1">이주의 추천</div>
+            <div class="text-violet-300 text-xs font-bold uppercase tracking-widest mb-1">🔥 이 카테고리 대표 테스트</div>
             <h3 class="text-slate-100 font-bold text-lg mb-1">${real.title}</h3>
             <p class="text-slate-400 text-sm">${real.hook}</p>
           </div>
         </div>
-      </div>
+      </div>` : ''}
 
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        ${real ? `
         <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center cursor-pointer hover:border-violet-500 transition" onclick="psychtestOpenPost('${real.id}')">
           <div class="text-3xl mb-2">${real.emoji}</div>
           <p class="text-slate-100 font-semibold text-sm mb-1">${real.title}</p>
           <p class="text-slate-500 text-xs">▷ ${engagementCount('psychtest-' + real.id + '-plays', 128)}</p>
-        </div>
-        ${comingSoon.map(c => `
+        </div>` : ''}
+        ${locked.map(c => `
           <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-4 text-center opacity-60 cursor-pointer" onclick="showToast('곧 만나요! 준비중인 콘텐츠예요 🙏')">
             <div class="text-3xl mb-2">${c.emoji}</div>
             <p class="text-slate-300 font-semibold text-sm mb-1">${c.title}</p>
@@ -4161,7 +4192,7 @@ function psychtestOpenPost(testId) {
   const container = document.getElementById('psychtest-container');
   container.innerHTML = `
     <div class="max-w-lg mx-auto">
-      <button onclick="renderPsychtestFeed()" class="text-slate-400 hover:text-slate-200 text-sm mb-4">← 목록으로</button>
+      <button onclick="renderPsychtestFeed('${App.state.psychtest.category}')" class="text-slate-400 hover:text-slate-200 text-sm mb-4">← 목록으로</button>
       <div class="flex items-start gap-4 mb-4">
         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-700/60 to-slate-800 flex items-center justify-center text-2xl shrink-0">${t.emoji}</div>
         <div>
@@ -4181,7 +4212,7 @@ function psychtestOpenPost(testId) {
 
 function psychtestStart(testId) {
   bumpEngagement('psychtest-' + testId + '-plays');
-  App.state.psychtest = { testId, step: 0, answers: [] };
+  App.state.psychtest = { category: App.state.psychtest.category, testId, step: 0, answers: [] };
   renderPsychtestQuestion();
 }
 
@@ -4200,7 +4231,7 @@ function renderPsychtestQuestion() {
       <div class="progress-bar-track mb-6"><div class="h-full rounded-full bg-violet-500 transition-all" style="width:${progress}%"></div></div>
       <h3 class="text-slate-100 text-xl font-semibold mb-6 leading-relaxed">Q${state.step + 1}. ${q.q}</h3>
       <div class="flex flex-col gap-3">
-        ${[['바로 답장한다', 0], ['조금 뜸 들이다 답장한다', 1], ['한참 뒤에 생각날 때 답장한다', 2]].map(([label, val]) => `
+        ${q.options.map(([label, val]) => `
           <button class="option-btn" onclick="psychtestAnswer(${val})">${label}</button>`).join('')}
       </div>
     </div>`;
@@ -4264,7 +4295,7 @@ function renderPsychtestResult() {
         <p class="text-slate-500 text-xs bg-slate-800 border border-dashed border-slate-700 rounded-lg p-3 text-center">💬 댓글은 로그인 후 작성할 수 있어요 (준비 중)</p>
       </div>
 
-      <button onclick="renderPsychtestFeed()" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">목록으로</button>
+      <button onclick="renderPsychtestFeed('${App.state.psychtest.category}')" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">목록으로</button>
     </div>`;
 }
 
@@ -5868,22 +5899,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btn) btn.addEventListener('click', toggleSound);
   });
 
-  /* ── 사이드바 "테스트" 그룹 접기/펼치기 ── */
-  const testsGroup = document.getElementById('nav-group-tests');
-  const testsToggle = document.getElementById('nav-group-tests-toggle');
-  if (testsGroup && testsToggle) {
-    if (localStorage.getItem('nav_tests_collapsed') === '1') testsGroup.classList.remove('open');
-    testsToggle.addEventListener('click', () => {
-      const isOpen = testsGroup.classList.toggle('open');
-      localStorage.setItem('nav_tests_collapsed', isOpen ? '0' : '1');
+  /* ── 사이드바 그룹 접기/펼치기 (v0.2.4~: 심리테스트존 그룹 추가되며 공용 루프로 일반화,
+       기존 저장 키(nav_tests_collapsed)는 그대로 유지해 하위호환) ── */
+  ['nav-group-tests', 'nav-group-psychtest'].forEach(groupId => {
+    const group = document.getElementById(groupId);
+    const toggle = document.getElementById(groupId + '-toggle');
+    if (!group || !toggle) return;
+    const storageKey = 'nav_' + groupId.replace('nav-group-', '') + '_collapsed';
+    if (localStorage.getItem(storageKey) === '1') group.classList.remove('open');
+    toggle.addEventListener('click', () => {
+      const isOpen = group.classList.toggle('open');
+      localStorage.setItem(storageKey, isOpen ? '0' : '1');
     });
-  }
+  });
 
-  /* ── 내비게이션 클릭 이벤트 ── */
+  /* ── 내비게이션 클릭 이벤트 ──
+     심리테스트존 하위메뉴는 data-psych-category도 함께 갖고 있어, 섹션 이동 후
+     해당 카테고리 피드를 바로 보여주도록 psychtestNavCategory()를 추가 호출 (v0.2.4~) */
   document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
       const section = item.dataset.section;
       App.navigate(section);
+      if (item.dataset.psychCategory) psychtestNavCategory(item.dataset.psychCategory);
     });
   });
 

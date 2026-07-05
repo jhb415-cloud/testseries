@@ -1,4 +1,4 @@
-<!-- v0.2.3 | 5-in-1 Dashboard SPA -->
+<!-- v0.2.4 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -136,29 +136,47 @@
       </div>
     </div>
 
-    <div class="nav-item" data-section="dream">
-      <span class="text-lg">🌙</span> 꿈 해몽 검색
+    <!-- 심리 테스트존 그룹 (v0.2.4~: 4개 카테고리 하위메뉴로 재구성, Phase 4 로드맵 11-6) -->
+    <div class="nav-group open" id="nav-group-psychtest">
+      <div class="nav-group-header" id="nav-group-psychtest-toggle">
+        <span class="text-lg">🃏</span> 심리 테스트존
+        <span class="nav-group-chevron">▾</span>
+      </div>
+      <div class="nav-group-items" id="nav-group-psychtest-items">
+        <div class="nav-item nav-subitem" data-section="psychtest" data-psych-category="character">
+          <span class="text-lg">🎭</span> 캐릭터 테스트
+        </div>
+        <div class="nav-item nav-subitem" data-section="psychtest" data-psych-category="trait">
+          <span class="text-lg">🧠</span> 성향 테스트
+        </div>
+        <div class="nav-item nav-subitem" data-section="psychtest" data-psych-category="taste">
+          <span class="text-lg">🛍️</span> 취향 테스트
+        </div>
+        <div class="nav-item nav-subitem" data-section="psychtest" data-psych-category="national">
+          <span class="text-lg">🇰🇷</span> 국민테스트
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-item" data-section="balance">
+      <span class="text-lg">⚖️</span> 밸런스 게임
     </div>
     <div class="nav-item" data-section="fortune">
       <span class="text-lg">🔮</span> 오늘의 운세
+    </div>
+    <div class="nav-item" data-section="fortuneext">
+      <span class="text-lg">🔯</span> 사주 · 타로 · 궁합 <span class="badge-soon-nav">준비중</span>
+    </div>
+    <div class="nav-item" data-section="dream">
+      <span class="text-lg">🌙</span> 꿈 해몽 검색
     </div>
     <div class="nav-item" data-section="lotto">
       <span class="text-lg">🎱</span> 로또 번호 조합기
     </div>
 
-    <!-- Phase 4 수익화 로드맵 신규 메뉴 (v0.2.3~): 심리테스트존/밸런스게임은 일부 실제 콘텐츠 오픈,
-         가족오락관/사주·타로·궁합은 전체 준비중 -->
-    <div class="nav-item" data-section="psychtest">
-      <span class="text-lg">🃏</span> 심리 테스트존
-    </div>
-    <div class="nav-item" data-section="balance">
-      <span class="text-lg">⚖️</span> 밸런스 게임
-    </div>
+    <!-- 가족오락관은 요청 순서 목록에 없어 맨 끝에 배치(전체 준비중, Phase 4 로드맵 11-1) -->
     <div class="nav-item" data-section="family">
       <span class="text-lg">🎲</span> 가족오락관 <span class="badge-soon-nav">준비중</span>
-    </div>
-    <div class="nav-item" data-section="fortuneext">
-      <span class="text-lg">🔮</span> 사주 · 타로 · 궁합 <span class="badge-soon-nav">준비중</span>
     </div>
   </nav>
 
@@ -178,7 +196,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4">
-    <p class="text-slate-600 text-xs">v0.2.3 · 2026-07-05</p>
+    <p class="text-slate-600 text-xs">v0.2.4 · 2026-07-05</p>
   </div>
 </aside>
 

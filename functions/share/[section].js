@@ -139,7 +139,7 @@ export async function onRequestGet(context) {
     /* 심리테스트존 결과 공유 — testId+grade 조합별 이미지(현재는 katokspeed 1개×3등급뿐,
        신규 테스트 추가 시 share-cards/psychtest-{testId}-{grade}.jpg를 함께 생성할 것) */
     const testId = /^[a-z0-9]+$/.test(url.searchParams.get('testId')) ? url.searchParams.get('testId') : 'katokspeed';
-    const grade = /^[ABC]$/.test(url.searchParams.get('grade')) ? url.searchParams.get('grade') : 'A';
+    const grade = /^[ABCD]$/.test(url.searchParams.get('grade')) ? url.searchParams.get('grade') : 'A';
     const result = url.searchParams.get('result') || '';
     rawTitle = `${rawNickname} 님의 심리테스트 결과`;
     rawDescription = result || '나도 확인해보고 싶다면? 과몰입 연구소에서 테스트해보세요 👉';
