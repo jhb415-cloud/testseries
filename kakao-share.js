@@ -1,6 +1,9 @@
-/* v0.0.46 | 5-in-1 Dashboard SPA — kakao-share.js */
+/* v0.2.1 | 5-in-1 Dashboard SPA — kakao-share.js
+   개인 계정으로 새로 만든 Kakao Developers 앱의 JavaScript 키로 교체 (기존 앱이 회사 계정에
+   잘못 연결돼있던 문제 수정). 신규 앱에는 기존 도메인(testseries1.pages.dev)과 도메인 이전
+   예정인 www.gwamol-lap.xyz 둘 다 미리 등록해둬 도메인 전환 시 카카오 쪽 재작업이 없도록 함 */
 
-Kakao.init('0149c1c9d33b66ac289ee90d973cc243');
+Kakao.init('3e54f92e9a63142650381c63b1cadee3');
 
 function shareToKakao(text) {
   try {
