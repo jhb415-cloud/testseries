@@ -4859,7 +4859,7 @@ function initLottodraw() {
   const stage = document.getElementById('lottodraw-stage');
   const size = Math.max(220, Math.min(310, (stage.clientWidth || 320) - 16));
   s.radius = size / 2;
-  s.ballR = Math.round(size * 0.052);
+  s.ballR = Math.round(size * 0.041); // v0.1.5: 0.052→0.041 축소 — 뭉침 완화 + 팝콘식 끓음에 맞는 크기
   s.rampLen = Math.round(size * 0.46);
   const r = s.ballR;
   const rampRad = LOTTODRAW_RAMP_DEG * Math.PI / 180;
@@ -4942,33 +4942,43 @@ function lottodrawResetBalls() {
       n, el,
       x: Math.cos(ang) * dist, y: Math.sin(ang) * dist,
       vx: (Math.random() - 0.5) * 1.2, vy: (Math.random() - 0.5) * 1.2,
-      phase: Math.random() * Math.PI * 2, // 공마다 다른 바람 위상 — 일제히 같은 방향으로 돌지 않게
     });
   }
 }
 
-/* 물리 루프 (좌표계: 구체 중심 원점) — v0.1.4~ 패들 대신 "바람" 방식.
-   실제 추첨기처럼 아래에서 공기를 불어 올리는 상승기류(아래쪽에 있을수록 강함, 세기 랜덤) +
-   천천히 방향이 바뀌는 옆바람 + 공마다 위상이 다른 난기류로 불규칙하게 떠다니게 함.
-   전체 속도 상한도 기존(r*0.75)보다 낮춰(r*0.45) 차분하게 */
+/* 물리 루프 (좌표계: 구체 중심 원점) — v0.1.5~ "분수 순환(에어믹스)" 방식.
+   실제 추첨기처럼 바닥 중앙 노즐에서 쉬지 않고 공기를 뿜어 공이 가운데로 솟구쳤다가
+   양옆 벽을 타고 쏟아져 내려 다시 제트에 빨려 들어가는 순환 구조 — 팝콘처럼 끓으며
+   바닥에 뭉치지 않는다. 노즐 위치는 비주기 이중 사인으로 좌우 스윙해 패턴 고착 방지.
+   (v0.1.4의 부유식 옆바람+소용돌이는 공이 아래에 깔리고 예측이 쉬워 교체) */
 function lottodrawTick(session) {
   const s = lottoDrawState;
   if (session !== s.session || App.state.currentSection !== 'lottodraw' || s.finished) return;
   const R = s.radius, r = s.ballR;
 
-  s.windT += 0.008;
-  const crossWind = Math.sin(s.windT * 1.7) * 0.045 + Math.sin(s.windT * 0.6 + 2) * 0.03;
-  const maxV = r * 0.45; // 프레임당 최대 속도 (터널링 방지 겸 전체 속도 다운)
+  s.windT += 0.016;
+  /* 노즐 스윙: 제트 중심이 좌우로 천천히 흔들림 (주기가 다른 사인 2개 합성 → 비주기적) */
+  const nozzleX = (Math.sin(s.windT * 0.9) * 0.35 + Math.sin(s.windT * 0.37 + 1.7) * 0.2) * R;
+  const jetW = R * 0.5; // 제트 수평 폭 (가우시안 시그마)
+  const maxV = r * 0.75; // 프레임당 최대 속도 (터널링 방지)
 
   for (const b of s.balls) {
-    b.vy += 0.05; // 약한 중력
-    /* 옆바람 + 공별 위상이 다른 소용돌이 + 미세 난기류 */
-    b.vx += crossWind + Math.sin(s.windT * 3 + b.phase) * 0.04 + (Math.random() - 0.5) * 0.1;
-    b.vy += (Math.random() - 0.5) * 0.1;
-    /* 하단 에어제트: 아래쪽에 있을수록 위로 강하게 밀어올림 (세기는 매 프레임 랜덤) */
-    if (b.y > 0) b.vy -= (0.04 + 0.12 * (b.y / R)) * Math.random() * 1.6;
-    /* 공기 저항 — 난기류로 에너지가 계속 쌓이지 않게 감쇠 */
-    b.vx *= 0.99; b.vy *= 0.99;
+    b.vy += 0.09; // 중력 — 제트 밖으로 밀려난 공이 벽을 타고 떨어지며 순환이 생기게 v0.1.4(0.05)보다 강화
+    /* 연속 하단 제트: 아래쪽 2/3 구간에서 노즐 중심에 가까울수록 강한 상승기류.
+       세기는 매 프레임 랜덤 요동(0.4~1.6배) — 꺼지지 않고 계속 분다 */
+    if (b.y > -R * 0.35) {
+      const dxn = b.x - nozzleX;
+      const horiz = Math.exp(-(dxn * dxn) / (2 * jetW * jetW));
+      const depth = (b.y + R * 0.35) / (R * 1.35); // 0(제트 상단)~1(바닥)
+      const jet = 0.34 * (0.35 + 0.65 * depth) * horiz * (0.4 + Math.random() * 1.2);
+      b.vy -= jet;
+      b.vx += (Math.random() - 0.5) * jet * 0.9; // 제트 내 수평 난류
+    }
+    /* 상시 난기류 */
+    b.vx += (Math.random() - 0.5) * 0.16;
+    b.vy += (Math.random() - 0.5) * 0.16;
+    /* 공기 저항 — 난기류로 에너지가 계속 쌓이지 않게 감쇠 (순환 유지 위해 v0.1.4보다 약하게) */
+    b.vx *= 0.995; b.vy *= 0.995;
     b.x += b.vx; b.y += b.vy;
 
     /* 유리 구체 벽 반사 (반발계수 0.75) */
