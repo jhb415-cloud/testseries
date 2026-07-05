@@ -1,4 +1,4 @@
-<!-- v0.1.9 | 5-in-1 Dashboard SPA -->
+<!-- v0.2.0 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -163,7 +163,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4">
-    <p class="text-slate-600 text-xs">v0.1.9 · 2026-07-05</p>
+    <p class="text-slate-600 text-xs">v0.2.0 · 2026-07-05</p>
   </div>
 </aside>
 
@@ -198,16 +198,17 @@
           <div class="flex items-center justify-between mb-4">
             <p id="home-date" class="text-slate-400 text-sm"></p>
           </div>
-          <!-- 오늘의 인생 한마디 (카드 크기는 기존 그대로) -->
-          <div class="bg-gradient-to-br from-violet-900/60 to-indigo-900/60 border border-violet-700/40 rounded-2xl p-6 shadow-lg">
-            <div class="flex items-center gap-2 mb-3">
-              <span class="text-xl">✨</span>
-              <span class="text-violet-300 font-bold text-sm uppercase tracking-widest">오늘의 인생 한마디</span>
+          <!-- 오늘의 인생 한마디 (v0.1.9~: 아래 "내 정보"와 색이 겹쳐 구분이 안 된다는 피드백으로
+               indigo/violet 계열에서 amber 계열로 교체, 세로 공간도 축소) -->
+          <div class="bg-gradient-to-br from-amber-900/40 to-amber-950/30 border border-amber-700/40 rounded-xl p-4 shadow-lg">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-lg">✨</span>
+              <span class="text-amber-300 font-bold text-xs uppercase tracking-widest">오늘의 인생 한마디</span>
             </div>
-            <p id="home-quote-text" class="text-white text-xl sm:text-2xl font-semibold leading-relaxed mb-2"></p>
-            <p id="home-quote-author" class="text-violet-300 text-sm font-medium mb-4"></p>
+            <p id="home-quote-text" class="text-white text-base sm:text-lg font-semibold leading-snug mb-1"></p>
+            <p id="home-quote-author" class="text-amber-300/80 text-xs font-medium mb-2"></p>
             <button id="home-copy-btn"
-              class="bg-violet-700/50 hover:bg-violet-600/60 text-violet-200 text-sm font-semibold px-4 py-2 rounded-xl transition">
+              class="bg-amber-700/40 hover:bg-amber-600/50 text-amber-200 text-xs font-semibold px-3 py-1.5 rounded-lg transition">
               📋 문구 복사
             </button>
           </div>
