@@ -17,19 +17,26 @@ const html = `<!doctype html><html><head><meta charset="utf-8"><style>
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     position:relative;
   }
-  .balls { display:flex; gap:22px; margin-bottom:36px; }
+  /* v0.1.8~: 카카오톡이 1200x630을 약 1:1(중앙 630px)로 크롭해 보여줘서 모든 요소를
+     중앙 540px 안전영역 안에 배치 (generate-share-cards.js와 동일한 규칙) */
+  .balls { display:flex; gap:18px; margin-bottom:30px; }
   .ball {
-    width:96px; height:96px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    font-weight:900; font-size:40px; color:#fff; text-shadow:0 2px 4px rgba(0,0,0,0.35);
+    width:74px; height:74px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-size:32px; color:#fff; text-shadow:0 2px 4px rgba(0,0,0,0.35);
     box-shadow: inset 0 -8px 14px rgba(0,0,0,0.25), inset 0 6px 10px rgba(255,255,255,0.25), 0 8px 18px rgba(0,0,0,0.35);
   }
   .title {
-    font-weight:900; font-size:58px; color:#f8fafc; text-align:center;
-    text-shadow: 0 4px 16px rgba(0,0,0,0.4); margin-bottom:18px;
+    font-weight:900; font-size:46px; color:#f8fafc; text-align:center;
+    max-width:540px; line-height:1.3; word-break:keep-all; overflow-wrap:break-word;
+    text-shadow: 0 4px 16px rgba(0,0,0,0.4); margin-bottom:16px;
   }
-  .tip { font-size:28px; color:rgba(241,245,249,0.75); text-align:center; }
+  .tip {
+    font-size:24px; color:rgba(241,245,249,0.75); text-align:center;
+    max-width:540px; line-height:1.5; word-break:keep-all; overflow-wrap:break-word;
+  }
   .wordmark {
-    position:absolute; bottom:36px; font-size:26px; color:rgba(241,245,249,0.55); font-weight:700;
+    position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+    font-size:24px; color:rgba(241,245,249,0.55); font-weight:700; white-space:nowrap;
   }
 </style></head><body>
   <div class="balls">

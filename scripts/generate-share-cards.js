@@ -15,8 +15,13 @@ global.window = global;
 require(path.join(__dirname, '..', 'data.js'));
 const AppData = window.AppData;
 
-/* 공통 카드 렌더러 — 배경 테마(그라데이션 2색+포인트색)만 바꿔가며 전체 사이트에서 재사용 */
-function themedCardHTML({ bgFrom, bgTo, accent, badgeBg, badge, emoji, title, subtitle }) {
+/* 공통 카드 렌더러 — 배경 테마(그라데이션 2색+포인트색)만 바꿔가며 전체 사이트에서 재사용
+   v0.1.8~: 카카오톡 피드 카드는 1200x630 원본을 채팅창에서 약 1:1(중앙 630px 폭)로 크롭해 보여준다는 걸
+   실사용 스크린샷으로 확인(v0.1.1의 760px 축소로도 여전히 잘렸고, 좌상단 배지는 통째로 안 보였음).
+   → 모든 요소(배지 포함)를 중앙 540px "정사각 안전영역" 안에 배치: 배지는 상단 중앙으로 이동,
+   텍스트는 word-break:keep-all로 어절 단위 2~3줄 배치. scale 파라미터는 세로 넘침 시 자동 축소용. */
+function themedCardHTML({ bgFrom, bgTo, accent, badgeBg, badge, emoji, title, subtitle, scale = 1 }) {
+  const px = (n) => Math.round(n * scale);
   return `<!doctype html><html><head><meta charset="utf-8"><style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
@@ -27,32 +32,33 @@ function themedCardHTML({ bgFrom, bgTo, accent, badgeBg, badge, emoji, title, su
       position:relative;
     }
     .badge {
-      position:absolute; top:48px; left:48px;
+      position:absolute; top:34px; left:50%; transform:translateX(-50%);
       background:${badgeBg}; color:${accent}; border:3px solid ${accent};
-      font-weight:900; font-size:32px; padding:10px 28px; border-radius:16px;
-      letter-spacing:1px;
+      font-weight:900; font-size:${px(28)}px; padding:${px(8)}px ${px(24)}px; border-radius:14px;
+      letter-spacing:1px; white-space:nowrap;
     }
-    .emoji { font-size:200px; line-height:1; margin-bottom:24px; text-align:center; }
+    .content { display:flex; flex-direction:column; align-items:center; }
+    .emoji { font-size:${px(120)}px; line-height:1; margin-bottom:${px(18)}px; text-align:center; }
     .title {
-      font-weight:900; font-size:56px; color:#f1f5f9; text-align:center;
-      /* v0.1.1~: 카카오톡 채팅창 미리보기가 1200px 원본보다 좁게 크롭해서 보여줘 텍스트가 좌우로
-         잘리는 문제 발견(실사용 스크린샷) — max-width를 1000→760px로 줄여 안전 여백을 넉넉히 확보.
-         219장 전체(scripts/generate-share-cards.js 재실행)에 적용된 값이라 임의로 되돌리지 말 것 */
-      max-width:760px; line-height:1.3; text-shadow: 0 4px 16px rgba(0,0,0,0.4);
-      margin-bottom:20px;
+      font-weight:900; font-size:${px(44)}px; color:#f1f5f9; text-align:center;
+      max-width:540px; line-height:1.3; text-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      margin-bottom:${px(14)}px; word-break:keep-all; overflow-wrap:break-word;
     }
     .tip {
-      font-size:28px; color:rgba(241,245,249,0.75); text-align:center;
-      max-width:700px; line-height:1.5;
+      font-size:${px(24)}px; color:rgba(241,245,249,0.78); text-align:center;
+      max-width:540px; line-height:1.5; word-break:keep-all; overflow-wrap:break-word;
     }
     .wordmark {
-      position:absolute; bottom:36px; font-size:26px; color:rgba(241,245,249,0.55); font-weight:700;
+      position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+      font-size:24px; color:rgba(241,245,249,0.55); font-weight:700; white-space:nowrap;
     }
   </style></head><body>
     ${badge ? `<div class="badge">${badge}</div>` : ''}
-    <div class="emoji">${emoji}</div>
-    <div class="title">${title}</div>
-    ${subtitle ? `<div class="tip">${subtitle}</div>` : ''}
+    <div class="content">
+      <div class="emoji">${emoji}</div>
+      <div class="title">${title}</div>
+      ${subtitle ? `<div class="tip">${subtitle}</div>` : ''}
+    </div>
     <div class="wordmark">🧪 과몰입 연구소</div>
   </body></html>`;
 }
@@ -108,9 +114,31 @@ async function main() {
 
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
-  const shot = async (html, filename) => {
-    await page.setContent(html);
-    await page.screenshot({ path: path.join(outDir, filename), type: 'jpeg', quality: 85 });
+
+  /* 안전영역 검증: 배지·제목·팁이 카카오 정사각 크롭 가시범위(중앙 630px, 여유 두고 315~885px)를
+     벗어나거나 세로로 넘치면 scale을 낮춰 재시도, 그래도 실패하면 생성을 중단하고 알림 */
+  const SAFE_LEFT = 315, SAFE_RIGHT = 885, MAX_CONTENT_H = 445;
+  const shot = async (params, filename) => {
+    for (const scale of [1, 0.9, 0.8]) {
+      await page.setContent(themedCardHTML({ ...params, scale }));
+      const ok = await page.evaluate(({ SAFE_LEFT, SAFE_RIGHT, MAX_CONTENT_H }) => {
+        const content = document.querySelector('.content');
+        if (content.getBoundingClientRect().height > MAX_CONTENT_H) return false;
+        for (const sel of ['.badge', '.title', '.tip']) {
+          const el = document.querySelector(sel);
+          if (!el) continue;
+          const r = el.getBoundingClientRect();
+          if (r.left < SAFE_LEFT || r.right > SAFE_RIGHT) return false;
+          if (el.scrollWidth > el.clientWidth + 2) return false;
+        }
+        return true;
+      }, { SAFE_LEFT, SAFE_RIGHT, MAX_CONTENT_H });
+      if (ok) {
+        await page.screenshot({ path: path.join(outDir, filename), type: 'jpeg', quality: 85 });
+        return;
+      }
+    }
+    throw new Error(`안전영역 검증 실패: ${filename}`);
   };
 
   let count = 0;
@@ -122,14 +150,14 @@ async function main() {
       const pool = animalCards[section][tier];
       for (let idx = 0; idx < pool.length; idx++) {
         const card = pool[idx];
-        await shot(themedCardHTML({ ...TIER_THEME[tier], badge: `Tier ${tier}`, emoji: card.emoji, title: card.title, subtitle: card.tip }), `${section}-${tier}-${idx}.jpg`);
+        await shot(({ ...TIER_THEME[tier], badge: `Tier ${tier}`, emoji: card.emoji, title: card.title, subtitle: card.tip }), `${section}-${tier}-${idx}.jpg`);
         count++;
       }
     }
   }
 
   // ② 친구 대결 공용 VS 이미지
-  await shot(themedCardHTML({ bgFrom: '#1e3a5f', bgTo: '#881337', accent: '#f1f5f9', badgeBg: '#0f0a02', badge: null, emoji: '⚔️', title: '친구 대결 도전장', subtitle: '같은 테스트로 실력을 겨뤄보세요!' }), 'vs.jpg');
+  await shot(({ bgFrom: '#1e3a5f', bgTo: '#881337', accent: '#f1f5f9', badgeBg: '#0f0a02', badge: null, emoji: '⚔️', title: '친구 대결 도전장', subtitle: '같은 테스트로 실력을 겨뤄보세요!' }), 'vs.jpg');
   count++;
 
   // ③-1 MBTI 16유형
@@ -137,31 +165,31 @@ async function main() {
   for (const type of Object.keys(mbtiResults)) {
     const r = mbtiResults[type];
     const theme = MBTI_THEME[MBTI_GROUP_THEME[type]];
-    await shot(themedCardHTML({ ...theme, badge: type, emoji: r.emoji, title: r.title, subtitle: null }), `mbti-${type}.jpg`);
+    await shot(({ ...theme, badge: type, emoji: r.emoji, title: r.title, subtitle: null }), `mbti-${type}.jpg`);
     count++;
   }
 
   // ③-2 ADHD 4등급
   for (const r of AppData.adhdResults) {
-    await shot(themedCardHTML({ ...ADHD_THEME, badge: `등급 ${r.grade}`, emoji: r.emoji, title: r.title, subtitle: null }), `adhd-${r.grade}.jpg`);
+    await shot(({ ...ADHD_THEME, badge: `등급 ${r.grade}`, emoji: r.emoji, title: r.title, subtitle: null }), `adhd-${r.grade}.jpg`);
     count++;
   }
 
   // ③-3 인싸력 4등급
   for (const r of AppData.insaResults) {
-    await shot(themedCardHTML({ ...INSA_THEME, badge: `등급 ${r.grade}`, emoji: r.emoji, title: r.title, subtitle: null }), `insa-${r.grade}.jpg`);
+    await shot(({ ...INSA_THEME, badge: `등급 ${r.grade}`, emoji: r.emoji, title: r.title, subtitle: null }), `insa-${r.grade}.jpg`);
     count++;
   }
 
   // ③-4 속담 완성 4등급
   for (const r of AppData.proverbResults) {
-    await shot(themedCardHTML({ ...PROVERB_THEME, badge: `등급 ${r.grade}`, emoji: r.emoji, title: r.title, subtitle: null }), `proverb-${r.grade}.jpg`);
+    await shot(({ ...PROVERB_THEME, badge: `등급 ${r.grade}`, emoji: r.emoji, title: r.title, subtitle: null }), `proverb-${r.grade}.jpg`);
     count++;
   }
 
   // ③-5 그 시절 물가 4등급
   for (const r of AppData.priceQuizResults) {
-    await shot(themedCardHTML({ ...PRICEQUIZ_THEME, badge: `등급 ${r.grade}`, emoji: r.emoji, title: r.title, subtitle: null }), `pricequiz-${r.grade}.jpg`);
+    await shot(({ ...PRICEQUIZ_THEME, badge: `등급 ${r.grade}`, emoji: r.emoji, title: r.title, subtitle: null }), `pricequiz-${r.grade}.jpg`);
     count++;
   }
 
@@ -169,7 +197,7 @@ async function main() {
   for (const zodiac of Object.keys(AppData.fortuneData)) {
     const data = AppData.fortuneData[zodiac];
     const slug = ZODIAC_SLUG[zodiac];
-    await shot(themedCardHTML({ ...FORTUNE_THEME, badge: `${zodiac}띠`, emoji: data.emoji, title: '오늘의 운세', subtitle: null }), `fortune-${slug}.jpg`);
+    await shot(({ ...FORTUNE_THEME, badge: `${zodiac}띠`, emoji: data.emoji, title: '오늘의 운세', subtitle: null }), `fortune-${slug}.jpg`);
     count++;
   }
 
@@ -177,7 +205,7 @@ async function main() {
   for (let i = 0; i < AppData.dreamData.length; i++) {
     const d = AppData.dreamData[i];
     const emoji = DREAM_EMOJI[i] || '🌙';
-    await shot(themedCardHTML({ ...DREAM_THEME, badge: '꿈해몽', emoji, title: d.title, subtitle: d.summary }), `dream-${i}.jpg`);
+    await shot(({ ...DREAM_THEME, badge: '꿈해몽', emoji, title: d.title, subtitle: d.summary }), `dream-${i}.jpg`);
     count++;
   }
 
