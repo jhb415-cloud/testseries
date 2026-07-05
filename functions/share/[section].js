@@ -93,12 +93,27 @@ export async function onRequestGet(context) {
     rawDescription = result || '오늘 내 운세는 어떨까? 과몰입 연구소에서 확인해보세요 👉';
     imageUrl = `${origin}/share-cards/fortune-${zodiacSlug}.jpg`;
   } else if (section === 'dream') {
-    const dreamIdx = /^[0-9]+$/.test(url.searchParams.get('dreamIdx')) ? url.searchParams.get('dreamIdx') : '0';
+    const dreamIdxRaw = url.searchParams.get('dreamIdx');
+    const dreamIdx = /^[0-9]+$/.test(dreamIdxRaw) ? dreamIdxRaw : null;
+    const isAiDream = url.searchParams.get('dreamAi') === '1';
     const dreamTitle = url.searchParams.get('dreamTitle') || '꿈 해몽';
-    const result = url.searchParams.get('result') || '';
+    const dreamSummary = url.searchParams.get('dreamSummary') || '';
     rawTitle = `꿈 해몽: ${dreamTitle}`;
-    rawDescription = result || '이 꿈이 무슨 의미인지 과몰입 연구소에서 확인해보세요 👉';
-    imageUrl = `${origin}/share-cards/dream-${dreamIdx}.jpg`;
+    rawDescription = dreamSummary || '이 꿈이 무슨 의미인지 과몰입 연구소에서 확인해보세요 👉';
+    /* AI 생성 해몽은 테마 인덱스가 없어 전용 이미지가 없으므로 범용 이미지(dream-0.jpg)로 대체 */
+    imageUrl = dreamIdx !== null ? `${origin}/share-cards/dream-${dreamIdx}.jpg` : `${origin}/share-cards/dream-0.jpg`;
+    /* v0.1.5~: 공유자가 본 해몽 카드 전체(본문/행운색/행운숫자/오늘의 행동)를 그대로 프리뷰 화면까지
+       전달해, 링크를 연 사람이 검색 없이도 공유자와 똑같은 결과를 보게 함(로또의 실제 뽑은 번호
+       전달 방식과 동일한 접근 — extra 파라미터 재사용) */
+    extra = JSON.stringify({
+      title: dreamTitle,
+      summary: dreamSummary,
+      detail: url.searchParams.get('dreamDetail') || '',
+      lucky: url.searchParams.get('dreamLucky') || '',
+      luckyNum: url.searchParams.get('dreamLuckyNum') || '',
+      action: url.searchParams.get('dreamAction') || '',
+      ai: isAiDream,
+    });
   } else if (section === 'lotto') {
     /* 로또 조합기(완전랜덤/직접지정/운세연동/통계기반) 공용 홍보 링크 — og:image는 범용 홍보 이미지지만,
        실제 뽑은 번호(drawn)를 extra로 프리뷰 화면까지 전달해 링크를 연 사람에겐 진짜 번호를 공 UI로 보여줌 */

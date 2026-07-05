@@ -109,6 +109,14 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+/* v0.1.5~: AI 생성 콘텐츠를 카카오/공유 버튼 onclick의 백틱 템플릿 리터럴(`...${x}...`)에 넣기 전 살균.
+   escapeHtml()은 HTML 삽입은 막아주지만 백틱(`)이나 ${ 시퀀스는 그대로 통과시켜, onclick 속성 안의
+   JS 템플릿 리터럴을 탈출해 임의 코드를 실행시킬 수 있음(HTML 이스케이프와는 별개의 취약점) —
+   AI 응답(꿈해몽 AI 폴백)을 공유 버튼 문구로 쓸 때만 적용 */
+function sanitizeForJsTemplate(str) {
+  return String(str == null ? '' : str).replace(/`/g, "'").replace(/\$\{/g, '$ {');
+}
+
 /* Stage E: 동물 비유 결과 카드 (v0.0.48~) — Tier 채점 8개 테스트 전용, data.js AppData.animalCards 참고 */
 function pickAnimalCard(section, tier) {
   const pool = AppData.animalCards[section] && AppData.animalCards[section][tier];
@@ -966,6 +974,16 @@ function dreamRenderAiModal(query, data) {
     localStorage.setItem('last_dream_luckynum', data.luckyNum || '');
     markDone('dream');
 
+    /* v0.1.5~: AI 해몽도 정적 데이터 해몽과 동일하게 공유 가능하게 함.
+       data.title/summary는 OpenAI 응답(사용자 검색어 기반 프롬프트 인젝션 가능성 있음)이라
+       onclick 백틱 템플릿에 들어가기 전 sanitizeForJsTemplate()로 한 번 더 살균(escapeHtml과 별개 방어) */
+    const safeTitle = sanitizeForJsTemplate(data.title);
+    const safeSummary = sanitizeForJsTemplate(data.summary);
+    const shareText = `나 어제 이런 꿈 꿨어! ${safeTitle} — ${safeSummary} 너도 무슨 꿈인지 확인해봐 👉`;
+    const shareRow = renderIdentityShareRow('dream',
+      { dreamAi: 1, dreamTitle: data.title, dreamSummary: data.summary, dreamDetail: data.detail, dreamLucky: data.lucky, dreamLuckyNum: data.luckyNum, dreamAction: data.action, nickname: getNickname() || '나' },
+      `${location.origin}/share-cards/dream-0.jpg`, `AI가 해몽해준 내 꿈: ${safeTitle}`, safeSummary, shareText);
+
     modalInner.innerHTML = `
       <div class="modal-content bg-slate-800 rounded-2xl p-6 max-w-lg w-full mx-4 shadow-2xl">
         <div class="flex items-center justify-between mb-2">
@@ -992,6 +1010,7 @@ function dreamRenderAiModal(query, data) {
           <p class="text-indigo-200 text-sm">${escapeHtml(data.action)}</p>
         </div>
         <button onclick="dreamGoToLotto()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition mb-4">🎰 이 행운숫자로 로또 조합하기</button>
+        ${shareRow}
         <div class="text-yellow-200/50 text-xs">⚠️ AI가 생성한 참고용 콘텐츠이며, 민속학적 사실이나 전문적 조언이 아닙니다.</div>
       </div>`;
   });
@@ -1022,8 +1041,11 @@ function dreamRenderModal(tIdx, vIdx) {
 
   const hasVariants = d.variants && d.variants.length > 0;
   const shareText = `나 어제 이런 꿈 꿨어! ${title} — ${summary} 너도 무슨 꿈인지 확인해봐 👉`;
+  /* v0.1.5~: 공유 링크를 연 사람이 검색 없이도 나와 똑같은 해몽 카드를 그대로 보게끔
+     제목/요약뿐 아니라 본문·행운색·행운숫자·오늘의 행동까지 전부 landingParams로 전달
+     (functions/share/[section].js가 이걸 그대로 shared-preview 화면의 extra로 넘김) */
   const shareRow = renderIdentityShareRow('dream',
-    { dreamIdx: tIdx, dreamTitle: title, nickname: getNickname() || '나', result: summary },
+    { dreamIdx: tIdx, dreamTitle: title, dreamSummary: summary, dreamDetail: detail, dreamLucky: lucky, dreamLuckyNum: luckyNum, dreamAction: action, nickname: getNickname() || '나' },
     `${location.origin}/share-cards/dream-${tIdx}.jpg`, `내가 꾼 꿈: ${title}`, summary, shareText);
   const modalInner = document.getElementById('dream-modal-inner');
 
@@ -4688,6 +4710,35 @@ function sharedPreviewLottoBallsHTML(section, raw) {
     </div>`;
 }
 
+/* 프리뷰 화면용: 꿈해몽 공유는 범용 이미지 대신 공유자가 실제로 본 해몽 카드 전체(모달과 동일한 레이아웃)를
+   그대로 재현 — 로또의 "실제 뽑은 번호 표시"와 동일한 접근(v0.1.5~). AI 생성 해몽도 같은 extra 구조 재사용 */
+function sharedPreviewDreamCardHTML(dream) {
+  if (!dream) return '';
+  return `
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 mb-6 text-left shadow-xl">
+      <h2 class="text-slate-100 font-bold text-xl mb-3">${escapeHtml(dream.title)}</h2>
+      ${dream.ai ? `<div class="inline-block bg-violet-900/40 border border-violet-600/40 text-violet-300 text-xs font-semibold px-2 py-1 rounded-full mb-3">🤖 AI 생성 해몽</div>` : ''}
+      <div class="bg-blue-900/30 border border-blue-700/40 rounded-xl p-3 mb-4">
+        <span class="text-blue-300 font-semibold">✦ ${escapeHtml(dream.summary)}</span>
+      </div>
+      <p class="text-slate-300 leading-relaxed mb-5 text-sm">${escapeHtml(dream.detail)}</p>
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="bg-slate-700 rounded-lg p-3 text-center">
+          <div class="text-xs text-slate-400 mb-1">행운의 색</div>
+          <div class="text-slate-100 font-semibold text-sm">${escapeHtml(dream.lucky)}</div>
+        </div>
+        <div class="bg-slate-700 rounded-lg p-3 text-center">
+          <div class="text-xs text-slate-400 mb-1">행운의 숫자</div>
+          <div class="text-slate-100 font-semibold text-sm">${escapeHtml(dream.luckyNum)}</div>
+        </div>
+      </div>
+      <div class="bg-indigo-900/30 border border-indigo-700/40 rounded-xl p-3">
+        <div class="text-indigo-300 text-xs font-semibold mb-1">오늘의 행동</div>
+        <p class="text-indigo-200 text-sm">${escapeHtml(dream.action)}</p>
+      </div>
+    </div>`;
+}
+
 function initSharedPreview() {
   const container = document.getElementById('shared-preview-container');
   if (!container) return;
@@ -4706,11 +4757,16 @@ function initSharedPreview() {
   /* 로또 공유(drawn 페이로드)는 범용 홍보 이미지 대신 실제 뽑은 번호를 공 UI로 보여줌 (v0.1.3~) */
   const lottoBalls = (next.section === 'lotto' || next.section === 'lottodraw') ? sharedPreviewLottoBallsHTML(next.section, next.extra) : '';
 
+  /* 꿈해몽 공유는 범용 이미지 대신 실제 해몽 결과 카드를 재현 (v0.1.5~) */
+  let dreamCard = '';
+  if (next.section === 'dream' && next.extra) {
+    try { dreamCard = sharedPreviewDreamCardHTML(JSON.parse(next.extra)); } catch (e) { dreamCard = ''; }
+  }
+
   container.innerHTML = `
     <div class="max-w-md mx-auto pt-8 px-4 text-center">
-      ${lottoBalls || (image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(title)}" class="w-full rounded-2xl shadow-2xl mb-5 border border-slate-700" />` : '')}
-      <h2 class="text-slate-100 font-bold text-xl mb-2">${escapeHtml(title)}</h2>
-      <p class="text-slate-400 text-sm mb-6">${escapeHtml(desc)}</p>
+      ${lottoBalls || dreamCard || (image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(title)}" class="w-full rounded-2xl shadow-2xl mb-5 border border-slate-700" />` : '')}
+      ${dreamCard ? '' : `<h2 class="text-slate-100 font-bold text-xl mb-2">${escapeHtml(title)}</h2><p class="text-slate-400 text-sm mb-6">${escapeHtml(desc)}</p>`}
       <button onclick="sharedPreviewProceed()" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-4 rounded-xl transition text-lg">${escapeHtml(cta)}</button>
     </div>`;
 }
