@@ -1,4 +1,4 @@
-/* v0.3.0 | 5-in-1 Dashboard SPA — app.js */
+/* v0.3.1 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -4191,7 +4191,7 @@ const PSYCHTEST_LOCKED = {
   character: [{ emoji: '🏯', title: '나의 사극 빙의 테스트' }, { emoji: '🦹', title: '나의 빌런 각성 테스트' }],
   trait: [{ emoji: '🧊', title: 'T의 공감능력 테스트' }, { emoji: '💤', title: '관태기 자가진단 테스트' }],
   taste: [{ emoji: '🏪', title: '나의 편의점 소비 유형 테스트' }, { emoji: '📺', title: 'OTT 정주행 스타일 테스트' }],
-  national: [{ emoji: '⭐', title: '별자리 성격 테스트' }, { emoji: '🎂', title: '탄생월 성격 테스트' }],
+  national: [],
 };
 
 function initPsychtest() {
@@ -4210,7 +4210,10 @@ function renderPsychtestFeed(category) {
   category = category || 'trait';
   App.state.psychtest.category = category;
   const container = document.getElementById('psychtest-container');
-  const real = AppData.psychTests.find(x => x.category === category);
+  /* v0.3.1~: 카테고리당 진짜 콘텐츠가 여러 개(예: 국민테스트 3개)일 수 있어 첫 매칭 1개만 찾던 find()를
+     filter()로 바꿔 전부 노출 — 대표 배너는 그중 첫 번째를 사용 */
+  const reals = AppData.psychTests.filter(x => x.category === category);
+  const real = reals[0];
   const locked = PSYCHTEST_LOCKED[category] || [];
 
   const tabsHTML = Object.keys(PSYCHTEST_CATEGORIES).map(key => {
@@ -4238,12 +4241,12 @@ function renderPsychtestFeed(category) {
       </div>` : ''}
 
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        ${real ? `
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center cursor-pointer hover:border-violet-500 transition" onclick="psychtestOpenPost('${real.id}')">
-          <div class="text-3xl mb-2">${real.emoji}</div>
-          <p class="text-slate-100 font-semibold text-sm mb-1">${real.title}</p>
-          <p class="text-slate-500 text-xs">▷ ${engagementCount('psychtest-' + real.id + '-plays', 128)}</p>
-        </div>` : ''}
+        ${reals.map(t => `
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center cursor-pointer hover:border-violet-500 transition" onclick="psychtestOpenPost('${t.id}')">
+          <div class="text-3xl mb-2">${t.emoji}</div>
+          <p class="text-slate-100 font-semibold text-sm mb-1">${t.title}</p>
+          <p class="text-slate-500 text-xs">▷ ${engagementCount('psychtest-' + t.id + '-plays', 128)}</p>
+        </div>`).join('')}
         ${locked.map(c => `
           <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-4 text-center opacity-60 cursor-pointer" onclick="showToast('곧 만나요! 준비중인 콘텐츠예요 🙏')">
             <div class="text-3xl mb-2">${c.emoji}</div>
@@ -4379,28 +4382,20 @@ function initBalance() {
 
 function renderBalanceFeed() {
   const container = document.getElementById('balance-container');
-  const real = AppData.balanceGames[0];
-  const comingSoon = [
-    { emoji: '🏝️', title: '무인도에 하나만 vs 아무것도 없이' },
-    { emoji: '⏰', title: '10년 일찍 태어나기 vs 10년 늦게 태어나기' },
-  ];
+  /* v0.3.1~: 예전엔 balanceGames[0] 하나만 진짜로 보여주고 나머지는 가짜 "준비중" 카드였는데,
+     콘텐츠를 6개로 늘리면서 전부 실제 플레이 가능한 카드로 노출 (잠금 placeholder 제거) */
   container.innerHTML = `
     <div class="max-w-2xl mx-auto">
       <h2 class="text-2xl font-black text-slate-100 mb-1">⚖️ 밸런스 게임</h2>
       <p class="text-slate-400 mb-6">A vs B, 당신의 선택은?</p>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center cursor-pointer hover:border-emerald-500 transition" onclick="balanceOpenPost('${real.id}')">
-          <div class="text-3xl mb-2">${real.emoji}</div>
-          <p class="text-slate-100 font-semibold text-sm mb-1">${real.title}</p>
-          <p class="text-slate-500 text-xs">▷ ${engagementCount('balance-' + real.id + '-plays', 203)}</p>
-        </div>
-        ${comingSoon.map(c => `
-          <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-4 text-center opacity-60 cursor-pointer" onclick="showToast('곧 만나요! 준비중인 콘텐츠예요 🙏')">
-            <div class="text-3xl mb-2">${c.emoji}</div>
-            <p class="text-slate-300 font-semibold text-sm mb-1">${c.title}</p>
-            <p class="text-slate-500 text-xs">🔒 준비중</p>
-          </div>`).join('')}
+        ${AppData.balanceGames.map(g => `
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center cursor-pointer hover:border-emerald-500 transition" onclick="balanceOpenPost('${g.id}')">
+          <div class="text-3xl mb-2">${g.emoji}</div>
+          <p class="text-slate-100 font-semibold text-sm mb-1">${g.title}</p>
+          <p class="text-slate-500 text-xs">▷ ${engagementCount('balance-' + g.id + '-plays', 203)}</p>
+        </div>`).join('')}
       </div>
     </div>`;
 }
