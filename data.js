@@ -4633,5 +4633,19 @@ window.AppData = {
       optionB: { label: "자식 있어야 완성", emoji: "👨‍👩‍👧", resultText: "가족이 최우선! 아이가 주는 의미를 더 크게 보는 파네요." },
       dummySplitA: 48
     }
+  ],
+
+  /* 이상형 월드컵 v1 (v0.4.0~) — "인생 공감 밈 월드컵" 1개만 우선 오픈.
+     실사진(무료 스톡사진, Unsplash/Pexels/Pixabay) 기반, 이모지는 카드 배지 정도로만 보조 사용.
+     후보 8개 단일 토너먼트(8강→4강→결승, 총 3라운드) */
+  worldcupMemes: [
+    { id: "nunnun",    emoji: "🛏️", title: "눕눕",         desc: "침대와 한몸, 오늘도 못 일어남",          image: "assets/worldcup/nunnun.jpg" },
+    { id: "tungjang",  emoji: "💸", title: "텅장",         desc: "월급은 스쳐 지나가는 바람",              image: "assets/worldcup/tungjang.jpg" },
+    { id: "caffeine",  emoji: "☕", title: "카페인 수혈",  desc: "이거 없인 눈도 안 떠짐",                 image: "assets/worldcup/caffeine.jpg" },
+    { id: "yasik",     emoji: "🍗", title: "야식",         desc: "오늘만 먹고 내일부터 다이어트",          image: "assets/worldcup/yasik.jpg" },
+    { id: "scroll",    emoji: "📱", title: "스크롤 중독",  desc: "자기 전 30분이 3시간 됨",                image: "assets/worldcup/scroll.jpg" },
+    { id: "receipt",   emoji: "🧾", title: "영수증 플렉스", desc: "결제는 했는데 기억이 없음",              image: "assets/worldcup/receipt.jpg" },
+    { id: "delivery",  emoji: "📦", title: "택배 쌓기",    desc: "뜯지도 않은 택배가 방 한켠에",           image: "assets/worldcup/delivery.jpg" },
+    { id: "sofa",      emoji: "🛋️", title: "소파 귀차니즘", desc: "한번 앉으면 못 일어남",                  image: "assets/worldcup/sofa.jpg" }
   ]
 };

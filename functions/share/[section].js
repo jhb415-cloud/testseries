@@ -16,9 +16,24 @@ const IDENTITY_SECTIONS = ['mbti', 'adhd', 'insa', 'proverb', 'pricequiz', 'fort
 const LOTTO_SECTIONS = ['lotto', 'lottodraw'];
 /* Phase 4 수익화 로드맵 11-6/11-7 (v0.2.3~): 심리테스트존/밸런스게임 */
 const FEED_SECTIONS = ['psychtest', 'balance'];
-const VALID_SECTIONS = [...TIER_SECTIONS, ...IDENTITY_SECTIONS, ...LOTTO_SECTIONS, ...FEED_SECTIONS];
+/* 이상형 월드컵 (v0.4.0~) */
+const WORLDCUP_SECTIONS = ['worldcup'];
+const VALID_SECTIONS = [...TIER_SECTIONS, ...IDENTITY_SECTIONS, ...LOTTO_SECTIONS, ...FEED_SECTIONS, ...WORLDCUP_SECTIONS];
 const CTA_RESULT = '나도 해보기';
 const CTA_CHALLENGE = '⚔️ 도전하기';
+
+/* 이상형 월드컵 후보 텍스트 — data.js의 AppData.worldcupMemes와 내용 동일(이 함수는 별도 런타임이라
+   data.js를 import할 수 없어 title/desc만 최소 복제, 이미지 파일은 assets/worldcup/{id}.jpg 공용) */
+const WORLDCUP_MEMES = {
+  nunnun:   { title: '눕눕',         desc: '침대와 한몸, 오늘도 못 일어남' },
+  tungjang: { title: '텅장',         desc: '월급은 스쳐 지나가는 바람' },
+  caffeine: { title: '카페인 수혈',  desc: '이거 없인 눈도 안 떠짐' },
+  yasik:    { title: '야식',         desc: '오늘만 먹고 내일부터 다이어트' },
+  scroll:   { title: '스크롤 중독',  desc: '자기 전 30분이 3시간 됨' },
+  receipt:  { title: '영수증 플렉스', desc: '결제는 했는데 기억이 없음' },
+  delivery: { title: '택배 쌓기',    desc: '뜯지도 않은 택배가 방 한켠에' },
+  sofa:     { title: '소파 귀차니즘', desc: '한번 앉으면 못 일어남' },
+};
 
 function esc(str) {
   return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -151,6 +166,13 @@ export async function onRequestGet(context) {
     rawTitle = `${rawNickname} 님의 선택은?`;
     rawDescription = result || '너라면 어떤 걸 고를래? 과몰입 연구소에서 확인해보세요 👉';
     imageUrl = `${origin}/share-cards/balance-${gameId}.jpg`;
+  } else if (section === 'worldcup') {
+    const championId = WORLDCUP_MEMES[url.searchParams.get('champion')] ? url.searchParams.get('champion') : 'nunnun';
+    const meme = WORLDCUP_MEMES[championId];
+    rawTitle = `내 인생 밈은 ${meme.title}!`;
+    rawDescription = `${meme.desc} — 너는 뭐 나올 것 같아? 과몰입 연구소에서 확인해보세요 👉`;
+    imageUrl = `${origin}/assets/worldcup/${championId}.jpg`;
+    cta = '🏆 나도 해보기';
   }
 
   const title = esc(rawTitle);

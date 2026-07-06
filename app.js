@@ -4711,16 +4711,149 @@ function initFortuneExt() {
 }
 
 /* ══════════════════════════════════════════════════
-   🏆 이상형 월드컵 (v0.2.5~, 과몰입 투표소 그룹 — 전부 준비중)
+   🏆 이상형 월드컵 (v0.2.5 뼈대 → v0.4.0 "인생 공감 밈 월드컵" 1개 실구현)
+   - 후보 8개 단일 토너먼트(8강→4강→결승), 실사진(무료 스톡사진) 기반
+   - 랭킹(전체 몇 위)은 Supabase에 익명 투표를 처음부터 쌓되, 누적 100판 미만이면 노출하지 않음
+     (표본 적을 때 노출하면 초라해 보인다는 사용자 우려 반영 — percentile_cache의 MIN_SAMPLE_SIZE와 같은 사상)
 ══════════════════════════════════════════════════ */
+const WORLDCUP_RANK_THRESHOLD = 100;
+
 function initWorldcup() {
   const container = document.getElementById('worldcup-container');
   container.innerHTML = `
-    <div class="max-w-2xl mx-auto text-center py-12">
+    <div class="max-w-md mx-auto text-center py-6">
       <div class="text-5xl mb-4">🏆</div>
-      <h2 class="text-2xl font-black text-slate-100 mb-2">이상형 월드컵</h2>
-      <p class="text-slate-400 mb-6">둘 중 하나를 계속 골라 최종 우승을 가리는 토너먼트, 준비 중이에요</p>
-      <span class="text-xs font-bold text-amber-400 bg-amber-400/10 border border-amber-400/30 px-3 py-1.5 rounded-full">준비중</span>
+      <h2 class="text-2xl font-black text-slate-100 mb-2">인생 공감 밈 월드컵</h2>
+      <p class="text-slate-400 mb-1">둘 중 더 "나 같은" 쪽을 골라주세요</p>
+      <p class="text-slate-500 text-sm mb-6">8강 → 4강 → 결승, 총 3라운드</p>
+      <button onclick="worldcupStart()" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-4 rounded-xl transition text-lg">시작하기</button>
+    </div>`;
+}
+
+function worldcupMemeById(id) {
+  return AppData.worldcupMemes.find(m => m.id === id);
+}
+
+function worldcupStart() {
+  bumpEngagement('site-worldcup-plays');
+  const ids = shuffleArray(AppData.worldcupMemes.map(m => m.id));
+  App.state.worldcup = { roundIds: ids, roundLabel: '8강', matchIdx: 0, nextRoundIds: [], champion: null };
+  worldcupRenderMatch();
+}
+
+function worldcupRenderMatch() {
+  const s = App.state.worldcup;
+  const container = document.getElementById('worldcup-container');
+  const a = worldcupMemeById(s.roundIds[s.matchIdx * 2]);
+  const b = worldcupMemeById(s.roundIds[s.matchIdx * 2 + 1]);
+  const totalMatches = s.roundIds.length / 2;
+  container.innerHTML = `
+    <div class="max-w-2xl mx-auto">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-slate-300 font-bold">${s.roundLabel}</span>
+        <span class="text-slate-500 text-xs">${s.matchIdx + 1} / ${totalMatches}</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3 relative">
+        ${[a, b].map(m => `
+          <div class="cursor-pointer group" onclick="worldcupPick('${m.id}')">
+            <div class="relative rounded-2xl overflow-hidden border-2 border-slate-700 group-hover:border-violet-500 transition aspect-[3/4] bg-slate-800">
+              <img src="${m.image}" alt="${escapeHtml(m.title)}" class="w-full h-full object-cover"/>
+              <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent pt-12 pb-3 px-3">
+                <p class="text-white font-black text-base sm:text-lg">${m.emoji} ${escapeHtml(m.title)}</p>
+                <p class="text-slate-300 text-xs">${escapeHtml(m.desc)}</p>
+              </div>
+            </div>
+          </div>`).join('')}
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-slate-100 font-black text-2xl bg-slate-900 border-2 border-slate-700 rounded-full w-12 h-12 flex items-center justify-center pointer-events-none">VS</div>
+      </div>
+    </div>`;
+}
+
+function worldcupPick(winnerId) {
+  const s = App.state.worldcup;
+  if (!s) return;
+  playSound('tick');
+  s.nextRoundIds.push(winnerId);
+  s.matchIdx++;
+  if (s.matchIdx * 2 >= s.roundIds.length) {
+    if (s.nextRoundIds.length === 1) {
+      worldcupFinish(s.nextRoundIds[0]);
+      return;
+    }
+    s.roundIds = s.nextRoundIds;
+    s.nextRoundIds = [];
+    s.matchIdx = 0;
+    s.roundLabel = s.roundIds.length === 2 ? '결승' : `${s.roundIds.length}강`;
+  }
+  worldcupRenderMatch();
+}
+
+async function worldcupFinish(championId) {
+  App.state.worldcup.champion = championId;
+  playSound('tierS');
+  worldcupRenderResult(championId, null);
+  worldcupSubmitVote(championId);
+  const stats = await worldcupFetchStats();
+  const rankingEl = document.getElementById('worldcup-ranking');
+  if (rankingEl) rankingEl.innerHTML = worldcupRankingHTML(championId, stats);
+}
+
+/* 투표는 처음부터 실제로 Supabase에 쌓아두되(표본 자체는 손실 없이 계속 축적),
+   100판 임계치 미만일 땐 화면에만 안 보여줌 — 실패해도 결과 화면에는 영향 없도록 항상 catch */
+async function worldcupSubmitVote(memeId) {
+  try {
+    if (!window.sb) return;
+    if (typeof ensureAnonSession === 'function') await ensureAnonSession();
+    await window.sb.from('worldcup_votes').insert({ meme_id: memeId });
+  } catch (e) {
+    console.error('월드컵 투표 기록 실패:', e);
+  }
+}
+
+async function worldcupFetchStats() {
+  try {
+    if (!window.sb) return null;
+    const { data, error } = await window.sb.from('worldcup_stats').select('meme_id, votes');
+    if (error || !data) return null;
+    return data;
+  } catch (e) {
+    return null;
+  }
+}
+
+function worldcupRankingHTML(championId, stats) {
+  if (!stats) return `<p class="text-slate-500 text-xs mt-3">📊 순위 집계 중...</p>`;
+  const total = stats.reduce((sum, s) => sum + Number(s.votes), 0);
+  if (total < WORLDCUP_RANK_THRESHOLD) {
+    return `<p class="text-slate-500 text-xs mt-3">📊 아직 데이터가 적어서 전체 순위는 비공개예요 (누적 ${total}판, 100판부터 공개)</p>`;
+  }
+  const sorted = [...stats].sort((a, b) => b.votes - a.votes);
+  const rank = sorted.findIndex(s => s.meme_id === championId) + 1;
+  const mine = sorted.find(s => s.meme_id === championId);
+  const votes = mine ? mine.votes : 0;
+  return `<p class="text-amber-300 text-sm font-bold mt-3">📊 전체 ${total}판 중 ${rank}위 (${votes}표)</p>`;
+}
+
+function worldcupRenderResult(championId, stats) {
+  const m = worldcupMemeById(championId);
+  const container = document.getElementById('worldcup-container');
+  const shareText = `나 인생 공감 밈 월드컵 했는데 결과가 "${m.title}"! 너는 뭐 나올 것 같아? 🏆`;
+  const imageUrl = `${location.origin}/${m.image}`;
+  const shareUrl = buildShareLandingUrl('worldcup', { champion: championId });
+  container.innerHTML = `
+    <div class="max-w-md mx-auto text-center">
+      <p class="text-slate-400 text-sm mb-3">🏆 당신의 인생 밈은...</p>
+      <div class="rounded-2xl overflow-hidden border-2 border-amber-400 mb-4">
+        <img src="${m.image}" alt="${escapeHtml(m.title)}" class="w-full aspect-[3/4] object-cover"/>
+      </div>
+      <h2 class="text-2xl font-black text-slate-100 mb-1">${m.emoji} ${escapeHtml(m.title)}</h2>
+      <p class="text-slate-400 mb-1">${escapeHtml(m.desc)}</p>
+      <div id="worldcup-ranking">${worldcupRankingHTML(championId, stats)}</div>
+      <div class="mt-4">
+        ${shareKakaoButtonHTML(imageUrl, `내 인생 밈은 ${m.title}!`, m.desc, shareUrl)}
+        ${shareIconRowHTML(shareText, shareUrl)}
+      </div>
+      <button onclick="worldcupStart()" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">🔄 다시하기</button>
     </div>`;
 }
 
