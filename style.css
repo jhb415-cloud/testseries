@@ -266,6 +266,23 @@ html.light {
   display: none;
 }
 
+/* ── 제휴문의 폼 모달 (v0.3.4~, 꿈 해몽 모달과 동일한 오버레이 패턴 재사용) ── */
+#partnership-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  backdrop-filter: blur(2px);
+}
+
+#partnership-modal.hidden {
+  display: none;
+}
+
 .modal-content {
   animation: fadeInScale 0.3s ease forwards;
   max-height: 90vh;

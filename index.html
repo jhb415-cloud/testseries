@@ -1,10 +1,13 @@
-<!-- v0.3.3 | 5-in-1 Dashboard SPA -->
+<!-- v0.3.4 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>과몰입 연구소</title>
+  <!-- 브랜드 로고/파비콘 (v0.3.4~) -->
+  <link rel="icon" type="image/png" href="assets/brand/favicon-32.png"/>
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png"/>
   <!-- Google AdSense 사이트 소유권 확인 + 광고 스크립트 (v0.2.6~, publisher ID: pub-4825324689294427) -->
   <meta name="google-adsense-account" content="ca-pub-4825324689294427">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4825324689294427"
@@ -75,7 +78,7 @@
   <div class="px-5 py-6 border-b border-slate-800">
     <div class="flex items-center justify-between gap-2 mb-1">
       <div class="flex items-center gap-2">
-        <span class="text-2xl">🎯</span>
+        <img src="assets/brand/logo-icon.png" alt="과몰입 연구소" class="w-8 h-8 shrink-0"/>
         <span class="text-slate-100 font-black text-lg tracking-tight">과몰입 연구소</span>
       </div>
       <button id="sound-toggle-btn" type="button" title="효과음 켜기/끄기"
@@ -225,7 +228,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4">
-    <p class="text-slate-600 text-xs">v0.3.3 · 2026-07-06</p>
+    <p class="text-slate-600 text-xs">v0.3.4 · 2026-07-06</p>
   </div>
 </aside>
 
@@ -237,7 +240,10 @@
   <!-- 상단 헤더 (모바일) -->
   <header class="lg:hidden sticky top-0 z-30 bg-slate-950 border-b border-slate-800 px-4 py-3 flex items-center gap-3">
     <button id="hamburger-btn" class="text-slate-300 hover:text-slate-50 text-2xl leading-none">☰</button>
-    <span class="text-slate-100 font-bold text-base flex-1">과몰입 연구소</span>
+    <div class="flex items-center gap-2 flex-1">
+      <img src="assets/brand/logo-icon.png" alt="과몰입 연구소" class="w-6 h-6 shrink-0"/>
+      <span class="text-slate-100 font-bold text-base">과몰입 연구소</span>
+    </div>
     <button id="sound-toggle-btn-mobile" type="button" title="효과음 켜기/끄기"
       class="sound-toggle-btn shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-lg transition">
       🔊
@@ -535,7 +541,7 @@
   <footer class="border-t border-slate-800 px-6 py-8 text-slate-500 text-xs">
     <div class="max-w-4xl mx-auto">
       <div class="flex items-center gap-2 mb-2">
-        <span class="text-xl">🎯</span>
+        <img src="assets/brand/logo-icon.png" alt="과몰입 연구소" class="w-6 h-6 shrink-0"/>
         <span class="text-slate-100 font-black text-base">과몰입 연구소</span>
       </div>
       <p class="text-slate-500 mb-4">재미로 시작했다가 뼈 맞고 공유하는 종합 테스트 모음 — 본 플랫폼의 모든 테스트 결과는 오락 목적이며 전문 진단을 대체하지 않습니다.</p>
@@ -544,6 +550,7 @@
         <div class="flex items-center gap-4">
           <span class="hover:text-slate-300 cursor-pointer transition" onclick="App.navigate('privacy')">개인정보처리방침</span>
           <span class="hover:text-slate-300 cursor-pointer transition" onclick="App.navigate('terms')">서비스 이용약관</span>
+          <span class="hover:text-slate-300 cursor-pointer transition" onclick="openPartnershipModal()">제휴문의</span>
           <span>문의: <a href="mailto:jhb415@gmail.com" class="hover:text-slate-300 transition">jhb415@gmail.com</a></span>
         </div>
       </div>
@@ -587,6 +594,11 @@
 ════════════════════════════════════════════════ -->
 <div id="dream-modal" class="hidden">
   <div id="dream-modal-inner"></div>
+</div>
+
+<!-- 제휴문의 폼 모달 (v0.3.4~) -->
+<div id="partnership-modal" class="hidden">
+  <div id="partnership-modal-inner"></div>
 </div>
 
 <!-- ════════════════════════════════════════════════

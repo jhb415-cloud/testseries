@@ -563,6 +563,70 @@ function showToast(msg) {
   setTimeout(() => t.classList.add('hidden'), 2700);
 }
 
+/* ── 제휴문의 폼 (v0.3.4~, 푸터에서 진입 → Slack 웹훅으로 전달) ── */
+function openPartnershipModal() {
+  const inner = document.getElementById('partnership-modal-inner');
+  inner.innerHTML = `
+    <div class="modal-content bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-md w-full">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-slate-100 font-bold text-lg">🤝 제휴문의</h3>
+        <button onclick="closePartnershipModal()" class="text-slate-400 hover:text-slate-100 text-xl leading-none">✕</button>
+      </div>
+      <div class="space-y-3">
+        <input id="partnership-name" type="text" maxlength="60" placeholder="이름 (선택)"
+          class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-violet-500 transition"/>
+        <input id="partnership-email" type="email" maxlength="120" placeholder="이메일 (필수)"
+          class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-violet-500 transition"/>
+        <textarea id="partnership-message" maxlength="2000" rows="5" placeholder="제안 내용을 입력해주세요 (필수)"
+          class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-violet-500 transition resize-none"></textarea>
+        <input id="partnership-website" type="text" tabindex="-1" autocomplete="off"
+          class="absolute -left-[9999px] w-px h-px opacity-0" aria-hidden="true"/>
+      </div>
+      <button id="partnership-submit-btn" onclick="submitPartnershipInquiry()"
+        class="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 rounded-xl transition mt-4">보내기</button>
+    </div>`;
+  document.getElementById('partnership-modal').classList.remove('hidden');
+}
+
+function closePartnershipModal() {
+  document.getElementById('partnership-modal').classList.add('hidden');
+}
+
+async function submitPartnershipInquiry() {
+  const name = document.getElementById('partnership-name').value.trim();
+  const email = document.getElementById('partnership-email').value.trim();
+  const message = document.getElementById('partnership-message').value.trim();
+  const website = document.getElementById('partnership-website').value.trim();
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('이메일을 확인해주세요!'); return; }
+  if (!message) { showToast('제안 내용을 입력해주세요!'); return; }
+
+  const btn = document.getElementById('partnership-submit-btn');
+  btn.disabled = true;
+  btn.textContent = '보내는 중...';
+
+  try {
+    const res = await fetch('/api/partnership-inquiry', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message, website }),
+    });
+    const data = await res.json().catch(() => ({ ok: false }));
+    if (res.ok && data.ok) {
+      showToast('제휴문의가 접수되었습니다. 감사합니다!');
+      closePartnershipModal();
+    } else {
+      showToast('전송에 실패했어요. 잠시 후 다시 시도해주세요.');
+      btn.disabled = false;
+      btn.textContent = '보내기';
+    }
+  } catch (e) {
+    showToast('전송에 실패했어요. 잠시 후 다시 시도해주세요.');
+    btn.disabled = false;
+    btn.textContent = '보내기';
+  }
+}
+
 function closeMobileSidebar() {
   const sb = document.getElementById('sidebar');
   const ov = document.getElementById('sidebar-overlay');
@@ -6116,6 +6180,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (dreamModal) {
     dreamModal.addEventListener('click', function(e) {
       if (e.target === this) dreamCloseModal();
+    });
+  }
+
+  /* ── 제휴문의 모달 배경 클릭 닫기 ── */
+  const partnershipModal = document.getElementById('partnership-modal');
+  if (partnershipModal) {
+    partnershipModal.addEventListener('click', function(e) {
+      if (e.target === this) closePartnershipModal();
     });
   }
 
