@@ -1,4 +1,4 @@
-/* v0.3.1 | 5-in-1 Dashboard SPA — app.js */
+/* v0.3.2 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -625,21 +625,43 @@ function initHome() {
     { section: 'lotto',   emoji: '🎱', title: '로또 번호 조합기', desc: '랜덤·직접지정·운세연동 4가지 모드' },
   ];
 
-  const testCards = [
-    { section: 'mbti',        emoji: '🧠',  title: '성격 파탄(MBTI)',   desc: '간단/정밀 2모드로 알아보는 팩폭 성격 분석' },
-    { section: 'brain',       emoji: '⚡',  title: '두뇌 나이 측정기',   desc: '스트룹 테스트, 3단계 난이도' },
-    { section: 'adhd',        emoji: '🌪️', title: '프로 미루러',        desc: 'ADHD 성향 자가진단, 간단/정밀 2모드' },
-    { section: 'reaction',    emoji: '💨',  title: '반응속도 테스트',    desc: '쉬움~어려움, 가짜신호까지 등장' },
-    { section: 'memdigit',    emoji: '🔢',  title: '숫자 기억력 테스트', desc: '적응형 자릿수, 탭 키패드로 도전' },
-    { section: 'seqmem',      emoji: '🧩',  title: '순서 기억력 테스트', desc: '격자 타일 순서 암기, 즉시 판정' },
-    { section: 'colorvision', emoji: '🎨',  title: '색각 테스트',        desc: '미묘하게 다른 색 타일 찾기' },
-    { section: 'logic',       emoji: '📊',  title: '논리력 테스트',      desc: '숫자 규칙 다음 값 맞히기 4지선다' },
-    { section: 'impulse',     emoji: '🚦',  title: '충동억제 테스트',    desc: 'Go/No-Go, 성급한 반응을 참아라' },
-    { section: 'shortfocus',  emoji: '📱',  title: '숏폼 집중력 테스트', desc: '피드 속 목표 콘텐츠만 빠르게 찾아 탭' },
-    { section: 'insa',        emoji: '🎉',  title: '인싸력 테스트',      desc: '10문항 사교성 성향 퀴즈 (MZ향)' },
-    { section: 'proverb',     emoji: '📜',  title: '속담 완성 퀴즈',     desc: '시간 제한 없는 지혜 나눔 테스트' },
-    { section: 'pricequiz',   emoji: '🧾',  title: '그 시절 물가 맞히기', desc: '실제 물가 통계 기반 향수 트리비아' },
+  /* v0.3.2~: 13개 테스트만 후보로 삼던 것 대신, 사이드바에 있는 전체 메뉴(심리테스트존/밸런스게임
+     개별 콘텐츠, 로또 직접 뽑기 게임 포함)를 전부 후보로 넣고 실제 사용 시점(각 테스트 Start 함수,
+     dreamShowModal, fortuneSubmit, lotto 조합 실행, psychtestStart, balancePick 등)에 찍히는
+     engagementCount 기준 상위 6개만 노출 — "특정 13개로 제한하지 말고 전체 메뉴가 경쟁하게" 요청 반영.
+     꿈해몽/오늘의운세/로또 조합기는 위 도구 그리드에 항상 노출되므로 중복을 피해 후보에서 제외.
+     base 값은 실사용 데이터가 쌓이기 전 임의 추정치이며 실제 인기순이 아님을 화면에 항상 명시한다
+     (index.html 캡션 참고). */
+  const popularCandidates = [
+    { section: 'mbti',        emoji: '🧠',  title: '성격 파탄(MBTI)',   desc: '간단/정밀 2모드로 알아보는 팩폭 성격 분석', key: 'site-mbti-plays', base: 980, run: () => App.navigate('mbti') },
+    { section: 'brain',       emoji: '⚡',  title: '두뇌 나이 측정기',   desc: '스트룹 테스트, 3단계 난이도', key: 'site-brain-plays', base: 740, run: () => App.navigate('brain') },
+    { section: 'adhd',        emoji: '🌪️', title: '프로 미루러',        desc: 'ADHD 성향 자가진단, 간단/정밀 2모드', key: 'site-adhd-plays', base: 650, run: () => App.navigate('adhd') },
+    { section: 'reaction',    emoji: '💨',  title: '반응속도 테스트',    desc: '쉬움~어려움, 가짜신호까지 등장', key: 'site-reaction-plays', base: 590, run: () => App.navigate('reaction') },
+    { section: 'shortfocus',  emoji: '📱',  title: '숏폼 집중력 테스트', desc: '피드 속 목표 콘텐츠만 빠르게 찾아 탭', key: 'site-shortfocus-plays', base: 410, run: () => App.navigate('shortfocus') },
+    { section: 'insa',        emoji: '🎉',  title: '인싸력 테스트',      desc: '10문항 사교성 성향 퀴즈 (MZ향)', key: 'site-insa-plays', base: 510, run: () => App.navigate('insa') },
+    { section: 'memdigit',    emoji: '🔢',  title: '숫자 기억력 테스트', desc: '적응형 자릿수, 탭 키패드로 도전', key: 'site-memdigit-plays', base: 340, run: () => App.navigate('memdigit') },
+    { section: 'seqmem',      emoji: '🧩',  title: '순서 기억력 테스트', desc: '격자 타일 순서 암기, 즉시 판정', key: 'site-seqmem-plays', base: 300, run: () => App.navigate('seqmem') },
+    { section: 'colorvision', emoji: '🎨',  title: '색각 테스트',        desc: '미묘하게 다른 색 타일 찾기', key: 'site-colorvision-plays', base: 280, run: () => App.navigate('colorvision') },
+    { section: 'lottodraw',   emoji: '🎰',  title: '로또 직접 뽑기 게임', desc: '유리 추첨기로 직접 뽑는 로또 번호', key: 'site-lottodraw-plays', base: 220, run: () => App.navigate('lottodraw') },
+    { section: 'logic',       emoji: '📊',  title: '논리력 테스트',      desc: '숫자 규칙 다음 값 맞히기 4지선다', key: 'site-logic-plays', base: 260, run: () => App.navigate('logic') },
+    { section: 'impulse',     emoji: '🚦',  title: '충동억제 테스트',    desc: 'Go/No-Go, 성급한 반응을 참아라', key: 'site-impulse-plays', base: 230, run: () => App.navigate('impulse') },
+    { section: 'proverb',     emoji: '📜',  title: '속담 완성 퀴즈',     desc: '시간 제한 없는 지혜 나눔 테스트', key: 'site-proverb-plays', base: 180, run: () => App.navigate('proverb') },
+    { section: 'pricequiz',   emoji: '🧾',  title: '그 시절 물가 맞히기', desc: '실제 물가 통계 기반 향수 트리비아', key: 'site-pricequiz-plays', base: 150, run: () => App.navigate('pricequiz') },
+    ...AppData.psychTests.map(t => ({
+      section: 'psychtest', emoji: t.emoji, title: t.title, desc: t.hook.slice(0, 24) + '…',
+      key: 'psychtest-' + t.id + '-plays', base: 128,
+      run: () => { psychtestNavCategory(t.category); App.navigate('psychtest'); psychtestOpenPost(t.id); },
+    })),
+    ...AppData.balanceGames.map(g => ({
+      section: 'balance', emoji: g.emoji, title: g.title, desc: g.hook.slice(0, 24) + '…',
+      key: 'balance-' + g.id + '-plays', base: 203,
+      run: () => { App.navigate('balance'); balanceOpenPost(g.id); },
+    })),
   ];
+  const topTestCards = popularCandidates
+    .map(c => ({ ...c, score: engagementCount(c.key, c.base) }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 6);
 
   /* v0.1.0~: 원색 그라데이션 카드 → 사이트 기본 카드색(slate) 기반 무채색 톤으로 통일 (도구/테스트 그리드 공통) */
   const renderGrid = (gridId, cards) => {
@@ -655,13 +677,13 @@ function initHome() {
         <p class="text-sm text-slate-400">${c.desc}</p>
         <div class="mt-4 text-xs font-semibold text-violet-400 uppercase tracking-widest">시작하기 →</div>
       `;
-      div.onclick = () => App.navigate(c.section);
+      div.onclick = c.run || (() => App.navigate(c.section));
       grid.appendChild(div);
     });
   };
 
   renderGrid('home-tool-grid', toolCards);
-  renderGrid('home-service-grid', testCards);
+  renderGrid('home-service-grid', topTestCards);
 
   // 오늘 날짜 표시
   const now = new Date();
@@ -824,6 +846,7 @@ function mbtiStart(mode) {
   const nickname = document.getElementById('mbti-nickname').value.trim();
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
+  bumpEngagement('site-mbti-plays');
   const state = App.state.mbti;
   state.nickname = nickname;
   state.mode = mode;
@@ -1089,6 +1112,7 @@ function dreamRenderAiModal(query, data) {
 function dreamShowModal(tIdx, vIdx) {
   const d = AppData.dreamData[tIdx];
   if (!d) return;
+  bumpEngagement('site-dream-plays');
 
   // 최초 오픈 시에만 3초 광고 로딩. 이후 칩 클릭(변형 보기)은 로딩 없이 즉시 전환.
   App.showLoader(() => {
@@ -1310,6 +1334,7 @@ function fortuneSubmit() {
   const zodiac = getZodiacFromYear(y);
   App.state.fortune.zodiac = zodiac;
   App.state.fortune.year = y;
+  bumpEngagement('site-fortune-plays');
   App.showLoader(() => renderFortuneView('result'));
 }
 
@@ -1532,6 +1557,7 @@ function brainSelectDifficulty(difficulty) {
   const nickname = document.getElementById('brain-nickname').value.trim();
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
+  bumpEngagement('site-brain-plays');
   const state = App.state.brain;
   state.nickname = nickname;
   state.difficulty = difficulty;
@@ -1736,6 +1762,7 @@ function adhdStart(mode) {
   const nickname = document.getElementById('adhd-nickname').value.trim();
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
+  bumpEngagement('site-adhd-plays');
   const state = App.state.adhd;
   state.nickname = nickname;
   state.mode = mode;
@@ -1906,6 +1933,7 @@ function reactionStart(difficulty) {
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
+  bumpEngagement('site-reaction-plays');
   const cfg = REACTION_CONFIG[difficulty];
   App.state.reaction = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -2162,6 +2190,7 @@ function memdigitStart(difficulty) {
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
+  bumpEngagement('site-memdigit-plays');
   const cfg = MEMDIGIT_CONFIG[difficulty];
   App.state.memdigit = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -2467,6 +2496,7 @@ function seqmemStart(difficulty) {
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
+  bumpEngagement('site-seqmem-plays');
   const cfg = SEQMEM_CONFIG[difficulty];
   App.state.seqmem = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -2752,6 +2782,7 @@ function colorvisionStart(difficulty) {
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
+  bumpEngagement('site-colorvision-plays');
   const cfg = COLORVISION_CONFIG[difficulty];
   App.state.colorvision = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -3057,6 +3088,7 @@ function logicStart(difficulty) {
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
+  bumpEngagement('site-logic-plays');
   const cfg = LOGIC_CONFIG[difficulty];
   App.state.logic = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -3304,6 +3336,7 @@ function impulseStart(difficulty) {
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
+  bumpEngagement('site-impulse-plays');
   const cfg = IMPULSE_CONFIG[difficulty];
   App.state.impulse = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -3599,6 +3632,7 @@ function shortfocusStart(difficulty) {
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
+  bumpEngagement('site-shortfocus-plays');
   const cfg = SHORTFOCUS_CONFIG[difficulty];
   App.state.shortfocus = {
     nickname, difficulty, round: 0, totalRounds: cfg.rounds,
@@ -3833,6 +3867,7 @@ function insaStart() {
   const nickname = document.getElementById('insa-nickname').value.trim();
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
+  bumpEngagement('site-insa-plays');
   App.state.insa.nickname = nickname;
   App.state.insa.answers = [];
   App.state.insa.step = 0;
@@ -3960,6 +3995,7 @@ function proverbStart() {
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
+  bumpEngagement('site-proverb-plays');
   const questions = shuffleArray(AppData.proverbQuestions).slice(0, 10);
   App.state.proverb = { nickname, step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [], questions };
   renderProverbView('question');
@@ -4117,6 +4153,7 @@ function pricequizStart() {
   const nickname = input ? input.value.trim() : '';
   if (!nickname) { showToast('별명을 입력해주세요!'); return; }
   setNickname(nickname);
+  bumpEngagement('site-pricequiz-plays');
   const questions = shuffleArray(AppData.priceQuizQuestions).slice(0, 10);
   App.state.pricequiz = { nickname, step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [], questions };
   renderPricequizView('question');
@@ -4982,6 +5019,7 @@ function lottoPickSet(seedNums) {
 }
 
 function lottoRunRandom() {
+  bumpEngagement('site-lotto-plays');
   const games = [];
   for (let i = 0; i < 5; i++) games.push(lottoPickSet());
   lottoRenderGames(games, '완전 랜덤 조합', { rerun: 'lottoRunRandom()' });
@@ -4996,6 +5034,7 @@ function lottoRunCustom() {
     showToast('1~5개의 숫자(1~45)를 콤마로 구분해 입력해주세요!');
     return;
   }
+  bumpEngagement('site-lotto-plays');
   const games = [];
   for (let i = 0; i < 5; i++) games.push(lottoPickSet(uniqueNums));
   lottoRenderGames(games, `직접 지정 (${uniqueNums.join(', ')} 포함)`, { rerun: 'lottoRunCustom()', highlight: uniqueNums });
@@ -5003,6 +5042,7 @@ function lottoRunCustom() {
 
 /* 오늘의 운세·꿈 행운숫자 연동 — 어느 숫자가 어디서 왔는지 출처별로 구분해 명확히 표기 (v0.1.3~) */
 function lottoRunFortunePick() {
+  bumpEngagement('site-lotto-plays');
   const fortuneNum = localStorage.getItem('last_fortune_luckynum') || '';
   const dreamNum = localStorage.getItem('last_dream_luckynum') || '';
   const fortuneNums = (fortuneNum.match(/\d+/g) || []).map(n => parseInt(n, 10)).filter(v => v >= 1 && v <= 45);
@@ -5068,6 +5108,7 @@ async function lottoFetchStats() {
 }
 
 async function lottoRunStats() {
+  bumpEngagement('site-lotto-plays');
   const container = document.getElementById('lotto-result');
   if (container) container.innerHTML = '<p class="text-slate-500 text-sm text-center py-4">📊 실제 당첨 통계 불러오는 중...</p>';
   try {
@@ -5472,6 +5513,7 @@ function lottodrawBallColor(n) {
 function initLottodraw() {
   const container = document.getElementById('lottodraw-container');
   if (!container) return;
+  bumpEngagement('site-lottodraw-plays');
   const s = lottoDrawState;
   s.session++;
   if (s.fastTimer) { clearInterval(s.fastTimer); s.fastTimer = null; }
