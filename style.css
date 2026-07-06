@@ -283,6 +283,23 @@ html.light {
   display: none;
 }
 
+/* ── 의견 보내기 폼 모달 (v0.3.5~, 동일한 오버레이 패턴 재사용) ── */
+#feedback-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  backdrop-filter: blur(2px);
+}
+
+#feedback-modal.hidden {
+  display: none;
+}
+
 .modal-content {
   animation: fadeInScale 0.3s ease forwards;
   max-height: 90vh;

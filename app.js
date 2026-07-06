@@ -627,6 +627,69 @@ async function submitPartnershipInquiry() {
   }
 }
 
+/* ── 의견 보내기 폼 (v0.3.5~, 제휴문의와 동일 패턴 — 사진 첨부는 R2 스토리지 도입 후 추가 예정) ── */
+function openFeedbackModal() {
+  const inner = document.getElementById('feedback-modal-inner');
+  inner.innerHTML = `
+    <div class="modal-content bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-md w-full">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-slate-100 font-bold text-lg">💬 의견 보내기</h3>
+        <button onclick="closeFeedbackModal()" class="text-slate-400 hover:text-slate-100 text-xl leading-none">✕</button>
+      </div>
+      <div class="space-y-3">
+        <input id="feedback-name" type="text" maxlength="60" placeholder="이름 (선택)"
+          class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-violet-500 transition"/>
+        <input id="feedback-email" type="email" maxlength="120" placeholder="이메일 (선택, 답변 받고 싶으시면 입력)"
+          class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-violet-500 transition"/>
+        <textarea id="feedback-message" maxlength="2000" rows="5" placeholder="어떤 의견이든 편하게 남겨주세요 (필수)"
+          class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-violet-500 transition resize-none"></textarea>
+        <input id="feedback-website" type="text" tabindex="-1" autocomplete="off"
+          class="absolute -left-[9999px] w-px h-px opacity-0" aria-hidden="true"/>
+      </div>
+      <button id="feedback-submit-btn" onclick="submitFeedback()"
+        class="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 rounded-xl transition mt-4">보내기</button>
+    </div>`;
+  document.getElementById('feedback-modal').classList.remove('hidden');
+}
+
+function closeFeedbackModal() {
+  document.getElementById('feedback-modal').classList.add('hidden');
+}
+
+async function submitFeedback() {
+  const name = document.getElementById('feedback-name').value.trim();
+  const email = document.getElementById('feedback-email').value.trim();
+  const message = document.getElementById('feedback-message').value.trim();
+  const website = document.getElementById('feedback-website').value.trim();
+
+  if (!message) { showToast('의견 내용을 입력해주세요!'); return; }
+
+  const btn = document.getElementById('feedback-submit-btn');
+  btn.disabled = true;
+  btn.textContent = '보내는 중...';
+
+  try {
+    const res = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message, website }),
+    });
+    const data = await res.json().catch(() => ({ ok: false }));
+    if (res.ok && data.ok) {
+      showToast('의견이 전달되었습니다. 감사합니다!');
+      closeFeedbackModal();
+    } else {
+      showToast('전송에 실패했어요. 잠시 후 다시 시도해주세요.');
+      btn.disabled = false;
+      btn.textContent = '보내기';
+    }
+  } catch (e) {
+    showToast('전송에 실패했어요. 잠시 후 다시 시도해주세요.');
+    btn.disabled = false;
+    btn.textContent = '보내기';
+  }
+}
+
 function closeMobileSidebar() {
   const sb = document.getElementById('sidebar');
   const ov = document.getElementById('sidebar-overlay');
@@ -6188,6 +6251,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (partnershipModal) {
     partnershipModal.addEventListener('click', function(e) {
       if (e.target === this) closePartnershipModal();
+    });
+  }
+
+  /* ── 의견 보내기 모달 배경 클릭 닫기 ── */
+  const feedbackModal = document.getElementById('feedback-modal');
+  if (feedbackModal) {
+    feedbackModal.addEventListener('click', function(e) {
+      if (e.target === this) closeFeedbackModal();
     });
   }
 

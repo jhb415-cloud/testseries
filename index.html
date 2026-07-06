@@ -1,4 +1,4 @@
-<!-- v0.3.4 | 5-in-1 Dashboard SPA -->
+<!-- v0.3.5 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -228,7 +228,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4">
-    <p class="text-slate-600 text-xs">v0.3.4 · 2026-07-06</p>
+    <p class="text-slate-600 text-xs">v0.3.5 · 2026-07-06</p>
   </div>
 </aside>
 
@@ -551,6 +551,7 @@
           <span class="hover:text-slate-300 cursor-pointer transition" onclick="App.navigate('privacy')">개인정보처리방침</span>
           <span class="hover:text-slate-300 cursor-pointer transition" onclick="App.navigate('terms')">서비스 이용약관</span>
           <span class="hover:text-slate-300 cursor-pointer transition" onclick="openPartnershipModal()">제휴문의</span>
+          <span class="hover:text-slate-300 cursor-pointer transition" onclick="openFeedbackModal()">의견 보내기</span>
           <span>문의: <a href="mailto:jhb415@gmail.com" class="hover:text-slate-300 transition">jhb415@gmail.com</a></span>
         </div>
       </div>
@@ -599,6 +600,11 @@
 <!-- 제휴문의 폼 모달 (v0.3.4~) -->
 <div id="partnership-modal" class="hidden">
   <div id="partnership-modal-inner"></div>
+</div>
+
+<!-- 의견 보내기 폼 모달 (v0.3.5~) -->
+<div id="feedback-modal" class="hidden">
+  <div id="feedback-modal-inner"></div>
 </div>
 
 <!-- ════════════════════════════════════════════════
