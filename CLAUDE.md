@@ -1,6 +1,6 @@
 # CLAUDE.md — 5-in-1 Dashboard SPA 아키텍처 규칙
 
-## 현재 버전: v0.3.6
+## 현재 버전: v0.3.7
 
 ## 프로젝트 개요
 Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보드 SPA.
@@ -178,6 +178,7 @@ Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보�
 | 2026-07-06 | v0.3.4 | **실제 브랜드 로고 이미지 삽입 + 제휴문의 폼(Slack 웹훅) 신설.** 상세는 위 "2. 기능 현황" 표의 "사이트 브랜드명 변경 → 실제 로고 이미지 삽입"·"제휴문의 폼" 두 행 참고. ①사용자가 디자이너 의뢰 로고 파일을 `assets/brand/logo-source.png`로 직접 업로드 → Python(Pillow)으로 흰 배경 제거(un-premultiply로 fringe 방지)+아이콘만 크롭+512/180/32px 3종 생성, 기존 🎯 이모지 임시 로고를 사이드바·모바일헤더·푸터 3곳 전부 교체 + 파비콘/apple-touch-icon 신규 추가. ②푸터에 "제휴문의" 링크+모달 폼 신설, `functions/api/partnership-inquiry.js`가 Slack 웹훅으로 전달(`SLACK_WEBHOOK_URL` 환경변수 등록 필요, 아직 미등록). **검증**: `node --check` 통과, Playwright로 다크/라이트 로고 렌더링(픽셀 확대 확인 포함)과 제휴문의 폼 검증/제출 플로우 확인 |
 | 2026-07-06 | v0.3.5 | **제휴문의 Slack 연동 실전 배포 검증 완료 + 의견보내기 폼 신규 추가.** 상세는 위 "2. 기능 현황" 표 참고. Slack 앱 생성 중 겪은 2가지 플랫폼 버그(Incoming Webhooks 단독 활성화 시 "봇 사용자 없음" 에러 → 매니페스트 방식 재생성으로 해결, 한글 bot display_name의 매니페스트 검증 에러 → 영문명으로 해결)를 사용자와 함께 스크린샷 기반으로 실시간 트러블슈팅. 사용자 판단으로 제휴문의/의견보내기 두 폼이 웹훅 1개(채널 1개)를 공유하도록 단순화. `SLACK_WEBHOOK_URL` 등록 후 실 배포 사이트에 curl로 테스트 전송 → Slack 채널 수신까지 end-to-end 확인. 이어서 동일 패턴으로 `functions/api/feedback.js`+`#feedback-modal` 신규 구현(사진 첨부는 R2 필요해 이번 범위 제외, 텍스트만). **검증**: `node --check` 통과, Playwright로 의견보내기 모달 렌더링/빈값 검증 확인 |
 | 2026-07-06 | v0.3.6 | **contact@gwamol-lab.xyz 이메일 수신+발신 설정 완료 (문서 전용, 코드 변경 없음).** 상세는 위 "2. 기능 현황" 표 참고. Cloudflare Email Routing으로 수신 설정(도메인이 이미 Cloudflare에 있어 MX/TXT 자동 추가), Gmail의 "다른 주소에서 메일 보내기"(SMTP: smtp.gmail.com + 앱 비밀번호)로 Workspace 없이 무료로 발신까지 설정. 확인 메일이 Cloudflare Email Routing "Syncing" 상태일 때 발송돼 최초 1회 유실됐던 것을 Activity Log로 진단 후 재전송으로 해결. 겸사겸사 CLAUDE.md의 "도메인 이전" 행이 실제로는 v0.2.8에 이미 완료됐는데 "진행 중"으로 방치돼있던 걸 발견해 함께 정정 |
+| 2026-07-06 | v0.3.7 | **사이트 노출 문의 이메일을 개인 주소 → contact@gwamol-lab.xyz로 교체.** v0.3.6에서 이메일 수신/발신 설정이 끝나자 사용자가 바로 요청. `index.html` 내 `jhb415@gmail.com` 전체 3곳(개인정보처리방침 문의처, 서비스 이용약관 문의처, 푸터 문의 링크)을 `contact@gwamol-lab.xyz`로 일괄 교체(href의 `mailto:`와 표시 텍스트 양쪽 다). **검증**: Playwright로 푸터 렌더링 확인 |
 
 ---
 
