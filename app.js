@@ -1,4 +1,4 @@
-/* v0.1.1 | 5-in-1 Dashboard SPA — app.js */
+/* v0.3.0 | 5-in-1 Dashboard SPA — app.js */
 
 /* ══════════════════════════════════════════════════
    전역 상태
@@ -888,52 +888,103 @@ function dreamSearch() {
   if (input) dreamSearchBy(input.value.trim());
 }
 
+/* v0.3.0~: 검색 랭킹 엔진. 조사 제거 + "꿈/해몽" 등 불용어 제거 후,
+   각 단어가 전체 데이터에서 얼마나 희소한지(1/등장문서수)로 가중치를 매겨
+   "외계인"처럼 변별력 있는 단어에 실린 점수가 높은 항목만 통과시킨다(최고점의 50% 컷오프).
+   과거엔 단어 하나만 겹쳐도(OR) 노출되거나, "꿈"이 모든 제목에 들어있어 전체가 노출되는 버그가 있었음.
+   상세 배경은 CLAUDE.md 변경 이력 v0.3.0 항목 참고 — 되돌리거나 방향을 바꿀 수 있어 기록해둠. */
+const DREAM_STOPWORDS = new Set(['꿈', '해몽', '나오다', '나오는', '보다', '보는', '꾸다', '꾸는', '관하다', '관한', '대하다', '대한', '거', '것']);
+const DREAM_PARTICLES = ['에게서', '으로써', '한테서', '이라는', '에게는', '에서는', '까지는', '부터는',
+  '에게', '에서', '으로', '한테', '까지', '부터', '이랑', '하고',
+  '은', '는', '이', '가', '을', '를', '도', '만', '의', '에', '로', '와', '과', '랑'].sort((a, b) => b.length - a.length);
+
+function dreamStripParticle(token) {
+  for (const p of DREAM_PARTICLES) {
+    if (token.length > p.length && token.endsWith(p)) return token.slice(0, token.length - p.length);
+  }
+  return token;
+}
+
+function dreamTokenizeQuery(query) {
+  return query.toLowerCase().split(/\s+/)
+    .map(dreamStripParticle)
+    .filter(t => t && !DREAM_STOPWORDS.has(t));
+}
+
+function dreamDocText(d, v) {
+  const o = v || d;
+  return [...(o.keywords || []), o.title].join(' ').toLowerCase();
+}
+
+function dreamComputeWeights(tokens) {
+  const weights = {};
+  tokens.forEach(t => {
+    let df = 0;
+    AppData.dreamData.forEach(d => {
+      if (dreamDocText(d, null).includes(t)) df++;
+      (d.variants || []).forEach(v => { if (dreamDocText(d, v).includes(t)) df++; });
+    });
+    weights[t] = df > 0 ? 1 / df : 0;
+  });
+  return weights;
+}
+
 function dreamSearchBy(query) {
   if (!query) { showToast('검색어를 입력해주세요!'); return; }
   const input = document.getElementById('dream-search-input');
   if (input) input.value = query;
 
-  const terms = query.toLowerCase().split(/\s+/);
-
-  // 테마(대표 키워드) + 하위 variants 키워드까지 모두 검색
-  const results = [];
-  AppData.dreamData.forEach((d, tIdx) => {
-    const baseText = [...d.keywords, d.title].join(' ').toLowerCase();
-    const baseMatch = terms.some(t => baseText.includes(t));
-
-    let matchedVariantIdx = null;
-    (d.variants || []).forEach((v, vIdx) => {
-      if (matchedVariantIdx !== null) return;
-      const vText = [...v.keywords, v.title].join(' ').toLowerCase();
-      if (terms.some(t => vText.includes(t))) matchedVariantIdx = vIdx;
-    });
-
-    if (baseMatch || matchedVariantIdx !== null) {
-      results.push({ tIdx, vIdx: matchedVariantIdx });
-    }
-  });
-
   const container = document.getElementById('dream-search-results');
   if (!container) return;
+  const safeQuery = escapeHtml(query).replace(/'/g, "\\'");
+
+  const tokens = dreamTokenizeQuery(query);
+  const results = [];
+
+  if (tokens.length > 0) {
+    const weights = dreamComputeWeights(tokens);
+    const candidates = [];
+
+    AppData.dreamData.forEach((d, tIdx) => {
+      const themeText = dreamDocText(d, null);
+      let themeScore = 0;
+      tokens.forEach(t => { if (themeText.includes(t)) themeScore += weights[t]; });
+
+      let bestVariantIdx = null;
+      let bestVariantScore = 0;
+      (d.variants || []).forEach((v, vIdx) => {
+        const vText = dreamDocText(d, v);
+        let vScore = 0;
+        tokens.forEach(t => { if (vText.includes(t)) vScore += weights[t]; });
+        if (vScore > bestVariantScore) { bestVariantScore = vScore; bestVariantIdx = vIdx; }
+      });
+
+      // 변형 점수가 테마 자체보다 "확실히" 높을 때만 변형을 대표로 노출, 동점이면 테마(모달에서 변형 칩도 볼 수 있음)를 노출
+      if (bestVariantScore > themeScore) {
+        candidates.push({ tIdx, vIdx: bestVariantIdx, score: bestVariantScore });
+      } else if (themeScore > 0) {
+        candidates.push({ tIdx, vIdx: null, score: themeScore });
+      }
+    });
+
+    const maxScore = candidates.reduce((m, c) => Math.max(m, c.score), 0);
+    if (maxScore > 0) {
+      results.push(...candidates.filter(c => c.score >= maxScore * 0.5).sort((a, b) => b.score - a.score));
+    }
+  }
 
   if (results.length === 0) {
-    const suggestions = ['뱀', '하늘을 날다', '이빨이 빠지다', '물', '불'];
-    const safeQuery = escapeHtml(query).replace(/'/g, "\\'");
     container.innerHTML = `
       <div class="text-center py-8">
         <div class="text-4xl mb-3">🔍</div>
-        <p class="text-slate-400 mb-4">'${escapeHtml(query)}'에 대한 해몽 결과가 없어요.</p>
-        <button onclick="dreamAiSearch('${safeQuery}')" class="bg-violet-700 hover:bg-violet-600 text-white text-sm font-bold px-5 py-2.5 rounded-full transition mb-5">🤖 AI 해몽으로 찾아보기</button>
-        <p class="text-slate-500 text-sm mb-4">또는 다른 키워드로 검색해보세요</p>
-        <div class="flex flex-wrap gap-2 justify-center">
-          ${suggestions.map(s => `<button onclick="dreamSearchBy('${s}')" class="bg-blue-700/30 border border-blue-600/40 text-blue-300 text-sm px-4 py-2 rounded-full hover:bg-blue-700/50 transition">${s}</button>`).join('')}
-        </div>
+        <p class="text-slate-400 mb-5">'${escapeHtml(query)}'에 대한 해몽 결과가 없어요.</p>
+        <button onclick="dreamAiSearch('${safeQuery}')" class="bg-violet-700 hover:bg-violet-600 text-white font-bold px-6 py-3 rounded-full transition">🤖 AI 해몽으로 찾아보기</button>
       </div>`;
     return;
   }
 
   container.innerHTML = `
-    <p class="text-slate-500 text-sm mb-3">'${query}' 검색 결과 ${results.length}건</p>
+    <p class="text-slate-500 text-sm mb-3">'${escapeHtml(query)}' 검색 결과 ${results.length}건</p>
     <div class="flex flex-col gap-3">
       ${results.map(({tIdx, vIdx}) => {
         const d = AppData.dreamData[tIdx];
@@ -952,6 +1003,10 @@ function dreamSearchBy(query) {
           </div>
         </div>`;
       }).join('')}
+    </div>
+    <div class="mt-5 pt-5 border-t border-slate-700 text-center">
+      <p class="text-slate-500 text-sm mb-3">찾는 꿈이 아닌가요?</p>
+      <button onclick="dreamAiSearch('${safeQuery}')" class="bg-violet-700 hover:bg-violet-600 text-white text-sm font-bold px-5 py-2.5 rounded-full transition">🤖 AI 해몽으로 찾아보기</button>
     </div>`;
 }
 
