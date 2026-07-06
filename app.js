@@ -241,7 +241,7 @@ function shareIconRowHTML(shareText, shareUrl) {
       <button onclick="shareFacebook('${shareUrl}')"
         class="w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-black text-xl flex items-center justify-center shadow-lg transition" title="페이스북 공유">f</button>
       <button onclick="shareTwitter('${shareUrl}', \`${shareText}\`)"
-        class="w-14 h-14 rounded-full bg-slate-900 hover:bg-slate-800 border border-slate-600 text-white font-black text-lg flex items-center justify-center shadow-lg transition" title="X(트위터) 공유">𝕏</button>
+        class="w-14 h-14 rounded-full bg-[#0f172a] hover:bg-[#1e293b] border border-[#475569] text-white font-black text-lg flex items-center justify-center shadow-lg transition" title="X(트위터) 공유">𝕏</button>
       <button onclick="shareBand('${shareUrl}', \`${shareText}\`)"
         class="w-14 h-14 rounded-full bg-[#00C73C] hover:brightness-95 text-white font-black text-xs flex items-center justify-center shadow-lg transition" title="밴드 공유">밴드</button>
       <button onclick="copyToClipboard('${shareUrl}')"
@@ -332,7 +332,7 @@ function renderChallengeCompareCard(myResult, challenge, section, myNickname, my
       ${shareKakaoButtonHTML(`${location.origin}/share-cards/vs.jpg`, kakaoTitle, kakaoDesc, shareUrl)}
       <div class="flex items-center justify-center gap-3">
         <button onclick="shareTwitter('${shareUrl}', \`${kakaoDesc}\`)"
-          class="w-12 h-12 rounded-full bg-slate-900 hover:bg-slate-800 border border-slate-600 text-white font-black flex items-center justify-center shadow-lg transition" title="X(트위터) 공유">𝕏</button>
+          class="w-12 h-12 rounded-full bg-[#0f172a] hover:bg-[#1e293b] border border-[#475569] text-white font-black flex items-center justify-center shadow-lg transition" title="X(트위터) 공유">𝕏</button>
         <button onclick="copyToClipboard('${shareUrl}')"
           class="w-12 h-12 rounded-full bg-slate-700 hover:bg-slate-600 text-slate-100 text-xl flex items-center justify-center shadow-lg transition" title="링크 복사">🔗</button>
       </div>
