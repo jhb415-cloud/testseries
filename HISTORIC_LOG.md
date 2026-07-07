@@ -2,6 +2,24 @@
 
 ---
 
+## 세션 #18 — 2026-07-07
+
+### 현재 버전: v0.4.1
+
+### 작업 내용
+- **(세션 초반) 카카오 키 노출 점검**: 사용자가 "카카오 계정이 노출된 것 같다"며 점검 체크리스트를 가져옴 → `git log -p --all` 전체 히스토리 검색으로 실측: public 저장소에 있는 건 카카오 **JavaScript 키 2개**(구 회사계정 앱 키 + 현 개인계정 앱 키)뿐이고, REST API/Admin/OpenAI/Slack 웹훅/Supabase service_role 등 진짜 시크릿은 히스토리 전체 0건임을 확인. JS 키는 도메인 화이트리스트로 보호되는 공개 설계 키라(이 프로젝트가 v0.0.41부터 의도적으로 하드코딩) 재발급·히스토리 정리 불필요라고 결론. 참고 교정: GitHub 코드 검색은 과거 커밋을 인덱싱하지 않음 / 현재 Kakao Developers는 4종 앱 키 전부 재발급 지원.
+- **밸런스게임 스페셜 실구현 (v0.4.1)**: 전날(세션 #17) 피쿠 레퍼런스 4단계 분석 끝에 합의한 기획("중급 수준 목표, 심리테스트존 엔진 사상 확장, 1차 게임 2개")을 사용자가 대화 백업 txt로 가져와 "이어서 진행" 승인.
+  - `data.js`: 신규 `AppData.balanceSpecials` — "인생 밸런스 게임 — 그나마 나은 지옥 고르기"(8문항, 신체 불편 vs 사회적 굴욕 축 → 백조/너구리/수달/모아이), "연애 밸런스 게임 — 최악 피하기 편"(9문항, 무심함 vs 과잉밀착 축 → 고양이/수달/강아지/코알라). 문항 스키마 `options:[{emoji,label,desc,pt}]`, 결과 스키마 `{grade,range,emoji,title,catch,detail,hashtags,traits}`.
+  - `app.js`: `balanceSpOpen/balanceSpStart/renderBalanceSpQuestion/balanceSpAnswer/renderBalanceSpResult` 신설. 문항 UI는 A/B 카드 2개(기존 밸런스게임 톤: emerald/rose hover), 진행바는 심리테스트존 패턴, 결과 직전 `App.showLoader()`(3초 광고 프리로더) 재사용. 결과 화면: 유형 카드(이모지+제목+캐치프레이즈+해시태그 칩) + detail 박스 + 특징 체크리스트 2단 그리드 + `renderIdentityShareRow('balance', {gameId, grade, ...})` + 참여수(`engagementCount('balance-sp-{id}-plays', 180)`) + 다시하기/목록. 피드 상단에 "🎯 스페셜" 배너 리스트 신설, 기존 A/B 6개는 "⚡ 스피드 선택" 그리드로 유지.
+  - 공유: `functions/share/[section].js` balance 분기에 `grade` 파라미터 추가(있으면 `balance-sp-{gameId}-{grade}.jpg`+"밸런스게임 유형은?" 타이틀, 없으면 기존 동작 그대로 — 하위호환). `scripts/generate-phase4-share-cards.js`에 balanceSpecials 순회 루프 추가, 유형별 이미지 8장 생성(전량 scale=1 안전영역 통과).
+  - **검증**: `node --check` 4개 파일 통과. Playwright(정적 서버)로 — 피드에 스페셜 2개+스피드 6개 노출, lifepick 전량 B선택→"무적 철면피 모아이형"(D) 정확, lovepick 전량 A→"자유영혼 고양이형"(A)·혼합 4점→"온도조절 수달형"(B) 경계 매핑 정확, 카카오 버튼 onclick에 유형별 이미지 경로 포함, 다시하기→Q1 복귀, 기존 A/B 게임 %바·심리테스트존 피드 회귀 없음, 콘솔 에러 0건. 모바일 폭(420px) 스크린샷으로 문항/결과 레이아웃 시각 확인.
+
+### 다음 세션 시작점
+- 밸런스게임 스페셜 반응 보고 3번째 게임 추가 여부 결정 → 이후 **가족오락관**으로 넘어가기로 합의됨(세션 #17).
+- 애드센스 심사 결과 대기 중(2026-07-05 검토 요청) — 승인 시 `ADSENSE_REVIEW_MODE=false` 원복 + family/fortuneext 숨김 해제 검토.
+
+---
+
 ## 세션 #13 — 2026-07-05
 
 ### 현재 버전: v0.1.6

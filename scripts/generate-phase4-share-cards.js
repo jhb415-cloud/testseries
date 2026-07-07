@@ -101,6 +101,13 @@ async function main() {
     await shot({ ...BALANCE_THEME, badge: '밸런스게임', emoji: g.emoji, title: g.title, subtitle: '당신의 선택은? 나도 골라보기' }, `balance-${g.id}.jpg`);
   }
 
+  // 밸런스게임 스페셜(v0.4.1~) — 유형 결과별 이미지(balance-sp-{id}-{grade}.jpg)
+  for (const g of (AppData.balanceSpecials || [])) {
+    for (const r of g.results) {
+      await shot({ ...BALANCE_THEME, badge: '밸런스게임 스페셜', emoji: r.emoji, title: r.title, subtitle: r.catch }, `balance-sp-${g.id}-${r.grade}.jpg`);
+    }
+  }
+
   await browser.close();
   console.log('Phase 4 공유 이미지 생성 완료');
 }

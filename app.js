@@ -4553,6 +4553,24 @@ function renderBalanceFeed() {
       <h2 class="text-2xl font-black text-slate-100 mb-1">⚖️ 밸런스 게임</h2>
       <p class="text-slate-400 mb-6">A vs B, 당신의 선택은?</p>
 
+      <!-- v0.4.1~ 밸런스게임 스페셜: 여러 문항 → 유형 결과 (피쿠 "중급" 레퍼런스 기반) -->
+      <div class="text-emerald-300 text-xs font-bold uppercase tracking-widest mb-2">🎯 스페셜 — 유형까지 알려주는 밸런스게임</div>
+      <div class="flex flex-col gap-3 mb-6">
+        ${(AppData.balanceSpecials || []).map(g => `
+        <div class="bg-gradient-to-br from-emerald-900/40 to-slate-800 border border-emerald-700/40 rounded-2xl p-5 cursor-pointer hover:border-emerald-500 transition"
+          onclick="balanceSpOpen('${g.id}')">
+          <div class="flex items-center gap-4">
+            <div class="text-4xl">${g.emoji}</div>
+            <div>
+              <h3 class="text-slate-100 font-bold text-lg mb-1">${g.title}</h3>
+              <p class="text-slate-400 text-sm mb-1">${g.hook}</p>
+              <p class="text-slate-500 text-xs">${g.questions.length}문항 · 약 ${g.estMinutes}분 · ▷ ${engagementCount('balance-sp-' + g.id + '-plays', 180)}</p>
+            </div>
+          </div>
+        </div>`).join('')}
+      </div>
+
+      <div class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">⚡ A vs B 스피드 선택</div>
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
         ${AppData.balanceGames.map(g => `
         <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center cursor-pointer hover:border-emerald-500 transition" onclick="balanceOpenPost('${g.id}')">
@@ -4644,6 +4662,126 @@ function balancePick(gameId, choice) {
       ${shareRow}
 
       <button onclick="renderBalanceFeed()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">목록으로</button>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   ⚖️🎯 밸런스게임 스페셜 (v0.4.1~)
+   - 여러 문항 연속 → pt 합산 → 유형(캐릭터) 결과. 채점 구조는 심리테스트존 엔진과 동일 사상,
+     문항 UI만 밸런스게임 고유의 A/B 카드 2개(이모지+제목+짧은 설명) 형태
+   - 결과 전 App.showLoader() 3초 광고 프리로더(기존 인프라 재사용)
+══════════════════════════════════════════════════ */
+function balanceSpOpen(gameId) {
+  const g = (AppData.balanceSpecials || []).find(x => x.id === gameId);
+  if (!g) return;
+  App.state.balanceSp = { gameId, step: 0, score: 0 };
+  const container = document.getElementById('balance-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <button onclick="renderBalanceFeed()" class="text-slate-400 hover:text-slate-200 text-sm mb-4">← 목록으로</button>
+      <div class="flex items-start gap-4 mb-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-700/60 to-slate-800 flex items-center justify-center text-2xl shrink-0">${g.emoji}</div>
+        <div>
+          <h2 class="text-slate-100 font-black text-xl mb-1">${g.title}</h2>
+          <p class="text-slate-500 text-xs">과몰입 연구소 · ${g.questions.length}문항 · 약 ${g.estMinutes}분 · ▷ ${engagementCount('balance-sp-' + g.id + '-plays', 180)}</p>
+        </div>
+      </div>
+      <p class="text-slate-300 leading-relaxed mb-4">${g.hook}</p>
+      <div class="flex gap-2 mb-6">
+        ${g.tags.map(tag => `<span class="bg-slate-700/50 text-slate-300 text-xs px-3 py-1 rounded-full"># ${tag}</span>`).join('')}
+      </div>
+      <button onclick="balanceSpStart('${g.id}')" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition">
+        시작하기
+      </button>
+    </div>`;
+}
+
+function balanceSpStart(gameId) {
+  bumpEngagement('balance-sp-' + gameId + '-plays');
+  App.state.balanceSp = { gameId, step: 0, score: 0 };
+  renderBalanceSpQuestion();
+}
+
+function renderBalanceSpQuestion() {
+  const state = App.state.balanceSp;
+  const g = AppData.balanceSpecials.find(x => x.id === state.gameId);
+  const q = g.questions[state.step];
+  const progress = Math.round((state.step / g.questions.length) * 100);
+  const container = document.getElementById('balance-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-slate-400 text-sm">${g.title}</span>
+        <span class="text-emerald-400 font-bold text-sm">${state.step + 1} / ${g.questions.length}</span>
+      </div>
+      <div class="progress-bar-track mb-6"><div class="h-full rounded-full bg-emerald-500 transition-all" style="width:${progress}%"></div></div>
+      <h3 class="text-slate-100 text-xl font-semibold mb-2 leading-relaxed text-center">Q${state.step + 1}. ${q.q}</h3>
+      <p class="text-slate-500 text-xs text-center mb-6">그나마 나은 쪽을 골라주세요 😈</p>
+      <div class="grid grid-cols-2 gap-3 items-stretch">
+        ${q.options.map((opt, i) => `
+        <button onclick="balanceSpAnswer(${opt.pt})" class="bg-slate-800 border border-slate-700 ${i === 0 ? 'hover:border-emerald-500' : 'hover:border-rose-500'} rounded-xl p-5 text-center transition flex flex-col items-center justify-start">
+          <div class="text-4xl mb-3">${opt.emoji}</div>
+          <p class="text-slate-100 font-bold text-sm mb-2 leading-snug" style="word-break:keep-all">${opt.label}</p>
+          <p class="text-slate-500 text-xs leading-snug" style="word-break:keep-all">${opt.desc}</p>
+        </button>`).join('')}
+      </div>
+    </div>`;
+}
+
+function balanceSpAnswer(pt) {
+  const state = App.state.balanceSp;
+  state.score += pt;
+  state.step++;
+  const g = AppData.balanceSpecials.find(x => x.id === state.gameId);
+  if (state.step >= g.questions.length) {
+    App.showLoader(() => renderBalanceSpResult());
+  } else {
+    renderBalanceSpQuestion();
+  }
+}
+
+function renderBalanceSpResult() {
+  const state = App.state.balanceSp;
+  const g = AppData.balanceSpecials.find(x => x.id === state.gameId);
+  const result = g.results.find(r => state.score >= r.range[0] && state.score <= r.range[1]) || g.results[g.results.length - 1];
+  const nickname = getNickname() || '나';
+  const shareText = `나 「${g.title}」 해봤는데 「${result.title}」 나왔어 ㅋㅋ 너도 해봐 👉`;
+
+  const shareRow = renderIdentityShareRow('balance',
+    { gameId: g.id, grade: result.grade, nickname, result: result.title },
+    `${location.origin}/share-cards/balance-sp-${g.id}-${result.grade}.jpg`,
+    `${nickname} 님은 「${result.title}」`, result.catch, shareText);
+
+  const container = document.getElementById('balance-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <div class="bg-gradient-to-br from-emerald-900/40 to-slate-800 border border-emerald-700/40 rounded-2xl p-6 text-center mb-4">
+        <p class="text-emerald-300 text-xs font-bold uppercase tracking-widest mb-3">당신의 유형은</p>
+        <div class="text-6xl mb-3">${result.emoji}</div>
+        <div class="text-slate-100 font-black text-2xl mb-2">${result.title}</div>
+        <p class="text-emerald-200 text-sm font-semibold mb-3">"${result.catch}"</p>
+        <div class="flex flex-wrap justify-center gap-2">
+          ${result.hashtags.map(h => `<span class="bg-emerald-900/50 text-emerald-300 text-xs px-3 py-1 rounded-full">#${h}</span>`).join('')}
+        </div>
+      </div>
+      <div class="bg-slate-800 rounded-2xl p-5 mb-4">
+        <p class="text-slate-300 leading-relaxed text-sm">${result.detail}</p>
+      </div>
+      <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-4 mb-5">
+        <h4 class="text-slate-200 font-bold text-sm mb-3">✅ 이런 특징이 있어요</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          ${result.traits.map(t => `<div class="flex gap-2 text-slate-300 text-xs bg-slate-800 border border-slate-700 rounded-lg p-2.5"><span class="text-emerald-400 shrink-0">✔</span><span style="word-break:keep-all">${t}</span></div>`).join('')}
+        </div>
+      </div>
+
+      ${shareRow}
+
+      <p class="text-slate-600 text-xs text-center my-4">지금까지 ▷ ${engagementCount('balance-sp-' + g.id + '-plays', 180)}명이 플레이했어요 <span class="text-slate-700">(추후 실데이터 연동 예정)</span></p>
+
+      <div class="flex gap-2">
+        <button onclick="balanceSpStart('${g.id}')" class="flex-1 bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl transition">🔄 다시 하기</button>
+        <button onclick="renderBalanceFeed()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">목록으로</button>
+      </div>
     </div>`;
 }
 
