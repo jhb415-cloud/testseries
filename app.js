@@ -5784,7 +5784,7 @@ function renderHomeMypage() {
           ${earnedBadges.map(b => `
             <span class="bg-indigo-800/50 border border-indigo-600 text-indigo-200 text-xs font-semibold px-3 py-1 rounded-full">${b.emoji} ${b.label}</span>`).join('')}
         </div>` : `
-        <p class="text-slate-500 text-xs">테스트를 완주하면 칭호를 얻을 수 있어요!</p>`}
+        <p class="text-slate-300 text-xs">테스트를 완주하면 칭호를 얻을 수 있어요!</p>`}
     </div>
 
     <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 mb-6">
@@ -5795,7 +5795,7 @@ function renderHomeMypage() {
       <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${doneCount/sections.length*100}%"></div></div>
       <div class="flex flex-wrap gap-2 mt-3">
         ${sections.map(s => `
-          <span onclick="App.navigate('${s}')" class="cursor-pointer text-xs px-3 py-1.5 rounded-full transition ${isDone(s) ? 'bg-emerald-700/40 text-emerald-300 border border-emerald-600' : 'bg-slate-700 text-slate-500 border border-slate-600 hover:border-slate-500'}">
+          <span onclick="App.navigate('${s}')" class="cursor-pointer text-xs px-3 py-1.5 rounded-full transition ${isDone(s) ? 'bg-emerald-700/40 text-emerald-300 border border-emerald-600' : 'bg-slate-700 text-slate-300 border border-slate-600 hover:border-slate-500'}">
             ${isDone(s) ? '✅' : '⬜'} ${sectionLabels[s]}
           </span>`).join('')}
       </div>
@@ -5806,7 +5806,7 @@ function renderHomeMypage() {
     <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5">
       <h4 class="text-slate-300 font-bold mb-3">🕓 최근 테스트 기록</h4>
       ${historyItems.length === 0 ? `
-        <p class="text-slate-500 text-sm text-center py-4">아직 완료한 테스트가 없어요. 테스트를 해보세요!</p>` : `
+        <p class="text-slate-300 text-sm text-center py-4">아직 완료한 테스트가 없어요. 테스트를 해보세요!</p>` : `
         <div class="space-y-2">
           ${historyItems.map(h => `
             <div class="flex items-center justify-between bg-slate-700/50 rounded-lg px-3 py-2 gap-2">
