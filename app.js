@@ -35,12 +35,23 @@ window.App = {
     target.classList.remove('hidden');
     requestAnimationFrame(() => target.classList.add('fade-in'));
 
-    if (sectionId !== this.state.currentSection) {
+    const sectionChanged = sectionId !== this.state.currentSection;
+    if (sectionChanged) {
       this._sectionHistory.push(this.state.currentSection);
       if (this._sectionHistory.length > 30) this._sectionHistory.shift();
     }
     this.state.currentSection = sectionId;
     location.hash = sectionId;
+
+    // GA4 가상 페이지뷰 (v0.4.6~): SPA 해시 라우팅은 실제 페이지 로드가 아니라 GA가 자동으로 못 잡음 —
+    // 섹션이 바뀔 때만 수동으로 page_view 이벤트 전송(같은 섹션 재클릭 시 중복 전송 방지)
+    if (sectionChanged && typeof gtag === 'function') {
+      gtag('event', 'page_view', {
+        page_title: document.title,
+        page_location: location.href,
+        page_path: location.pathname + location.hash,
+      });
+    }
 
     // 내비 active 처리
     // 심리테스트존 하위메뉴 4개는 전부 data-section="psychtest"를 공유해서(카테고리만 다름)
