@@ -172,8 +172,8 @@ export async function onRequestGet(context) {
     imageUrl = grade ? `${origin}/share-cards/balance-sp-${gameId}-${grade}.jpg` : `${origin}/share-cards/balance-${gameId}.jpg`;
   } else if (section === 'family') {
     /* 가족오락관(스피드퀴즈/몸으로말해요) 기록 공유 — 게임별 공용 이미지 1장 */
-    const game = /^(speedquiz|charades)$/.test(url.searchParams.get('game')) ? url.searchParams.get('game') : 'speedquiz';
-    const gameName = game === 'charades' ? '몸으로 말해요' : '스피드 퀴즈';
+    const game = /^(speedquiz|charades|liar)$/.test(url.searchParams.get('game')) ? url.searchParams.get('game') : 'speedquiz';
+    const gameName = { speedquiz: '스피드 퀴즈', charades: '몸으로 말해요', liar: '라이어 게임' }[game];
     const score = /^\d{1,3}$/.test(url.searchParams.get('score')) ? url.searchParams.get('score') : null;
     const time = /^\d{2,3}$/.test(url.searchParams.get('time')) ? url.searchParams.get('time') : null;
     const cat = url.searchParams.get('cat') || '';

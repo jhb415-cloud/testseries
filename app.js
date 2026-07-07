@@ -4788,9 +4788,8 @@ function renderBalanceSpResult() {
 /* ══════════════════════════════════════════════════
    🎲 가족오락관 (v0.2.3~, Phase 4 로드맵 11-1 — 메뉴만, 전체 준비중)
 ══════════════════════════════════════════════════ */
-/* v0.4.2~: 스피드 퀴즈/몸으로 말해요 2개는 실제 오픈(AppData.familyGames) — 이 목록은 남은 준비중 게임 */
+/* v0.4.2~: 스피드 퀴즈/몸으로 말해요(+v0.4.3 라이어 게임)는 실제 오픈(AppData.familyGames) — 이 목록은 남은 준비중 게임 */
 const FAMILY_GAMES = [
-  { emoji: '🤥', name: '라이어 게임', desc: '거짓말쟁이를 찾아라' },
   { emoji: '🗣️', name: '이구동성 게임', desc: '한 단어를 여러 명이 동시에 외치면? 맞혀보세요' },
   { emoji: '🎵', name: '삼행시 대결', desc: '주어진 단어로 삼행시 짓기' },
   { emoji: '🧠', name: '스무고개', desc: '질문 20개 안에 정답 맞히기' },
@@ -4845,6 +4844,7 @@ function familyOpenGame(gameId) {
   if (!g) return;
   const st = App.state.family;
   st.gameId = gameId;
+  if (gameId === 'liar') { liarRenderSetup(); return; }
   st.catId = st.catId && g.categories.some(c => c.id === st.catId) ? st.catId : g.categories[0].id;
   st.timeLimit = st.timeLimit || 90;
   familyRenderSetup();
@@ -5019,6 +5019,213 @@ function familyRenderResult() {
       <div class="flex gap-2 mt-4">
         <button onclick="familyStart()" class="flex-1 bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition">🔄 같은 설정으로 한 판 더</button>
         <button onclick="familyRenderSetup()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">설정 바꾸기</button>
+      </div>
+      <button onclick="initFamily()" class="w-full mt-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 rounded-xl transition">목록으로</button>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   🤥 가족오락관 — 라이어 게임 (v0.4.3~)
+   - "폰 돌려보기" 방식: 인원(3~8)·카테고리 설정 → 한 명씩 몰래 확인(한 명만 라이어) →
+     토론(선택 타이머) → 라이어 공개. 제시어 풀은 스피드 퀴즈 카테고리 재사용
+   - 오프라인 진행 도우미라 점수 저장 없음, 승패 판정도 사람이 함(역전승 룰만 안내)
+══════════════════════════════════════════════════ */
+function liarCategories() {
+  return AppData.familyGames.speedquiz.categories;
+}
+
+function liarRenderSetup() {
+  const st = App.state.family;
+  st.liar = st.liar || {};
+  const L = st.liar;
+  L.players = L.players || 4;
+  L.catId = L.catId && liarCategories().some(c => c.id === L.catId) ? L.catId : liarCategories()[0].id;
+  const g = AppData.familyGames.liar;
+  const container = document.getElementById('family-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <button onclick="initFamily()" class="text-slate-400 hover:text-slate-200 text-sm mb-4">← 목록으로</button>
+      <div class="text-center mb-5">
+        <div class="text-5xl mb-2">${g.emoji}</div>
+        <h2 class="text-slate-100 font-black text-2xl mb-1">${g.title}</h2>
+        <p class="text-slate-400 text-sm">${g.desc}</p>
+      </div>
+      <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-4 mb-5">
+        <h4 class="text-slate-200 font-bold text-sm mb-2">📖 어떻게 하나요</h4>
+        <ol class="space-y-1.5">
+          ${g.how.map((s, i) => `<li class="flex gap-2 text-slate-300 text-sm"><span class="text-amber-400 font-bold shrink-0">${i + 1}.</span><span style="word-break:keep-all">${s}</span></li>`).join('')}
+        </ol>
+      </div>
+      <p class="text-slate-300 font-bold text-sm mb-2">인원 수</p>
+      <div class="flex flex-wrap gap-2 mb-5">
+        ${[3, 4, 5, 6, 7, 8].map(n => `
+        <button onclick="App.state.family.liar.players=${n}; liarRenderSetup();"
+          class="w-12 py-2 rounded-xl text-sm font-bold border transition ${L.players === n ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-slate-700 text-slate-300 hover:border-amber-600'}">${n}명</button>`).join('')}
+      </div>
+      <p class="text-slate-300 font-bold text-sm mb-2">제시어 카테고리 <span class="text-slate-500 font-normal text-xs">(라이어에게도 카테고리는 공개돼요)</span></p>
+      <div class="flex flex-wrap gap-2 mb-6">
+        ${liarCategories().map(c => `
+        <button onclick="App.state.family.liar.catId='${c.id}'; liarRenderSetup();"
+          class="px-3 py-2 rounded-full text-sm font-semibold border transition ${L.catId === c.id ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-slate-700 text-slate-300 hover:border-amber-600'}">
+          ${c.emoji} ${c.label}</button>`).join('')}
+      </div>
+      <button onclick="liarStart()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition">▶ 시작하기</button>
+    </div>`;
+}
+
+function liarStart() {
+  const st = App.state.family;
+  bumpEngagement('family-liar-plays');
+  const L = st.liar;
+  const cat = liarCategories().find(c => c.id === L.catId);
+  L.word = pickOne(cat.words);
+  L.liarIdx = Math.floor(Math.random() * L.players);
+  L.revealIdx = 0;
+  st.session++;
+  liarRenderPass();
+}
+
+function liarRenderPass() {
+  const L = App.state.family.liar;
+  const container = document.getElementById('family-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto text-center py-10">
+      <p class="text-slate-400 text-sm mb-2">${L.revealIdx + 1} / ${L.players}</p>
+      <div class="text-6xl mb-4">📵</div>
+      <h2 class="text-slate-100 font-black text-2xl mb-2">${L.revealIdx + 1}번 플레이어 차례</h2>
+      <p class="text-slate-400 mb-8" style="word-break:keep-all">다른 사람이 화면을 보지 않게 폰을 건네받은 뒤 눌러주세요</p>
+      <button onclick="liarRenderReveal()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-4 rounded-xl transition text-lg">🤫 혼자 확인하기</button>
+    </div>`;
+}
+
+function liarRenderReveal() {
+  const L = App.state.family.liar;
+  const cat = liarCategories().find(c => c.id === L.catId);
+  const isLiar = L.revealIdx === L.liarIdx;
+  const container = document.getElementById('family-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto text-center py-10">
+      <p class="text-slate-400 text-sm mb-4">${L.revealIdx + 1}번 플레이어</p>
+      ${isLiar ? `
+      <div class="bg-gradient-to-br from-rose-900/40 to-slate-800 border border-rose-700/40 rounded-2xl p-8 mb-6">
+        <div class="text-6xl mb-3">🤥</div>
+        <div class="text-rose-300 font-black text-3xl mb-3">당신이 라이어!</div>
+        <p class="text-slate-300 text-sm" style="word-break:keep-all">카테고리는 <b class="text-slate-100">${cat.emoji} ${cat.label}</b> — 제시어는 비밀이에요.<br>다른 사람들 설명을 들으며 아는 척 버텨보세요 😎</p>
+      </div>` : `
+      <div class="bg-gradient-to-br from-emerald-900/40 to-slate-800 border border-emerald-700/40 rounded-2xl p-8 mb-6">
+        <p class="text-slate-400 text-sm mb-2">${cat.emoji} ${cat.label} — 제시어</p>
+        <div class="text-slate-100 font-black text-4xl mb-3" style="word-break:keep-all">${L.word}</div>
+        <p class="text-slate-400 text-sm">기억했죠? 라이어가 눈치 못 채게 설명해주세요</p>
+      </div>`}
+      <button onclick="liarNextPlayer()" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-4 rounded-xl transition">확인 완료 — ${L.revealIdx + 1 < L.players ? '다음 사람에게 넘기기' : '모두 확인 끝!'}</button>
+    </div>`;
+}
+
+function liarNextPlayer() {
+  const L = App.state.family.liar;
+  L.revealIdx++;
+  if (L.revealIdx >= L.players) {
+    liarRenderDiscuss();
+  } else {
+    liarRenderPass();
+  }
+}
+
+function liarRenderDiscuss() {
+  const st = App.state.family;
+  const L = st.liar;
+  const cat = liarCategories().find(c => c.id === L.catId);
+  const container = document.getElementById('family-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <div class="text-center mb-6">
+        <div class="text-5xl mb-2">🗣️</div>
+        <h2 class="text-slate-100 font-black text-2xl mb-1">토론 시작!</h2>
+        <p class="text-slate-400 text-sm">카테고리: ${cat.emoji} ${cat.label} · ${L.players}명 중 라이어 1명</p>
+      </div>
+      <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-4 mb-5">
+        <ol class="space-y-1.5">
+          <li class="flex gap-2 text-slate-300 text-sm"><span class="text-amber-400 font-bold shrink-0">1.</span><span>1번부터 돌아가며 제시어를 <b>한 마디씩</b> 설명해요 (제시어 단어 자체는 금지)</span></li>
+          <li class="flex gap-2 text-slate-300 text-sm"><span class="text-amber-400 font-bold shrink-0">2.</span><span>다 돌았으면 자유 토론 — 수상한 사람을 추궁하세요 🕵️</span></li>
+          <li class="flex gap-2 text-slate-300 text-sm"><span class="text-amber-400 font-bold shrink-0">3.</span><span>셋 세고 동시에 라이어 지목! 그 다음 아래 버튼으로 정답 공개</span></li>
+        </ol>
+      </div>
+      <div class="bg-slate-800 rounded-xl p-4 mb-5 text-center">
+        <p class="text-slate-400 text-xs mb-2">토론 타이머 (선택)</p>
+        <div id="liar-timer" class="text-slate-100 font-black text-3xl mb-3">--:--</div>
+        <div class="flex gap-2">
+          ${[1, 2, 3].map(m => `<button onclick="liarStartTimer(${m})" class="flex-1 py-2 rounded-xl text-sm font-bold bg-slate-700 hover:bg-slate-600 text-slate-100 transition">${m}분</button>`).join('')}
+        </div>
+      </div>
+      <button onclick="liarRenderResult()" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-4 rounded-xl transition text-lg">🕵️ 라이어 공개하기</button>
+    </div>`;
+}
+
+function liarStartTimer(minutes) {
+  const st = App.state.family;
+  const L = st.liar;
+  if (L.timer) clearInterval(L.timer);
+  L.remaining = minutes * 60;
+  st.session++;
+  const session = st.session;
+  const render = () => {
+    const el = document.getElementById('liar-timer');
+    if (!el) return;
+    const m = Math.floor(L.remaining / 60), s = L.remaining % 60;
+    el.textContent = `${m}:${String(s).padStart(2, '0')}`;
+    el.className = 'font-black text-3xl mb-3 ' + (L.remaining <= 10 ? 'text-rose-400' : 'text-slate-100');
+  };
+  render();
+  L.timer = setInterval(() => {
+    if (session !== st.session || App.state.currentSection !== 'family') { clearInterval(L.timer); return; }
+    L.remaining--;
+    if (L.remaining <= 5 && L.remaining > 0) playSound('tick');
+    if (L.remaining <= 0) {
+      clearInterval(L.timer);
+      L.timer = null;
+      playSound('wrong');
+      const el = document.getElementById('liar-timer');
+      if (el) el.textContent = '⏰ 타임업!';
+      return;
+    }
+    render();
+  }, 1000);
+}
+
+function liarRenderResult() {
+  const st = App.state.family;
+  const L = st.liar;
+  if (L.timer) { clearInterval(L.timer); L.timer = null; }
+  const cat = liarCategories().find(c => c.id === L.catId);
+  const nickname = getNickname() || '우리집';
+  const shareText = `우리 라이어 게임 했는데 눈치싸움 미쳤음 ㅋㅋ 폰 하나만 있으면 바로 됨, 너네도 해봐 👉`;
+  const shareRow = renderIdentityShareRow('family',
+    { game: 'liar', nickname },
+    `${location.origin}/share-cards/family-liar.jpg`,
+    `${nickname} 팀의 라이어 게임 한 판`, `한 명만 제시어를 모른다! 눈치싸움 게임`, shareText);
+  playSound('tierS');
+  const container = document.getElementById('family-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <div class="bg-gradient-to-br from-rose-900/40 to-slate-800 border border-rose-700/40 rounded-2xl p-6 text-center mb-4">
+        <div class="text-6xl mb-3">🤥</div>
+        <p class="text-slate-400 text-sm mb-1">라이어는 바로...</p>
+        <div class="text-rose-300 font-black text-4xl mb-3">${L.liarIdx + 1}번 플레이어!</div>
+        <p class="text-slate-300 text-sm">제시어는 <b class="text-slate-100">${cat.emoji} ${L.word}</b> 였습니다</p>
+      </div>
+      <div class="bg-amber-900/30 border border-amber-700/40 rounded-xl p-4 mb-5">
+        <p class="text-amber-300 text-sm font-bold mb-1">⚖️ 판정 가이드</p>
+        <ul class="space-y-1 text-slate-300 text-sm">
+          <li>· 라이어를 <b>맞게 지목</b>했다면 → 시민 승리! (단, 라이어가 이 자리에서 제시어를 맞히면 <b>역전승</b>)</li>
+          <li>· <b>엉뚱한 사람</b>을 지목했다면 → 라이어 승리!</li>
+        </ul>
+      </div>
+
+      ${shareRow}
+
+      <div class="flex gap-2 mt-4">
+        <button onclick="liarStart()" class="flex-1 bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition">🔄 같은 설정으로 한 판 더</button>
+        <button onclick="liarRenderSetup()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">설정 바꾸기</button>
       </div>
       <button onclick="initFamily()" class="w-full mt-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 rounded-xl transition">목록으로</button>
     </div>`;
