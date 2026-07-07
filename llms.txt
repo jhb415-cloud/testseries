@@ -1,0 +1,37 @@
+# 과몰입 연구소
+
+> 재미로 시작했다가 뼈 맞고 공유하는 종합 테스트 모음. MBTI, 두뇌 인지 테스트, 심리테스트, 밸런스 게임, 오늘의 운세, 꿈 해몽, 로또 번호 조합기 등을 무료로 제공하는 웹 서비스입니다. 결과는 오락 목적이며 전문 진단을 대체하지 않습니다.
+
+## 두뇌 테스트존
+
+- [MBTI 성격 파탄 테스트](https://gwamol-lab.xyz/#mbti): 12~24문항 MBTI 성향 테스트, 간단/정밀 2모드
+- [두뇌 나이 측정기](https://gwamol-lab.xyz/#brain): 스트룹 효과 기반 반응 테스트
+- [프로 미루러(ADHD 성향) 테스트](https://gwamol-lab.xyz/#adhd): 주의력/충동성 성향 자가 진단
+- [반응속도 테스트](https://gwamol-lab.xyz/#reaction)
+- [숫자 기억력 테스트](https://gwamol-lab.xyz/#memdigit)
+- [순서 기억력 테스트](https://gwamol-lab.xyz/#seqmem)
+- [색각 테스트](https://gwamol-lab.xyz/#colorvision)
+- [논리력 테스트](https://gwamol-lab.xyz/#logic)
+- [충동억제 테스트](https://gwamol-lab.xyz/#impulse)
+- [숏폼 집중력 테스트](https://gwamol-lab.xyz/#shortfocus)
+- [인싸력 테스트](https://gwamol-lab.xyz/#insa)
+- [속담 완성 퀴즈](https://gwamol-lab.xyz/#proverb)
+- [그 시절 물가 맞히기](https://gwamol-lab.xyz/#pricequiz)
+
+## 심리테스트존 / 과몰입 투표소
+
+- [심리테스트존](https://gwamol-lab.xyz/#psychtest): 캐릭터/성향/취향/국민테스트 카테고리별 심리 테스트
+- [밸런스 게임](https://gwamol-lab.xyz/#balance): A/B 선택형 밸런스 게임 및 여러 문항 기반 유형 테스트
+- [이상형 월드컵](https://gwamol-lab.xyz/#worldcup): 8강 토너먼트 밈 월드컵
+
+## 운명 관측소
+
+- [오늘의 운세](https://gwamol-lab.xyz/#fortune): 띠별 오늘의 운세
+- [꿈 해몽 검색](https://gwamol-lab.xyz/#dream): 키워드 기반 꿈 해몽 검색, AI 폴백 지원
+
+## 기타 서비스
+
+- [가족오락관](https://gwamol-lab.xyz/#family): 스피드 퀴즈/몸으로 말해요/라이어 게임 등 오프라인 파티게임 진행 도우미
+- [로또 번호 조합기](https://gwamol-lab.xyz/#lotto): 랜덤/직접지정/운세연동/통계기반 로또 번호 조합
+- [개인정보처리방침](https://gwamol-lab.xyz/#privacy)
+- [서비스 이용약관](https://gwamol-lab.xyz/#terms)

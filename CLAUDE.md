@@ -1,6 +1,6 @@
 # CLAUDE.md — 5-in-1 Dashboard SPA 아키텍처 규칙
 
-## 현재 버전: v0.4.7
+## 현재 버전: v0.4.8
 
 ## 프로젝트 개요
 Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보드 SPA.
@@ -14,7 +14,7 @@ Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보�
 
 | 기능 | 상태 | 버전 | 비고 |
 |---|---|---|---|
-| 구글 애널리틱스(GA4) 연동 → SPA 섹션 이동 가상 페이지뷰 추가 → PageSpeed Insights 성능 개선(1차: 로고 이미지) | ✅ 완료 | v0.4.5 → v0.4.7 | 로드맵을 "검색노출/신규유입/퍼포먼스 마케팅" 단계로 전환하며 착수한 첫 작업. 사용자가 GA4 속성 생성 후 전달한 gtag.js 스니펫(측정 ID `G-W05KHWP4WY`)을 `index.html` `<head>` 최상단에 삽입, SPA라 파일 1개뿐이라 추가 삽입 지점 없음. **v0.4.6**: 해시 라우팅 특성상 최초 접속 1회만 페이지뷰가 잡히고 이후 섹션 간 이동(홈→MBTI→운세 등)은 GA가 전혀 못 잡는 문제를 사용자에게 설명 후 "지금 바로 해달라"는 확정을 받고 구현 — `App.navigate()`에 섹션이 실제로 바뀔 때만(중복 방지) `gtag('event', 'page_view', {page_title, page_location, page_path})`를 전송하도록 추가, gtag 함수가 `<head>`에서 먼저 정의되고 `app.js`는 body 끝에서 로드되는 순서라 문제 없음. **v0.4.7**: 사용자가 구글 PageSpeed Insights로 실제 사이트를 분석한 스크린샷 다수를 첨부 — Claude가 먼저 전체 항목(색상 대비/JS 축소/미사용 JS/preconnect/네트워크 체인/레거시 JS/캐시 수명/이미지 전송/렌더링 차단)을 제3자 스크립트(광고·GA·카카오·Supabase·Tailwind CDN, 전부 의도된 기능이라 삭제 대상 아님) vs 직접 고칠 수 있는 것으로 분류해 방향성 보고 후 AskUserQuestion으로 범위를 확인받음 — 1차로 **로고 이미지 크기 문제**(179KB 낭비, LCP에 직접 영향)만 진행 확정. nav/모바일헤더/푸터 3곳이 512×512 원본(`assets/brand/logo-icon.png`)을 32px/24px로 줄여서 표시하고 있던 것을 발견 — Python(Pillow)으로 96px 리사이즈본(`logo-icon-96.png`, 183KB→12.4KB)을 신규 생성해 3곳 전부 교체. preconnect/색상대비/defer/Tailwind CDN 빌드전환/JS minify 등 나머지 항목은 보류, 다음 확인 후 순차 진행 예정 |
+| 구글 애널리틱스(GA4) 연동 → SPA 섹션 이동 가상 페이지뷰 추가 → PageSpeed Insights 성능 개선(1차: 로고 이미지, 2차: llms.txt) | ✅ 완료 | v0.4.5 → v0.4.8 | 로드맵을 "검색노출/신규유입/퍼포먼스 마케팅" 단계로 전환하며 착수한 첫 작업. 사용자가 GA4 속성 생성 후 전달한 gtag.js 스니펫(측정 ID `G-W05KHWP4WY`)을 `index.html` `<head>` 최상단에 삽입, SPA라 파일 1개뿐이라 추가 삽입 지점 없음. **v0.4.6**: 해시 라우팅 특성상 최초 접속 1회만 페이지뷰가 잡히고 이후 섹션 간 이동(홈→MBTI→운세 등)은 GA가 전혀 못 잡는 문제를 사용자에게 설명 후 "지금 바로 해달라"는 확정을 받고 구현 — `App.navigate()`에 섹션이 실제로 바뀔 때만(중복 방지) `gtag('event', 'page_view', {page_title, page_location, page_path})`를 전송하도록 추가, gtag 함수가 `<head>`에서 먼저 정의되고 `app.js`는 body 끝에서 로드되는 순서라 문제 없음. **v0.4.7**: 사용자가 구글 PageSpeed Insights로 실제 사이트를 분석한 스크린샷 다수를 첨부 — Claude가 먼저 전체 항목(색상 대비/JS 축소/미사용 JS/preconnect/네트워크 체인/레거시 JS/캐시 수명/이미지 전송/렌더링 차단)을 제3자 스크립트(광고·GA·카카오·Supabase·Tailwind CDN, 전부 의도된 기능이라 삭제 대상 아님) vs 직접 고칠 수 있는 것으로 분류해 방향성 보고 후 AskUserQuestion으로 범위를 확인받음 — 1차로 **로고 이미지 크기 문제**(179KB 낭비, LCP에 직접 영향)만 진행 확정. nav/모바일헤더/푸터 3곳이 512×512 원본(`assets/brand/logo-icon.png`)을 32px/24px로 줄여서 표시하고 있던 것을 발견 — Python(Pillow)으로 96px 리사이즈본(`logo-icon-96.png`, 183KB→12.4KB)을 신규 생성해 3곳 전부 교체. preconnect/색상대비/defer/Tailwind CDN 빌드전환/JS minify 등 나머지 항목은 보류, 다음 확인 후 순차 진행 예정. **v0.4.8**: 사용자가 PageSpeed의 "에이전트 접근성 — llms.txt가 권장사항을 준수하지 않음"(H1 헤더 없음+링크 없음) 지적을 가져와 신규 `llms.txt`(repo 루트) 작성 — H1로 사이트 소개(오락 목적 명시) + 두뇌테스트존 13개/심리테스트존·투표소 3개/운명 관측소 2개/가족오락관·로또·약관 링크까지 전체 섹션을 마크다운 링크 목록으로 정리. 구조 변경도 제3자 스크립트도 아닌 루트 텍스트 파일 추가라 사용자가 즉시 확정한 안전한 작업 |
 | MBTI 12문항 테스트 | ✅ 완료 → 간단/정밀 2모드 | v0.0.1 → v0.0.28 | |
 | 꿈 해몽 검색 (통합설명) | ✅ 완료 | v0.0.1 | |
 | 오늘의 운세 (띠별) | ✅ 완료 → 카테고리별 다중 variant(336개) 완료 | v0.0.1 → v0.0.36 | |
@@ -191,6 +191,7 @@ Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보�
 | 2026-07-07 | v0.4.5 | **구글 애널리틱스(GA4) 태그 삽입.** 사용자가 로드맵을 "검색노출/신규유입/퍼포먼스 마케팅" 단계로 전환하며 데이터 수집부터 착수 — GA4 속성 생성 후 전달받은 gtag.js 스니펫(측정 ID `G-W05KHWP4WY`)을 `index.html` `<head>` 최상단(Google 권장 위치, AdSense 스크립트보다도 앞)에 삽입. 이 프로젝트는 SPA라 실제 `.html` 파일이 `index.html` 하나뿐이라 다른 파일에는 삽입 불필요(공유 랜딩 `functions/share/[section].js`는 실제 방문자를 즉시 SPA로 리다이렉트하므로 별도 계측 불필요, 크롤러는 JS를 실행하지 않아 영향 없음) |
 | 2026-07-07 | v0.4.6 | **SPA 섹션 이동 GA4 가상 페이지뷰 추가.** 해시 라우팅 SPA 특성상 최초 접속 1회만 페이지뷰가 잡히고 이후 섹션 간 이동은 GA가 못 잡는 문제를 사용자에게 설명, "지금 바로 해달라"는 결정을 받고 구현 — `App.navigate()`에서 섹션이 실제로 바뀔 때만 `gtag('event','page_view',...)`를 전송하도록 추가(같은 섹션 재클릭 시 중복 전송 없음) |
 | 2026-07-07 | v0.4.7 | **PageSpeed Insights 성능 개선 1차 — 로고 이미지 크기.** 사용자가 PageSpeed 분석 스크린샷 다수를 첨부, Claude가 제3자 스크립트(삭제 불가) vs 직접 수정 가능 항목으로 분류해 방향 보고 후 로고 이미지만 우선 진행 확정 — nav/모바일헤더/푸터 3곳이 512×512 원본을 32px/24px로 축소 표시하던 것을 96px 리사이즈본(`logo-icon-96.png`, 183KB→12.4KB)으로 교체. 나머지 항목(preconnect/색상대비/defer/Tailwind CDN/JS minify)은 보류 |
+| 2026-07-07 | v0.4.8 | **PageSpeed Insights 성능 개선 2차 — llms.txt 신규 작성.** "에이전트 접근성 — llms.txt가 권장사항을 준수하지 않음"(H1 헤더+링크 필요) 지적 반영, repo 루트에 사이트 소개+전체 섹션 링크 목록을 담은 `llms.txt` 신규 작성 |
 
 ---
 
@@ -220,6 +221,7 @@ testseries/
 ├── supabase-client.js # Supabase 익명 인증 + 결과 이중 기록
 ├── ads.txt           # Google AdSense 승인 판매자 확인 파일 (v0.2.6~, publisher ID: pub-4825324689294427)
 ├── robots.txt        # 전체 크롤러 허용 (v0.2.8~)
+├── llms.txt          # AI/LLM 크롤러용 사이트 소개+전체 섹션 링크 목록 (v0.4.8~, PageSpeed "에이전트 접근성" 권장사항 대응)
 ├── assets/brand/      # 브랜드 로고 원본+가공 파일 (v0.3.4~) — logo-source.png(원본), logo-icon.png(512px 투명 아이콘, 사이트 전역 사용), apple-touch-icon.png, favicon-32.png
 ├── assets/worldcup/   # 이상형 월드컵 후보 실사진 8장 (v0.4.0~, 무료 상업이용 스톡사진 Unsplash/Pexels, EXIF 제거 완료) — 신규 월드컵 추가 시 같은 방식으로 소싱
 ├── functions/
