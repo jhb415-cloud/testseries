@@ -5368,10 +5368,10 @@ async function worldcupFetchStats() {
 }
 
 function worldcupRankingHTML(championId, stats) {
-  if (!stats) return `<p class="text-slate-500 text-xs mt-3">📊 순위 집계 중...</p>`;
+  if (!stats) return '';
   const total = stats.reduce((sum, s) => sum + Number(s.votes), 0);
   if (total < WORLDCUP_RANK_THRESHOLD) {
-    return `<p class="text-slate-500 text-xs mt-3">📊 아직 데이터가 적어서 전체 순위는 비공개예요 (누적 ${total}판, 100판부터 공개)</p>`;
+    return '';
   }
   const sorted = [...stats].sort((a, b) => b.votes - a.votes);
   const rank = sorted.findIndex(s => s.meme_id === championId) + 1;
