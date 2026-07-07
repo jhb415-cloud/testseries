@@ -4788,11 +4788,10 @@ function renderBalanceSpResult() {
 /* ══════════════════════════════════════════════════
    🎲 가족오락관 (v0.2.3~, Phase 4 로드맵 11-1 — 메뉴만, 전체 준비중)
 ══════════════════════════════════════════════════ */
+/* v0.4.2~: 스피드 퀴즈/몸으로 말해요 2개는 실제 오픈(AppData.familyGames) — 이 목록은 남은 준비중 게임 */
 const FAMILY_GAMES = [
-  { emoji: '🗣️', name: '이구동성 게임', desc: '한 단어를 여러 명이 동시에 외치면? 맞혀보세요' },
   { emoji: '🤥', name: '라이어 게임', desc: '거짓말쟁이를 찾아라' },
-  { emoji: '🙅', name: '몸으로 말해요', desc: '제스처만으로 정답 맞히기' },
-  { emoji: '🎯', name: '스피드 퀴즈', desc: '제한시간 안에 설명만 듣고 맞히기' },
+  { emoji: '🗣️', name: '이구동성 게임', desc: '한 단어를 여러 명이 동시에 외치면? 맞혀보세요' },
   { emoji: '🎵', name: '삼행시 대결', desc: '주어진 단어로 삼행시 짓기' },
   { emoji: '🧠', name: '스무고개', desc: '질문 20개 안에 정답 맞히기' },
   { emoji: '🖐️', name: '손병호 게임', desc: '해당하면 손가락 접기' },
@@ -4802,15 +4801,28 @@ const FAMILY_GAMES = [
 ];
 
 function initFamily() {
+  /* session 토큰: 섹션을 떠나면 돌아가던 타이머가 스스로 멈추게 함 (lottodraw 물리 루프와 동일 패턴) */
+  App.state.family = { session: (App.state.family ? App.state.family.session : 0) + 1 };
   const container = document.getElementById('family-container');
   container.innerHTML = `
     <div class="max-w-2xl mx-auto">
       <h2 class="text-2xl font-black text-slate-100 mb-1">🎲 가족오락관</h2>
-      <p class="text-slate-400 mb-6">모였을 때 바로 써먹는 온가족 실내게임 10선 — 오프라인 진행법도 함께 안내할 예정이에요</p>
+      <p class="text-slate-400 mb-6">모였을 때 폰 하나로 바로 진행하는 온가족 실내게임 — 출제·타이머·채점은 저희가 할게요</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+        ${Object.entries(AppData.familyGames).map(([id, g]) => `
+        <div class="bg-gradient-to-br from-amber-900/40 to-slate-800 border border-amber-700/40 rounded-2xl p-5 cursor-pointer hover:border-amber-500 transition" onclick="familyOpenGame('${id}')">
+          <div class="text-4xl mb-2">${g.emoji}</div>
+          <h3 class="text-slate-100 font-bold text-lg mb-1">${g.title}</h3>
+          <p class="text-slate-400 text-sm mb-2">${g.desc}</p>
+          <p class="text-slate-500 text-xs">▷ ${engagementCount('family-' + id + '-plays', 95)}</p>
+        </div>`).join('')}
+      </div>
+
       <div class="space-y-2">
         ${FAMILY_GAMES.map(g => `
           <div class="flex items-center gap-3 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 opacity-70 cursor-pointer hover:border-violet-500 transition"
-            onclick="showToast('가족오락관 콘텐츠는 준비 중이에요 — 곧 만나요! 🙏')">
+            onclick="showToast('이 게임은 준비 중이에요 — 곧 만나요! 🙏')">
             <div class="text-2xl w-9 text-center">${g.emoji}</div>
             <div class="flex-1">
               <p class="text-slate-100 font-semibold text-sm">${g.name}</p>
@@ -4819,7 +4831,196 @@ function initFamily() {
             <span class="text-xs font-bold px-3 py-1 rounded-full bg-slate-700/60 text-slate-400 whitespace-nowrap">🔒 준비중</span>
           </div>`).join('')}
       </div>
-      <p class="text-slate-600 text-xs mt-4">※ 사이트 방문이 늘어나면 순차적으로 오픈할 예정이에요.</p>
+      <p class="text-slate-600 text-xs mt-4">※ 나머지 게임도 순차적으로 오픈할 예정이에요.</p>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   🎯 가족오락관 — 스피드 퀴즈/몸으로 말해요 진행 도우미 엔진 (v0.4.2~)
+   - 두 게임이 같은 엔진 공유: 카테고리·시간 선택 → 3초 카운트다운 → 제시어+타이머+⭕/⏭️ → 결과 리캡
+   - 오프라인 파티게임의 "출제자 역할"을 폰이 대신하는 도구라 점수 저장(saveRanking)은 하지 않음
+══════════════════════════════════════════════════ */
+function familyOpenGame(gameId) {
+  const g = AppData.familyGames[gameId];
+  if (!g) return;
+  const st = App.state.family;
+  st.gameId = gameId;
+  st.catId = st.catId && g.categories.some(c => c.id === st.catId) ? st.catId : g.categories[0].id;
+  st.timeLimit = st.timeLimit || 90;
+  familyRenderSetup();
+}
+
+function familyRenderSetup() {
+  const st = App.state.family;
+  const g = AppData.familyGames[st.gameId];
+  const container = document.getElementById('family-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <button onclick="initFamily()" class="text-slate-400 hover:text-slate-200 text-sm mb-4">← 목록으로</button>
+      <div class="text-center mb-5">
+        <div class="text-5xl mb-2">${g.emoji}</div>
+        <h2 class="text-slate-100 font-black text-2xl mb-1">${g.title}</h2>
+        <p class="text-slate-400 text-sm">${g.desc}</p>
+      </div>
+      <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-4 mb-5">
+        <h4 class="text-slate-200 font-bold text-sm mb-2">📖 어떻게 하나요</h4>
+        <ol class="space-y-1.5">
+          ${g.how.map((s, i) => `<li class="flex gap-2 text-slate-300 text-sm"><span class="text-amber-400 font-bold shrink-0">${i + 1}.</span><span style="word-break:keep-all">${s}</span></li>`).join('')}
+        </ol>
+      </div>
+      <p class="text-slate-300 font-bold text-sm mb-2">제시어 카테고리</p>
+      <div class="flex flex-wrap gap-2 mb-5">
+        ${g.categories.map(c => `
+        <button onclick="App.state.family.catId='${c.id}'; familyRenderSetup();"
+          class="px-3 py-2 rounded-full text-sm font-semibold border transition ${st.catId === c.id ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-slate-700 text-slate-300 hover:border-amber-600'}">
+          ${c.emoji} ${c.label}</button>`).join('')}
+      </div>
+      <p class="text-slate-300 font-bold text-sm mb-2">제한시간</p>
+      <div class="flex gap-2 mb-6">
+        ${[60, 90, 120].map(t => `
+        <button onclick="App.state.family.timeLimit=${t}; familyRenderSetup();"
+          class="flex-1 py-2 rounded-xl text-sm font-bold border transition ${st.timeLimit === t ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-slate-700 text-slate-300 hover:border-amber-600'}">
+          ${t}초</button>`).join('')}
+      </div>
+      <button onclick="familyStart()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition">▶ 시작하기</button>
+    </div>`;
+}
+
+function familyStart() {
+  const st = App.state.family;
+  bumpEngagement('family-' + st.gameId + '-plays');
+  const g = AppData.familyGames[st.gameId];
+  const cat = g.categories.find(c => c.id === st.catId);
+  st.words = shuffleArray([...cat.words]);
+  st.idx = 0;
+  st.score = 0;
+  st.log = [];
+  st.remaining = st.timeLimit;
+  st.session++;
+  const session = st.session;
+
+  /* 3→2→1 카운트다운 (출제자가 폰을 잡을 준비 시간) */
+  const container = document.getElementById('family-container');
+  let count = 3;
+  const showCount = () => {
+    if (session !== App.state.family.session || App.state.currentSection !== 'family') return;
+    if (count > 0) {
+      container.innerHTML = `<div class="max-w-lg mx-auto text-center py-24"><div class="text-7xl font-black text-amber-400">${count}</div><p class="text-slate-400 mt-4">${st.gameId === 'charades' ? '표현할 사람, 폰 잡으세요!' : '출제자님, 폰 잡으세요!'}</p></div>`;
+      playSound('tick');
+      count--;
+      setTimeout(showCount, 700);
+    } else {
+      familyBeginRound(session);
+    }
+  };
+  showCount();
+}
+
+function familyBeginRound(session) {
+  const st = App.state.family;
+  familyRenderPlay();
+  st.timer = setInterval(() => {
+    if (session !== st.session || App.state.currentSection !== 'family') { clearInterval(st.timer); return; }
+    st.remaining--;
+    if (st.remaining <= 0) {
+      clearInterval(st.timer);
+      playSound('wrong');
+      familyRenderResult();
+      return;
+    }
+    if (st.remaining <= 5) playSound('tick');
+    const tEl = document.getElementById('family-timer');
+    const bEl = document.getElementById('family-timer-bar');
+    if (tEl) {
+      tEl.textContent = st.remaining + '초';
+      tEl.className = 'font-black text-2xl ' + (st.remaining <= 10 ? 'text-rose-400' : 'text-amber-400');
+    }
+    if (bEl) bEl.style.width = Math.round((st.remaining / st.timeLimit) * 100) + '%';
+  }, 1000);
+}
+
+function familyCurrentWord() {
+  const st = App.state.family;
+  /* 풀을 다 쓰면 다시 섞어서 계속 (제한시간이 끝날 때까지 제시어가 마르지 않게) */
+  if (st.idx >= st.words.length) {
+    st.words = shuffleArray([...st.words]);
+    st.idx = 0;
+  }
+  return st.words[st.idx];
+}
+
+function familyRenderPlay() {
+  const st = App.state.family;
+  const g = AppData.familyGames[st.gameId];
+  const cat = g.categories.find(c => c.id === st.catId);
+  const container = document.getElementById('family-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-slate-400 text-sm">${g.emoji} ${g.title} · ${cat.emoji} ${cat.label}</span>
+        <span id="family-timer" class="font-black text-2xl text-amber-400">${st.remaining}초</span>
+      </div>
+      <div class="progress-bar-track mb-6"><div id="family-timer-bar" class="h-full rounded-full bg-amber-500 transition-all" style="width:100%"></div></div>
+      <div class="bg-gradient-to-br from-amber-900/40 to-slate-800 border border-amber-700/40 rounded-2xl py-14 px-6 text-center mb-6">
+        <p id="family-word" class="text-slate-100 font-black text-4xl" style="word-break:keep-all">${familyCurrentWord()}</p>
+      </div>
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <button onclick="familyMark(true)" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xl py-6 rounded-2xl transition">⭕ 정답</button>
+        <button onclick="familyMark(false)" class="bg-slate-700 hover:bg-slate-600 text-slate-100 font-black text-xl py-6 rounded-2xl transition">⏭️ 패스</button>
+      </div>
+      <p class="text-center text-slate-400 text-sm">맞힌 개수: <span id="family-score" class="text-emerald-400 font-bold">${st.score}</span>개</p>
+    </div>`;
+}
+
+function familyMark(correct) {
+  const st = App.state.family;
+  if (!st.timer || st.remaining <= 0) return;
+  const word = familyCurrentWord();
+  st.log.push({ word, correct });
+  if (correct) { st.score++; playSound('correct'); } else { playSound('tick'); }
+  st.idx++;
+  const wEl = document.getElementById('family-word');
+  const sEl = document.getElementById('family-score');
+  if (wEl) { wEl.textContent = familyCurrentWord(); pulseElement(wEl, correct ? 'pop' : 'wrong'); }
+  if (sEl) sEl.textContent = st.score;
+}
+
+function familyRenderResult() {
+  const st = App.state.family;
+  const g = AppData.familyGames[st.gameId];
+  const cat = g.categories.find(c => c.id === st.catId);
+  const nickname = getNickname() || '우리집';
+  const shareText = `우리 「${g.title}」(${cat.label}) ${st.timeLimit}초에 ${st.score}개 맞혔어!! 이거 가족이랑 하면 진짜 웃김 ㅋㅋ 너네도 해봐 👉`;
+  const shareRow = renderIdentityShareRow('family',
+    { game: st.gameId, nickname, score: String(st.score), cat: cat.label, time: String(st.timeLimit) },
+    `${location.origin}/share-cards/family-${st.gameId}.jpg`,
+    `${nickname} 팀의 ${g.title} 기록`, `${cat.label} ${st.timeLimit}초 — ${st.score}개 정답!`, shareText);
+
+  const container = document.getElementById('family-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <div class="bg-gradient-to-br from-amber-900/40 to-slate-800 border border-amber-700/40 rounded-2xl p-6 text-center mb-4">
+        <div class="text-5xl mb-2">${g.emoji}</div>
+        <p class="text-slate-400 text-sm mb-1">${cat.emoji} ${cat.label} · ${st.timeLimit}초</p>
+        <div class="text-slate-100 font-black text-4xl mb-1">${st.score}개 정답!</div>
+        <p class="text-amber-300 text-sm">${st.score >= 15 ? '이 팀 텔레파시 되는 거 아니에요? 🤯' : st.score >= 8 ? '호흡 척척! 다음 판은 기록 경신 가봅시다 🔥' : '웃느라 못 맞힌 거 다 압니다 ㅋㅋ 한 판 더!'}</p>
+      </div>
+
+      ${st.log.length ? `
+      <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-4 mb-5">
+        <h4 class="text-slate-200 font-bold text-sm mb-3">📋 제시어 리캡</h4>
+        <div class="flex flex-wrap gap-2">
+          ${st.log.map(l => `<span class="text-xs px-3 py-1 rounded-full ${l.correct ? 'bg-emerald-900/50 text-emerald-300' : 'bg-slate-700/60 text-slate-400 line-through'}">${l.word}</span>`).join('')}
+        </div>
+      </div>` : ''}
+
+      ${shareRow}
+
+      <div class="flex gap-2 mt-4">
+        <button onclick="familyStart()" class="flex-1 bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition">🔄 같은 설정으로 한 판 더</button>
+        <button onclick="familyRenderSetup()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">설정 바꾸기</button>
+      </div>
+      <button onclick="initFamily()" class="w-full mt-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 rounded-xl transition">목록으로</button>
     </div>`;
 }
 

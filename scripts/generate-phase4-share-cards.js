@@ -108,6 +108,12 @@ async function main() {
     }
   }
 
+  // 가족오락관(v0.4.2~) — 게임별 공용 이미지 1장 (기록 숫자는 카카오 카드 텍스트가 담당)
+  const FAMILY_THEME = { bgFrom: '#7c2d12', bgTo: '#0c0a1f', accent: '#fcd34d', badgeBg: '#92400e' };
+  for (const [id, g] of Object.entries(AppData.familyGames || {})) {
+    await shot({ ...FAMILY_THEME, badge: '가족오락관', emoji: g.emoji, title: g.title, subtitle: '폰 하나로 바로 하는 온가족 게임 — 우리도 해보기' }, `family-${id}.jpg`);
+  }
+
   await browser.close();
   console.log('Phase 4 공유 이미지 생성 완료');
 }

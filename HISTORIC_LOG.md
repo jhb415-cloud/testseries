@@ -4,7 +4,7 @@
 
 ## 세션 #18 — 2026-07-07
 
-### 현재 버전: v0.4.1
+### 현재 버전: v0.4.2
 
 ### 작업 내용
 - **(세션 초반) 카카오 키 노출 점검**: 사용자가 "카카오 계정이 노출된 것 같다"며 점검 체크리스트를 가져옴 → `git log -p --all` 전체 히스토리 검색으로 실측: public 저장소에 있는 건 카카오 **JavaScript 키 2개**(구 회사계정 앱 키 + 현 개인계정 앱 키)뿐이고, REST API/Admin/OpenAI/Slack 웹훅/Supabase service_role 등 진짜 시크릿은 히스토리 전체 0건임을 확인. JS 키는 도메인 화이트리스트로 보호되는 공개 설계 키라(이 프로젝트가 v0.0.41부터 의도적으로 하드코딩) 재발급·히스토리 정리 불필요라고 결론. 참고 교정: GitHub 코드 검색은 과거 커밋을 인덱싱하지 않음 / 현재 Kakao Developers는 4종 앱 키 전부 재발급 지원.
@@ -14,8 +14,15 @@
   - 공유: `functions/share/[section].js` balance 분기에 `grade` 파라미터 추가(있으면 `balance-sp-{gameId}-{grade}.jpg`+"밸런스게임 유형은?" 타이틀, 없으면 기존 동작 그대로 — 하위호환). `scripts/generate-phase4-share-cards.js`에 balanceSpecials 순회 루프 추가, 유형별 이미지 8장 생성(전량 scale=1 안전영역 통과).
   - **검증**: `node --check` 4개 파일 통과. Playwright(정적 서버)로 — 피드에 스페셜 2개+스피드 6개 노출, lifepick 전량 B선택→"무적 철면피 모아이형"(D) 정확, lovepick 전량 A→"자유영혼 고양이형"(A)·혼합 4점→"온도조절 수달형"(B) 경계 매핑 정확, 카카오 버튼 onclick에 유형별 이미지 경로 포함, 다시하기→Q1 복귀, 기존 A/B 게임 %바·심리테스트존 피드 회귀 없음, 콘솔 에러 0건. 모바일 폭(420px) 스크린샷으로 문항/결과 레이아웃 시각 확인.
 
+- **가족오락관 1차 오픈 (v0.4.2)**: AskUserQuestion으로 범위 확정 — 사용자가 "스피드 퀴즈/몸으로 말해요 먼저, 라이어게임은 준비중"+"사이드바 숨김 해제" 선택("다되면 오늘 또 작업할 수도" 언급 → 라이어게임이 유력한 다음 작업).
+  - `data.js` `AppData.familyGames`: 게임 2개×카테고리 5개, 제시어 252개(스피드퀴즈: 음식28/동물28/사물·생활28/직업24/장소·여행24, 몸으로말해요: 동물24/스포츠24/일상행동24/직업24/악기·놀이24 — 후자는 동작 표현 가능 단어 위주 별도 선정).
+  - `app.js`: 진행 도우미 공용 엔진 — `familyOpenGame`(어떻게 하나요 3단계+카테고리 칩+60/90/120초) → `familyStart`(3→2→1 카운트다운) → 플레이(제시어 카드+타이머 바+⭕정답/⏭️패스, 풀 소진 시 재셔플) → `familyRenderResult`(점수+유머 코멘트+제시어 리캡 칩+같은 설정 한판 더). 타이머는 session 토큰+currentSection 체크로 섹션 이탈 시 자동 정지(lottodraw 패턴). 팀 기록이라 saveRanking은 의도적으로 미사용.
+  - 공유: `functions/share/[section].js`에 family 분기(FAMILY_SECTIONS, game/score/time/cat 파라미터 검증, 잘못된 game은 speedquiz 폴백), `generate-phase4-share-cards.js`에 FAMILY_THEME(웜 오렌지) 루프 → `family-speedquiz.jpg`/`family-charades.jpg` 생성.
+  - **사이드바 숨김 해제**: v0.2.8 애드센스 임시숨김 3개 중 family 해제(준비중 배지도 제거) — **남은 숨김은 fortuneext 1개뿐** (`[[project_adsense_review_temp_hides]]` 메모리 갱신함).
+  - **검증**: `node --check` 4개 파일, Playwright(사이드바 노출/피드 2+8/설정 반영/카운트다운/플레이 단어·점수·타이머/타임업 결과/리캡/카카오 이미지 경로/한판 더/섹션 이탈 시 타이머 정지/charades 안내) 콘솔 에러 0건, wrangler+curl로 `/share/family` og 3종+폴백 확인.
+
 ### 다음 세션 시작점
-- 밸런스게임 스페셜 반응 보고 3번째 게임 추가 여부 결정 → 이후 **가족오락관**으로 넘어가기로 합의됨(세션 #17).
+- 밸런스게임 스페셜 3번째 게임은 추후 업데이트로 보류(사용자 확정). 가족오락관은 2/10 오픈 — 다음 후보는 **라이어 게임**(사용자가 "다되면 오늘 또 작업할 수도"라고 언급).
 - 애드센스 심사 결과 대기 중(2026-07-05 검토 요청) — 승인 시 `ADSENSE_REVIEW_MODE=false` 원복 + family/fortuneext 숨김 해제 검토.
 
 ---

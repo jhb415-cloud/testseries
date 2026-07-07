@@ -16,9 +16,11 @@ const IDENTITY_SECTIONS = ['mbti', 'adhd', 'insa', 'proverb', 'pricequiz', 'fort
 const LOTTO_SECTIONS = ['lotto', 'lottodraw'];
 /* Phase 4 수익화 로드맵 11-6/11-7 (v0.2.3~): 심리테스트존/밸런스게임 */
 const FEED_SECTIONS = ['psychtest', 'balance'];
+/* 가족오락관 진행 도우미 (v0.4.2~) */
+const FAMILY_SECTIONS = ['family'];
 /* 이상형 월드컵 (v0.4.0~) */
 const WORLDCUP_SECTIONS = ['worldcup'];
-const VALID_SECTIONS = [...TIER_SECTIONS, ...IDENTITY_SECTIONS, ...LOTTO_SECTIONS, ...FEED_SECTIONS, ...WORLDCUP_SECTIONS];
+const VALID_SECTIONS = [...TIER_SECTIONS, ...IDENTITY_SECTIONS, ...LOTTO_SECTIONS, ...FEED_SECTIONS, ...FAMILY_SECTIONS, ...WORLDCUP_SECTIONS];
 const CTA_RESULT = '나도 해보기';
 const CTA_CHALLENGE = '⚔️ 도전하기';
 
@@ -168,6 +170,17 @@ export async function onRequestGet(context) {
     rawTitle = grade ? `${rawNickname} 님의 밸런스게임 유형은?` : `${rawNickname} 님의 선택은?`;
     rawDescription = result || '너라면 어떤 걸 고를래? 과몰입 연구소에서 확인해보세요 👉';
     imageUrl = grade ? `${origin}/share-cards/balance-sp-${gameId}-${grade}.jpg` : `${origin}/share-cards/balance-${gameId}.jpg`;
+  } else if (section === 'family') {
+    /* 가족오락관(스피드퀴즈/몸으로말해요) 기록 공유 — 게임별 공용 이미지 1장 */
+    const game = /^(speedquiz|charades)$/.test(url.searchParams.get('game')) ? url.searchParams.get('game') : 'speedquiz';
+    const gameName = game === 'charades' ? '몸으로 말해요' : '스피드 퀴즈';
+    const score = /^\d{1,3}$/.test(url.searchParams.get('score')) ? url.searchParams.get('score') : null;
+    const time = /^\d{2,3}$/.test(url.searchParams.get('time')) ? url.searchParams.get('time') : null;
+    const cat = url.searchParams.get('cat') || '';
+    rawTitle = `${rawNickname} 팀의 ${gameName} 기록`;
+    rawDescription = score ? `${cat ? cat + ' ' : ''}${time ? time + '초에 ' : ''}${score}개 정답! 우리 가족도 도전해볼까? 👉` : '폰 하나로 바로 하는 온가족 게임 — 과몰입 연구소에서 해보세요 👉';
+    imageUrl = `${origin}/share-cards/family-${game}.jpg`;
+    cta = '🎲 우리도 해보기';
   } else if (section === 'worldcup') {
     const championId = WORLDCUP_MEMES[url.searchParams.get('champion')] ? url.searchParams.get('champion') : 'nunnun';
     const meme = WORLDCUP_MEMES[championId];
