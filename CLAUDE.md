@@ -1,6 +1,6 @@
 # CLAUDE.md — 5-in-1 Dashboard SPA 아키텍처 규칙
 
-## 현재 버전: v0.4.6
+## 현재 버전: v0.4.7
 
 ## 프로젝트 개요
 Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보드 SPA.
@@ -14,7 +14,7 @@ Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보�
 
 | 기능 | 상태 | 버전 | 비고 |
 |---|---|---|---|
-| 구글 애널리틱스(GA4) 연동 → SPA 섹션 이동 가상 페이지뷰 추가 | ✅ 완료 | v0.4.5 → v0.4.6 | 로드맵을 "검색노출/신규유입/퍼포먼스 마케팅" 단계로 전환하며 착수한 첫 작업. 사용자가 GA4 속성 생성 후 전달한 gtag.js 스니펫(측정 ID `G-W05KHWP4WY`)을 `index.html` `<head>` 최상단에 삽입, SPA라 파일 1개뿐이라 추가 삽입 지점 없음. **v0.4.6**: 해시 라우팅 특성상 최초 접속 1회만 페이지뷰가 잡히고 이후 섹션 간 이동(홈→MBTI→운세 등)은 GA가 전혀 못 잡는 문제를 사용자에게 설명 후 "지금 바로 해달라"는 확정을 받고 구현 — `App.navigate()`에 섹션이 실제로 바뀔 때만(중복 방지) `gtag('event', 'page_view', {page_title, page_location, page_path})`를 전송하도록 추가, gtag 함수가 `<head>`에서 먼저 정의되고 `app.js`는 body 끝에서 로드되는 순서라 문제 없음 |
+| 구글 애널리틱스(GA4) 연동 → SPA 섹션 이동 가상 페이지뷰 추가 → PageSpeed Insights 성능 개선(1차: 로고 이미지) | ✅ 완료 | v0.4.5 → v0.4.7 | 로드맵을 "검색노출/신규유입/퍼포먼스 마케팅" 단계로 전환하며 착수한 첫 작업. 사용자가 GA4 속성 생성 후 전달한 gtag.js 스니펫(측정 ID `G-W05KHWP4WY`)을 `index.html` `<head>` 최상단에 삽입, SPA라 파일 1개뿐이라 추가 삽입 지점 없음. **v0.4.6**: 해시 라우팅 특성상 최초 접속 1회만 페이지뷰가 잡히고 이후 섹션 간 이동(홈→MBTI→운세 등)은 GA가 전혀 못 잡는 문제를 사용자에게 설명 후 "지금 바로 해달라"는 확정을 받고 구현 — `App.navigate()`에 섹션이 실제로 바뀔 때만(중복 방지) `gtag('event', 'page_view', {page_title, page_location, page_path})`를 전송하도록 추가, gtag 함수가 `<head>`에서 먼저 정의되고 `app.js`는 body 끝에서 로드되는 순서라 문제 없음. **v0.4.7**: 사용자가 구글 PageSpeed Insights로 실제 사이트를 분석한 스크린샷 다수를 첨부 — Claude가 먼저 전체 항목(색상 대비/JS 축소/미사용 JS/preconnect/네트워크 체인/레거시 JS/캐시 수명/이미지 전송/렌더링 차단)을 제3자 스크립트(광고·GA·카카오·Supabase·Tailwind CDN, 전부 의도된 기능이라 삭제 대상 아님) vs 직접 고칠 수 있는 것으로 분류해 방향성 보고 후 AskUserQuestion으로 범위를 확인받음 — 1차로 **로고 이미지 크기 문제**(179KB 낭비, LCP에 직접 영향)만 진행 확정. nav/모바일헤더/푸터 3곳이 512×512 원본(`assets/brand/logo-icon.png`)을 32px/24px로 줄여서 표시하고 있던 것을 발견 — Python(Pillow)으로 96px 리사이즈본(`logo-icon-96.png`, 183KB→12.4KB)을 신규 생성해 3곳 전부 교체. preconnect/색상대비/defer/Tailwind CDN 빌드전환/JS minify 등 나머지 항목은 보류, 다음 확인 후 순차 진행 예정 |
 | MBTI 12문항 테스트 | ✅ 완료 → 간단/정밀 2모드 | v0.0.1 → v0.0.28 | |
 | 꿈 해몽 검색 (통합설명) | ✅ 완료 | v0.0.1 | |
 | 오늘의 운세 (띠별) | ✅ 완료 → 카테고리별 다중 variant(336개) 완료 | v0.0.1 → v0.0.36 | |
@@ -190,6 +190,7 @@ Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보�
 | 2026-07-07 | v0.4.4 | **이상형 월드컵 순위 표본부족 문구 완전 숨김.** 사용자가 Supabase SQL(`worldcup_votes`/`worldcup_stats`) 실행 후 실제 플레이해보니 "누적 1판, 100판부터 공개" 문구가 그대로 노출돼 "고객한테 보여주지 말고 숨겨달라"고 요청 — `worldcupRankingHTML()`이 표본 부족 시 빈 문자열을 반환하도록 수정, 100판 이상부터만 순위 문구가 나타남 |
 | 2026-07-07 | v0.4.5 | **구글 애널리틱스(GA4) 태그 삽입.** 사용자가 로드맵을 "검색노출/신규유입/퍼포먼스 마케팅" 단계로 전환하며 데이터 수집부터 착수 — GA4 속성 생성 후 전달받은 gtag.js 스니펫(측정 ID `G-W05KHWP4WY`)을 `index.html` `<head>` 최상단(Google 권장 위치, AdSense 스크립트보다도 앞)에 삽입. 이 프로젝트는 SPA라 실제 `.html` 파일이 `index.html` 하나뿐이라 다른 파일에는 삽입 불필요(공유 랜딩 `functions/share/[section].js`는 실제 방문자를 즉시 SPA로 리다이렉트하므로 별도 계측 불필요, 크롤러는 JS를 실행하지 않아 영향 없음) |
 | 2026-07-07 | v0.4.6 | **SPA 섹션 이동 GA4 가상 페이지뷰 추가.** 해시 라우팅 SPA 특성상 최초 접속 1회만 페이지뷰가 잡히고 이후 섹션 간 이동은 GA가 못 잡는 문제를 사용자에게 설명, "지금 바로 해달라"는 결정을 받고 구현 — `App.navigate()`에서 섹션이 실제로 바뀔 때만 `gtag('event','page_view',...)`를 전송하도록 추가(같은 섹션 재클릭 시 중복 전송 없음) |
+| 2026-07-07 | v0.4.7 | **PageSpeed Insights 성능 개선 1차 — 로고 이미지 크기.** 사용자가 PageSpeed 분석 스크린샷 다수를 첨부, Claude가 제3자 스크립트(삭제 불가) vs 직접 수정 가능 항목으로 분류해 방향 보고 후 로고 이미지만 우선 진행 확정 — nav/모바일헤더/푸터 3곳이 512×512 원본을 32px/24px로 축소 표시하던 것을 96px 리사이즈본(`logo-icon-96.png`, 183KB→12.4KB)으로 교체. 나머지 항목(preconnect/색상대비/defer/Tailwind CDN/JS minify)은 보류 |
 
 ---
 
