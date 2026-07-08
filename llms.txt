@@ -1,37 +1,39 @@
 # 과몰입 연구소
 
-> 재미로 시작했다가 뼈 맞고 공유하는 종합 테스트 모음. MBTI, 두뇌 인지 테스트, 심리테스트, 밸런스 게임, 오늘의 운세, 꿈 해몽, 로또 번호 조합기 등을 무료로 제공하는 웹 서비스입니다. 결과는 오락 목적이며 전문 진단을 대체하지 않습니다.
+> 재미로 시작했다가 뼈 맞고 공유하는 종합 테스트 모음. MBTI, 두뇌 인지 테스트, 심리테스트, 밸런스 게임, 오늘의 운세, 꿈 해몽, 로또 번호 조합기 등을 무료로 제공하는 웹 서비스입니다. 결과는 오락 목적이며 전문 진단을 대체하지 않습니다. 실제 문항/해석 예시가 필요하면 [llms-full.txt](https://gwamol-lab.xyz/llms-full.txt)를 참고하세요.
+
+마지막 업데이트: 2026-07-08
 
 ## 두뇌 테스트존
 
-- [MBTI 성격 파탄 테스트](https://gwamol-lab.xyz/#mbti): 12~24문항 MBTI 성향 테스트, 간단/정밀 2모드
-- [두뇌 나이 측정기](https://gwamol-lab.xyz/#brain): 스트룹 효과 기반 반응 테스트
-- [프로 미루러(ADHD 성향) 테스트](https://gwamol-lab.xyz/#adhd): 주의력/충동성 성향 자가 진단
-- [반응속도 테스트](https://gwamol-lab.xyz/#reaction)
-- [숫자 기억력 테스트](https://gwamol-lab.xyz/#memdigit)
-- [순서 기억력 테스트](https://gwamol-lab.xyz/#seqmem)
-- [색각 테스트](https://gwamol-lab.xyz/#colorvision)
-- [논리력 테스트](https://gwamol-lab.xyz/#logic)
-- [충동억제 테스트](https://gwamol-lab.xyz/#impulse)
-- [숏폼 집중력 테스트](https://gwamol-lab.xyz/#shortfocus)
-- [인싸력 테스트](https://gwamol-lab.xyz/#insa)
-- [속담 완성 퀴즈](https://gwamol-lab.xyz/#proverb)
-- [그 시절 물가 맞히기](https://gwamol-lab.xyz/#pricequiz)
+- [MBTI 성격 파탄 테스트](https://gwamol-lab.xyz/#mbti): 12~24문항으로 16가지 성격 유형(ISTJ~ENTJ)을 진단, 유형별 강점/도전과제/성장 팁 제공. 간단/정밀 2모드
+- [두뇌 나이 측정기](https://gwamol-lab.xyz/#brain): 스트룹 효과(색상-단어 불일치) 기반 반응 테스트로 인지 처리 속도 측정, 난이도 3단계
+- [프로 미루러(ADHD 성향) 테스트](https://gwamol-lab.xyz/#adhd): 주의력/충동성 성향 자가 진단 문항, 간단/정밀 2모드(정밀은 부주의·과잉행동 영역 분리)
+- [반응속도 테스트](https://gwamol-lab.xyz/#reaction): 시각 자극에 대한 순간 반응속도(ms) 측정
+- [숫자 기억력 테스트](https://gwamol-lab.xyz/#memdigit): 점점 길어지는 숫자열을 암기해 입력하는 적응형 단기기억 테스트
+- [순서 기억력 테스트](https://gwamol-lab.xyz/#seqmem): 격자 타일이 켜지는 순서를 그대로 따라 누르는 시몬게임식 기억력 테스트
+- [색각 테스트](https://gwamol-lab.xyz/#colorvision): 미묘하게 다른 색 타일을 찾는 색 구별 감각 게임(임상 색맹검사 아님)
+- [논리력 테스트](https://gwamol-lab.xyz/#logic): 숫자 규칙(등차/등비/피보나치식)의 다음 값을 맞히는 4지선다 테스트
+- [충동억제 테스트](https://gwamol-lab.xyz/#impulse): Go/No-Go 방식(초록=탭, 빨강=참기)으로 충동 조절 능력 측정
+- [숏폼 집중력 테스트](https://gwamol-lab.xyz/#shortfocus): 목표 카테고리와 일치하는 콘텐츠 카드만 찾아 탭하는 시각 탐색 집중력 테스트
+- [인싸력 테스트](https://gwamol-lab.xyz/#insa): 10문항 사교성 성향 퀴즈, 인싸/아싸 모두 긍정적으로 프레이밍
+- [속담 완성 퀴즈](https://gwamol-lab.xyz/#proverb): 한국 속담 100개 문제풀에서 매번 랜덤 10문항, 4지선다
+- [그 시절 물가 맞히기](https://gwamol-lab.xyz/#pricequiz): 실제 통계 기반 과거 물가(짜장면/버스/라면 등) 맞히기, 4지선다
 
 ## 심리테스트존 / 과몰입 투표소
 
-- [심리테스트존](https://gwamol-lab.xyz/#psychtest): 캐릭터/성향/취향/국민테스트 카테고리별 심리 테스트
-- [밸런스 게임](https://gwamol-lab.xyz/#balance): A/B 선택형 밸런스 게임 및 여러 문항 기반 유형 테스트
-- [이상형 월드컵](https://gwamol-lab.xyz/#worldcup): 8강 토너먼트 밈 월드컵
+- [심리테스트존](https://gwamol-lab.xyz/#psychtest): 캐릭터/성향/취향/국민테스트 4개 카테고리별 심리 테스트(전생 동물, 짠테크형 vs 플렉스형, 민초 vs 반민초, 혈액형 성격 등)
+- [밸런스 게임](https://gwamol-lab.xyz/#balance): A/B 선택형 밸런스 게임 6종 + 여러 문항으로 유형을 가리는 밸런스게임 스페셜
+- [이상형 월드컵](https://gwamol-lab.xyz/#worldcup): 일상 공감 밈 8개(눕눕/텅장/카페인수혈 등)로 겨루는 8강 토너먼트
 
 ## 운명 관측소
 
-- [오늘의 운세](https://gwamol-lab.xyz/#fortune): 띠별 오늘의 운세
-- [꿈 해몽 검색](https://gwamol-lab.xyz/#dream): 키워드 기반 꿈 해몽 검색, AI 폴백 지원
+- [오늘의 운세](https://gwamol-lab.xyz/#fortune): 12띠별 오늘의 총운/재물운/애정운/건강운, 매일 다른 문구로 갱신
+- [꿈 해몽 검색](https://gwamol-lab.xyz/#dream): 174개 테마·546개 세부 꿈에 대한 키워드 기반 해몽 검색, 매칭 안 되면 AI 해몽 폴백 지원
 
 ## 기타 서비스
 
-- [가족오락관](https://gwamol-lab.xyz/#family): 스피드 퀴즈/몸으로 말해요/라이어 게임 등 오프라인 파티게임 진행 도우미
-- [로또 번호 조합기](https://gwamol-lab.xyz/#lotto): 랜덤/직접지정/운세연동/통계기반 로또 번호 조합
+- [가족오락관](https://gwamol-lab.xyz/#family): 스피드 퀴즈/몸으로 말해요/라이어 게임 등 오프라인 파티게임 진행 도우미(출제·타이머·채점 대행)
+- [로또 번호 조합기](https://gwamol-lab.xyz/#lotto): 완전랜덤/직접지정/운세·꿈 연동/실제 당첨 통계 기반 4가지 모드로 로또 번호 조합
 - [개인정보처리방침](https://gwamol-lab.xyz/#privacy)
 - [서비스 이용약관](https://gwamol-lab.xyz/#terms)

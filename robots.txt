@@ -1,4 +1,52 @@
 User-agent: *
 Allow: /
 
+# GEO(생성형 AI 답변엔진 최적화, v0.5.6~): AI 크롤러를 "모델 학습용"과 "실시간 답변/검색용"으로
+# 구분해서 다르게 취급 — 학습용은 콘텐츠가 모델 가중치 학습에 쓰이는 걸 원치 않아 차단하고,
+# 실시간 답변/검색에 실제로 쓰이는 크롤러는 AI 검색 결과 노출을 위해 명시적으로 허용.
+# 참고: Cloudflare 계정 설정(Content Signals)이 위와 별개로 GPTBot/ClaudeBot/Google-Extended/
+# Bytespider/CCBot/Amazonbot/Applebot-Extended/meta-externalagent도 이미 차단 중이지만,
+# 그 설정이 바뀌어도 이 저장소 자체의 robots.txt가 동일한 정책을 유지하도록 명시해둠.
+
+# 학습(train)용 — 차단
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+# 실시간 답변/검색용 — 명시적으로 허용 (AI 검색 결과 노출에 필수)
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
 Sitemap: https://gwamol-lab.xyz/sitemap.xml
