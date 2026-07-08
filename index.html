@@ -1,4 +1,4 @@
-<!-- v0.5.6 | 5-in-1 Dashboard SPA -->
+<!-- v0.5.7 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -39,6 +39,47 @@
       "url": "https://gwamol-lab.xyz/",
       "logo": "https://gwamol-lab.xyz/assets/brand/logo-icon.png"
     }
+  }
+  </script>
+  <!-- FAQPage 구조화 데이터 (v0.5.7~, GEO 3단계): 아래 질문/답변은 홈 화면의 "❓ 자주 묻는 질문"
+       <details> 아코디언과 반드시 1:1로 일치시킬 것(화면에 없는 내용을 구조화 데이터에만 넣으면
+       리치 스니펫 자격 박탈 대상) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "이 사이트의 테스트는 전부 무료인가요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "네, 회원가입 없이 모든 테스트·운세·꿈해몽·로또 조합기를 무료로 이용할 수 있어요. 광고 수익으로 운영됩니다." }
+      },
+      {
+        "@type": "Question",
+        "name": "테스트 결과가 저장되나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "네, 이 기기(브라우저)에 자동 저장되어 홈 화면의 완주 현황과 최근 기록에서 다시 확인할 수 있어요. 다른 기기·브라우저에서는 보이지 않아요." }
+      },
+      {
+        "@type": "Question",
+        "name": "MBTI나 ADHD 성향 테스트는 정식 진단인가요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "아니요. 모든 테스트 결과는 오락 목적의 자가 진단 콘텐츠이며, 전문적인 심리·의학 진단을 대체하지 않아요." }
+      },
+      {
+        "@type": "Question",
+        "name": "결과를 카카오톡이나 친구에게 공유할 수 있나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "네, 대부분의 결과 화면에 카카오톡 공유 버튼과 \"친구에게 도전장 보내기\" 기능이 있어 결과를 바로 공유할 수 있어요." }
+      },
+      {
+        "@type": "Question",
+        "name": "오늘의 운세와 꿈 해몽은 매일 바뀌나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "오늘의 운세는 매일 다른 문구가 자동으로 노출돼요. 꿈 해몽은 검색어에 따라 174개 테마 중 매칭되는 결과를 보여주고, 매칭되는 게 없으면 AI가 새로 해몽을 생성해줘요." }
+      },
+      {
+        "@type": "Question",
+        "name": "로또 번호 조합기를 쓰면 당첨 확률이 올라가나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "아니요, 오락용 번호 조합 도구예요. 다만 실제 최근 당첨 통계를 참고하는 모드가 있어 재미로 활용할 수 있어요." }
+      }
+    ]
   }
   </script>
   <!-- Google tag (gtag.js) -->
@@ -282,7 +323,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4">
-    <p class="text-slate-600 text-xs">v0.5.6 · 2026-07-08</p>
+    <p class="text-slate-600 text-xs">v0.5.7 · 2026-07-08</p>
   </div>
 </aside>
 
@@ -350,6 +391,38 @@
         <h2 class="text-slate-100 font-bold text-lg mb-4">🔥 지금 인기있는 테스트</h2>
         <div id="home-service-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         <p class="text-slate-400 text-xs mt-3">※ 인기 순위는 이 홈 화면에서의 클릭 수 기준 추정치예요 — 추후 실데이터 연동 예정. 전체 테스트 목록은 사이드바에서 확인하세요.</p>
+
+        <!-- 자주 묻는 질문 (v0.5.7~, GEO 3단계): <details>/<summary>는 접혀있어도 텍스트가 DOM에
+             그대로 남아있는 네이티브 HTML 요소라 크롤러가 온전히 읽을 수 있음. 아래 질문/답변 문구는
+             <head>의 FAQPage JSON-LD와 반드시 1:1로 일치시킬 것(구글 가이드라인 — 구조화 데이터는
+             화면에 보이는 내용과 같아야 리치 스니펫 자격이 유지됨). -->
+        <h2 class="text-slate-100 font-bold text-lg mt-8 mb-4">❓ 자주 묻는 질문</h2>
+        <div class="space-y-2">
+          <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
+            <summary class="cursor-pointer font-semibold text-slate-100 text-sm">이 사이트의 테스트는 전부 무료인가요?</summary>
+            <p class="text-slate-400 text-sm mt-2">네, 회원가입 없이 모든 테스트·운세·꿈해몽·로또 조합기를 무료로 이용할 수 있어요. 광고 수익으로 운영됩니다.</p>
+          </details>
+          <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
+            <summary class="cursor-pointer font-semibold text-slate-100 text-sm">테스트 결과가 저장되나요?</summary>
+            <p class="text-slate-400 text-sm mt-2">네, 이 기기(브라우저)에 자동 저장되어 홈 화면의 완주 현황과 최근 기록에서 다시 확인할 수 있어요. 다른 기기·브라우저에서는 보이지 않아요.</p>
+          </details>
+          <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
+            <summary class="cursor-pointer font-semibold text-slate-100 text-sm">MBTI나 ADHD 성향 테스트는 정식 진단인가요?</summary>
+            <p class="text-slate-400 text-sm mt-2">아니요. 모든 테스트 결과는 오락 목적의 자가 진단 콘텐츠이며, 전문적인 심리·의학 진단을 대체하지 않아요.</p>
+          </details>
+          <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
+            <summary class="cursor-pointer font-semibold text-slate-100 text-sm">결과를 카카오톡이나 친구에게 공유할 수 있나요?</summary>
+            <p class="text-slate-400 text-sm mt-2">네, 대부분의 결과 화면에 카카오톡 공유 버튼과 "친구에게 도전장 보내기" 기능이 있어 결과를 바로 공유할 수 있어요.</p>
+          </details>
+          <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
+            <summary class="cursor-pointer font-semibold text-slate-100 text-sm">오늘의 운세와 꿈 해몽은 매일 바뀌나요?</summary>
+            <p class="text-slate-400 text-sm mt-2">오늘의 운세는 매일 다른 문구가 자동으로 노출돼요. 꿈 해몽은 검색어에 따라 174개 테마 중 매칭되는 결과를 보여주고, 매칭되는 게 없으면 AI가 새로 해몽을 생성해줘요.</p>
+          </details>
+          <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
+            <summary class="cursor-pointer font-semibold text-slate-100 text-sm">로또 번호 조합기를 쓰면 당첨 확률이 올라가나요?</summary>
+            <p class="text-slate-400 text-sm mt-2">아니요, 오락용 번호 조합 도구예요. 다만 실제 최근 당첨 통계를 참고하는 모드가 있어 재미로 활용할 수 있어요.</p>
+          </details>
+        </div>
 
       </div>
     </div>
@@ -599,6 +672,8 @@
         <span class="text-slate-100 font-black text-base">과몰입 연구소</span>
       </div>
       <p class="text-slate-300 mb-4">재미로 시작했다가 뼈 맞고 공유하는 종합 테스트 모음 — 본 플랫폼의 모든 테스트 결과는 오락 목적이며 전문 진단을 대체하지 않습니다.</p>
+      <!-- 콘텐츠 최신화 신호 (v0.5.7~, GEO 5단계): 크롤러가 읽을 수 있는 위치에 갱신 시점을 명시 -->
+      <p class="text-slate-400 mb-4">콘텐츠 최근 업데이트: 2026-07-08</p>
       <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
         <span>© 2026 과몰입 연구소. All rights reserved.</span>
         <div class="flex items-center gap-4">

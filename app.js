@@ -759,8 +759,8 @@ function initHome() {
 
   const toolCards = [
     { section: 'dream',   emoji: '🌙', title: '꿈 해몽 검색',    desc: '어젯밤 그 꿈, 무슨 의미일까?' },
-    { section: 'fortune', emoji: '🔮', title: '오늘의 운세',      desc: '띠별 오늘 하루 운세 확인' },
-    { section: 'lotto',   emoji: '🎱', title: '로또 번호 조합기', desc: '랜덤·직접지정·운세연동 4가지 모드' },
+    { section: 'fortune', emoji: '🔮', title: '오늘의 운세',      desc: '출근길 5초, 오늘 내 운세부터 확인' },
+    { section: 'lotto',   emoji: '🎱', title: '로또 번호 조합기', desc: '이번 주 번호 뭘 고를지 고민될 때' },
   ];
 
   /* v0.3.2~: 13개 테스트만 후보로 삼던 것 대신, 사이드바에 있는 전체 메뉴(심리테스트존/밸런스게임
@@ -771,20 +771,20 @@ function initHome() {
      base 값은 실사용 데이터가 쌓이기 전 임의 추정치이며 실제 인기순이 아님을 화면에 항상 명시한다
      (index.html 캡션 참고). */
   const popularCandidates = [
-    { section: 'mbti',        emoji: '🧠',  title: '성격 파탄(MBTI)',   desc: '간단/정밀 2모드로 알아보는 팩폭 성격 분석', key: 'site-mbti-plays', base: 980, run: () => App.navigate('mbti') },
-    { section: 'brain',       emoji: '⚡',  title: '두뇌 나이 측정기',   desc: '스트룹 테스트, 3단계 난이도', key: 'site-brain-plays', base: 740, run: () => App.navigate('brain') },
-    { section: 'adhd',        emoji: '🌪️', title: '프로 미루러',        desc: 'ADHD 성향 자가진단, 간단/정밀 2모드', key: 'site-adhd-plays', base: 650, run: () => App.navigate('adhd') },
-    { section: 'reaction',    emoji: '💨',  title: '반응속도 테스트',    desc: '쉬움~어려움, 가짜신호까지 등장', key: 'site-reaction-plays', base: 590, run: () => App.navigate('reaction') },
-    { section: 'shortfocus',  emoji: '📱',  title: '숏폼 집중력 테스트', desc: '피드 속 목표 콘텐츠만 빠르게 찾아 탭', key: 'site-shortfocus-plays', base: 410, run: () => App.navigate('shortfocus') },
-    { section: 'insa',        emoji: '🎉',  title: '인싸력 테스트',      desc: '10문항 사교성 성향 퀴즈 (MZ향)', key: 'site-insa-plays', base: 510, run: () => App.navigate('insa') },
-    { section: 'memdigit',    emoji: '🔢',  title: '숫자 기억력 테스트', desc: '적응형 자릿수, 탭 키패드로 도전', key: 'site-memdigit-plays', base: 340, run: () => App.navigate('memdigit') },
-    { section: 'seqmem',      emoji: '🧩',  title: '순서 기억력 테스트', desc: '격자 타일 순서 암기, 즉시 판정', key: 'site-seqmem-plays', base: 300, run: () => App.navigate('seqmem') },
-    { section: 'colorvision', emoji: '🎨',  title: '색각 테스트',        desc: '미묘하게 다른 색 타일 찾기', key: 'site-colorvision-plays', base: 280, run: () => App.navigate('colorvision') },
-    { section: 'lottodraw',   emoji: '🎰',  title: '로또 직접 뽑기 게임', desc: '유리 추첨기로 직접 뽑는 로또 번호', key: 'site-lottodraw-plays', base: 220, run: () => App.navigate('lottodraw') },
-    { section: 'logic',       emoji: '📊',  title: '논리력 테스트',      desc: '숫자 규칙 다음 값 맞히기 4지선다', key: 'site-logic-plays', base: 260, run: () => App.navigate('logic') },
-    { section: 'impulse',     emoji: '🚦',  title: '충동억제 테스트',    desc: 'Go/No-Go, 성급한 반응을 참아라', key: 'site-impulse-plays', base: 230, run: () => App.navigate('impulse') },
-    { section: 'proverb',     emoji: '📜',  title: '속담 완성 퀴즈',     desc: '시간 제한 없는 지혜 나눔 테스트', key: 'site-proverb-plays', base: 180, run: () => App.navigate('proverb') },
-    { section: 'pricequiz',   emoji: '🧾',  title: '그 시절 물가 맞히기', desc: '실제 물가 통계 기반 향수 트리비아', key: 'site-pricequiz-plays', base: 150, run: () => App.navigate('pricequiz') },
+    { section: 'mbti',        emoji: '🧠',  title: '성격 파탄(MBTI)',   desc: '친구랑 같이 하면 더 재밌는 팩폭 성격 테스트', key: 'site-mbti-plays', base: 980, run: () => App.navigate('mbti') },
+    { section: 'brain',       emoji: '⚡',  title: '두뇌 나이 측정기',   desc: '요즘 머리 굳은 것 같을 때 해보는 뇌 나이 체크', key: 'site-brain-plays', base: 740, run: () => App.navigate('brain') },
+    { section: 'adhd',        emoji: '🌪️', title: '프로 미루러',        desc: '나만 그런가 싶을 때 해보는 자가진단', key: 'site-adhd-plays', base: 650, run: () => App.navigate('adhd') },
+    { section: 'reaction',    emoji: '💨',  title: '반응속도 테스트',    desc: '게임할 때 내 반응속도 진짜 빠른지 궁금할 때', key: 'site-reaction-plays', base: 590, run: () => App.navigate('reaction') },
+    { section: 'shortfocus',  emoji: '📱',  title: '숏폼 집중력 테스트', desc: '숏폼 보다가 집중력 떨어진 것 같을 때', key: 'site-shortfocus-plays', base: 410, run: () => App.navigate('shortfocus') },
+    { section: 'insa',        emoji: '🎉',  title: '인싸력 테스트',      desc: '나 인싸야 아싸야? 10문항으로 바로 확인', key: 'site-insa-plays', base: 510, run: () => App.navigate('insa') },
+    { section: 'memdigit',    emoji: '🔢',  title: '숫자 기억력 테스트', desc: '숫자 잘 외운다고 자부할 때 도전해보기', key: 'site-memdigit-plays', base: 340, run: () => App.navigate('memdigit') },
+    { section: 'seqmem',      emoji: '🧩',  title: '순서 기억력 테스트', desc: '순서 기억력에 자신 있으면 도전해보기', key: 'site-seqmem-plays', base: 300, run: () => App.navigate('seqmem') },
+    { section: 'colorvision', emoji: '🎨',  title: '색각 테스트',        desc: '색 구별 잘한다고 생각될 때 해보는 테스트', key: 'site-colorvision-plays', base: 280, run: () => App.navigate('colorvision') },
+    { section: 'lottodraw',   emoji: '🎰',  title: '로또 직접 뽑기 게임', desc: '손맛 느끼며 직접 뽑아보는 로또 번호', key: 'site-lottodraw-plays', base: 220, run: () => App.navigate('lottodraw') },
+    { section: 'logic',       emoji: '📊',  title: '논리력 테스트',      desc: '숫자에 강하다면 도전해볼 논리력 테스트', key: 'site-logic-plays', base: 260, run: () => App.navigate('logic') },
+    { section: 'impulse',     emoji: '🚦',  title: '충동억제 테스트',    desc: '성격 급한 편이라면 해보는 충동억제 테스트', key: 'site-impulse-plays', base: 230, run: () => App.navigate('impulse') },
+    { section: 'proverb',     emoji: '📜',  title: '속담 완성 퀴즈',     desc: '부모님과 대화 소재로 좋은 속담 퀴즈', key: 'site-proverb-plays', base: 180, run: () => App.navigate('proverb') },
+    { section: 'pricequiz',   emoji: '🧾',  title: '그 시절 물가 맞히기', desc: '그때 그 시절 물가, 얼마였는지 기억나세요?', key: 'site-pricequiz-plays', base: 150, run: () => App.navigate('pricequiz') },
     ...AppData.psychTests.map(t => ({
       section: 'psychtest', emoji: t.emoji, title: t.title, desc: t.hook.slice(0, 24) + '…',
       key: 'psychtest-' + t.id + '-plays', base: 128,
