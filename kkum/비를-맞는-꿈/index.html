@@ -19,6 +19,10 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4825324689294427" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-W05KHWP4WY"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-W05KHWP4WY');</script>
+  <script>window.__kkumShare = {"url":"https://gwamol-lab.xyz/kkum/비를-맞는-꿈/","title":"비를 맞는 꿈 해몽","desc":"감정의 정화와 새로운 시작","image":"https://gwamol-lab.xyz/share-cards/dream-share.jpg"};</script>
+  <script defer src="https://t1.kakaocdn.net/kakao_js_sdk/2.8.1/kakao.min.js"
+    integrity="sha384-OL+ylM/iuPLtW5U3XcvLSGhE8JzReKDank5InqlHGWPhb4140/yrBw0bg0y7+C9J" crossorigin="anonymous"></script>
+  <script defer src="/assets/kkum-share.js"></script>
   <style>
     :root { color-scheme: dark; }
     * { box-sizing: border-box; margin: 0; }
@@ -46,6 +50,17 @@
     .cta { text-align:center; margin:2rem 0; }
     .cta a { display:inline-block; background:#7c3aed; color:#fff; font-weight:800; padding:.85rem 1.5rem; border-radius:999px; }
     .cta a:hover { background:#6d28d9; text-decoration:none; }
+    .kakao-btn { display:flex; align-items:center; justify-content:center; gap:.5rem; width:100%;
+      background:#FEE500; color:#191919; font-weight:900; font-size:1.05rem; padding:.9rem; border:none;
+      border-radius:16px; cursor:pointer; margin:1.5rem 0 .75rem; }
+    .kakao-btn:hover { filter:brightness(.96); }
+    .icon-row { display:flex; align-items:center; justify-content:center; gap:.75rem; margin-bottom:1.5rem; }
+    .icon-row button { width:48px; height:48px; border-radius:999px; border:none; cursor:pointer;
+      font-weight:900; font-size:1.1rem; display:flex; align-items:center; justify-content:center; color:#fff; }
+    .icon-row .fb { background:#1877f2; }
+    .icon-row .x { background:#0f172a; border:1px solid #475569; }
+    .icon-row .band { background:#03c75a; }
+    .icon-row .copy { background:#334155; }
     .grid { display:grid; grid-template-columns:1fr; gap:.75rem; }
     @media(min-width:560px){ .grid { grid-template-columns:1fr 1fr; } }
     .card { display:block; background:#1e293b; border:1px solid #334155; border-radius:14px; padding:1rem 1.1rem; }
@@ -96,6 +111,14 @@
         <h3>비를 맞으면서도 즐겁게 웃는 꿈</h3>
         <p style="margin-bottom:0;">어려운 상황도 긍정적으로 받아들이고 있다는 좋은 신호입니다.</p>
         <div class="sub">🍀 초록색 · 🔢 6, 24 · 💡 지금의 긍정적인 마음가짐을 계속 유지해보세요.</div>
+      </div>
+      <h2>이 해몽 공유하기</h2>
+      <button class="kakao-btn" onclick="kkumShareKakao()">💬 카카오톡으로 공유하기</button>
+      <div class="icon-row">
+        <button class="fb" onclick="kkumShareFacebook()" title="페이스북 공유">f</button>
+        <button class="x" onclick="kkumShareTwitter()" title="X(트위터) 공유">𝕏</button>
+        <button class="band" onclick="kkumShareBand()" title="밴드 공유">밴드</button>
+        <button class="copy" onclick="kkumCopyLink()" title="링크 복사">🔗</button>
       </div>
       <div class="cta"><a href="/#dream">🌙 다른 꿈도 검색해보기</a></div>
       <h2>다른 꿈 해몽 보기</h2>

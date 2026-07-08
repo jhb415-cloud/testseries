@@ -53,8 +53,15 @@ function slugify(title) {
 }
 dreams.forEach(t => { t._slug = slugify(t.title); });
 
-function pageShell({ title, description, canonicalPath, body }) {
+function pageShell({ title, description, canonicalPath, body, shareData }) {
   const robots = PUBLISH ? '' : '\n  <meta name="robots" content="noindex"/>';
+  // shareData가 있는 페이지(상세)만 카카오 SDK + 공유 스크립트 로드 — 목록 페이지는 공유 대상이
+  // 아니므로 불필요한 의존성을 안 실음(174개 상세 페이지가 kkum-share.js 1개를 캐시 공유)
+  const shareScripts = shareData ? `
+  <script>window.__kkumShare = ${JSON.stringify(shareData)};</script>
+  <script defer src="https://t1.kakaocdn.net/kakao_js_sdk/2.8.1/kakao.min.js"
+    integrity="sha384-OL+ylM/iuPLtW5U3XcvLSGhE8JzReKDank5InqlHGWPhb4140/yrBw0bg0y7+C9J" crossorigin="anonymous"></script>
+  <script defer src="/assets/kkum-share.js"></script>` : '';
   return `<!doctype html>
 <html lang="ko">
 <head>
@@ -74,7 +81,7 @@ function pageShell({ title, description, canonicalPath, body }) {
   <meta name="google-adsense-account" content="ca-pub-4825324689294427"/>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4825324689294427" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-W05KHWP4WY"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-W05KHWP4WY');</script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-W05KHWP4WY');</script>${shareScripts}
   <style>
     :root { color-scheme: dark; }
     * { box-sizing: border-box; margin: 0; }
@@ -102,6 +109,17 @@ function pageShell({ title, description, canonicalPath, body }) {
     .cta { text-align:center; margin:2rem 0; }
     .cta a { display:inline-block; background:#7c3aed; color:#fff; font-weight:800; padding:.85rem 1.5rem; border-radius:999px; }
     .cta a:hover { background:#6d28d9; text-decoration:none; }
+    .kakao-btn { display:flex; align-items:center; justify-content:center; gap:.5rem; width:100%;
+      background:#FEE500; color:#191919; font-weight:900; font-size:1.05rem; padding:.9rem; border:none;
+      border-radius:16px; cursor:pointer; margin:1.5rem 0 .75rem; }
+    .kakao-btn:hover { filter:brightness(.96); }
+    .icon-row { display:flex; align-items:center; justify-content:center; gap:.75rem; margin-bottom:1.5rem; }
+    .icon-row button { width:48px; height:48px; border-radius:999px; border:none; cursor:pointer;
+      font-weight:900; font-size:1.1rem; display:flex; align-items:center; justify-content:center; color:#fff; }
+    .icon-row .fb { background:#1877f2; }
+    .icon-row .x { background:#0f172a; border:1px solid #475569; }
+    .icon-row .band { background:#03c75a; }
+    .icon-row .copy { background:#334155; }
     .grid { display:grid; grid-template-columns:1fr; gap:.75rem; }
     @media(min-width:560px){ .grid { grid-template-columns:1fr 1fr; } }
     .card { display:block; background:#1e293b; border:1px solid #334155; border-radius:14px; padding:1rem 1.1rem; }
@@ -151,6 +169,14 @@ function detailBody(t, related) {
       </div>
       <div class="action">💡 오늘의 행동 — ${esc(t.action)}</div>
       ${variants ? `<h2>이런 꿈도 있어요</h2>${variants}` : ''}
+      <h2>이 해몽 공유하기</h2>
+      <button class="kakao-btn" onclick="kkumShareKakao()">💬 카카오톡으로 공유하기</button>
+      <div class="icon-row">
+        <button class="fb" onclick="kkumShareFacebook()" title="페이스북 공유">f</button>
+        <button class="x" onclick="kkumShareTwitter()" title="X(트위터) 공유">𝕏</button>
+        <button class="band" onclick="kkumShareBand()" title="밴드 공유">밴드</button>
+        <button class="copy" onclick="kkumCopyLink()" title="링크 복사">🔗</button>
+      </div>
       <div class="cta"><a href="/#dream">🌙 다른 꿈도 검색해보기</a></div>
       <h2>다른 꿈 해몽 보기</h2>
       <nav class="related">
@@ -197,11 +223,18 @@ dreams.forEach((t, i) => {
   const dir = path.join(outRoot, t._slug);
   fs.mkdirSync(dir, { recursive: true });
   const desc = `${t.summary}. ${t.detail}`.slice(0, 155);
+  const canonicalPath = `/kkum/${t._slug}/`;
   fs.writeFileSync(path.join(dir, 'index.html'), pageShell({
     title: `${t.title} 해몽 - 무슨 의미일까? | 과몰입 연구소`,
     description: desc,
-    canonicalPath: `/kkum/${t._slug}/`,
+    canonicalPath,
     body: detailBody(t, related),
+    shareData: {
+      url: `${ORIGIN}${canonicalPath}`,
+      title: `${t.title} 해몽`,
+      desc: t.summary,
+      image: `${ORIGIN}/share-cards/dream-share.jpg`,
+    },
   }));
 });
 
