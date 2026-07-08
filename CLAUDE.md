@@ -1,6 +1,6 @@
 # CLAUDE.md — 5-in-1 Dashboard SPA 아키텍처 규칙
 
-## 현재 버전: v0.5.4
+## 현재 버전: v0.5.5
 
 ## 프로젝트 개요
 Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보드 SPA.
@@ -199,6 +199,7 @@ Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보�
 | 2026-07-08 | v0.5.2 | **네이버 서치어드바이저 사이트 소유 확인 완료.** 사용자가 서치어드바이저에서 `gwamol-lab.xyz` 등록 후 발급받은 코드를 전달, v0.5.1에서 주석 처리해둔 `<meta name="naver-site-verification">`에 채워 넣고 활성화. 다음 단계(서치어드바이저 소유확인 버튼 클릭 + sitemap.xml 제출, 구글 서치 콘솔 등록)는 사용자가 진행 예정 |
 | 2026-07-08 | v0.5.3 | **외부 SEO 체크업 도구(seositecheckup.com) 지적사항 반영.** 사용자가 실제 사이트를 스캔한 결과 이슈 목록(HIGH 5건+MEDIUM 4건)을 텍스트로 전달, 코드로 고칠 수 있는 것과 Cloudflare 계정 설정이 필요한 것을 구분해 진행. **코드 반영**: ①`<h1>`이 사이트 전체에 하나도 없던 것을 발견(디자인상 브랜드 워드마크가 `<span>`이었음) — 시각 디자인은 그대로 두고 `<body>` 최상단에 `class="sr-only"` H1(title/meta description과 동일 키워드)만 신규 추가 ②Tailwind CDN/Supabase JS/Kakao SDK/`data.js`/`supabase-client.js`/`kakao-share.js`/`app.js` 등 `<head>`와 body 끝 스크립트들이 전부 동기 로드라 렌더링을 막던 것 — Tailwind CDN은 렌더 전에 유틸리티를 주입해야 FOUC가 안 생겨 동기 유지, 나머지 6개 스크립트엔 `defer` 추가(defer는 문서 순서대로 실행되므로 body 끝 스크립트들의 실행 순서·의존관계는 그대로 유지됨) ③Cloudflare Pages가 `404.html`이 없으면 존재하지 않는 경로도 index.html을 200으로 서빙하던 것(SPA 폴백)을 발견 — 신규 `404.html`(브랜드 톤 + 홈/주요 섹션 링크) 추가로 진짜 존재하지 않는 경로는 실제 404 상태코드+안내 화면이 뜨도록 함(해시 라우팅 특성상 유효 경로는 원래 `/` 하나뿐이라 사이드 이펙트 없음) ④이상형 월드컵 스톡사진 8장이 전부 1600px 원본을 그대로 쓰고 있어(실제 표시는 카드 그리드 폭 기준 최대 ~330px) "이미지 크기 최적화" 항목에 걸림 — Pillow로 최대 1200px+품질82로 리사이즈, 총 용량 1.77MB→0.72MB(약 59% 절감), 화질 체감 차이 없음. **이미 v0.5.1~v0.5.2에서 해결돼 재스캔하면 사라질 항목**: sitemap 누락, 구조화 데이터 누락, 소셜 메타태그 누락 — 스캔 시점에 아직 반영 전이었거나 도구가 캐시를 본 것으로 추정. **코드로 못 고치는 항목(Cloudflare 계정 설정 필요)**: URL 정규화(canonicalization) — `gwamol-lab.xyz`와 `www.gwamol-lab.xyz`가 리다이렉트 없이 둘 다 200으로 동시 응답 중인 것을 실측 확인(canonical 태그는 이미 apex를 가리키지만, 실제 리다이렉트가 없으면 중복 콘텐츠로 인식될 수 있음) — Cloudflare 대시보드에서 Redirect Rule(www→apex 301)을 설정해야 하는 계정 작업이라 사용자에게 안내만 하고 코드 변경은 하지 않음. **검증**: 정적 서버+Playwright로 h1 텍스트 확인, MBTI 섹션 이동+Kakao SDK 초기화+Supabase 클라이언트 준비가 defer 적용 후에도 정상 동작함을 확인, 이상형 월드컵 섹션 진입 및 404.html 렌더링까지 콘솔 에러 없이 확인 |
 | 2026-07-08 | v0.5.4 | **Meta Description 실제 태그 보강.** 사용자가 seositecheckup.com에서 "Meta Title Test" 확대 캡처를 전달 — 확인해보니 스캔 시점이 v0.5.1 배포 전이라 `<title>`은 이미 해결된 옛 이슈(캐시)였지만, 그 옆의 **Meta Description Test는 실제로 남아있던 진짜 문제**였음: v0.5.1에서 `og:description`/`twitter:description`은 길게 새로 썼는데 정작 실제 `<meta name="description">` 태그 본체는 옛날 39자짜리("과몰입 연구소 — 재미로 시작했다가...")를 그대로 두고 있었음(권장 150~220자에 크게 못 미침). 실제 서비스 콘텐츠(MBTI/두뇌 나이/심리테스트/밸런스 게임/오늘의 운세/꿈 해몽/로또)를 나열한 156자 설명으로 교체 |
+| 2026-07-08 | v0.5.5 | **네이버 서치어드바이저 www 속성 추가 등록.** 사용자가 `gwamol-lab.xyz`(apex)만 등록했었다는 걸 뒤늦게 깨닫고 `www.gwamol-lab.xyz`도 별도 속성으로 등록, 발급받은 소유확인 코드(`86367a01ec31b5a81697eb1a01a7f785fe492cad`)를 전달 — 같은 `index.html`이 두 호스트 모두에서 서빙되므로 `<meta name="naver-site-verification">` 태그 2개(apex용/www용)를 나란히 추가. `[[project_stage_d_backend]]` 메모에 기록된 "www→apex 리다이렉트는 SEO 고도화 라운드까지 보류" 결정과 일관되게, 지금은 두 호스트가 모두 독립적으로 살아있는 상태를 그대로 인정하고 양쪽 다 검색엔진에 등록해두는 방향으로 진행 |
 
 ---
 
