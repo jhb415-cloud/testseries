@@ -1037,6 +1037,7 @@ function renderDreamSearch() {
             </button>`).join('')}
         </div>
       </div>
+      <p class="text-center mt-6"><a href="/kkum/" class="text-violet-400 hover:text-violet-300 text-sm underline">📖 174가지 꿈해몽 전체 목록 보기</a></p>
     </div>`;
 
   document.getElementById('dream-search-input').addEventListener('keydown', e => {

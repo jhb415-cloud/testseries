@@ -22,7 +22,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const PUBLISH = false;   // 미리보기 단계 — 확정 후 true로 변경
+const PUBLISH = true;    // v0.5.9~ 정식 공개 확정(사용자 승인) — noindex 해제 + sitemap-kkum.xml 생성
 const LIMIT = null;      // null=전체, 숫자=앞에서 N개만
 const PER_PAGE = 20;
 const ORIGIN = 'https://gwamol-lab.xyz';
@@ -253,6 +253,22 @@ for (let p = 1; p <= totalPages; p++) {
   const dir = p === 1 ? outRoot : path.join(outRoot, 'page', String(p));
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'index.html'), html);
+}
+
+// PUBLISH=true일 때만 sitemap-kkum.xml 생성(루트 sitemap.xml은 손으로 관리하는 별도 파일이라
+// 이 스크립트가 건드리지 않음 — robots.txt에 Sitemap 라인을 하나 더 추가해 병행 등록)
+if (PUBLISH) {
+  const urlEntries = [];
+  urlEntries.push(`  <url><loc>${ORIGIN}/kkum/</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>`);
+  for (let p = 2; p <= totalPages; p++) {
+    urlEntries.push(`  <url><loc>${ORIGIN}/kkum/page/${p}/</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>`);
+  }
+  dreams.forEach(t => {
+    urlEntries.push(`  <url><loc>${ORIGIN}/kkum/${encodeURIComponent(t._slug)}/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>`);
+  });
+  const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlEntries.join('\n')}\n</urlset>\n`;
+  fs.writeFileSync(path.join(__dirname, '..', 'sitemap-kkum.xml'), sitemapXml);
+  console.log(`sitemap-kkum.xml 생성 완료 (${urlEntries.length}개 URL)`);
 }
 
 console.log(`생성 완료: 상세 ${dreams.length}개 + 목록 ${totalPages}페이지 (PUBLISH=${PUBLISH}, PER_PAGE=${PER_PAGE})`);
