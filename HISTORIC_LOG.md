@@ -16,8 +16,10 @@
 
 - **공유→"나도 해보기" 클릭 시 빈 화면 버그 수정 (v0.6.3)**: 위 이미지 작업을 커밋+푸시한 직후, 사용자가 실제 카카오톡 공유 링크로 접속해 "나도 해보기"를 눌렀더니 헤더/푸터만 남고 본문이 완전히 빈 화면이 된다는 스크린샷을 제보. Playwright로 직접 재현(`sharedPreviewProceed()` 클릭까지) — 실제로는 `#worldcup-container` 안에 팩 인트로 화면이 정상 렌더링돼 있었는데, 부모 `#section-worldcup`이 `hidden` 상태로 남아 하나도 안 보이는 상태였음. 원인 추적 결과 `app.js` 최하단 `hashchange` 리스너가 쿼리스트링을 안 뗀 채 비교하고 있었음 — "나도 해보기" 클릭 시 `App.navigate('worldcup')`가 `location.hash`를 `'worldcup'`으로 바꾸며 비동기 `hashchange`를 예약한 직후, 같은 동기 흐름에서 `wcOpenIntro()`가 주소창 갱신용으로 `history.replaceState(...,'#worldcup?play=lazy-hell-32')`를 호출 — 이 조합이 겹치는 유일한 케이스(다른 15개 테스트는 이런 조합이 없음)라, 뒤늦게 온 `hashchange`가 이미 쿼리까지 붙은 해시를 통째로 섹션 id로 오인 → `App.navigate('worldcup?play=...')` 호출 → 전체 섹션을 숨긴 뒤 존재하지 않는 id를 못 찾아 그대로 멈춤. 초기 라우팅 코드와 동일하게 `.split('?')[0]`로 쿼리를 떼어내는 한 줄 수정으로 해결. **검증**: `node --check` 통과, Playwright로 (a) 수정 전 버그 재현(`section-worldcup hidden:true` 확인) (b) 수정 후 동일 플로우 정상 동작(`hidden:false`+인트로 화면 노출) (c) 일반 내비게이션(`navigate('mbti')`/`navigate('home')`)·월드컵 카드 "시작하기" 직접 클릭·브라우저 뒤로가기 전부 회귀 없음 확인.
 
+- **cute-animals-32 오매칭 이미지 2장 교체 (v0.6.4)**: 사용자가 라이브 화면 스크린샷으로 "치와와" 카드가 멕시코 치와와 시(市) 건물 사진으로, "카피바라" 카드는 카피바라가 프레임 구석에 걸려 카드 크롭에서 아예 안 보인다고 제보. 원인은 `worldcup-sources/cute-animals-32.sources.json`의 검색 키워드(`"chihuahua"`가 개 품종/도시명 동음이의로 오매칭, `"capybara bath"`는 피사체가 프레임 구석에 작아 3:4 크롭 시 잘려나감). Pexels(로열티프리)에서 후보 이미지들을 받아 실제 카드 CSS(`aspect-ratio:3/4`+`object-fit:cover`)와 동일한 크롭을 Python으로 재현해 검증 후 교체 — `an23`(단독 강아지 초상, 큰 귀+또렷한 눈빛), `an32`(카피바라 단독 근접샷, 물속에서 정면 응시). `worldcup-images-raw/cute-animals-32/{an23,an32}.jpg` 교체 → `process_worldcup_images.py` 재실행으로 webp 갱신(다른 94장은 무변화). 소싱 키워드 파일에 재발 방지 주석 추가.
+
 ### 다음 세션 시작점
-- 이상형 월드컵 팩 3~6(이미지형)은 이제 전부 실사진/생성이미지 완료 상태이고, 공유→"나도 해보기" 진입 버그도 수정됨 — 남은 후속은 실사용 반응 모니터링(역배 토스트/랭킹 100판 임계치) 정도.
+- 이상형 월드컵 팩 3~6(이미지형)은 이제 전부 실사진/생성이미지 완료 상태이고, 공유→"나도 해보기" 진입 버그와 cute-animals-32 오매칭 이미지 2장도 수정됨 — 남은 후속은 실사용 반응 모니터링(역배 토스트/랭킹 100판 임계치) 정도. 다른 3개 이미지형 팩(soul-food-32/korea-travel-16/gwamol-emotion-16)도 혹시 비슷한 오매칭이 있는지 사용자가 실사용 중 발견하면 알려달라고 안내할 것.
 - `[[project_roadmap_priority_2026-07]]` 메모리 갱신 필요(다음 우선순위 재확인).
 
 ---

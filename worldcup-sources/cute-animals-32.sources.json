@@ -21,7 +21,7 @@
   "an20": "baby elephant",
   "an21": "dolphin smile",
   "an22": "seal lying",
-  "an23": "chihuahua",
+  "an23": "chihuahua dog portrait (v0.6.4~: 'chihuahua' 단독 검색어가 멕시코 치와와 시(市) 사진과 혼동돼 오매칭났던 적 있음 — 반드시 'dog'/'puppy' 등을 함께 넣어 동물로 한정할 것)",
   "an24": "shiba inu",
   "an25": "russian blue cat",
   "an26": "munchkin cat",
@@ -30,5 +30,5 @@
   "an29": "baby fox",
   "an30": "koala hugging",
   "an31": "sloth smiling",
-  "an32": "capybara bath"
+  "an32": "capybara in water, close-up facing camera (v0.6.4~: 이전 사진은 카피바라가 프레임 구석에 작게 걸쳐 있어 카드 크롭 시 아예 안 보였음 — 반드시 동물이 중앙에 크게 나온 사진으로 고를 것)"
 }
