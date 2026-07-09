@@ -24,19 +24,6 @@ const VALID_SECTIONS = [...TIER_SECTIONS, ...IDENTITY_SECTIONS, ...LOTTO_SECTION
 const CTA_RESULT = '나도 해보기';
 const CTA_CHALLENGE = '⚔️ 도전하기';
 
-/* 이상형 월드컵 후보 텍스트 — data.js의 AppData.worldcupMemes와 내용 동일(이 함수는 별도 런타임이라
-   data.js를 import할 수 없어 title/desc만 최소 복제, 이미지 파일은 assets/worldcup/{id}.jpg 공용) */
-const WORLDCUP_MEMES = {
-  nunnun:   { title: '눕눕',         desc: '침대와 한몸, 오늘도 못 일어남' },
-  tungjang: { title: '텅장',         desc: '월급은 스쳐 지나가는 바람' },
-  caffeine: { title: '카페인 수혈',  desc: '이거 없인 눈도 안 떠짐' },
-  yasik:    { title: '야식',         desc: '오늘만 먹고 내일부터 다이어트' },
-  scroll:   { title: '스크롤 중독',  desc: '자기 전 30분이 3시간 됨' },
-  receipt:  { title: '영수증 플렉스', desc: '결제는 했는데 기억이 없음' },
-  delivery: { title: '택배 쌓기',    desc: '뜯지도 않은 택배가 방 한켠에' },
-  sofa:     { title: '소파 귀차니즘', desc: '한번 앉으면 못 일어남' },
-};
-
 function esc(str) {
   return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
@@ -183,12 +170,20 @@ export async function onRequestGet(context) {
     imageUrl = `${origin}/share-cards/family-${game}.jpg`;
     cta = '🎲 우리도 해보기';
   } else if (section === 'worldcup') {
-    const championId = WORLDCUP_MEMES[url.searchParams.get('champion')] ? url.searchParams.get('champion') : 'nunnun';
-    const meme = WORLDCUP_MEMES[championId];
-    rawTitle = `내 인생 밈은 ${meme.title}!`;
-    rawDescription = `${meme.desc} — 너는 뭐 나올 것 같아? 과몰입 연구소에서 확인해보세요 👉`;
-    imageUrl = `${origin}/assets/worldcup/${championId}.jpg`;
+    /* v0.6.1~ 팩 시스템 전면 개편: 팩이 6개+아이템 160개라 이 함수에 카탈로그를 복제하는 대신,
+       클라이언트(wcRenderResult)가 이미 계산해둔 팩 제목/우승자 이름/공유 이미지 URL을 쿼리로 그대로
+       전달받아 사용 — 성향형 섹션들이 result 텍스트를 직접 넘기는 패턴과 동일. image는 우리 origin의
+       예상 경로(share-cards/ 또는 worldcup/images/)일 때만 신뢰하고, 아니면 기본 이미지로 폴백 */
+    const packId = /^[a-z0-9-]{1,40}$/.test(url.searchParams.get('packId') || '') ? url.searchParams.get('packId') : '';
+    const championName = url.searchParams.get('championName') || '';
+    const packTitle = url.searchParams.get('packTitle') || '이상형 월드컵';
+    const rawImage = url.searchParams.get('image') || '';
+    imageUrl = (rawImage.startsWith(`${origin}/share-cards/`) || rawImage.startsWith(`${origin}/worldcup/images/`))
+      ? rawImage : `${origin}/share-cards/og-default.jpg`;
+    rawTitle = championName ? `내 최애는 '${championName}'!` : `${packTitle} 결과`;
+    rawDescription = `「${packTitle}」에서 내가 고른 최애는 '${championName || '???'}' — 너의 선택은? 과몰입 연구소에서 확인해보세요 👉`;
     cta = '🏆 나도 해보기';
+    extra = packId || null;
   }
 
   const title = esc(rawTitle);

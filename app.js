@@ -5372,150 +5372,516 @@ function initFortuneExt() {
 }
 
 /* ══════════════════════════════════════════════════
-   🏆 이상형 월드컵 (v0.2.5 뼈대 → v0.4.0 "인생 공감 밈 월드컵" 1개 실구현)
-   - 후보 8개 단일 토너먼트(8강→4강→결승), 실사진(무료 스톡사진) 기반
-   - 랭킹(전체 몇 위)은 Supabase에 익명 투표를 처음부터 쌓되, 누적 100판 미만이면 노출하지 않음
-     (표본 적을 때 노출하면 초라해 보인다는 사용자 우려 반영 — percentile_cache의 MIN_SAMPLE_SIZE와 같은 사상)
-══════════════════════════════════════════════════ */
-const WORLDCUP_RANK_THRESHOLD = 100;
+   🏆 이상형 월드컵 — 팩 시스템 (v0.6.1~, 전면 재구축)
+   레거시(밈 8개 단일토너먼트, v0.2.5~v0.4.4, worldcup_votes/worldcup_stats 뷰 기반)는 git 히스토리에
+   보존, 이 버전에서 완전 교체 — 신규 worldcup_stats(테이블)/worldcup_plays로 이름은 같지만 스키마가 달라
+   기존 뷰/테이블은 SQL에서 drop 후 재생성.
 
-function initWorldcup() {
-  const container = document.getElementById('worldcup-container');
-  container.innerHTML = `
-    <div class="max-w-md mx-auto text-center py-6">
-      <div class="text-5xl mb-4">🏆</div>
-      <h2 class="text-2xl font-black text-slate-100 mb-2">인생 공감 밈 월드컵</h2>
-      <p class="text-slate-400 mb-1">둘 중 더 "나 같은" 쪽을 골라주세요</p>
-      <p class="text-slate-500 text-sm mb-6">8강 → 4강 → 결승, 총 3라운드</p>
-      <button onclick="worldcupStart()" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-4 rounded-xl transition text-lg">시작하기</button>
-    </div>`;
+   이 프로젝트는 번들러 없는 전역 스크립트 SPA라 실제 ES 모듈 분리 대신, 다른 14개 기능과 동일하게
+   app.js 안에서 역할별 주석 블록으로 "모듈"을 구분함:
+     ① bracketEngine  — 순수 함수, 대진표 생성/진행 (DOM/네트워크 의존 없음)
+     ② worldcupLoader — 팩 데이터 검증/조회 (data.js의 AppData.worldcupPacks를 읽음)
+     ③ statsEngine    — Supabase 승패/우승 집계 read/write (실패해도 화면엔 영향 없음)
+     ④ explorePage    — 탐색 화면(검색/카테고리 칩/정렬/카드 그리드)
+     ⑤ ui/resultRenderer — 인트로/매치/결과 화면
+     ⑥ rank page      — 팩별 랭킹 화면
+     ⑦ shareCard      — 카카오/공유 링크 연동 (기존 shareKakaoButtonHTML/shareIconRowHTML 재사용)
+
+   라우팅: 이 SPA는 해시 라우팅(#worldcup)만 지원하고 진짜 URL 경로(/worldcup/play/:packId)는 없어
+   #worldcup?play={packId} / #worldcup?rank={packId} 형태로 대체(다른 기능의 ?vs=/?drawn= 패턴과 동일).
+   내부 화면 전환은 history.replaceState로 주소창만 갱신하고 hashchange를 발생시키지 않음
+   (App.navigate가 알 수 없는 sectionId를 만나면 화면을 비워버리는 기존 동작과 충돌 방지). */
+
+const WC_MIN_SAMPLE = 10;       // 역배 토스트 최소 표본(해당 아이템의 승+패 누적 횟수)
+const WC_UPSET_RATE = 0.2;      // 역배 판정 승률 임계치(이하면 "역배 성공" 토스트)
+
+/* ── ① bracketEngine (순수 함수, DOM/네트워크 없음) ──
+   상태 shape: { packId, roundIds:[], roundLabel, matchIdx, nextRoundIds:[], champion:null,
+                 history:[{winnerId,loserId}], semifinalists:[] } */
+function wcRoundLabel(size) {
+  if (size <= 2) return '결승';
+  if (size === 4) return '4강';
+  return `${size}강`;
 }
-
-function worldcupMemeById(id) {
-  return AppData.worldcupMemes.find(m => m.id === id);
+function wcBuildBracket(pack, roundSize) {
+  const ids = shuffleArray(pack.items.map(it => it.id)).slice(0, roundSize);
+  return { packId: pack.packId, roundIds: ids, roundLabel: wcRoundLabel(ids.length), matchIdx: 0, nextRoundIds: [], champion: null, history: [], semifinalists: [] };
 }
-
-function worldcupStart() {
-  bumpEngagement('site-worldcup-plays');
-  const ids = shuffleArray(AppData.worldcupMemes.map(m => m.id));
-  App.state.worldcup = { roundIds: ids, roundLabel: '8강', matchIdx: 0, nextRoundIds: [], champion: null };
-  worldcupRenderMatch();
+function wcCurrentMatchIds(state) {
+  return [state.roundIds[state.matchIdx * 2], state.roundIds[state.matchIdx * 2 + 1]];
 }
-
-function worldcupRenderMatch() {
-  const s = App.state.worldcup;
-  const container = document.getElementById('worldcup-container');
-  const a = worldcupMemeById(s.roundIds[s.matchIdx * 2]);
-  const b = worldcupMemeById(s.roundIds[s.matchIdx * 2 + 1]);
-  const totalMatches = s.roundIds.length / 2;
-  container.innerHTML = `
-    <div class="max-w-2xl mx-auto">
-      <div class="flex items-center justify-between mb-4">
-        <span class="text-slate-300 font-bold">${s.roundLabel}</span>
-        <span class="text-slate-500 text-xs">${s.matchIdx + 1} / ${totalMatches}</span>
-      </div>
-      <div class="grid grid-cols-2 gap-3 relative">
-        ${[a, b].map(m => `
-          <div class="cursor-pointer group" onclick="worldcupPick('${m.id}')">
-            <div class="relative rounded-2xl overflow-hidden border-2 border-slate-700 group-hover:border-violet-500 transition aspect-[3/4] bg-slate-800">
-              <img src="${m.image}" alt="${escapeHtml(m.title)}" class="w-full h-full object-cover"/>
-              <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent pt-12 pb-3 px-3">
-                <p class="text-white font-black text-base sm:text-lg">${m.emoji} ${escapeHtml(m.title)}</p>
-                <p class="text-slate-300 text-xs">${escapeHtml(m.desc)}</p>
-              </div>
-            </div>
-          </div>`).join('')}
-        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-slate-100 font-black text-2xl bg-slate-900 border-2 border-slate-700 rounded-full w-12 h-12 flex items-center justify-center pointer-events-none">VS</div>
-      </div>
-    </div>`;
-}
-
-function worldcupPick(winnerId) {
-  const s = App.state.worldcup;
-  if (!s) return;
-  playSound('tick');
-  s.nextRoundIds.push(winnerId);
-  s.matchIdx++;
-  if (s.matchIdx * 2 >= s.roundIds.length) {
-    if (s.nextRoundIds.length === 1) {
-      worldcupFinish(s.nextRoundIds[0]);
-      return;
+function wcTotalMatchesInRound(state) { return state.roundIds.length / 2; }
+/* winnerId를 이번 매치 승자로 기록하고 다음 매치/라운드로 진행 — 결승까지 끝나면 champion이 채워짐.
+   4강 진입 시점의 4명을 semifinalists로 별도 보존(결과 화면의 "나의 4강" 표시용, 라운드가 진행되며
+   roundIds 자체는 계속 다음 라운드로 덮어써지기 때문에 그 시점 스냅샷이 필요함) */
+function wcAdvance(state, winnerId, loserId) {
+  state.history.push({ winnerId, loserId });
+  state.nextRoundIds.push(winnerId);
+  state.matchIdx++;
+  if (state.matchIdx * 2 >= state.roundIds.length) {
+    if (state.nextRoundIds.length === 1) {
+      state.champion = state.nextRoundIds[0];
+      return state;
     }
-    s.roundIds = s.nextRoundIds;
-    s.nextRoundIds = [];
-    s.matchIdx = 0;
-    s.roundLabel = s.roundIds.length === 2 ? '결승' : `${s.roundIds.length}강`;
+    state.roundIds = state.nextRoundIds;
+    state.nextRoundIds = [];
+    state.matchIdx = 0;
+    state.roundLabel = wcRoundLabel(state.roundIds.length);
+    if (state.roundIds.length === 4) state.semifinalists = [...state.roundIds];
   }
-  worldcupRenderMatch();
+  return state;
 }
 
-async function worldcupFinish(championId) {
-  App.state.worldcup.champion = championId;
-  playSound('tierS');
-  worldcupRenderResult(championId, null);
-  worldcupSubmitVote(championId);
-  const stats = await worldcupFetchStats();
-  const rankingEl = document.getElementById('worldcup-ranking');
-  if (rankingEl) rankingEl.innerHTML = worldcupRankingHTML(championId, stats);
+/* ── ② worldcupLoader ── */
+function wcValidatePack(pack) {
+  const errs = [];
+  if (!pack.packId || !pack.title || !Array.isArray(pack.items)) { errs.push('필수 필드(packId/title/items) 누락'); return errs; }
+  const n = pack.items.length;
+  if (![8, 16, 32].includes(n)) errs.push(`아이템 개수(${n})가 8/16/32강에 맞지 않음`);
+  const ids = new Set(pack.items.map(it => it.id));
+  if (ids.size !== n) errs.push('아이템 id 중복');
+  pack.items.forEach(it => {
+    if (!it.id || !it.name) { errs.push(`아이템 필드 누락: ${JSON.stringify(it)}`); return; }
+    if (pack.type === 'emoji' && !it.emoji) errs.push(`emoji형인데 emoji 없음: ${it.id}`);
+    if (pack.type === 'image' && !it.imagePath) errs.push(`image형인데 imagePath 없음: ${it.id}`);
+  });
+  return errs;
+}
+function wcGetValidPacks() {
+  const packs = (AppData.worldcupPacks || []);
+  const valid = [];
+  packs.forEach(p => {
+    const errs = wcValidatePack(p);
+    if (errs.length) { console.error(`[worldcup] 팩 검증 실패, 목록에서 제외: ${p.packId}`, errs); return; }
+    valid.push(p);
+  });
+  return valid;
+}
+function wcGetPack(packId) { return wcGetValidPacks().find(p => p.packId === packId) || null; }
+function wcImgPath(item) { return item.imagePath || ''; }
+/* 실제 이미지 파일이 아직 없어도(투입 전) 게임이 끊기지 않도록 텍스트 placeholder로 폴백 */
+function wcImgFallback(imgEl) {
+  imgEl.onerror = null;
+  imgEl.style.display = 'none';
+  const holder = imgEl.parentElement;
+  if (holder && !holder.querySelector('.wc-img-placeholder')) {
+    const ph = document.createElement('div');
+    ph.className = 'wc-img-placeholder';
+    ph.innerHTML = '<span>🖼️</span><span>이미지 준비중</span>';
+    holder.appendChild(ph);
+  }
 }
 
-/* 투표는 처음부터 실제로 Supabase에 쌓아두되(표본 자체는 손실 없이 계속 축적),
-   100판 임계치 미만일 땐 화면에만 안 보여줌 — 실패해도 결과 화면에는 영향 없도록 항상 catch */
-async function worldcupSubmitVote(memeId) {
+/* ── ③ statsEngine (Supabase 익명 read/insert/update, 전부 실패해도 화면엔 영향 없음) ── */
+async function wcFetchItemStats(packId, itemId) {
+  try {
+    if (!window.sb) return null;
+    const { data, error } = await window.sb.from('worldcup_stats').select('wins,losses,appearances,championships').eq('pack_id', packId).eq('item_id', itemId).maybeSingle();
+    if (error) return null;
+    return data;
+  } catch (e) { return null; }
+}
+async function wcFetchPackStats(packId) {
+  try {
+    if (!window.sb) return null;
+    const { data, error } = await window.sb.from('worldcup_stats').select('item_id,wins,losses,appearances,championships').eq('pack_id', packId);
+    if (error || !data) return null;
+    return data;
+  } catch (e) { return null; }
+}
+async function wcUpsertRow(packId, itemId, patch) {
+  const existing = await wcFetchItemStats(packId, itemId);
+  const base = existing || { wins: 0, losses: 0, appearances: 0, championships: 0 };
+  await window.sb.from('worldcup_stats').upsert({
+    pack_id: packId, item_id: itemId,
+    wins: base.wins + (patch.wins || 0),
+    losses: base.losses + (patch.losses || 0),
+    appearances: base.appearances + (patch.appearances || 0),
+    championships: base.championships + (patch.championships || 0),
+  }, { onConflict: 'pack_id,item_id' });
+}
+/* fire-and-forget — 매치 결과 승/패 집계 (읽고-더하고-쓰는 방식, 이 사이트의 다른 익명 카운터들과
+   동일하게 완벽한 원자성은 보장하지 않지만 트래픽 규모상 허용 가능한 수준) */
+async function wcRecordMatch(packId, winnerId, loserId) {
   try {
     if (!window.sb) return;
     if (typeof ensureAnonSession === 'function') await ensureAnonSession();
-    await window.sb.from('worldcup_votes').insert({ meme_id: memeId });
-  } catch (e) {
-    console.error('월드컵 투표 기록 실패:', e);
+    await Promise.all([
+      wcUpsertRow(packId, winnerId, { wins: 1, appearances: 1 }),
+      wcUpsertRow(packId, loserId, { losses: 1, appearances: 1 }),
+    ]);
+  } catch (e) { console.error('월드컵 매치 기록 실패:', e); }
+}
+async function wcRecordChampionship(packId, championId, roundSize) {
+  try {
+    if (!window.sb) return;
+    if (typeof ensureAnonSession === 'function') await ensureAnonSession();
+    await wcUpsertRow(packId, championId, { championships: 1 });
+    await window.sb.from('worldcup_plays').insert({ pack_id: packId, round_size: roundSize, champion_id: championId });
+  } catch (e) { console.error('월드컵 우승 기록 실패:', e); }
+}
+/* 역배 토스트 — 방금 고른 아이템의 "이전까지 누적 승률"이 낮은데도 내가 골랐다면 축하 토스트.
+   표본(승+패) 10개 미만이면 조용히 스킵(percentile_cache/월드컵 랭킹과 동일한 표본 게이트 사상) */
+async function wcCheckUpset(packId, winnerId) {
+  const stats = await wcFetchItemStats(packId, winnerId);
+  if (!stats) return;
+  const total = stats.wins + stats.losses;
+  if (total < WC_MIN_SAMPLE) return;
+  const rate = stats.wins / total;
+  if (rate <= WC_UPSET_RATE) {
+    showToast(`🔥 역배 성공! 이 선택, 전체 ${Math.round(rate * 100)}%만 골랐어요`);
   }
 }
-
-async function worldcupFetchStats() {
+/* 참여자수(탐색 카드/NEW 뱃지용) — 팩별 실제 worldcup_plays row 개수. count(*)를 pack_id별로 묶는
+   집계 API가 PostgREST 기본으로는 없어, 전체 pack_id 목록을 한 번에 받아 클라이언트에서 카운트 */
+async function wcFetchAllPlayCounts() {
   try {
     if (!window.sb) return null;
-    const { data, error } = await window.sb.from('worldcup_stats').select('meme_id, votes');
+    const { data, error } = await window.sb.from('worldcup_plays').select('pack_id');
     if (error || !data) return null;
-    return data;
-  } catch (e) {
-    return null;
-  }
+    const counts = {};
+    data.forEach(r => { counts[r.pack_id] = (counts[r.pack_id] || 0) + 1; });
+    return counts;
+  } catch (e) { return null; }
 }
 
-function worldcupRankingHTML(championId, stats) {
-  if (!stats) return '';
-  const total = stats.reduce((sum, s) => sum + Number(s.votes), 0);
-  if (total < WORLDCUP_RANK_THRESHOLD) {
-    return '';
-  }
-  const sorted = [...stats].sort((a, b) => b.votes - a.votes);
-  const rank = sorted.findIndex(s => s.meme_id === championId) + 1;
-  const mine = sorted.find(s => s.meme_id === championId);
-  const votes = mine ? mine.votes : 0;
-  return `<p class="text-amber-300 text-sm font-bold mt-3">📊 전체 ${total}판 중 ${rank}위 (${votes}표)</p>`;
+/* ── 세션 이어하기(sessionStorage) — 탭을 닫거나 다른 섹션 갔다 와도 진행 중이던 대진표 유지,
+   결과가 나면(wcFinish) 지움. 브라우저를 완전히 닫으면 사라지는 게 의도(로그인 없는 익명 플레이) ── */
+function wcSaveSession() {
+  const s = App.state.worldcup;
+  if (!s || !s.bracket || !s.packId) return;
+  try { sessionStorage.setItem('wc_session_' + s.packId, JSON.stringify({ bracket: s.bracket, roundSize: s.roundSize })); } catch (e) {}
+}
+function wcLoadSession(packId) {
+  try {
+    const raw = sessionStorage.getItem('wc_session_' + packId);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+function wcClearSession(packId) {
+  try { sessionStorage.removeItem('wc_session_' + packId); } catch (e) {}
 }
 
-function worldcupRenderResult(championId, stats) {
-  const m = worldcupMemeById(championId);
-  const container = document.getElementById('worldcup-container');
-  const shareText = `나 인생 공감 밈 월드컵 했는데 결과가 "${m.title}"! 너는 뭐 나올 것 같아? 🏆`;
-  const imageUrl = `${location.origin}/${m.image}`;
-  const shareUrl = buildShareLandingUrl('worldcup', { champion: championId });
-  container.innerHTML = `
-    <div class="max-w-md mx-auto text-center">
-      <p class="text-slate-400 text-sm mb-3">🏆 당신의 인생 밈은...</p>
-      <div class="rounded-2xl overflow-hidden border-2 border-amber-400 mb-4">
-        <img src="${m.image}" alt="${escapeHtml(m.title)}" class="w-full aspect-[3/4] object-cover"/>
+/* ── 진입점 — App.SECTION_INIT('worldcup')이 호출. 공유 링크(#worldcup?play=/?rank=)나
+   "나도 해보기"(App._worldcupSharedOpen)로 특정 팩에 바로 진입하는 경우를 우선 처리 ── */
+function initWorldcup() {
+  const params = App._worldcupInitialParams;
+  App._worldcupInitialParams = null;
+  const sharedPlay = App._worldcupSharedOpen;
+  App._worldcupSharedOpen = null;
+
+  App.state.worldcup = { view: 'explore', packId: null, bracket: null, roundSize: null, search: '', category: '전체', sort: 'popular', playCounts: null };
+
+  const playId = (params && params.get('play')) || sharedPlay || null;
+  const rankId = params && params.get('rank');
+  if (rankId && wcGetPack(rankId)) { wcOpenRank(rankId); return; }
+  if (playId && wcGetPack(playId)) { wcOpenIntro(playId); return; }
+  wcRenderExplore();
+}
+
+/* ── ④ explorePage ── */
+function wcCardHTML(pack, plays) {
+  const isNew = plays !== null && plays < 100;
+  return `
+    <div class="wc-card">
+      ${wcThumbHTML(pack)}
+      <div class="wc-card-body">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="wc-badge">${escapeHtml(pack.category)}</span>
+          <span class="text-slate-500 text-xs">${plays === null ? '집계 중' : plays + '명 참여'}${isNew ? ' <span class="wc-new-badge">NEW</span>' : ''}</span>
+        </div>
+        <h3 class="text-slate-100 font-bold text-lg mb-1">${escapeHtml(pack.title)}</h3>
+        <p class="text-slate-400 text-sm mb-4 line-clamp-2">${escapeHtml(pack.hook)}</p>
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="wcOpenIntro('${pack.packId}')" class="wc-btn-accent">▶ 시작하기</button>
+          <button onclick="wcOpenRank('${pack.packId}')" class="wc-btn-ghost">📊 통계</button>
+        </div>
       </div>
-      <h2 class="text-2xl font-black text-slate-100 mb-1">${m.emoji} ${escapeHtml(m.title)}</h2>
-      <p class="text-slate-400 mb-1">${escapeHtml(m.desc)}</p>
-      <div id="worldcup-ranking">${worldcupRankingHTML(championId, stats)}</div>
-      <div class="mt-4">
-        ${shareKakaoButtonHTML(imageUrl, `내 인생 밈은 ${m.title}!`, m.desc, shareUrl)}
+    </div>`;
+}
+function wcThumbHTML(pack) {
+  if (pack.type === 'emoji') {
+    return `
+      <div class="wc-thumb">
+        <div class="wc-thumb-half wc-thumb-emoji-a"><span>${pack.thumbnail.leftEmoji}</span></div>
+        <div class="wc-thumb-half wc-thumb-emoji-b"><span>${pack.thumbnail.rightEmoji}</span></div>
+      </div>`;
+  }
+  const left = pack.items.find(i => i.id === pack.thumbnail.left);
+  const right = pack.items.find(i => i.id === pack.thumbnail.right);
+  return `
+    <div class="wc-thumb">
+      <div class="wc-thumb-half">${left ? `<img src="${wcImgPath(left)}" alt="" onerror="wcImgFallback(this)"/>` : ''}</div>
+      <div class="wc-thumb-half">${right ? `<img src="${wcImgPath(right)}" alt="" onerror="wcImgFallback(this)"/>` : ''}</div>
+    </div>`;
+}
+function wcRenderGridHTML() {
+  const s = App.state.worldcup;
+  const packs = wcGetValidPacks();
+  const q = (s.search || '').trim().toLowerCase();
+  let filtered = packs.filter(p => (s.category === '전체' || p.category === s.category) && (!q || p.title.toLowerCase().includes(q) || p.hook.toLowerCase().includes(q)));
+  const rows = filtered.map(p => ({ pack: p, plays: s.playCounts ? (s.playCounts[p.packId] || 0) : null }));
+  if (s.sort === 'popular') rows.sort((a, b) => (b.plays || 0) - (a.plays || 0));
+  else rows.sort((a, b) => new Date(b.pack.createdAt) - new Date(a.pack.createdAt));
+  if (!rows.length) return '<p class="text-slate-500 text-center col-span-full py-10">검색 결과가 없어요</p>';
+  return rows.map(({ pack, plays }) => wcCardHTML(pack, plays)).join('');
+}
+function wcOnSearch(v) {
+  App.state.worldcup.search = v;
+  const el = document.getElementById('wc-grid');
+  if (el) el.innerHTML = wcRenderGridHTML();
+}
+function wcOnCategory(c) { App.state.worldcup.category = c; wcRenderExplore(); }
+function wcOnSort(sort) { App.state.worldcup.sort = sort; wcRenderExplore(); }
+
+async function wcRenderExplore() {
+  const s = App.state.worldcup;
+  s.view = 'explore';
+  s.packId = null;
+  history.replaceState(null, '', location.pathname + '#worldcup');
+  const container = document.getElementById('worldcup-container');
+  const packs = wcGetValidPacks();
+  const categories = ['전체', ...Array.from(new Set(packs.map(p => p.category)))];
+  const counts = {};
+  categories.forEach(c => { counts[c] = c === '전체' ? packs.length : packs.filter(p => p.category === c).length; });
+
+  container.innerHTML = `
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-6">
+        <h2 class="text-2xl font-black text-slate-100 mb-1">🏆 이상형 월드컵</h2>
+        <p class="text-slate-400">토너먼트로 당신의 최애를 가려보세요</p>
+      </div>
+      <input type="text" value="${escapeHtml(s.search || '')}" oninput="wcOnSearch(this.value)" placeholder="🔍 제목 검색"
+        class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 mb-4 focus:outline-none" style="border-color:var(--wc-accent-border,transparent)" />
+      <div class="flex flex-wrap gap-2 mb-4">
+        ${categories.map(c => `<span class="wc-cat-chip ${c === s.category ? 'active' : ''}" onclick="wcOnCategory('${c}')">${escapeHtml(c)} ${counts[c]}</span>`).join('')}
+      </div>
+      <div class="flex gap-2 mb-6">
+        <button class="wc-sort-btn ${s.sort === 'popular' ? 'active' : ''}" onclick="wcOnSort('popular')">인기순</button>
+        <button class="wc-sort-btn ${s.sort === 'latest' ? 'active' : ''}" onclick="wcOnSort('latest')">최신순</button>
+      </div>
+      <div id="wc-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">${wcRenderGridHTML()}</div>
+    </div>`;
+
+  if (!s.playCounts) {
+    const counts2 = await wcFetchAllPlayCounts();
+    if (counts2 && App.state.worldcup.view === 'explore') {
+      App.state.worldcup.playCounts = counts2;
+      const grid = document.getElementById('wc-grid');
+      if (grid) grid.innerHTML = wcRenderGridHTML();
+    }
+  }
+}
+
+/* ── ⑤ ui/resultRenderer ── */
+function wcOpenIntro(packId) {
+  const pack = wcGetPack(packId);
+  if (!pack) { showToast('존재하지 않는 팩이에요'); wcRenderExplore(); return; }
+  App.state.worldcup.packId = packId;
+  App.state.worldcup.view = 'intro';
+  history.replaceState(null, '', location.pathname + '#worldcup?play=' + packId);
+  const container = document.getElementById('worldcup-container');
+  const n = pack.items.length;
+  const candidates = [8, 16, 32].filter(r => r <= n);
+  const resumed = wcLoadSession(packId);
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <button onclick="wcRenderExplore()" class="text-slate-400 hover:text-slate-200 text-sm mb-4">← 목록으로</button>
+      ${wcThumbHTML(pack)}
+      <h2 class="text-slate-100 font-black text-2xl mt-4 mb-2">${escapeHtml(pack.title)}</h2>
+      <p class="text-slate-300 leading-relaxed mb-6">${escapeHtml(pack.editorial)}</p>
+      ${resumed ? `<button onclick="wcResumeSession('${packId}')" class="w-full wc-btn-accent py-3 mb-3">▶ 이어하기 (${escapeHtml(wcRoundLabel(resumed.bracket.roundIds.length))})</button>` : ''}
+      <p class="text-slate-500 text-xs mb-2">라운드 선택</p>
+      <div class="grid gap-2 mb-6" style="grid-template-columns:repeat(${candidates.length},minmax(0,1fr))">
+        ${candidates.map(r => `<button onclick="wcStart('${packId}', ${r})" class="wc-round-btn">${wcRoundLabel(r)}</button>`).join('')}
+      </div>
+    </div>`;
+}
+function wcStart(packId, roundSize) {
+  const pack = wcGetPack(packId);
+  if (!pack) return;
+  bumpEngagement('worldcup-' + packId + '-plays');
+  const bracket = wcBuildBracket(pack, roundSize);
+  App.state.worldcup.bracket = bracket;
+  App.state.worldcup.roundSize = roundSize;
+  App.state.worldcup.view = 'play';
+  wcSaveSession();
+  wcRenderMatch(pack, bracket);
+}
+function wcResumeSession(packId) {
+  const saved = wcLoadSession(packId);
+  const pack = wcGetPack(packId);
+  if (!saved || !pack) { wcOpenIntro(packId); return; }
+  App.state.worldcup.bracket = saved.bracket;
+  App.state.worldcup.roundSize = saved.roundSize;
+  App.state.worldcup.view = 'play';
+  wcRenderMatch(pack, saved.bracket);
+}
+function wcMatchCardHTML(pack, item, side) {
+  if (!item) return '<div></div>';
+  if (pack.type === 'emoji') {
+    return `
+      <div class="wc-match-card wc-match-emoji" id="wc-match-${side}" onclick="wcPickUI('${item.id}','${side}')">
+        <div class="wc-match-emoji-icon">${item.emoji}</div>
+        <p class="wc-match-name">${escapeHtml(item.name)}</p>
+        <p class="wc-match-caption">${escapeHtml(item.caption)}</p>
+      </div>`;
+  }
+  return `
+    <div class="wc-match-card wc-match-image" id="wc-match-${side}" onclick="wcPickUI('${item.id}','${side}')">
+      <img src="${wcImgPath(item)}" alt="${escapeHtml(item.name)}" onerror="wcImgFallback(this)"/>
+      <div class="wc-match-overlay">
+        <p class="wc-match-name">${escapeHtml(item.name)}</p>
+        <p class="wc-match-caption">${escapeHtml(item.caption)}</p>
+      </div>
+    </div>`;
+}
+function wcRenderMatch(pack, state) {
+  const [aId, bId] = wcCurrentMatchIds(state);
+  const a = pack.items.find(i => i.id === aId);
+  const b = pack.items.find(i => i.id === bId);
+  const total = wcTotalMatchesInRound(state);
+  const progress = Math.round((state.matchIdx / total) * 100);
+  const isFinal = state.roundIds.length === 2;
+  const container = document.getElementById('worldcup-container');
+  container.innerHTML = `
+    <div class="max-w-3xl mx-auto">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-slate-300 font-bold ${isFinal ? 'wc-accent-text' : ''}">${isFinal ? '🏆 결승' : escapeHtml(state.roundLabel)}</span>
+        <span class="text-slate-500 text-xs">${state.matchIdx + 1} / ${total}</span>
+      </div>
+      <div class="progress-bar-track mb-5"><div class="h-full rounded-full wc-progress-fill transition-all" style="width:${progress}%"></div></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 relative">
+        ${wcMatchCardHTML(pack, a, 'a')}
+        ${wcMatchCardHTML(pack, b, 'b')}
+        <div class="wc-vs-badge">VS</div>
+      </div>
+    </div>`;
+  wcPreloadNext(pack, state);
+}
+function wcPreloadNext(pack, state) {
+  if (pack.type !== 'image') return;
+  const nextIdx = (state.matchIdx + 1) * 2;
+  [state.roundIds[nextIdx], state.roundIds[nextIdx + 1]].forEach(id => {
+    if (!id) return;
+    const item = pack.items.find(i => i.id === id);
+    if (!item) return;
+    const img = new Image();
+    img.src = wcImgPath(item);
+  });
+}
+/* 선택 즉시 확대+하이라이트(CSS wc-picked/wc-not-picked) → 0.4초 뒤 실제 진행 */
+function wcPickUI(itemId, side) {
+  const state = App.state.worldcup.bracket;
+  const [aId, bId] = wcCurrentMatchIds(state);
+  const loserId = itemId === aId ? bId : aId;
+  const picked = document.getElementById('wc-match-' + side);
+  const other = document.getElementById('wc-match-' + (side === 'a' ? 'b' : 'a'));
+  if (picked) picked.classList.add('wc-picked');
+  if (other) other.classList.add('wc-not-picked');
+  setTimeout(() => wcPick(itemId, loserId), 400);
+}
+function wcPick(winnerId, loserId) {
+  const s = App.state.worldcup;
+  if (!s || !s.bracket) return;
+  playSound('tick');
+  const pack = wcGetPack(s.packId);
+  wcRecordMatch(s.packId, winnerId, loserId);   // fire-and-forget
+  wcCheckUpset(s.packId, winnerId);             // fire-and-forget
+  wcAdvance(s.bracket, winnerId, loserId);
+  wcSaveSession();
+  if (s.bracket.champion) {
+    wcFinish(pack, s.bracket);
+  } else {
+    wcRenderMatch(pack, s.bracket);
+  }
+}
+function wcFinish(pack, state) {
+  wcClearSession(pack.packId);
+  wcRecordChampionship(pack.packId, state.champion, App.state.worldcup.roundSize); // fire-and-forget
+  App.state.worldcup.view = 'result';
+  playSound('tierS');
+  wcRenderResult(pack, state);
+}
+function wcResultMediaHTML(pack, item) {
+  if (pack.type === 'emoji') return `<div class="wc-result-emoji">${item.emoji}</div>`;
+  return `<div class="wc-result-image-wrap"><img src="${wcImgPath(item)}" alt="${escapeHtml(item.name)}" onerror="wcImgFallback(this)"/></div>`;
+}
+/* ⑦ shareCard — emoji형은 아이템마다 미리 렌더링해둔 정적 카드(scripts/generate-worldcup-share-cards.js),
+   image형은 실제 사진 경로를 og:image로 그대로 재사용(다른 이미지형 결과들과 동일 원칙, 별도 생성 불필요) */
+function wcShareImageUrl(pack, item) {
+  if (pack.type === 'emoji') return `${location.origin}/share-cards/worldcup-${pack.packId}-${item.id}.jpg`;
+  return `${location.origin}/${wcImgPath(item)}`;
+}
+function wcRenderResult(pack, state) {
+  const champion = pack.items.find(i => i.id === state.champion);
+  const lastMatch = state.history[state.history.length - 1];
+  const runnerUp = lastMatch ? pack.items.find(i => i.id === lastMatch.loserId) : null;
+  const semiFinalists = (state.semifinalists || []).map(id => pack.items.find(i => i.id === id)).filter(Boolean);
+  const nickname = getNickname() || '나';
+  const shareText = `「${pack.title}」 ${state.roundIds.length <= 1 ? App.state.worldcup.roundSize : App.state.worldcup.roundSize}강에서 살아남은 나의 최애는 '${champion.name}'! 너의 선택은?`;
+  const imageUrl = wcShareImageUrl(pack, champion);
+  const shareUrl = buildShareLandingUrl('worldcup', { packId: pack.packId, champion: champion.id, championName: champion.name, packTitle: pack.title, image: imageUrl });
+  const container = document.getElementById('worldcup-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto text-center">
+      <p class="text-slate-400 text-sm mb-3">🏆 ${escapeHtml(pack.title)}의 우승은...</p>
+      ${wcResultMediaHTML(pack, champion)}
+      <h2 class="text-2xl font-black text-slate-100 mt-4 mb-1">${escapeHtml(champion.name)}</h2>
+      <p class="text-slate-400 mb-3">${escapeHtml(champion.caption)}</p>
+      ${runnerUp ? `<p class="text-slate-500 text-sm mb-1">🥈 준우승: ${escapeHtml(runnerUp.name)}</p>` : ''}
+      ${semiFinalists.length ? `<p class="text-slate-600 text-xs mb-4">나의 4강: ${semiFinalists.map(i => escapeHtml(i.name)).join(' · ')}</p>` : ''}
+      <div class="mt-3 mb-4">
+        ${shareKakaoButtonHTML(imageUrl, `나의 최애는 ${champion.name}!`, shareText, shareUrl)}
         ${shareIconRowHTML(shareText, shareUrl)}
       </div>
-      <button onclick="worldcupStart()" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">🔄 다시하기</button>
+      <div class="flex gap-2">
+        <button onclick="wcOpenIntro('${pack.packId}')" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">🔄 다시하기</button>
+        <button onclick="wcOpenRank('${pack.packId}')" class="flex-1 wc-btn-accent">📊 랭킹보기</button>
+      </div>
+      <button onclick="wcRenderExplore()" class="w-full mt-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 rounded-xl transition">목록으로</button>
     </div>`;
+}
+
+/* ── ⑥ rank page ── */
+function wcOpenRank(packId) {
+  const pack = wcGetPack(packId);
+  if (!pack) { showToast('존재하지 않는 팩이에요'); wcRenderExplore(); return; }
+  App.state.worldcup.packId = packId;
+  App.state.worldcup.view = 'rank';
+  history.replaceState(null, '', location.pathname + '#worldcup?rank=' + packId);
+  const container = document.getElementById('worldcup-container');
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto">
+      <button onclick="wcRenderExplore()" class="text-slate-400 hover:text-slate-200 text-sm mb-4">← 목록으로</button>
+      <h2 class="text-slate-100 font-black text-xl mb-1">${escapeHtml(pack.title)} 랭킹</h2>
+      <p class="text-slate-500 text-sm mb-5">승률 기준 순위예요</p>
+      <div id="wc-rank-list" class="space-y-2"><p class="text-slate-500 text-sm text-center py-6">불러오는 중...</p></div>
+      <button onclick="wcOpenIntro('${packId}')" class="w-full mt-5 wc-btn-accent py-3">▶ 나도 해보기</button>
+    </div>`;
+  wcRenderRankList(pack);
+}
+async function wcRenderRankList(pack) {
+  const stats = await wcFetchPackStats(pack.packId);
+  const el = document.getElementById('wc-rank-list');
+  if (!el) return;
+  if (!stats || !stats.length) { el.innerHTML = '<p class="text-slate-500 text-sm text-center py-6">아직 집계된 데이터가 없어요 — 직접 플레이해서 첫 기록을 남겨보세요!</p>'; return; }
+  const rows = stats.map(s => {
+    const item = pack.items.find(i => i.id === s.item_id);
+    if (!item) return null;
+    const total = s.wins + s.losses;
+    const winRate = total > 0 ? Math.round((s.wins / total) * 100) : 0;
+    return { item, winRate, appearances: s.appearances, championships: s.championships };
+  }).filter(Boolean).sort((a, b) => b.winRate - a.winRate || b.appearances - a.appearances);
+  el.innerHTML = rows.map((r, i) => `
+    <div class="flex items-center gap-3 bg-slate-800 border border-slate-700 rounded-xl p-3">
+      <span class="w-6 text-center font-black ${i < 3 ? 'wc-accent-text' : 'text-slate-500'}">${i + 1}</span>
+      ${pack.type === 'emoji' ? `<span class="text-2xl w-10 text-center">${r.item.emoji}</span>` : `<img src="${wcImgPath(r.item)}" onerror="wcImgFallback(this)" class="w-10 h-10 rounded-lg object-cover shrink-0"/>`}
+      <div class="flex-1 min-w-0">
+        <p class="text-slate-100 font-semibold text-sm truncate">${escapeHtml(r.item.name)}</p>
+        <p class="text-slate-500 text-xs">승률 ${r.winRate}% · 출전 ${r.appearances}회${r.championships ? ` · 🏆${r.championships}` : ''}</p>
+      </div>
+    </div>`).join('');
 }
 
 /* ══════════════════════════════════════════════════
@@ -6347,6 +6713,11 @@ function sharedPreviewProceed() {
   if (next.section === 'lotto' && next.extra) {
     App._lottoSharedDrawn = next.extra;
   }
+  /* 월드컵 공유 링크의 "나도 해보기"는 탐색 화면이 아니라 공유자가 플레이했던 그 팩의 인트로로
+     바로 진입시킴(extra = packId 문자열, v0.6.1~) */
+  if (next.section === 'worldcup' && next.extra) {
+    App._worldcupSharedOpen = next.extra;
+  }
   App.navigate(next.section);
 }
 
@@ -7080,6 +7451,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (hash === 'lotto') {
       App._lottoSharedDrawn = params.get('drawn') || '';
+    }
+    /* 월드컵 팩 탐색/플레이/랭킹은 진짜 URL 경로가 없어 #worldcup?play=/?rank=로 대체(v0.6.1~) —
+       initWorldcup()이 이 시점에 미리 떼어둔 값을 읽어 곧바로 해당 팩 화면으로 진입시킴 */
+    if (hash === 'worldcup') {
+      App._worldcupInitialParams = params;
     }
   }
   App.navigate(hash in sectionInits ? hash : 'home');
