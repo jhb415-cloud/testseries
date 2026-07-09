@@ -1,5 +1,6 @@
 .wrangler/
 node_modules/
+.env
 
 # 이상형 월드컵 이미지 파이프라인 원본(리사이즈 전 대용량 png/jpg) — 가공본만 worldcup/images/에 커밋
 worldcup-images-raw/

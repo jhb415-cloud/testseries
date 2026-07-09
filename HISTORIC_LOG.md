@@ -2,6 +2,24 @@
 
 ---
 
+## 세션 #19 — 2026-07-09
+
+### 현재 버전: v0.6.2
+
+### 작업 내용
+- **(직전 세션 #18 이후 미기록 구간)**: CLAUDE.md 기준 v0.4.3→v0.6.1 사이(밸런스게임 스페셜 8등급+실시간 서버집계 v0.6.0, 이상형 월드컵 팩 시스템 전면 재구축 v0.6.1)에 세션이 있었으나 이 로그에는 기록되지 않았음 — 상세는 CLAUDE.md "2. 기능 현황"/"4. 변경 이력" 표에만 남아있음(다음에 시간 나면 이 로그도 소급 보강 검토).
+- **이상형 월드컵 이미지형 3개 팩 실사진 소싱 + AI 오리지널 팩 생성 스크립트 완료 (v0.6.2)**: 세션이 중간에 끊겨(컨텍스트 손실) 재개 — v0.6.1에서 만들어둔 팩 6개 중 이미지형 4개(`cute-animals-32`/`soul-food-32`/`korea-travel-16`/`gwamol-emotion-16`)가 placeholder 폴백 상태였던 것을 실제 이미지로 채우는 작업이 진행 중이었음. 재개 시 git status/파일시스템으로 상태부터 진단(대화 컨텍스트가 끊겨 무엇이 끝났는지 불명확했음).
+  - 확인 결과 **작업은 이미 실질적으로 완료돼 있었음**: CC0 실사 스톡사진 3팩(cute-animals-32 32장/soul-food-32 32장/korea-travel-16 16장)은 `worldcup-images-raw/{packId}/`에 원본이 놓여 `process_worldcup_images.py`로 이미 변환·배치 완료, AI 오리지널 마스코트 팩(gwamol-emotion-16, 16장)은 신규 `scripts/generateWorldcupImages.js`(OpenAI Images API `gpt-image-1` 호출 → 동일 파이프라인 자동 연계)로 생성 완료 — `worldcup/images/{packId}/*.webp` 총 96개 파일이 전부 디스크에 존재.
+  - **재개 세션에서 한 일**: 코드 자체는 이미 짜여 있었으므로, 데이터 정합성을 기계적으로 재검증(①`node --check` data.js/app.js ②data.js의 `imagePath` 참조 96개 vs 실제 파일 개수 팩별 일치 확인 ③0바이트 파일 없음 ④참조된 모든 imagePath가 디스크에 실재 ⑤정적 서버로 이미지 응답 200 확인)한 뒤, 문서만 갱신하고 커밋. 신규 `worldcup/packs/README.md`(팩별 소싱 방식이 다른 이유: 동물/음식/여행=CC0 실사진 재미 요소, 과몰이 마스코트=오리지널 캐릭터라 AI 생성이 유일한 방법)와 `worldcup/packs/gwamol-emotion-16.prompts.md`(16개 아이템 AI 생성 프롬프트)도 이미 작성돼 있었음. `.gitignore`에 `.env` 추가 + `.env.example`로 `OPENAI_API_KEY` 필요 사실만 문서화(키 자체는 Codespaces Secrets에서 주입, 코드/문서에 미포함).
+  - **CLAUDE.md/index.html 버전 갱신**: v0.6.1→v0.6.2(index.html 상단 주석+사이드바 버전 표시), CLAUDE.md "이상형 월드컵" 행에 v0.6.2 내역 추가, 변경 이력 표에 v0.6.2 행 신설, 파일 구조 섹션에 `worldcup/packs/`·`generateWorldcupImages.js` 항목 추가.
+  - **검증**: `node --check` 통과, 4개 팩 데이터-파일 개수 정합(32/32/16/16) 확인, imagePath 96개 전부 실재, 정적 서버 curl로 이미지 200 확인.
+
+### 다음 세션 시작점
+- 이상형 월드컵 팩 3~6(이미지형)은 이제 전부 실사진/생성이미지 완료 상태 — 남은 후속은 실사용 반응 모니터링(역배 토스트/랭킹 100판 임계치) 정도.
+- `[[project_roadmap_priority_2026-07]]` 메모리 갱신 필요(다음 우선순위 재확인).
+
+---
+
 ## 세션 #18 — 2026-07-07
 
 ### 현재 버전: v0.4.3
