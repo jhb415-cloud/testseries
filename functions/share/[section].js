@@ -165,7 +165,8 @@ export async function onRequestGet(context) {
     /* 밸런스게임 결과 공유 — 게임별 이미지 1장(선택지와 무관하게 공용, 신규 게임 추가 시 함께 생성).
        v0.4.1~ 스페셜(유형 결과)은 grade 파라미터가 붙고 유형별 이미지(balance-sp-{id}-{grade}.jpg)를 사용 */
     const gameId = /^[a-z0-9]+$/.test(url.searchParams.get('gameId')) ? url.searchParams.get('gameId') : 'lifeorcash';
-    const grade = /^[ABCD]$/.test(url.searchParams.get('grade')) ? url.searchParams.get('grade') : null;
+    /* v0.6.0~: balanceSpecials 결과유형이 4등급(A-D)→8등급(A-H)으로 확장됨 */
+    const grade = /^[A-H]$/.test(url.searchParams.get('grade')) ? url.searchParams.get('grade') : null;
     const result = url.searchParams.get('result') || '';
     rawTitle = grade ? `${rawNickname} 님의 밸런스게임 유형은?` : `${rawNickname} 님의 선택은?`;
     rawDescription = result || '너라면 어떤 걸 고를래? 과몰입 연구소에서 확인해보세요 👉';

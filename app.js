@@ -4551,8 +4551,63 @@ function renderPsychtestResult() {
 
 /* ══════════════════════════════════════════════════
    ⚖️ 밸런스 게임 (v0.2.3~, Phase 4 수익화 로드맵 11-7)
-   - A/B 양자택일 + 다른 사람들의 선택 비율(현재는 더미, 추후 실데이터 연동)
+   - A/B 양자택일 + 다른 사람들의 실제 선택 비율(v0.6.0~ 실서버 집계)
+   - balance_responses(익명 insert) + balance_stats(집계 뷰), worldcup_votes/stats와 동일 패턴
+     (SQL은 사용자가 Supabase SQL Editor에서 직접 실행 필요 — 테이블 없으면 그냥 더미값만 보임)
 ══════════════════════════════════════════════════ */
+const BALANCE_MIN_SAMPLE = 5; /* percentile_cache/worldcup과 동일한 표본 게이트 사상 */
+
+/* balanceGames(스피드 A/B) 실시간 %용 — dummySplitA를 "가상 표본 100개"로 보고 실제 집계와 블렌딩,
+   표본이 적을 땐 더미가 지배하고 쌓일수록 실데이터가 지배함 */
+function balanceBlendPercent(dummyA, stats) {
+  const DUMMY_TOTAL = 100;
+  let realA = 0, realB = 0;
+  if (stats) {
+    const a = stats.find(s => s.choice === 'A');
+    const b = stats.find(s => s.choice === 'B');
+    realA = a ? Number(a.votes) : 0;
+    realB = b ? Number(b.votes) : 0;
+  }
+  const totalA = dummyA + realA;
+  const totalB = (DUMMY_TOTAL - dummyA) + realB;
+  const total = totalA + totalB;
+  return total > 0 ? Math.round((totalA / total) * 100) : dummyA;
+}
+
+/* 투표 1건 기록 — 실패해도 화면엔 영향 없도록 항상 catch (worldcupSubmitVote와 동일 패턴) */
+async function balanceSubmitVote(packId, questionId, choice) {
+  try {
+    if (!window.sb) return;
+    if (typeof ensureAnonSession === 'function') await ensureAnonSession();
+    await window.sb.from('balance_responses').insert({ pack_id: packId, question_id: questionId, choice });
+  } catch (e) {
+    console.error('밸런스게임 투표 기록 실패:', e);
+  }
+}
+
+/* pack_id+question_id 기준 A/B 집계 조회 — 테이블/뷰가 아직 없으면 조용히 null */
+async function balanceFetchStats(packId, questionId) {
+  try {
+    if (!window.sb) return null;
+    const { data, error } = await window.sb
+      .from('balance_stats')
+      .select('choice, votes')
+      .eq('pack_id', packId)
+      .eq('question_id', questionId);
+    if (error || !data) return null;
+    return data;
+  } catch (e) {
+    return null;
+  }
+}
+
+/* 내가 고른 쪽의 실제 비율이 낮을수록(소수의견일수록) 반응 문구 — 표본 부족 시 호출 측에서 걸러야 함 */
+function balanceMinorityReaction(myPercent) {
+  if (myPercent <= 20) return '🔥 <b class="text-amber-300">소수의견 반란군!</b> 대다수와 다른 길을 선택했어요';
+  if (myPercent <= 35) return '👀 <b class="text-amber-300">은근 희귀템</b> — 취향이 확고하시네요';
+  return '';
+}
+
 function initBalance() {
   App.state.balance = { gameId: null, picked: null };
   renderBalanceFeed();
@@ -4642,12 +4697,9 @@ function balancePick(gameId, choice) {
     `${location.origin}/share-cards/balance-${g.id}.jpg`,
     `${nickname} 님의 선택: ${pickedOpt.label}`, g.title, shareText);
 
-  /* 실제 집계는 추후 백엔드 연동 예정 — 지금은 이 기기의 선택 1표만 dummySplitA 기준값에 살짝 반영 */
-  const pickedA = parseInt(localStorage.getItem('balance_pickA_' + gameId) || '0', 10) + (choice === 'A' ? 1 : 0);
-  const pickedB = parseInt(localStorage.getItem('balance_pickB_' + gameId) || '0', 10) + (choice === 'B' ? 1 : 0);
-  localStorage.setItem('balance_pickA_' + gameId, pickedA);
-  localStorage.setItem('balance_pickB_' + gameId, pickedB);
-  const percentA = Math.round((g.dummySplitA * 100 + pickedA * 100) / (100 + pickedA + pickedB));
+  /* v0.6.0~: dummySplitA(가상 표본 100개)를 즉시 보여주고, 실제 Supabase 집계가 도착하면 블렌딩된 값으로
+     비동기 갱신 — 네트워크를 기다리지 않고 항상 바로 %가 보이면서 점점 정확해지는 구조 */
+  const percentA = g.dummySplitA;
 
   const container = document.getElementById('balance-container');
   container.innerHTML = `
@@ -4659,24 +4711,39 @@ function balancePick(gameId, choice) {
       </div>
 
       <div class="bg-slate-800 rounded-2xl p-5 mb-5">
-        <p class="text-slate-400 text-xs mb-2">다른 사람들의 선택 <span class="text-slate-600">(추후 실데이터 연동 예정 — 현재 더미 표시)</span></p>
+        <p class="text-slate-400 text-xs mb-2">다른 사람들의 선택</p>
         <div class="flex items-center gap-2 mb-1">
-          <span class="text-slate-100 text-sm font-bold w-10">${percentA}%</span>
+          <span class="text-slate-100 text-sm font-bold w-10" id="balance-bar-a">${percentA}%</span>
           <div class="flex-1 h-3 bg-slate-700 rounded-full overflow-hidden flex">
-            <div class="bg-emerald-500 h-full" style="width:${percentA}%"></div>
-            <div class="bg-rose-500 h-full" style="width:${100 - percentA}%"></div>
+            <div class="bg-emerald-500 h-full transition-all" id="balance-bar-fill-a" style="width:${percentA}%"></div>
+            <div class="bg-rose-500 h-full transition-all" id="balance-bar-fill-b" style="width:${100 - percentA}%"></div>
           </div>
-          <span class="text-slate-100 text-sm font-bold w-10 text-right">${100 - percentA}%</span>
+          <span class="text-slate-100 text-sm font-bold w-10 text-right" id="balance-bar-b">${100 - percentA}%</span>
         </div>
         <div class="flex justify-between text-xs text-slate-500">
           <span>${g.optionA.label}</span><span>${g.optionB.label}</span>
         </div>
+        <p id="balance-minority-reaction" class="text-xs mt-2"></p>
       </div>
 
       ${shareRow}
 
       <button onclick="renderBalanceFeed()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">목록으로</button>
     </div>`;
+
+  balanceSubmitVote(gameId, 'q1', choice);
+  balanceFetchStats(gameId, 'q1').then(stats => {
+    const barA = document.getElementById('balance-bar-a');
+    if (!barA) return; /* 이미 다른 화면으로 이동함 */
+    const finalPercentA = balanceBlendPercent(g.dummySplitA, stats);
+    barA.textContent = finalPercentA + '%';
+    document.getElementById('balance-bar-b').textContent = (100 - finalPercentA) + '%';
+    document.getElementById('balance-bar-fill-a').style.width = finalPercentA + '%';
+    document.getElementById('balance-bar-fill-b').style.width = (100 - finalPercentA) + '%';
+    const myPercent = choice === 'A' ? finalPercentA : 100 - finalPercentA;
+    const reactionEl = document.getElementById('balance-minority-reaction');
+    if (reactionEl) reactionEl.innerHTML = balanceMinorityReaction(myPercent);
+  });
 }
 
 /* ══════════════════════════════════════════════════
@@ -4688,7 +4755,7 @@ function balancePick(gameId, choice) {
 function balanceSpOpen(gameId) {
   const g = (AppData.balanceSpecials || []).find(x => x.id === gameId);
   if (!g) return;
-  App.state.balanceSp = { gameId, step: 0, score: 0 };
+  App.state.balanceSp = { gameId, step: 0, score: 0, answers: [] };
   const container = document.getElementById('balance-container');
   container.innerHTML = `
     <div class="max-w-lg mx-auto">
@@ -4712,7 +4779,7 @@ function balanceSpOpen(gameId) {
 
 function balanceSpStart(gameId) {
   bumpEngagement('balance-sp-' + gameId + '-plays');
-  App.state.balanceSp = { gameId, step: 0, score: 0 };
+  App.state.balanceSp = { gameId, step: 0, score: 0, answers: [] };
   renderBalanceSpQuestion();
 }
 
@@ -4733,7 +4800,7 @@ function renderBalanceSpQuestion() {
       <p class="text-slate-500 text-xs text-center mb-6">그나마 나은 쪽을 골라주세요 😈</p>
       <div class="grid grid-cols-2 gap-3 items-stretch">
         ${q.options.map((opt, i) => `
-        <button onclick="balanceSpAnswer(${opt.pt})" class="bg-slate-800 border border-slate-700 ${i === 0 ? 'hover:border-emerald-500' : 'hover:border-rose-500'} rounded-xl p-5 text-center transition flex flex-col items-center justify-start">
+        <button onclick="balanceSpAnswer(${i}, ${opt.pt})" class="bg-slate-800 border border-slate-700 ${i === 0 ? 'hover:border-emerald-500' : 'hover:border-rose-500'} rounded-xl p-5 text-center transition flex flex-col items-center justify-start">
           <div class="text-4xl mb-3">${opt.emoji}</div>
           <p class="text-slate-100 font-bold text-sm mb-2 leading-snug" style="word-break:keep-all">${opt.label}</p>
           <p class="text-slate-500 text-xs leading-snug" style="word-break:keep-all">${opt.desc}</p>
@@ -4742,11 +4809,16 @@ function renderBalanceSpQuestion() {
     </div>`;
 }
 
-function balanceSpAnswer(pt) {
+/* optIndex: 0(A카드)/1(B카드) — 문항별 실시간 집계용 pack_id+question_id+choice로 투표 기록(v0.6.0~) */
+function balanceSpAnswer(optIndex, pt) {
   const state = App.state.balanceSp;
+  const g = AppData.balanceSpecials.find(x => x.id === state.gameId);
+  const questionId = 'q' + (state.step + 1);
+  const choice = optIndex === 0 ? 'A' : 'B';
+  state.answers.push({ questionId, choice });
+  balanceSubmitVote(g.id, questionId, choice);
   state.score += pt;
   state.step++;
-  const g = AppData.balanceSpecials.find(x => x.id === state.gameId);
   if (state.step >= g.questions.length) {
     App.showLoader(() => renderBalanceSpResult());
   } else {
@@ -4788,6 +4860,8 @@ function renderBalanceSpResult() {
         </div>
       </div>
 
+      <p id="balance-sp-minority" class="text-amber-300 text-xs font-bold text-center mb-4"></p>
+
       ${shareRow}
 
       <p class="text-slate-600 text-xs text-center my-4">지금까지 ▷ ${engagementCount('balance-sp-' + g.id + '-plays', 180)}명이 플레이했어요 <span class="text-slate-700">(추후 실데이터 연동 예정)</span></p>
@@ -4797,6 +4871,33 @@ function renderBalanceSpResult() {
         <button onclick="renderBalanceFeed()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">목록으로</button>
       </div>
     </div>`;
+
+  /* v0.6.0~: 문항별 실서버 집계(balance_stats)를 조회해 이 유저의 답변 중 몇 개가 소수의견이었는지 계산 —
+     표본이 BALANCE_MIN_SAMPLE 미만인 문항은 비교 대상에서 제외(percentile_cache/worldcup과 동일한 표본 게이트),
+     실패해도 결과 화면 자체에는 영향 없도록 async IIFE로 분리 */
+  (async () => {
+    const finalState = App.state.balanceSp;
+    if (!finalState || finalState.gameId !== g.id) return;
+    const statsList = await Promise.all(finalState.answers.map(ans => balanceFetchStats(g.id, ans.questionId)));
+    let minorityCount = 0, comparedCount = 0;
+    finalState.answers.forEach((ans, idx) => {
+      const stats = statsList[idx];
+      if (!stats) return;
+      const a = stats.find(s => s.choice === 'A');
+      const b = stats.find(s => s.choice === 'B');
+      const votesA = a ? Number(a.votes) : 0, votesB = b ? Number(b.votes) : 0;
+      const total = votesA + votesB;
+      if (total < BALANCE_MIN_SAMPLE) return;
+      comparedCount++;
+      const myVotes = ans.choice === 'A' ? votesA : votesB;
+      if (myVotes / total <= 0.35) minorityCount++;
+    });
+    const el = document.getElementById('balance-sp-minority');
+    if (!el || comparedCount === 0 || minorityCount === 0) return;
+    el.textContent = minorityCount >= Math.ceil(comparedCount / 2)
+      ? `🔥 소수의견 반란군! ${comparedCount}문항 중 ${minorityCount}개가 남들과 다른 선택이었어요`
+      : `👀 ${comparedCount}문항 중 ${minorityCount}개는 은근 희귀한 선택이었어요`;
+  })();
 }
 
 /* ══════════════════════════════════════════════════
