@@ -14,8 +14,10 @@
   - **CLAUDE.md/index.html 버전 갱신**: v0.6.1→v0.6.2(index.html 상단 주석+사이드바 버전 표시), CLAUDE.md "이상형 월드컵" 행에 v0.6.2 내역 추가, 변경 이력 표에 v0.6.2 행 신설, 파일 구조 섹션에 `worldcup/packs/`·`generateWorldcupImages.js` 항목 추가.
   - **검증**: `node --check` 통과, 4개 팩 데이터-파일 개수 정합(32/32/16/16) 확인, imagePath 96개 전부 실재, 정적 서버 curl로 이미지 200 확인.
 
+- **공유→"나도 해보기" 클릭 시 빈 화면 버그 수정 (v0.6.3)**: 위 이미지 작업을 커밋+푸시한 직후, 사용자가 실제 카카오톡 공유 링크로 접속해 "나도 해보기"를 눌렀더니 헤더/푸터만 남고 본문이 완전히 빈 화면이 된다는 스크린샷을 제보. Playwright로 직접 재현(`sharedPreviewProceed()` 클릭까지) — 실제로는 `#worldcup-container` 안에 팩 인트로 화면이 정상 렌더링돼 있었는데, 부모 `#section-worldcup`이 `hidden` 상태로 남아 하나도 안 보이는 상태였음. 원인 추적 결과 `app.js` 최하단 `hashchange` 리스너가 쿼리스트링을 안 뗀 채 비교하고 있었음 — "나도 해보기" 클릭 시 `App.navigate('worldcup')`가 `location.hash`를 `'worldcup'`으로 바꾸며 비동기 `hashchange`를 예약한 직후, 같은 동기 흐름에서 `wcOpenIntro()`가 주소창 갱신용으로 `history.replaceState(...,'#worldcup?play=lazy-hell-32')`를 호출 — 이 조합이 겹치는 유일한 케이스(다른 15개 테스트는 이런 조합이 없음)라, 뒤늦게 온 `hashchange`가 이미 쿼리까지 붙은 해시를 통째로 섹션 id로 오인 → `App.navigate('worldcup?play=...')` 호출 → 전체 섹션을 숨긴 뒤 존재하지 않는 id를 못 찾아 그대로 멈춤. 초기 라우팅 코드와 동일하게 `.split('?')[0]`로 쿼리를 떼어내는 한 줄 수정으로 해결. **검증**: `node --check` 통과, Playwright로 (a) 수정 전 버그 재현(`section-worldcup hidden:true` 확인) (b) 수정 후 동일 플로우 정상 동작(`hidden:false`+인트로 화면 노출) (c) 일반 내비게이션(`navigate('mbti')`/`navigate('home')`)·월드컵 카드 "시작하기" 직접 클릭·브라우저 뒤로가기 전부 회귀 없음 확인.
+
 ### 다음 세션 시작점
-- 이상형 월드컵 팩 3~6(이미지형)은 이제 전부 실사진/생성이미지 완료 상태 — 남은 후속은 실사용 반응 모니터링(역배 토스트/랭킹 100판 임계치) 정도.
+- 이상형 월드컵 팩 3~6(이미지형)은 이제 전부 실사진/생성이미지 완료 상태이고, 공유→"나도 해보기" 진입 버그도 수정됨 — 남은 후속은 실사용 반응 모니터링(역배 토스트/랭킹 100판 임계치) 정도.
 - `[[project_roadmap_priority_2026-07]]` 메모리 갱신 필요(다음 우선순위 재확인).
 
 ---

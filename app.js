@@ -7460,9 +7460,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   App.navigate(hash in sectionInits ? hash : 'home');
 
-  /* ── hashchange 이벤트 (뒤로가기/앞으로가기) ── */
+  /* ── hashchange 이벤트 (뒤로가기/앞으로가기) ──
+     쿼리스트링(?play=... 등)은 떼어내고 섹션 id만 비교할 것 — 안 떼면 월드컵처럼
+     App.navigate() 직후 history.replaceState로 쿼리를 붙이는 화면에서, 그 사이에 비동기로
+     날아오는 hashchange가 "worldcup?play=xxx"를 통째로 섹션 id로 오인해 존재하지 않는
+     엘리먼트를 찾다 실패 → 화면이 전부 hidden된 채로 멈추는 버그가 있었음(v0.6.2에서 발견·수정) */
   window.addEventListener('hashchange', () => {
-    const h = location.hash.replace('#', '') || 'home';
+    const h = (location.hash.replace('#', '') || 'home').split('?')[0];
     if (h !== App.state.currentSection) App.navigate(h);
   });
 });
