@@ -2,12 +2,20 @@
   "id": "drunk-mbti",
   "title": "취중 MBTI 테스트",
   "description": "술 들어가면 튀어나오는 인격, 우는 술 · 시비 술 · 잠수 술 중 나는?",
-  "hashtags": ["취중MBTI", "심리테스트", "술자리밈", "MBTI밈"],
+  "hashtags": [
+    "취중MBTI",
+    "심리테스트",
+    "술자리밈",
+    "MBTI밈"
+  ],
   "theme": "neon",
   "cover_image": "assets/cover.webp",
   "seed_count": 194280,
   "scoring_type": "mbti4",
-  "loading": { "text": "취중 인격 분석 중..", "duration_ms": 2000 },
+  "loading": {
+    "text": "취중 인격 분석 중..",
+    "duration_ms": 2000
+  },
   "related": [],
   "resultTemplate": {
     "title": "취중 인격: {code}",
@@ -21,22 +29,118 @@
     "tip": "무대 위 스타 같은 타입, 근데 다음 날은 조용히 흑역사 정리하자"
   },
   "questions": [
-    { "text": "술 들어가면 나는?", "image": "assets/question/bottle.svg",
-      "choices": [{ "label": "더 시끄럽고 활발해짐", "axis": "E" }, { "label": "조용해지거나 잠수", "axis": "I" }] },
-    { "text": "취하면 연락 패턴?", "image": null,
-      "choices": [{ "label": "아무한테나 전화·톡 돌림", "axis": "E" }, { "label": "폰 꺼놓고 혼자", "axis": "I" }] },
-    { "text": "취중 대화 주제는?", "image": "assets/question/speech-bubble.svg",
-      "choices": [{ "label": "인생·우주·미래 얘기", "axis": "N" }, { "label": "오늘 있었던 팩트 얘기", "axis": "S" }] },
-    { "text": "술자리에서 나는?", "image": null,
-      "choices": [{ "label": "\"우리 왜 사는 걸까\" 철학", "axis": "N" }, { "label": "\"이 안주 맛있다\" 현실", "axis": "S" }] },
-    { "text": "취하면 감정 상태는?", "image": "assets/question/moon-tear.svg",
-      "choices": [{ "label": "팩트 폭격·시비", "axis": "T" }, { "label": "울거나 사랑 고백", "axis": "F" }] },
-    { "text": "취중 진담은?", "image": null,
-      "choices": [{ "label": "\"솔직히 말해서 넌...\" 팩폭", "axis": "T" }, { "label": "\"내가 널 얼마나...\" 눈물", "axis": "F" }] },
-    { "text": "술자리 마무리는?", "image": null,
-      "choices": [{ "label": "2차·3차 계획 짜는 사람", "axis": "J" }, { "label": "흐름대로 될대로", "axis": "P" }] },
-    { "text": "다음 날 아침?", "image": null,
-      "choices": [{ "label": "어제 한 말·자리 다 기억+정산", "axis": "J" }, { "label": "필름 끊김, 몰라", "axis": "P" }] }
+    {
+      "text": "술이 슬슬 들어가기 시작하면, 나는 어떻게 변할까?",
+      "image": "assets/question/bottle.svg",
+      "choices": [
+        {
+          "label": "목소리 커지고 아무나 붙잡고 건배 제안함",
+          "axis": "E"
+        },
+        {
+          "label": "점점 말수 줄다가 조용히 스르륵 사라짐",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "취했을 때 내 폰에서는 무슨 일이 벌어지고 있을까?",
+      "image": null,
+      "choices": [
+        {
+          "label": "전화번호부 위에서부터 안부 전화 돌리는 중",
+          "axis": "E"
+        },
+        {
+          "label": "방해금지 모드 켜고 혼자만의 세계로 잠수",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "취중 대화, 정신 차려보면 나는 무슨 얘기를 하고 있을까?",
+      "image": "assets/question/speech-bubble.svg",
+      "choices": [
+        {
+          "label": "인생이란 뭘까, 우주, 전생 같은 얘기로 빠져 있음",
+          "axis": "N"
+        },
+        {
+          "label": "오늘 있었던 일 팩트 위주로 브리핑하는 중",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "술자리에 안주가 새로 나왔다. 내 반응은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "\"근데 우리는 왜 사는 걸까\" 갑자기 철학 모드",
+          "axis": "N"
+        },
+        {
+          "label": "\"와 이 안주 미쳤다\" 지금 이 순간에 집중",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "취기가 확 오르면 내 감정은 어느 쪽으로 터질까?",
+      "image": "assets/question/moon-tear.svg",
+      "choices": [
+        {
+          "label": "\"내가 팩트만 말할게\" 팩트 폭격기 가동",
+          "axis": "T"
+        },
+        {
+          "label": "울면서 \"너희들 진짜 사랑해\" 고백 시작",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "취중진담 타임이 왔다. 내 입에서 나오는 말은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "\"솔직히 너 그건 고쳐야 돼\" 돌직구 발사",
+          "axis": "T"
+        },
+        {
+          "label": "\"내가 너를 얼마나 아끼는지 알아?\" 눈물의 고백",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "슬슬 자리가 끝나가는 분위기. 이때 나는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "\"2차는 저기, 3차는 노래방\" 이미 동선 다 짜놓음",
+          "axis": "J"
+        },
+        {
+          "label": "흘러가는 대로, 될 대로 되라지~",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "다음 날 아침 눈을 뜨면 나는 어떤 상태일까?",
+      "image": null,
+      "choices": [
+        {
+          "label": "어제 한 말과 쓴 돈까지 전부 기억하고 정산 완료",
+          "axis": "J"
+        },
+        {
+          "label": "필름 완전 끊김. 나 어제 집에 어떻게 왔지?",
+          "axis": "P"
+        }
+      ]
+    }
   ],
   "results": []
 }

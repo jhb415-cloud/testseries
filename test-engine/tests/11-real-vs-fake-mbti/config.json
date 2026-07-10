@@ -2,12 +2,20 @@
   "id": "real-vs-fake-mbti",
   "title": "찐 MBTI vs 겉 MBTI 판별기 (겉바속촉)",
   "description": "남들이 보는 나 8문항 + 진짜 내 속마음 8문항, 겉과 속의 MBTI가 정말 같을까?",
-  "hashtags": ["겉바속촉", "심리테스트", "MBTI", "본캐부캐"],
+  "hashtags": [
+    "겉바속촉",
+    "심리테스트",
+    "MBTI",
+    "본캐부캐"
+  ],
   "theme": "scrapbook",
   "cover_image": "assets/cover.webp",
   "seed_count": 227340,
   "scoring_type": "mbti4_dual",
-  "loading": { "text": "겉과 속의 온도차 측정 중..", "duration_ms": 2200 },
+  "loading": {
+    "text": "겉과 속의 온도차 측정 중..",
+    "duration_ms": 2200
+  },
   "related": [],
   "resultTemplate": {
     "title": "겉 {outer} / 속 {inner}",
@@ -21,38 +29,246 @@
     "tip": "겉과 속이 다르다고 가짜인 건 아니야, 둘 다 진짜 너야"
   },
   "questions": [
-    { "text": "처음 보는 모임에서 남들 눈에 나는?", "block": "outer", "image": "assets/question/polaroid-smile.svg",
-      "choices": [{ "label": "먼저 말 거는 사람", "axis": "E" }, { "label": "조용히 있는 사람", "axis": "I" }] },
-    { "text": "남들이 평가하는 내 이미지는?", "block": "outer", "image": null,
-      "choices": [{ "label": "활발·에너지 넘침", "axis": "E" }, { "label": "차분·과묵", "axis": "I" }] },
-    { "text": "회의/모임에서 남들이 보는 나?", "block": "outer", "image": null,
-      "choices": [{ "label": "아이디어 막 던짐", "axis": "N" }, { "label": "현실적인 말 함", "axis": "S" }] },
-    { "text": "남들이 생각하는 내 대화 스타일?", "block": "outer", "image": null,
-      "choices": [{ "label": "상상·가능성 얘기 많음", "axis": "N" }, { "label": "구체적 사실 위주", "axis": "S" }] },
-    { "text": "갈등 상황에서 남들이 보는 나?", "block": "outer", "image": "assets/question/washi-tape.svg",
-      "choices": [{ "label": "논리로 딱 자름", "axis": "T" }, { "label": "공감부터 함", "axis": "F" }] },
-    { "text": "남들이 나에게 조언 구할 때 기대하는 건?", "block": "outer", "image": null,
-      "choices": [{ "label": "냉정한 팩트", "axis": "T" }, { "label": "따뜻한 위로", "axis": "F" }] },
-    { "text": "남들이 보는 내 생활 방식?", "block": "outer", "image": null,
-      "choices": [{ "label": "계획적·정리됨", "axis": "J" }, { "label": "즉흥적·자유로움", "axis": "P" }] },
-    { "text": "약속에 대해 남들이 아는 내 모습?", "block": "outer", "image": null,
-      "choices": [{ "label": "시간 칼같이 지킴", "axis": "J" }, { "label": "유동적임", "axis": "P" }] },
-    { "text": "사실 사람들 만나고 나면?", "block": "inner", "image": "assets/question/polaroid-blush.svg",
-      "choices": [{ "label": "더 에너지 참", "axis": "E" }, { "label": "방전돼서 혼자 충전 필요", "axis": "I" }] },
-    { "text": "진짜 편한 상태는?", "block": "inner", "image": null,
-      "choices": [{ "label": "사람들 사이", "axis": "E" }, { "label": "혼자 있을 때", "axis": "I" }] },
-    { "text": "혼자 있을 때 진짜 생각은?", "block": "inner", "image": null,
-      "choices": [{ "label": "온갖 상상·미래 시뮬", "axis": "N" }, { "label": "오늘 할 일·현실", "axis": "S" }] },
-    { "text": "뭔가 결정할 때 진짜 기준은?", "block": "inner", "image": null,
-      "choices": [{ "label": "직감·큰그림", "axis": "N" }, { "label": "경험·데이터", "axis": "S" }] },
-    { "text": "겉으론 웃어도 속으론?", "block": "inner", "image": "assets/question/notebook-heart.svg",
-      "choices": [{ "label": "이해득실 계산 중", "axis": "T" }, { "label": "상대 기분 신경", "axis": "F" }] },
-    { "text": "진짜 상처받는 순간은?", "block": "inner", "image": null,
-      "choices": [{ "label": "논리적으로 틀렸다 할 때", "axis": "T" }, { "label": "마음 몰라줄 때", "axis": "F" }] },
-    { "text": "실제 내 방/일상은?", "block": "inner", "image": null,
-      "choices": [{ "label": "나름의 체계 있음", "axis": "J" }, { "label": "정리는 언젠가...", "axis": "P" }] },
-    { "text": "진짜 나는 마감/계획을?", "block": "inner", "image": null,
-      "choices": [{ "label": "미리 끝냄", "axis": "J" }, { "label": "닥쳐야 함", "axis": "P" }] }
+    {
+      "text": "처음 보는 사람들 모임에 갔다. 남들 눈에 비친 나는 어떤 모습일까?",
+      "block": "outer",
+      "image": "assets/question/polaroid-smile.svg",
+      "choices": [
+        {
+          "label": "먼저 말 걸고 분위기 트는 사람 (인싸 소리 들음)",
+          "axis": "E"
+        },
+        {
+          "label": "조용히 웃으면서 리액션만 하는 사람",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "주변 사람들한테 \"나 어떤 사람이야?\" 물어보면 뭐라고 답이 올까?",
+      "block": "outer",
+      "image": null,
+      "choices": [
+        {
+          "label": "에너지 넘치고 활발하다는 말이 먼저 나옴",
+          "axis": "E"
+        },
+        {
+          "label": "차분하고 진중하다는 말이 먼저 나옴",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "회의나 모임에서 아이디어 얘기가 나올 때, 남들이 보는 나는?",
+      "block": "outer",
+      "image": null,
+      "choices": [
+        {
+          "label": "\"이런 것도 되지 않을까?\" 아이디어 막 던지는 스타일",
+          "axis": "N"
+        },
+        {
+          "label": "\"그래서 예산은? 일정은?\" 현실 체크 담당",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "사람들이 기억하는 내 대화 스타일은 어느 쪽에 가까울까?",
+      "block": "outer",
+      "image": null,
+      "choices": [
+        {
+          "label": "\"만약에~\" 상상이랑 가능성 얘기로 흘러가는 편",
+          "axis": "N"
+        },
+        {
+          "label": "실제 있었던 일, 구체적인 팩트 위주로 말하는 편",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "친구들 사이에 갈등이 터졌다. 이때 남들이 보는 나는?",
+      "block": "outer",
+      "image": "assets/question/washi-tape.svg",
+      "choices": [
+        {
+          "label": "상황 정리해서 논리로 딱 잘라주는 판사 역할",
+          "axis": "T"
+        },
+        {
+          "label": "\"그래서 마음은 괜찮아?\" 양쪽 다 다독이는 역할",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "사람들이 나한테 고민 상담하러 올 때, 사실 기대하는 건 뭘까?",
+      "block": "outer",
+      "image": null,
+      "choices": [
+        {
+          "label": "돌려 말하지 않는 냉정한 팩트와 해결책",
+          "axis": "T"
+        },
+        {
+          "label": "\"네 잘못 아니야\" 따뜻한 공감과 위로",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "남들이 알고 있는 내 평소 생활 방식은?",
+      "block": "outer",
+      "image": null,
+      "choices": [
+        {
+          "label": "계획표대로 움직이는 갓생러 이미지",
+          "axis": "J"
+        },
+        {
+          "label": "그때그때 끌리는 대로 사는 자유영혼 이미지",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "약속 시간에 대해 사람들이 아는 내 모습은?",
+      "block": "outer",
+      "image": null,
+      "choices": [
+        {
+          "label": "10분 전 도착이 국룰인 사람",
+          "axis": "J"
+        },
+        {
+          "label": "\"미안 5분만!\"이 익숙한 사람",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "자, 이제 진짜 속마음 차례. 사람들 실컷 만나고 집에 오면 나는?",
+      "block": "inner",
+      "image": "assets/question/polaroid-blush.svg",
+      "choices": [
+        {
+          "label": "\"오늘 재밌었다~\" 오히려 에너지가 차오름",
+          "axis": "E"
+        },
+        {
+          "label": "현관문 닫는 순간 방전, 혼자 충전 필요",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "아무도 안 볼 때, 내가 진짜로 편한 상태는?",
+      "block": "inner",
+      "image": null,
+      "choices": [
+        {
+          "label": "그래도 누군가랑 같이 있을 때가 편함",
+          "axis": "E"
+        },
+        {
+          "label": "혼자 침대에 누워서 폰 볼 때가 제일 편함",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "혼자 멍때릴 때 머릿속에선 무슨 생각이 돌아가고 있을까?",
+      "block": "inner",
+      "image": null,
+      "choices": [
+        {
+          "label": "온갖 상상과 미래 시뮬레이션이 자동 재생됨",
+          "axis": "N"
+        },
+        {
+          "label": "내일 할 일, 통장 잔고 같은 현실 걱정",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "뭔가 결정해야 할 때, 남들은 모르는 진짜 내 기준은?",
+      "block": "inner",
+      "image": null,
+      "choices": [
+        {
+          "label": "왠지 이게 맞을 것 같은 직감과 큰그림",
+          "axis": "N"
+        },
+        {
+          "label": "지금까지의 경험이랑 눈에 보이는 데이터",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "겉으론 웃고 있어도 속으로는 사실…?",
+      "block": "inner",
+      "image": "assets/question/notebook-heart.svg",
+      "choices": [
+        {
+          "label": "이게 나한테 득인지 실인지 계산 돌리는 중",
+          "axis": "T"
+        },
+        {
+          "label": "혹시 저 사람 기분 상했나 눈치 보는 중",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "내가 진짜로 상처받는 순간은 언제일까?",
+      "block": "inner",
+      "image": null,
+      "choices": [
+        {
+          "label": "내 논리가 틀렸다고 지적당했을 때",
+          "axis": "T"
+        },
+        {
+          "label": "내 마음을 아무도 몰라준다고 느낄 때",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "남들은 모르는 실제 내 방과 일상은?",
+      "block": "inner",
+      "image": null,
+      "choices": [
+        {
+          "label": "어질러 보여도 나름의 체계가 다 있음",
+          "axis": "J"
+        },
+        {
+          "label": "정리는 언젠가 한다… 언젠가는…",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "마감이나 계획 앞에서 진짜 나는?",
+      "block": "inner",
+      "image": null,
+      "choices": [
+        {
+          "label": "불안해서라도 미리 끝내놔야 발 뻗고 잠",
+          "axis": "J"
+        },
+        {
+          "label": "마감 전날 밤의 나를 믿는다",
+          "axis": "P"
+        }
+      ]
+    }
   ],
   "results": []
 }

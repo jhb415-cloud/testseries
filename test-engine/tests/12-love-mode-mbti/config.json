@@ -1,13 +1,21 @@
 {
   "id": "love-mode-mbti",
   "title": "연애하면 바뀌는 내 MBTI",
-  "description": "평소 성격 말고, 연애할 때만 튀어나오는 진짜 MBTI는 따로 있다",
-  "hashtags": ["연애MBTI", "심리테스트", "연애유형", "MBTI밈"],
+  "description": "평소엔 안 그러는데 연애만 하면 딴사람 된다? 썸 탈 때부터 싸울 때, 기념일까지 — 연애할 때만 튀어나오는 진짜 내 연애 인격을 8가지 상황으로 확인해보자",
+  "hashtags": [
+    "연애MBTI",
+    "심리테스트",
+    "연애유형",
+    "MBTI밈"
+  ],
   "theme": "papercut",
   "cover_image": "assets/cover.webp",
   "seed_count": 219450,
   "scoring_type": "mbti4",
-  "loading": { "text": "연애 모드 MBTI 분석 중..", "duration_ms": 2000 },
+  "loading": {
+    "text": "연애 모드 MBTI 분석 중..",
+    "duration_ms": 2000
+  },
   "related": [],
   "resultTemplate": {
     "title": "연애 모드: {code}",
@@ -21,22 +29,118 @@
     "tip": "사랑 앞에서 무너지는 타입, 그거 은근 매력이야"
   },
   "questions": [
-    { "text": "좋아하는 사람이 생기면?", "image": "assets/question/mask-peel.svg",
-      "choices": [{ "label": "적극적으로 다가감", "axis": "E" }, { "label": "티 안 내고 속으로", "axis": "I" }] },
-    { "text": "연애 중 주말 데이트는?", "image": null,
-      "choices": [{ "label": "밖에서 활동적으로", "axis": "E" }, { "label": "집에서 둘이 오붓하게", "axis": "I" }] },
-    { "text": "연인의 고민을 들을 때?", "image": null,
-      "choices": [{ "label": "해결책·조언", "axis": "T" }, { "label": "일단 공감·위로", "axis": "F" }] },
-    { "text": "연인과 싸웠을 때?", "image": null,
-      "choices": [{ "label": "논리적으로 따짐", "axis": "T" }, { "label": "감정이 앞섬", "axis": "F" }] },
-    { "text": "연애할 때 나는 미래를?", "image": "assets/question/torn-heart.svg",
-      "choices": [{ "label": "결혼·먼 그림 상상", "axis": "N" }, { "label": "지금 이 순간 위주", "axis": "S" }] },
-    { "text": "연인에게 사랑 표현은?", "image": null,
-      "choices": [{ "label": "추상적·로맨틱하게", "axis": "N" }, { "label": "구체적 행동·선물로", "axis": "S" }] },
-    { "text": "데이트 계획은?", "image": "assets/question/scissors-cut.svg",
-      "choices": [{ "label": "미리 코스 다 짬", "axis": "J" }, { "label": "그날 기분따라", "axis": "P" }] },
-    { "text": "기념일은?", "image": null,
-      "choices": [{ "label": "미리 챙기고 준비", "axis": "J" }, { "label": "당일 즉흥적으로", "axis": "P" }] }
+    {
+      "text": "좋아하는 사람이 생기면, 난 어떻게 하지?",
+      "image": "assets/question/mask-peel.svg",
+      "choices": [
+        {
+          "label": "일단 자주 마주치게 만들고 적극적으로 다가감",
+          "axis": "E"
+        },
+        {
+          "label": "티 안 내고 그 사람 SNS만 하루 12번 들어감",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "연애 중 주말 데이트, 내가 원하는 그림은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "핫플 찾아다니면서 밖에서 활동적으로 노는 데이트",
+          "axis": "E"
+        },
+        {
+          "label": "집에서 배달 시켜놓고 둘이 오붓하게 뒹굴기",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "연인이 힘들다며 고민을 털어놓는다. 내 첫 반응은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "\"그건 이렇게 하면 되잖아\" 해결책부터 나감",
+          "axis": "T"
+        },
+        {
+          "label": "\"헐, 진짜 힘들었겠다\" 일단 공감부터 함",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "연인과 싸웠다. 이때 나는 어떤 모습일까?",
+      "image": null,
+      "choices": [
+        {
+          "label": "\"아까 네 말은 앞뒤가 안 맞아\" 조목조목 따짐",
+          "axis": "T"
+        },
+        {
+          "label": "논리고 뭐고 서운한 감정이 먼저 터져 나옴",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "연애할 때 나는 우리의 미래를 어떻게 그릴까?",
+      "image": "assets/question/torn-heart.svg",
+      "choices": [
+        {
+          "label": "벌써 결혼식장에 신혼집 인테리어까지 상상 완료",
+          "axis": "N"
+        },
+        {
+          "label": "먼 미래보다 지금 이 순간이 좋으면 그걸로 충분",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "연인에게 사랑을 표현할 때 나는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "\"너는 나한테 우주야\" 추상적이고 로맨틱한 말로",
+          "axis": "N"
+        },
+        {
+          "label": "말보다 행동 — 좋아하던 그 빵 말없이 사다주기",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "데이트 약속이 잡혔다. 만나기 전까지 나는?",
+      "image": "assets/question/scissors-cut.svg",
+      "choices": [
+        {
+          "label": "맛집 예약에 동선, 2차 카페까지 코스 완성해둠",
+          "axis": "J"
+        },
+        {
+          "label": "일단 만나서 그날 기분 따라 정하면 되지",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "다가오는 기념일, 나는 어떤 타입일까?",
+      "image": null,
+      "choices": [
+        {
+          "label": "몇 주 전부터 선물이랑 이벤트 몰래 준비하는 타입",
+          "axis": "J"
+        },
+        {
+          "label": "당일 아침에 \"헉\" 하고 급하게 움직이는 타입",
+          "axis": "P"
+        }
+      ]
+    }
   ],
   "results": []
 }
