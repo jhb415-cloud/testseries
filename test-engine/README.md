@@ -102,17 +102,28 @@ test-engine/
 
 ## 이미지 생성 2단계 워크플로우 (2026-07-10~)
 OpenAI(`gpt-image-1`) 단독 생성 품질이 부족하다고 판단해, 스타일 탐색과 프로덕션 생성을 분리했다.
+비용을 최소화하려고 두 가지 경로를 준비해뒀다 — **기본값은 A(사실상 무료)**, B는 전액 자동화가
+필요할 때만 쓰는 대안(결제 필요).
 
-1. **스타일 탐색(수동)**: Claude가 컨셉+포터블 프롬프트를 제안 → 사용자가 Midjourney 등 외부 툴로
-   직접 샘플을 뽑아보고 마음에 드는 스타일을 확정(공식 API가 없어 자동화하지 않음).
-2. **프로덕션 자동화**: 확정한 레퍼런스 이미지를 `tests/{testId}/assets/reference/`에 넣고
-   `node test-engine/scripts/generate-assets-gemini.js {testId}`로 나머지 결과 세트를 일괄 생성
-   (Nano Banana Pro / `gemini-3-pro-image-preview`, 참조 이미지 최대 8장까지 블렌딩).
-   `GEMINI_API_KEY` 필요(Codespaces Secrets에 등록됨) — **단, 이 모델은 무료 티어가 없어 키가 속한
-   Google Cloud 프로젝트에 결제가 활성화되어 있어야 실제로 이미지가 생성된다**(2026-07-10 실측:
-   결제 미활성 상태에서 `429 RESOURCE_EXHAUSTED` 확인, API 호출 구조 자체는 정상 검증됨).
-3. 기존 `generate-assets.js`(OpenAI)는 그대로 남겨둠 — mental-age 등 이미 생성된 자산과 무관하며,
-   `reference/` 없이 텍스트 프롬프트만으로 빠르게 뽑아야 할 때는 계속 쓸 수 있다.
+**A. 무료 레퍼런스 + OpenAI 배치 생성 (기본, 사실상 무료)**
+1. **스타일 탐색(수동, 무료)**: Claude가 컨셉+포터블 프롬프트를 제안 → 사용자가 Gemini 무료 채팅
+   (gemini.google.com, API 아닌 소비자용 앱이라 결제 없이 사용 가능) 등 외부 툴로 레퍼런스 이미지
+   1장을 직접 뽑아 전달.
+2. 받은 레퍼런스 이미지를 `tests/{testId}/assets/reference/`에 넣고
+   `node test-engine/scripts/generate-assets.js {testId}` 실행 — `reference/`가 있으면 자동으로
+   OpenAI `images/edits`(레퍼런스 이미지 최대 16장 입력, 스타일 전이 지원)로 그 스타일을 참조해
+   나머지 세트를 생성한다. `reference/`가 없으면 기존처럼 순수 텍스트 생성(`images/generations`)
+   그대로 동작(하위호환, mental-age 등 기존 자산 무변경). 이미 등록된 `OPENAI_API_KEY`만 있으면 되고
+   신규 결제 설정 불필요, 건당 수 센트 수준(2026-07-10 실측: images/edits 200 OK 확인).
+
+**B. 전액 자동화(참고용, 결제 필요) — `generate-assets-gemini.js`**
+스타일 탐색까지 사람이 개입하지 않고 완전 자동으로 돌리고 싶을 때의 대안. 확정한 레퍼런스 이미지를
+`tests/{testId}/assets/reference/`에 넣고 `node test-engine/scripts/generate-assets-gemini.js {testId}`로
+나머지 결과 세트를 일괄 생성(Nano Banana Pro / `gemini-3-pro-image-preview`, 참조 이미지 최대 8장까지
+블렌딩). `GEMINI_API_KEY` 필요(Codespaces Secrets에 등록됨) — **단, 이 모델은 무료 티어가 없어 키가
+속한 Google Cloud 프로젝트에 결제가 활성화되어 있어야 실제로 이미지가 생성된다**(2026-07-10 실측:
+결제 미활성 상태에서 `429 RESOURCE_EXHAUSTED` 확인, API 호출 구조 자체는 정상 검증됨). 현재는 A로
+충분해 실사용 우선순위는 낮음.
 
 ## 알려진 제약 / 다음 단계
 - `axis` 채점은 스키마와 분기 로직만 준비되어 있고, 실제 콘텐츠는 아직 없습니다 (2호 MBTI형 테스트 예정).
