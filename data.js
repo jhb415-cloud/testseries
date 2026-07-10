@@ -5151,7 +5151,7 @@ window.AppData = {
     {
       id: 'k-office-type', title: '회사에서 나는 무슨 K-직장인 유형?', emoji: '💼',
       hook: '조용한퇴사형부터 오피스인싸형까지, 8문항으로 알아보는 진짜 회사 부캐',
-      url: '/test-engine/tests/k-office-type/index.html',
+      url: '/test-engine/tests/1-k-office-type/index.html',
       engagementKey: 'site-koffice-plays',
       addedAt: '2026-07-10', isNew: true,
     },

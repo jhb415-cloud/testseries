@@ -65,11 +65,18 @@
 
 ## 4-3. 폴더 생성
 ```
-/test-engine/tests/{test_id}/
-  index.html   (기존 완성 테스트의 index.html 복사 후 id만 교체)
+/test-engine/tests/{number}-{test_id}/
+  index.html   (기존 완성 테스트의 index.html 복사 후 data-test-id만 교체)
   config.json
   assets/
 ```
+**폴더명은 `tests/index.json`의 `number` 필드를 앞에 붙인다**(예: `1-k-office-type`,
+`11-real-vs-fake-mbti`, 2026-07-10 사용자 요청 — 파일 탐색기에서 순서 파악이 쉽도록).
+`number`가 없는 mental-age(20개 목록 이전 1호 콘텐츠)만 예외. **주의**: 폴더명이 곧
+공개 URL 경로(`/test-engine/tests/{폴더명}/index.html`)이므로, 폴더를 만든 뒤에
+번호가 바뀌는 일이 없도록 착수 전 `index.json`에서 번호를 먼저 확정할 것 — `config.json`
+내부의 `"id"` 필드나 `index.html`의 `data-test-id`는 번호 없는 순수 test_id 그대로 유지
+(localStorage 완료 카운터 키 등에 쓰이므로 폴더명과 다르게 둬도 무방, 실제로도 다름).
 기존 엔진 파일(engine.js/engine.css/themes/*)은 절대 수정하지 않는다.
 
 ## 4-4. 이미지 — 샘플 우선 승인 절차 (★ 핵심, 항상 준수)
