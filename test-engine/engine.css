@@ -1,0 +1,232 @@
+/* test-engine v2 (STEP 2) | engine.css — 테마 무관 공통 레이아웃(골격) */
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #f5f5f5;
+}
+
+#test-engine-root, .te-app {
+  box-sizing: border-box;
+}
+#test-engine-root *, #test-engine-root *::before, #test-engine-root *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --te-max-width: 500px;
+  --te-footer-height: 132px;
+}
+
+.te-app {
+  max-width: var(--te-max-width);
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+}
+
+.te-has-fixed-footer {
+  padding-bottom: var(--te-footer-height);
+}
+
+/* 하단 고정 액션 바 — 모바일 풀폭에서도 항상 최대 500px 폭을 유지하며 중앙정렬 */
+.te-choices-fixed {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--te-max-width);
+  padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10;
+}
+
+.te-btn {
+  min-height: 56px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  padding: 12px 16px;
+  line-height: 1.35;
+}
+
+.te-btn-choice {
+  min-height: 64px;
+  text-align: left;
+}
+
+.te-progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+.te-progress-fill {
+  height: 100%;
+  background: currentColor;
+  transition: width 0.25s ease;
+}
+.te-progress-anim {
+  width: 0%;
+  animation-name: te-progress-fill-anim;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes te-progress-fill-anim {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+.te-intro-cover,
+.te-result-img,
+.te-question-img {
+  width: 100%;
+  display: block;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  padding: 16px 20px;
+  flex: 1;
+}
+
+.te-title { font-size: 22px; margin: 8px 0; }
+.te-desc { font-size: 15px; line-height: 1.5; }
+.te-chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.te-chip { font-size: 12px; padding: 4px 10px; border-radius: 999px; background: rgba(0, 0, 0, 0.06); }
+
+.te-question-counter { font-size: 13px; opacity: 0.7; margin: 0 0 8px; }
+.te-question-text { font-size: 20px; line-height: 1.4; margin: 8px 0 20px; }
+
+.te-loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  text-align: center;
+  gap: 16px;
+}
+.te-spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top-color: currentColor;
+  animation: te-spin 0.8s linear infinite;
+}
+@keyframes te-spin {
+  to { transform: rotate(360deg); }
+}
+
+.te-result-title { font-size: 24px; margin: 12px 0 4px; }
+.te-result-subtitle { font-size: 15px; opacity: 0.8; margin: 0 0 16px; }
+.te-result-traits { padding-left: 20px; margin: 0 0 16px; }
+.te-result-traits li { margin-bottom: 6px; }
+.te-result-tip { font-size: 14px; opacity: 0.85; }
+.te-save-hint { font-size: 13px; text-align: center; opacity: 0.6; margin-top: 12px; }
+.te-seen-count { text-align: center; font-size: 13px; margin: 8px 0 0; opacity: 0.8; }
+
+.te-error { text-align: center; padding: 40px 20px; }
+
+/* 결과 화면은 버튼이 3개(다시하기/공유하기/이미지 저장)라 하단 여백을 더 확보 */
+.te-screen-result.te-has-fixed-footer {
+  padding-bottom: 210px;
+}
+
+.te-btn-accent {
+  background: #D85A30;
+  color: #fff;
+}
+
+/* 관련 테스트 배너 — config.related가 비어있으면 컨테이너 자체가 렌더되지 않음 */
+.te-related {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+.te-related-label {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+.te-related-list {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+.te-related-item {
+  flex: 0 0 auto;
+  width: 120px;
+  text-decoration: none;
+  color: inherit;
+  font-size: 13px;
+  text-align: center;
+}
+.te-related-thumb {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* 결과 공유카드 저장 모달 */
+.te-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1000;
+}
+.te-modal-card {
+  background: #fff;
+  color: #111;
+  border-radius: 16px;
+  max-width: 360px;
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.te-modal-img {
+  width: 100%;
+  border-radius: 10px;
+  display: block;
+}
+.te-modal-hint {
+  font-size: 13px;
+  text-align: center;
+  opacity: 0.75;
+  margin: 0;
+}
+.te-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <circle cx="150" cy="150" r="120" fill="#ffeaa7"/>
+  <circle cx="150" cy="160" r="80" fill="#fdcb6e"/>
+  <circle cx="120" cy="150" r="10" fill="#2d3436"/>
+  <circle cx="180" cy="150" r="10" fill="#2d3436"/>
+  <path d="M115 185 Q150 215 185 185" stroke="#2d3436" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <polygon points="150,40 170,80 130,80" fill="#e17055"/>
+  <circle cx="150" cy="35" r="8" fill="#fab1a0"/>
+  <circle cx="90" cy="120" r="10" fill="#ff7675"/>
+  <circle cx="210" cy="120" r="10" fill="#ff7675"/>
+</svg>

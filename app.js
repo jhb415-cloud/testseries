@@ -4384,6 +4384,36 @@ function psychtestNavCategory(category) {
   renderPsychtestFeed(category);
 }
 
+/* /test-engine/ 신규 테스트 노출 배너 (STEP 2). AppData.externalTests가 배열이라
+   항목이 늘어나도 코드 변경 없이 자동 반영됨. sortMode로 정렬 기준만 바꾸면 되도록
+   분리해둠 — 지금은 'new'(최신순, addedAt 내림차순) 고정 호출이지만 나중에 'popular'
+   (engagementKey 기준 engagementCount 내림차순)로 UI 토글을 얹기만 하면 됨. */
+function sortExternalTests(list, sortMode) {
+  const arr = list.slice();
+  if (sortMode === 'popular') {
+    return arr.sort((a, b) => engagementCount(b.engagementKey, 0) - engagementCount(a.engagementKey, 0));
+  }
+  return arr.sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
+}
+
+function externalTestsBannerHTML(sortMode) {
+  const tests = sortExternalTests(AppData.externalTests || [], sortMode || 'new');
+  if (!tests.length) return '';
+  return tests.map(t => `
+    <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')"
+      class="relative block bg-slate-800 border-2 rounded-2xl p-5 mb-6 transition hover:opacity-90"
+      style="border-color:#D85A30;">
+      ${t.isNew ? `<span class="absolute -top-2 -left-2 text-white text-xs font-black px-2.5 py-1 rounded-full shadow-lg" style="background:#D85A30;">NEW</span>` : ''}
+      <div class="flex items-center gap-4">
+        <div class="text-4xl">${t.emoji}</div>
+        <div>
+          <h3 class="text-slate-100 font-black text-xl mb-1">${t.title}</h3>
+          <p class="text-slate-400 text-sm">${t.hook}</p>
+        </div>
+      </div>
+    </a>`).join('');
+}
+
 function renderPsychtestFeed(category) {
   category = category || 'trait';
   App.state.psychtest.category = category;
@@ -4403,6 +4433,7 @@ function renderPsychtestFeed(category) {
     <div class="max-w-2xl mx-auto">
       <h2 class="text-2xl font-black text-slate-100 mb-1">🃏 심리 테스트존</h2>
       <p class="text-slate-400 mb-4">요즘 뜨는 심리테스트, 카테고리별로 계속 업데이트됩니다</p>
+      ${externalTestsBannerHTML('new')}
       <div class="flex flex-wrap gap-2 mb-6">${tabsHTML}</div>
 
       ${real ? `

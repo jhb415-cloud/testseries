@@ -1,0 +1,94 @@
+/* test-engine v2 (STEP 2) | themes/retro.css — 1호 테마: 윈도우95 레트로 스킨
+   engine.css의 골격 클래스(.te-app, .te-btn, .te-progress-* 등)를 그대로 사용하고,
+   색상/테두리/폰트만 이 파일에서 덮어씀. 가독성 우선 — 과한 픽셀폰트는 지양. */
+
+.te-app {
+  background: #008080;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 4px 4px;
+  color: #000;
+  font-family: "Tahoma", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #c0c0c0;
+  border: 2px solid #000;
+  box-shadow: inset -2px -2px 0 #808080, inset 2px 2px 0 #fff;
+  margin: 16px;
+  border-radius: 0;
+  position: relative;
+}
+
+/* 가짜 타이틀바 */
+.te-intro-body::before,
+.te-question-body::before,
+.te-result-body::before {
+  content: "system32.exe";
+  display: block;
+  margin: -16px -20px 16px;
+  height: 28px;
+  line-height: 28px;
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 0 8px;
+}
+
+.te-loading-box::before { content: none; }
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  color: #000080;
+}
+
+.te-btn {
+  background: #c0c0c0;
+  color: #000;
+  border-radius: 0;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  box-shadow: inset 1px 1px 0 #dfdfdf;
+}
+.te-btn:active {
+  border-color: #808080 #fff #fff #808080;
+  box-shadow: none;
+}
+
+.te-btn-primary {
+  background: #000080;
+  color: #fff;
+  border-color: #4a6cd4 #00003f #00003f #4a6cd4;
+}
+
+.te-btn-accent {
+  background: #D85A30;
+  color: #fff;
+  border-color: #f0a080 #7a2c10 #7a2c10 #f0a080;
+}
+
+.te-progress-track {
+  background: #808080;
+  border: 1px solid #000;
+  border-radius: 0;
+}
+.te-progress-fill {
+  background: #000080;
+  color: #000080;
+}
+
+.te-chip {
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 0;
+  color: #000080;
+}
+
+.te-spinner {
+  border-color: rgba(0, 0, 0, 0.2);
+  border-top-color: #000080;
+}

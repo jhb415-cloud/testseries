@@ -5136,5 +5136,18 @@ window.AppData = {
       ]
     }
   ],
+
+  /* /test-engine/ (별도 프로토타입, STEP 2) 심리테스트존 노출 배너용 목록.
+     배열+addedAt/engagementKey 필드로 둬서, 항목이 늘어나면 인기순/최신순 정렬로 바로 확장 가능
+     (app.js의 sortExternalTests() 참고). url은 SPA 해시가 아닌 실제 정적 페이지 경로. */
+  externalTests: [
+    {
+      id: 'mental-age', title: '진짜 정신연령 테스트', emoji: '🧠',
+      hook: '숫자 나이는 못 속여도 정신연령은 못 속이지... 지금 바로 확인!',
+      url: '/test-engine/tests/mental-age/index.html',
+      engagementKey: 'site-mentalage-plays',
+      addedAt: '2026-07-10', isNew: true,
+    },
+  ],
 };
 
