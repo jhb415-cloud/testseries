@@ -5155,6 +5155,13 @@ window.AppData = {
       engagementKey: 'site-koffice-plays',
       addedAt: '2026-07-10', isNew: true,
     },
+    {
+      id: 'desert-island-type', title: '무인도에 떨어지면 나는? (생존 유형)', emoji: '🏝️',
+      hook: '구조선 오기 전까지 나는 살아남을 수 있을까, 8문항 생존 성향 테스트',
+      url: '/test-engine/tests/2-desert-island-type/index.html',
+      engagementKey: 'site-desertisland-plays',
+      addedAt: '2026-07-10', isNew: true,
+    },
   ],
 };
 

@@ -22,20 +22,12 @@
 
 ---
 
-## #2. 무인도 생존 유형 (6개 결과: 3일컷리타이어형/족장등극형/혼자만생존형/눈치빌런형/감성낭만형/브레인참모형)
-**컨셉(재설계)**: 세피아 잉크 탐험일지/지도 스케치 — 낡은 지도·탐험일지 페이지 위에 손그림 펜화로
-그린 느낌. 크로스해칭 음영, 나침반/점선 경로/얼룩진 종이 텍스처. 색은 세피아/올드페이퍼 톤 하나로
-통일(#1의 원색 플랫 벡터와 완전히 다른 무드 — 색이 아니라 매체 자체가 다름).
-
-커버 샘플 프롬프트:
-```
-Vintage sepia ink pen-and-wash illustration on an aged parchment map background, cross-hatched shading, hand-drawn compass rose and dotted path lines, weathered paper texture with subtle stains, a small shipwreck silhouette and palm tree line art in the corner, no color except sepia and brown ink tones, no photorealism, no text, no watermark, no real people, square format.
-```
-
-결과 샘플 프롬프트 (족장등극형):
-```
-Vintage sepia ink pen-and-wash illustration on an aged parchment map background, cross-hatched shading, weathered paper texture with subtle stains, no color except sepia and brown ink tones. A stylized castaway character sketched in sepia ink wearing a makeshift coconut-shell crown drawn with cross-hatch shading, holding a driftwood staff, standing triumphantly on a small sand mound, hand-drawn palm fronds around them, faint compass rose in the corner. ABSOLUTELY NO text, letters, numbers, or words anywhere. No watermark, no real people, square format.
-```
+## 완료 — #2. 무인도 생존 유형 (6개 결과 전부 생성·QA 완료, 사이트 연동만 남음)
+**컨셉**: 세피아 잉크 탐험일지/지도 스케치. 매체: 손그림 펜화(크로스해칭), 팔레트 세피아/브라운
+단색. UI 테마: 신규 `themes/journal.css`. 사용자가 준 2패널 합성 레퍼런스를 좌(커버용)/우(눈치빌런형
+포즈용)로 분리 — 우측은 그대로 opportunist.webp로 채택, 나머지 5개+커버는 OpenAI images/edits로
+그 스타일 참조 생성(k-office-type에서 익힌 "레퍼런스 포즈 복사 금지 + 한 줄 프롬프트" 원칙 그대로
+적용해 첫 시도에 전부 성공).
 
 ## #11. 찐 MBTI vs 겉 MBTI (겉바속촉, outer×inner 256조합 — 유형별 개별 제작 불가, 범용 1~2장만)
 **컨셉(재설계)**: 종이 콜라주(레이어드 페이퍼컷) — 실제 색종이를 오려 붙인 듯한 층 구조, 종이

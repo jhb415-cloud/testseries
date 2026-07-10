@@ -1,0 +1,82 @@
+/* test-engine — themes/journal.css — 4호 테마: 세피아 탐험일지/지도 스케치 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   desert-island-type(#2 자리)가 1호 사용처. 낡은 지도/일지 페이지 질감 + 세피아 톤,
+   plat 벡터(office.css)·판타지(fantasy.css)·레트로(retro.css)와도 확실히 다른 무드. */
+
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Noto+Sans+KR:wght@400;600;700&display=swap');
+
+.te-app {
+  background:
+    radial-gradient(ellipse at 30% 10%, rgba(139, 108, 66, 0.15), transparent 55%),
+    linear-gradient(180deg, #d9c9a8 0%, #c7b28a 100%);
+  color: #3a2f1f;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background:
+    repeating-linear-gradient(0deg, rgba(139,108,66,0.04) 0px, rgba(139,108,66,0.04) 1px, transparent 1px, transparent 26px),
+    #f2e6c9;
+  border: 2px solid #8b6c42;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 1px rgba(139, 108, 66, 0.3),
+    0 6px 16px rgba(58, 47, 31, 0.35);
+  margin: 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Special Elite", "Noto Sans KR", serif;
+  color: #4a3820;
+  letter-spacing: 0.01em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #6b5738; }
+
+.te-chip {
+  background: rgba(139, 108, 66, 0.15);
+  border: 1px solid rgba(139, 108, 66, 0.5);
+  color: #5a4526;
+  font-family: "Special Elite", serif;
+}
+
+.te-btn {
+  background: #8b6c42;
+  color: #f2e6c9;
+  border: 1px solid #5a4526;
+  box-shadow: 0 3px 0 #5a4526;
+  font-weight: 700;
+}
+.te-btn-primary { background: #a8471f; border-color: #6b2c12; box-shadow: 0 3px 0 #6b2c12; color: #fdf0df; }
+.te-btn-secondary { background: #e2d2ac; border-color: #b6a077; box-shadow: 0 3px 0 #b6a077; color: #4a3820; }
+.te-btn-accent { background: #a8471f; border-color: #6b2c12; box-shadow: 0 3px 0 #6b2c12; color: #fdf0df; }
+.te-btn-kakao { background: #FEE500; color: #191600; border-color: rgba(0,0,0,0.2); box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
+
+.te-btn-choice {
+  background: #f2e6c9;
+  color: #3a2f1f;
+  border: 1px solid #b6a077;
+  box-shadow: none;
+}
+.te-btn-choice:active { background: rgba(139, 108, 66, 0.15); border-color: #8b6c42; }
+
+.te-progress-track { background: rgba(90, 69, 38, 0.15); }
+.te-progress-fill { background: linear-gradient(90deg, #8b6c42, #a8471f); }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #3a2f1f;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(139, 108, 66, 0.2);
+  border-top-color: #a8471f;
+}
