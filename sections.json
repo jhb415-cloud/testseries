@@ -4,7 +4,7 @@
       "id": "new",
       "title": "🆕 지금 뜨는 신설존",
       "highlight": true,
-      "test_ids": ["mental-age"]
+      "test_ids": ["mental-age", "k-office-type"]
     },
     {
       "id": "mbtizone",
