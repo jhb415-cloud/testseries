@@ -10,13 +10,7 @@
       "id": "mbtizone",
       "title": "🧬 MBTI존",
       "highlight": true,
-      "test_ids": [],
-      "placeholder": {
-        "emoji": "🧬",
-        "title": "MBTI 정밀 분석 (준비중)",
-        "desc": "곧 만나요! 심리 테스트존 > MBTI존에서 먼저 구경해보세요",
-        "psychCategory": "mbtizone"
-      }
+      "test_ids": ["real-vs-fake-mbti", "love-mode-mbti", "drunk-mbti"]
     },
     {
       "id": "popular",

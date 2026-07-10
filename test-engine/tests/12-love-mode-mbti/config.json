@@ -3,7 +3,7 @@
   "title": "연애하면 바뀌는 내 MBTI",
   "description": "평소 성격 말고, 연애할 때만 튀어나오는 진짜 MBTI는 따로 있다",
   "hashtags": ["연애MBTI", "심리테스트", "연애유형", "MBTI밈"],
-  "theme": "retro",
+  "theme": "papercut",
   "cover_image": "assets/cover.webp",
   "seed_count": 219450,
   "scoring_type": "mbti4",
@@ -21,7 +21,7 @@
     "tip": "사랑 앞에서 무너지는 타입, 그거 은근 매력이야"
   },
   "questions": [
-    { "text": "좋아하는 사람이 생기면?", "image": null,
+    { "text": "좋아하는 사람이 생기면?", "image": "assets/question/mask-peel.svg",
       "choices": [{ "label": "적극적으로 다가감", "axis": "E" }, { "label": "티 안 내고 속으로", "axis": "I" }] },
     { "text": "연애 중 주말 데이트는?", "image": null,
       "choices": [{ "label": "밖에서 활동적으로", "axis": "E" }, { "label": "집에서 둘이 오붓하게", "axis": "I" }] },
@@ -29,11 +29,11 @@
       "choices": [{ "label": "해결책·조언", "axis": "T" }, { "label": "일단 공감·위로", "axis": "F" }] },
     { "text": "연인과 싸웠을 때?", "image": null,
       "choices": [{ "label": "논리적으로 따짐", "axis": "T" }, { "label": "감정이 앞섬", "axis": "F" }] },
-    { "text": "연애할 때 나는 미래를?", "image": null,
+    { "text": "연애할 때 나는 미래를?", "image": "assets/question/torn-heart.svg",
       "choices": [{ "label": "결혼·먼 그림 상상", "axis": "N" }, { "label": "지금 이 순간 위주", "axis": "S" }] },
     { "text": "연인에게 사랑 표현은?", "image": null,
       "choices": [{ "label": "추상적·로맨틱하게", "axis": "N" }, { "label": "구체적 행동·선물로", "axis": "S" }] },
-    { "text": "데이트 계획은?", "image": null,
+    { "text": "데이트 계획은?", "image": "assets/question/scissors-cut.svg",
       "choices": [{ "label": "미리 코스 다 짬", "axis": "J" }, { "label": "그날 기분따라", "axis": "P" }] },
     { "text": "기념일은?", "image": null,
       "choices": [{ "label": "미리 챙기고 준비", "axis": "J" }, { "label": "당일 즉흥적으로", "axis": "P" }] }

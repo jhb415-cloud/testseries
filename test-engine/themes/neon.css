@@ -1,0 +1,115 @@
+/* test-engine — themes/neon.css — 5호 테마: 네온사인 라인아트 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   drunk-mbti(#13 자리)가 1호 사용처. 어두운 도심 야경 + 글로우 네온 라인,
+   레트로/판타지/오피스/저널 4개 테마와도 확실히 다른 무드(글로우 이펙트 중심). */
+
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR:wght@400;600;700&display=swap');
+
+.te-app {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(29, 158, 117, 0.18), transparent 55%),
+    linear-gradient(180deg, #0b1226 0%, #050810 100%);
+  color: #d9fbf0;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: linear-gradient(180deg, #101a33 0%, #0a1224 100%);
+  border: 1px solid rgba(93, 231, 194, 0.5);
+  border-radius: 16px;
+  box-shadow:
+    0 0 0 1px rgba(93, 231, 194, 0.15),
+    0 0 24px rgba(29, 158, 117, 0.35),
+    0 8px 24px rgba(0, 0, 0, 0.6);
+  margin: 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Do Hyeon", "Noto Sans KR", sans-serif;
+  color: #5de7c2;
+  text-shadow: 0 0 8px rgba(93, 231, 194, 0.7), 0 0 18px rgba(93, 231, 194, 0.35);
+  letter-spacing: 0.01em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #a9c9c0; }
+
+.te-chip {
+  background: rgba(93, 231, 194, 0.1);
+  border: 1px solid rgba(93, 231, 194, 0.5);
+  color: #5de7c2;
+  text-shadow: 0 0 6px rgba(93, 231, 194, 0.5);
+}
+
+.te-btn {
+  background: rgba(93, 231, 194, 0.08);
+  color: #5de7c2;
+  border: 1.5px solid #5de7c2;
+  border-radius: 999px;
+  box-shadow: 0 0 12px rgba(93, 231, 194, 0.45);
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(93, 231, 194, 0.6);
+}
+.te-btn-primary {
+  background: rgba(216, 90, 48, 0.12);
+  color: #ff9d6e;
+  border: 1.5px solid #ff9d6e;
+  box-shadow: 0 0 14px rgba(255, 157, 110, 0.5);
+  text-shadow: 0 0 6px rgba(255, 157, 110, 0.6);
+}
+.te-btn-secondary {
+  background: rgba(255, 255, 255, 0.04);
+  color: #9fb8c9;
+  border: 1.5px solid rgba(159, 184, 201, 0.5);
+  box-shadow: none;
+  text-shadow: none;
+}
+.te-btn-accent {
+  background: rgba(216, 90, 48, 0.12);
+  color: #ff9d6e;
+  border: 1.5px solid #ff9d6e;
+  box-shadow: 0 0 14px rgba(255, 157, 110, 0.5);
+  text-shadow: 0 0 6px rgba(255, 157, 110, 0.6);
+}
+.te-btn-kakao {
+  background: #FEE500;
+  color: #191600;
+  border: 1.5px solid #FEE500;
+  box-shadow: 0 0 14px rgba(254, 229, 0, 0.5);
+  text-shadow: none;
+}
+
+.te-btn-choice {
+  background: rgba(255, 255, 255, 0.03);
+  color: #d9fbf0;
+  border: 1.5px solid rgba(93, 231, 194, 0.35);
+  border-radius: 999px;
+  box-shadow: none;
+  text-shadow: none;
+}
+.te-btn-choice:active {
+  background: rgba(93, 231, 194, 0.15);
+  border-color: #5de7c2;
+  box-shadow: 0 0 12px rgba(93, 231, 194, 0.4);
+}
+
+.te-progress-track { background: rgba(93, 231, 194, 0.12); border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #1D9E75, #5de7c2); border-radius: 999px; box-shadow: 0 0 10px rgba(93, 231, 194, 0.6); }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #d9fbf0;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(93, 231, 194, 0.2);
+  border-top-color: #5de7c2;
+  box-shadow: 0 0 12px rgba(93, 231, 194, 0.4);
+}

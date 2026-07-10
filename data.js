@@ -5163,5 +5163,32 @@ window.AppData = {
       addedAt: '2026-07-10', isNew: true,
     },
   ],
+
+  /* /test-engine/ MBTI존 카테고리 노출 목록(STEP 3.1). externalTests와 동일한 구조·정렬
+     인프라(app.js의 sortExternalTests/externalTestsFeedHTML)를 그대로 재사용 — 배열이라
+     항목이 늘어나도 코드 변경 없이 자동 반영됨. */
+  mbtiZoneTests: [
+    {
+      id: 'real-vs-fake-mbti', title: '찐 MBTI vs 겉 MBTI 판별기 (겉바속촉)', emoji: '🎭',
+      hook: '남들이 보는 나 8문항 + 진짜 내 속마음 8문항, 겉과 속의 MBTI가 정말 같을까?',
+      url: '/test-engine/tests/11-real-vs-fake-mbti/index.html',
+      engagementKey: 'site-realvsfakembti-plays',
+      addedAt: '2026-07-10', isNew: true,
+    },
+    {
+      id: 'love-mode-mbti', title: '연애하면 바뀌는 내 MBTI', emoji: '💌',
+      hook: '평소 성격 말고, 연애할 때만 튀어나오는 진짜 MBTI는 따로 있다',
+      url: '/test-engine/tests/12-love-mode-mbti/index.html',
+      engagementKey: 'site-lovemodembti-plays',
+      addedAt: '2026-07-10', isNew: true,
+    },
+    {
+      id: 'drunk-mbti', title: '취중 MBTI 테스트', emoji: '🍺',
+      hook: '술 들어가면 튀어나오는 인격, 우는 술 · 시비 술 · 잠수 술 중 나는?',
+      url: '/test-engine/tests/13-drunk-mbti/index.html',
+      engagementKey: 'site-drunkmbti-plays',
+      addedAt: '2026-07-10', isNew: true,
+    },
+  ],
 };
 

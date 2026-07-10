@@ -799,7 +799,7 @@ function buildTestIndex() {
   const index = {};
   HOME_TOOL_CARDS.forEach(c => { index[c.id] = c; });
   buildPopularCandidates().forEach(c => { index[c.id || c.section] = c; });
-  (AppData.externalTests || []).forEach(t => {
+  [...(AppData.externalTests || []), ...(AppData.mbtiZoneTests || [])].forEach(t => {
     index[t.id] = {
       id: t.id, emoji: t.emoji, title: t.title, desc: t.hook,
       run: () => { bumpEngagement(t.engagementKey); location.href = t.url; },
@@ -4450,8 +4450,10 @@ const PSYCHTEST_CATEGORIES = {
   national: { label: '국민테스트', emoji: '🇰🇷' },
 };
 const PSYCHTEST_LOCKED = {
-  immersive: [], // 실제 콘텐츠는 AppData.externalTests에서 옴(아래 externalTestsBannerHTML)
-  mbtizone: [{ emoji: '🧬', title: 'MBTI 정밀 유형 분석' }],
+  immersive: [], // 실제 콘텐츠는 AppData.externalTests에서 옴(아래 externalTestsFeedHTML)
+  mbtizone: [], // 실제 콘텐츠는 AppData.mbtiZoneTests에서 옴(아래 externalTestsFeedHTML). STEP 3.1(2026-07-10)
+                // 전까지는 가짜 잠금 카드 1개뿐이었으나, real-vs-fake-mbti/love-mode-mbti/drunk-mbti
+                // 3개가 실제로 완성되며 잠금 카드를 제거하고 실콘텐츠로 교체.
   character: [{ emoji: '🏯', title: '나의 사극 빙의 테스트' }, { emoji: '🦹', title: '나의 빌런 각성 테스트' }],
   trait: [{ emoji: '🧊', title: 'T의 공감능력 테스트' }, { emoji: '💤', title: '관태기 자가진단 테스트' }],
   taste: [{ emoji: '🏪', title: '나의 편의점 소비 유형 테스트' }, { emoji: '📺', title: 'OTT 정주행 스타일 테스트' }],
@@ -4482,34 +4484,51 @@ function sortExternalTests(list, sortMode) {
   return arr.sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
 }
 
-function externalTestsBannerHTML(sortMode) {
-  const tests = sortExternalTests(AppData.externalTests || [], sortMode || 'new');
+/* STEP 3.1(2026-07-10): 몰입테스트/MBTI존 둘 다 전용 목록(externalTests/mbtiZoneTests)이
+   실콘텐츠로만 채워지게 되며(잠금 placeholder 없음), 기존 전체너비 배너 1줄 나열 대신
+   character/trait 등 기존 카테고리와 동일한 "인기 대표 1개 강조 + 3열 그리드" 레이아웃으로
+   통일 — 인기순(popular, 클릭수 기준) 1위를 상단에 큰 카드로, 전체 목록(1위 포함, 기존
+   카테고리의 대표카드 중복 노출 관례와 동일)을 아래 3열 그리드로 다시 보여준다. */
+function externalTestsFeedHTML(list) {
+  const tests = sortExternalTests(list || [], 'popular');
   if (!tests.length) return '';
-  return tests.map(t => `
-    <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')"
-      class="relative block bg-slate-800 border-2 rounded-2xl p-5 mb-6 transition hover:opacity-90"
-      style="border-color:#D85A30;">
-      ${t.isNew ? `<span class="absolute -top-2 -left-2 text-white text-xs font-black px-2.5 py-1 rounded-full shadow-lg" style="background:#D85A30;">NEW</span>` : ''}
+  const top = tests[0];
+  return `
+    <a href="${top.url}" onclick="bumpEngagement('${top.engagementKey}')"
+      class="relative block bg-gradient-to-br from-orange-900/40 to-slate-800 border-2 border-orange-700/50 rounded-2xl p-5 mb-4 transition hover:border-orange-500">
       <div class="flex items-center gap-4">
-        <div class="text-4xl">${t.emoji}</div>
+        <div class="text-4xl">${top.emoji}</div>
         <div>
-          <h3 class="text-slate-100 font-black text-xl mb-1">${t.title}</h3>
-          <p class="text-slate-400 text-sm">${t.hook}</p>
+          <div class="text-orange-300 text-xs font-bold uppercase tracking-widest mb-1">🔥 지금 가장 인기있는 테스트</div>
+          <h3 class="text-slate-100 font-black text-lg mb-1">${top.title}</h3>
+          <p class="text-slate-400 text-sm">${top.hook}</p>
         </div>
       </div>
-    </a>`).join('');
+    </a>
+    <div class="grid grid-cols-3 gap-3 mb-6">
+      ${tests.map(t => `
+      <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')"
+        class="relative block bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center transition hover:border-orange-500">
+        ${t.isNew ? `<span class="absolute -top-2 -left-2 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-lg" style="background:#D85A30;">NEW</span>` : ''}
+        <div class="text-3xl mb-2">${t.emoji}</div>
+        <p class="text-slate-100 font-semibold text-sm mb-1">${t.title}</p>
+        <p class="text-slate-500 text-xs">▷ ${engagementCount(t.engagementKey, 0)}</p>
+      </a>`).join('')}
+    </div>`;
 }
 
 function renderPsychtestFeed(category) {
   category = category || 'trait';
   App.state.psychtest.category = category;
   const container = document.getElementById('psychtest-container');
-  const isImmersive = category === 'immersive';
+  /* STEP 3.1(2026-07-10): mbtizone도 immersive와 동일하게 AppData.psychTests가 아니라
+     전용 배열(mbtiZoneTests)이 콘텐츠 소스라 이 카테고리들을 한 그룹으로 묶어 처리 */
+  const isExternalCategory = category === 'immersive' || category === 'mbtizone';
   /* v0.3.1~: 카테고리당 진짜 콘텐츠가 여러 개(예: 국민테스트 3개)일 수 있어 첫 매칭 1개만 찾던 find()를
      filter()로 바꿔 전부 노출 — 대표 배너는 그중 첫 번째를 사용.
-     STEP 3: 몰입테스트(immersive) 카테고리는 AppData.psychTests가 아니라 AppData.externalTests가
+     STEP 3: 몰입테스트/MBTI존은 AppData.psychTests가 아니라 각각 externalTests/mbtiZoneTests가
      콘텐츠 소스라 여기서는 항상 빈 배열(대표 배너/그리드 카드 없음), 아래에서 별도 렌더 */
-  const reals = isImmersive ? [] : AppData.psychTests.filter(x => x.category === category);
+  const reals = isExternalCategory ? [] : AppData.psychTests.filter(x => x.category === category);
   const real = reals[0];
   const locked = PSYCHTEST_LOCKED[category] || [];
 
@@ -4525,7 +4544,8 @@ function renderPsychtestFeed(category) {
       <p class="text-slate-400 mb-4">요즘 뜨는 심리테스트, 카테고리별로 계속 업데이트됩니다</p>
       <div class="flex flex-wrap gap-2 mb-6">${tabsHTML}</div>
 
-      ${isImmersive ? externalTestsBannerHTML('new') : ''}
+      ${category === 'immersive' ? externalTestsFeedHTML(AppData.externalTests) : ''}
+      ${category === 'mbtizone' ? externalTestsFeedHTML(AppData.mbtiZoneTests) : ''}
 
       ${real ? `
       <div class="bg-gradient-to-br from-violet-900/40 to-slate-800 border border-violet-700/40 rounded-2xl p-5 mb-6 cursor-pointer hover:border-violet-500 transition"
