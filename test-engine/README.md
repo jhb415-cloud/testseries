@@ -44,7 +44,11 @@ test-engine/
   themes/
     retro.css          # 1호 테마: 윈도우95 레트로 스킨
   scripts/
-    generate-assets.js # STEP 1.5: config가 참조하는 이미지를 gpt-image-1로 생성하는 빌드타임 스크립트
+    generate-assets.js         # STEP 1.5: config가 참조하는 이미지를 gpt-image-1로 생성하는 빌드타임 스크립트
+    generate-assets-gemini.js  # 2단계 자동화(2026-07-10): Nano Banana Pro(gemini-3-pro-image-preview)로
+                                # assets/reference/의 스타일 락 이미지를 참조해 나머지 세트를 생성.
+                                # generate-assets.js와 출력 경로/prompts.md 컨벤션은 동일, 참조 이미지
+                                # 유무만 다름(GEMINI_API_KEY 필요, 아래 "이미지 생성 2단계 워크플로우" 참고)
   tests/
     mental-age/
       index.html       # 진입점. engine + result-card 로드, data-test-id="mental-age"
@@ -52,7 +56,9 @@ test-engine/
       assets/
         cover.webp       # 커버 일러스트 (AI 생성, STEP 1.5)
         result/          # 결과 구간별 일러스트 (6개, AI 생성)
-        prompts.md       # 이미지 생성에 사용한 프롬프트 (generate-assets.js가 파싱)
+        prompts.md       # 이미지 생성에 사용한 프롬프트 (generate-assets.js/-gemini.js가 파싱)
+        reference/        # (선택) generate-assets-gemini.js 전용 — Midjourney 등에서 확정한 스타일
+                          # 락 이미지를 여기 넣으면 매 생성마다 스타일 참조로 함께 전달됨(최대 8장)
 ```
 
 ## 화면 흐름
@@ -93,6 +99,20 @@ test-engine/
 3. `config.json` 작성 (원하는 `scoring_type`에 맞는 `questions`/`results` 구조로)
 4. `assets/cover.svg`, `assets/result/*.svg` 준비 — 이미지 경로는 전부 config.json에서 참조하므로 하드코딩된 경로 없음
 5. 새 테마가 필요하면 `themes/{테마명}.css`를 추가하고 config의 `theme` 값을 그 이름으로 지정
+
+## 이미지 생성 2단계 워크플로우 (2026-07-10~)
+OpenAI(`gpt-image-1`) 단독 생성 품질이 부족하다고 판단해, 스타일 탐색과 프로덕션 생성을 분리했다.
+
+1. **스타일 탐색(수동)**: Claude가 컨셉+포터블 프롬프트를 제안 → 사용자가 Midjourney 등 외부 툴로
+   직접 샘플을 뽑아보고 마음에 드는 스타일을 확정(공식 API가 없어 자동화하지 않음).
+2. **프로덕션 자동화**: 확정한 레퍼런스 이미지를 `tests/{testId}/assets/reference/`에 넣고
+   `node test-engine/scripts/generate-assets-gemini.js {testId}`로 나머지 결과 세트를 일괄 생성
+   (Nano Banana Pro / `gemini-3-pro-image-preview`, 참조 이미지 최대 8장까지 블렌딩).
+   `GEMINI_API_KEY` 필요(Codespaces Secrets에 등록됨) — **단, 이 모델은 무료 티어가 없어 키가 속한
+   Google Cloud 프로젝트에 결제가 활성화되어 있어야 실제로 이미지가 생성된다**(2026-07-10 실측:
+   결제 미활성 상태에서 `429 RESOURCE_EXHAUSTED` 확인, API 호출 구조 자체는 정상 검증됨).
+3. 기존 `generate-assets.js`(OpenAI)는 그대로 남겨둠 — mental-age 등 이미 생성된 자산과 무관하며,
+   `reference/` 없이 텍스트 프롬프트만으로 빠르게 뽑아야 할 때는 계속 쓸 수 있다.
 
 ## 알려진 제약 / 다음 단계
 - `axis` 채점은 스키마와 분기 로직만 준비되어 있고, 실제 콘텐츠는 아직 없습니다 (2호 MBTI형 테스트 예정).
