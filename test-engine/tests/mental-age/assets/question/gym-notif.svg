@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="12" fill="#e8e8e8" stroke="#000" stroke-width="4"/>
+  <!-- phone -->
+  <rect x="230" y="60" width="140" height="240" rx="14" fill="#ffffff" stroke="#000" stroke-width="4"/>
+  <rect x="245" y="80" width="110" height="180" fill="#c9f0e2" stroke="#000" stroke-width="3"/>
+  <circle cx="300" cy="278" r="10" fill="#666" stroke="#000" stroke-width="2"/>
+  <!-- notification bubble -->
+  <rect x="330" y="60" width="220" height="90" rx="10" fill="#ffffff" stroke="#000" stroke-width="4"/>
+  <polygon points="345,150 365,150 345,175" fill="#ffffff" stroke="#000" stroke-width="4"/>
+  <circle cx="365" cy="100" r="22" fill="#1D9E75" stroke="#000" stroke-width="3"/>
+  <!-- flex arm icon -->
+  <path d="M355 108 q10 -22 22 -10 q10 10 -2 20 q-14 10 -20 -10 z" fill="#fff"/>
+  <text x="400" y="95" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#000">오운완!</text>
+  <text x="400" y="122" font-family="Arial, sans-serif" font-size="16" fill="#333">단톡방 알림 12+</text>
+  <!-- new badge -->
+  <circle cx="540" cy="70" r="20" fill="#D85A30" stroke="#000" stroke-width="3"/>
+  <text x="540" y="76" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">NEW</text>
+</svg>

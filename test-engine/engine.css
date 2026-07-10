@@ -107,6 +107,18 @@ body {
   flex: 1;
 }
 
+/* 문항에 image가 없을 때(questions[].image nullable) 텍스트가 위에 붙고 아래가
+   허전하게 비어 보이는 문제 완화 — 세로 중앙 정렬. 문항 이미지가 있으면(.te-question-img
+   존재) 기존처럼 이미지가 상단에 오는 자연스러운 흐름을 그대로 둔다. */
+.te-question-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.te-question-body:has(.te-question-img) {
+  justify-content: flex-start;
+}
+
 .te-title { font-size: 22px; margin: 8px 0; }
 .te-desc { font-size: 15px; line-height: 1.5; }
 .te-chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }

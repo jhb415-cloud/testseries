@@ -12,7 +12,7 @@
   "questions": [
     {
       "text": "친구가 단톡에 '오운완' 인증샷을 올렸다. 내 반응은?",
-      "image": null,
+      "image": "assets/question/gym-notif.svg",
       "choices": [
         { "label": "바로 좋아요 누르고 나도 헬스장 간다 (기만 아님, 진짜 갈거임)", "score": 3 },
         { "label": "오운완? '오늘 운동 완전 패스' 아니야?", "score": 0 }
@@ -36,7 +36,7 @@
     },
     {
       "text": "단톡방에서 처음 보는 최신 밈이 올라왔다",
-      "image": null,
+      "image": "assets/question/meme-chat.svg",
       "choices": [
         { "label": "오 이거 처음 보는데 뭔 뜻이야?", "score": 2 },
         { "label": "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ 이거 어제도 봤는데 (밈력 만렙)", "score": 0 }
@@ -60,7 +60,7 @@
     },
     {
       "text": "'홧김비용'(스트레스 받아서 지르는 소비)에 대한 내 생각은?",
-      "image": null,
+      "image": "assets/question/impulse-buy.svg",
       "choices": [
         { "label": "그거 낭비 아니야? 스트레스는 운동으로 풀어야지", "score": 3 },
         { "label": "인정, 스트레스는 지름신으로 푸는 것 (탕진잼 결제 완료)", "score": 0 }
@@ -84,7 +84,7 @@
     },
     {
       "text": "건강검진 결과지를 받으면?",
-      "image": null,
+      "image": "assets/question/health-checkup.svg",
       "choices": [
         { "label": "꼼꼼히 읽고 병원 예약부터 잡는다", "score": 3 },
         { "label": "어차피 괜찮겠지 하고 서랍에 넣어둔다", "score": 0 }
@@ -108,7 +108,7 @@
     },
     {
       "text": "인스타 스토리와 현생의 갭 차이는?",
-      "image": null,
+      "image": "assets/question/insta-reality-gap.svg",
       "choices": [
         { "label": "스토리 = 현생 그대로 (꾸밈없는 일상)", "score": 2 },
         { "label": "스토리는 화려한 필터, 현생은 이불 밖은 위험 (국룰)", "score": 0 }

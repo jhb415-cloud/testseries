@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="12" fill="#e8e8e8" stroke="#000" stroke-width="4"/>
+  <!-- big speech bubble -->
+  <rect x="90" y="60" width="420" height="180" rx="16" fill="#ffffff" stroke="#000" stroke-width="4"/>
+  <polygon points="230,240 270,240 230,290" fill="#ffffff" stroke="#000" stroke-width="4"/>
+  <!-- laughing face -->
+  <circle cx="200" cy="150" r="60" fill="#FFE28A" stroke="#000" stroke-width="4"/>
+  <path d="M170 135 q10 -14 20 0" stroke="#000" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M210 135 q10 -14 20 0" stroke="#000" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M165 165 q35 35 70 0" stroke="#000" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <!-- ㅋㅋㅋ text -->
+  <text x="290" y="130" font-family="Arial, sans-serif" font-size="42" font-weight="bold" fill="#D85A30">ㅋㅋㅋㅋ</text>
+  <text x="290" y="175" font-family="Arial, sans-serif" font-size="42" font-weight="bold" fill="#1D9E75">ㅋㅋㅋㅋㅋ</text>
+  <text x="290" y="215" font-family="Arial, sans-serif" font-size="18" fill="#333">최신 밈 등장</text>
+</svg>

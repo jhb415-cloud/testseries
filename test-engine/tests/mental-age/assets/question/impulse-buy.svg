@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="12" fill="#e8e8e8" stroke="#000" stroke-width="4"/>
+  <!-- shopping bag -->
+  <path d="M210 130 h180 l16 160 h-212 z" fill="#1D9E75" stroke="#000" stroke-width="4"/>
+  <path d="M250 130 q0 -50 50 -50 q50 0 50 50" fill="none" stroke="#000" stroke-width="6"/>
+  <rect x="210" y="130" width="180" height="24" fill="#0f6b4d" stroke="#000" stroke-width="3"/>
+  <!-- won symbol on bag -->
+  <text x="300" y="230" font-family="Arial, sans-serif" font-size="44" font-weight="bold" fill="#fff" text-anchor="middle">₩</text>
+  <!-- lightning bolt (impulse) -->
+  <polygon points="410,60 370,180 405,180 380,290 460,150 420,150 445,60" fill="#D85A30" stroke="#000" stroke-width="4"/>
+  <!-- stress lines -->
+  <path d="M150 90 l20 20 M140 130 l28 6 M150 170 l20 -14" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+</svg>

@@ -189,6 +189,7 @@
       state.introInputValue = inputEl ? inputEl.value : '';
       startTest();
     });
+    syncFixedFooterHeight();
   }
 
   function startTest() {
@@ -246,6 +247,7 @@
         selectChoice(q, choiceIndex);
       });
     });
+    syncFixedFooterHeight();
   }
 
   function selectChoice(question, choiceIndex) {
@@ -503,6 +505,7 @@
     qs('#te-share-btn').addEventListener('click', function () { shareResult(result); });
     qs('#te-save-btn').addEventListener('click', function () { handleSaveImageClick(result); });
     qs('#te-kakao-btn').addEventListener('click', function () { shareResultToKakao(result); });
+    syncFixedFooterHeight();
 
     if (relatedIds.length) loadRelatedBanner(relatedIds);
   }
@@ -635,6 +638,20 @@
   // ---------- 유틸 ----------
   function qs(sel) { return rootEl.querySelector(sel); }
   function qsa(sel) { return Array.prototype.slice.call(rootEl.querySelectorAll(sel)); }
+
+  // 하단 고정 버튼바(.te-choices-fixed)는 화면마다 버튼 개수가 다른데(인트로 1개/질문 2~N개/
+  // 결과 4개), engine.css의 --te-footer-height(132px)는 고정값이라 선택지가 3개 이상인 질문
+  // (예: type 채점처럼 선택지가 6개인 테스트)에서 버튼바가 실제로는 더 커져 본문과 겹치거나
+  // 화면 아래로 잘려 보이는 문제가 있었음(2026-07-10 발견). 렌더 직후 실제 버튼바 높이를
+  // 측정해 .te-app의 padding-bottom을 정확히 맞춰준다 — 버튼 개수와 무관하게 항상 정확.
+  function syncFixedFooterHeight() {
+    requestAnimationFrame(function () {
+      var appEl = qs('.te-app');
+      var footerEl = qs('.te-choices-fixed');
+      if (!appEl || !footerEl) return;
+      appEl.style.paddingBottom = footerEl.offsetHeight + 'px';
+    });
+  }
 
   function escapeHtml(str) {
     return String(str == null ? '' : str).replace(/[&<>"']/g, function (ch) {
