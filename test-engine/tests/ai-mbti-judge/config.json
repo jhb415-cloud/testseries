@@ -1,0 +1,46 @@
+{
+  "id": "ai-mbti-judge",
+  "title": "AI가 판별하는 진짜 내 MBTI (과몰입 검거)",
+  "description": "당신이 주장하는 그 유형, 진짜 맞을까? AI가 8문항으로 재판정합니다",
+  "hashtags": ["AI판별", "심리테스트", "MBTI검거", "MBTI밈"],
+  "theme": "retro",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 233590,
+  "scoring_type": "mbti4",
+  "loading": { "text": "AI가 진짜 유형 재판정 중..", "duration_ms": 2200 },
+  "related": [],
+  "intro_input": {
+    "label": "당신이 생각하는 내 MBTI는?",
+    "options": ["ISTJ", "ISFJ", "INFJ", "INTJ", "ISTP", "ISFP", "INFP", "INTP", "ESTP", "ESFP", "ENFP", "ENTP", "ESTJ", "ESFJ", "ENFJ", "ENTJ"]
+  },
+  "resultTemplate": {
+    "title": "AI 판정: {code}",
+    "subtitle": "당신이 주장한 유형: {claimed} · AI 판정 유형: {code}",
+    "image": "assets/result/generic.webp",
+    "traits": [
+      "8문항 답변을 기준으로 재계산한 진짜 유형",
+      "주장한 유형({claimed})과 다를 수도, 같을 수도 있음",
+      "AI는 감정 없이 팩트만 봄"
+    ],
+    "tip": "과몰입 검거 완료 🚨 인정하기 싫겠지만 팩트임"
+  },
+  "questions": [
+    { "text": "주말에 아무 약속 없을 때 진짜 기분은?", "image": null,
+      "choices": [{ "label": "심심함, 누구라도 만나고 싶음", "axis": "E" }, { "label": "개꿀, 완벽한 하루", "axis": "I" }] },
+    { "text": "새로운 사람들과의 자리 후?", "image": null,
+      "choices": [{ "label": "에너지 충전됨", "axis": "E" }, { "label": "집 가서 혼자 방전 회복", "axis": "I" }] },
+    { "text": "어떤 얘기가 더 끌려?", "image": null,
+      "choices": [{ "label": "\"만약 이런 세상이면?\" 가정", "axis": "N" }, { "label": "\"실제로 이게 어떻게 됐대\" 사실", "axis": "S" }] },
+    { "text": "설명을 들을 때?", "image": null,
+      "choices": [{ "label": "전체 맥락·의미 알아야 이해", "axis": "N" }, { "label": "구체적 예시·단계가 있어야 이해", "axis": "S" }] },
+    { "text": "친구가 고민 상담할 때 진짜 반응?", "image": null,
+      "choices": [{ "label": "원인 분석하고 해결책 제시", "axis": "T" }, { "label": "일단 \"헐 어떡해\" 공감", "axis": "F" }] },
+    { "text": "결정할 때 더 신경 쓰는 건?", "image": null,
+      "choices": [{ "label": "뭐가 맞고 효율적인가", "axis": "T" }, { "label": "누가 상처받나", "axis": "F" }] },
+    { "text": "여행 전날 나는?", "image": null,
+      "choices": [{ "label": "짐·동선 다 정리 완료", "axis": "J" }, { "label": "아직 짐도 안 쌈", "axis": "P" }] },
+    { "text": "할 일이 생기면?", "image": null,
+      "choices": [{ "label": "바로 처리해야 마음 편함", "axis": "J" }, { "label": "미루다 막판 스퍼트", "axis": "P" }] }
+  ],
+  "results": []
+}

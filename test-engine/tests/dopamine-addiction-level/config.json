@@ -1,0 +1,156 @@
+{
+  "id": "dopamine-addiction-level",
+  "title": "나의 도파민 중독 레벨 테스트",
+  "description": "숏폼 시청 시간부터 알림 확인 습관까지, 8문항으로 재는 도파민 중독 레벨",
+  "hashtags": ["도파민중독", "심리테스트", "숏폼중독", "디지털디톡스"],
+  "theme": "retro",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 268910,
+  "scoring_type": "sum",
+  "loading": { "text": "도파민 중독 레벨 측정 중..", "duration_ms": 2000 },
+  "related": [],
+  "questions": [
+    {
+      "text": "아침에 눈 뜨자마자?",
+      "image": null,
+      "choices": [
+        { "label": "스트레칭·물", "score": 0 },
+        { "label": "알람 끄고 일어남", "score": 1 },
+        { "label": "폰 잠깐 봄", "score": 2 },
+        { "label": "30분째 숏폼 스크롤", "score": 3 }
+      ]
+    },
+    {
+      "text": "밥 먹을 때 나는?",
+      "image": null,
+      "choices": [
+        { "label": "밥만 먹음", "score": 0 },
+        { "label": "음악 틀어놓음", "score": 1 },
+        { "label": "영상 봄", "score": 2 },
+        { "label": "영상 없으면 밥 못 먹음", "score": 3 }
+      ]
+    },
+    {
+      "text": "숏폼(릴스/쇼츠) 하루 시청 시간?",
+      "image": null,
+      "choices": [
+        { "label": "거의 안 봄", "score": 0 },
+        { "label": "30분 이하", "score": 1 },
+        { "label": "1~2시간", "score": 2 },
+        { "label": "정신 차리면 3시간+", "score": 3 }
+      ]
+    },
+    {
+      "text": "알림이 오면?",
+      "image": null,
+      "choices": [
+        { "label": "나중에 확인", "score": 0 },
+        { "label": "짬 날 때", "score": 1 },
+        { "label": "웬만하면 바로", "score": 2 },
+        { "label": "즉시 확인 안 하면 불안", "score": 3 }
+      ]
+    },
+    {
+      "text": "지루한 순간(엘베·신호 대기)이 오면?",
+      "image": null,
+      "choices": [
+        { "label": "그냥 기다림", "score": 0 },
+        { "label": "딴생각", "score": 1 },
+        { "label": "폰 꺼냄", "score": 2 },
+        { "label": "무조건 폰, 5초도 못 참음", "score": 3 }
+      ]
+    },
+    {
+      "text": "책/긴 글을 읽을 때?",
+      "image": null,
+      "choices": [
+        { "label": "집중 잘 됨", "score": 0 },
+        { "label": "조금 걸림", "score": 1 },
+        { "label": "자꾸 폰 봄", "score": 2 },
+        { "label": "세 줄 넘으면 못 읽음", "score": 3 }
+      ]
+    },
+    {
+      "text": "자기 전 나는?",
+      "image": null,
+      "choices": [
+        { "label": "폰 안 보고 잠", "score": 0 },
+        { "label": "잠깐 보고 잠", "score": 1 },
+        { "label": "침대에서 1시간+", "score": 2 },
+        { "label": "폰 하다 새벽에 잠", "score": 3 }
+      ]
+    },
+    {
+      "text": "새로고침/좋아요 확인 빈도는?",
+      "image": null,
+      "choices": [
+        { "label": "잘 안 함", "score": 0 },
+        { "label": "가끔", "score": 1 },
+        { "label": "자주", "score": 2 },
+        { "label": "습관적으로 계속", "score": 3 }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "min": 0, "max": 5,
+      "title": "도파민청정",
+      "subtitle": "숏폼 알고리즘도 못 건드리는 사람",
+      "image": "assets/result/dopamine-clean.webp",
+      "traits": [
+        "아침엔 폰 대신 스트레칭·물부터",
+        "지루한 순간도 그냥 기다릴 수 있음",
+        "긴 글도 집중해서 잘 읽음"
+      ],
+      "tip": "이 정도면 요즘 시대에 진짜 희귀한 능력이야, 그대로 유지해"
+    },
+    {
+      "min": 6, "max": 11,
+      "title": "정상범위",
+      "subtitle": "적당히 즐기고 적당히 끊는 밸런스",
+      "image": "assets/result/normal-range.webp",
+      "traits": [
+        "숏폼은 30분 이하로 적당히",
+        "알림도 짬 날 때 확인하는 여유",
+        "자기 전 잠깐만 보고 잠"
+      ],
+      "tip": "딱 좋은 균형감이야, 지금 그대로만 유지하면 돼"
+    },
+    {
+      "min": 12, "max": 17,
+      "title": "도파민의존",
+      "subtitle": "폰 없이는 조금 불안해지는 단계",
+      "image": "assets/result/dopamine-dependent.webp",
+      "traits": [
+        "밥 먹을 때 영상 없으면 허전함",
+        "지루한 순간엔 자동으로 폰부터 꺼냄",
+        "긴 글 읽을 때 자꾸 폰 신경 쓰임"
+      ],
+      "tip": "슬슬 신호가 오는 중이야, 하루 딱 30분만 폰 없는 시간 만들어보자"
+    },
+    {
+      "min": 18, "max": 21,
+      "title": "도파민중독",
+      "subtitle": "정신 차리면 이미 3시간이 지나있음",
+      "image": "assets/result/dopamine-addicted.webp",
+      "traits": [
+        "아침부터 30분째 숏폼 스크롤 중",
+        "알림 즉시 확인 안 하면 불안함",
+        "새로고침·좋아요 확인이 습관이 됨"
+      ],
+      "tip": "이미 알고리즘한테 완전히 잡힌 상태, 지금부터라도 시간 정해놓자"
+    },
+    {
+      "min": 22, "max": 24,
+      "title": "디톡스시급",
+      "subtitle": "이 결과도 3초 안에 넘길 사람",
+      "image": "assets/result/detox-urgent.webp",
+      "traits": [
+        "영상 없이는 밥도 못 먹는 지경",
+        "세 줄 넘는 글은 읽기 포기",
+        "폰 하다 새벽 넘겨서 잠드는 게 일상"
+      ],
+      "tip": "도파민 중독 레벨 최상급 🚨 이 결과도 3초 안에 넘길 거잖아"
+    }
+  ]
+}

@@ -1,9 +1,9 @@
-# 심리테스트 엔진 (test-engine) — STEP 3까지 진행된 프로토타입, 사이트에 실제 연동됨
+# 심리테스트 엔진 (test-engine) — STEP 5까지 진행된 프로토타입, 사이트에 실제 연동됨
 
 > **신규 심리테스트 콘텐츠를 추가/제작하는 작업이라면 이 README보다 [`CLAUDE.md`](./CLAUDE.md)(작업 규칙)·[`style-guide.md`](./style-guide.md)(톤 가이드)·[`tests/index.json`](./tests/index.json)(콘텐츠 레지스트리)를 먼저 읽을 것** — "새 심리테스트 추가해줘" 요청이 오면 항상 이 세 파일 기준으로 진행한다(2026-07-10 셋업). 이 README는 엔진 자체(`engine.js`/`engine.css`/`result-card.js`)의 기술 구조 설명이다.
 
 ## 버전 표기 규칙
-이 하위 프로젝트는 메인 사이트의 `vX.Y.Z` 버전과 무관하게 **`test-engine vN (STEP N)`** 자체 표기를 씀 (engine.js/engine.css/themes/*.css 등 수정 파일 상단 주석 참고). 현재 `v3 (STEP 3 버그수정)`.
+이 하위 프로젝트는 메인 사이트의 `vX.Y.Z` 버전과 무관하게 **`test-engine vN (STEP N)`** 자체 표기를 씀 (engine.js/engine.css/themes/*.css 등 수정 파일 상단 주석 참고). 현재 `v5 (STEP 5: MBTI 4축 동시 채점 + 인트로 자기신고 입력 추가)`.
 
 ## 개요
 `engine.js`/`engine.css`/`result-card.js`/`themes/*.css`는 기존 사이트(`index.html` / `app.js` / `data.js`)와 분리된 신규 엔진입니다.
@@ -14,6 +14,8 @@
 - 엔진 자체는 4가지 채점 방식(`sum`/`type`/`quiz`/`axis`)을 전부 지원하도록 설계했지만, 1호는 `sum`만 실제로 사용합니다.
 - **STEP 2 추가**: 결과 화면 Canvas 공유카드 저장(`result-card.js`), 관련 테스트 배너(`config.related`)
 - **STEP 3 추가**: 결과 화면 카카오톡 공유 버튼(메인 사이트와 같은 Kakao 앱 키 재사용, 같은 도메인이라 추가 등록 불필요), 모든 화면에 "← 메인으로" 고정 링크 — 둘 다 `engine.js`가 `init()` 시점에 자동으로 주입하므로 **새 테스트를 추가해도 별도 설정 없이 자동 적용됩니다.**
+- **STEP 4 추가**: `sum` 채점 전용 선택적 보조 태그 집계 — 등급 구간(예: 천사~찐빌런)과 별개로 문항 선택지에 `tag`를 달아두면 가장 많이 나온 태그가 결과에 merge되고, 결과 텍스트의 `{tag}` 플레이스홀더가 자동 치환됩니다(`tests/villain-index/config.json` 참고). `tag`가 없는 기존 `sum` 테스트(mental-age 등)는 완전히 그대로 동작(하위호환 Playwright 검증 완료).
+- **STEP 5 추가**: 신규 `scoring_type` 2종 — `mbti4`(choice.axis로 E/I·S/N·T/F·J/P 4쌍을 동시 집계해 4글자 MBTI 코드 산출)와 `mbti4_dual`(question.block: `outer`/`inner`로 두 세트를 독립 집계, "겉 MBTI/속 MBTI"류). 기존 `axis`는 좌/우 단일 축만 지원해 16유형 MBTI 산출이 불가능했던 걸 보완. 결과 콘텐츠는 `config.resultTemplate`(제목/부제/특징/팁에 `{code}`/`{outer}`/`{inner}`/`{claimed}` 플레이스홀더)로 즉석 생성하는 게 기본 전략이라 16개(또는 그 이상) 결과를 전부 손으로 안 써도 됩니다. 인트로 화면에 `config.intro_input`(라벨+옵션 배열)을 넣으면 테스트 시작 전 자기신고 값을 드롭다운으로 받아 `{claimed}`로 쓸 수 있습니다("AI가 판별하는 진짜 내 MBTI"류). `intro_input`이 없으면 렌더링에 변화 없음(하위호환).
 
 ## 로컬에서 확인하는 방법
 `config.json`을 `fetch()`로 불러오기 때문에 `file://`로 직접 열면 CORS 에러가 납니다. **반드시 로컬 서버로 열어야 합니다.**

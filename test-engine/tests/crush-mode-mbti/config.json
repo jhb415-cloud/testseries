@@ -1,0 +1,42 @@
+{
+  "id": "crush-mode-mbti",
+  "title": "좋아하는 사람 앞에서 나오는 MBTI (크러쉬 모드)",
+  "description": "짝사랑 상대 앞에서만 나오는 반전 MBTI, 8문항으로 확인하는 크러쉬 모드",
+  "hashtags": ["크러쉬모드", "심리테스트", "짝사랑밈", "MBTI밈"],
+  "theme": "retro",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 211980,
+  "scoring_type": "mbti4",
+  "loading": { "text": "크러쉬 모드 분석 중..", "duration_ms": 2000 },
+  "related": [],
+  "resultTemplate": {
+    "title": "크러쉬 모드: {code}",
+    "subtitle": "좋아하는 사람 앞에서만 나오는 반전 인격",
+    "image": "assets/result/generic.webp",
+    "traits": [
+      "평소랑 다르게 {code}식으로 돌변",
+      "좋아하는 티는 나는데 정작 표현은 서툰 편",
+      "이 모드 나오면 주변 사람들이 먼저 눈치챔"
+    ],
+    "tip": "좋아하면 벙어리 되는 타입, 그거 다 티 나는 거 알아?"
+  },
+  "questions": [
+    { "text": "좋아하는 사람 앞에서 나는?", "image": null,
+      "choices": [{ "label": "오히려 더 나댐", "axis": "E" }, { "label": "갑자기 조용해짐", "axis": "I" }] },
+    { "text": "크러쉬랑 있을 때 텐션은?", "image": null,
+      "choices": [{ "label": "평소보다 업", "axis": "E" }, { "label": "얼어붙음", "axis": "I" }] },
+    { "text": "좋아하는 사람 생각할 때?", "image": null,
+      "choices": [{ "label": "온갖 상상·시나리오", "axis": "N" }, { "label": "실제 있었던 일 곱씹음", "axis": "S" }] },
+    { "text": "그 사람에게 잘 보이려 할 때?", "image": null,
+      "choices": [{ "label": "분위기·느낌으로", "axis": "N" }, { "label": "구체적 챙김·선물로", "axis": "S" }] },
+    { "text": "크러쉬가 힘들어하면?", "image": null,
+      "choices": [{ "label": "해결해주고 싶음", "axis": "T" }, { "label": "같이 마음 아파함", "axis": "F" }] },
+    { "text": "좋아하는 티가 날 때?", "image": null,
+      "choices": [{ "label": "오히려 툴툴대며 숨김", "axis": "T" }, { "label": "다 티 남, 못 숨김", "axis": "F" }] },
+    { "text": "그 사람과의 만남은?", "image": null,
+      "choices": [{ "label": "미리 상황 다 시뮬", "axis": "J" }, { "label": "되면 되는대로", "axis": "P" }] },
+    { "text": "고백 타이밍은?", "image": null,
+      "choices": [{ "label": "계획하고 준비함", "axis": "J" }, { "label": "순간 훅 지름", "axis": "P" }] }
+  ],
+  "results": []
+}

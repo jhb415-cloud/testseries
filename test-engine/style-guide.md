@@ -26,3 +26,21 @@
 - mental-age: 병맛(장르 미스매치) — "정신연령 측정을 국가 공인 신체검사처럼 근엄하게"
   — Windows95 UI 병맛
 - (다음 테스트 추가 시: 톤 종류 + 컨셉 한 줄을 이어서 기록, 반복 여부 체크용)
+
+### 2026-07-10 일괄 텍스트 초안 18개 (이미지 컨셉/4-4 승인 전 단계 — 아래는 문체 톤만 기록)
+사용자가 준 `gwamol_test_questions_v0.0.1.md`(일반 10 + MBTI 10)를 config.json 스키마로 변환.
+전부 원문 문체를 그대로 살린 **밈/드립형**(유행어·짤 감성 캐주얼체) 문체이고, 이미지 컨셉(4-4
+샘플 승인)은 아직 진행 전이라 시각적 톤(병맛/진지/깔끔 중 어느 스타일 이미지로 갈지)은 전부
+미정 — 다음 단계에서 결정할 것. 아래 9개는 `type`/`sum` 채점(기존 엔진 그대로), 그 아래
+9개는 신규 `mbti4`/`mbti4_dual`(STEP 5) 채점.
+- k-office-type(회사 K-직장인 유형)/desert-island-type(무인도 생존유형)/text-reply-love-type(답장
+  스타일 연애유형)/spending-type(소비유형)/idol-position-type(아이돌 포지션)/group-chat-character
+  (단톡방 캐릭터)/joseon-past-life-type(조선시대 전생): 전부 `type` 채점, 밈/드립형
+- mbti-addiction-level(MBTI 과몰입 레벨)/dopamine-addiction-level(도파민 중독 레벨): `sum` 채점,
+  밈/드립형
+- villain-index(내 안의 빌런 지수): `sum`+STEP 4 보조 태그 집계(단톡/모임/회사/연애빌런), 밈/드립형
+- real-vs-fake-mbti(찐vs겉 MBTI): `mbti4_dual`, 밈/드립형
+- love-mode-mbti/drunk-mbti/villain-mbti/crush-mode-mbti/brain-structure-report/office-mask-mbti/
+  shadow-mbti/ai-mbti-judge: 전부 `mbti4`(ai-mbti-judge만 `intro_input` 자기신고 드롭다운 추가),
+  밈/드립형, 결과 콘텐츠는 16개 손글씨 대신 `resultTemplate` 하나로 템플릿 생성(2026-07-10 합의)
+- mbti-couple-match(#19 커플 궁합기): 콘텐츠·등급 규칙만 `DESIGN.md`로 정리, UI 미구현(별도 확인 필요)

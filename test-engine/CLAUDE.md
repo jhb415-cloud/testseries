@@ -28,8 +28,31 @@
 
 ## 4-2. 사전 체크
 - `tests/index.json` 읽고 id 중복, concept_style 반복 여부 확인.
-- scoring_type 판단: 일반 테스트는 sum 또는 type, MBTI 축 테스트는 axis.
-  (엔진은 sum/type/quiz/axis 4종 모두 이미 지원하므로 엔진 코드는 재작업하지 않는다.)
+- scoring_type 판단: 일반 테스트는 sum 또는 type, **MBTI 16유형(4축 동시 산출)은 `mbti4`**
+  (겉/속처럼 두 세트를 동시에 산출해야 하면 `mbti4_dual`, 사용자 자기신고 값과 비교하고
+  싶으면 인트로에 `intro_input` 드롭다운 추가 — 전부 STEP 5에서 추가된 기능, 아래 참고).
+  기존 `axis`는 좌/우 단일 축 게이지 1개만 지원해서 16유형 MBTI 산출엔 못 쓴다.
+  (엔진은 sum/type/quiz/axis/mbti4/mbti4_dual 6종을 지원하므로 이 범위 안에서는 엔진 코드를
+  재작업하지 않는다. 이 6종으로 표현 안 되는 완전히 새로운 상호작용(예: #19 커플 궁합기처럼
+  "두 유형을 골라 즉시 매칭"하는 화면)은 여전히 엔진 확장이 필요해 사전 보고 후 진행한다.)
+- **STEP 4(2026-07-10)부터 예외 1건**: `sum` 채점에 선택적 보조 태그 집계 기능이 추가됨 —
+  문항 선택지에 `"tag"` 필드를 넣으면(등급 판정용 `score`와 별개로) 가장 많이 나온 태그가
+  `result.tag`로 결과에 merge되고, 결과 텍스트(`subtitle`/`traits[]`/`tip`)에 `{tag}` 플레이스홀더를
+  쓰면 렌더 시점에 자동 치환된다(태그가 하나도 안 걸렸으면 결과 항목의 `tagFallback` 값으로 대체,
+  `villain-index/config.json` 참고). "등급(sum)"과 "페르소나 유형(태그)"을 동시에 매기는 콘텐츠에만
+  쓰는 기능이라 필요할 때만 선택지에 `tag`를 붙이면 되고, `tag`가 없는 기존/향후 `sum` 테스트(예:
+  mental-age)는 완전히 그대로 동작한다(하위호환 확인됨). 이 예외를 제외한 나머지 엔진 로직은
+  여전히 "절대 수정하지 않는다"는 원칙을 유지 — `sum` 채점 자체의 새 기능이 또 필요해지면
+  이번처럼 사용자에게 먼저 영향 범위·리스크를 보고하고 컨펌받은 뒤에만 진행할 것.
+- **STEP 5(2026-07-10) 예외 2건째**: MBTI 시리즈 10개를 만들다 기존 `axis`(좌/우 단일 축)로는
+  16유형 MBTI(4축 동시 계산)가 애초에 불가능하다는 걸 발견 — 사용자가 "복잡하더라도 퀄리티를
+  높이는 쪽"으로 확정해 신규 `mbti4`/`mbti4_dual` scoring_type과 인트로 `intro_input` 드롭다운을
+  추가(engine.js 상단 STEP 5 코멘트, `test-engine/README.md` 참고). `choice.axis`/`question.block`/
+  `config.intro_input`이 전부 없는 기존 config는 렌더링·채점에 변화가 없다(mental-age/villain-index
+  둘 다 Playwright로 재검증). `real-vs-fake-mbti`(mbti4_dual)와 `ai-mbti-judge`(intro_input)가
+  실사용 예시. **#19(MBTI 커플 궁합기)는 이 6종 중 어느 것으로도 표현이 안 되는 "두 유형을 골라
+  즉시 매칭"하는 화면이라 이번 STEP에 포함하지 않음** — 콘텐츠·등급 규칙만 `tests/mbti-couple-match/
+  DESIGN.md`에 정리해두고, 실제 구현(신규 화면 타입)은 사용자 확인 후 별도 진행.
 
 ## 4-3. 폴더 생성
 ```

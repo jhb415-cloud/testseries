@@ -1,0 +1,42 @@
+{
+  "id": "villain-mbti",
+  "title": "내 안의 빌런 MBTI",
+  "description": "빡치는 순간 튀어나오는 진짜 인격, 화나면 나오는 내 안의 MBTI 빌런은?",
+  "hashtags": ["빌런MBTI", "심리테스트", "빡침밈", "MBTI밈"],
+  "theme": "retro",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 202160,
+  "scoring_type": "mbti4",
+  "loading": { "text": "빌런 인격 분석 중..", "duration_ms": 2000 },
+  "related": [],
+  "resultTemplate": {
+    "title": "빌런 모드: {code}",
+    "subtitle": "화나면 튀어나오는 또 다른 인격",
+    "image": "assets/result/generic.webp",
+    "traits": [
+      "빡치면 {code}식 빌런 모드로 전환",
+      "평소엔 안 나오는데 화나면 확실히 나옴",
+      "주변 사람들은 이미 이 모드를 눈치챘을 듯"
+    ],
+    "tip": "동료들이 이미 알고 있음 🤡"
+  },
+  "questions": [
+    { "text": "킹받는 상황이 오면?", "image": null,
+      "choices": [{ "label": "바로 표출·소리침", "axis": "E" }, { "label": "속으로 삭힘", "axis": "I" }] },
+    { "text": "화났을 때 나는?", "image": null,
+      "choices": [{ "label": "주변에 다 말하고 다님", "axis": "E" }, { "label": "혼자 곱씹음", "axis": "I" }] },
+    { "text": "화날 때 머릿속은?", "image": null,
+      "choices": [{ "label": "\"이게 다 무슨 의미가\" 큰 그림", "axis": "N" }, { "label": "\"정확히 이게 문제잖아\" 팩트", "axis": "S" }] },
+    { "text": "빡친 이유를 설명할 때?", "image": null,
+      "choices": [{ "label": "추상적으로 폭발", "axis": "N" }, { "label": "시간순 팩트 정리", "axis": "S" }] },
+    { "text": "화났을 때 상대에게?", "image": null,
+      "choices": [{ "label": "논리로 팩폭·몰아세움", "axis": "T" }, { "label": "서운함·감정 폭발", "axis": "F" }] },
+    { "text": "사과받을 때?", "image": null,
+      "choices": [{ "label": "논리적으로 납득돼야 함", "axis": "T" }, { "label": "진심이 느껴져야 함", "axis": "F" }] },
+    { "text": "화난 뒤 나는?", "image": null,
+      "choices": [{ "label": "손절·정리 계획 세움", "axis": "J" }, { "label": "그때그때 감정대로", "axis": "P" }] },
+    { "text": "뒤끝은?", "image": null,
+      "choices": [{ "label": "정확히 기억하고 리스트업", "axis": "J" }, { "label": "그때뿐, 금방 잊음", "axis": "P" }] }
+  ],
+  "results": []
+}

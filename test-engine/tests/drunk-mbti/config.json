@@ -1,0 +1,42 @@
+{
+  "id": "drunk-mbti",
+  "title": "취중 MBTI 테스트",
+  "description": "술 들어가면 튀어나오는 인격, 우는 술 · 시비 술 · 잠수 술 중 나는?",
+  "hashtags": ["취중MBTI", "심리테스트", "술자리밈", "MBTI밈"],
+  "theme": "retro",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 194280,
+  "scoring_type": "mbti4",
+  "loading": { "text": "취중 인격 분석 중..", "duration_ms": 2000 },
+  "related": [],
+  "resultTemplate": {
+    "title": "취중 인격: {code}",
+    "subtitle": "술이 들어가면 튀어나오는 또 다른 나",
+    "image": "assets/result/generic.webp",
+    "traits": [
+      "맨정신엔 안 나오는 {code} 기질 발동",
+      "술자리에서만 볼 수 있는 특별한 텐션",
+      "다음 날 필름 복구하면 다들 웃는 포인트"
+    ],
+    "tip": "무대 위 스타 같은 타입, 근데 다음 날은 조용히 흑역사 정리하자"
+  },
+  "questions": [
+    { "text": "술 들어가면 나는?", "image": null,
+      "choices": [{ "label": "더 시끄럽고 활발해짐", "axis": "E" }, { "label": "조용해지거나 잠수", "axis": "I" }] },
+    { "text": "취하면 연락 패턴?", "image": null,
+      "choices": [{ "label": "아무한테나 전화·톡 돌림", "axis": "E" }, { "label": "폰 꺼놓고 혼자", "axis": "I" }] },
+    { "text": "취중 대화 주제는?", "image": null,
+      "choices": [{ "label": "인생·우주·미래 얘기", "axis": "N" }, { "label": "오늘 있었던 팩트 얘기", "axis": "S" }] },
+    { "text": "술자리에서 나는?", "image": null,
+      "choices": [{ "label": "\"우리 왜 사는 걸까\" 철학", "axis": "N" }, { "label": "\"이 안주 맛있다\" 현실", "axis": "S" }] },
+    { "text": "취하면 감정 상태는?", "image": null,
+      "choices": [{ "label": "팩트 폭격·시비", "axis": "T" }, { "label": "울거나 사랑 고백", "axis": "F" }] },
+    { "text": "취중 진담은?", "image": null,
+      "choices": [{ "label": "\"솔직히 말해서 넌...\" 팩폭", "axis": "T" }, { "label": "\"내가 널 얼마나...\" 눈물", "axis": "F" }] },
+    { "text": "술자리 마무리는?", "image": null,
+      "choices": [{ "label": "2차·3차 계획 짜는 사람", "axis": "J" }, { "label": "흐름대로 될대로", "axis": "P" }] },
+    { "text": "다음 날 아침?", "image": null,
+      "choices": [{ "label": "어제 한 말·자리 다 기억+정산", "axis": "J" }, { "label": "필름 끊김, 몰라", "axis": "P" }] }
+  ],
+  "results": []
+}

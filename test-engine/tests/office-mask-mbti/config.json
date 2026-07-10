@@ -1,0 +1,42 @@
+{
+  "id": "office-mask-mbti",
+  "title": "회사에서의 내 MBTI (K-직장인 가면)",
+  "description": "밖에서는 인싸인데 회사에서는 완전 다른 사람? 회사 모드 MBTI 8문항",
+  "hashtags": ["회사MBTI", "심리테스트", "K직장인", "MBTI밈"],
+  "theme": "retro",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 208140,
+  "scoring_type": "mbti4",
+  "loading": { "text": "회사 모드 MBTI 분석 중..", "duration_ms": 2000 },
+  "related": [],
+  "resultTemplate": {
+    "title": "회사 모드: {code}",
+    "subtitle": "회사 가면을 쓰면 나오는 또 다른 나",
+    "image": "assets/result/generic.webp",
+    "traits": [
+      "회사에서만 {code}식 가면을 쓰는 편",
+      "밖에서의 나와 회사에서의 나는 완전 다른 사람",
+      "동료들이 아는 나는 진짜 내가 아닐 수도"
+    ],
+    "tip": "밖에선 인싸, 회사에선 유령 — 다들 이 가면 하나씩은 있잖아"
+  },
+  "questions": [
+    { "text": "회사에서 나는?", "image": null,
+      "choices": [{ "label": "먼저 말 걸고 어울림", "axis": "E" }, { "label": "필요할 때만 최소한", "axis": "I" }] },
+    { "text": "회식 자리에서?", "image": null,
+      "choices": [{ "label": "분위기 주도", "axis": "E" }, { "label": "구석에서 조용히", "axis": "I" }] },
+    { "text": "업무 지시를 받을 때?", "image": null,
+      "choices": [{ "label": "\"왜, 어떤 의미로?\" 물음", "axis": "N" }, { "label": "\"정확히 뭘, 언제까지?\" 물음", "axis": "S" }] },
+    { "text": "일하는 방식은?", "image": null,
+      "choices": [{ "label": "큰 방향·개선 아이디어", "axis": "N" }, { "label": "매뉴얼·정확한 실행", "axis": "S" }] },
+    { "text": "동료와 의견 충돌 시?", "image": null,
+      "choices": [{ "label": "논리로 설득", "axis": "T" }, { "label": "관계 생각해서 조율", "axis": "F" }] },
+    { "text": "피드백을 줄 때?", "image": null,
+      "choices": [{ "label": "팩트 위주로 직설", "axis": "T" }, { "label": "돌려서 부드럽게", "axis": "F" }] },
+    { "text": "프로젝트 스타일은?", "image": null,
+      "choices": [{ "label": "일정·계획 먼저 짬", "axis": "J" }, { "label": "유연하게 대응", "axis": "P" }] },
+    { "text": "마감 관리는?", "image": null,
+      "choices": [{ "label": "미리미리 끝냄", "axis": "J" }, { "label": "데드라인 파워", "axis": "P" }] }
+  ],
+  "results": []
+}

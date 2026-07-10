@@ -1,9 +1,26 @@
-/* test-engine v3 (STEP 3 버그수정) | engine.js — 공통 로직 (config 로드, 화면 전환, 채점, 렌더,
-   결과 공유카드 저장, 관련 테스트 배너, 카카오톡 공유, 메인 사이트로 돌아가기 링크)
-   순수 바닐라 JS. 외부 라이브러리 없음. 기능별 함수로 분리해 유지보수.
+/* test-engine v5 (STEP 5: MBTI 4축 동시 채점 + 인트로 자기신고 입력 추가) | engine.js — 공통 로직
+   (config 로드, 화면 전환, 채점, 렌더, 결과 공유카드 저장, 관련 테스트 배너, 카카오톡 공유,
+   메인 사이트로 돌아가기 링크) 순수 바닐라 JS. 외부 라이브러리 없음. 기능별 함수로 분리해 유지보수.
    결과 화면의 "이미지 저장" 기능은 별도 파일 result-card.js(window.TestEngineResultCard)에 위임한다.
    카카오 SDK 로드+초기화와 "메인으로" 링크는 이 파일이 init() 시점에 자동으로 주입한다 —
-   새 테스트를 추가할 때 index.html에 별도로 스크립트/마크업을 추가할 필요가 없다(자동 적용). */
+   새 테스트를 추가할 때 index.html에 별도로 스크립트/마크업을 추가할 필요가 없다(자동 적용).
+
+   STEP 4: sum 채점(등급 구간)에 선택적 보조 태그 집계를 추가 — choice.tag가 있는 선택지만
+   카운트해서 가장 많이 나온 태그를 결과에 merge(result.tag)한다. mental-age처럼 choice.tag가
+   전혀 없는 기존 config는 tagCounts가 항상 빈 객체라 동작이 완전히 그대로 유지된다(하위호환).
+   결과 카드 텍스트(subtitle/traits/tip)에 "{tag}" 플레이스홀더를 쓰면 렌더 시점에 치환되고,
+   태그가 하나도 안 걸렸을 땐 결과 항목의 tagFallback 값으로 대체한다(빌런 지수 테스트 참고).
+
+   STEP 5: 기존 axis(좌/우 단일 축)로는 16유형 MBTI를 산출할 수 없어(4축 동시 계산 불가) 신규
+   scoring_type 2종을 추가— `mbti4`(choice.axis: E/I/S/N/T/F/J/P 4쌍 동시 집계→4글자 코드 산출)와
+   `mbti4_dual`(question.block: 'outer'|'inner'로 두 세트를 독립 집계→코드 2개, "겉 MBTI/속 MBTI"류).
+   결과 콘텐츠는 16(또는 256)개를 전부 손으로 쓰는 대신 config.resultTemplate 하나에
+   "{code}"/"{outer}"/"{inner}"/"{claimed}" 플레이스홀더를 써서 즉석 생성하는 게 기본 전략
+   (fillVarsTemplate) — 특정 코드만 결과를 다듬고 싶으면 results[]에 res.code로 끼워 넣으면 그
+   항목이 우선 적용된다. 인트로 화면에 config.intro_input(라벨+옵션 배열)을 넣으면 테스트 시작
+   전 자기신고 값(예: "당신이 생각하는 내 MBTI는?")을 드롭다운으로 받아 state.introInputValue에
+   저장하고, mbti4 결과의 "{claimed}" 플레이스홀더로 사용할 수 있다(#20 메타 테스트용).
+   intro_input이 없는 기존 config는 렌더링에 아무 변화가 없다(하위호환). */
 
 (function () {
   'use strict';
@@ -19,10 +36,18 @@
     questionIndex: 0,
     answers: [],
     sumScore: 0,
+    tagCounts: {},
     typeCounts: {},
     correctCount: 0,
-    axisScore: { left: 0, right: 0 }
+    axisScore: { left: 0, right: 0 },
+    mbtiCounts: makeMbtiCounter(),
+    mbtiCountsOuter: makeMbtiCounter(),
+    mbtiCountsInner: makeMbtiCounter(),
+    introInputValue: ''
   };
+
+  var MBTI_PAIRS = [['E', 'I'], ['S', 'N'], ['T', 'F'], ['J', 'P']];
+  function makeMbtiCounter() { return { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 }; }
 
   var rootEl = null;
 
@@ -124,6 +149,18 @@
       .map(function (h) { return '<span class="te-chip">#' + escapeHtml(h) + '</span>'; })
       .join('');
 
+    // config.intro_input(선택): 결과 화면에서 "당신이 주장한 유형 vs AI 판정"처럼 자기신고 값과
+    // 비교하고 싶을 때 인트로에 드롭다운 하나를 추가한다. 없으면 기존과 동일하게 렌더된다.
+    var introInputHtml = '';
+    if (c.intro_input && Array.isArray(c.intro_input.options) && c.intro_input.options.length) {
+      var optionsHtml = c.intro_input.options
+        .map(function (o) { return '<option value="' + escapeAttr(o) + '">' + escapeHtml(o) + '</option>'; })
+        .join('');
+      introInputHtml =
+        '<label class="te-intro-input-label" for="te-intro-input">' + escapeHtml(c.intro_input.label || '') + '</label>' +
+        '<select class="te-intro-input" id="te-intro-input">' + optionsHtml + '</select>';
+    }
+
     rootEl.innerHTML =
       '<div class="te-app te-screen-intro te-has-fixed-footer">' +
         '<div class="te-intro-cover">' +
@@ -133,6 +170,7 @@
           '<h1 class="te-title">' + escapeHtml(c.title) + '</h1>' +
           '<p class="te-desc">' + escapeHtml(c.description) + '</p>' +
           '<div class="te-chip-row">' + hashtags + '</div>' +
+          introInputHtml +
         '</div>' +
         '<div class="te-choices-fixed te-intro-footer">' +
           '<button type="button" class="te-btn te-btn-primary" id="te-start-btn">테스트 시작</button>' +
@@ -140,16 +178,24 @@
         '</div>' +
       '</div>';
 
-    qs('#te-start-btn').addEventListener('click', startTest);
+    qs('#te-start-btn').addEventListener('click', function () {
+      var inputEl = qs('#te-intro-input');
+      state.introInputValue = inputEl ? inputEl.value : '';
+      startTest();
+    });
   }
 
   function startTest() {
     state.questionIndex = 0;
     state.answers = [];
     state.sumScore = 0;
+    state.tagCounts = {};
     state.typeCounts = {};
     state.correctCount = 0;
     state.axisScore = { left: 0, right: 0 };
+    state.mbtiCounts = makeMbtiCounter();
+    state.mbtiCountsOuter = makeMbtiCounter();
+    state.mbtiCountsInner = makeMbtiCounter();
     renderQuestion();
   }
 
@@ -199,7 +245,7 @@
   function selectChoice(question, choiceIndex) {
     var choice = question.choices[choiceIndex];
     state.answers.push(choice);
-    applyScoring(choice);
+    applyScoring(choice, question);
 
     if (state.questionIndex < state.config.questions.length - 1) {
       state.questionIndex += 1;
@@ -209,10 +255,13 @@
     }
   }
 
-  function applyScoring(choice) {
+  function applyScoring(choice, question) {
     switch (state.config.scoring_type) {
       case 'sum':
         state.sumScore += Number(choice.score) || 0;
+        if (choice.tag) {
+          state.tagCounts[choice.tag] = (state.tagCounts[choice.tag] || 0) + 1;
+        }
         break;
       case 'type':
         if (choice.type) {
@@ -226,6 +275,19 @@
         // choice.axis: 'left' | 'right', choice.weight: number (기본 1)
         if (choice.axis === 'left') state.axisScore.left += Number(choice.weight) || 1;
         else if (choice.axis === 'right') state.axisScore.right += Number(choice.weight) || 1;
+        break;
+      case 'mbti4':
+        // choice.axis: 'E'|'I'|'S'|'N'|'T'|'F'|'J'|'P', choice.weight: number (기본 1) — 4축 동시 집계
+        if (choice.axis && state.mbtiCounts.hasOwnProperty(choice.axis)) {
+          state.mbtiCounts[choice.axis] += Number(choice.weight) || 1;
+        }
+        break;
+      case 'mbti4_dual':
+        // question.block: 'outer'|'inner'로 두 세트의 4축을 독립 집계(겉 MBTI/속 MBTI 등)
+        if (choice.axis) {
+          var bucket = (question && question.block === 'inner') ? state.mbtiCountsInner : state.mbtiCountsOuter;
+          if (bucket.hasOwnProperty(choice.axis)) bucket[choice.axis] += Number(choice.weight) || 1;
+        }
         break;
       default:
         console.warn('[test-engine] 알 수 없는 scoring_type: ' + state.config.scoring_type);
@@ -265,6 +327,8 @@
       case 'type': return computeTypeResult(c);
       case 'quiz': return computeQuizResult(c);
       case 'axis': return computeAxisResult(c);
+      case 'mbti4': return computeMbti4Result(c);
+      case 'mbti4_dual': return computeMbti4DualResult(c);
       default:
         console.warn('[test-engine] 알 수 없는 scoring_type: ' + c.scoring_type);
         return c.results[0];
@@ -274,7 +338,26 @@
   function computeSumResult(c) {
     var score = state.sumScore;
     var matched = c.results.filter(function (r) { return score >= r.min && score <= r.max; })[0];
-    return matched || c.results[c.results.length - 1];
+    var base = matched || c.results[c.results.length - 1];
+    // choice.tag를 쓰는 config가 없으면(mental-age 등) bestTag/tagFallback 둘 다 falsy라
+    // merged.tag는 빈 문자열로만 남고 렌더 결과는 기존과 완전히 동일하다.
+    var bestTag = computeBestTag();
+    var merged = {};
+    Object.keys(base).forEach(function (k) { merged[k] = base[k]; });
+    merged.tag = bestTag || base.tagFallback || '';
+    return merged;
+  }
+
+  function computeBestTag() {
+    var best = null;
+    var bestCount = -1;
+    Object.keys(state.tagCounts).forEach(function (tag) {
+      if (state.tagCounts[tag] > bestCount) {
+        bestCount = state.tagCounts[tag];
+        best = tag;
+      }
+    });
+    return best;
   }
 
   function computeTypeResult(c) {
@@ -309,10 +392,68 @@
     return merged;
   }
 
+  // choice.axis 카운트(E/I/S/N/T/F/J/P)에서 4글자 MBTI 코드 산출 — 동점이면 각 쌍의 앞 글자
+  // (E/S/T/J)로 처리(공식 규칙이 있는 게 아니라 이 엔진의 결정적 기본값).
+  function codeFromCounts(counts) {
+    var code = '';
+    var ratios = {};
+    MBTI_PAIRS.forEach(function (pair) {
+      var a = counts[pair[0]] || 0;
+      var b = counts[pair[1]] || 0;
+      var total = a + b || 1;
+      code += (b > a) ? pair[1] : pair[0];
+      ratios[pair[0] + pair[1]] = Math.round((b / total) * 100); // 뒷글자(I/N/F/P) 비율 %
+    });
+    return { code: code, ratios: ratios };
+  }
+
+  function computeMbti4Result(c) {
+    var r = codeFromCounts(state.mbtiCounts);
+    var vars = { code: r.code, claimed: state.introInputValue || '' };
+    var matched = (c.results || []).filter(function (res) { return res.code === r.code; })[0];
+    var merged = fillVarsTemplate(matched || c.resultTemplate || {}, vars);
+    merged.code = r.code;
+    merged.axisRatios = r.ratios;
+    if (state.introInputValue) merged.claimed = state.introInputValue;
+    return merged;
+  }
+
+  function computeMbti4DualResult(c) {
+    var outer = codeFromCounts(state.mbtiCountsOuter);
+    var inner = codeFromCounts(state.mbtiCountsInner);
+    var vars = { outer: outer.code, inner: inner.code };
+    var merged = fillVarsTemplate(c.resultTemplate || {}, vars);
+    merged.outerCode = outer.code;
+    merged.innerCode = inner.code;
+    return merged;
+  }
+
+  // scoring_type이 mbti4/mbti4_dual일 때: title/subtitle/traits[]/tip 안의 "{code}"/"{outer}"/
+  // "{inner}"/"{claimed}" 같은 플레이스홀더를 실제 계산값으로 치환한다. 손으로 쓴 results[]
+  // 항목(res.code 매칭)이든 config.resultTemplate로 즉석 생성한 경량 콘텐츠든 동일하게 적용되므로,
+  // 16개 결과를 전부 손으로 쓰지 않고 템플릿 하나로 대체하는 것도, 특정 코드만 손으로 다듬어
+  // results[]에 끼워 넣는 것도 둘 다 자연스럽게 지원한다(2026-07-10 합의: 기본은 템플릿형).
+  function fillVarsTemplate(src, vars) {
+    function fill(str) {
+      var out = String(str || '');
+      Object.keys(vars).forEach(function (k) {
+        out = out.split('{' + k + '}').join(vars[k]);
+      });
+      return out;
+    }
+    return {
+      title: fill(src.title) || Object.keys(vars).map(function (k) { return vars[k]; }).join(' / '),
+      subtitle: fill(src.subtitle),
+      image: src.image || '',
+      traits: (src.traits || []).map(fill),
+      tip: fill(src.tip)
+    };
+  }
+
   // ---------- 화면: 결과 ----------
   function renderResult(result) {
     var traits = (result.traits || [])
-      .map(function (t) { return '<li>' + escapeHtml(t) + '</li>'; })
+      .map(function (t) { return '<li>' + escapeHtml(applyTagTemplate(t, result.tag)) + '</li>'; })
       .join('');
 
     var relatedIds = (state.config.related || []).filter(Boolean);
@@ -323,9 +464,9 @@
         '<div class="te-result-body">' +
           '<img src="' + escapeAttr(result.image) + '" alt="' + escapeAttr(result.title) + '" class="te-result-img" style="width:100%;display:block;" />' +
           '<h2 class="te-result-title">' + escapeHtml(result.title) + '</h2>' +
-          '<p class="te-result-subtitle">' + escapeHtml(result.subtitle || '') + '</p>' +
+          '<p class="te-result-subtitle">' + escapeHtml(applyTagTemplate(result.subtitle || '', result.tag)) + '</p>' +
           '<ul class="te-result-traits">' + traits + '</ul>' +
-          '<p class="te-result-tip">' + escapeHtml(result.tip || '') + '</p>' +
+          '<p class="te-result-tip">' + escapeHtml(applyTagTemplate(result.tip || '', result.tag)) + '</p>' +
           '<p class="te-save-hint">📸 이미지를 꾹 눌러 저장해보세요</p>' +
           relatedHtml +
         '</div>' +
@@ -480,6 +621,13 @@
     });
   }
   function escapeAttr(str) { return escapeHtml(str); }
+
+  // sum 채점 결과 텍스트의 "{tag}" 플레이스홀더를 computeSumResult()가 merge한 result.tag로 치환.
+  // tag가 없는 config(mental-age 등)는 "{tag}" 자체를 안 쓰므로 무해하게 그대로 통과한다.
+  function applyTagTemplate(str, tag) {
+    if (!tag) return str;
+    return String(str).replace(/\{tag\}/g, tag);
+  }
 
   // ---------- 시작 ----------
   if (document.readyState === 'loading') {

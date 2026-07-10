@@ -1,0 +1,42 @@
+{
+  "id": "shadow-mbti",
+  "title": "스트레스 받으면 튀어나오는 그림자 MBTI",
+  "description": "번아웃, 극한 상황에서 튀어나오는 나의 그림자 인격은 어떤 MBTI일까",
+  "hashtags": ["그림자MBTI", "심리테스트", "번아웃밈", "MBTI밈"],
+  "theme": "retro",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 189620,
+  "scoring_type": "mbti4",
+  "loading": { "text": "그림자 인격 분석 중..", "duration_ms": 2200 },
+  "related": [],
+  "resultTemplate": {
+    "title": "그림자 인격: {code}",
+    "subtitle": "한계에 다다랐을 때 튀어나오는 또 다른 나",
+    "image": "assets/result/generic.webp",
+    "traits": [
+      "평소와는 정반대로 {code} 성향이 폭주",
+      "극한 상황에서만 볼 수 있는 낯선 모습",
+      "주변 사람들도 이 모드는 처음 볼 수도"
+    ],
+    "tip": "당신의 그림자는 이렇게 생겼습니다 🌑"
+  },
+  "questions": [
+    { "text": "스트레스가 극에 달하면 나는?", "image": null,
+      "choices": [{ "label": "갑자기 말 많아지고 예민", "axis": "E" }, { "label": "완전 잠수·연락 두절", "axis": "I" }] },
+    { "text": "번아웃 왔을 때?", "image": null,
+      "choices": [{ "label": "사람들에게 터뜨림", "axis": "E" }, { "label": "방에 틀어박힘", "axis": "I" }] },
+    { "text": "스트레스 상태의 생각 회로는?", "image": null,
+      "choices": [{ "label": "최악의 시나리오 무한 상상", "axis": "N" }, { "label": "\"당장 이거 어떡해\" 현실 압박", "axis": "S" }] },
+    { "text": "무너질 때 집착하는 건?", "image": null,
+      "choices": [{ "label": "의미·이유 찾기", "axis": "N" }, { "label": "눈앞 디테일에 집착", "axis": "S" }] },
+    { "text": "스트레스 폭발 시 태도?", "image": null,
+      "choices": [{ "label": "차갑게 팩폭·냉정", "axis": "T" }, { "label": "감정 통제 불가", "axis": "F" }] },
+    { "text": "극한 상황에서 남에게?", "image": null,
+      "choices": [{ "label": "날카롭게 몰아세움", "axis": "T" }, { "label": "서운함·눈물 폭발", "axis": "F" }] },
+    { "text": "스트레스 받으면 일상이?", "image": null,
+      "choices": [{ "label": "오히려 강박적으로 정리", "axis": "J" }, { "label": "다 놓아버림·방치", "axis": "P" }] },
+    { "text": "한계에 다다르면?", "image": null,
+      "choices": [{ "label": "극단적으로 계획·통제하려 함", "axis": "J" }, { "label": "될대로 되라, 포기", "axis": "P" }] }
+  ],
+  "results": []
+}

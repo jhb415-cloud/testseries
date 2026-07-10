@@ -1,0 +1,42 @@
+{
+  "id": "brain-structure-report",
+  "title": "내 뇌 구조 분석 보고서",
+  "description": "평소 사고방식 8문항으로 뽑아보는 내 뇌 구조 분석 보고서",
+  "hashtags": ["뇌구조", "심리테스트", "뇌분석보고서", "MBTI밈"],
+  "theme": "retro",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 246730,
+  "scoring_type": "mbti4",
+  "loading": { "text": "뇌 구조 스캔 중..", "duration_ms": 2200 },
+  "related": [],
+  "resultTemplate": {
+    "title": "뇌 분석 결과: {code}",
+    "subtitle": "당신의 머릿속을 스캔한 결과입니다",
+    "image": "assets/result/generic.webp",
+    "traits": [
+      "{code} 회로가 뇌의 대부분을 차지하는 중",
+      "생각의 흐름을 따라가보면 패턴이 확실히 보임",
+      "이 결과, 캡처해서 저장할 사람 많을 듯"
+    ],
+    "tip": "당신의 뇌 분석 결과가 활성화됐습니다 🧠"
+  },
+  "questions": [
+    { "text": "머릿속이 제일 바쁠 때는?", "image": null,
+      "choices": [{ "label": "사람들이랑 있을 때", "axis": "E" }, { "label": "혼자 생각할 때", "axis": "I" }] },
+    { "text": "아이디어가 떠오르는 순간?", "image": null,
+      "choices": [{ "label": "떠들다가", "axis": "E" }, { "label": "조용히 있을 때", "axis": "I" }] },
+    { "text": "내 뇌의 기본 모드는?", "image": null,
+      "choices": [{ "label": "\"만약에...?\" 상상 회로", "axis": "N" }, { "label": "\"지금 뭐 해야 하지\" 현실 회로", "axis": "S" }] },
+    { "text": "정보를 받아들일 때?", "image": null,
+      "choices": [{ "label": "전체 그림·의미 먼저", "axis": "N" }, { "label": "디테일·팩트 먼저", "axis": "S" }] },
+    { "text": "판단할 때 뇌가 쓰는 건?", "image": null,
+      "choices": [{ "label": "논리 엔진", "axis": "T" }, { "label": "감정 엔진", "axis": "F" }] },
+    { "text": "결정을 내릴 때?", "image": null,
+      "choices": [{ "label": "효율·이득 계산", "axis": "T" }, { "label": "사람·관계 고려", "axis": "F" }] },
+    { "text": "내 뇌의 정리 상태는?", "image": null,
+      "choices": [{ "label": "폴더별 정리됨", "axis": "J" }, { "label": "열려있는 탭 100개", "axis": "P" }] },
+    { "text": "할 일 앞에서 뇌는?", "image": null,
+      "choices": [{ "label": "미리 시뮬·계획", "axis": "J" }, { "label": "마감 임박해야 각성", "axis": "P" }] }
+  ],
+  "results": []
+}

@@ -1,0 +1,148 @@
+{
+  "id": "villain-index",
+  "title": "내 안의 빌런 지수 테스트",
+  "description": "단톡방부터 연애까지, 8문항으로 재는 내 안의 빌런 지수와 페르소나",
+  "hashtags": ["빌런지수", "심리테스트", "자아성찰", "MZ밈테스트"],
+  "theme": "retro",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 241670,
+  "scoring_type": "sum",
+  "loading": { "text": "빌런 지수 계산 중..", "duration_ms": 2000 },
+  "related": [],
+  "questions": [
+    {
+      "text": "단톡방에서 나만 정보 알 때?",
+      "image": null,
+      "choices": [
+        { "label": "바로 공유", "score": 0 },
+        { "label": "필요할 때만", "score": 1 },
+        { "label": "은근 늦게", "score": 2 },
+        { "label": "나만 앎, 안 알려줌", "score": 3, "tag": "단톡빌런" }
+      ]
+    },
+    {
+      "text": "친구가 자랑할 때 속마음?",
+      "image": null,
+      "choices": [
+        { "label": "진심 축하", "score": 0 },
+        { "label": "좀 부럽", "score": 1 },
+        { "label": "겉으론 축하 속으론 배아픔", "score": 2 },
+        { "label": "\"그게 뭐 대단하다고\"", "score": 3, "tag": "모임빌런" }
+      ]
+    },
+    {
+      "text": "회의에서 남 아이디어가 좋을 때?",
+      "image": null,
+      "choices": [
+        { "label": "대놓고 칭찬", "score": 0 },
+        { "label": "인정은 함", "score": 1 },
+        { "label": "조용히 넘어감", "score": 2 },
+        { "label": "내 아이디어인 척", "score": 3, "tag": "회사빌런" }
+      ]
+    },
+    {
+      "text": "연인이 다른 이성 얘기하면?",
+      "image": null,
+      "choices": [
+        { "label": "쿨하게 들음", "score": 0 },
+        { "label": "살짝 신경", "score": 1 },
+        { "label": "티 안 내고 기분 상함", "score": 2 },
+        { "label": "캐묻고 뒤끝", "score": 3, "tag": "연애빌런" }
+      ]
+    },
+    {
+      "text": "약속 시간에 늦었을 때 나는?",
+      "image": null,
+      "choices": [
+        { "label": "미리 연락하고 사과", "score": 0 },
+        { "label": "도착해서 사과", "score": 1 },
+        { "label": "대충 \"차 막혔어\"", "score": 2 },
+        { "label": "오히려 상대 탓", "score": 3, "tag": "모임빌런" }
+      ]
+    },
+    {
+      "text": "남의 실수를 목격했을 때?",
+      "image": null,
+      "choices": [
+        { "label": "조용히 도와줌", "score": 0 },
+        { "label": "모른 척", "score": 1 },
+        { "label": "속으로 비웃음", "score": 2 },
+        { "label": "소문냄", "score": 3, "tag": "단톡빌런" }
+      ]
+    },
+    {
+      "text": "내가 잘못했다는 걸 알았을 때?",
+      "image": null,
+      "choices": [
+        { "label": "바로 인정·사과", "score": 0 },
+        { "label": "인정은 함", "score": 1 },
+        { "label": "어물쩍", "score": 2 },
+        { "label": "절대 인정 안 함", "score": 3, "tag": "회사빌런" }
+      ]
+    },
+    {
+      "text": "상대가 나한테 서운하다고 하면?",
+      "image": null,
+      "choices": [
+        { "label": "진지하게 들음", "score": 0 },
+        { "label": "미안해함", "score": 1 },
+        { "label": "\"예민하네\"", "score": 2 },
+        { "label": "\"네가 문제지\" 역공", "score": 3, "tag": "연애빌런" }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "min": 0, "max": 6,
+      "title": "천사",
+      "subtitle": "빌런 기운이라곤 1도 없는 클린 그 자체",
+      "image": "assets/result/angel.webp",
+      "traits": [
+        "단톡방 정보는 알자마자 바로 공유",
+        "친구 자랑에도 진심으로 축하하는 타입",
+        "내 잘못은 바로 인정하고 사과부터"
+      ],
+      "tip": "너 같은 사람만 있으면 세상이 참 편할 텐데",
+      "tagFallback": ""
+    },
+    {
+      "min": 7, "max": 12,
+      "title": "잠재빌런",
+      "subtitle": "겉으론 착한데 마음의 소리가 가끔 좀 세다",
+      "image": "assets/result/potential-villain.webp",
+      "traits": [
+        "축하는 하는데 속으론 살짝 부러움",
+        "남 실수 보면 속으로만 살짝 비웃음",
+        "서운하다는 말 들으면 은근 예민해짐"
+      ],
+      "tip": "아직은 괜찮은데, 방심하면 슬슬 진화할지도",
+      "tagFallback": ""
+    },
+    {
+      "min": 13, "max": 18,
+      "title": "은근빌런",
+      "subtitle": "은근히 {tag} 기질이 스멀스멀 올라오는 중",
+      "image": "assets/result/quiet-villain.webp",
+      "traits": [
+        "겉으론 태연한 척, 속으론 계산 다 함",
+        "잘못해도 어물쩍 넘어가려는 편",
+        "티는 안 나지만 은근 {tag} 짬이 좀 있음"
+      ],
+      "tip": "주변에서는 이미 눈치챘을지도, 조심히 활동하자",
+      "tagFallback": "은근"
+    },
+    {
+      "min": 19, "max": 24,
+      "title": "찐빌런",
+      "subtitle": "너 은근 아니고 그냥 {tag} 확정임",
+      "image": "assets/result/real-villain.webp",
+      "traits": [
+        "필요할 때만 정보 공유, 나머진 나만 앎",
+        "잘못해도 절대 인정 안 하는 강철 멘탈",
+        "주변에서 이미 \"쟤 {tag}잖아\" 소문났을 듯"
+      ],
+      "tip": "빌런 지수 최상급 — 주변 사람들 이미 다 눈치챔 🤡",
+      "tagFallback": "만능"
+    }
+  ]
+}
