@@ -2,12 +2,20 @@
   "id": "mbti-stat-window",
   "title": "내 MBTI 능력치 스탯창",
   "description": "게임 시작 전에 내 캐릭터 스펙부터 확인 — 실제 응답 기반으로 계산되는 진짜 내 스탯",
-  "hashtags": ["MBTI스탯", "심리테스트", "MBTI능력치", "MBTI밈"],
+  "hashtags": [
+    "MBTI스탯",
+    "심리테스트",
+    "MBTI능력치",
+    "MBTI밈"
+  ],
   "theme": "fantasy",
   "cover_image": "assets/cover.webp",
   "seed_count": 152340,
   "scoring_type": "mbti4",
-  "loading": { "text": "능력치 스탯 계산 중..", "duration_ms": 2000 },
+  "loading": {
+    "text": "능력치 스탯 계산 중..",
+    "duration_ms": 2000
+  },
   "related": [],
   "resultTemplate": {
     "title": "캐릭터 생성 완료: {code}",
@@ -22,22 +30,327 @@
     "tip": "스탯은 그날 컨디션 따라 살짝 바뀔 수 있음 — 재도전하면 스탯 새로고침 가능"
   },
   "questions": [
-    { "text": "새로운 모임에 가면 나는?", "image": null,
-      "choices": [{ "label": "낯선 사람한테도 먼저 말 검", "axis": "E" }, { "label": "아는 사람 옆에만 붙어있음", "axis": "I" }] },
-    { "text": "주말에 에너지 충전하는 법은?", "image": null,
-      "choices": [{ "label": "밖에서 사람 만나야 충전됨", "axis": "E" }, { "label": "집에서 혼자 있어야 충전됨", "axis": "I" }] },
-    { "text": "새 프로젝트 시작할 때?", "image": null,
-      "choices": [{ "label": "구체적인 자료·매뉴얼부터 챙김", "axis": "S" }, { "label": "큰 그림/아이디어부터 떠올림", "axis": "N" }] },
-    { "text": "이야기할 때 나는?", "image": null,
-      "choices": [{ "label": "실제 있었던 일 위주로 말함", "axis": "S" }, { "label": "상상·비유를 섞어 말함", "axis": "N" }] },
-    { "text": "친구가 힘든 일 얘기하면?", "image": null,
-      "choices": [{ "label": "원인 분석하고 해결책 제시", "axis": "T" }, { "label": "일단 공감하고 위로부터", "axis": "F" }] },
-    { "text": "결정할 때 더 중요한 건?", "image": null,
-      "choices": [{ "label": "논리적으로 맞는지", "axis": "T" }, { "label": "사람들 감정 상하지 않는지", "axis": "F" }] },
-    { "text": "여행 갈 때 나는?", "image": null,
-      "choices": [{ "label": "일정표 다 짜놓고 움직임", "axis": "J" }, { "label": "도착해서 그때그때 정함", "axis": "P" }] },
-    { "text": "마감이 있는 일은?", "image": null,
-      "choices": [{ "label": "미리미리 끝내놔야 마음 편함", "axis": "J" }, { "label": "마감 임박해야 엔진 걸림", "axis": "P" }] }
+    {
+      "text": "새로운 모임에 가면 나는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "낯선 사람한테도 먼저 말 검",
+          "axis": "E"
+        },
+        {
+          "label": "아는 사람 옆에만 붙어있음",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "주말에 에너지 충전하는 법은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "밖에서 사람 만나야 충전됨",
+          "axis": "E"
+        },
+        {
+          "label": "집에서 혼자 있어야 충전됨",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "새 프로젝트 시작할 때?",
+      "image": null,
+      "choices": [
+        {
+          "label": "구체적인 자료·매뉴얼부터 챙김",
+          "axis": "S"
+        },
+        {
+          "label": "큰 그림/아이디어부터 떠올림",
+          "axis": "N"
+        }
+      ]
+    },
+    {
+      "text": "이야기할 때 나는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "실제 있었던 일 위주로 말함",
+          "axis": "S"
+        },
+        {
+          "label": "상상·비유를 섞어 말함",
+          "axis": "N"
+        }
+      ]
+    },
+    {
+      "text": "친구가 힘든 일 얘기하면?",
+      "image": null,
+      "choices": [
+        {
+          "label": "원인 분석하고 해결책 제시",
+          "axis": "T"
+        },
+        {
+          "label": "일단 공감하고 위로부터",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "결정할 때 더 중요한 건?",
+      "image": null,
+      "choices": [
+        {
+          "label": "논리적으로 맞는지",
+          "axis": "T"
+        },
+        {
+          "label": "사람들 감정 상하지 않는지",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "여행 갈 때 나는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "일정표 다 짜놓고 움직임",
+          "axis": "J"
+        },
+        {
+          "label": "도착해서 그때그때 정함",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "마감이 있는 일은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "미리미리 끝내놔야 마음 편함",
+          "axis": "J"
+        },
+        {
+          "label": "마감 임박해야 엔진 걸림",
+          "axis": "P"
+        }
+      ]
+    }
   ],
-  "results": []
+  "results": [
+    {
+      "code": "ISTJ",
+      "title": "🛡️ 성기사 ({code})",
+      "subtitle": "매뉴얼대로 안 하면 버프 안 줌. 원칙이 곧 스킬트리인 철벽 팔라딘",
+      "image": "assets/result/istj.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "성기사답게 재측정도 계획표에 넣어두자 — 스탯은 그날 컨디션 따라 살짝 바뀔 수 있음"
+    },
+    {
+      "code": "ISFJ",
+      "title": "🏰 수호기사 ({code})",
+      "subtitle": "파티원 다 지키느라 정작 자기 HP는 안 챙기는 대형 방패",
+      "image": "assets/result/isfj.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "가끔은 방패 내려놓고 본인 스탯도 챙길 것 — 재도전하면 스탯 새로고침 가능"
+    },
+    {
+      "code": "INFJ",
+      "title": "🔮 현자 ({code})",
+      "subtitle": "3턴 뒤 상대 패까지 읽고 있는데 굳이 말은 안 해주는 예언가",
+      "image": "assets/result/infj.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "미래가 보여도 스탯은 오늘 기준 — 재도전하면 새 예언(스탯)으로 갱신됨"
+    },
+    {
+      "code": "INTJ",
+      "title": "🌑 흑마법사 ({code})",
+      "subtitle": "이미 엔딩까지 전략 다 짜놓음. 파티는 그냥 따라오면 되는 마스터마인드",
+      "image": "assets/result/intj.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "계획에 없던 재도전도 가끔은 유효함 — 스탯은 그날 컨디션 따라 살짝 바뀜"
+    },
+    {
+      "code": "ISTP",
+      "title": "🗡️ 암살자 ({code})",
+      "subtitle": "말 없이 사라졌다가 어느새 보스 처치 로그만 남기는 원샷원킬",
+      "image": "assets/result/istp.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "굳이 설명 안 해도 됨. 조용히 재도전해서 스탯만 갱신하고 가면 됨"
+    },
+    {
+      "code": "ISFP",
+      "title": "🌿 드루이드 ({code})",
+      "subtitle": "전투보다 필드 야생동물 쓰다듬기 콘텐츠에 진심인 자연인",
+      "image": "assets/result/isfp.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "동물 친구들이 지켜보는 중 — 기분 따라 스탯 바뀌니 재도전으로 새로고침 가능"
+    },
+    {
+      "code": "INFP",
+      "title": "✨ 백마법사 ({code})",
+      "subtitle": "적 몬스터도 불쌍해서 힐 주다가 팀한테 혼나는 성수 그 자체",
+      "image": "assets/result/infp.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "너무 몰입해서 상처받지 말 것 — 스탯은 그날 감정 상태 따라 살짝 바뀜"
+    },
+    {
+      "code": "INTP",
+      "title": "⚗️ 연금술사 ({code})",
+      "subtitle": "'이거 섞으면 어떻게 되지?' → 공방 폭발 3회차. 그래도 이론은 완벽함",
+      "image": "assets/result/intp.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "실험 정신 발동됐다면 재도전 ㄱㄱ — 표본이 늘수록 스탯이 정확해짐(이론상)"
+    },
+    {
+      "code": "ESTP",
+      "title": "⚔️ 검투사 ({code})",
+      "subtitle": "관중 함성 들리면 스탯 2배 되는 아레나의 타고난 쇼맨",
+      "image": "assets/result/estp.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "지금 이 스탯도 관중 없어서 낮게 나온 걸 수도? 재도전해서 증명하자"
+    },
+    {
+      "code": "ESFP",
+      "title": "🎸 음유시인 ({code})",
+      "subtitle": "전투 중에도 스포트라이트는 내 거. 버프곡이 아니라 단독 콘서트",
+      "image": "assets/result/esfp.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "앵콜 요청 들어옴 — 재도전하면 오늘의 무대(스탯)로 새로고침 가능"
+    },
+    {
+      "code": "ENFP",
+      "title": "🎲 소환사 ({code})",
+      "subtitle": "뭐가 소환될지 본인도 모름. 근데 일단 재밌으면 된 거 아님?",
+      "image": "assets/result/enfp.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "재도전할 때마다 다른 스탯이 소환될 수 있음 — 그게 소환사의 묘미"
+    },
+    {
+      "code": "ENTP",
+      "title": "⚙️ 마도공학자 ({code})",
+      "subtitle": "'이론상 가능함'으로 시작해서 결국 공성병기까지 만들어오는 발명가",
+      "image": "assets/result/entp.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "이 스탯도 반박 가능함 — 재도전으로 데이터 더 모아서 논파해보자"
+    },
+    {
+      "code": "ESTJ",
+      "title": "🚩 기사단장 ({code})",
+      "subtitle": "레이드 공대장. 딜찍누 금지, 오더 안 들으면 강퇴인 완벽 지휘관",
+      "image": "assets/result/estj.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "오늘 공략 끝났으면 다음 스케줄에 재측정 넣어둘 것 — 스탯은 갱신됨"
+    },
+    {
+      "code": "ESFJ",
+      "title": "💖 힐러 ({code})",
+      "subtitle": "'포션 먹었어? 버프 받았어?' 파티의 공식 엄마이자 진짜 주인공",
+      "image": "assets/result/esfj.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "남 챙기다 본인 스탯 확인 늦었지? 가끔은 본인 것도 재측정해주기"
+    },
+    {
+      "code": "ENFJ",
+      "title": "🌟 대사제 ({code})",
+      "subtitle": "만렙 찍고도 뉴비 마을에서 길 안내해주고 있는 서버 인망캐",
+      "image": "assets/result/enfj.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "다들 따라오게 만드는 그 스탯, 재도전하면 오늘 컨디션으로 갱신 가능"
+    },
+    {
+      "code": "ENTJ",
+      "title": "👑 마왕 ({code})",
+      "subtitle": "정복 스케줄이 분기별로 짜여 있는 최종보스. 근데 유능해서 할 말 없음",
+      "image": "assets/result/entj.webp",
+      "traits": [
+        "🗣️ 사교력   {ebar} {e}%",
+        "🔮 직관력   {nbar} {n}%",
+        "❤️ 공감력   {fbar} {f}%",
+        "📐 계획성   {jbar} {j}%"
+      ],
+      "tip": "정복 일정에 재측정도 넣어두자 — 스탯은 그날 컨디션 따라 살짝 바뀜"
+    }
+  ]
 }

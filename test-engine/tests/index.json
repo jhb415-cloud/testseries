@@ -11,25 +11,176 @@
       "concept_style": "레트로 Windows95 병맛",
       "note": "PART1/2 20개 목록 이전에 만들어진 1호 콘텐츠, 번호 없음. v0.0.3: 문항 이미지 규칙(4-4-1) 소급 적용 — 1/4/7/10/13번 문항에 SVG 아이콘 추가(API 비용 없이 직접 제작), 하단 고정 버튼바 높이를 실측 기반으로 동적 계산하도록 engine.js 수정(선택지 많은 테스트에서 버튼-본문 겹침 버그 수정, k-office-type에서 발견)"
     },
-    { "number": 1, "id": "k-office-type", "title": "회사에서 나는 무슨 K-직장인 유형?", "category": "몰입테스트", "scoring_type": "type", "status": "완료(운영중) — 폴더 1-k-office-type, 사이트 연동 완료(AppData.externalTests/sections.json/sitemap.xml)", "concept_style": "밈/드립형 — 플랫 벡터 사원증 밈 포스터, themes/office.css", "note": "images/edits 레퍼런스 생성 시 프롬프트 truncation 버그 발견·수정(2026-07-10, generate-assets.js 파서는 헤딩당 한 줄만 읽음 — 항상 한 줄로 작성할 것)" },
-    { "number": 2, "id": "desert-island-type", "title": "무인도에 떨어지면 나는? (생존 유형)", "category": "몰입테스트", "scoring_type": "type", "status": "완료(이미지·QA·index.html까지, 사이트 연동 전) — 폴더 2-desert-island-type", "concept_style": "세피아 잉크 탐험일지/지도 스케치, themes/journal.css", "note": "레퍼런스 2장(사용자 제공 합성 이미지를 좌우 분리) 중 우측(눈치빌런형 포즈)을 opportunist.webp로 그대로 채택, 나머지 5개+커버는 OpenAI images/edits로 생성" },
-    { "number": 3, "id": "text-reply-love-type", "title": "텍스트 답장 스타일로 보는 연애 유형", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
-    { "number": 4, "id": "spending-type", "title": "나의 소비 유형: 거지방 vs 욜로", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
-    { "number": 5, "id": "villain-index", "title": "내 안의 빌런 지수 테스트", "category": "몰입테스트", "scoring_type": "sum+tag(STEP4)", "status": "텍스트 초안 완료, 이미지 미착수" },
-    { "number": 6, "id": "mbti-addiction-level", "title": "나의 MBTI 과몰입 정도 테스트 (메타)", "category": "몰입테스트", "scoring_type": "sum", "status": "텍스트 초안 완료, 이미지 미착수" },
-    { "number": 7, "id": "idol-position-type", "title": "내가 아이돌 그룹에 들어가면 포지션은?", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
-    { "number": 8, "id": "group-chat-character", "title": "단톡방에서 나는 무슨 캐릭터?", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
-    { "number": 9, "id": "dopamine-addiction-level", "title": "나의 도파민 중독 레벨 테스트", "category": "몰입테스트", "scoring_type": "sum", "status": "텍스트 초안 완료, 이미지 미착수" },
-    { "number": 10, "id": "joseon-past-life-type", "title": "전생에 나는 조선시대 누구? (사주/명리 연계)", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
-    { "number": 11, "id": "real-vs-fake-mbti", "title": "찐 MBTI vs 겉 MBTI 판별기 (겉바속촉)", "category": "MBTI존", "scoring_type": "mbti4_dual", "status": "완료(사이트 연동까지) — 폴더 11-real-vs-fake-mbti, MBTI존 탭+홈 sections.json+sitemap.xml 전부 연결됨", "concept_style": "밈/드립형 — 스크랩북/폴라로이드 다이어리 콜라주, themes/scrapbook.css", "note": "사용자가 Gemini로 직접 뽑은 레퍼런스(그리드 노트+워시테이프 폴라로이드 2장: 오렌지톤 겉모습 미소 vs 청록톤 속마음 클로즈업)가 겉바속촉 컨셉과 정확히 맞아떨어져 그대로 채택, images/edits로 스타일 전이해 cover+generic 생성" },
-    { "number": 12, "id": "love-mode-mbti", "title": "연애하면 바뀌는 내 MBTI", "category": "MBTI존", "scoring_type": "mbti4", "status": "완료(사이트 연동까지) — 폴더 12-love-mode-mbti, MBTI존 탭+홈 sections.json+sitemap.xml 전부 연결됨", "concept_style": "밈/드립형 — 레이어드 페이퍼컷 마스크 콜라주, themes/papercut.css", "note": "사용자가 Gemini로 직접 뽑은 레퍼런스(주황 웃는 마스크가 페이지처럼 벗겨지며 청록 진지한 얼굴이 드러나는 구성)를 '연애 앞에서 튀어나오는 다른 나(가면)' 컨셉으로 채택, images/edits로 스타일 전이해 cover+generic 생성" },
-    { "number": 13, "id": "drunk-mbti", "title": "취중 MBTI 테스트", "category": "MBTI존", "scoring_type": "mbti4", "status": "완료(사이트 연동까지) — 폴더 13-drunk-mbti, MBTI존 탭+홈 sections.json+sitemap.xml 전부 연결됨", "concept_style": "밈/드립형 — 네온사인 라인아트(도심 야경), themes/neon.css", "note": "사용자가 Gemini로 직접 뽑은 레퍼런스(2패널: 커버용 서있는 포즈+'Emotional Drunk type' 결과 포즈)가 라벨까지 명시돼있어 그대로 cover/generic 프롬프트로 채택, images/edits로 스타일 전이해 생성" },
-    { "number": 14, "id": "villain-mbti", "title": "내 안의 빌런 MBTI", "category": "MBTI존", "scoring_type": "mbti4", "status": "텍스트 초안 완료, 이미지 미착수" },
-    { "number": 15, "id": "crush-mode-mbti", "title": "좋아하는 사람 앞에서 나오는 MBTI (크러쉬 모드)", "category": "MBTI존", "scoring_type": "mbti4", "status": "텍스트 초안 완료, 이미지 미착수" },
-    { "number": 16, "id": "brain-structure-report", "title": "내 뇌 구조 분석 보고서", "category": "MBTI존", "scoring_type": "mbti4", "status": "텍스트 초안 완료, 이미지 미착수" },
-    { "number": 17, "id": "office-mask-mbti", "title": "회사에서의 내 MBTI (K-직장인 가면)", "category": "MBTI존", "scoring_type": "mbti4", "status": "텍스트 초안 완료, 이미지 미착수" },
-    { "number": 18, "id": "shadow-mbti", "title": "스트레스 받으면 튀어나오는 그림자 MBTI", "category": "MBTI존", "scoring_type": "mbti4", "status": "텍스트 초안 완료, 이미지 미착수" },
-    { "number": 19, "id": "mbti-stat-window", "title": "내 MBTI 능력치 스탯창 (원안 'MBTI 커플 조합 궁합기'에서 교체됨)", "category": "MBTI존", "scoring_type": "mbti4", "status": "이미지 스타일 확정(판타지 RPG 초상화+themes/fantasy.css+한글 라벨), 16개 클래스 중 샘플 2종만 생성됨 — 나머지 14종 진행 필요", "note": "레거시 원안은 test-engine/tests/mbti-couple-match/DESIGN.md에 보존" },
-    { "number": 20, "id": "ai-mbti-judge", "title": "AI가 판별하는 진짜 내 MBTI (과몰입 검거)", "category": "MBTI존", "scoring_type": "mbti4+intro_input", "status": "텍스트 초안 완료, 이미지 미착수" }
+    {
+      "number": 1,
+      "id": "k-office-type",
+      "title": "회사에서 나는 무슨 K-직장인 유형?",
+      "category": "몰입테스트",
+      "scoring_type": "type",
+      "status": "완료(운영중) — 폴더 1-k-office-type, 사이트 연동 완료(AppData.externalTests/sections.json/sitemap.xml)",
+      "concept_style": "밈/드립형 — 플랫 벡터 사원증 밈 포스터, themes/office.css",
+      "note": "images/edits 레퍼런스 생성 시 프롬프트 truncation 버그 발견·수정(2026-07-10, generate-assets.js 파서는 헤딩당 한 줄만 읽음 — 항상 한 줄로 작성할 것)"
+    },
+    {
+      "number": 2,
+      "id": "desert-island-type",
+      "title": "무인도에 떨어지면 나는? (생존 유형)",
+      "category": "몰입테스트",
+      "scoring_type": "type",
+      "status": "완료(이미지·QA·index.html까지, 사이트 연동 전) — 폴더 2-desert-island-type",
+      "concept_style": "세피아 잉크 탐험일지/지도 스케치, themes/journal.css",
+      "note": "레퍼런스 2장(사용자 제공 합성 이미지를 좌우 분리) 중 우측(눈치빌런형 포즈)을 opportunist.webp로 그대로 채택, 나머지 5개+커버는 OpenAI images/edits로 생성"
+    },
+    {
+      "number": 3,
+      "id": "text-reply-love-type",
+      "title": "텍스트 답장 스타일로 보는 연애 유형",
+      "category": "몰입테스트",
+      "scoring_type": "type",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    },
+    {
+      "number": 4,
+      "id": "spending-type",
+      "title": "나의 소비 유형: 거지방 vs 욜로",
+      "category": "몰입테스트",
+      "scoring_type": "type",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    },
+    {
+      "number": 5,
+      "id": "villain-index",
+      "title": "내 안의 빌런 지수 테스트",
+      "category": "몰입테스트",
+      "scoring_type": "sum+tag(STEP4)",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    },
+    {
+      "number": 6,
+      "id": "mbti-addiction-level",
+      "title": "나의 MBTI 과몰입 정도 테스트 (메타)",
+      "category": "몰입테스트",
+      "scoring_type": "sum",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    },
+    {
+      "number": 7,
+      "id": "idol-position-type",
+      "title": "내가 아이돌 그룹에 들어가면 포지션은?",
+      "category": "몰입테스트",
+      "scoring_type": "type",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    },
+    {
+      "number": 8,
+      "id": "group-chat-character",
+      "title": "단톡방에서 나는 무슨 캐릭터?",
+      "category": "몰입테스트",
+      "scoring_type": "type",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    },
+    {
+      "number": 9,
+      "id": "dopamine-addiction-level",
+      "title": "나의 도파민 중독 레벨 테스트",
+      "category": "몰입테스트",
+      "scoring_type": "sum",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    },
+    {
+      "number": 10,
+      "id": "joseon-past-life-type",
+      "title": "전생에 나는 조선시대 누구? (사주/명리 연계)",
+      "category": "몰입테스트",
+      "scoring_type": "type",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    },
+    {
+      "number": 11,
+      "id": "real-vs-fake-mbti",
+      "title": "찐 MBTI vs 겉 MBTI 판별기 (겉바속촉)",
+      "category": "MBTI존",
+      "scoring_type": "mbti4_dual",
+      "status": "완료(사이트 연동까지) — 폴더 11-real-vs-fake-mbti, MBTI존 탭+홈 sections.json+sitemap.xml 전부 연결됨",
+      "concept_style": "밈/드립형 — 스크랩북/폴라로이드 다이어리 콜라주, themes/scrapbook.css",
+      "note": "사용자가 Gemini로 직접 뽑은 레퍼런스(그리드 노트+워시테이프 폴라로이드 2장: 오렌지톤 겉모습 미소 vs 청록톤 속마음 클로즈업)가 겉바속촉 컨셉과 정확히 맞아떨어져 그대로 채택, images/edits로 스타일 전이해 cover+generic 생성"
+    },
+    {
+      "number": 12,
+      "id": "love-mode-mbti",
+      "title": "연애하면 바뀌는 내 MBTI",
+      "category": "MBTI존",
+      "scoring_type": "mbti4",
+      "status": "완료(사이트 연동까지) — 폴더 12-love-mode-mbti, MBTI존 탭+홈 sections.json+sitemap.xml 전부 연결됨",
+      "concept_style": "밈/드립형 — 레이어드 페이퍼컷 마스크 콜라주, themes/papercut.css",
+      "note": "사용자가 Gemini로 직접 뽑은 레퍼런스(주황 웃는 마스크가 페이지처럼 벗겨지며 청록 진지한 얼굴이 드러나는 구성)를 '연애 앞에서 튀어나오는 다른 나(가면)' 컨셉으로 채택, images/edits로 스타일 전이해 cover+generic 생성"
+    },
+    {
+      "number": 13,
+      "id": "drunk-mbti",
+      "title": "취중 MBTI 테스트",
+      "category": "MBTI존",
+      "scoring_type": "mbti4",
+      "status": "완료(사이트 연동까지) — 폴더 13-drunk-mbti, MBTI존 탭+홈 sections.json+sitemap.xml 전부 연결됨",
+      "concept_style": "밈/드립형 — 네온사인 라인아트(도심 야경), themes/neon.css",
+      "note": "사용자가 Gemini로 직접 뽑은 레퍼런스(2패널: 커버용 서있는 포즈+'Emotional Drunk type' 결과 포즈)가 라벨까지 명시돼있어 그대로 cover/generic 프롬프트로 채택, images/edits로 스타일 전이해 생성"
+    },
+    {
+      "number": 14,
+      "id": "villain-mbti",
+      "title": "내 안의 빌런 MBTI",
+      "category": "MBTI존",
+      "scoring_type": "mbti4",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    },
+    {
+      "number": 15,
+      "id": "crush-mode-mbti",
+      "title": "좋아하는 사람 앞에서 나오는 MBTI (크러쉬 모드)",
+      "category": "MBTI존",
+      "scoring_type": "mbti4",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    },
+    {
+      "number": 16,
+      "id": "brain-structure-report",
+      "title": "내 뇌 구조 분석 보고서",
+      "category": "MBTI존",
+      "scoring_type": "mbti4",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    },
+    {
+      "number": 17,
+      "id": "office-mask-mbti",
+      "title": "회사에서의 내 MBTI (K-직장인 가면)",
+      "category": "MBTI존",
+      "scoring_type": "mbti4",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    },
+    {
+      "number": 18,
+      "id": "shadow-mbti",
+      "title": "스트레스 받으면 튀어나오는 그림자 MBTI",
+      "category": "MBTI존",
+      "scoring_type": "mbti4",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    },
+    {
+      "number": 19,
+      "id": "mbti-stat-window",
+      "title": "내 MBTI 능력치 스탯창 (원안 'MBTI 커플 조합 궁합기'에서 교체됨)",
+      "category": "MBTI존",
+      "scoring_type": "mbti4",
+      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 19-mbti-stat-window, 16유형 전원 게임 클래스 초상화(한글 라벨 각인) + results[] 16종 클래스별 문구",
+      "note": "레거시 원안은 test-engine/tests/mbti-couple-match/DESIGN.md에 보존"
+    },
+    {
+      "number": 20,
+      "id": "ai-mbti-judge",
+      "title": "AI가 판별하는 진짜 내 MBTI (과몰입 검거)",
+      "category": "MBTI존",
+      "scoring_type": "mbti4+intro_input",
+      "status": "텍스트 초안 완료, 이미지 미착수"
+    }
   ]
 }
