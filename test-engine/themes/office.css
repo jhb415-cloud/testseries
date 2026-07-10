@@ -1,0 +1,79 @@
+/* test-engine — themes/office.css — 3호 테마: 모던 오피스 밈 포스터 스킨
+   engine.css의 골격 클래스(.te-app, .te-btn, .te-progress-* 등)를 그대로 사용하고,
+   색상/테두리/폰트만 이 파일에서 덮어씀. k-office-type(#1 자리)이 1호 사용처.
+   레트로(윈도우95)/판타지와 마찬가지로 신규 테마 파일 추가 방식 — engine.js/engine.css는
+   수정하지 않음. 결과 일러스트(플랫 벡터, 사원증 밈, 그레이/네이비+청록/주황 팔레트)와
+   톤을 맞춘 "밝은 오피스 코르크보드" 무드. */
+
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;600;700&display=swap');
+
+.te-app {
+  background: linear-gradient(180deg, #f4f4f1 0%, #e7e6e0 100%);
+  color: #23292f;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #ffffff;
+  border: 1px solid #dcdcd6;
+  border-top: 6px solid #1D9E75;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(35, 41, 47, 0.1);
+  margin: 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Black Han Sans", "Noto Sans KR", sans-serif;
+  color: #1f2a30;
+  letter-spacing: 0.01em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #5b6570; }
+
+.te-chip {
+  background: rgba(29, 158, 117, 0.1);
+  border: 1px solid rgba(29, 158, 117, 0.4);
+  color: #0f6b4d;
+  font-weight: 600;
+}
+
+.te-btn {
+  background: #1D9E75;
+  color: #ffffff;
+  border: 1px solid #0f6b4d;
+  box-shadow: 0 3px 0 #0f6b4d;
+  font-weight: 600;
+}
+.te-btn-primary { background: #D85A30; border-color: #a83f1f; box-shadow: 0 3px 0 #a83f1f; color: #fff; }
+.te-btn-secondary { background: #eceae4; border-color: #cfcdc5; box-shadow: 0 3px 0 #cfcdc5; color: #23292f; }
+.te-btn-accent { background: #D85A30; border-color: #a83f1f; box-shadow: 0 3px 0 #a83f1f; color: #fff; }
+.te-btn-kakao { background: #FEE500; color: #191600; border-color: rgba(0,0,0,0.15); box-shadow: 0 3px 0 rgba(0,0,0,0.15); }
+
+.te-btn-choice {
+  background: #f7f7f4;
+  color: #23292f;
+  border: 1px solid #dcdcd6;
+  box-shadow: none;
+}
+.te-btn-choice:active { background: rgba(29, 158, 117, 0.1); border-color: #1D9E75; }
+
+.te-progress-track { background: rgba(35, 41, 47, 0.08); }
+.te-progress-fill { background: linear-gradient(90deg, #1D9E75, #D85A30); }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #23292f;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(29, 158, 117, 0.15);
+  border-top-color: #D85A30;
+}

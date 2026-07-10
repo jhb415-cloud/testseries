@@ -11,7 +11,7 @@
       "concept_style": "레트로 Windows95 병맛",
       "note": "PART1/2 20개 목록 이전에 만들어진 1호 콘텐츠, 번호 없음"
     },
-    { "number": 1, "id": "k-office-type", "title": "회사에서 나는 무슨 K-직장인 유형?", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 1, "id": "k-office-type", "title": "회사에서 나는 무슨 K-직장인 유형?", "category": "몰입테스트", "scoring_type": "type", "status": "완료(이미지·QA·index.html까지, 사이트 연동 전)", "concept_style": "밈/드립형 — 플랫 벡터 사원증 밈 포스터, themes/office.css", "note": "images/edits 레퍼런스 생성 시 프롬프트 truncation 버그 발견·수정(2026-07-10, generate-assets.js 파서는 헤딩당 한 줄만 읽음 — 항상 한 줄로 작성할 것)" },
     { "number": 2, "id": "desert-island-type", "title": "무인도에 떨어지면 나는? (생존 유형)", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
     { "number": 3, "id": "text-reply-love-type", "title": "텍스트 답장 스타일로 보는 연애 유형", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
     { "number": 4, "id": "spending-type", "title": "나의 소비 유형: 거지방 vs 욜로", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
