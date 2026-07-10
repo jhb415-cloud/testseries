@@ -53,6 +53,15 @@
   실사용 예시. **#19(MBTI 커플 궁합기)는 이 6종 중 어느 것으로도 표현이 안 되는 "두 유형을 골라
   즉시 매칭"하는 화면이라 이번 STEP에 포함하지 않음** — 콘텐츠·등급 규칙만 `tests/mbti-couple-match/
   DESIGN.md`에 정리해두고, 실제 구현(신규 화면 타입)은 사용자 확인 후 별도 진행.
+- **STEP 6(2026-07-10) 예외 3건째 — #19 대체**: 사용자가 "궁합 말고 다른 걸로, 근데 MBTI식은
+  유지"로 결정해 #19를 `mbti-stat-window`(MBTI를 게임 캐릭터 능력치 스탯 바로 시각화)로 교체
+  확정. `mbti4`는 이미 축별 비율을 내부적으로 계산해두고 있었는데 `fillVarsTemplate`에는
+  `{code}`/`{claimed}`만 노출되고 있어서, 이미 계산된 값을 `{e}`/`{n}`/`{f}`/`{j}`(E/N/F/J
+  쪽 퍼센트)와 `{ebar}`/`{nbar}`/`{fbar}`/`{jbar}`(10칸 이모지 막대 문자열)로 템플릿에 추가
+  노출(engine.js `computeMbti4Result`/신규 `statBar()`, 새 scoring_type이 아니라 mbti4의
+  파생값만 더 꺼내 쓰는 것). 이 변수들을 참조하지 않는 기존 resultTemplate은 완전히 그대로
+  동작(mental-age Playwright 재검증 완료), `mbti-stat-window`가 실사용 예시 — 16유형 고정
+  문구가 아니라 **실제 응답 기반 퍼센트**가 나오는 첫 mbti4 콘텐츠.
 
 ## 4-3. 폴더 생성
 ```

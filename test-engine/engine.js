@@ -20,7 +20,13 @@
    항목이 우선 적용된다. 인트로 화면에 config.intro_input(라벨+옵션 배열)을 넣으면 테스트 시작
    전 자기신고 값(예: "당신이 생각하는 내 MBTI는?")을 드롭다운으로 받아 state.introInputValue에
    저장하고, mbti4 결과의 "{claimed}" 플레이스홀더로 사용할 수 있다(#20 메타 테스트용).
-   intro_input이 없는 기존 config는 렌더링에 아무 변화가 없다(하위호환). */
+   intro_input이 없는 기존 config는 렌더링에 아무 변화가 없다(하위호환).
+
+   STEP 6: mbti4 채점이 내부적으로 이미 계산해두던 축별 비율(codeFromCounts의 ratios)을
+   fillVarsTemplate의 vars에 "{e}"/"{n}"/"{f}"/"{j}"(각각 E/N/F/J 쪽으로 기운 정도, 0~100
+   정수%)로 추가 노출 — 새 scoring_type이 아니라 mbti4가 이미 구하던 값을 한 군데 더
+   꺼내 쓰는 것뿐이라 이 필드를 참조하지 않는 기존 config(resultTemplate에 {e}등이 없는
+   경우)는 렌더링에 아무 변화가 없다(하위호환, mbti-stat-window 테스트가 실사용 예시). */
 
 (function () {
   'use strict';
@@ -407,9 +413,24 @@
     return { code: code, ratios: ratios };
   }
 
+  // STEP 6: 퍼센트(0~100)를 10칸 이모지 블록 막대로 변환 — 텍스트 치환만 하는 fillVarsTemplate으로는
+  // "값에 비례한 막대 길이"를 만들 수 없어 이 계산만 별도 헬퍼로 분리(순수 함수, 렌더링 로직 아님).
+  function statBar(pct) {
+    var filled = Math.max(0, Math.min(10, Math.round(pct / 10)));
+    return '█'.repeat(filled) + '░'.repeat(10 - filled);
+  }
+
   function computeMbti4Result(c) {
     var r = codeFromCounts(state.mbtiCounts);
-    var vars = { code: r.code, claimed: state.introInputValue || '' };
+    var eVal = 100 - r.ratios.EI, nVal = r.ratios.SN, fVal = r.ratios.TF, jVal = 100 - r.ratios.JP;
+    var vars = {
+      code: r.code,
+      claimed: state.introInputValue || '',
+      // STEP 6: 이미 계산돼있던 r.ratios(I/N/F/P 비율)를 앞글자(E/N/F/J) 기준 퍼센트로 뒤집어
+      // 템플릿에서 바로 쓸 수 있게 노출 — 능력치/스탯 표시류 콘텐츠에서 "{e}%"/"{ebar}" 식으로 사용.
+      e: eVal, n: nVal, f: fVal, j: jVal,
+      ebar: statBar(eVal), nbar: statBar(nVal), fbar: statBar(fVal), jbar: statBar(jVal)
+    };
     var matched = (c.results || []).filter(function (res) { return res.code === r.code; })[0];
     var merged = fillVarsTemplate(matched || c.resultTemplate || {}, vars);
     merged.code = r.code;
