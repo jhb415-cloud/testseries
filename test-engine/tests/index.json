@@ -1,13 +1,35 @@
 {
+  "_numbering_note": "사용자가 준 원본 20개 목록의 번호(1~20, PART1=몰입테스트 1~10 / PART2=MBTI존 11~20)를 그대로 유지. 앞으로 '1,2,3번' 'mbti 1,2,3번(=11,12,13)' 'mbti 1번(=11번)' 등으로 지칭하면 이 number 필드로 매핑한다. #19는 원안(MBTI 커플 궁합기)이 반려되어 mbti-stat-window(MBTI 능력치 스탯창)로 교체됨.",
   "tests": [
     {
       "id": "mental-age",
       "title": "진짜 정신연령 테스트",
-      "category": "일반",
+      "category": "몰입테스트",
       "scoring_type": "sum",
-      "status": "완료",
+      "status": "완료(운영중)",
       "version": "v0.0.2",
-      "concept_style": "레트로 Windows95 병맛"
-    }
+      "concept_style": "레트로 Windows95 병맛",
+      "note": "PART1/2 20개 목록 이전에 만들어진 1호 콘텐츠, 번호 없음"
+    },
+    { "number": 1, "id": "k-office-type", "title": "회사에서 나는 무슨 K-직장인 유형?", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 2, "id": "desert-island-type", "title": "무인도에 떨어지면 나는? (생존 유형)", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 3, "id": "text-reply-love-type", "title": "텍스트 답장 스타일로 보는 연애 유형", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 4, "id": "spending-type", "title": "나의 소비 유형: 거지방 vs 욜로", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 5, "id": "villain-index", "title": "내 안의 빌런 지수 테스트", "category": "몰입테스트", "scoring_type": "sum+tag(STEP4)", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 6, "id": "mbti-addiction-level", "title": "나의 MBTI 과몰입 정도 테스트 (메타)", "category": "몰입테스트", "scoring_type": "sum", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 7, "id": "idol-position-type", "title": "내가 아이돌 그룹에 들어가면 포지션은?", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 8, "id": "group-chat-character", "title": "단톡방에서 나는 무슨 캐릭터?", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 9, "id": "dopamine-addiction-level", "title": "나의 도파민 중독 레벨 테스트", "category": "몰입테스트", "scoring_type": "sum", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 10, "id": "joseon-past-life-type", "title": "전생에 나는 조선시대 누구? (사주/명리 연계)", "category": "몰입테스트", "scoring_type": "type", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 11, "id": "real-vs-fake-mbti", "title": "찐 MBTI vs 겉 MBTI 판별기 (겉바속촉)", "category": "MBTI존", "scoring_type": "mbti4_dual", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 12, "id": "love-mode-mbti", "title": "연애하면 바뀌는 내 MBTI", "category": "MBTI존", "scoring_type": "mbti4", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 13, "id": "drunk-mbti", "title": "취중 MBTI 테스트", "category": "MBTI존", "scoring_type": "mbti4", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 14, "id": "villain-mbti", "title": "내 안의 빌런 MBTI", "category": "MBTI존", "scoring_type": "mbti4", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 15, "id": "crush-mode-mbti", "title": "좋아하는 사람 앞에서 나오는 MBTI (크러쉬 모드)", "category": "MBTI존", "scoring_type": "mbti4", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 16, "id": "brain-structure-report", "title": "내 뇌 구조 분석 보고서", "category": "MBTI존", "scoring_type": "mbti4", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 17, "id": "office-mask-mbti", "title": "회사에서의 내 MBTI (K-직장인 가면)", "category": "MBTI존", "scoring_type": "mbti4", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 18, "id": "shadow-mbti", "title": "스트레스 받으면 튀어나오는 그림자 MBTI", "category": "MBTI존", "scoring_type": "mbti4", "status": "텍스트 초안 완료, 이미지 미착수" },
+    { "number": 19, "id": "mbti-stat-window", "title": "내 MBTI 능력치 스탯창 (원안 'MBTI 커플 조합 궁합기'에서 교체됨)", "category": "MBTI존", "scoring_type": "mbti4", "status": "이미지 스타일 확정(판타지 RPG 초상화+themes/fantasy.css+한글 라벨), 16개 클래스 중 샘플 2종만 생성됨 — 나머지 14종 진행 필요", "note": "레거시 원안은 test-engine/tests/mbti-couple-match/DESIGN.md에 보존" },
+    { "number": 20, "id": "ai-mbti-judge", "title": "AI가 판별하는 진짜 내 MBTI (과몰입 검거)", "category": "MBTI존", "scoring_type": "mbti4+intro_input", "status": "텍스트 초안 완료, 이미지 미착수" }
   ]
 }

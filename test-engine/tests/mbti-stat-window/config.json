@@ -3,7 +3,7 @@
   "title": "내 MBTI 능력치 스탯창",
   "description": "게임 시작 전에 내 캐릭터 스펙부터 확인 — 실제 응답 기반으로 계산되는 진짜 내 스탯",
   "hashtags": ["MBTI스탯", "심리테스트", "MBTI능력치", "MBTI밈"],
-  "theme": "retro",
+  "theme": "fantasy",
   "cover_image": "assets/cover.webp",
   "seed_count": 152340,
   "scoring_type": "mbti4",
