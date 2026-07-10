@@ -38,6 +38,19 @@
   padding: 0 8px;
 }
 
+/* 이미지 없는 문항에서 engine.css가 .te-question-body를 flex 세로 중앙 정렬하는데,
+   flex 아이템인 ::before 타이틀바까지 같이 가운데로 밀려 카드가 반으로 나뉜 것처럼
+   보이는 버그(v0.6.6 사용자 제보) — 타이틀바만 카드 상단에 절대 고정하고 그만큼
+   본문 패딩으로 보정. 이미지 있는 문항(flex-start)도 동일 위치라 시각 변화 없음. */
+.te-question-body { padding-top: 44px; }
+.te-question-body::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+}
+
 .te-loading-box::before { content: none; }
 
 .te-title,
