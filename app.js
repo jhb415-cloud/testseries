@@ -746,6 +746,149 @@ function toggleTheme() {
 /* ══════════════════════════════════════════════════
    🏠 홈 섹션 초기화
 ══════════════════════════════════════════════════ */
+/* v0.3.2~ "인기 테스트" 계산의 코어 후보 목록(내부 인지/성향 테스트 14개) — STEP 3에서
+   buildTestIndex()도 이 상수를 재사용하도록 분리(기존엔 initHome() 안에 인라인돼있어 중복 위험).
+   base 값은 실사용 데이터가 쌓이기 전 임의 추정치이며 실제 인기순이 아님을 화면에 항상 명시한다
+   (index.html 캡션 참고). */
+const CORE_TEST_CARDS = [
+  { section: 'mbti',        emoji: '🧠',  title: '성격 파탄(MBTI)',   desc: '친구랑 같이 하면 더 재밌는 팩폭 성격 테스트', key: 'site-mbti-plays', base: 980, run: () => App.navigate('mbti') },
+  { section: 'brain',       emoji: '⚡',  title: '두뇌 나이 측정기',   desc: '요즘 머리 굳은 것 같을 때 해보는 뇌 나이 체크', key: 'site-brain-plays', base: 740, run: () => App.navigate('brain') },
+  { section: 'adhd',        emoji: '🌪️', title: '프로 미루러',        desc: '나만 그런가 싶을 때 해보는 자가진단', key: 'site-adhd-plays', base: 650, run: () => App.navigate('adhd') },
+  { section: 'reaction',    emoji: '💨',  title: '반응속도 테스트',    desc: '게임할 때 내 반응속도 진짜 빠른지 궁금할 때', key: 'site-reaction-plays', base: 590, run: () => App.navigate('reaction') },
+  { section: 'shortfocus',  emoji: '📱',  title: '숏폼 집중력 테스트', desc: '숏폼 보다가 집중력 떨어진 것 같을 때', key: 'site-shortfocus-plays', base: 410, run: () => App.navigate('shortfocus') },
+  { section: 'insa',        emoji: '🎉',  title: '인싸력 테스트',      desc: '나 인싸야 아싸야? 10문항으로 바로 확인', key: 'site-insa-plays', base: 510, run: () => App.navigate('insa') },
+  { section: 'memdigit',    emoji: '🔢',  title: '숫자 기억력 테스트', desc: '숫자 잘 외운다고 자부할 때 도전해보기', key: 'site-memdigit-plays', base: 340, run: () => App.navigate('memdigit') },
+  { section: 'seqmem',      emoji: '🧩',  title: '순서 기억력 테스트', desc: '순서 기억력에 자신 있으면 도전해보기', key: 'site-seqmem-plays', base: 300, run: () => App.navigate('seqmem') },
+  { section: 'colorvision', emoji: '🎨',  title: '색각 테스트',        desc: '색 구별 잘한다고 생각될 때 해보는 테스트', key: 'site-colorvision-plays', base: 280, run: () => App.navigate('colorvision') },
+  { section: 'lottodraw',   emoji: '🎰',  title: '로또 직접 뽑기 게임', desc: '손맛 느끼며 직접 뽑아보는 로또 번호', key: 'site-lottodraw-plays', base: 220, run: () => App.navigate('lottodraw') },
+  { section: 'logic',       emoji: '📊',  title: '논리력 테스트',      desc: '숫자에 강하다면 도전해볼 논리력 테스트', key: 'site-logic-plays', base: 260, run: () => App.navigate('logic') },
+  { section: 'impulse',     emoji: '🚦',  title: '충동억제 테스트',    desc: '성격 급한 편이라면 해보는 충동억제 테스트', key: 'site-impulse-plays', base: 230, run: () => App.navigate('impulse') },
+  { section: 'proverb',     emoji: '📜',  title: '속담 완성 퀴즈',     desc: '부모님과 대화 소재로 좋은 속담 퀴즈', key: 'site-proverb-plays', base: 180, run: () => App.navigate('proverb') },
+  { section: 'pricequiz',   emoji: '🧾',  title: '그 시절 물가 맞히기', desc: '그때 그 시절 물가, 얼마였는지 기억나세요?', key: 'site-pricequiz-plays', base: 150, run: () => App.navigate('pricequiz') },
+];
+
+const HOME_TOOL_CARDS = [
+  { id: 'dream',   section: 'dream',   emoji: '🌙', title: '꿈 해몽 검색',    desc: '어젯밤 그 꿈, 무슨 의미일까?', run: () => App.navigate('dream') },
+  { id: 'fortune', section: 'fortune', emoji: '🔮', title: '오늘의 운세',      desc: '출근길 5초, 오늘 내 운세부터 확인', run: () => App.navigate('fortune') },
+  { id: 'lotto',   section: 'lotto',   emoji: '🎱', title: '로또 번호 조합기', desc: '이번 주 번호 뭘 고를지 고민될 때', run: () => App.navigate('lotto') },
+];
+
+/* v0.3.2~에서 인라인이던 "인기 후보 전체 목록"(내부 코어 14개 + 심리테스트존 + 밸런스게임)을
+   그대로 반환 — 실제 클릭 시점 engagementCount로 정렬해 상위 N개만 뽑는 건 호출부 책임 */
+function buildPopularCandidates() {
+  return [
+    ...CORE_TEST_CARDS,
+    ...AppData.psychTests.map(t => ({
+      id: 'psychtest-' + t.id, section: 'psychtest', emoji: t.emoji, title: t.title, desc: t.hook.slice(0, 24) + '…',
+      key: 'psychtest-' + t.id + '-plays', base: 128,
+      run: () => { psychtestNavCategory(t.category); App.navigate('psychtest'); psychtestOpenPost(t.id); },
+    })),
+    ...AppData.balanceGames.map(g => ({
+      id: 'balance-' + g.id, section: 'balance', emoji: g.emoji, title: g.title, desc: g.hook.slice(0, 24) + '…',
+      key: 'balance-' + g.id + '-plays', base: 203,
+      run: () => { App.navigate('balance'); balanceOpenPost(g.id); },
+    })),
+  ];
+}
+
+/* STEP 3(2026-07-10): sections.json의 test_ids가 참조할 수 있는 모든 카드를 id 하나로 조회할 수
+   있게 모아둔 통합 인덱스. 실제 config.json을 fetch하는 대신(내부 테스트는애초에 그런 파일이
+   없음) data.js에 이미 있는 배열들 + /test-engine/ 외부 테스트 목록을 조합해서 만든다 —
+   홈 로딩 시 추가 네트워크 요청이 없어 더 빠르고, 존재하지 않는 id는 조용히 무시된다. */
+function buildTestIndex() {
+  const index = {};
+  HOME_TOOL_CARDS.forEach(c => { index[c.id] = c; });
+  buildPopularCandidates().forEach(c => { index[c.id || c.section] = c; });
+  (AppData.externalTests || []).forEach(t => {
+    index[t.id] = {
+      id: t.id, emoji: t.emoji, title: t.title, desc: t.hook,
+      run: () => { bumpEngagement(t.engagementKey); location.href = t.url; },
+    };
+  });
+  return index;
+}
+
+/* v0.1.0~: 원색 그라데이션 카드 → 사이트 기본 카드색(slate) 기반 무채색 톤으로 통일 */
+function homeCardHTML(c, highlight, bindId) {
+  return `
+    <div id="${bindId}" class="service-card bg-slate-800 border ${highlight ? '' : 'border-slate-700'} rounded-2xl p-5 text-slate-100 shadow cursor-pointer transition hover:opacity-90"
+      ${highlight ? 'style="border-width:2px;border-color:#D85A30;"' : ''}>
+      ${highlight ? `<span class="inline-block text-[10px] font-black px-2 py-0.5 rounded-full mb-2" style="background:#D85A30;color:#fff;">NEW</span>` : ''}
+      <div class="text-4xl mb-3">${c.emoji}</div>
+      <h3 class="${highlight ? 'font-black' : 'font-bold'} text-lg mb-1 text-slate-100">${c.title}</h3>
+      <p class="text-sm text-slate-400">${c.desc}</p>
+      <div class="mt-4 text-xs font-semibold text-violet-400 uppercase tracking-widest">시작하기 →</div>
+    </div>`;
+}
+
+/* STEP 3: sections.json 하나로 홈 화면 진열대 구성을 바꿀 수 있는 큐레이션 레이어.
+   섹션 종류 3가지: ①dynamic:'popularity' — 기존 인기순 자동계산 그대로 재사용
+   ②placeholder가 있고 test_ids가 비어있음 — 준비중 티저 카드 1개만 표시
+   ③그 외 — test_ids를 buildTestIndex()로 조회, 결과가 비면 섹션 자체를 렌더하지 않음(정직성 원칙)
+   카드 클릭 핸들러는 렌더링과 같은 루프에서 고유 id로 등록해두고(bindings) innerHTML을 채운
+   직후 한 번에 붙인다 — DOM 순서에 의존하는 위치 매칭 대신 id로 직접 연결해 안전하다. */
+async function renderHomeSections() {
+  const container = document.getElementById('home-sections-container');
+  if (!container) return;
+  let sections = [];
+  try {
+    const res = await fetch('/sections.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error('sections.json fetch failed: ' + res.status);
+    sections = (await res.json()).sections || [];
+  } catch (e) {
+    console.warn('sections.json 로드 실패, 홈 큐레이션 섹션을 건너뜁니다:', e.message);
+    return;
+  }
+
+  const index = buildTestIndex();
+  const bindings = [];
+  let bindSeq = 0;
+  let html = '';
+
+  sections.forEach(sec => {
+    let cards;
+    if (sec.dynamic === 'popularity') {
+      cards = buildPopularCandidates()
+        .map(c => ({ ...c, score: engagementCount(c.key, c.base) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, sec.limit || 6);
+    } else {
+      cards = (sec.test_ids || []).map(id => index[id]).filter(Boolean);
+    }
+
+    if (!cards.length) {
+      if (!sec.placeholder) return; // 빈 섹션은 조용히 숨김
+      html += `
+        <h2 class="text-slate-100 ${sec.highlight ? 'font-black' : 'font-bold'} text-lg mb-4 mt-8">${sec.title}</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="service-card bg-slate-800/60 border border-slate-700 rounded-2xl p-5 text-slate-300 opacity-70 cursor-pointer transition hover:opacity-90"
+            onclick="psychtestNavCategory('${sec.placeholder.psychCategory}'); App.navigate('psychtest');">
+            <div class="text-4xl mb-3">${sec.placeholder.emoji}</div>
+            <h3 class="font-bold text-lg mb-1 text-slate-100">${sec.placeholder.title}</h3>
+            <p class="text-sm text-slate-400">${sec.placeholder.desc}</p>
+          </div>
+        </div>`;
+      return;
+    }
+
+    const rowHTML = cards.map(c => {
+      const bindId = 'home-card-bind-' + (bindSeq++);
+      bindings.push({ id: bindId, run: c.run || (() => App.navigate(c.section)) });
+      return homeCardHTML(c, sec.highlight, bindId);
+    }).join('');
+
+    html += `
+      <h2 class="text-slate-100 ${sec.highlight ? 'font-black' : 'font-bold'} text-lg mb-4 mt-8">${sec.title}</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">${rowHTML}</div>`;
+  });
+
+  container.innerHTML = html;
+  bindings.forEach(b => {
+    const el = document.getElementById(b.id);
+    if (el) el.onclick = b.run;
+  });
+}
+
 function initHome() {
   const quotes = AppData.quotes;
   const idx = Math.floor(seededRandom(dailyQuoteSeed()) * quotes.length);
@@ -756,72 +899,7 @@ function initHome() {
   document.getElementById('home-copy-btn').onclick = () => copyToClipboard(`"${quote.text}" — ${quote.author}`);
 
   renderDailyChallengeCard();
-
-  const toolCards = [
-    { section: 'dream',   emoji: '🌙', title: '꿈 해몽 검색',    desc: '어젯밤 그 꿈, 무슨 의미일까?' },
-    { section: 'fortune', emoji: '🔮', title: '오늘의 운세',      desc: '출근길 5초, 오늘 내 운세부터 확인' },
-    { section: 'lotto',   emoji: '🎱', title: '로또 번호 조합기', desc: '이번 주 번호 뭘 고를지 고민될 때' },
-  ];
-
-  /* v0.3.2~: 13개 테스트만 후보로 삼던 것 대신, 사이드바에 있는 전체 메뉴(심리테스트존/밸런스게임
-     개별 콘텐츠, 로또 직접 뽑기 게임 포함)를 전부 후보로 넣고 실제 사용 시점(각 테스트 Start 함수,
-     dreamShowModal, fortuneSubmit, lotto 조합 실행, psychtestStart, balancePick 등)에 찍히는
-     engagementCount 기준 상위 6개만 노출 — "특정 13개로 제한하지 말고 전체 메뉴가 경쟁하게" 요청 반영.
-     꿈해몽/오늘의운세/로또 조합기는 위 도구 그리드에 항상 노출되므로 중복을 피해 후보에서 제외.
-     base 값은 실사용 데이터가 쌓이기 전 임의 추정치이며 실제 인기순이 아님을 화면에 항상 명시한다
-     (index.html 캡션 참고). */
-  const popularCandidates = [
-    { section: 'mbti',        emoji: '🧠',  title: '성격 파탄(MBTI)',   desc: '친구랑 같이 하면 더 재밌는 팩폭 성격 테스트', key: 'site-mbti-plays', base: 980, run: () => App.navigate('mbti') },
-    { section: 'brain',       emoji: '⚡',  title: '두뇌 나이 측정기',   desc: '요즘 머리 굳은 것 같을 때 해보는 뇌 나이 체크', key: 'site-brain-plays', base: 740, run: () => App.navigate('brain') },
-    { section: 'adhd',        emoji: '🌪️', title: '프로 미루러',        desc: '나만 그런가 싶을 때 해보는 자가진단', key: 'site-adhd-plays', base: 650, run: () => App.navigate('adhd') },
-    { section: 'reaction',    emoji: '💨',  title: '반응속도 테스트',    desc: '게임할 때 내 반응속도 진짜 빠른지 궁금할 때', key: 'site-reaction-plays', base: 590, run: () => App.navigate('reaction') },
-    { section: 'shortfocus',  emoji: '📱',  title: '숏폼 집중력 테스트', desc: '숏폼 보다가 집중력 떨어진 것 같을 때', key: 'site-shortfocus-plays', base: 410, run: () => App.navigate('shortfocus') },
-    { section: 'insa',        emoji: '🎉',  title: '인싸력 테스트',      desc: '나 인싸야 아싸야? 10문항으로 바로 확인', key: 'site-insa-plays', base: 510, run: () => App.navigate('insa') },
-    { section: 'memdigit',    emoji: '🔢',  title: '숫자 기억력 테스트', desc: '숫자 잘 외운다고 자부할 때 도전해보기', key: 'site-memdigit-plays', base: 340, run: () => App.navigate('memdigit') },
-    { section: 'seqmem',      emoji: '🧩',  title: '순서 기억력 테스트', desc: '순서 기억력에 자신 있으면 도전해보기', key: 'site-seqmem-plays', base: 300, run: () => App.navigate('seqmem') },
-    { section: 'colorvision', emoji: '🎨',  title: '색각 테스트',        desc: '색 구별 잘한다고 생각될 때 해보는 테스트', key: 'site-colorvision-plays', base: 280, run: () => App.navigate('colorvision') },
-    { section: 'lottodraw',   emoji: '🎰',  title: '로또 직접 뽑기 게임', desc: '손맛 느끼며 직접 뽑아보는 로또 번호', key: 'site-lottodraw-plays', base: 220, run: () => App.navigate('lottodraw') },
-    { section: 'logic',       emoji: '📊',  title: '논리력 테스트',      desc: '숫자에 강하다면 도전해볼 논리력 테스트', key: 'site-logic-plays', base: 260, run: () => App.navigate('logic') },
-    { section: 'impulse',     emoji: '🚦',  title: '충동억제 테스트',    desc: '성격 급한 편이라면 해보는 충동억제 테스트', key: 'site-impulse-plays', base: 230, run: () => App.navigate('impulse') },
-    { section: 'proverb',     emoji: '📜',  title: '속담 완성 퀴즈',     desc: '부모님과 대화 소재로 좋은 속담 퀴즈', key: 'site-proverb-plays', base: 180, run: () => App.navigate('proverb') },
-    { section: 'pricequiz',   emoji: '🧾',  title: '그 시절 물가 맞히기', desc: '그때 그 시절 물가, 얼마였는지 기억나세요?', key: 'site-pricequiz-plays', base: 150, run: () => App.navigate('pricequiz') },
-    ...AppData.psychTests.map(t => ({
-      section: 'psychtest', emoji: t.emoji, title: t.title, desc: t.hook.slice(0, 24) + '…',
-      key: 'psychtest-' + t.id + '-plays', base: 128,
-      run: () => { psychtestNavCategory(t.category); App.navigate('psychtest'); psychtestOpenPost(t.id); },
-    })),
-    ...AppData.balanceGames.map(g => ({
-      section: 'balance', emoji: g.emoji, title: g.title, desc: g.hook.slice(0, 24) + '…',
-      key: 'balance-' + g.id + '-plays', base: 203,
-      run: () => { App.navigate('balance'); balanceOpenPost(g.id); },
-    })),
-  ];
-  const topTestCards = popularCandidates
-    .map(c => ({ ...c, score: engagementCount(c.key, c.base) }))
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 6);
-
-  /* v0.1.0~: 원색 그라데이션 카드 → 사이트 기본 카드색(slate) 기반 무채색 톤으로 통일 (도구/테스트 그리드 공통) */
-  const renderGrid = (gridId, cards) => {
-    const grid = document.getElementById(gridId);
-    if (!grid) return;
-    grid.innerHTML = '';
-    cards.forEach(c => {
-      const div = document.createElement('div');
-      div.className = 'service-card bg-slate-800 border border-slate-700 hover:border-violet-500 rounded-2xl p-5 text-slate-100 shadow cursor-pointer transition';
-      div.innerHTML = `
-        <div class="text-4xl mb-3">${c.emoji}</div>
-        <h3 class="font-bold text-lg mb-1 text-slate-100">${c.title}</h3>
-        <p class="text-sm text-slate-400">${c.desc}</p>
-        <div class="mt-4 text-xs font-semibold text-violet-400 uppercase tracking-widest">시작하기 →</div>
-      `;
-      div.onclick = c.run || (() => App.navigate(c.section));
-      grid.appendChild(div);
-    });
-  };
-
-  renderGrid('home-tool-grid', toolCards);
-  renderGrid('home-service-grid', topTestCards);
+  renderHomeSections();
 
   // 오늘 날짜 표시
   const now = new Date();
@@ -4359,13 +4437,21 @@ function bumpEngagement(key) {
 /* 카테고리 메타(라벨/이모지) + 잠금 콘텐츠(제목만, 2026-07-05 사용자가 선정 요청한
    "어그로 있는" 향후 주제) — 카테고리당 정원 3개(오픈 1 + 잠금 2) 운영, 신규 주제는
    CONTENT_PROMPTS.md의 AI 프롬프트로 생성 후 이 배열에 추가 */
+/* STEP 3(2026-07-10): /test-engine/ 프로토타입존(몰입테스트)과 MBTI존을 신설 카테고리로
+   맨 앞에 추가 — `badge: 'NEW'`가 있으면 탭 자체에 배지+굵은 글씨 처리(아래 tabsHTML 참고).
+   character/trait/taste/national은 추후(애드센스 승인 후) "일반테스트" 1개로 통합 예정
+   ([[project_psychtest_menu_consolidation]] 메모 참고, 지금은 손대지 않음). */
 const PSYCHTEST_CATEGORIES = {
+  immersive: { label: '몰입테스트', emoji: '🧪', badge: 'NEW' },
+  mbtizone: { label: 'MBTI존', emoji: '🧬', badge: 'NEW' },
   character: { label: '캐릭터 테스트', emoji: '🎭' },
   trait: { label: '성향 테스트', emoji: '🧠' },
   taste: { label: '취향 테스트', emoji: '🛍️' },
   national: { label: '국민테스트', emoji: '🇰🇷' },
 };
 const PSYCHTEST_LOCKED = {
+  immersive: [], // 실제 콘텐츠는 AppData.externalTests에서 옴(아래 externalTestsBannerHTML)
+  mbtizone: [{ emoji: '🧬', title: 'MBTI 정밀 유형 분석' }],
   character: [{ emoji: '🏯', title: '나의 사극 빙의 테스트' }, { emoji: '🦹', title: '나의 빌런 각성 테스트' }],
   trait: [{ emoji: '🧊', title: 'T의 공감능력 테스트' }, { emoji: '💤', title: '관태기 자가진단 테스트' }],
   taste: [{ emoji: '🏪', title: '나의 편의점 소비 유형 테스트' }, { emoji: '📺', title: 'OTT 정주행 스타일 테스트' }],
@@ -4418,23 +4504,28 @@ function renderPsychtestFeed(category) {
   category = category || 'trait';
   App.state.psychtest.category = category;
   const container = document.getElementById('psychtest-container');
+  const isImmersive = category === 'immersive';
   /* v0.3.1~: 카테고리당 진짜 콘텐츠가 여러 개(예: 국민테스트 3개)일 수 있어 첫 매칭 1개만 찾던 find()를
-     filter()로 바꿔 전부 노출 — 대표 배너는 그중 첫 번째를 사용 */
-  const reals = AppData.psychTests.filter(x => x.category === category);
+     filter()로 바꿔 전부 노출 — 대표 배너는 그중 첫 번째를 사용.
+     STEP 3: 몰입테스트(immersive) 카테고리는 AppData.psychTests가 아니라 AppData.externalTests가
+     콘텐츠 소스라 여기서는 항상 빈 배열(대표 배너/그리드 카드 없음), 아래에서 별도 렌더 */
+  const reals = isImmersive ? [] : AppData.psychTests.filter(x => x.category === category);
   const real = reals[0];
   const locked = PSYCHTEST_LOCKED[category] || [];
 
   const tabsHTML = Object.keys(PSYCHTEST_CATEGORIES).map(key => {
     const cat = PSYCHTEST_CATEGORIES[key];
-    return `<span class="cat-tab-btn ${key === category ? 'active' : ''}" onclick="psychtestNavCategory('${key}')">${cat.emoji} ${cat.label}</span>`;
+    const badgeHTML = cat.badge ? `<span class="ml-1 text-[10px] font-black px-1.5 py-0.5 rounded-full align-middle" style="background:#D85A30;color:#fff;">${cat.badge}</span>` : '';
+    return `<span class="cat-tab-btn ${cat.badge ? 'font-black' : ''} ${key === category ? 'active' : ''}" onclick="psychtestNavCategory('${key}')">${cat.emoji} ${cat.label}${badgeHTML}</span>`;
   }).join('');
 
   container.innerHTML = `
     <div class="max-w-2xl mx-auto">
       <h2 class="text-2xl font-black text-slate-100 mb-1">🃏 심리 테스트존</h2>
       <p class="text-slate-400 mb-4">요즘 뜨는 심리테스트, 카테고리별로 계속 업데이트됩니다</p>
-      ${externalTestsBannerHTML('new')}
       <div class="flex flex-wrap gap-2 mb-6">${tabsHTML}</div>
+
+      ${isImmersive ? externalTestsBannerHTML('new') : ''}
 
       ${real ? `
       <div class="bg-gradient-to-br from-violet-900/40 to-slate-800 border border-violet-700/40 rounded-2xl p-5 mb-6 cursor-pointer hover:border-violet-500 transition"

@@ -1,4 +1,4 @@
-<!-- v0.6.4 | 5-in-1 Dashboard SPA -->
+<!-- v0.6.5 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -247,6 +247,13 @@
         <span class="nav-group-chevron">▾</span>
       </div>
       <div class="nav-group-items" id="nav-group-psychtest-items">
+        <!-- STEP 3(2026-07-10): 몰입테스트(/test-engine/ 프로토타입존)/MBTI존 신설, 항상 최상단 -->
+        <div class="nav-item nav-subitem font-black" data-section="psychtest" data-psych-category="immersive">
+          <span class="text-lg">🧪</span> 몰입테스트 <span class="badge-new-nav">NEW</span>
+        </div>
+        <div class="nav-item nav-subitem font-black" data-section="psychtest" data-psych-category="mbtizone">
+          <span class="text-lg">🧬</span> MBTI존 <span class="badge-new-nav">NEW</span>
+        </div>
         <div class="nav-item nav-subitem" data-section="psychtest" data-psych-category="character">
           <span class="text-lg">🎭</span> 캐릭터 테스트
         </div>
@@ -323,7 +330,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4">
-    <p class="text-slate-600 text-xs">v0.6.4 · 2026-07-09</p>
+    <p class="text-slate-600 text-xs">v0.6.5 · 2026-07-10</p>
   </div>
 </aside>
 
@@ -383,13 +390,11 @@
         <!-- 오늘의 챌린지 (날짜 시드 기반 추천 테스트 3개) -->
         <div id="home-daily-challenge" class="mb-8"></div>
 
-        <!-- 서비스 그리드: 도구 -->
-        <h2 class="text-slate-100 font-bold text-lg mb-4">🎯 서비스 바로가기</h2>
-        <div id="home-tool-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
-
-        <!-- 서비스 그리드: 인기 테스트 (v0.3.2~: 13개 전체 나열 대신 상위 6개만, 전체 목록은 사이드바 참고) -->
-        <h2 class="text-slate-100 font-bold text-lg mb-4">🔥 지금 인기있는 테스트</h2>
-        <div id="home-service-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        <!-- 홈 진열대 큐레이션 (STEP 3, 2026-07-10~): 섹션 구성은 /sections.json 하나로 관리,
+             JS(renderHomeSections())가 이 컨테이너 하나에 섹션별 <h2>+그리드를 전부 채워 넣음.
+             예전엔 "서비스 바로가기"/"지금 인기있는 테스트" 그리드 2개가 고정이었지만, sections.json만
+             고치면 진열대 구성이 바뀌도록 일반화했다. -->
+        <div id="home-sections-container"></div>
         <p class="text-slate-400 text-xs mt-3">※ 인기 순위는 이 홈 화면에서의 클릭 수 기준 추정치예요 — 추후 실데이터 연동 예정. 전체 테스트 목록은 사이드바에서 확인하세요.</p>
 
         <!-- 자주 묻는 질문 (v0.5.7~, GEO 3단계): <details>/<summary>는 접혀있어도 텍스트가 DOM에

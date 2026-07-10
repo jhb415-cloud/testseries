@@ -1,7 +1,9 @@
-/* test-engine v2 (STEP 2) | engine.js — 공통 로직 (config 로드, 화면 전환, 채점, 렌더,
-   결과 공유카드 저장, 관련 테스트 배너)
+/* test-engine v3 (STEP 3 버그수정) | engine.js — 공통 로직 (config 로드, 화면 전환, 채점, 렌더,
+   결과 공유카드 저장, 관련 테스트 배너, 카카오톡 공유, 메인 사이트로 돌아가기 링크)
    순수 바닐라 JS. 외부 라이브러리 없음. 기능별 함수로 분리해 유지보수.
-   결과 화면의 "이미지 저장" 기능은 별도 파일 result-card.js(window.TestEngineResultCard)에 위임한다. */
+   결과 화면의 "이미지 저장" 기능은 별도 파일 result-card.js(window.TestEngineResultCard)에 위임한다.
+   카카오 SDK 로드+초기화와 "메인으로" 링크는 이 파일이 init() 시점에 자동으로 주입한다 —
+   새 테스트를 추가할 때 index.html에 별도로 스크립트/마크업을 추가할 필요가 없다(자동 적용). */
 
 (function () {
   'use strict';
@@ -24,6 +26,12 @@
 
   var rootEl = null;
 
+  // 메인 사이트(같은 도메인)에서 이미 쓰고 있는 Kakao Developers 앱 키를 그대로 재사용 —
+  // 도메인이 같으므로(gwamol-lab.xyz) 카카오 쪽 도메인 화이트리스트 추가 등록이 필요 없다.
+  var KAKAO_APP_KEY = '3e54f92e9a63142650381c63b1cadee3';
+  var KAKAO_SDK_SRC = 'https://t1.kakaocdn.net/kakao_js_sdk/2.8.1/kakao.min.js';
+  var KAKAO_SDK_INTEGRITY = 'sha384-OL+ylM/iuPLtW5U3XcvLSGhE8JzReKDank5InqlHGWPhb4140/yrBw0bg0y7+C9J';
+
   // ---------- bootstrap ----------
   function init() {
     rootEl = document.getElementById('test-engine-root');
@@ -31,6 +39,8 @@
       console.error('[test-engine] #test-engine-root 요소를 찾을 수 없습니다.');
       return;
     }
+    injectHomeLink();
+    loadKakaoSdk(); // fire-and-forget: 결과 화면에 도달할 즈음엔 로드가 끝나있을 것으로 기대, 실패해도 공유 버튼이 안내 문구로 우아하게 처리함
     loadConfig()
       .then(function (config) {
         state.config = config;
@@ -42,6 +52,36 @@
         console.error('[test-engine] config.json 로드 실패', err);
         rootEl.innerHTML = '<p class="te-error">테스트를 불러오지 못했습니다. 새로고침해보세요.</p>';
       });
+  }
+
+  // 화면 어디서든(질문 중간 포함) 메인 사이트로 빠져나갈 수 있는 고정 링크.
+  // rootEl.innerHTML 교체와 무관하게 항상 떠 있도록 document.body에 직접 붙인다.
+  function injectHomeLink() {
+    if (document.getElementById('te-home-link')) return;
+    var a = document.createElement('a');
+    a.id = 'te-home-link';
+    a.className = 'te-home-link';
+    a.href = '/';
+    a.textContent = '← 메인으로';
+    document.body.appendChild(a);
+  }
+
+  function loadKakaoSdk() {
+    if (window.Kakao) {
+      try { if (!Kakao.isInitialized()) Kakao.init(KAKAO_APP_KEY); } catch (e) { /* noop */ }
+      return;
+    }
+    if (document.getElementById('te-kakao-sdk')) return;
+    var script = document.createElement('script');
+    script.id = 'te-kakao-sdk';
+    script.src = KAKAO_SDK_SRC;
+    script.integrity = KAKAO_SDK_INTEGRITY;
+    script.crossOrigin = 'anonymous';
+    script.onload = function () {
+      try { Kakao.init(KAKAO_APP_KEY); } catch (e) { console.warn('[test-engine] Kakao 초기화 실패', e); }
+    };
+    script.onerror = function () { console.warn('[test-engine] Kakao SDK 로드 실패'); };
+    document.head.appendChild(script);
   }
 
   function loadConfig() {
@@ -290,17 +330,45 @@
           relatedHtml +
         '</div>' +
         '<div class="te-choices-fixed te-result-footer">' +
-          '<button type="button" class="te-btn te-btn-secondary" id="te-restart-btn">다시하기</button>' +
-          '<button type="button" class="te-btn te-btn-primary" id="te-share-btn">공유하기</button>' +
+          '<button type="button" class="te-btn te-btn-kakao" id="te-kakao-btn">💬 카카오톡으로 공유하기</button>' +
           '<button type="button" class="te-btn te-btn-accent" id="te-save-btn">🖼️ 이미지 저장</button>' +
+          '<button type="button" class="te-btn te-btn-primary" id="te-share-btn">공유하기</button>' +
+          '<button type="button" class="te-btn te-btn-secondary" id="te-restart-btn">다시하기</button>' +
         '</div>' +
       '</div>';
 
     qs('#te-restart-btn').addEventListener('click', renderIntro);
     qs('#te-share-btn').addEventListener('click', function () { shareResult(result); });
     qs('#te-save-btn').addEventListener('click', function () { handleSaveImageClick(result); });
+    qs('#te-kakao-btn').addEventListener('click', function () { shareResultToKakao(result); });
 
     if (relatedIds.length) loadRelatedBanner(relatedIds);
+  }
+
+  // ---------- 카카오톡 공유 ----------
+  function shareResultToKakao(result) {
+    if (!window.Kakao || !Kakao.isInitialized()) {
+      alert('카카오 공유 준비 중이에요. 잠시 후 다시 시도해주세요.');
+      loadKakaoSdk();
+      return;
+    }
+    try {
+      var imageUrl = new URL(result.image, document.baseURI).href;
+      var shareUrl = window.location.href;
+      Kakao.Share.sendDefault({
+        objectType: 'feed',
+        content: {
+          title: result.title,
+          description: state.config.title + (result.subtitle ? ' — ' + result.subtitle : ''),
+          imageUrl: imageUrl,
+          link: { mobileWebUrl: shareUrl, webUrl: shareUrl }
+        },
+        buttons: [{ title: '나도 테스트하기', link: { mobileWebUrl: shareUrl, webUrl: shareUrl } }]
+      });
+    } catch (e) {
+      console.error('[test-engine] 카카오 공유 실패', e);
+      alert('카카오 공유에 실패했어요.');
+    }
   }
 
   // ---------- 결과 공유카드 저장 (result-card.js 위임) ----------

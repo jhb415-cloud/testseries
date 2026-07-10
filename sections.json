@@ -1,0 +1,38 @@
+{
+  "sections": [
+    {
+      "id": "new",
+      "title": "🆕 지금 뜨는 신설존",
+      "highlight": true,
+      "test_ids": ["mental-age"]
+    },
+    {
+      "id": "mbtizone",
+      "title": "🧬 MBTI존",
+      "highlight": true,
+      "test_ids": [],
+      "placeholder": {
+        "emoji": "🧬",
+        "title": "MBTI 정밀 분석 (준비중)",
+        "desc": "곧 만나요! 심리 테스트존 > MBTI존에서 먼저 구경해보세요",
+        "psychCategory": "mbtizone"
+      }
+    },
+    {
+      "id": "popular",
+      "title": "🔥 이번주 인기",
+      "dynamic": "popularity",
+      "limit": 6
+    },
+    {
+      "id": "tools",
+      "title": "🎯 도구 모음",
+      "test_ids": ["dream", "fortune", "lotto"]
+    },
+    {
+      "id": "season",
+      "title": "☀️ 시즌 기획전",
+      "test_ids": []
+    }
+  ]
+}

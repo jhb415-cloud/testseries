@@ -1,4 +1,4 @@
-/* test-engine v2 (STEP 2) | engine.css — 테마 무관 공통 레이아웃(골격) */
+/* test-engine v3 (STEP 3 버그수정) | engine.css — 테마 무관 공통 레이아웃(골격) */
 
 html, body {
   height: 100%;
@@ -147,14 +147,38 @@ body {
 
 .te-error { text-align: center; padding: 40px 20px; }
 
-/* 결과 화면은 버튼이 3개(다시하기/공유하기/이미지 저장)라 하단 여백을 더 확보 */
+/* 결과 화면은 버튼이 4개(카카오/이미지저장/공유하기/다시하기)라 하단 여백을 더 확보 */
 .te-screen-result.te-has-fixed-footer {
-  padding-bottom: 210px;
+  padding-bottom: 266px;
 }
 
 .te-btn-accent {
   background: #D85A30;
   color: #fff;
+}
+
+.te-btn-kakao {
+  background: #FEE500;
+  color: #191919;
+  font-weight: 800;
+}
+
+/* 어느 화면에서든 메인 사이트로 빠져나갈 수 있는 고정 링크 (engine.js가 자동 주입) */
+.te-home-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+  text-decoration: none;
+}
+.te-home-link:hover {
+  background: rgba(0, 0, 0, 0.75);
 }
 
 /* 관련 테스트 배너 — config.related가 비어있으면 컨테이너 자체가 렌더되지 않음 */
