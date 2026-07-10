@@ -40,6 +40,20 @@
 - 폴라로이드/스크랩북 다이어리 콜라주 (real-vs-fake-mbti)
 - 레이어드 페이퍼컷 마스크 콜라주 (love-mode-mbti)
 - 네온사인 라인아트 (drunk-mbti)
+- (계획 중, 아직 미생성) 플랫 메신저 채팅 UI 목업 — text-reply-love-type
+- (계획 중, 아직 미생성) 빈티지 신문/전단지 콜라주(하프톤 인쇄) — spending-type
+- (계획 중, 아직 미생성) 필름누아르 수배전단/머그샷 포스터 — villain-index
+- (계획 중, 아직 미생성) 코믹북 액션 패널(하프톤+스피드라인) — villain-mbti
+- (계획 중, 아직 미생성) 리소그래프 2도인쇄 러브레터 zine — crush-mode-mbti
+- (계획 중, 아직 미생성) 임상 뇌스캔 모니터/홀로그램 대시보드 — brain-structure-report
+- (계획 중, 아직 미생성) 스테인드글라스 성화(종교 아이콘화) — mbti-addiction-level
+- (계획 중, 아직 미생성) 홀로그램 K-pop 포토카드(홀로포일) — idol-position-type
+- (계획 중, 아직 미생성) 채팅 스티커팩 캐릭터(치비+굵은 화이트 아웃라인) — group-chat-character
+- (계획 중, 아직 미생성) 글리치/CRT 노이즈 아트 — dopamine-addiction-level
+- (계획 중, 아직 미생성) 조선 민화(전통 채색화) — joseon-past-life-type
+- (계획 중, 아직 미생성) 이중노출 사진 아트(시네마틱) — office-mask-mbti
+- (계획 중, 아직 미생성) 수묵 잉크워시 실루엣 — shadow-mbti
+- (계획 중, 아직 미생성) 사이버펑크 법정 스캐너(홀로그램 UI) — ai-mbti-judge
 
 ## 테스트별 사용 톤·컨셉 기록 (매번 추가)
 - mental-age: 병맛(장르 미스매치) — "정신연령 측정을 국가 공인 신체검사처럼 근엄하게"
