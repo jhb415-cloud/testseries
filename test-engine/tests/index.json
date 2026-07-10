@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "id": "mental-age",
+      "title": "진짜 정신연령 테스트",
+      "category": "일반",
+      "scoring_type": "sum",
+      "status": "완료",
+      "version": "v0.0.2",
+      "concept_style": "레트로 Windows95 병맛"
+    }
+  ]
+}

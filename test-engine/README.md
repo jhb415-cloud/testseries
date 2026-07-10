@@ -1,5 +1,7 @@
 # 심리테스트 엔진 (test-engine) — STEP 3까지 진행된 프로토타입, 사이트에 실제 연동됨
 
+> **신규 심리테스트 콘텐츠를 추가/제작하는 작업이라면 이 README보다 [`CLAUDE.md`](./CLAUDE.md)(작업 규칙)·[`style-guide.md`](./style-guide.md)(톤 가이드)·[`tests/index.json`](./tests/index.json)(콘텐츠 레지스트리)를 먼저 읽을 것** — "새 심리테스트 추가해줘" 요청이 오면 항상 이 세 파일 기준으로 진행한다(2026-07-10 셋업). 이 README는 엔진 자체(`engine.js`/`engine.css`/`result-card.js`)의 기술 구조 설명이다.
+
 ## 버전 표기 규칙
 이 하위 프로젝트는 메인 사이트의 `vX.Y.Z` 버전과 무관하게 **`test-engine vN (STEP N)`** 자체 표기를 씀 (engine.js/engine.css/themes/*.css 등 수정 파일 상단 주석 참고). 현재 `v3 (STEP 3 버그수정)`.
 
