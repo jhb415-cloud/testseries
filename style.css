@@ -137,16 +137,34 @@ html.light {
   white-space: nowrap;
 }
 
-/* STEP 3(2026-07-10) 신설 메뉴(몰입테스트/MBTI존) "NEW" 배지 — 라이트/다크 무관 고정 브랜드 오렌지 */
+/* STEP 3(2026-07-10) 신설 메뉴(몰입테스트/MBTI존) "NEW" 배지 — 기존 주황 배지가 눈에 잘 안 띈다는
+   피드백으로 골드 톤+반짝임 애니메이션으로 교체(2026-07-10). 배경을 어두운 반투명으로 고정해
+   라이트/다크 사이드바 배경 어느 쪽에서도 금색 글씨·테두리의 대비가 유지되도록 함 */
 .badge-new-nav {
   margin-left: auto;
-  font-size: 0.65rem;
+  font-size: 0.5rem;
   font-weight: 800;
-  color: #fff;
-  background: #D85A30;
-  padding: 0.1rem 0.45rem;
+  letter-spacing: 0.02em;
+  color: #FFD966;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid #FFD966;
+  padding: 0.05rem 0.4rem;
   border-radius: 999px;
   white-space: nowrap;
+  animation: badge-new-sparkle 1.6s ease-in-out infinite;
+}
+
+@keyframes badge-new-sparkle {
+  0%, 100% {
+    box-shadow: 0 0 2px rgba(255, 217, 102, 0.3);
+    text-shadow: 0 0 2px rgba(255, 217, 102, 0.4);
+    border-color: rgba(255, 217, 102, 0.55);
+  }
+  50% {
+    box-shadow: 0 0 8px rgba(255, 217, 102, 0.95), 0 0 16px rgba(255, 217, 102, 0.5);
+    text-shadow: 0 0 6px rgba(255, 217, 102, 1);
+    border-color: #FFE699;
+  }
 }
 
 /* 심리테스트존 카테고리 탭 (v0.2.4~) */
