@@ -3,7 +3,13 @@
 > **신규 심리테스트 콘텐츠를 추가/제작하는 작업이라면 이 README보다 [`CLAUDE.md`](./CLAUDE.md)(작업 규칙)·[`style-guide.md`](./style-guide.md)(톤 가이드)·[`tests/index.json`](./tests/index.json)(콘텐츠 레지스트리)를 먼저 읽을 것** — "새 심리테스트 추가해줘" 요청이 오면 항상 이 세 파일 기준으로 진행한다(2026-07-10 셋업). 이 README는 엔진 자체(`engine.js`/`engine.css`/`result-card.js`)의 기술 구조 설명이다.
 
 ## 버전 표기 규칙
-이 하위 프로젝트는 메인 사이트의 `vX.Y.Z` 버전과 무관하게 **`test-engine vN (STEP N)`** 자체 표기를 씀 (engine.js/engine.css/themes/*.css 등 수정 파일 상단 주석 참고). 현재 `v5 (STEP 5: MBTI 4축 동시 채점 + 인트로 자기신고 입력 추가)`.
+이 하위 프로젝트는 메인 사이트의 `vX.Y.Z` 버전과 무관하게 **`test-engine vN (STEP N)`** 자체 표기를 씀 (engine.js/engine.css/themes/*.css 등 수정 파일 상단 주석 참고). 현재 `v6 (버튼바-본문 겹침 수정 + 캐시버스팅 도입)`.
+
+**⚠️ engine.js/engine.css/result-card.js를 고칠 때마다 반드시 캐시버스팅 버전을 같이 올릴 것(2026-07-11 확립)** — 이 세 파일은 완성된 테스트 10개의 `index.html`에서 `<script>`/`<link>`로 정적 로드되는데, 이번에 **캐시버스팅 쿼리스트링(`?v=`)이 아예 없었던 걸 발견** — 그래서 engine.js를 고쳐 배포해도 Cloudflare/브라우저가 몇 시간씩 구버전을 계속 서빙해 "고쳤는데 안 고쳐진 것처럼 보이는" 배포 지연 버그가 있었음(사용자가 실사용 스크린샷으로 제보). 이제 세 파일 전부 `?v=`가 붙어있으니, 이 중 하나라도 수정하면:
+1. `engine.js` 파일 헤더 주석의 "vN"과, 파일 내부 `ENGINE_ASSET_VERSION` 상수를 새 번호로 올리고
+2. `test-engine/tests/` 아래 완성된 테스트 10개 `index.html` 전부의 해당 `?v=`도 같은 번호로 일괄 교체할 것 (세 파일의 쿼리스트링을 각각 sed로 치환하면 됨).
+
+동적으로 주입되는 `themes/*.css`는 `injectThemeCSS()`가 `ENGINE_ASSET_VERSION`을 그대로 재사용하므로 위 1번만 하면 자동으로 캐시버스팅된다(10개 index.html을 따로 안 건드려도 됨).
 
 ## 개요
 `engine.js`/`engine.css`/`result-card.js`/`themes/*.css`는 기존 사이트(`index.html` / `app.js` / `data.js`)와 분리된 신규 엔진입니다.

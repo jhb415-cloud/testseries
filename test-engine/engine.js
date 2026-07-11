@@ -1,4 +1,4 @@
-/* test-engine v5 (STEP 5: MBTI 4축 동시 채점 + 인트로 자기신고 입력 추가) | engine.js — 공통 로직
+/* test-engine v6 (버튼바-본문 겹침 수정 + 캐시버스팅 도입) | engine.js — 공통 로직
    (config 로드, 화면 전환, 채점, 렌더, 결과 공유카드 저장, 관련 테스트 배너, 카카오톡 공유,
    메인 사이트로 돌아가기 링크) 순수 바닐라 JS. 외부 라이브러리 없음. 기능별 함수로 분리해 유지보수.
    결과 화면의 "이미지 저장" 기능은 별도 파일 result-card.js(window.TestEngineResultCard)에 위임한다.
@@ -26,10 +26,30 @@
    fillVarsTemplate의 vars에 "{e}"/"{n}"/"{f}"/"{j}"(각각 E/N/F/J 쪽으로 기운 정도, 0~100
    정수%)로 추가 노출 — 새 scoring_type이 아니라 mbti4가 이미 구하던 값을 한 군데 더
    꺼내 쓰는 것뿐이라 이 필드를 참조하지 않는 기존 config(resultTemplate에 {e}등이 없는
-   경우)는 렌더링에 아무 변화가 없다(하위호환, mbti-stat-window 테스트가 실사용 예시). */
+   경우)는 렌더링에 아무 변화가 없다(하위호환, mbti-stat-window 테스트가 실사용 예시).
+
+   v6(2026-07-11): ①웹폰트 비동기 로딩으로 결과 화면 하단 고정 버튼바가 커지며 본문과
+   겹치던 문제 수정 — syncFixedFooterHeight()가 document.fonts.ready 완료 후 한 번 더
+   재측정 + 화면 회전 등 대비 window resize 리스너 추가. ②이 파일(engine.js)과
+   engine.css/result-card.js가 여태 캐시버스팅 쿼리스트링이 전혀 없어서, 방금 배포한 위 수정을
+   포함해 이 파일이 바뀔 때마다 Cloudflare/브라우저가 몇 시간씩 구버전을 계속 서빙할 수 있는
+   상태였음(메인 사이트 index.html은 v0.6.5부터 ?v= 캐시버스팅이 있는데 이 폴더만 빠져있었음)
+   — 10개 완성 테스트의 index.html 전부에 engine.js/engine.css/result-card.js "?v=" 추가,
+   동적 주입되는 themes(각 css)는 아래 ENGINE_ASSET_VERSION 하나로 중앙 관리(themes 파일이
+   바뀔 땐 이 상수만 올리면 됨). 앞으로 engine.js/engine.css/result-card.js를 고칠 때마다 반드시
+   1) 이 헤더의 "vN"과 아래 ENGINE_ASSET_VERSION을 새 번호로 올리고
+   2) tests 폴더 아래 완성된 테스트 10개 index.html 전부의 해당 "?v="도 같은 번호로 일괄
+      교체할 것(engine.js와 engine.css와 result-card.js 세 파일의 물음표-v 쿼리스트링을
+      한 번에 sed로 치환하면 됨) — 안 하면 이번과 같은 "고쳤는데 반영이 안 된 것처럼 보이는"
+      배포 지연 버그가 재발한다. */
 
 (function () {
   'use strict';
+
+  // engine.js 자체가 바뀔 때마다 이 번호를 올리고, 위 헤더 안내대로 10개 index.html의
+  // engine.js/engine.css/result-card.js ?v=도 같은 번호로 맞출 것 — themes/*.css는
+  // injectThemeCSS()가 이 상수를 그대로 재사용해 자동으로 캐시버스팅된다(파일별로 안 챙겨도 됨).
+  var ENGINE_ASSET_VERSION = '6';
 
   // 최상단에서 즉시 캡처해야 함 — defer 스크립트라도 동기 실행 구간에서만 currentScript가 유효함
   var ENGINE_SCRIPT = document.currentScript;
@@ -130,7 +150,12 @@
     if (document.querySelector('link[data-te-theme]')) return;
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = ENGINE_BASE + 'themes/' + themeName + '.css';
+    // themes/*.css는 engine.js가 동적으로 <link>를 주입하는 방식이라(정적 태그가 아님)
+    // 여기서만 버전을 올리면 21개 index.html을 손대지 않고도 캐시버스팅됨(아래 ENGINE_ASSET_VERSION
+    // 참고, engine.js/engine.css/result-card.js처럼 정적 <script>/<link>로 로드되는 파일은
+    // 각 index.html의 ?v=를 직접 올려야 함 — 2026-07-11 발견: 캐시버스팅 자체가 아예 없어서
+    // 배포 후에도 브라우저/Cloudflare가 구버전 engine.js를 계속 서빙하던 문제가 있었음).
+    link.href = ENGINE_BASE + 'themes/' + themeName + '.css?v=' + ENGINE_ASSET_VERSION;
     link.dataset.teTheme = themeName;
     document.head.appendChild(link);
   }
