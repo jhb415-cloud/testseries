@@ -3,7 +3,7 @@
   "title": "텍스트 답장 스타일로 보는 연애 유형",
   "description": "좋아하는 사람한테 오는 톡, 나는 어떻게 답장할까? 8문항 연애 답장 테스트",
   "hashtags": ["답장스타일", "심리테스트", "연애유형", "카톡밈"],
-  "theme": "retro",
+  "theme": "messenger",
   "cover_image": "assets/cover.webp",
   "seed_count": 52,
   "scoring_type": "type",

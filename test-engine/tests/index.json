@@ -37,8 +37,9 @@
       "title": "텍스트 답장 스타일로 보는 연애 유형",
       "category": "몰입테스트",
       "scoring_type": "type",
-      "status": "텍스트 초안 완료, 이미지 미착수",
-      "note": "2026-07-11 질문/답변을 단답형에서 상황 서술형 완결 문장으로 전면 리라이팅(type 값 등 채점 필드는 무변경)"
+      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 3-text-reply-love-type, 신규 테마 messenger.css",
+      "concept_style": "깔끔/위트형 — 코믹 말풍선 아이콘 일러스트(폰 UI 흉내 아님), themes/messenger.css",
+      "note": "이미지 컨셉을 3차례 재설계 — 1차(레퍼런스 images/edits로 폰 UI 그대로 스타일 참조)는 상단바/타임스탬프까지 흉내내다 깨진 가짜 영문 텍스트 발생, 2차(레퍼런스 없이 'messaging app' 문구 사용)는 gpt-image-1이 로고/앱아이콘으로 오인해 'MESSAGING APP' 텍스트 배너가 박힌 제네릭 이미지로 나옴, 3차(레퍼런스 미사용+'app/UI/phone' 단어 제거+말풍선을 순수 만화 소재로 묘사)로 최종 성공. **이 과정에서 generate-assets.js 프롬프트 파서가 `##` 헤딩 다음 '한 줄'만 읽는다는 기존 함정(k-office-type에서 이미 발견됐던 것)을 모르고 여러 줄로 줄바꿈해서 써서 프롬프트가 중간에 잘려있었던 게 3차 시도 초반까지도 실패 원인이었음 — 한 줄로 재작성 후 정상화. 앞으로 prompts.md 작성 시 항상 한 줄 유지할 것(README.md에도 있는 규칙, 재차 확인).**"
     },
     {
       "number": 4,
