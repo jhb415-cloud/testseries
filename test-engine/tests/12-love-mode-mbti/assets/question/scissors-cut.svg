@@ -1,10 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Q7: 데이트 약속이 잡히면 — 왼쪽: 코스 다 짜둠(점선 경로+핀), 오른쪽: 그날 기분따라(흩어진 컨페티) -->
   <rect width="200" height="200" fill="#f5efe2"/>
-  <line x1="30" y1="150" x2="150" y2="60" stroke="#33302a" stroke-width="2" stroke-dasharray="6 8" opacity="0.5"/>
-  <g fill="none" stroke="#d85a30" stroke-width="7" stroke-linecap="round">
-    <circle cx="150" cy="60" r="12"/>
-    <circle cx="150" cy="110" r="12"/>
-    <line x1="160" y1="70" x2="70" y2="150"/>
-    <line x1="160" y1="100" x2="70" y2="20"/>
+  <!-- 왼쪽: 계획된 경로 -->
+  <path d="M36 150c10-30 20-50 40-70" stroke="#d85a30" stroke-width="3" stroke-dasharray="6 6" fill="none" stroke-linecap="round"/>
+  <circle cx="36" cy="150" r="7" fill="#d85a30"/>
+  <path d="M76 66c0-8 8-14 16-14s16 6 16 14c0 10-16 22-16 22s-16-12-16-22z" fill="#d85a30"/>
+  <circle cx="92" cy="66" r="5" fill="#f5efe2"/>
+  <!-- 오른쪽: 즉흥, 흩어진 조각들 -->
+  <g fill="#1d9e75">
+    <rect x="130" y="60" width="10" height="10" transform="rotate(20 135 65)"/>
+    <rect x="152" y="80" width="9" height="9" transform="rotate(-15 156 84)"/>
+    <rect x="140" y="100" width="8" height="8" transform="rotate(40 144 104)"/>
+    <rect x="166" y="110" width="10" height="10" transform="rotate(-25 171 115)"/>
+    <rect x="150" y="130" width="7" height="7" transform="rotate(10 153 133)"/>
   </g>
 </svg>

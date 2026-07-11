@@ -2,78 +2,159 @@
   "id": "mbti-addiction-level",
   "title": "나의 MBTI 과몰입 정도 테스트 (메타)",
   "description": "MBTI 뭔데부터 MBTI 교주까지, 6문항으로 재는 진짜 과몰입 레벨",
-  "hashtags": ["MBTI과몰입", "심리테스트", "MBTI밈", "자아성찰"],
-  "theme": "retro",
+  "hashtags": [
+    "MBTI과몰입",
+    "심리테스트",
+    "MBTI밈",
+    "자아성찰"
+  ],
+  "theme": "stained-glass",
   "cover_image": "assets/cover.webp",
   "seed_count": 256910,
   "scoring_type": "sum",
-  "loading": { "text": "과몰입 레벨 측정 중..", "duration_ms": 2000 },
+  "loading": {
+    "text": "과몰입 레벨 측정 중..",
+    "duration_ms": 2000
+  },
   "related": [],
   "questions": [
     {
-      "text": "처음 만난 사람에게?",
+      "text": "처음 만난 사람과 대화를 시작할 때, MBTI에 대한 나의 태도는?",
       "image": null,
       "choices": [
-        { "label": "관심 없음", "score": 0 },
-        { "label": "대화하다 알게 됨", "score": 2 },
-        { "label": "초반에 물어봄", "score": 4 },
-        { "label": "\"MBTI 뭐예요?\"가 첫 질문", "score": 5 }
+        {
+          "label": "딱히 관심이 없어서 안 물어봄",
+          "score": 0
+        },
+        {
+          "label": "대화하다 자연스럽게 알게 되는 정도",
+          "score": 2
+        },
+        {
+          "label": "초반에 궁금해서 슬쩍 물어봄",
+          "score": 4
+        },
+        {
+          "label": "\"MBTI가 뭐예요?\"가 첫 질문으로 나감",
+          "score": 5
+        }
       ]
     },
     {
-      "text": "사람이 이상하게 굴면?",
+      "text": "누군가 이상하게 행동하는 걸 보면, 나는 그 이유를 어떻게 해석할까?",
       "image": null,
       "choices": [
-        { "label": "그냥 그런가 봄", "score": 0 },
-        { "label": "성격이겠지", "score": 2 },
-        { "label": "\"쟤 T라서 그래\"", "score": 4 },
-        { "label": "유형별 행동 예측함", "score": 5 }
+        {
+          "label": "그냥 그런가보다 하고 넘어감",
+          "score": 0
+        },
+        {
+          "label": "원래 그런 성격인가보다 생각함",
+          "score": 2
+        },
+        {
+          "label": "\"쟤 T라서 그래\" 하고 바로 단정함",
+          "score": 4
+        },
+        {
+          "label": "유형별 행동 패턴까지 예측하며 분석함",
+          "score": 5
+        }
       ]
     },
     {
-      "text": "연애 상대 고를 때 MBTI는?",
+      "text": "연애 상대를 고를 때, MBTI는 얼마나 중요한 기준일까?",
       "image": null,
       "choices": [
-        { "label": "상관없음", "score": 0 },
-        { "label": "참고만", "score": 2 },
-        { "label": "궁합 찾아봄", "score": 4 },
-        { "label": "특정 유형만 만남", "score": 5 }
+        {
+          "label": "MBTI는 전혀 상관하지 않음",
+          "score": 0
+        },
+        {
+          "label": "그냥 참고 정도로만 봄",
+          "score": 2
+        },
+        {
+          "label": "궁합 콘텐츠까지 찾아보는 편",
+          "score": 4
+        },
+        {
+          "label": "특정 유형만 만나려고 하는 편",
+          "score": 5
+        }
       ]
     },
     {
-      "text": "새 MBTI 순위 콘텐츠 보면?",
+      "text": "새로운 MBTI 유형별 순위 콘텐츠가 올라오면, 나는?",
       "image": null,
       "choices": [
-        { "label": "스킵", "score": 0 },
-        { "label": "재밌네", "score": 2 },
-        { "label": "저장함", "score": 4 },
-        { "label": "내 유형 찾아 다 캡처", "score": 5 }
+        {
+          "label": "별 관심 없이 그냥 스킵함",
+          "score": 0
+        },
+        {
+          "label": "재밌다고 웃으며 한 번 보고 넘김",
+          "score": 2
+        },
+        {
+          "label": "마음에 들면 저장까지 해둠",
+          "score": 4
+        },
+        {
+          "label": "내 유형 찾아서 전부 캡처해둠",
+          "score": 5
+        }
       ]
     },
     {
-      "text": "친구가 \"그거 다 미신이야\" 하면?",
+      "text": "친구가 \"그거 다 미신이야\"라고 말하면, 나의 반응은?",
       "image": null,
       "choices": [
-        { "label": "인정", "score": 0 },
-        { "label": "그럴 수도", "score": 2 },
-        { "label": "발끈", "score": 4 },
-        { "label": "논문·통계로 반박", "score": 5 }
+        {
+          "label": "맞는 말이라고 순순히 인정함",
+          "score": 0
+        },
+        {
+          "label": "그럴 수도 있겠다 하고 넘어감",
+          "score": 2
+        },
+        {
+          "label": "괜히 발끈하며 반박하고 싶어짐",
+          "score": 4
+        },
+        {
+          "label": "관련 논문이나 통계까지 꺼내며 반박함",
+          "score": 5
+        }
       ]
     },
     {
-      "text": "본인 유형에 대해?",
+      "text": "내 MBTI 유형에 대해 얼마나 자세히 알고 있을까?",
       "image": null,
       "choices": [
-        { "label": "뭐였더라", "score": 0 },
-        { "label": "대충 앎", "score": 2 },
-        { "label": "부가 기능까지 앎", "score": 4 },
-        { "label": "유형 특징 줄줄 읊음", "score": 5 }
+        {
+          "label": "내 유형이 뭐였는지도 가물가물함",
+          "score": 0
+        },
+        {
+          "label": "대충 이런 성격이라는 정도만 앎",
+          "score": 2
+        },
+        {
+          "label": "세부 부기능까지 자세히 알고 있음",
+          "score": 4
+        },
+        {
+          "label": "유형 특징을 줄줄 외워서 읊을 수 있음",
+          "score": 5
+        }
       ]
     }
   ],
   "results": [
     {
-      "min": 0, "max": 5,
+      "min": 0,
+      "max": 5,
       "title": "MBTI뭔데",
       "subtitle": "그거 먹는 건가요? 수준의 무관심",
       "image": "assets/result/mbti-whatever.webp",
@@ -85,7 +166,8 @@
       "tip": "관심 없어도 괜찮아, 세상엔 MBTI 말고도 재밌는 게 많으니까"
     },
     {
-      "min": 6, "max": 11,
+      "min": 6,
+      "max": 11,
       "title": "재미로봄",
       "subtitle": "가볍게 즐기는 라이트 유저",
       "image": "assets/result/light-fan.webp",
@@ -97,7 +179,8 @@
       "tip": "딱 좋은 거리감이야, 그 정도가 제일 건강한 밸런스"
     },
     {
-      "min": 12, "max": 17,
+      "min": 12,
+      "max": 17,
       "title": "은근믿음",
       "subtitle": "은근히 신뢰하는 티가 나는 단계",
       "image": "assets/result/quiet-believer.webp",
@@ -109,7 +192,8 @@
       "tip": "이미 은근히 믿고 있으면서 아닌 척하는 중이지? 다 알아"
     },
     {
-      "min": 18, "max": 23,
+      "min": 18,
+      "max": 23,
       "title": "과몰입러",
       "subtitle": "MBTI로 사람을 예측하는 지경까지 옴",
       "image": "assets/result/overinvested.webp",
@@ -121,7 +205,8 @@
       "tip": "이 정도면 MBTI 상담소 차려도 되겠다, 근데 가끔은 그냥 사람으로 봐줘"
     },
     {
-      "min": 24, "max": 30,
+      "min": 24,
+      "max": 30,
       "title": "MBTI교주",
       "subtitle": "만나자마자 유형부터 묻는 찐교주",
       "image": "assets/result/mbti-cult-leader.webp",

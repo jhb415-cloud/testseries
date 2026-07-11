@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Q13: 겉으론 웃어도 속으론 — 이득/실 계산(오렌지, 저울) vs 상대 기분 신경(청록, 하트+물음표) -->
   <rect width="200" height="200" fill="#f7f1e3"/>
   <g stroke="#e4d9bf" stroke-width="1.5">
     <line x1="0" y1="40" x2="200" y2="40"/><line x1="0" y1="80" x2="200" y2="80"/>
@@ -6,6 +7,16 @@
     <line x1="40" y1="0" x2="40" y2="200"/><line x1="80" y1="0" x2="80" y2="200"/>
     <line x1="120" y1="0" x2="120" y2="200"/><line x1="160" y1="0" x2="160" y2="200"/>
   </g>
-  <path d="M100 140c-30-22-46-40-46-60a26 26 0 0 1 46-16 26 26 0 0 1 46 16c0 20-16 38-46 60z"
-        fill="none" stroke="#d85a30" stroke-width="6" stroke-linejoin="round"/>
+  <!-- 웃는 얼굴 -->
+  <circle cx="100" cy="66" r="30" fill="#fffdf7" stroke="#3a2e1f" stroke-width="3"/>
+  <circle cx="90" cy="60" r="3" fill="#3a2e1f"/>
+  <circle cx="110" cy="60" r="3" fill="#3a2e1f"/>
+  <path d="M86 74c6 8 22 8 28 0" fill="none" stroke="#3a2e1f" stroke-width="3" stroke-linecap="round"/>
+  <path d="M100 96v14" stroke="#3a2e1f" stroke-width="2" stroke-dasharray="3 4"/>
+  <!-- 왼쪽: 이해득실 계산 (저울) -->
+  <path d="M60 128v34M46 132h28" stroke="#d85a30" stroke-width="4" stroke-linecap="round"/>
+  <path d="M46 132l-8 16h16zM74 132l-8 16h16z" fill="none" stroke="#d85a30" stroke-width="3" stroke-linejoin="round"/>
+  <!-- 오른쪽: 상대 기분 신경 (하트 + 물음표) -->
+  <path d="M140 138c-8-6-14-12-14-19a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 7-6 13-14 19z" fill="none" stroke="#1d9e75" stroke-width="4" stroke-linejoin="round"/>
+  <text x="140" y="176" font-size="24" font-weight="700" fill="#1d9e75" text-anchor="middle" font-family="sans-serif">?</text>
 </svg>

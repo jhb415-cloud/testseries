@@ -45,7 +45,9 @@
       "title": "나의 소비 유형: 거지방 vs 욜로",
       "category": "몰입테스트",
       "scoring_type": "type",
-      "status": "텍스트 초안 완료, 이미지 미착수"
+      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 4-spending-type, 질문/답변 자연문장화 리라이팅 완료, 신규 테마 vintage-collage.css. 2026-07-11 Playwright QA 재검증 완료(콘솔 에러 0, 이미지 로드 정상, 공유/저장 버튼 정상)",
+      "concept_style": "밈/드립형 — 1970년대 신문 쿠폰 광고 콜라주로 무지출챌린저의 궁상 vs 욜로형의 탕진을 대비, themes/vintage-collage.css",
+      "note": "사용자가 미리 준비한 config.json 초안+Gemini 레퍼런스 기반. 크림 하프톤 배경+모서리 잘린 쿠폰형 카드+Black Han Sans 포스터 폰트"
     },
     {
       "number": 5,
@@ -53,7 +55,9 @@
       "title": "내 안의 빌런 지수 테스트",
       "category": "몰입테스트",
       "scoring_type": "sum+tag(STEP4)",
-      "status": "텍스트 초안 완료, 이미지 미착수"
+      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 5-villain-index, 질문/답변 자연문장화 리라이팅 완료, 신규 테마 noir-comic.css. 2026-07-11 Playwright QA 재검증 완료(콘솔 에러 0, 이미지 로드 정상, sum+tag 채점·{tag} 치환 정상, 공유/저장 버튼 정상)",
+      "concept_style": "밈/드립형 — 형사 머그샷에서 진짜 빌런으로 리빌되는 필름누아르 코믹, themes/noir-comic.css",
+      "note": "sum 채점에 선택적 tag 집계(STEP4 예외)를 처음 실사용한 콘텐츠 — 순검정 배경+흰 테두리 코믹패널+Black And White Picture 디스트레스 폰트"
     },
     {
       "number": 6,
@@ -61,7 +65,9 @@
       "title": "나의 MBTI 과몰입 정도 테스트 (메타)",
       "category": "몰입테스트",
       "scoring_type": "sum",
-      "status": "텍스트 초안 완료, 이미지 미착수"
+      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 6-mbti-addiction-level, 질문/답변 자연문장화 리라이팅 완료, 신규 테마 stained-glass.css. 2026-07-11 Playwright QA 재검증 완료(콘솔 에러 0, 이미지 로드 정상, 공유/저장 버튼 정상)",
+      "concept_style": "밈/드립형 — MBTI 과몰입을 신앙처럼 과장한 성당 스테인드글라스 성화, themes/stained-glass.css",
+      "note": "짙은 남색 납선 그리드 배경+금색 이중선 테두리 카드+Song Myung 세리프 폰트"
     },
     {
       "number": 7,
@@ -101,7 +107,7 @@
       "title": "찐 MBTI vs 겉 MBTI 판별기 (겉바속촉)",
       "category": "MBTI존",
       "scoring_type": "mbti4_dual",
-      "status": "완료(사이트 연동까지) — 폴더 11-real-vs-fake-mbti, MBTI존 탭+홈 sections.json+sitemap.xml 전부 연결됨",
+      "status": "완료(사이트 연동까지) — 폴더 11-real-vs-fake-mbti, MBTI존 탭+홈 sections.json+sitemap.xml 전부 연결됨. 2026-07-10 질문/답변 자연문장화 + 문항 이미지(SVG) 4장 내용 맞게 재제작",
       "concept_style": "밈/드립형 — 스크랩북/폴라로이드 다이어리 콜라주, themes/scrapbook.css",
       "note": "사용자가 Gemini로 직접 뽑은 레퍼런스(그리드 노트+워시테이프 폴라로이드 2장: 오렌지톤 겉모습 미소 vs 청록톤 속마음 클로즈업)가 겉바속촉 컨셉과 정확히 맞아떨어져 그대로 채택, images/edits로 스타일 전이해 cover+generic 생성"
     },
@@ -111,7 +117,7 @@
       "title": "연애하면 바뀌는 내 MBTI",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "완료(사이트 연동까지) — 폴더 12-love-mode-mbti, MBTI존 탭+홈 sections.json+sitemap.xml 전부 연결됨",
+      "status": "완료(사이트 연동까지) — 폴더 12-love-mode-mbti, MBTI존 탭+홈 sections.json+sitemap.xml 전부 연결됨. 2026-07-10 설명 보강 + 질문/답변 자연문장화 + 문항 이미지(SVG) 3장 내용 맞게 재제작",
       "concept_style": "밈/드립형 — 레이어드 페이퍼컷 마스크 콜라주, themes/papercut.css",
       "note": "사용자가 Gemini로 직접 뽑은 레퍼런스(주황 웃는 마스크가 페이지처럼 벗겨지며 청록 진지한 얼굴이 드러나는 구성)를 '연애 앞에서 튀어나오는 다른 나(가면)' 컨셉으로 채택, images/edits로 스타일 전이해 cover+generic 생성"
     },
@@ -121,7 +127,7 @@
       "title": "취중 MBTI 테스트",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "완료(사이트 연동까지) — 폴더 13-drunk-mbti, MBTI존 탭+홈 sections.json+sitemap.xml 전부 연결됨",
+      "status": "완료(사이트 연동까지) — 폴더 13-drunk-mbti, MBTI존 탭+홈 sections.json+sitemap.xml 전부 연결됨. 2026-07-10 질문/답변 자연문장화 + 문항 이미지(SVG) 3장 내용 맞게 재제작",
       "concept_style": "밈/드립형 — 네온사인 라인아트(도심 야경), themes/neon.css",
       "note": "사용자가 Gemini로 직접 뽑은 레퍼런스(2패널: 커버용 서있는 포즈+'Emotional Drunk type' 결과 포즈)가 라벨까지 명시돼있어 그대로 cover/generic 프롬프트로 채택, images/edits로 스타일 전이해 생성"
     },

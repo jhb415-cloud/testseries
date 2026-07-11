@@ -1,9 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Q5: 친구들 갈등, 남들이 보는 나 — 다투는 두 사람(오렌지) + 중재하는 나(청록, 가운데) -->
   <rect width="200" height="200" fill="#f7f1e3"/>
-  <g transform="rotate(-8 100 100)">
-    <rect x="30" y="82" width="140" height="36" fill="#d85a30" opacity="0.85"/>
-    <rect x="30" y="82" width="140" height="36" fill="none" stroke="#fffdf7" stroke-width="3" stroke-dasharray="10 8" opacity="0.6"/>
+  <rect x="20" y="20" width="160" height="160" rx="6" fill="#fffdf7" stroke="#e4d9bf" stroke-width="2" transform="rotate(2 100 100)"/>
+  <g transform="rotate(2 100 100)">
+    <circle cx="58" cy="78" r="15" fill="#d85a30"/>
+    <path d="M50 72l6 6M64 72l-6 6" stroke="#3a2e1f" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M52 90c4-3 12-3 16 0" fill="none" stroke="#3a2e1f" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="142" cy="78" r="15" fill="#d85a30"/>
+    <path d="M134 72l6 6M148 72l-6 6" stroke="#3a2e1f" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M136 90c4-3 12-3 16 0" fill="none" stroke="#3a2e1f" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M76 66l8 6-8 4M124 66l-8 6 8 4" fill="none" stroke="#d85a30" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="100" cy="120" r="19" fill="#1d9e75"/>
+    <circle cx="94" cy="116" r="2.4" fill="#fffdf7"/>
+    <circle cx="106" cy="116" r="2.4" fill="#fffdf7"/>
+    <path d="M92 127c4 3 12 3 16 0" fill="none" stroke="#fffdf7" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M83 108l-16-8M117 108l16-8" fill="none" stroke="#1d9e75" stroke-width="6" stroke-linecap="round"/>
   </g>
-  <path d="M60 50c4 6 4 12 0 18M76 46c4 6 4 12 0 18" stroke="#1d9e75" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.7"/>
-  <path d="M130 150c4 6 4 12 0 18M146 146c4 6 4 12 0 18" stroke="#1d9e75" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <rect x="128" y="14" width="30" height="14" fill="#d85a30" opacity="0.8" transform="rotate(-16 143 21)"/>
 </svg>

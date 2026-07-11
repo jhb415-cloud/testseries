@@ -2,98 +2,211 @@
   "id": "villain-index",
   "title": "내 안의 빌런 지수 테스트",
   "description": "단톡방부터 연애까지, 8문항으로 재는 내 안의 빌런 지수와 페르소나",
-  "hashtags": ["빌런지수", "심리테스트", "자아성찰", "MZ밈테스트"],
-  "theme": "retro",
+  "hashtags": [
+    "빌런지수",
+    "심리테스트",
+    "자아성찰",
+    "MZ밈테스트"
+  ],
+  "theme": "noir-comic",
   "cover_image": "assets/cover.webp",
   "seed_count": 241670,
   "scoring_type": "sum",
-  "loading": { "text": "빌런 지수 계산 중..", "duration_ms": 2000 },
+  "loading": {
+    "text": "빌런 지수 계산 중..",
+    "duration_ms": 2000
+  },
   "related": [],
   "questions": [
     {
-      "text": "단톡방에서 나만 정보 알 때?",
+      "text": "단체 카톡방에서 나만 어떤 정보를 알고 있을 때, 나는 어떻게 할까?",
       "image": null,
       "choices": [
-        { "label": "바로 공유", "score": 0 },
-        { "label": "필요할 때만", "score": 1 },
-        { "label": "은근 늦게", "score": 2 },
-        { "label": "나만 앎, 안 알려줌", "score": 3, "tag": "단톡빌런" }
+        {
+          "label": "바로바로 다 같이 공유함",
+          "score": 0
+        },
+        {
+          "label": "필요할 때만 살짝 알려줌",
+          "score": 1
+        },
+        {
+          "label": "묻기 전까진 은근 늦게 알려줌",
+          "score": 2
+        },
+        {
+          "label": "나만 알고 절대 안 알려줌",
+          "score": 3,
+          "tag": "단톡빌런"
+        }
       ]
     },
     {
-      "text": "친구가 자랑할 때 속마음?",
+      "text": "친구가 신나서 자랑을 늘어놓을 때, 내 속마음은 어떨까?",
       "image": null,
       "choices": [
-        { "label": "진심 축하", "score": 0 },
-        { "label": "좀 부럽", "score": 1 },
-        { "label": "겉으론 축하 속으론 배아픔", "score": 2 },
-        { "label": "\"그게 뭐 대단하다고\"", "score": 3, "tag": "모임빌런" }
+        {
+          "label": "진심으로 축하해주는 마음뿐",
+          "score": 0
+        },
+        {
+          "label": "솔직히 조금은 부러운 마음이 듦",
+          "score": 1
+        },
+        {
+          "label": "겉으론 축하하지만 속으론 배가 아픔",
+          "score": 2
+        },
+        {
+          "label": "\"그게 뭐 대단한 일이라고\" 싶음",
+          "score": 3,
+          "tag": "모임빌런"
+        }
       ]
     },
     {
-      "text": "회의에서 남 아이디어가 좋을 때?",
+      "text": "회의 중 다른 사람의 아이디어가 진짜 좋다고 느껴질 때, 나는?",
       "image": null,
       "choices": [
-        { "label": "대놓고 칭찬", "score": 0 },
-        { "label": "인정은 함", "score": 1 },
-        { "label": "조용히 넘어감", "score": 2 },
-        { "label": "내 아이디어인 척", "score": 3, "tag": "회사빌런" }
+        {
+          "label": "대놓고 칭찬하고 인정해줌",
+          "score": 0
+        },
+        {
+          "label": "속으론 인정하되 티는 안 냄",
+          "score": 1
+        },
+        {
+          "label": "별말 없이 조용히 넘어감",
+          "score": 2
+        },
+        {
+          "label": "은근슬쩍 내 아이디어인 것처럼 굴음",
+          "score": 3,
+          "tag": "회사빌런"
+        }
       ]
     },
     {
-      "text": "연인이 다른 이성 얘기하면?",
+      "text": "연인이 다른 이성 이야기를 꺼낼 때, 나의 반응은?",
       "image": null,
       "choices": [
-        { "label": "쿨하게 들음", "score": 0 },
-        { "label": "살짝 신경", "score": 1 },
-        { "label": "티 안 내고 기분 상함", "score": 2 },
-        { "label": "캐묻고 뒤끝", "score": 3, "tag": "연애빌런" }
+        {
+          "label": "별 신경 안 쓰고 쿨하게 들음",
+          "score": 0
+        },
+        {
+          "label": "살짝은 신경이 쓰이긴 함",
+          "score": 1
+        },
+        {
+          "label": "티는 안 내지만 속으로 기분이 상함",
+          "score": 2
+        },
+        {
+          "label": "꼬치꼬치 캐묻고 며칠 뒤끝을 부림",
+          "score": 3,
+          "tag": "연애빌런"
+        }
       ]
     },
     {
-      "text": "약속 시간에 늦었을 때 나는?",
+      "text": "약속에 늦었다는 걸 깨달았을 때, 나는 보통 어떻게 행동할까?",
       "image": null,
       "choices": [
-        { "label": "미리 연락하고 사과", "score": 0 },
-        { "label": "도착해서 사과", "score": 1 },
-        { "label": "대충 \"차 막혔어\"", "score": 2 },
-        { "label": "오히려 상대 탓", "score": 3, "tag": "모임빌런" }
+        {
+          "label": "미리 연락하고 진심으로 사과함",
+          "score": 0
+        },
+        {
+          "label": "도착해서라도 바로 사과함",
+          "score": 1
+        },
+        {
+          "label": "대충 \"차가 막혀서\"라고 둘러댐",
+          "score": 2
+        },
+        {
+          "label": "오히려 상대방 탓을 하며 넘어감",
+          "score": 3,
+          "tag": "모임빌런"
+        }
       ]
     },
     {
-      "text": "남의 실수를 목격했을 때?",
+      "text": "눈앞에서 다른 사람의 실수를 목격했을 때, 나는?",
       "image": null,
       "choices": [
-        { "label": "조용히 도와줌", "score": 0 },
-        { "label": "모른 척", "score": 1 },
-        { "label": "속으로 비웃음", "score": 2 },
-        { "label": "소문냄", "score": 3, "tag": "단톡빌런" }
+        {
+          "label": "조용히 다가가서 도와줌",
+          "score": 0
+        },
+        {
+          "label": "못 본 척 그냥 넘어감",
+          "score": 1
+        },
+        {
+          "label": "속으로 몰래 비웃음",
+          "score": 2
+        },
+        {
+          "label": "여기저기 소문을 내고 다님",
+          "score": 3,
+          "tag": "단톡빌런"
+        }
       ]
     },
     {
-      "text": "내가 잘못했다는 걸 알았을 때?",
+      "text": "내가 명백히 잘못했다는 걸 스스로 깨달았을 때, 나는?",
       "image": null,
       "choices": [
-        { "label": "바로 인정·사과", "score": 0 },
-        { "label": "인정은 함", "score": 1 },
-        { "label": "어물쩍", "score": 2 },
-        { "label": "절대 인정 안 함", "score": 3, "tag": "회사빌런" }
+        {
+          "label": "바로 인정하고 진심으로 사과함",
+          "score": 0
+        },
+        {
+          "label": "마음속으론 인정하고 있음",
+          "score": 1
+        },
+        {
+          "label": "확실히 짚지 않고 어물쩍 넘어감",
+          "score": 2
+        },
+        {
+          "label": "끝까지 절대 인정하지 않음",
+          "score": 3,
+          "tag": "회사빌런"
+        }
       ]
     },
     {
-      "text": "상대가 나한테 서운하다고 하면?",
+      "text": "상대방이 나 때문에 서운했다고 털어놓을 때, 나는 어떤 반응을 보일까?",
       "image": null,
       "choices": [
-        { "label": "진지하게 들음", "score": 0 },
-        { "label": "미안해함", "score": 1 },
-        { "label": "\"예민하네\"", "score": 2 },
-        { "label": "\"네가 문제지\" 역공", "score": 3, "tag": "연애빌런" }
+        {
+          "label": "진지하게 귀 기울여 들어줌",
+          "score": 0
+        },
+        {
+          "label": "미안한 마음이 바로 듦",
+          "score": 1
+        },
+        {
+          "label": "\"너 좀 예민한 거 아니야?\" 싶음",
+          "score": 2
+        },
+        {
+          "label": "오히려 \"네가 더 문제지\" 하고 역공함",
+          "score": 3,
+          "tag": "연애빌런"
+        }
       ]
     }
   ],
   "results": [
     {
-      "min": 0, "max": 6,
+      "min": 0,
+      "max": 6,
       "title": "천사",
       "subtitle": "빌런 기운이라곤 1도 없는 클린 그 자체",
       "image": "assets/result/angel.webp",
@@ -106,7 +219,8 @@
       "tagFallback": ""
     },
     {
-      "min": 7, "max": 12,
+      "min": 7,
+      "max": 12,
       "title": "잠재빌런",
       "subtitle": "겉으론 착한데 마음의 소리가 가끔 좀 세다",
       "image": "assets/result/potential-villain.webp",
@@ -119,7 +233,8 @@
       "tagFallback": ""
     },
     {
-      "min": 13, "max": 18,
+      "min": 13,
+      "max": 18,
       "title": "은근빌런",
       "subtitle": "은근히 {tag} 기질이 스멀스멀 올라오는 중",
       "image": "assets/result/quiet-villain.webp",
@@ -132,7 +247,8 @@
       "tagFallback": "은근"
     },
     {
-      "min": 19, "max": 24,
+      "min": 19,
+      "max": 24,
       "title": "찐빌런",
       "subtitle": "너 은근 아니고 그냥 {tag} 확정임",
       "image": "assets/result/real-villain.webp",

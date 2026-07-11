@@ -1,11 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Q1: 모임에서 남들 눈에 비친 나 — 먼저 말 거는 사람(오렌지, 왼쪽) vs 조용히 리액션만 하는 사람(청록, 오른쪽) -->
   <rect width="200" height="200" fill="#f7f1e3"/>
-  <g transform="rotate(-4 100 100)">
-    <rect x="46" y="34" width="108" height="128" rx="4" fill="#fffdf7" stroke="#e4d9bf" stroke-width="2"/>
-    <rect x="56" y="44" width="88" height="80" rx="2" fill="#f0a864"/>
-    <circle cx="88" cy="76" r="4" fill="#4a3f2f"/>
-    <circle cx="112" cy="76" r="4" fill="#4a3f2f"/>
-    <path d="M84 96c6 8 26 8 32 0" fill="none" stroke="#4a3f2f" stroke-width="4" stroke-linecap="round"/>
+  <g transform="rotate(-3 100 100)">
+    <rect x="30" y="26" width="140" height="150" rx="4" fill="#fffdf7" stroke="#e4d9bf" stroke-width="2"/>
+    <rect x="42" y="38" width="116" height="106" rx="2" fill="#efe6cf"/>
+    <!-- 오렌지: 먼저 말 거는 사람, 팔 들고 말풍선 -->
+    <circle cx="72" cy="98" r="16" fill="#d85a30"/>
+    <circle cx="67" cy="94" r="2.4" fill="#3a2e1f"/>
+    <circle cx="77" cy="94" r="2.4" fill="#3a2e1f"/>
+    <path d="M65 104c4 4 12 4 16 0" fill="none" stroke="#3a2e1f" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M72 82c-10-2-16 4-14 12" fill="none" stroke="#d85a30" stroke-width="6" stroke-linecap="round"/>
+    <path d="M92 76h20a6 6 0 0 1 6 6v6a6 6 0 0 1-6 6h-8l-6 8v-8h-6a6 6 0 0 1-6-6v-6a6 6 0 0 1 6-6z" fill="#d85a30" opacity="0.85"/>
+    <!-- 청록: 조용히 웃으며 리액션만 하는 사람 -->
+    <circle cx="128" cy="112" r="14" fill="#1d9e75"/>
+    <circle cx="124" cy="109" r="2" fill="#fffdf7"/>
+    <circle cx="132" cy="109" r="2" fill="#fffdf7"/>
+    <path d="M123 117c3 3 8 3 11 0" fill="none" stroke="#fffdf7" stroke-width="2.2" stroke-linecap="round"/>
   </g>
-  <rect x="118" y="24" width="30" height="14" fill="#1d9e75" opacity="0.75" transform="rotate(20 133 31)"/>
+  <rect x="128" y="16" width="30" height="14" fill="#1d9e75" opacity="0.75" transform="rotate(18 143 23)"/>
 </svg>

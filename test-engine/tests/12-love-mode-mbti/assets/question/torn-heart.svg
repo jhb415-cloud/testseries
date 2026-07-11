@@ -1,6 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Q5: 연애할 때 미래를 그리는 방식 — 왼쪽 절반: 결혼까지 상상(웨딩 링), 오른쪽 절반: 지금 이 순간(시계) -->
   <rect width="200" height="200" fill="#f5efe2"/>
   <path d="M100 156c-36-26-56-48-56-72a32 32 0 0 1 56-20 32 32 0 0 1 56 20c0 24-20 46-56 72z" fill="#d85a30"/>
   <path d="M100 156c-36-26-56-48-56-72a32 32 0 0 1 22-30c-2 4-3 9-3 14 0 24 20 46 37 62-1 8 0 18 0 26z" fill="#1d9e75" opacity="0.85"/>
-  <path d="M96 66l-8 16 12 6-10 20" fill="none" stroke="#f5efe2" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- 왼쪽(오렌지): 웨딩 링 두 개 -->
+  <circle cx="76" cy="76" r="8" fill="none" stroke="#f5efe2" stroke-width="3.4"/>
+  <circle cx="88" cy="84" r="8" fill="none" stroke="#f5efe2" stroke-width="3.4"/>
+  <!-- 오른쪽(청록): 시계 -->
+  <circle cx="130" cy="92" r="14" fill="none" stroke="#f5efe2" stroke-width="3.4"/>
+  <path d="M130 84v8l6 4" stroke="#f5efe2" stroke-width="3" stroke-linecap="round" fill="none"/>
 </svg>

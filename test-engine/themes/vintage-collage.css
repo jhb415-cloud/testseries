@@ -1,0 +1,92 @@
+/* test-engine — themes/vintage-collage.css — 7호 테마: 빈티지 신문/전단지 콜라주 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   spending-type(#4 자리)가 1호 사용처. 크림 색 낡은 신문지 + 하프톤 도트 질감,
+   쿠폰 티켓처럼 모서리가 잘린 카드. 기존 6개 테마와도 확실히 다른 무드(빈티지 광고지). */
+
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;600;700&display=swap');
+
+.te-app {
+  background:
+    radial-gradient(circle at 20% 15%, rgba(216, 90, 48, 0.06) 0, transparent 3%),
+    radial-gradient(circle at 60% 40%, rgba(29, 158, 117, 0.06) 0, transparent 3%),
+    radial-gradient(circle at 85% 75%, rgba(216, 90, 48, 0.05) 0, transparent 3%),
+    radial-gradient(circle at 35% 85%, rgba(29, 158, 117, 0.05) 0, transparent 3%),
+    #ede2c8;
+  background-size: 140px 140px, 160px 160px, 130px 130px, 150px 150px, auto;
+  color: #3a2e1f;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #f8f1de;
+  border: 2px solid #3a2e1f;
+  /* 쿠폰 티켓처럼 위·아래 모서리를 살짝 잘라낸 형태 */
+  clip-path: polygon(
+    0 8px, 8px 0, calc(100% - 8px) 0, 100% 8px,
+    100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px)
+  );
+  box-shadow: 4px 4px 0 rgba(58, 46, 31, 0.18), 0 10px 24px rgba(58, 46, 31, 0.12);
+  margin: 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Black Han Sans", "Noto Sans KR", sans-serif;
+  color: #1d6e52;
+  letter-spacing: 0.01em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #6b5a3e; }
+
+.te-chip {
+  background: repeating-linear-gradient(45deg, #d85a30, #d85a30 4px, #e8845c 4px, #e8845c 8px);
+  border: 1px dashed #3a2e1f;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 3px;
+}
+
+.te-btn {
+  background: #d85a30;
+  color: #fff8ea;
+  border-radius: 4px;
+  border: 2px solid #3a2e1f;
+  box-shadow: 3px 3px 0 #3a2e1f;
+  font-family: "Black Han Sans", "Noto Sans KR", sans-serif;
+}
+.te-btn:active { box-shadow: 1px 1px 0 #3a2e1f; transform: translate(2px, 2px); }
+.te-btn-primary { background: #1d9e75; }
+.te-btn-secondary { background: #f8f1de; color: #3a2e1f; }
+.te-btn-accent { background: #d85a30; }
+.te-btn-kakao { background: #FEE500; color: #191919; border-color: #3a2e1f; }
+
+.te-btn-choice {
+  background: #fff8ea;
+  color: #3a2e1f;
+  border: 2px dashed #b8a172;
+  border-radius: 4px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+.te-btn-choice:active { background: rgba(216, 90, 48, 0.12); border-color: #d85a30; }
+
+.te-progress-track { background: rgba(58, 46, 31, 0.12); border-radius: 3px; }
+.te-progress-fill { background: repeating-linear-gradient(45deg, #1d9e75, #1d9e75 6px, #24b98a 6px, #24b98a 12px); border-radius: 3px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #3a2e1f;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(216, 90, 48, 0.2);
+  border-top-color: #d85a30;
+}
