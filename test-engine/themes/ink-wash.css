@@ -1,0 +1,88 @@
+/* test-engine — themes/ink-wash.css — 신규 테마: 수묵 잉크워시 실루엣 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   shadow-mbti(#18)가 1호 사용처. 크림 화선지 배경 + 먹 번짐 텍스처 + 청록 글로우
+   포인트로 "억눌린 그림자가 튀어나오는" 긴장감을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #e8e2d4; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    radial-gradient(ellipse at 30% 100%, rgba(0, 204, 249, 0.10), transparent 55%),
+    #e8e2d4;
+  color: #1a1814;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #f3efe3;
+  border-radius: 2px;
+  border: 2px solid #1a1814;
+  box-shadow: 6px 6px 0 rgba(26, 24, 20, 0.12);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Nanum Myeongjo", "Noto Sans KR", serif;
+  font-weight: 800;
+  color: #1a1814;
+  letter-spacing: -0.01em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #55503f; }
+
+.te-chip {
+  background: #1a1814;
+  border: none;
+  color: #00ccf9;
+  font-family: "Nanum Myeongjo", serif;
+  font-weight: 700;
+  border-radius: 2px;
+}
+
+.te-btn {
+  background: #1a1814;
+  color: #00ccf9;
+  border-radius: 2px;
+  border: none;
+  box-shadow: 4px 4px 0 rgba(26, 24, 20, 0.3);
+  font-family: "Nanum Myeongjo", "Noto Sans KR", serif;
+  font-weight: 700;
+}
+.te-btn-primary { background: #1a1814; color: #00ccf9; box-shadow: 4px 4px 0 rgba(26, 24, 20, 0.3); }
+.te-btn-secondary { background: #e0d9c6; box-shadow: 4px 4px 0 rgba(26, 24, 20, 0.15); color: #1a1814; }
+.te-btn-accent { background: #d85a30; color: #f3efe3; box-shadow: 4px 4px 0 rgba(26, 24, 20, 0.3); }
+.te-btn-kakao { background: #FEE500; color: #191600; border: none; box-shadow: 4px 4px 0 rgba(26, 24, 20, 0.2); }
+
+.te-btn-choice {
+  background: #f3efe3;
+  color: #1a1814;
+  border: 2px solid #1a1814;
+  border-radius: 2px;
+  box-shadow: 3px 3px 0 rgba(26, 24, 20, 0.2);
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: #1a1814; color: #00ccf9; box-shadow: 1px 1px 0 rgba(26, 24, 20, 0.2); }
+
+.te-progress-track { background: #e0d9c6; border-radius: 999px; border: 1px solid #1a1814; }
+.te-progress-fill { background: #1a1814; border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #1a1814;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(26, 24, 20, 0.15);
+  border-top-color: #1a1814;
+}
