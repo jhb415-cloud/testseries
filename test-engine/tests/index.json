@@ -177,8 +177,9 @@
       "title": "회사에서의 내 MBTI (K-직장인 가면)",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "텍스트 초안 완료, 이미지 미착수",
-      "note": "2026-07-11 질문/답변을 단답형에서 상황 서술형 완결 문장으로 전면 리라이팅(axis 값 등 채점 필드는 무변경)"
+      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 17-office-mask-mbti, 신규 테마 double-exposure.css",
+      "concept_style": "밈/드립형 — 이중노출 시네마틱 사진(다른 9개 테스트가 전부 일러스트인 것과 차별화되는 사진 매체), themes/double-exposure.css",
+      "note": "resultTemplate 공용 구조라 이미지 2장(cover+generic)만 필요 — 레퍼런스의 두 패널(도시 노을 이중노출/사무실 형광등 이중노출)을 각각 cover(진짜 나)/generic(회사 가면) 컨셉으로 그대로 매칭, 1회 생성 성공."
     },
     {
       "number": 18,

@@ -1,0 +1,101 @@
+/* test-engine — themes/double-exposure.css — 신규 테마: 이중노출 사진 아트(시네마틱) 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   office-mask-mbti(#17)가 1호 사용처. 다크 시네마틱 배경 + 청록/오렌지 듀오톤 그레이딩으로
+   "이중노출 인물사진" 느낌을 낸다. 다른 일러스트 계열 테마와 달리 사진 매체라 무광 미니멀
+   레이아웃으로 차별화. */
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #14181d; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    linear-gradient(160deg, rgba(0, 204, 249, 0.10), transparent 45%),
+    linear-gradient(-20deg, rgba(216, 90, 48, 0.10), transparent 45%),
+    #14181d;
+  color: #eef1f4;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #1b2027;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.55);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+.te-intro-body::after,
+.te-result-body::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00ccf9, #d85a30);
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Oswald", "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #a6b0ba; }
+
+.te-chip {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #eef1f4;
+  font-family: "Oswald", sans-serif;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.te-btn {
+  background: #eef1f4;
+  color: #14181d;
+  border-radius: 2px;
+  border: none;
+  box-shadow: none;
+  font-family: "Oswald", "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.te-btn-primary { background: #eef1f4; color: #14181d; }
+.te-btn-secondary { background: transparent; box-shadow: none; color: #eef1f4; border: 1px solid rgba(255,255,255,0.3); }
+.te-btn-accent { background: #d85a30; color: #14181d; }
+.te-btn-kakao { background: #FEE500; color: #191600; border: none; box-shadow: none; }
+
+.te-btn-choice {
+  background: #20262e;
+  color: #eef1f4;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: rgba(0, 204, 249, 0.14); border-color: #00ccf9; }
+
+.te-progress-track { background: #20262e; border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #00ccf9, #d85a30); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #eef1f4;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(0, 204, 249, 0.18);
+  border-top-color: #00ccf9;
+}
