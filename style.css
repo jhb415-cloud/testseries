@@ -1,4 +1,4 @@
-/* v0.8.0 | 5-in-1 Dashboard SPA — style.css */
+/* v0.8.1 | 5-in-1 Dashboard SPA — style.css */
 
 /* ── 기본 리셋 & 페이드인 애니메이션 ── */
 * { box-sizing: border-box; }
@@ -39,15 +39,24 @@ html {
   --nav-hover-bg: rgba(27, 28, 28, 0.06);
   --overlay-scrim: rgba(252, 249, 248, 0.96);
 
-  /* "부드러운 강조 박스"(bg-{color}-900/30 + text-{color}-300 조합)용 — 밝은 파스텔 채움 + 짙은 텍스트 */
+  /* "부드러운 강조 박스"(bg-{color}-900/30 + text-{color}-300 조합)용 — 밝은 파스텔 채움 + 짙은 텍스트
+     2026-07-11: app.js 전체를 스캔해 실제 사용되는 색상-shade 조합 중 리맵이 빠져있던 27개를
+     일괄 추가(모드선택 버튼 등에서 일부 색상만 유독 탁하게 보이던 원인 — amber-800/violet-800/
+     purple-800/pink-* 등이 리맵 목록에 없어 Tailwind 기본 어두운 값이 라이트 배경에 그대로
+     깔렸었음). red-400/900/950은 HELL 버튼 전용으로 항상 검정 배경 위 밝은 글자여야 해서 의도적으로
+     리맵 대상에서 제외(그대로 유지). */
   --blue-900: 179 235 255;    --blue-700: 0 145 179;    --blue-400: 0 82 102;    --blue-300: 0 103 127;
-  --indigo-900: 230 224 255;  --indigo-300: 68 50 130;  --indigo-200: 50 36 110;
-  --violet-900: 240 224 255;  --violet-400: 100 40 180; --violet-300: 120 60 200; --violet-200: 90 30 160;
-  --emerald-900: 214 248 220; --emerald-800: 190 240 200; --emerald-700: 150 220 165; --emerald-400: 10 110 60; --emerald-300: 10 90 50;
-  --rose-900: 255 214 216;    --rose-800: 255 195 198;  --rose-700: 255 170 175; --rose-400: 150 10 40;   --rose-300: 120 5 35;
-  --amber-900: 255 240 179;   --amber-400: 112 91 0;    --amber-300: 90 73 0;
-  --yellow-900: 255 245 199;  --yellow-300: 100 80 0;   --yellow-200: 80 64 0;
-  --purple-300: 100 40 160;
+  --indigo-900: 230 224 255;  --indigo-700: 200 190 255; --indigo-300: 68 50 130;  --indigo-200: 50 36 110;
+  --violet-900: 240 224 255;  --violet-800: 235 210 255; --violet-700: 210 180 255; --violet-400: 100 40 180; --violet-300: 120 60 200; --violet-200: 90 30 160;
+  --emerald-900: 214 248 220; --emerald-800: 190 240 200; --emerald-700: 150 220 165; --emerald-400: 10 110 60; --emerald-300: 10 90 50; --emerald-200: 8 70 40;
+  --rose-900: 255 214 216;    --rose-800: 255 195 198;  --rose-700: 255 170 175; --rose-400: 150 10 40;   --rose-300: 120 5 35; --rose-200: 95 5 30;
+  --amber-900: 255 240 179;   --amber-800: 254 225 130; --amber-700: 250 205 80; --amber-400: 112 91 0;    --amber-300: 90 73 0;
+  --yellow-900: 255 245 199;  --yellow-700: 250 210 60; --yellow-400: 110 85 0;  --yellow-300: 100 80 0;   --yellow-200: 80 64 0;
+  --purple-800: 235 210 255;  --purple-700: 215 180 255; --purple-300: 100 40 160;
+  --pink-900: 255 224 230;    --pink-800: 255 205 215;  --pink-700: 255 180 195; --pink-400: 140 10 60;   --pink-300: 115 5 50; --pink-200: 95 5 45;
+  --fuchsia-900: 250 224 255; --fuchsia-700: 240 190 255; --fuchsia-200: 120 20 130;
+  --orange-900: 255 224 194;  --orange-700: 255 190 130; --orange-400: 140 70 0;  --orange-300: 115 55 0;
+  --cyan-700: 179 240 255;    --cyan-400: 0 90 110;     --cyan-300: 0 70 90;
 
   /* 이상형 월드컵 전용 포인트 컬러(라임, v0.6.1~) — 밝은 배경에서도 충분한 대비를 위해 진한 톤 유지 */
   --wc-accent: 77 124 15;         /* lime-700 */
@@ -702,23 +711,32 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
 }
 .wc-accent-text { color: rgb(var(--wc-accent)); }
 
-/* 탐색 카드 */
+/* 탐색 카드 (v0.8.0~ Kinetic Logic 톤 — 이 모듈은 전용 클래스(.wc-*)라 Phase 1의 Tailwind
+   속성선택자 shim이 적용되지 않아 굵은 테두리+그림자를 여기서 직접 부여) */
 .wc-card {
   background: rgb(var(--slate-800));
-  border: 1px solid rgb(var(--slate-700));
+  border: 3px solid rgb(var(--ink));
   border-radius: 1rem;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: border-color 0.15s ease;
+  box-shadow: 5px 5px 0 0 rgb(var(--ink));
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.wc-card:hover { border-color: rgb(var(--wc-accent) / 0.6); }
+.wc-card:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 0 rgb(var(--ink)); }
 .wc-card-body { padding: 1rem; }
 
 /* 2분할 썸네일(탐색 카드/인트로 공용) */
 .wc-thumb {
   display: flex;
   aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+/* 인트로 화면처럼 .wc-card 없이 썸네일만 단독으로 쓰는 경우의 굵은 테두리 래퍼 (2026-07-11~) */
+.wc-thumb-framed {
+  border-radius: 1rem;
+  border: 3px solid rgb(var(--ink));
+  box-shadow: 5px 5px 0 0 rgb(var(--ink));
   overflow: hidden;
 }
 .wc-thumb-half {
@@ -755,18 +773,19 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
   border-radius: 999px;
   background: rgb(var(--wc-accent) / 0.16);
   color: rgb(var(--wc-accent));
-  border: 1px solid rgb(var(--wc-accent) / 0.4);
+  border: 2px solid rgb(var(--ink));
 }
 .wc-new-badge {
   font-size: 0.65rem;
   font-weight: 800;
   padding: 0.05rem 0.4rem;
   border-radius: 999px;
-  background: rgb(var(--rose-700) / 0.3);
-  color: rgb(var(--rose-300));
+  background: rgb(var(--tertiary-container));
+  color: rgb(var(--on-tertiary-container));
+  border: 2px solid rgb(var(--ink));
 }
 
-/* 버튼류 */
+/* 버튼류 (v0.8.0~: 굵은 테두리+하드 그림자 추가) */
 .wc-btn-accent {
   background: rgb(var(--wc-accent));
   color: #0f2405;
@@ -774,19 +793,23 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
   padding: 0.6rem 0.5rem;
   border-radius: 0.75rem;
   text-align: center;
-  transition: background 0.15s ease;
+  border: 3px solid rgb(var(--ink));
+  box-shadow: 4px 4px 0 0 rgb(var(--ink));
+  transition: all 0.15s ease;
 }
-.wc-btn-accent:hover { background: rgb(var(--wc-accent-strong)); }
+.wc-btn-accent:hover { background: rgb(var(--wc-accent-strong)); transform: translate(-1px, -1px); box-shadow: 5px 5px 0 0 rgb(var(--ink)); }
 .wc-btn-ghost {
-  background: rgb(var(--slate-700) / 0.6);
-  color: rgb(var(--slate-100));
+  background: rgb(var(--surface-lowest));
+  color: rgb(var(--ink));
   font-weight: 700;
   padding: 0.6rem 0.5rem;
   border-radius: 0.75rem;
   text-align: center;
-  transition: background 0.15s ease;
+  border: 3px solid rgb(var(--ink));
+  box-shadow: 4px 4px 0 0 rgb(var(--ink));
+  transition: all 0.15s ease;
 }
-.wc-btn-ghost:hover { background: rgb(var(--slate-600) / 0.6); }
+.wc-btn-ghost:hover { background: rgb(var(--surface-container)); transform: translate(-1px, -1px); box-shadow: 5px 5px 0 0 rgb(var(--ink)); }
 
 /* 카테고리 칩 / 정렬 토글 */
 .wc-cat-chip {
@@ -794,8 +817,9 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
   font-weight: 700;
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
-  background: rgb(var(--slate-700) / 0.5);
-  color: rgb(var(--slate-400));
+  background: rgb(var(--surface-container));
+  color: rgb(var(--ink) / 0.7);
+  border: 2px solid rgb(var(--ink));
   cursor: pointer;
   transition: all 0.15s ease;
   white-space: nowrap;
@@ -806,34 +830,36 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
   font-weight: 700;
   padding: 0.4rem 1rem;
   border-radius: 0.6rem;
-  background: rgb(var(--slate-800));
-  border: 1px solid rgb(var(--slate-700));
-  color: rgb(var(--slate-400));
+  background: rgb(var(--surface-lowest));
+  border: 2px solid rgb(var(--ink));
+  color: rgb(var(--ink) / 0.7);
   transition: all 0.15s ease;
 }
-.wc-sort-btn.active { border-color: rgb(var(--wc-accent)); color: rgb(var(--wc-accent)); }
+.wc-sort-btn.active { background: rgb(var(--wc-accent) / 0.25); color: rgb(var(--ink)); }
 .wc-round-btn {
-  background: rgb(var(--slate-800));
-  border: 1px solid rgb(var(--slate-700));
-  color: rgb(var(--slate-100));
+  background: rgb(var(--surface-lowest));
+  border: 3px solid rgb(var(--ink));
+  color: rgb(var(--ink));
   font-weight: 800;
   padding: 0.65rem 0.5rem;
   border-radius: 0.75rem;
+  box-shadow: 3px 3px 0 0 rgb(var(--ink));
   transition: all 0.15s ease;
 }
-.wc-round-btn:hover { border-color: rgb(var(--wc-accent)); color: rgb(var(--wc-accent)); }
+.wc-round-btn:hover { background: rgb(var(--wc-accent) / 0.2); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 0 rgb(var(--ink)); }
 
 /* 매치 화면 */
 .wc-match-card {
   position: relative;
   border-radius: 1rem;
-  border: 2px solid rgb(var(--slate-700));
+  border: 3px solid rgb(var(--ink));
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+  box-shadow: 5px 5px 0 0 rgb(var(--ink));
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.25s ease;
   background: rgb(var(--slate-800));
 }
-.wc-match-card:hover { border-color: rgb(var(--wc-accent) / 0.7); }
+.wc-match-card:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 0 rgb(var(--ink)); }
 .wc-match-image { aspect-ratio: 3 / 4; }
 .wc-match-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .wc-match-overlay {
@@ -923,11 +949,12 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
   width: 3rem; height: 3rem;
   display: flex; align-items: center; justify-content: center;
-  background: rgb(var(--slate-900));
-  border: 2px solid rgb(var(--slate-700));
+  background: rgb(var(--surface-lowest));
+  border: 2px solid rgb(var(--ink));
+  box-shadow: 2px 2px 0 0 rgb(var(--ink));
   border-radius: 999px;
   font-weight: 900; font-size: 1.1rem;
-  color: rgb(var(--slate-100));
+  color: rgb(var(--ink));
   pointer-events: none;
   z-index: 2;
 }

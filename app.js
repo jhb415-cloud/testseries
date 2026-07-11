@@ -738,8 +738,38 @@ const HOME_TOOL_CARDS = [
   { id: 'lotto',   section: 'lotto',   emoji: '🎱', title: '로또 번호 조합기', desc: '이번 주 번호 뭘 고를지 고민될 때', run: () => App.navigate('lotto') },
 ];
 
-/* v0.3.2~에서 인라인이던 "인기 후보 전체 목록"(내부 코어 14개 + 심리테스트존 + 밸런스게임)을
-   그대로 반환 — 실제 클릭 시점 engagementCount로 정렬해 상위 N개만 뽑는 건 호출부 책임 */
+/* 몰입테스트/MBTI존(외부 test-engine 콘텐츠) 후보 — 실제 cover.webp 썸네일 포함(2026-07-11~,
+   "요즘 뜨는 심리테스트" 큐레이션 섹션과 "이번주 인기" 풀 양쪽에서 재사용) */
+function buildPsychTrendingCandidates() {
+  return [...(AppData.externalTests || []), ...(AppData.mbtiZoneTests || [])].map(t => ({
+    id: t.id, emoji: t.emoji, title: t.title, desc: t.hook,
+    image: psyCoverImage(t), key: t.engagementKey, base: t.baseCount,
+    run: () => { bumpEngagement(t.engagementKey); location.href = t.url; },
+  }));
+}
+
+/* 이상형 월드컵 팩 후보 — 탐색 그리드와 동일한 2분할 썸네일(wcThumbHTML) 재사용 (2026-07-11~) */
+function buildWorldcupCandidates() {
+  return wcGetValidPacks().map(p => ({
+    id: 'worldcup-' + p.packId, section: 'worldcup', emoji: p.emoji, title: p.title.replace(/^\S+\s/, ''), desc: p.hook,
+    thumbHTML: wcThumbHTML(p), key: 'worldcup-' + p.packId + '-plays', base: 30,
+    run: () => { App.navigate('worldcup'); wcOpenIntro(p.packId); },
+  }));
+}
+
+/* 가족오락관 게임 후보 (2026-07-11~) */
+function buildFamilyCandidates() {
+  return Object.entries(AppData.familyGames).map(([id, g]) => ({
+    id: 'family-' + id, section: 'family', emoji: (g.title.match(/\p{Emoji}/u) || ['🎉'])[0], title: g.title.replace(/^\S+\s/, ''), desc: '가족오락관 진행 도우미로 바로 플레이',
+    key: 'family-' + id + '-plays', base: 95,
+    run: () => { App.navigate('family'); familyOpenGame(id); },
+  }));
+}
+
+/* v0.3.2~에서 인라인이던 "인기 후보 전체 목록" — v0.8.0~: 사용자가 "이번주 인기는 전체 메뉴
+   포함해서 실참여수 기반으로"라고 요청해 심리테스트존/두뇌테스트존뿐 아니라 몰입테스트·MBTI존·
+   과몰입 투표소(밸런스게임+이상형 월드컵)·운명 관측소(운세/꿈해몽)·로또·가족오락관까지 전체 메뉴로
+   확장. 실제 클릭 시점 engagementCount로 정렬해 상위 N개만 뽑는 건 호출부(renderHomeSections) 책임 */
 function buildPopularCandidates() {
   return [
     ...CORE_TEST_CARDS,
@@ -753,6 +783,12 @@ function buildPopularCandidates() {
       key: 'balance-' + g.id + '-plays', base: 203,
       run: () => { App.navigate('balance'); balanceOpenPost(g.id); },
     })),
+    ...buildPsychTrendingCandidates(),
+    ...buildWorldcupCandidates(),
+    ...buildFamilyCandidates(),
+    { id: 'dream', section: 'dream', emoji: '🌙', title: '꿈 해몽 검색', desc: '어젯밤 그 꿈, 무슨 의미일까?', key: 'site-dream-plays', base: 260, run: () => App.navigate('dream') },
+    { id: 'fortune', section: 'fortune', emoji: '🔮', title: '오늘의 운세', desc: '출근길 5초, 오늘 내 운세부터 확인', key: 'site-fortune-plays', base: 300, run: () => App.navigate('fortune') },
+    { id: 'lotto', section: 'lotto', emoji: '🎱', title: '로또 번호 조합기', desc: '이번 주 번호 뭘 고를지 고민될 때', key: 'site-lotto-plays', base: 240, run: () => App.navigate('lotto') },
   ];
 }
 
@@ -763,23 +799,24 @@ function buildPopularCandidates() {
 function buildTestIndex() {
   const index = {};
   HOME_TOOL_CARDS.forEach(c => { index[c.id] = c; });
-  buildPopularCandidates().forEach(c => { index[c.id || c.section] = c; });
-  [...(AppData.externalTests || []), ...(AppData.mbtiZoneTests || [])].forEach(t => {
-    index[t.id] = {
-      id: t.id, emoji: t.emoji, title: t.title, desc: t.hook,
-      run: () => { bumpEngagement(t.engagementKey); location.href = t.url; },
-    };
-  });
+  buildPopularCandidates().forEach(c => { index[c.id || c.section] = c; }); // 몰입테스트/MBTI존/월드컵/가족오락관 포함
   return index;
 }
 
-/* v0.1.0~: 원색 그라데이션 카드 → 사이트 기본 카드색(slate) 기반 무채색 톤으로 통일 */
+/* v0.1.0~: 원색 그라데이션 카드 → 사이트 기본 카드색(slate) 기반 무채색 톤으로 통일
+   v0.8.0~: 실제 커버 이미지/썸네일이 있는 카드(몰입테스트·MBTI존·이상형 월드컵)는 큰 이모지 대신
+   그 썸네일을 상단에 렌더 — 없는 카드는 기존처럼 이모지 유지 */
 function homeCardHTML(c, highlight, bindId) {
+  const media = c.thumbHTML
+    ? `<div class="rounded-xl overflow-hidden mb-3" style="border:2px solid rgb(var(--ink));">${c.thumbHTML}</div>`
+    : c.image
+      ? `<div class="rounded-xl overflow-hidden mb-3" style="aspect-ratio:16/9; border:2px solid rgb(var(--ink));"><img src="${c.image}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="wcImgFallback(this)"></div>`
+      : `<div class="text-4xl mb-3">${c.emoji}</div>`;
   return `
     <div id="${bindId}" class="service-card bg-slate-800 border ${highlight ? '' : 'border-slate-700'} rounded-2xl p-5 text-slate-100 shadow cursor-pointer transition hover:opacity-90"
       ${highlight ? 'style="border-width:2px;border-color:#D85A30;"' : ''}>
       ${highlight ? `<span class="inline-block text-[10px] font-black px-2 py-0.5 rounded-full mb-2" style="background:#D85A30;color:#fff;">NEW</span>` : ''}
-      <div class="text-4xl mb-3">${c.emoji}</div>
+      ${media}
       <h3 class="${highlight ? 'font-black' : 'font-bold'} text-lg mb-1 text-slate-100">${c.title}</h3>
       <p class="text-sm text-slate-400">${c.desc}</p>
       <div class="mt-4 text-xs font-semibold text-violet-400 uppercase tracking-widest">시작하기 →</div>
@@ -817,6 +854,13 @@ async function renderHomeSections() {
         .map(c => ({ ...c, score: engagementCount(c.key, c.base) }))
         .sort((a, b) => b.score - a.score)
         .slice(0, sec.limit || 6);
+    } else if (sec.dynamic === 'psych-trending') {
+      /* v0.8.0~: 몰입테스트+MBTI존을 별도 섹션 2개로 나눴던 걸 사용자 요청으로 통합 —
+         두 목록을 합쳐 인기순으로 상위 N개만 노출(실제 test-engine 커버 이미지 포함) */
+      cards = buildPsychTrendingCandidates()
+        .map(c => ({ ...c, score: engagementCount(c.key, c.base) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, sec.limit || 3);
     } else {
       cards = (sec.test_ids || []).map(id => index[id]).filter(Boolean);
     }
@@ -5825,7 +5869,7 @@ function wcOpenIntro(packId) {
   container.innerHTML = `
     <div class="max-w-lg mx-auto">
       <button onclick="wcRenderExplore()" class="text-slate-400 hover:text-slate-200 text-sm mb-4">← 목록으로</button>
-      ${wcThumbHTML(pack)}
+      <div class="wc-thumb-framed">${wcThumbHTML(pack)}</div>
       <h2 class="text-slate-100 font-black text-2xl mt-4 mb-2">${escapeHtml(pack.title)}</h2>
       <p class="text-slate-300 leading-relaxed mb-6">${escapeHtml(pack.editorial)}</p>
       ${resumed ? `<button onclick="wcResumeSession('${packId}')" class="w-full wc-btn-accent py-3 mb-3">▶ 이어하기 (${escapeHtml(wcRoundLabel(resumed.bracket.roundIds.length))})</button>` : ''}
@@ -6246,17 +6290,18 @@ function renderDailyChallengeCard() {
   if (!container) return;
   const picks = getDailyChallengeTests();
   container.innerHTML = `
-    <div class="bg-gradient-to-br from-fuchsia-900/40 to-indigo-900/40 border border-fuchsia-700/40 rounded-2xl p-5">
-      <h4 class="text-slate-100 font-bold mb-1">🔥 오늘의 챌린지</h4>
-      <p class="text-slate-400 text-xs mb-3">매일 바뀌는 추천 테스트 3가지, 오늘 다 깨보세요!</p>
+    <div class="rounded-2xl p-5" style="background:rgb(var(--secondary-container) / 0.4); border:3px solid rgb(var(--ink)); box-shadow:5px 5px 0 0 rgb(var(--ink));">
+      <h4 class="font-bold mb-1" style="color:rgb(var(--ink));">🔥 오늘의 챌린지</h4>
+      <p class="text-xs mb-3" style="color:rgb(var(--ink) / 0.65);">매일 바뀌는 추천 테스트 3가지, 오늘 다 깨보세요!</p>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         ${picks.map(s => {
           const meta = DAILY_CHALLENGE_META[s];
           const done = isDone(s);
           return `
-            <div onclick="App.navigate('${s}')" class="cursor-pointer bg-slate-800/70 hover:bg-slate-700/70 border border-slate-700 rounded-xl p-3 text-center transition">
+            <div onclick="App.navigate('${s}')" class="cursor-pointer rounded-xl p-3 text-center transition"
+              style="background:rgb(var(--surface-lowest)); border:2px solid rgb(var(--ink)); box-shadow:3px 3px 0 0 rgb(var(--ink));">
               <div class="text-2xl mb-1">${meta.emoji}</div>
-              <div class="text-slate-100 text-sm font-semibold">${meta.label}</div>
+              <div class="text-sm font-semibold" style="color:rgb(var(--ink));">${meta.label}</div>
               <div class="text-xs mt-1 ${done ? 'text-emerald-400' : 'text-slate-500'}">${done ? '✅ 완료' : '도전하기 →'}</div>
             </div>`;
         }).join('')}
@@ -6366,31 +6411,31 @@ function renderHomeMypage() {
   });
 
   container.innerHTML = `
-    <div class="bg-gradient-to-br from-indigo-900/60 to-indigo-950/40 border border-indigo-700/40 rounded-2xl p-6 mb-6">
+    <div class="rounded-2xl p-6 mb-6" style="background:rgb(var(--surface-lowest)); border:3px solid rgb(var(--ink)); box-shadow:6px 6px 0 0 rgb(var(--ink));">
       <div class="flex items-center gap-4 mb-4">
-        <div class="w-14 h-14 rounded-full bg-indigo-600 flex items-center justify-center text-2xl font-black text-white shrink-0">
+        <div class="w-14 h-14 rounded-full flex items-center justify-center text-2xl font-black shrink-0"
+          style="background:rgb(var(--secondary-container)); color:rgb(var(--ink)); border:3px solid rgb(var(--ink)); box-shadow:3px 3px 0 0 rgb(var(--ink));">
           ${nickname ? nickname.charAt(0) : '?'}
         </div>
         <div class="flex-1">
           <input id="home-nickname-input" type="text" maxlength="12" value="${nickname}" placeholder="닉네임을 입력하세요"
-            class="bg-transparent border-b border-slate-600 text-slate-100 font-bold text-lg focus:outline-none focus:border-indigo-400 w-full py-1"/>
+            class="bg-transparent border-b border-slate-600 text-slate-100 font-bold text-lg focus:outline-none w-full py-1" style="border-color:rgb(var(--ink) / 0.3);"/>
         </div>
-        <button onclick="homeSaveNickname()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 py-2 rounded-lg transition">저장</button>
+        <button onclick="homeSaveNickname()" class="text-xs font-bold px-3 py-2 rounded-lg transition border-2"
+          style="background:rgb(var(--primary-container)); border-color:rgb(var(--ink)); color:rgb(var(--ink));">저장</button>
       </div>
       <div class="flex items-center gap-2 text-amber-300 text-sm font-semibold mb-3">🔥 ${streak}일 연속 방문 중</div>
 
-      <div class="flex items-center justify-between text-xs text-indigo-200 mb-1">
-        <span class="font-bold">⭐ Lv.${level}</span>
+      <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+        <span class="font-bold" style="color:rgb(var(--ink));">⭐ Lv.${level}</span>
         <span>${xpInLevel} / ${XP_PER_LEVEL} XP</span>
       </div>
-      <div class="bg-slate-700/60 rounded-full h-2 overflow-hidden mb-3">
-        <div class="h-full rounded-full bg-gradient-to-r from-indigo-400 to-violet-400" style="width:${xpInLevel}%"></div>
-      </div>
+      <div class="progress-bar-track mb-3"><div class="progress-bar-fill" style="width:${xpInLevel}%"></div></div>
 
       ${earnedBadges.length ? `
         <div class="flex flex-wrap gap-2">
           ${earnedBadges.map(b => `
-            <span class="bg-indigo-800/50 border border-indigo-600 text-indigo-200 text-xs font-semibold px-3 py-1 rounded-full">${b.emoji} ${b.label}</span>`).join('')}
+            <span class="text-xs font-semibold px-3 py-1 rounded-full border-2" style="background:rgb(var(--surface-container)); border-color:rgb(var(--ink)); color:rgb(var(--ink));">${b.emoji} ${b.label}</span>`).join('')}
         </div>` : `
         <p class="text-slate-300 text-xs">테스트를 완주하면 칭호를 얻을 수 있어요!</p>`}
     </div>

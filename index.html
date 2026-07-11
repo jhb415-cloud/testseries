@@ -1,4 +1,4 @@
-<!-- v0.8.0 | 5-in-1 Dashboard SPA -->
+<!-- v0.8.1 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -143,19 +143,23 @@
             // 아래 색상들은 "부드러운 강조 박스"(bg-{color}-900/30 + text-{color}-300 조합)에 쓰이는
             // 특정 shade만 remap. 500/600(버튼/뱃지 원색)은 테마 무관하게 항상 선명해야 하므로 건드리지 않음.
             blue:    { 700: 'rgb(var(--blue-700) / <alpha-value>)',    900: 'rgb(var(--blue-900) / <alpha-value>)',    300: 'rgb(var(--blue-300) / <alpha-value>)',    400: 'rgb(var(--blue-400) / <alpha-value>)' },
-            indigo:  { 900: 'rgb(var(--indigo-900) / <alpha-value>)',  200: 'rgb(var(--indigo-200) / <alpha-value>)',  300: 'rgb(var(--indigo-300) / <alpha-value>)' },
-            violet:  { 900: 'rgb(var(--violet-900) / <alpha-value>)',  200: 'rgb(var(--violet-200) / <alpha-value>)',  300: 'rgb(var(--violet-300) / <alpha-value>)',  400: 'rgb(var(--violet-400) / <alpha-value>)' },
-            purple:  { 300: 'rgb(var(--purple-300) / <alpha-value>)' },
-            emerald: { 700: 'rgb(var(--emerald-700) / <alpha-value>)', 800: 'rgb(var(--emerald-800) / <alpha-value>)', 900: 'rgb(var(--emerald-900) / <alpha-value>)', 300: 'rgb(var(--emerald-300) / <alpha-value>)', 400: 'rgb(var(--emerald-400) / <alpha-value>)' },
-            rose:    { 700: 'rgb(var(--rose-700) / <alpha-value>)',    800: 'rgb(var(--rose-800) / <alpha-value>)',    900: 'rgb(var(--rose-900) / <alpha-value>)',    300: 'rgb(var(--rose-300) / <alpha-value>)',    400: 'rgb(var(--rose-400) / <alpha-value>)' },
-            amber:   { 900: 'rgb(var(--amber-900) / <alpha-value>)',   300: 'rgb(var(--amber-300) / <alpha-value>)',   400: 'rgb(var(--amber-400) / <alpha-value>)' },
-            yellow:  { 900: 'rgb(var(--yellow-900) / <alpha-value>)',  200: 'rgb(var(--yellow-200) / <alpha-value>)',  300: 'rgb(var(--yellow-300) / <alpha-value>)' },
+            indigo:  { 900: 'rgb(var(--indigo-900) / <alpha-value>)',  700: 'rgb(var(--indigo-700) / <alpha-value>)',  200: 'rgb(var(--indigo-200) / <alpha-value>)',  300: 'rgb(var(--indigo-300) / <alpha-value>)' },
+            violet:  { 900: 'rgb(var(--violet-900) / <alpha-value>)',  800: 'rgb(var(--violet-800) / <alpha-value>)',  700: 'rgb(var(--violet-700) / <alpha-value>)',  200: 'rgb(var(--violet-200) / <alpha-value>)',  300: 'rgb(var(--violet-300) / <alpha-value>)',  400: 'rgb(var(--violet-400) / <alpha-value>)' },
+            purple:  { 800: 'rgb(var(--purple-800) / <alpha-value>)',  700: 'rgb(var(--purple-700) / <alpha-value>)',  300: 'rgb(var(--purple-300) / <alpha-value>)' },
+            emerald: { 700: 'rgb(var(--emerald-700) / <alpha-value>)', 800: 'rgb(var(--emerald-800) / <alpha-value>)', 900: 'rgb(var(--emerald-900) / <alpha-value>)', 200: 'rgb(var(--emerald-200) / <alpha-value>)', 300: 'rgb(var(--emerald-300) / <alpha-value>)', 400: 'rgb(var(--emerald-400) / <alpha-value>)' },
+            rose:    { 700: 'rgb(var(--rose-700) / <alpha-value>)',    800: 'rgb(var(--rose-800) / <alpha-value>)',    900: 'rgb(var(--rose-900) / <alpha-value>)',    200: 'rgb(var(--rose-200) / <alpha-value>)',    300: 'rgb(var(--rose-300) / <alpha-value>)',    400: 'rgb(var(--rose-400) / <alpha-value>)' },
+            amber:   { 900: 'rgb(var(--amber-900) / <alpha-value>)',   800: 'rgb(var(--amber-800) / <alpha-value>)',   700: 'rgb(var(--amber-700) / <alpha-value>)',   300: 'rgb(var(--amber-300) / <alpha-value>)',   400: 'rgb(var(--amber-400) / <alpha-value>)' },
+            yellow:  { 900: 'rgb(var(--yellow-900) / <alpha-value>)',  700: 'rgb(var(--yellow-700) / <alpha-value>)',  200: 'rgb(var(--yellow-200) / <alpha-value>)',  300: 'rgb(var(--yellow-300) / <alpha-value>)',  400: 'rgb(var(--yellow-400) / <alpha-value>)' },
+            pink:    { 900: 'rgb(var(--pink-900) / <alpha-value>)',    800: 'rgb(var(--pink-800) / <alpha-value>)',    700: 'rgb(var(--pink-700) / <alpha-value>)',    200: 'rgb(var(--pink-200) / <alpha-value>)',    300: 'rgb(var(--pink-300) / <alpha-value>)',    400: 'rgb(var(--pink-400) / <alpha-value>)' },
+            fuchsia: { 900: 'rgb(var(--fuchsia-900) / <alpha-value>)', 700: 'rgb(var(--fuchsia-700) / <alpha-value>)', 200: 'rgb(var(--fuchsia-200) / <alpha-value>)' },
+            orange:  { 900: 'rgb(var(--orange-900) / <alpha-value>)', 700: 'rgb(var(--orange-700) / <alpha-value>)',  300: 'rgb(var(--orange-300) / <alpha-value>)',  400: 'rgb(var(--orange-400) / <alpha-value>)' },
+            cyan:    { 700: 'rgb(var(--cyan-700) / <alpha-value>)',    300: 'rgb(var(--cyan-300) / <alpha-value>)',    400: 'rgb(var(--cyan-400) / <alpha-value>)' },
           }
         }
       }
     };
   </script>
-  <link rel="stylesheet" href="style.css?v=0.8.0"/>
+  <link rel="stylesheet" href="style.css?v=0.8.1"/>
   <!-- SEO 체크업 도구 지적사항 반영(v0.5.4~): 기존 39자는 권장 범위(150~220자) 대비 너무 짧았음 -->
   <meta name="description" content="과몰입 연구소는 MBTI, 두뇌 나이 측정기, 심리테스트, 밸런스 게임, 오늘의 운세, 꿈 해몽 검색, 로또 번호 조합기까지 다양한 테스트와 콘텐츠를 무료로 즐길 수 있는 종합 테스트 모음 사이트입니다. 재미로 시작했다가 뼈 맞고 공유하게 되는 콘텐츠들을 지금 바로 확인해보세요."/>
 </head>
@@ -322,7 +326,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4 border-t border-slate-800">
-    <p class="text-slate-600 text-xs">v0.8.0 · 2026-07-11</p>
+    <p class="text-slate-600 text-xs">v0.8.1 · 2026-07-11</p>
   </div>
 </aside>
 
@@ -356,17 +360,18 @@
           <div class="flex items-center justify-between mb-4">
             <p id="home-date" class="text-slate-400 text-sm"></p>
           </div>
-          <!-- 오늘의 인생 한마디 (v0.1.9~: 아래 "내 정보"와 색이 겹쳐 구분이 안 된다는 피드백으로
-               indigo/violet 계열에서 amber 계열로 교체, 세로 공간도 축소) -->
-          <div class="bg-gradient-to-br from-amber-900/40 to-amber-950/30 border border-amber-700/40 rounded-xl p-4 shadow-lg">
+          <!-- 오늘의 인생 한마디 (v0.8.0~: Kinetic Logic 플랫 톤 — amber-950 등 리맵 안 된 shade의
+               그라데이션이 라이트 팔레트에서 탁하게 보이던 문제라 tertiary-container 단색+굵은 테두리로 교체) -->
+          <div class="rounded-xl p-4" style="background:rgb(var(--tertiary-container) / 0.55); border:3px solid rgb(var(--ink)); box-shadow:4px 4px 0 0 rgb(var(--ink));">
             <div class="flex items-center gap-2 mb-2">
               <span class="text-lg">✨</span>
-              <span class="text-amber-300 font-bold text-xs uppercase tracking-widest">오늘의 인생 한마디</span>
+              <span class="font-bold text-xs uppercase tracking-widest" style="color:rgb(var(--on-tertiary-container));">오늘의 인생 한마디</span>
             </div>
             <p id="home-quote-text" class="text-slate-100 text-base sm:text-lg font-semibold leading-snug mb-1"></p>
-            <p id="home-quote-author" class="text-amber-300/80 text-xs font-medium mb-2"></p>
+            <p id="home-quote-author" class="text-xs font-medium mb-2" style="color:rgb(var(--on-tertiary-container) / 0.85);"></p>
             <button id="home-copy-btn"
-              class="bg-amber-700/40 hover:bg-amber-600/50 text-amber-200 text-xs font-semibold px-3 py-1.5 rounded-lg transition">
+              class="text-xs font-semibold px-3 py-1.5 rounded-lg transition border-2"
+              style="background:rgb(var(--surface-lowest)); border-color:rgb(var(--ink)); color:rgb(var(--ink));">
               📋 문구 복사
             </button>
           </div>
@@ -392,27 +397,27 @@
         <h2 class="text-slate-100 font-bold text-lg mt-8 mb-4">❓ 자주 묻는 질문</h2>
         <div class="space-y-2">
           <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
-            <summary class="cursor-pointer font-semibold text-slate-100 text-sm">이 사이트의 테스트는 전부 무료인가요?</summary>
+            <summary class="cursor-pointer font-semibold text-slate-100 text-sm block w-full">이 사이트의 테스트는 전부 무료인가요?</summary>
             <p class="text-slate-400 text-sm mt-2">네, 회원가입 없이 모든 테스트·운세·꿈해몽·로또 조합기를 무료로 이용할 수 있어요. 광고 수익으로 운영됩니다.</p>
           </details>
           <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
-            <summary class="cursor-pointer font-semibold text-slate-100 text-sm">테스트 결과가 저장되나요?</summary>
+            <summary class="cursor-pointer font-semibold text-slate-100 text-sm block w-full">테스트 결과가 저장되나요?</summary>
             <p class="text-slate-400 text-sm mt-2">네, 이 기기(브라우저)에 자동 저장되어 홈 화면의 완주 현황과 최근 기록에서 다시 확인할 수 있어요. 다른 기기·브라우저에서는 보이지 않아요.</p>
           </details>
           <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
-            <summary class="cursor-pointer font-semibold text-slate-100 text-sm">MBTI나 ADHD 성향 테스트는 정식 진단인가요?</summary>
+            <summary class="cursor-pointer font-semibold text-slate-100 text-sm block w-full">MBTI나 ADHD 성향 테스트는 정식 진단인가요?</summary>
             <p class="text-slate-400 text-sm mt-2">아니요. 모든 테스트 결과는 오락 목적의 자가 진단 콘텐츠이며, 전문적인 심리·의학 진단을 대체하지 않아요.</p>
           </details>
           <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
-            <summary class="cursor-pointer font-semibold text-slate-100 text-sm">결과를 카카오톡이나 친구에게 공유할 수 있나요?</summary>
+            <summary class="cursor-pointer font-semibold text-slate-100 text-sm block w-full">결과를 카카오톡이나 친구에게 공유할 수 있나요?</summary>
             <p class="text-slate-400 text-sm mt-2">네, 대부분의 결과 화면에 카카오톡 공유 버튼과 "친구에게 도전장 보내기" 기능이 있어 결과를 바로 공유할 수 있어요.</p>
           </details>
           <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
-            <summary class="cursor-pointer font-semibold text-slate-100 text-sm">오늘의 운세와 꿈 해몽은 매일 바뀌나요?</summary>
+            <summary class="cursor-pointer font-semibold text-slate-100 text-sm block w-full">오늘의 운세와 꿈 해몽은 매일 바뀌나요?</summary>
             <p class="text-slate-400 text-sm mt-2">오늘의 운세는 매일 다른 문구가 자동으로 노출돼요. 꿈 해몽은 검색어에 따라 174개 테마 중 매칭되는 결과를 보여주고, 매칭되는 게 없으면 AI가 새로 해몽을 생성해줘요.</p>
           </details>
           <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
-            <summary class="cursor-pointer font-semibold text-slate-100 text-sm">로또 번호 조합기를 쓰면 당첨 확률이 올라가나요?</summary>
+            <summary class="cursor-pointer font-semibold text-slate-100 text-sm block w-full">로또 번호 조합기를 쓰면 당첨 확률이 올라가나요?</summary>
             <p class="text-slate-400 text-sm mt-2">아니요, 오락용 번호 조합 도구예요. 다만 실제 최근 당첨 통계를 참고하는 모드가 있어 재미로 활용할 수 있어요.</p>
           </details>
         </div>
@@ -740,9 +745,9 @@
          transition-opacity duration-500 opacity-0 pointer-events-none">
 </div>
 
-<script defer src="data.js?v=0.8.0"></script>
-<script defer src="supabase-client.js?v=0.8.0"></script>
-<script defer src="kakao-share.js?v=0.8.0"></script>
-<script defer src="app.js?v=0.8.0"></script>
+<script defer src="data.js?v=0.8.1"></script>
+<script defer src="supabase-client.js?v=0.8.1"></script>
+<script defer src="kakao-share.js?v=0.8.1"></script>
+<script defer src="app.js?v=0.8.1"></script>
 </body>
 </html>

@@ -1,22 +1,17 @@
 {
   "sections": [
     {
-      "id": "new",
-      "title": "🆕 지금 뜨는 신설존",
+      "id": "psych-trending",
+      "title": "🆕 요즘 뜨는 심리테스트",
       "highlight": true,
-      "test_ids": ["mental-age", "k-office-type", "desert-island-type", "spending-type", "villain-index", "mbti-addiction-level"]
-    },
-    {
-      "id": "mbtizone",
-      "title": "🧬 MBTI존",
-      "highlight": true,
-      "test_ids": ["real-vs-fake-mbti", "love-mode-mbti", "drunk-mbti"]
+      "dynamic": "psych-trending",
+      "limit": 3
     },
     {
       "id": "popular",
       "title": "🔥 이번주 인기",
       "dynamic": "popularity",
-      "limit": 6
+      "limit": 3
     },
     {
       "id": "tools",
