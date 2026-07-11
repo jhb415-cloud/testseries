@@ -1,4 +1,4 @@
-<!-- v0.8.2 | 5-in-1 Dashboard SPA -->
+<!-- v0.8.3 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -106,13 +106,19 @@
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script defer src="https://t1.kakaocdn.net/kakao_js_sdk/2.8.1/kakao.min.js"
     integrity="sha384-OL+ylM/iuPLtW5U3XcvLSGhE8JzReKDank5InqlHGWPhb4140/yrBw0bg0y7+C9J" crossorigin="anonymous"></script>
-  <!-- "Kinetic Logic" 리디자인(v0.8.0~) 전용 웹폰트. Plus Jakarta Sans/Space Grotesk는 라틴 전용(한글
-       글리프 없음)이라 영문·숫자(점수/타이머/A·B·C·D 라벨 등)에만 적용되고 한글은 시스템 폰트로 자동
-       폴백됨 — 의도된 동작. 한글 헤드라인(font-black 등 큰 제목)은 게임 타이틀 느낌의 무료 한글 디스플레이
-       폰트 Black Han Sans를 병행 적용(test-engine의 vintage-collage 테마에서 쓰던 폰트와 동일). -->
+  <!-- 사이트 전역 폰트 (v0.8.3~): 기존 Plus Jakarta Sans/Space Grotesk/Be Vietnam Pro(라틴 전용) +
+       Black Han Sans(한글 폴백, 단일 굵기라 font-black 등에서 합성볼드로 뭉개져 보이던 원인) 조합을
+       걷어내고 Noto Sans KR 하나로 통일 — 한글/영문/숫자를 전부 네이티브로 지원하고 100~900 아홉
+       단계가 전부 실제 폰트 파일이라 어떤 굵기를 요청해도 합성볼드가 생길 일이 없음. 실사용 스크린샷
+       기반 폰트 후보 5개(Artifact 실물 비교) 중 "가장 안전한 표준"으로 사용자가 확정. sans/display/
+       label 세 역할을 굳이 다른 라틴 폰트로 나눌 필요가 없어져 fontFamily 자체도 하나로 합침(아래
+       사용처마다 실제 쓰던 font-black/extrabold/bold/semibold/medium 굵기만 로드: 400/500/600/700/800/900).
+       주의: 심리테스트존(몰입테스트·MBTI존) 카드 썸네일 제목은 각 테스트가 내부에서 쓰는 테마 폰트를
+       그대로 재사용하도록 app.js에서 별도 처리(THEME_TITLE_FONTS) — 이 전역 폰트와 무관하게 각자의
+       컨셉을 유지, 필요한 폰트만 그때그때 지연 로드됨. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Plus+Jakarta+Sans:wght@500;700;800&family=Be+Vietnam+Pro:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script>
     // slate 팔레트를 style.css의 CSS 변수로 remap (index.html의 tailwind.config 참고)
     // (rgb(var(--x) / <alpha-value>) 포맷을 써야 bg-slate-800/60 같은 opacity modifier가 계속 동작함)
@@ -122,9 +128,9 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Be Vietnam Pro"', '"Black Han Sans"', '-apple-system', 'BlinkMacSystemFont', '"Malgun Gothic"', '"Apple SD Gothic Neo"', 'sans-serif'],
-            display: ['"Plus Jakarta Sans"', '"Black Han Sans"', '-apple-system', '"Malgun Gothic"', 'sans-serif'],
-            label: ['"Space Grotesk"', '"Black Han Sans"', '-apple-system', '"Malgun Gothic"', 'sans-serif'],
+            sans: ['"Noto Sans KR"', '-apple-system', 'BlinkMacSystemFont', '"Malgun Gothic"', '"Apple SD Gothic Neo"', 'sans-serif'],
+            display: ['"Noto Sans KR"', '-apple-system', '"Malgun Gothic"', 'sans-serif'],
+            label: ['"Noto Sans KR"', '-apple-system', '"Malgun Gothic"', 'sans-serif'],
           },
           colors: {
             slate: {
@@ -159,7 +165,7 @@
       }
     };
   </script>
-  <link rel="stylesheet" href="style.css?v=0.8.2"/>
+  <link rel="stylesheet" href="style.css?v=0.8.3"/>
   <!-- SEO 체크업 도구 지적사항 반영(v0.5.4~): 기존 39자는 권장 범위(150~220자) 대비 너무 짧았음 -->
   <meta name="description" content="과몰입 연구소는 MBTI, 두뇌 나이 측정기, 심리테스트, 밸런스 게임, 오늘의 운세, 꿈 해몽 검색, 로또 번호 조합기까지 다양한 테스트와 콘텐츠를 무료로 즐길 수 있는 종합 테스트 모음 사이트입니다. 재미로 시작했다가 뼈 맞고 공유하게 되는 콘텐츠들을 지금 바로 확인해보세요."/>
 </head>
@@ -326,7 +332,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4 border-t border-slate-800">
-    <p class="text-slate-600 text-xs">v0.8.2 · 2026-07-11</p>
+    <p class="text-slate-600 text-xs">v0.8.3 · 2026-07-11</p>
   </div>
 </aside>
 
@@ -745,9 +751,9 @@
          transition-opacity duration-500 opacity-0 pointer-events-none">
 </div>
 
-<script defer src="data.js?v=0.8.2"></script>
-<script defer src="supabase-client.js?v=0.8.2"></script>
-<script defer src="kakao-share.js?v=0.8.2"></script>
-<script defer src="app.js?v=0.8.2"></script>
+<script defer src="data.js?v=0.8.3"></script>
+<script defer src="supabase-client.js?v=0.8.3"></script>
+<script defer src="kakao-share.js?v=0.8.3"></script>
+<script defer src="app.js?v=0.8.3"></script>
 </body>
 </html>

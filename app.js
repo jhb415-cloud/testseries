@@ -4506,6 +4506,39 @@ function psyCoverImage(test) {
   return test.url.replace(/index\.html$/, 'assets/cover.webp');
 }
 
+/* 심리테스트존 카드 썸네일 제목 폰트(v0.8.3~) — 사이트 전역 폰트(Noto Sans KR)로 통일하면서,
+   각 테스트가 내부에서 쓰는 테마 폰트(test-engine/themes/*.css의 .te-title)를 카드 제목에도
+   그대로 반영해 컨셉이 카드 단계에서부터 느껴지게 함. data.js의 externalTests/mbtiZoneTests
+   각 항목의 theme 필드(=test-engine config.json의 "theme" 값)로 조회한다.
+   ⚠️ 신규 테마 추가 시 이 레지스트리에도 반드시 항목을 추가할 것(test-engine/CLAUDE.md
+   "4-5. 배포 연동" 절차에 명시) — 안 하면 그 테마 폰트만 카드에서 기본 폰트로 보임(에러는 안 남). */
+const THEME_TITLE_FONTS = {
+  retro:            { family: '"Tahoma","Malgun Gothic","Apple SD Gothic Neo",sans-serif' },
+  office:           { family: '"Black Han Sans","Noto Sans KR",sans-serif', google: 'family=Black+Han+Sans' },
+  journal:          { family: '"Special Elite","Noto Sans KR",serif', google: 'family=Special+Elite' },
+  'vintage-collage':{ family: '"Black Han Sans","Noto Sans KR",sans-serif', google: 'family=Black+Han+Sans' },
+  'noir-comic':     { family: '"Black And White Picture","Noto Sans KR",sans-serif', google: 'family=Black+And+White+Picture' },
+  'stained-glass':  { family: '"Song Myung","Noto Sans KR",serif', google: 'family=Song+Myung' },
+  scrapbook:        { family: '"Gaegu","Noto Sans KR",cursive', google: 'family=Gaegu:wght@400;700' },
+  papercut:         { family: '"Baloo 2","Noto Sans KR",sans-serif', google: 'family=Baloo+2:wght@500;700;800' },
+  neon:             { family: '"Do Hyeon","Noto Sans KR",sans-serif', google: 'family=Do+Hyeon' },
+  fantasy:          { family: '"Cinzel","Noto Sans KR",serif', google: 'family=Cinzel:wght@600;700' },
+};
+const _loadedThemeFonts = new Set();
+function themeTitleFontFamily(theme) {
+  const cfg = THEME_TITLE_FONTS[theme];
+  return cfg ? cfg.family : '';
+}
+function ensureThemeFontLoaded(theme) {
+  const cfg = THEME_TITLE_FONTS[theme];
+  if (!cfg || !cfg.google || _loadedThemeFonts.has(theme)) return;
+  _loadedThemeFonts.add(theme);
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css2?' + cfg.google + '&display=swap';
+  document.head.appendChild(link);
+}
+
 /* STEP 3.1(2026-07-10): 몰입테스트/MBTI존 둘 다 전용 목록(externalTests/mbtiZoneTests)이
    실콘텐츠로만 채워지게 되며(잠금 placeholder 없음), 기존 전체너비 배너 1줄 나열 대신
    character/trait 등 기존 카테고리와 동일한 "인기 대표 1개 강조 + 3열 그리드" 레이아웃으로
@@ -4517,13 +4550,15 @@ function externalTestsFeedHTML(list) {
   const tests = sortExternalTests(list || [], 'popular');
   if (!tests.length) return '';
   const top = tests[0];
+  tests.forEach(t => ensureThemeFontLoaded(t.theme));
+  const topFont = themeTitleFontFamily(top.theme);
   return `
     <a href="${top.url}" onclick="bumpEngagement('${top.engagementKey}')" class="psy-hero block mb-4">
       <img src="${psyCoverImage(top)}" alt="" onerror="wcImgFallback(this)">
       <div class="psy-hero-scrim"></div>
       <div class="psy-hero-text">
         <div class="psy-hero-eyebrow">🔥 지금 가장 인기있는 테스트</div>
-        <h3 class="psy-hero-title line-clamp-2">${top.title}</h3>
+        <h3 class="psy-hero-title line-clamp-2"${topFont ? ` style='font-family:${topFont}'` : ''}>${top.title}</h3>
         <p class="psy-hero-subtitle line-clamp-2">${top.hook}</p>
       </div>
     </a>
@@ -4531,6 +4566,7 @@ function externalTestsFeedHTML(list) {
       ${tests.map((t, i) => {
         const rankClass = i === 0 ? 'psy-rank-1' : i === 1 ? 'psy-rank-2' : i === 2 ? 'psy-rank-3' : '';
         const count = engagementCount(t.engagementKey, t.baseCount || 200);
+        const cardFont = themeTitleFontFamily(t.theme);
         return `
       <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="psy-card block">
         <div class="psy-card-tile">
@@ -4539,7 +4575,7 @@ function externalTestsFeedHTML(list) {
           ${rankClass ? `<span class="psy-card-rank ${rankClass}">${i + 1}</span>` : ''}
           ${t.isNew ? `<span class="psy-card-badge-new">NEW</span>` : ''}
           <div class="psy-card-text">
-            <div class="psy-card-title line-clamp-2">${t.title}</div>
+            <div class="psy-card-title line-clamp-2"${cardFont ? ` style='font-family:${cardFont}'` : ''}>${t.title}</div>
             <div class="psy-card-hook line-clamp-2">${t.hook}</div>
           </div>
         </div>

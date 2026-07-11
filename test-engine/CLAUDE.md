@@ -147,12 +147,24 @@
 이 실수를 반복하지 않도록 처음부터 내용을 읽고 그릴 것.
 
 ## 4-5. 배포 연동
+- 메인 사이트 `data.js`의 `AppData.externalTests`(몰입테스트) 또는 `AppData.mbtiZoneTests`
+  (MBTI존)에 항목 추가 — `id`/`title`/`emoji`/`hook`/`url`/`engagementKey`/`baseCount`/
+  `addedAt`/`isNew`와 함께 **`theme` 필드를 반드시 포함**한다(이 테스트의 `config.json`
+  `"theme"` 값과 동일해야 함, 예: `theme: 'neon'`).
+- **이 테마가 처음 쓰이는 것이면**(=아직 다른 완성 테스트가 같은 테마를 안 쓰고 있으면),
+  `app.js`의 `THEME_TITLE_FONTS` 레지스트리(2026-07-11~, `externalTestsFeedHTML()` 위쪽)에
+  해당 테마의 `{ family, google }` 항목을 추가한다 — `family`는 그 테마 CSS의 `.te-title`
+  font-family를 그대로, `google`은 구글 폰트 CSS2 쿼리 파라미터(단일 굵기 폰트면 굵기 생략,
+  실제 여러 굵기가 있는 폰트면 `:wght@...` 포함). **이걸 빠뜨려도 에러는 안 나지만**, 메인
+  사이트 심리테스트존의 카드 썸네일 제목이 그 테스트만의 테마 폰트 대신 사이트 기본 폰트로
+  보이게 된다(카드 제목은 각 테스트 내부 화면과 같은 폰트를 쓰도록 통일하기로 함, 2026-07-11
+  사용자 확정) — 이미 등록된 테마를 재사용하는 신규 테스트는 이 단계 생략 가능.
 - `sections.json`에 적절한 섹션으로 항목 추가 (일반/MBTI존 구분).
 - MBTI 계열이면 MBTI존 라우팅에 연결.
 - **MBTI 축 4종(E-I/S-N/T-F/J-P)이 전부 완성되면**, 서로의 결과 화면에서
   다른 축 테스트로 이동하는 상호 링크를 추가한다 (전부 완성되기 전엔 생략).
 - `sitemap.xml`에 신규 URL 추가.
-- 기존 파일(sections.json, sitemap.xml, 메뉴 관련 파일) 수정 전에는
+- 기존 파일(data.js, sections.json, sitemap.xml, 메뉴 관련 파일) 수정 전에는
   어떤 파일을 어떻게 바꿀지 먼저 보여주고 승인받는다. 신규 폴더 생성/데이터
   추가 수준은 사전 승인 없이 진행 가능.
 
