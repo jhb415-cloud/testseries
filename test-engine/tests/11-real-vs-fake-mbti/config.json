@@ -10,7 +10,7 @@
   ],
   "theme": "scrapbook",
   "cover_image": "assets/cover.webp",
-  "seed_count": 227340,
+  "seed_count": 156,
   "scoring_type": "mbti4_dual",
   "loading": {
     "text": "겉과 속의 온도차 측정 중..",

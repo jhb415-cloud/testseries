@@ -5,7 +5,7 @@
   "hashtags": ["회사MBTI", "심리테스트", "K직장인", "MBTI밈"],
   "theme": "retro",
   "cover_image": "assets/cover.webp",
-  "seed_count": 208140,
+  "seed_count": 63,
   "scoring_type": "mbti4",
   "loading": { "text": "회사 모드 MBTI 분석 중..", "duration_ms": 2000 },
   "related": [],

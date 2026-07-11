@@ -10,7 +10,7 @@
   ],
   "theme": "fantasy",
   "cover_image": "assets/cover.webp",
-  "seed_count": 152340,
+  "seed_count": 97,
   "scoring_type": "mbti4",
   "loading": {
     "text": "능력치 스탯 계산 중..",

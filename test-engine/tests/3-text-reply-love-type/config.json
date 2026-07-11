@@ -5,7 +5,7 @@
   "hashtags": ["답장스타일", "심리테스트", "연애유형", "카톡밈"],
   "theme": "retro",
   "cover_image": "assets/cover.webp",
-  "seed_count": 231560,
+  "seed_count": 52,
   "scoring_type": "type",
   "loading": { "text": "답장 패턴 분석 중..", "duration_ms": 2000 },
   "related": [],

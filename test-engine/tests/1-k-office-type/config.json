@@ -5,7 +5,7 @@
   "hashtags": ["K직장인", "심리테스트", "회사밈", "직장인공감"],
   "theme": "office",
   "cover_image": "assets/cover.webp",
-  "seed_count": 214830,
+  "seed_count": 142,
   "scoring_type": "type",
   "loading": { "text": "당신의 직장인 부캐 분석 중..", "duration_ms": 2000 },
   "related": [],

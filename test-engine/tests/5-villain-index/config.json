@@ -10,7 +10,7 @@
   ],
   "theme": "noir-comic",
   "cover_image": "assets/cover.webp",
-  "seed_count": 241670,
+  "seed_count": 171,
   "scoring_type": "sum",
   "loading": {
     "text": "빌런 지수 계산 중..",

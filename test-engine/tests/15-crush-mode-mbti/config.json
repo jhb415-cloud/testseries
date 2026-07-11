@@ -5,7 +5,7 @@
   "hashtags": ["크러쉬모드", "심리테스트", "짝사랑밈", "MBTI밈"],
   "theme": "retro",
   "cover_image": "assets/cover.webp",
-  "seed_count": 211980,
+  "seed_count": 57,
   "scoring_type": "mbti4",
   "loading": { "text": "크러쉬 모드 분석 중..", "duration_ms": 2000 },
   "related": [],

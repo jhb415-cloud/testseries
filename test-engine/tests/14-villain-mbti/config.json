@@ -5,7 +5,7 @@
   "hashtags": ["빌런MBTI", "심리테스트", "빡침밈", "MBTI밈"],
   "theme": "retro",
   "cover_image": "assets/cover.webp",
-  "seed_count": 202160,
+  "seed_count": 68,
   "scoring_type": "mbti4",
   "loading": { "text": "빌런 인격 분석 중..", "duration_ms": 2000 },
   "related": [],

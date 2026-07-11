@@ -5,7 +5,7 @@
   "hashtags": ["아이돌포지션", "심리테스트", "데뷔각", "MZ밈테스트"],
   "theme": "retro",
   "cover_image": "assets/cover.webp",
-  "seed_count": 176230,
+  "seed_count": 61,
   "scoring_type": "type",
   "loading": { "text": "데뷔 포지션 분석 중..", "duration_ms": 2000 },
   "related": [],

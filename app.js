@@ -4428,6 +4428,11 @@ function bumpEngagement(key) {
   const cur = parseInt(localStorage.getItem('engage_' + key) || '0', 10);
   localStorage.setItem('engage_' + key, cur + 1);
 }
+/* 조회수 표기 축약(v0.6.8~) — 1만 이상이면 "1.2만" 식으로, 그 미만은 그대로 숫자 표기 */
+function formatCount(n) {
+  if (n >= 10000) return (n / 10000).toFixed(1).replace(/\.0$/, '') + '만';
+  return String(n);
+}
 
 /* ══════════════════════════════════════════════════
    🃏 심리 테스트존 (v0.2.3~, Phase 4 수익화 로드맵 11-6)
@@ -4479,41 +4484,59 @@ function psychtestNavCategory(category) {
 function sortExternalTests(list, sortMode) {
   const arr = list.slice();
   if (sortMode === 'popular') {
-    return arr.sort((a, b) => engagementCount(b.engagementKey, 0) - engagementCount(a.engagementKey, 0));
+    /* v0.6.8~: baseCount(초기 조회수)를 무시하고 클릭 증분만 비교하면 baseCount가 큰
+       항목이 랭킹엔 안 잡히는데 카드엔 더 큰 숫자로 보이는 모순이 생겨 baseCount도 함께 비교 */
+    return arr.sort((a, b) => engagementCount(b.engagementKey, b.baseCount || 0) - engagementCount(a.engagementKey, a.baseCount || 0));
   }
   return arr.sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
+}
+
+/* 카드 썸네일 경로(v0.6.8~) — 별도 필드 없이 url에서 파생. test-engine/CLAUDE.md 4-4
+   파이프라인이 모든 테스트 폴더에 assets/cover.webp를 생성해두는 관례를 그대로 신뢰한다. */
+function psyCoverImage(test) {
+  return test.url.replace(/index\.html$/, 'assets/cover.webp');
 }
 
 /* STEP 3.1(2026-07-10): 몰입테스트/MBTI존 둘 다 전용 목록(externalTests/mbtiZoneTests)이
    실콘텐츠로만 채워지게 되며(잠금 placeholder 없음), 기존 전체너비 배너 1줄 나열 대신
    character/trait 등 기존 카테고리와 동일한 "인기 대표 1개 강조 + 3열 그리드" 레이아웃으로
    통일 — 인기순(popular, 클릭수 기준) 1위를 상단에 큰 카드로, 전체 목록(1위 포함, 기존
-   카테고리의 대표카드 중복 노출 관례와 동일)을 아래 3열 그리드로 다시 보여준다. */
+   카테고리의 대표카드 중복 노출 관례와 동일)을 아래 3열 그리드로 다시 보여준다.
+   v0.6.8: 이모지 원형+회색 배경 카드를 각 테스트가 이미 갖고 있는 cover.webp 포스터 카드로
+   교체(신규 이미지 생성 없음, 기존 자산 재사용). 인기순 1~3위엔 금/은/동 순위 리본을 얹는다. */
 function externalTestsFeedHTML(list) {
   const tests = sortExternalTests(list || [], 'popular');
   if (!tests.length) return '';
   const top = tests[0];
   return `
-    <a href="${top.url}" onclick="bumpEngagement('${top.engagementKey}')"
-      class="relative block bg-gradient-to-br from-orange-900/40 to-slate-800 border-2 border-orange-700/50 rounded-2xl p-5 mb-4 transition hover:border-orange-500">
-      <div class="flex items-center gap-4">
-        <div class="text-4xl">${top.emoji}</div>
-        <div>
-          <div class="text-orange-300 text-xs font-bold uppercase tracking-widest mb-1">🔥 지금 가장 인기있는 테스트</div>
-          <h3 class="text-slate-100 font-black text-lg mb-1">${top.title}</h3>
-          <p class="text-slate-400 text-sm">${top.hook}</p>
-        </div>
+    <a href="${top.url}" onclick="bumpEngagement('${top.engagementKey}')" class="psy-hero block mb-4">
+      <img src="${psyCoverImage(top)}" alt="" onerror="wcImgFallback(this)">
+      <div class="psy-hero-scrim"></div>
+      <div class="psy-hero-text">
+        <div class="text-orange-300 text-xs font-bold uppercase tracking-widest mb-1">🔥 지금 가장 인기있는 테스트</div>
+        <h3 class="text-slate-100 font-black text-lg mb-1">${top.title}</h3>
+        <p class="text-slate-300 text-sm line-clamp-2">${top.hook}</p>
       </div>
     </a>
     <div class="grid grid-cols-3 gap-3 mb-6">
-      ${tests.map(t => `
-      <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')"
-        class="relative block bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center transition hover:border-orange-500">
-        ${t.isNew ? `<span class="absolute -top-2 -left-2 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-lg" style="background:#D85A30;">NEW</span>` : ''}
-        <div class="text-3xl mb-2">${t.emoji}</div>
-        <p class="text-slate-100 font-semibold text-sm mb-1">${t.title}</p>
-        <p class="text-slate-500 text-xs">▷ ${engagementCount(t.engagementKey, 0)}</p>
-      </a>`).join('')}
+      ${tests.map((t, i) => {
+        const rankClass = i === 0 ? 'psy-rank-1' : i === 1 ? 'psy-rank-2' : i === 2 ? 'psy-rank-3' : '';
+        const count = engagementCount(t.engagementKey, t.baseCount || 200);
+        return `
+      <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="psy-card block">
+        <div class="psy-card-tile">
+          <img src="${psyCoverImage(t)}" alt="" onerror="wcImgFallback(this)">
+          <div class="psy-card-scrim"></div>
+          ${rankClass ? `<span class="psy-card-rank ${rankClass}">${i + 1}</span>` : ''}
+          ${t.isNew ? `<span class="psy-card-badge-new">NEW</span>` : ''}
+          <div class="psy-card-text">
+            <div class="psy-card-title line-clamp-2">${t.title}</div>
+            <div class="psy-card-hook line-clamp-2">${t.hook}</div>
+          </div>
+        </div>
+        <p class="psy-card-stats">▶ ${formatCount(count)}</p>
+      </a>`;
+      }).join('')}
     </div>`;
 }
 
@@ -4560,7 +4583,7 @@ function renderPsychtestFeed(category) {
         </div>
       </div>` : ''}
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 items-start">
         ${reals.map(t => `
         <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center cursor-pointer hover:border-violet-500 transition" onclick="psychtestOpenPost('${t.id}')">
           <div class="text-3xl mb-2">${t.emoji}</div>
@@ -4568,10 +4591,15 @@ function renderPsychtestFeed(category) {
           <p class="text-slate-500 text-xs">▷ ${engagementCount('psychtest-' + t.id + '-plays', 128)}</p>
         </div>`).join('')}
         ${locked.map(c => `
-          <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-4 text-center opacity-60 cursor-pointer" onclick="showToast('곧 만나요! 준비중인 콘텐츠예요 🙏')">
-            <div class="text-3xl mb-2">${c.emoji}</div>
-            <p class="text-slate-300 font-semibold text-sm mb-1">${c.title}</p>
-            <p class="text-slate-500 text-xs">🔒 준비중</p>
+          <div class="cursor-pointer" onclick="showToast('곧 만나요! 준비중인 콘텐츠예요 🙏')">
+            <div class="psy-locked-tile">
+              <span class="psy-locked-watermark">${c.emoji}</span>
+              <div class="psy-locked-overlay">
+                <span class="text-xl">🔒</span>
+                <span class="text-slate-400 text-xs font-bold">준비중</span>
+              </div>
+            </div>
+            <p class="text-slate-300 font-semibold text-sm text-center mt-2">${c.title}</p>
           </div>`).join('')}
       </div>
     </div>`;

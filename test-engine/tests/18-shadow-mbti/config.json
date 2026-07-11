@@ -5,7 +5,7 @@
   "hashtags": ["그림자MBTI", "심리테스트", "번아웃밈", "MBTI밈"],
   "theme": "retro",
   "cover_image": "assets/cover.webp",
-  "seed_count": 189620,
+  "seed_count": 71,
   "scoring_type": "mbti4",
   "loading": { "text": "그림자 인격 분석 중..", "duration_ms": 2200 },
   "related": [],

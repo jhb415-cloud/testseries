@@ -72,6 +72,9 @@
     }
     injectHomeLink();
     loadKakaoSdk(); // fire-and-forget: 결과 화면에 도달할 즈음엔 로드가 끝나있을 것으로 기대, 실패해도 공유 버튼이 안내 문구로 우아하게 처리함
+    // 화면 회전/모바일 브라우저 주소창 접힘 등으로 뷰포트가 바뀔 때도 버튼바-본문 겹침이
+    // 생기지 않도록 전역 1회 등록(2026-07-11, 아래 syncFixedFooterHeight 주석 참고)
+    window.addEventListener('resize', syncFixedFooterHeight);
     loadConfig()
       .then(function (config) {
         state.config = config;
@@ -645,12 +648,20 @@
   // 화면 아래로 잘려 보이는 문제가 있었음(2026-07-10 발견). 렌더 직후 실제 버튼바 높이를
   // 측정해 .te-app의 padding-bottom을 정확히 맞춰준다 — 버튼 개수와 무관하게 항상 정확.
   function syncFixedFooterHeight() {
-    requestAnimationFrame(function () {
+    function measure() {
       var appEl = qs('.te-app');
       var footerEl = qs('.te-choices-fixed');
       if (!appEl || !footerEl) return;
       appEl.style.paddingBottom = footerEl.offsetHeight + 'px';
-    });
+    }
+    requestAnimationFrame(measure);
+    // 테마 대부분이 Google Fonts를 @import로 비동기 로드하는데, 최초 측정 시점(위 RAF)엔
+    // 폴백 폰트로 렌더링된 상태라 실제 웹폰트가 늦게 적용되며 버튼 줄바꿈/높이가 커지면
+    // padding이 모자라 본문과 겹치는 문제가 있었음(2026-07-11, 실사용 스크린샷으로 발견 —
+    // 폰트 로딩이 빠른 환경/헤드리스 테스트에선 재현이 잘 안 됨). 폰트 로딩 완료 후 한 번 더 재측정.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { requestAnimationFrame(measure); });
+    }
   }
 
   function escapeHtml(str) {

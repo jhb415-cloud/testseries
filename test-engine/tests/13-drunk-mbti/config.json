@@ -10,7 +10,7 @@
   ],
   "theme": "neon",
   "cover_image": "assets/cover.webp",
-  "seed_count": 194280,
+  "seed_count": 189,
   "scoring_type": "mbti4",
   "loading": {
     "text": "취중 인격 분석 중..",

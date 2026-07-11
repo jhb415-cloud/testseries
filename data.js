@@ -5139,48 +5139,52 @@ window.AppData = {
 
   /* /test-engine/ (별도 프로토타입, STEP 2) 심리테스트존 노출 배너용 목록.
      배열+addedAt/engagementKey 필드로 둬서, 항목이 늘어나면 인기순/최신순 정렬로 바로 확장 가능
-     (app.js의 sortExternalTests() 참고). url은 SPA 해시가 아닌 실제 정적 페이지 경로. */
+     (app.js의 sortExternalTests() 참고). url은 SPA 해시가 아닌 실제 정적 페이지 경로.
+     카드 썸네일은 별도 필드 없이 url에서 파생(app.js의 psyCoverImage() 참고, 각 테스트 폴더의
+     test-engine/CLAUDE.md 4-4 파이프라인이 생성해둔 assets/cover.webp를 그대로 재사용).
+     baseCount는 실제 카운팅이 쌓이기 전 조회수가 0으로 보이지 않게 잡아둔 고정 초기값
+     (v0.6.8, 200~300 사이 임의 배정) — 이후 실제 클릭(bumpEngagement)만큼 여기에 더해짐. */
   externalTests: [
     {
       id: 'mental-age', title: '진짜 정신연령 테스트', emoji: '🧠',
       hook: '숫자 나이는 못 속여도 정신연령은 못 속이지... 지금 바로 확인!',
       url: '/test-engine/tests/mental-age/index.html',
-      engagementKey: 'site-mentalage-plays',
+      engagementKey: 'site-mentalage-plays', baseCount: 297,
       addedAt: '2026-07-10', isNew: true,
     },
     {
       id: 'k-office-type', title: '회사에서 나는 무슨 K-직장인 유형?', emoji: '💼',
       hook: '조용한퇴사형부터 오피스인싸형까지, 8문항으로 알아보는 진짜 회사 부캐',
       url: '/test-engine/tests/1-k-office-type/index.html',
-      engagementKey: 'site-koffice-plays',
+      engagementKey: 'site-koffice-plays', baseCount: 231,
       addedAt: '2026-07-10', isNew: true,
     },
     {
       id: 'desert-island-type', title: '무인도에 떨어지면 나는? (생존 유형)', emoji: '🏝️',
       hook: '구조선 오기 전까지 나는 살아남을 수 있을까, 8문항 생존 성향 테스트',
       url: '/test-engine/tests/2-desert-island-type/index.html',
-      engagementKey: 'site-desertisland-plays',
+      engagementKey: 'site-desertisland-plays', baseCount: 219,
       addedAt: '2026-07-10', isNew: true,
     },
     {
       id: 'spending-type', title: '나의 소비 유형: 거지방 vs 욜로', emoji: '💸',
       hook: '월급날부터 세일 시즌까지, 8문항으로 알아보는 진짜 소비 습관',
       url: '/test-engine/tests/4-spending-type/index.html',
-      engagementKey: 'site-spendingtype-plays',
+      engagementKey: 'site-spendingtype-plays', baseCount: 256,
       addedAt: '2026-07-11', isNew: true,
     },
     {
       id: 'villain-index', title: '내 안의 빌런 지수 테스트', emoji: '😈',
       hook: '단톡방부터 연애까지, 8문항으로 재는 내 안의 빌런 지수와 페르소나',
       url: '/test-engine/tests/5-villain-index/index.html',
-      engagementKey: 'site-villainindex-plays',
+      engagementKey: 'site-villainindex-plays', baseCount: 268,
       addedAt: '2026-07-11', isNew: true,
     },
     {
       id: 'mbti-addiction-level', title: '나의 MBTI 과몰입 정도 테스트', emoji: '🔮',
       hook: 'MBTI 뭔데부터 MBTI 교주까지, 6문항으로 재는 진짜 과몰입 레벨',
       url: '/test-engine/tests/6-mbti-addiction-level/index.html',
-      engagementKey: 'site-mbtiaddiction-plays',
+      engagementKey: 'site-mbtiaddiction-plays', baseCount: 205,
       addedAt: '2026-07-11', isNew: true,
     },
   ],
@@ -5193,21 +5197,21 @@ window.AppData = {
       id: 'real-vs-fake-mbti', title: '찐 MBTI vs 겉 MBTI 판별기 (겉바속촉)', emoji: '🎭',
       hook: '남들이 보는 나 8문항 + 진짜 내 속마음 8문항, 겉과 속의 MBTI가 정말 같을까?',
       url: '/test-engine/tests/11-real-vs-fake-mbti/index.html',
-      engagementKey: 'site-realvsfakembti-plays',
+      engagementKey: 'site-realvsfakembti-plays', baseCount: 241,
       addedAt: '2026-07-10', isNew: true,
     },
     {
       id: 'love-mode-mbti', title: '연애하면 바뀌는 내 MBTI', emoji: '💌',
       hook: '평소 성격 말고, 연애할 때만 튀어나오는 진짜 MBTI는 따로 있다',
       url: '/test-engine/tests/12-love-mode-mbti/index.html',
-      engagementKey: 'site-lovemodembti-plays',
+      engagementKey: 'site-lovemodembti-plays', baseCount: 223,
       addedAt: '2026-07-10', isNew: true,
     },
     {
       id: 'drunk-mbti', title: '취중 MBTI 테스트', emoji: '🍺',
       hook: '술 들어가면 튀어나오는 인격, 우는 술 · 시비 술 · 잠수 술 중 나는?',
       url: '/test-engine/tests/13-drunk-mbti/index.html',
-      engagementKey: 'site-drunkmbti-plays',
+      engagementKey: 'site-drunkmbti-plays', baseCount: 275,
       addedAt: '2026-07-10', isNew: true,
     },
   ],

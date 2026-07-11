@@ -5,7 +5,7 @@
   "hashtags": ["뇌구조", "심리테스트", "뇌분석보고서", "MBTI밈"],
   "theme": "retro",
   "cover_image": "assets/cover.webp",
-  "seed_count": 246730,
+  "seed_count": 83,
   "scoring_type": "mbti4",
   "loading": { "text": "뇌 구조 스캔 중..", "duration_ms": 2200 },
   "related": [],

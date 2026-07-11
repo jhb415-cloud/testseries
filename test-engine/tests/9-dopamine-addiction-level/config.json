@@ -5,7 +5,7 @@
   "hashtags": ["도파민중독", "심리테스트", "숏폼중독", "디지털디톡스"],
   "theme": "retro",
   "cover_image": "assets/cover.webp",
-  "seed_count": 268910,
+  "seed_count": 88,
   "scoring_type": "sum",
   "loading": { "text": "도파민 중독 레벨 측정 중..", "duration_ms": 2000 },
   "related": [],

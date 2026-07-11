@@ -5,7 +5,7 @@
   "hashtags": ["정신연령", "심리테스트", "MZ밈테스트", "자아성찰"],
   "theme": "retro",
   "cover_image": "assets/cover.webp",
-  "seed_count": 289989,
+  "seed_count": 158,
   "scoring_type": "sum",
   "loading": { "text": "정신연령 측정 중..", "duration_ms": 2000 },
   "related": [],
