@@ -1112,7 +1112,7 @@ function renderDreamSearch() {
       <div class="flex gap-2 mb-4">
         <input id="dream-search-input" type="text" placeholder="예: 뱀, 하늘을 날다, 이빨이 빠지다..."
           class="flex-1 bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition"/>
-        <button onclick="dreamSearch()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-3 rounded-xl transition">검색</button>
+        <button onclick="dreamSearch()" class="bg-blue-800/50 hover:bg-blue-700/70 border border-blue-600 text-blue-300 font-bold px-5 py-3 rounded-xl transition">검색</button>
       </div>
       <div id="dream-search-results"></div>
       <div class="mt-6">
@@ -1125,7 +1125,7 @@ function renderDreamSearch() {
         </div>
       </div>
       <div class="text-center mt-6">
-        <a href="/kkum/" class="inline-block bg-violet-600 hover:bg-violet-500 text-white font-bold px-6 py-3 rounded-xl transition">📖 꿈해몽 전체 목록 보기</a>
+        <a href="/kkum/" class="inline-block bg-violet-800/50 hover:bg-violet-700/70 border border-violet-600 text-violet-300 font-bold px-6 py-3 rounded-xl transition">📖 꿈해몽 전체 목록 보기</a>
       </div>
     </div>`;
 
@@ -1467,7 +1467,7 @@ function renderFortuneView(view) {
         <input id="fortune-year-input" type="number" min="1924" max="${currentYear}" placeholder="출생연도 입력 (예: 1995)"
           class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-amber-500 transition text-center text-xl tracking-widest"/>
         <div id="fortune-zodiac-preview" class="text-2xl mb-4 min-h-8"></div>
-        <button onclick="fortuneSubmit()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-bold py-3 rounded-xl transition">
+        <button onclick="fortuneSubmit()" class="w-full bg-amber-800/50 hover:bg-amber-700/70 border border-amber-600 text-amber-300 font-bold py-3 rounded-xl transition">
           오늘의 운세 확인하기
         </button>
       </div>`;
