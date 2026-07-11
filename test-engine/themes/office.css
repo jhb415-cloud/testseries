@@ -8,6 +8,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;600;700&display=swap');
 
 .te-app {
+  --te-footer-bg: #e7e6e0; /* 고정 버튼바 배경(engine.css 참고) — 페이지 하단 배경과 동일 톤 */
   background: linear-gradient(180deg, #f4f4f1 0%, #e7e6e0 100%);
   color: #23292f;
   font-family: "Noto Sans KR", -apple-system, sans-serif;

@@ -6,6 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Black+And+White+Picture&family=Noto+Sans+KR:wght@400;700;900&display=swap');
 
 .te-app {
+  --te-footer-bg: #0d0d0d; /* 고정 버튼바 배경(engine.css 참고) — 페이지 하단 배경과 동일 톤 */
   background:
     radial-gradient(ellipse 60% 45% at 50% 0%, rgba(93, 231, 194, 0.16), transparent 60%),
     linear-gradient(180deg, #050505 0%, #0d0d0d 100%);

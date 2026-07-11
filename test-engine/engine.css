@@ -44,11 +44,16 @@ body {
   transform: translateX(-50%);
   width: 100%;
   max-width: var(--te-max-width);
-  padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+  padding: 26px 16px calc(16px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   gap: 10px;
   z-index: 10;
+  /* 버튼바가 투명하면 스크롤 중 본문(이미지/텍스트)이 버튼 사이로 그대로 비쳐
+     겹쳐 보인다(2026-07-11 사용자 제보 — padding-bottom 보정과는 별개 문제).
+     테마마다 페이지 배경색이 다르므로 각 테마가 .te-app에 --te-footer-bg를
+     정의하고, 여기서 상단만 살짝 페이드되는 불투명 배경으로 본문을 가린다. */
+  background: linear-gradient(180deg, transparent 0, var(--te-footer-bg, #0f172a) 22px);
 }
 
 .te-btn {

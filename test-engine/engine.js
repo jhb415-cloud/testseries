@@ -1,4 +1,4 @@
-/* test-engine v6 (버튼바-본문 겹침 수정 + 캐시버스팅 도입) | engine.js — 공통 로직
+/* test-engine v7 (버튼바 불투명 배경 — 스크롤 시 본문 비침 수정) | engine.js — 공통 로직
    (config 로드, 화면 전환, 채점, 렌더, 결과 공유카드 저장, 관련 테스트 배너, 카카오톡 공유,
    메인 사이트로 돌아가기 링크) 순수 바닐라 JS. 외부 라이브러리 없음. 기능별 함수로 분리해 유지보수.
    결과 화면의 "이미지 저장" 기능은 별도 파일 result-card.js(window.TestEngineResultCard)에 위임한다.
@@ -41,7 +41,14 @@
    2) tests 폴더 아래 완성된 테스트 10개 index.html 전부의 해당 "?v="도 같은 번호로 일괄
       교체할 것(engine.js와 engine.css와 result-card.js 세 파일의 물음표-v 쿼리스트링을
       한 번에 sed로 치환하면 됨) — 안 하면 이번과 같은 "고쳤는데 반영이 안 된 것처럼 보이는"
-      배포 지연 버그가 재발한다. */
+      배포 지연 버그가 재발한다.
+
+   v7(2026-07-11): 하단 고정 버튼바(.te-choices-fixed)가 배경이 투명해서, 스크롤 중 본문
+   (이미지/텍스트)이 버튼 사이 틈으로 그대로 비쳐 겹쳐 보이던 문제 수정(v6의 padding-bottom
+   보정과는 별개 이슈, 사용자 스크린샷 제보). engine.css가 버튼바에 상단만 페이드되는 불투명
+   배경(var(--te-footer-bg))을 깔고, 테마 10종 전부가 .te-app에 자기 페이지 배경과 같은 톤의
+   --te-footer-bg를 정의. engine.js 자체 로직 변경은 없고 ENGINE_ASSET_VERSION만 6→7
+   (themes/*.css 캐시버스팅용). */
 
 (function () {
   'use strict';
@@ -49,7 +56,7 @@
   // engine.js 자체가 바뀔 때마다 이 번호를 올리고, 위 헤더 안내대로 10개 index.html의
   // engine.js/engine.css/result-card.js ?v=도 같은 번호로 맞출 것 — themes/*.css는
   // injectThemeCSS()가 이 상수를 그대로 재사용해 자동으로 캐시버스팅된다(파일별로 안 챙겨도 됨).
-  var ENGINE_ASSET_VERSION = '6';
+  var ENGINE_ASSET_VERSION = '7';
 
   // 최상단에서 즉시 캡처해야 함 — defer 스크립트라도 동기 실행 구간에서만 currentScript가 유효함
   var ENGINE_SCRIPT = document.currentScript;

@@ -6,6 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Song+Myung&family=Noto+Sans+KR:wght@400;600;700&display=swap');
 
 .te-app {
+  --te-footer-bg: #05081c; /* 고정 버튼바 배경(engine.css 참고) — 페이지 하단 배경과 동일 톤 */
   background:
     repeating-linear-gradient(35deg, rgba(201, 163, 78, 0.1) 0px, rgba(201, 163, 78, 0.1) 2px, transparent 2px, transparent 46px),
     repeating-linear-gradient(-35deg, rgba(201, 163, 78, 0.1) 0px, rgba(201, 163, 78, 0.1) 2px, transparent 2px, transparent 46px),
