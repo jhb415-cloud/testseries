@@ -78,7 +78,7 @@ test-engine/
 | `hashtags` | 인트로 해시태그 칩 배열 |
 | `theme` | `themes/{theme}.css` 파일명 (확장자 제외) |
 | `cover_image` | 인트로 커버 이미지 경로 (config.json 기준 상대경로) |
-| `seed_count` | "N명이 확인했어요"의 기준값. 실제 표시값 = seed + 로컬 완료 카운트 |
+| `seed_count` | "N명이 확인했어요"의 기준값. 실제 표시값 = seed + 로컬 완료 카운트. **항상 두세 자리 안팎(대략 40~200)의 현실적인 값만 쓸 것** — 2026-07-11 21개 테스트 전부 15만~29만대의 비현실적인 값으로 잘못 세팅돼 있던 걸 사용자가 실사용 중 "말도 안되는 숫자"라고 지적해 전량 수정한 사례가 있음(경위는 CLAUDE.md 변경이력 v0.6.9 참고). 이 테스트가 메인 사이트 카드 그리드에 연동돼있다면(`data.js`의 `externalTests`/`mbtiZoneTests`의 `baseCount`, 조회수) 그보다 낮은 값으로 맞출 것(완료자 ≤ 조회자가 자연스러움) |
 | `scoring_type` | `sum` \| `type` \| `quiz` \| `axis` |
 | `loading.text` / `loading.duration_ms` | 로딩 연출 문구/지속시간(ms) |
 | `questions[]` | `text`, `image`(nullable), `choices[]` |
