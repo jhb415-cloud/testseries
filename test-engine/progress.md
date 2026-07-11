@@ -19,7 +19,7 @@
 - [x] #6 mbti-addiction-level — 완료 · 연동 O
 - [x] #7 idol-position-type — 완료 (commit: 630b8ba, 2026-07-11) · 연동 X(다음 배치)
 - [x] #8 group-chat-character — 완료 (2026-07-11) · 연동 X(다음 배치)
-- [ ] #9 dopamine-addiction-level — 질문 텍스트 리라이팅 완료(2026-07-11), **이미지 미착수**
+- [x] #9 dopamine-addiction-level — 완료 (2026-07-11) · 연동 X(다음 배치)
 - [ ] #10 joseon-past-life-type — 질문 텍스트 리라이팅 완료(2026-07-11), **이미지 미착수**
 
 ## MBTI존 (11~20)
