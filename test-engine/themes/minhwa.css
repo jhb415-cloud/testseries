@@ -1,0 +1,89 @@
+/* test-engine — themes/minhwa.css — 신규 테마: 조선 민화(전통 채색화) 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   joseon-past-life-type(#10)이 1호 사용처. 한지 크림 배경 + 먹색 테두리 +
+   민화 특유의 청록/주황 배색으로 "옛 화첩을 펼친" 감성을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #f1e6cf; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    radial-gradient(ellipse at 15% 0%, rgba(29, 122, 118, 0.12), transparent 55%),
+    radial-gradient(ellipse at 90% 100%, rgba(200, 110, 45, 0.14), transparent 55%),
+    #f1e6cf;
+  color: #2c2418;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #faf3e1;
+  border-radius: 6px;
+  border: 3px solid #2c2418;
+  box-shadow: 5px 5px 0 rgba(44, 36, 24, 0.18);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Gowun Batang", "Noto Sans KR", serif;
+  font-weight: 700;
+  color: #1d4d47;
+  letter-spacing: -0.01em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #5c4f3a; }
+
+.te-chip {
+  background: #1d7a76;
+  border: none;
+  color: #faf3e1;
+  font-family: "Gowun Batang", serif;
+  font-weight: 700;
+  border-radius: 4px;
+}
+
+.te-btn {
+  background: #c86e2d;
+  color: #faf3e1;
+  border-radius: 4px;
+  border: 2px solid #2c2418;
+  box-shadow: 3px 3px 0 #2c2418;
+  font-family: "Gowun Batang", "Noto Sans KR", serif;
+  font-weight: 700;
+}
+.te-btn-primary { background: #1d7a76; color: #faf3e1; box-shadow: 3px 3px 0 #2c2418; }
+.te-btn-secondary { background: #ece0c4; box-shadow: 3px 3px 0 #2c2418; color: #2c2418; }
+.te-btn-accent { background: #c86e2d; color: #faf3e1; box-shadow: 3px 3px 0 #2c2418; }
+.te-btn-kakao { background: #FEE500; color: #191600; border: 2px solid #2c2418; box-shadow: 3px 3px 0 #2c2418; }
+
+.te-btn-choice {
+  background: #faf3e1;
+  color: #2c2418;
+  border: 2px solid #ac9a72;
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 #ac9a72;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: #ece0c4; border-color: #1d7a76; box-shadow: 1px 1px 0 #1d7a76; }
+
+.te-progress-track { background: #ece0c4; border-radius: 999px; border: 1px solid #ac9a72; }
+.te-progress-fill { background: linear-gradient(90deg, #1d7a76, #c86e2d); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #2c2418;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(29, 122, 118, 0.18);
+  border-top-color: #1d7a76;
+}
