@@ -32,7 +32,7 @@
 - [x] #15 crush-mode-mbti — 완료 · 연동 O (commit: 8256ff3, 2026-07-11)
 - [x] #16 brain-structure-report — 완료 · 연동 O (commit: 8256ff3, 2026-07-11)
 - [x] #17 office-mask-mbti — 완료 (2026-07-11) · 연동 X(다음 배치)
-- [ ] #18 shadow-mbti — 질문 텍스트 리라이팅 완료(2026-07-11), **이미지 미착수**
+- [x] #18 shadow-mbti — 완료 (2026-07-11) · 연동 X(다음 배치)
 - [x] #19 mbti-stat-window — **콘텐츠 완료**(이미지·QA까지, commit: 8256ff3에서 질문 텍스트만 추가 수정) · **연동 X**(다음 배치에서 진행)
 - [ ] #20 ai-mbti-judge — 질문 텍스트 리라이팅 완료(2026-07-11), **이미지 미착수**
 
