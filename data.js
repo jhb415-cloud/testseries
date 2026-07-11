@@ -5162,6 +5162,27 @@ window.AppData = {
       engagementKey: 'site-desertisland-plays',
       addedAt: '2026-07-10', isNew: true,
     },
+    {
+      id: 'spending-type', title: '나의 소비 유형: 거지방 vs 욜로', emoji: '💸',
+      hook: '월급날부터 세일 시즌까지, 8문항으로 알아보는 진짜 소비 습관',
+      url: '/test-engine/tests/4-spending-type/index.html',
+      engagementKey: 'site-spendingtype-plays',
+      addedAt: '2026-07-11', isNew: true,
+    },
+    {
+      id: 'villain-index', title: '내 안의 빌런 지수 테스트', emoji: '😈',
+      hook: '단톡방부터 연애까지, 8문항으로 재는 내 안의 빌런 지수와 페르소나',
+      url: '/test-engine/tests/5-villain-index/index.html',
+      engagementKey: 'site-villainindex-plays',
+      addedAt: '2026-07-11', isNew: true,
+    },
+    {
+      id: 'mbti-addiction-level', title: '나의 MBTI 과몰입 정도 테스트', emoji: '🔮',
+      hook: 'MBTI 뭔데부터 MBTI 교주까지, 6문항으로 재는 진짜 과몰입 레벨',
+      url: '/test-engine/tests/6-mbti-addiction-level/index.html',
+      engagementKey: 'site-mbtiaddiction-plays',
+      addedAt: '2026-07-11', isNew: true,
+    },
   ],
 
   /* /test-engine/ MBTI존 카테고리 노출 목록(STEP 3.1). externalTests와 동일한 구조·정렬

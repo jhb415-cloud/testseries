@@ -27,7 +27,7 @@
       "title": "무인도에 떨어지면 나는? (생존 유형)",
       "category": "몰입테스트",
       "scoring_type": "type",
-      "status": "완료(이미지·QA·index.html까지, 사이트 연동 전) — 폴더 2-desert-island-type",
+      "status": "완료(운영중) — 폴더 2-desert-island-type, 사이트 연동 완료(AppData.externalTests/sections.json/sitemap.xml) — 2026-07-11 index.json 상태값이 실제 연동 상태를 반영 못 하고 있던 걸 발견해 정정",
       "concept_style": "세피아 잉크 탐험일지/지도 스케치, themes/journal.css",
       "note": "레퍼런스 2장(사용자 제공 합성 이미지를 좌우 분리) 중 우측(눈치빌런형 포즈)을 opportunist.webp로 그대로 채택, 나머지 5개+커버는 OpenAI images/edits로 생성"
     },
@@ -45,7 +45,7 @@
       "title": "나의 소비 유형: 거지방 vs 욜로",
       "category": "몰입테스트",
       "scoring_type": "type",
-      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 4-spending-type, 질문/답변 자연문장화 리라이팅 완료, 신규 테마 vintage-collage.css. 2026-07-11 Playwright QA 재검증 완료(콘솔 에러 0, 이미지 로드 정상, 공유/저장 버튼 정상)",
+      "status": "완료(운영중) — 폴더 4-spending-type, 사이트 연동 완료(AppData.externalTests/sections.json/sitemap.xml). 질문/답변 자연문장화 리라이팅 완료, 신규 테마 vintage-collage.css. 2026-07-11 Playwright QA 재검증 완료(콘솔 에러 0, 이미지 로드 정상, 공유/저장 버튼 정상)",
       "concept_style": "밈/드립형 — 1970년대 신문 쿠폰 광고 콜라주로 무지출챌린저의 궁상 vs 욜로형의 탕진을 대비, themes/vintage-collage.css",
       "note": "사용자가 미리 준비한 config.json 초안+Gemini 레퍼런스 기반. 크림 하프톤 배경+모서리 잘린 쿠폰형 카드+Black Han Sans 포스터 폰트"
     },
@@ -55,7 +55,7 @@
       "title": "내 안의 빌런 지수 테스트",
       "category": "몰입테스트",
       "scoring_type": "sum+tag(STEP4)",
-      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 5-villain-index, 질문/답변 자연문장화 리라이팅 완료, 신규 테마 noir-comic.css. 2026-07-11 Playwright QA 재검증 완료(콘솔 에러 0, 이미지 로드 정상, sum+tag 채점·{tag} 치환 정상, 공유/저장 버튼 정상)",
+      "status": "완료(운영중) — 폴더 5-villain-index, 사이트 연동 완료(AppData.externalTests/sections.json/sitemap.xml). 질문/답변 자연문장화 리라이팅 완료, 신규 테마 noir-comic.css. 2026-07-11 Playwright QA 재검증 완료(콘솔 에러 0, 이미지 로드 정상, sum+tag 채점·{tag} 치환 정상, 공유/저장 버튼 정상)",
       "concept_style": "밈/드립형 — 형사 머그샷에서 진짜 빌런으로 리빌되는 필름누아르 코믹, themes/noir-comic.css",
       "note": "sum 채점에 선택적 tag 집계(STEP4 예외)를 처음 실사용한 콘텐츠 — 순검정 배경+흰 테두리 코믹패널+Black And White Picture 디스트레스 폰트"
     },
@@ -65,7 +65,7 @@
       "title": "나의 MBTI 과몰입 정도 테스트 (메타)",
       "category": "몰입테스트",
       "scoring_type": "sum",
-      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 6-mbti-addiction-level, 질문/답변 자연문장화 리라이팅 완료, 신규 테마 stained-glass.css. 2026-07-11 Playwright QA 재검증 완료(콘솔 에러 0, 이미지 로드 정상, 공유/저장 버튼 정상)",
+      "status": "완료(운영중) — 폴더 6-mbti-addiction-level, 사이트 연동 완료(AppData.externalTests/sections.json/sitemap.xml). 질문/답변 자연문장화 리라이팅 완료, 신규 테마 stained-glass.css. 2026-07-11 Playwright QA 재검증 완료(콘솔 에러 0, 이미지 로드 정상, 공유/저장 버튼 정상)",
       "concept_style": "밈/드립형 — MBTI 과몰입을 신앙처럼 과장한 성당 스테인드글라스 성화, themes/stained-glass.css",
       "note": "짙은 남색 납선 그리드 배경+금색 이중선 테두리 카드+Song Myung 세리프 폰트"
     },
