@@ -860,11 +860,12 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
   aspect-ratio: 3 / 4;
   border-radius: 1rem;
   overflow: hidden;
-  border: 1px solid rgb(var(--slate-700));
+  border: 3px solid rgb(var(--ink));
   background: rgb(var(--slate-800));
-  transition: border-color 0.15s ease;
+  box-shadow: 5px 5px 0 0 rgb(var(--ink));
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.psy-card:hover .psy-card-tile { border-color: rgba(216, 90, 48, 0.6); }
+.psy-card:hover .psy-card-tile { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 0 rgb(var(--ink)); }
 .psy-card-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .psy-card-scrim {
   position: absolute; inset: 0;
@@ -885,15 +886,17 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
   position: absolute; top: 0.45rem; left: 0.45rem;
   width: 1.5rem; height: 1.5rem; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 0.72rem; font-weight: 800; color: #3b2400;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  font-size: 0.72rem; font-weight: 800; color: rgb(var(--ink));
+  border: 2px solid rgb(var(--ink));
+  box-shadow: 2px 2px 0 0 rgb(var(--ink));
 }
-.psy-rank-1 { background: linear-gradient(160deg, #ffe08a, #d4a017); }
-.psy-rank-2 { background: linear-gradient(160deg, #f1f5f9, #b8c2cc); }
-.psy-rank-3 { background: linear-gradient(160deg, #e3b08a, #a56a3e); }
+/* 그라데이션 금/은/동 원형 배지 → Kinetic Logic 톤의 플랫 컬러로 교체(2026-07-11) */
+.psy-rank-1 { background: rgb(var(--primary-container)); }
+.psy-rank-2 { background: #D9DEE3; }
+.psy-rank-3 { background: #E3A063; }
 
 /* 대표 히어로 배너(인기 1위) — 카드보다 와이드한 비율의 동일 스크림 패턴 */
-.psy-hero { position: relative; display: block; border-radius: 1rem; overflow: hidden; aspect-ratio: 16 / 7; border: 1px solid rgb(var(--slate-700)); }
+.psy-hero { position: relative; display: block; border-radius: 1rem; overflow: hidden; aspect-ratio: 16 / 7; border: 3px solid rgb(var(--ink)); box-shadow: 6px 6px 0 0 rgb(var(--ink)); }
 .psy-hero img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; display: block; }
 .psy-hero-scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,18,32,0.92) 0%, rgba(11,18,32,0.55) 45%, rgba(11,18,32,0.1) 100%); }
 .psy-hero-text { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 1.25rem; max-width: 70%; }
