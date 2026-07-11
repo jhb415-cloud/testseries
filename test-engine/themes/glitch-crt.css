@@ -1,0 +1,90 @@
+/* test-engine — themes/glitch-crt.css — 신규 테마: 글리치/CRT 노이즈 아트 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   dopamine-addiction-level(#9)이 1호 사용처. 다크 스크린 배경 + RGB 크로마틱
+   애버레이션(청록/주황 색분리) 텍스트섀도우로 "알고리즘에 잠식된 화면" 느낌을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #05070a; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 3px),
+    radial-gradient(ellipse at 30% 10%, rgba(0, 204, 249, 0.12), transparent 55%),
+    radial-gradient(ellipse at 80% 90%, rgba(216, 90, 48, 0.12), transparent 55%),
+    #05070a;
+  color: #e8f6f8;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #0c1116;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 204, 249, 0.35);
+  box-shadow: 0 0 0 1px rgba(216, 90, 48, 0.15), 0 18px 40px rgba(0, 0, 0, 0.6);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Share Tech Mono", monospace;
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  text-shadow: -1px 0 rgba(0, 204, 249, 0.7), 1px 0 rgba(216, 90, 48, 0.6);
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #9fb3ba; }
+
+.te-chip {
+  background: rgba(0, 204, 249, 0.12);
+  border: 1px solid #00ccf9;
+  color: #00ccf9;
+  font-family: "Share Tech Mono", monospace;
+  border-radius: 4px;
+}
+
+.te-btn {
+  background: #00ccf9;
+  color: #05070a;
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0 0 16px rgba(0, 204, 249, 0.45);
+  font-family: "Share Tech Mono", monospace;
+  font-weight: 700;
+}
+.te-btn-primary { background: #00ccf9; color: #05070a; box-shadow: 0 0 16px rgba(0, 204, 249, 0.45); }
+.te-btn-secondary { background: #12181f; box-shadow: none; color: #e8f6f8; border: 1px solid rgba(255,255,255,0.15); }
+.te-btn-accent { background: #d85a30; color: #05070a; box-shadow: 0 0 16px rgba(216, 90, 48, 0.45); }
+.te-btn-kakao { background: #FEE500; color: #191600; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+.te-btn-choice {
+  background: #0f151b;
+  color: #e8f6f8;
+  border: 1px solid rgba(0, 204, 249, 0.25);
+  border-radius: 6px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: rgba(216, 90, 48, 0.12); border-color: #d85a30; }
+
+.te-progress-track { background: #12181f; border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #00ccf9, #d85a30); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #e8f6f8;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(0, 204, 249, 0.18);
+  border-top-color: #00ccf9;
+}
