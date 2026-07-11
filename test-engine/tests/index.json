@@ -206,8 +206,9 @@
       "title": "AI가 판별하는 진짜 내 MBTI (과몰입 검거)",
       "category": "MBTI존",
       "scoring_type": "mbti4+intro_input",
-      "status": "텍스트 초안 완료, 이미지 미착수",
-      "note": "2026-07-11 질문/답변을 단답형에서 상황 서술형 완결 문장으로 전면 리라이팅(axis 값 등 채점 필드는 무변경)"
+      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 20-ai-mbti-judge, 신규 테마 cyber-court.css",
+      "concept_style": "밈/드립형 — 사이버펑크 법정 스캐너(홀로그램 UI), themes/cyber-court.css",
+      "note": "resultTemplate 공용 구조라 이미지 2장(cover+generic)만 필요 — 레퍼런스의 두 패널(마젠타 와이어프레임 전신 스캔/시안 홀로그램 저울+증거패널 판결 장면)을 각각 cover(신문 당하는 중)/generic(판결 순간)으로 매칭, 1회 생성 성공. intro_input 드롭다운(자기신고 유형)+{claimed} vs {code} 비교 subtitle Playwright로 정상 동작 확인, 20개 목록 전체(1~20+mental-age) 완료."
     }
   ]
 }
