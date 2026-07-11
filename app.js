@@ -4522,9 +4522,9 @@ function externalTestsFeedHTML(list) {
       <img src="${psyCoverImage(top)}" alt="" onerror="wcImgFallback(this)">
       <div class="psy-hero-scrim"></div>
       <div class="psy-hero-text">
-        <div class="text-orange-300 text-xs font-bold uppercase tracking-widest mb-1">🔥 지금 가장 인기있는 테스트</div>
-        <h3 class="text-slate-100 font-black text-lg mb-1">${top.title}</h3>
-        <p class="text-slate-300 text-sm line-clamp-2">${top.hook}</p>
+        <div class="psy-hero-eyebrow">🔥 지금 가장 인기있는 테스트</div>
+        <h3 class="psy-hero-title line-clamp-2">${top.title}</h3>
+        <p class="psy-hero-subtitle line-clamp-2">${top.hook}</p>
       </div>
     </a>
     <div class="grid grid-cols-3 gap-3 mb-6">
@@ -6932,11 +6932,11 @@ function initLotto() {
         <p class="text-slate-500 text-sm mb-5">원하는 방식으로 번호를 뽑아보세요 (오락 목적)</p>
         ${lottoSharedBannerHTML()}
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-          <button onclick="lottoRunRandom()" class="bg-violet-700 hover:bg-violet-600 text-white font-bold py-3 rounded-xl transition">🎲 완전 랜덤</button>
-          <button onclick="document.getElementById('lotto-custom-box').classList.toggle('hidden')" class="bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">✍️ 숫자 직접 지정</button>
-          <button onclick="lottoRunFortunePick()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition">🔮 오늘의 운세·꿈 연동</button>
-          <button onclick="lottoRunStats()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition">📊 실제 당첨 통계 기반</button>
-          <button onclick="App.navigate('lottodraw')" class="sm:col-span-2 bg-gradient-to-r from-rose-600 to-orange-500 hover:from-rose-500 hover:to-orange-400 text-white font-bold py-3 rounded-xl transition">🎰 직접 뽑기 게임 — 추첨기에서 내 손으로!</button>
+          <button onclick="lottoRunRandom()" class="bg-violet-800/50 hover:bg-violet-700/70 border border-violet-600 text-violet-300 font-bold py-3.5 rounded-xl transition">🎲 완전 랜덤</button>
+          <button onclick="document.getElementById('lotto-custom-box').classList.toggle('hidden')" class="bg-slate-700 hover:bg-slate-700/70 border border-slate-400 text-slate-200 font-bold py-3.5 rounded-xl transition">✍️ 숫자 직접 지정</button>
+          <button onclick="lottoRunFortunePick()" class="bg-amber-800/50 hover:bg-amber-700/70 border border-amber-600 text-amber-300 font-bold py-3.5 rounded-xl transition">🔮 오늘의 운세·꿈 연동</button>
+          <button onclick="lottoRunStats()" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3.5 rounded-xl transition">📊 실제 당첨 통계 기반</button>
+          <button onclick="App.navigate('lottodraw')" class="sm:col-span-2 bg-[rgb(var(--ink))] hover:opacity-90 border border-slate-900 text-[rgb(var(--primary-container))] font-extrabold py-3.5 rounded-xl transition">🎰 직접 뽑기 게임 — 추첨기에서 내 손으로!</button>
         </div>
         <div id="lotto-custom-box" class="hidden mb-5">
           <p class="text-slate-400 text-xs mb-2">포함하고 싶은 숫자 1~5개를 콤마로 구분해 입력하세요 (1~45)</p>
