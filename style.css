@@ -1,4 +1,4 @@
-/* v0.0.53 | 5-in-1 Dashboard SPA — style.css */
+/* v0.8.0 | 5-in-1 Dashboard SPA — style.css */
 
 /* ── 기본 리셋 & 페이드인 애니메이션 ── */
 * { box-sizing: border-box; }
@@ -7,73 +7,123 @@
 .hidden { display: none !important; }
 
 /* ══════════════════════════════════════════════════
-   🌗 다크/라이트 테마 변수
-   - Tailwind의 slate 팔레트를 아래 CSS 변수로 remap (index.html의 tailwind.config 참고)
+   🎨 "Kinetic Logic" 단일 테마 변수 (v0.8.0~)
+   - 다크/라이트 토글은 제거됨. 아래는 DESIGN1.md 팔레트를 기존 slate/accent 변수 인프라에
+     그대로 얹은 단일 값 세트 — 이 변수 스키마(html { --slate-*: ... }) 자체는 유지해뒀으므로,
+     나중에 다크 테마를 다시 원하면 두 번째 값 세트 + html.dark 같은 클래스 토글만 재도입하면 됨
+     (구조 재구축 불필요).
    - 값은 "R G B" 공백구분 트리플릿 (Tailwind opacity modifier인 bg-slate-800/60 등이 동작하려면 필수 포맷)
-   - 기본(html, 다크)은 기존 Tailwind slate 값과 동일 → 다크 모드 외관은 기존과 100% 동일
-   - html.light는 라이트 팔레트로 override (순백 대신 은은한 블루그레이 톤 사용)
+   - slate 스케일은 기존처럼 배경/텍스트 용도로 계속 쓰이되, 이번엔 전부 크림/화이트 배경 + 잉크색 텍스트로 매핑됨
+   - --ink/--primary-container 등 DESIGN1 고유 토큰은 신규 변수로 추가 — Phase 2~4에서 새로 작성하는
+     컴포넌트 CSS가 이 토큰을 직접 참조할 수 있게 함
 ══════════════════════════════════════════════════ */
 html {
-  --slate-50:  248 250 252;
-  --slate-100: 241 245 249;
-  --slate-200: 226 232 240;
-  --slate-300: 203 213 225;
-  --slate-400: 148 163 184;
-  --slate-500: 100 116 139;
-  --slate-600: 71 85 105;
-  --slate-700: 51 65 85;
-  --slate-800: 30 41 59;
-  --slate-900: 15 23 42;
-  --slate-950: 2 6 23;
+  /* 배경류(700~950): 화이트~크림 계열. 700=surface-container(연한 회베이지, 뱃지/보조 패널 채움색),
+     800=surface-container-lowest(카드 배경, 화이트), 900=surface(페이지 배경, 크림),
+     950=사이드바/헤더 배경(페이지와 동일 크림 — 참고 스크린샷처럼 두꺼운 검정 구분선으로만 분리) */
+  --slate-700: 240 237 237;
+  --slate-800: 255 255 255;
+  --slate-900: 252 249 248;
+  --slate-950: 252 249 248;
 
-  --nav-hover-bg: rgba(255,255,255,0.1);
-  --overlay-scrim: rgba(15, 23, 42, 0.92);
+  /* 텍스트류(50~600): 진한 잉크 → 옅은 아웃라인 순. 50/100=on-surface(본문, 가장 진함),
+     600으로 갈수록 옅어져 캡션/버전표시 등 최하위 텍스트에 사용 */
+  --slate-50:  27 28 28;
+  --slate-100: 27 28 28;
+  --slate-200: 51 47 34;
+  --slate-300: 77 70 50;
+  --slate-400: 127 118 95;
+  --slate-500: 127 118 95;
+  --slate-600: 165 155 130;
 
-  /* 강조 색상(부드러운 박스용 900/800/700 + 텍스트용 400/300/200) — 기본값은 Tailwind 표준값과 동일 */
-  --blue-900: 30 58 138;    --blue-700: 29 78 216;    --blue-400: 96 165 250;   --blue-300: 147 197 253;
-  --indigo-900: 49 46 129;  --indigo-300: 165 180 252; --indigo-200: 199 210 254;
-  --violet-900: 76 29 149;  --violet-400: 167 139 250; --violet-300: 196 181 253; --violet-200: 221 214 254;
-  --emerald-900: 6 78 59;   --emerald-800: 6 95 70;   --emerald-700: 4 120 87;  --emerald-400: 52 211 153; --emerald-300: 110 231 183;
-  --rose-900: 136 19 55;    --rose-800: 159 18 57;    --rose-700: 190 18 60;    --rose-400: 251 113 133;   --rose-300: 253 164 175;
-  --amber-900: 120 53 15;   --amber-400: 251 191 36;  --amber-300: 252 211 77;
-  --yellow-900: 113 63 18;  --yellow-300: 253 224 71; --yellow-200: 254 240 138;
-  --purple-300: 216 180 254;
+  --nav-hover-bg: rgba(27, 28, 28, 0.06);
+  --overlay-scrim: rgba(252, 249, 248, 0.96);
 
-  /* 이상형 월드컵 전용 포인트 컬러(라임/네온 1색, v0.6.1~) — 다른 팀/카테고리 색과 안 겹치게 단독 사용 */
-  --wc-accent: 163 230 53;        /* lime-400 */
-  --wc-accent-strong: 132 204 22; /* lime-500 */
-}
+  /* "부드러운 강조 박스"(bg-{color}-900/30 + text-{color}-300 조합)용 — 밝은 파스텔 채움 + 짙은 텍스트 */
+  --blue-900: 179 235 255;    --blue-700: 0 145 179;    --blue-400: 0 82 102;    --blue-300: 0 103 127;
+  --indigo-900: 230 224 255;  --indigo-300: 68 50 130;  --indigo-200: 50 36 110;
+  --violet-900: 240 224 255;  --violet-400: 100 40 180; --violet-300: 120 60 200; --violet-200: 90 30 160;
+  --emerald-900: 214 248 220; --emerald-800: 190 240 200; --emerald-700: 150 220 165; --emerald-400: 10 110 60; --emerald-300: 10 90 50;
+  --rose-900: 255 214 216;    --rose-800: 255 195 198;  --rose-700: 255 170 175; --rose-400: 150 10 40;   --rose-300: 120 5 35;
+  --amber-900: 255 240 179;   --amber-400: 112 91 0;    --amber-300: 90 73 0;
+  --yellow-900: 255 245 199;  --yellow-300: 100 80 0;   --yellow-200: 80 64 0;
+  --purple-300: 100 40 160;
 
-html.light {
-  --slate-50:  26 34 51;
-  --slate-100: 32 42 61;
-  --slate-200: 43 54 80;
-  --slate-300: 59 71 97;
-  --slate-400: 91 103 128;
-  --slate-500: 120 132 156;
-  --slate-600: 154 165 186;
-  --slate-700: 195 203 219;
-  --slate-800: 221 226 236;
-  --slate-900: 238 241 247;
-  --slate-950: 227 232 241;
-
-  --nav-hover-bg: rgba(15, 23, 42, 0.06);
-  --overlay-scrim: rgba(238, 241, 247, 0.92);
-
-  /* 라이트 모드: 박스 배경(900/800/700)은 중간 채도 톤으로 바꿔 옅은 opacity에서도 은은하게 보이도록 하고,
-     텍스트(400/300/200)는 짙은 톤으로 바꿔 옅은 박스 위에서도 대비를 확보 */
-  --blue-900: 96 165 250;    --blue-700: 59 130 246;   --blue-400: 29 78 216;    --blue-300: 30 64 175;
-  --indigo-900: 129 140 248; --indigo-300: 67 56 202;  --indigo-200: 55 48 163;
-  --violet-900: 167 139 250; --violet-400: 109 40 217; --violet-300: 109 40 217; --violet-200: 91 33 182;
-  --emerald-900: 52 211 153; --emerald-800: 16 185 129; --emerald-700: 16 185 129; --emerald-400: 4 120 87; --emerald-300: 6 95 70;
-  --rose-900: 251 113 133;   --rose-800: 244 63 94;    --rose-700: 244 63 94;    --rose-400: 190 18 60;    --rose-300: 159 18 57;
-  --amber-900: 251 191 36;   --amber-400: 180 83 9;    --amber-300: 146 64 14;
-  --yellow-900: 250 204 21;  --yellow-300: 161 98 7;   --yellow-200: 133 77 14;
-  --purple-300: 126 34 206;
-
-  /* 라이트 모드는 밝은 라임이 배경과 대비가 안 나와 진한 톤으로 교체 */
+  /* 이상형 월드컵 전용 포인트 컬러(라임, v0.6.1~) — 밝은 배경에서도 충분한 대비를 위해 진한 톤 유지 */
   --wc-accent: 77 124 15;         /* lime-700 */
   --wc-accent-strong: 63 98 18;   /* lime-800 */
+
+  /* ── DESIGN1.md "Kinetic Logic" 고유 토큰 (신규, v0.8.0~) — Phase 2~4의 신규 컴포넌트 CSS가 참조 ── */
+  --ink: 27 28 28;                    /* on-surface, 모든 아웃라인/헤드라인 텍스트 */
+  --ink-variant: 77 70 50;            /* on-surface-variant, 보조 텍스트 */
+  --outline: 127 118 95;
+  --outline-variant: 209 198 171;
+  --surface: 252 249 248;
+  --surface-container: 240 237 237;
+  --surface-container-high: 234 231 231;
+  --surface-lowest: 255 255 255;      /* 카드 배경(화이트) */
+  --primary-container: 255 210 0;     /* Sunburst Yellow — 1차 CTA */
+  --on-primary-container: 112 91 0;
+  --secondary-container: 0 204 249;   /* Electric Cyan — 2차 액션/진행 표시 */
+  --on-secondary-container: 0 82 102;
+  --tertiary-container: 255 201 202;  /* Punch Magenta — 경고/포인트 */
+  --on-tertiary-container: 187 0 53;
+}
+
+/* ══════════════════════════════════════════════════
+   🕹️ "Kinetic Logic" 전역 브루탈리즘 shim (v0.8.0~, Phase 1)
+   - app.js의 ~150여 곳 인라인 Tailwind 카드 마크업을 하나하나 고치는 대신, 이미 코드에 있는
+     class 문자열(rounded-xl/2xl/3xl/full + border-*)을 속성선택자로 잡아 검정 두꺼운 테두리 +
+     하드 오프셋 그림자 + 눌림 효과를 일괄 적용. app.js/index.html 템플릿 문자열은 건드리지 않음.
+   - border-slate-* 유틸리티는 전부 잉크색으로 강제 — 옅은 회색 구분선도 브루탈리즘 취지에 맞게
+     또렷한 선으로 바뀜(디자인 의도, 회귀 아님).
+   - Phase 2~4에서 각 화면을 직접 손볼 때 더 정밀한 컴포넌트 전용 스타일로 대체될 예정 — 이 shim은
+     "아직 손대지 않은 곳도 최소한 브루탈리즘 톤은 유지"하는 안전망 역할.
+══════════════════════════════════════════════════ */
+body {
+  background-color: rgb(var(--surface));
+  background-image: radial-gradient(rgb(var(--ink) / 0.08) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+[class*="border-slate-"],
+[class*="border-emerald-"],
+[class*="border-rose-"],
+[class*="border-amber-"],
+[class*="border-blue-"],
+[class*="border-indigo-"],
+[class*="border-violet-"] {
+  border-color: rgb(var(--ink)) !important;
+}
+
+[class*="rounded-xl"][class*="border"],
+[class*="rounded-2xl"][class*="border"],
+[class*="rounded-3xl"][class*="border"] {
+  border-width: 3px !important;
+  box-shadow: 6px 6px 0 0 rgb(var(--ink));
+}
+
+[class*="rounded-lg"][class*="border"] {
+  border-width: 2px !important;
+  box-shadow: 4px 4px 0 0 rgb(var(--ink));
+}
+
+[class*="rounded-full"][class*="border"] {
+  border-width: 2px !important;
+  box-shadow: 3px 3px 0 0 rgb(var(--ink));
+}
+
+button, a[class*="rounded"], .nav-item, .service-card, .option-btn, .cat-tab-btn {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+[class*="rounded-xl"][class*="border"]:active,
+[class*="rounded-2xl"][class*="border"]:active,
+[class*="rounded-3xl"][class*="border"]:active,
+[class*="rounded-lg"][class*="border"]:active,
+[class*="rounded-full"][class*="border"]:active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
 }
 
 @keyframes fadeIn {
@@ -118,10 +168,11 @@ html.light {
 }
 
 .nav-item.active {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  color: #fff;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+  background: rgb(var(--primary-container));
+  color: rgb(var(--ink));
+  font-weight: 800;
+  border: 2px solid rgb(var(--ink));
+  box-shadow: 3px 3px 0 0 rgb(var(--ink));
 }
 
 /* Phase 4 로드맵 신규 메뉴 "준비중" 배지 (v0.2.3~) */
@@ -179,8 +230,10 @@ html.light {
   transition: all 0.15s ease;
 }
 .cat-tab-btn.active {
-  background: #7c3aed;
-  color: #fff;
+  background: rgb(var(--primary-container));
+  color: rgb(var(--ink));
+  border: 2px solid rgb(var(--ink));
+  box-shadow: 2px 2px 0 0 rgb(var(--ink));
 }
 
 /* ── 사이드바 "테스트" 그룹 (접기/펼치기) ── */
@@ -281,8 +334,8 @@ html.light {
 .loader-spinner {
   width: 48px;
   height: 48px;
-  border: 4px solid rgba(99,102,241,0.3);
-  border-top-color: #6366f1;
+  border: 4px solid rgba(27,28,28,0.15);
+  border-top-color: rgb(var(--primary-container));
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -342,59 +395,127 @@ html.light {
   animation: fadeInScale 0.3s ease forwards;
   max-height: 90vh;
   overflow-y: auto;
+  border: 3px solid rgb(var(--ink));
+  border-radius: 1rem;
+  box-shadow: 12px 12px 0 0 rgb(var(--ink));
 }
 
 /* ── 카드 호버 ── */
 .service-card {
-  transition: all 0.25s ease;
+  transition: all 0.15s ease;
   cursor: pointer;
 }
 
 .service-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+  transform: translate(-2px, -2px);
 }
 
 /* ── 옵션 버튼 (MBTI / ADHD) ── */
 .option-btn {
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   cursor: pointer;
   text-align: left;
-  border: 2px solid rgb(var(--slate-700));
+  border: 3px solid rgb(var(--ink));
   border-radius: 0.75rem;
   padding: 0.85rem 1.2rem;
-  background: rgb(var(--slate-800));
-  color: rgb(var(--slate-300));
+  background: rgb(var(--surface-lowest));
+  color: rgb(var(--ink));
   width: 100%;
   font-size: 0.95rem;
   line-height: 1.5;
+  box-shadow: 4px 4px 0 0 rgb(var(--ink));
 }
 
+/* 선택지 버튼 4색 순환(v0.8.0~ Kinetic Logic) — 참고 목업(PSYCH-LAB/NEURO-SYNC)의 옐로/시안/마젠타/그레이
+   4색 순환 답변 버튼을 순수 CSS nth-of-type만으로 재현(마크업 변경 없음, MBTI/ADHD/인싸력/속담/물가/
+   심리테스트존/논리력/숫자기억력 키패드 등 .option-btn을 쓰는 모든 화면에 자동 적용) */
+button.option-btn:nth-of-type(4n+1) { background: rgb(var(--primary-container) / 0.55); }
+button.option-btn:nth-of-type(4n+2) { background: rgb(var(--secondary-container) / 0.35); }
+button.option-btn:nth-of-type(4n+3) { background: rgb(var(--tertiary-container) / 0.35); }
+button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container)); }
+
 .option-btn:hover {
-  border-color: #6366f1;
-  background: rgba(99,102,241,0.1);
-  color: rgb(var(--slate-200));
+  background: rgb(var(--secondary-container) / 0.6);
+  color: rgb(var(--ink));
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 0 rgb(var(--ink));
 }
 
 .option-btn.selected {
-  border-color: #6366f1;
-  background: rgba(99,102,241,0.2);
-  color: rgb(var(--indigo-300));
-  font-weight: 600;
+  background: rgb(var(--primary-container));
+  color: rgb(var(--ink));
+  font-weight: 700;
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+/* ── 질문 카드(말풍선+캐릭터 아이콘, v0.8.0~ Kinetic Logic Phase 2 — 첫 적용: 심리테스트존) ──
+   목업(PSYCH-LAB) 참고: 질문 텍스트를 카드로 감싸고, 카드 하단에 말풍선 꼬리 + 원형 캐릭터 아이콘을 배치.
+   꼬리는 순수 CSS 삼각형 트릭(::after=검정 외곽, ::before=흰 안쪽을 살짝 작게 겹쳐 "테두리 있는 꼬리" 재현). */
+.quiz-question-card {
+  position: relative;
+  background: rgb(var(--surface-lowest));
+  border: 3px solid rgb(var(--ink));
+  border-radius: 1rem;
+  padding: 1.25rem 1.4rem;
+  box-shadow: 6px 6px 0 0 rgb(var(--ink));
+  margin-bottom: 88px;
+}
+.quiz-question-card::after {
+  content: '';
+  position: absolute;
+  left: 32px;
+  bottom: -17px;
+  width: 0; height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 20px solid rgb(var(--ink));
+}
+.quiz-question-card::before {
+  content: '';
+  position: absolute;
+  left: 35px;
+  bottom: -12px;
+  width: 0; height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 16px solid rgb(var(--surface-lowest));
+  z-index: 1;
+}
+.quiz-question-avatar {
+  position: absolute;
+  left: 20px;
+  bottom: -70px;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: rgb(var(--primary-container));
+  border: 3px solid rgb(var(--ink));
+  box-shadow: 3px 3px 0 0 rgb(var(--ink));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  z-index: 2;
 }
 
 /* ── 프로그레스 바 ── */
 .progress-bar-track {
-  background: rgb(var(--slate-700));
+  background: rgb(var(--surface-container));
+  border: 2px solid rgb(var(--ink));
   border-radius: 999px;
-  height: 6px;
+  height: 10px;
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  background: repeating-linear-gradient(
+    45deg,
+    rgb(var(--primary-container)) 0 10px,
+    rgb(255 226 77) 10px 20px
+  );
   transition: width 0.4s ease;
 }
 
@@ -402,10 +523,12 @@ html.light {
 .tier-badge {
   display: inline-block;
   padding: 0.3rem 1rem;
+  border: 2px solid rgb(var(--ink));
   border-radius: 999px;
   font-weight: 700;
   font-size: 0.85rem;
   letter-spacing: 0.05em;
+  box-shadow: 2px 2px 0 0 rgb(var(--ink));
 }
 
 /* ── 모바일 오버레이 ── */
@@ -430,7 +553,9 @@ html.light {
 /* ── 더미 그래프 바 ── */
 .dummy-bar {
   border-radius: 4px 4px 0 0;
-  background: linear-gradient(180deg, #6366f1, #4338ca);
+  border: 2px solid rgb(var(--ink));
+  border-bottom: none;
+  background: rgb(var(--secondary-container));
   animation: fadeIn 0.5s ease forwards;
 }
 

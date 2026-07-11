@@ -709,41 +709,6 @@ function closeMobileSidebar() {
 }
 
 /* ══════════════════════════════════════════════════
-   🌗 다크/라이트 테마 토글
-══════════════════════════════════════════════════ */
-/* v0.1.0~: 사이드바는 아이콘 토글 대신 다크/라이트 두 버튼을 항상 같이 보여주고, 현재 선택된 쪽을 강조 표시
-   (모바일 헤더는 공간이 좁아 기존 아이콘 토글을 그대로 유지) */
-const THEME_BTN_ACTIVE = ['border-violet-500', 'bg-violet-900/30', 'text-violet-300'];
-const THEME_BTN_IDLE = ['border-slate-700', 'bg-slate-800', 'text-slate-400'];
-
-function applyThemeIcon() {
-  const isLight = document.documentElement.classList.contains('light');
-
-  const darkBtn = document.getElementById('theme-btn-dark');
-  const lightBtn = document.getElementById('theme-btn-light');
-  [[darkBtn, !isLight], [lightBtn, isLight]].forEach(([btn, active]) => {
-    if (!btn) return;
-    btn.classList.remove(...THEME_BTN_ACTIVE, ...THEME_BTN_IDLE);
-    btn.classList.add(...(active ? THEME_BTN_ACTIVE : THEME_BTN_IDLE));
-  });
-
-  const mobileIcon = document.getElementById('theme-toggle-icon-mobile');
-  if (mobileIcon) mobileIcon.textContent = isLight ? '☀️' : '🌙';
-}
-
-function setTheme(mode) {
-  const isLight = mode === 'light';
-  document.documentElement.classList.toggle('light', isLight);
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
-  applyThemeIcon();
-}
-
-function toggleTheme() {
-  const isLight = document.documentElement.classList.contains('light');
-  setTheme(isLight ? 'dark' : 'light');
-}
-
-/* ══════════════════════════════════════════════════
    🏠 홈 섹션 초기화
 ══════════════════════════════════════════════════ */
 /* v0.3.2~ "인기 테스트" 계산의 코어 후보 목록(내부 인지/성향 테스트 14개) — STEP 3에서
@@ -4648,8 +4613,11 @@ function renderPsychtestQuestion() {
         <span class="text-slate-400 text-sm">${t.title}</span>
         <span class="text-violet-400 font-bold text-sm">${state.step + 1} / ${t.questions.length}</span>
       </div>
-      <div class="progress-bar-track mb-6"><div class="h-full rounded-full bg-violet-500 transition-all" style="width:${progress}%"></div></div>
-      <h3 class="text-slate-100 text-xl font-semibold mb-6 leading-relaxed">Q${state.step + 1}. ${q.q}</h3>
+      <div class="progress-bar-track mb-6"><div class="progress-bar-fill" style="width:${progress}%"></div></div>
+      <div class="quiz-question-card">
+        <h3 class="text-slate-100 text-xl font-semibold leading-relaxed">Q${state.step + 1}. ${q.q}</h3>
+        <div class="quiz-question-avatar">${t.emoji}</div>
+      </div>
       <div class="flex flex-col gap-3">
         ${q.options.map(([label, val]) => `
           <button class="option-btn" onclick="psychtestAnswer(${val})">${label}</button>`).join('')}
@@ -6585,7 +6553,7 @@ function lottoBallClass(n) {
   if (n <= 10) return 'bg-yellow-400 text-slate-900';
   if (n <= 20) return 'bg-blue-500 text-white';
   if (n <= 30) return 'bg-red-500 text-white';
-  if (n <= 40) return 'bg-slate-700 text-white';
+  if (n <= 40) return 'bg-[#374151] text-white';
   return 'bg-emerald-500 text-white';
 }
 
@@ -7468,15 +7436,6 @@ function lottodrawSaveImage() {
 document.addEventListener('DOMContentLoaded', () => {
 
   updateVisitStreak();
-
-  /* ── 테마 선택: 사이드바는 다크/라이트 두 버튼, 모바일 헤더는 기존 아이콘 토글 (v0.1.0~) ── */
-  applyThemeIcon();
-  const themeDarkBtn = document.getElementById('theme-btn-dark');
-  const themeLightBtn = document.getElementById('theme-btn-light');
-  if (themeDarkBtn) themeDarkBtn.addEventListener('click', () => setTheme('dark'));
-  if (themeLightBtn) themeLightBtn.addEventListener('click', () => setTheme('light'));
-  const themeMobileBtn = document.getElementById('theme-toggle-btn-mobile');
-  if (themeMobileBtn) themeMobileBtn.addEventListener('click', toggleTheme);
 
   /* ── 효과음 토글 버튼 (v0.0.54~) ── */
   applySoundIcon();
