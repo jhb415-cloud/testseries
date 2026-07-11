@@ -77,8 +77,9 @@
       "title": "내가 아이돌 그룹에 들어가면 포지션은?",
       "category": "몰입테스트",
       "scoring_type": "type",
-      "status": "텍스트 초안 완료, 이미지 미착수",
-      "note": "2026-07-11 질문/답변을 단답형에서 상황 서술형 완결 문장으로 전면 리라이팅(type 값 등 채점 필드는 무변경)"
+      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 7-idol-position-type, 신규 테마 photocard.css",
+      "concept_style": "밈/드립형 — 홀로그램 K-pop 포토카드(무지개 홀로포일), themes/photocard.css",
+      "note": "사용자 Gemini 레퍼런스(2장 합성 포토카드)를 images/edits로 스타일 참조, 오리지널 아이돌 캐릭터 1명을 고정해두고 6개 포지션마다 포즈·표정·소품만 바꿔 재사용(단일 카드 강제 문구로 2패널 복제 없이 1회 생성 성공). single-line 프롬프트 규칙 준수."
     },
     {
       "number": 8,
