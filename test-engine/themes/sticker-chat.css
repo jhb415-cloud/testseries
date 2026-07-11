@@ -1,0 +1,88 @@
+/* test-engine — themes/sticker-chat.css — 신규 테마: 채팅 스티커팩 캐릭터(치비+굵은 화이트 아웃라인) 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   group-chat-character(#8)가 1호 사용처. 카카오톡 이모티콘 스토어 느낌의 파스텔 배경 +
+   동글동글한 스티커 카드로 "단톡방 캐릭터 도감" 감성을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #fff3e6; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    radial-gradient(circle at 15% 10%, rgba(29, 158, 117, 0.14), transparent 45%),
+    radial-gradient(circle at 85% 90%, rgba(216, 90, 48, 0.14), transparent 45%),
+    #fff3e6;
+  color: #3a2e22;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #ffffff;
+  border-radius: 28px;
+  border: 4px solid #3a2e22;
+  box-shadow: 5px 5px 0 rgba(58, 46, 34, 0.15);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Jua", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  color: #1d9e75;
+  letter-spacing: -0.01em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #6b5c4a; }
+
+.te-chip {
+  background: #ffe0c2;
+  border: 2px solid #3a2e22;
+  color: #3a2e22;
+  font-family: "Jua", sans-serif;
+  border-radius: 999px;
+}
+
+.te-btn {
+  background: #1d9e75;
+  color: #ffffff;
+  border-radius: 999px;
+  border: 3px solid #3a2e22;
+  box-shadow: 3px 3px 0 #3a2e22;
+  font-family: "Jua", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+}
+.te-btn-primary { background: #1d9e75; color: #ffffff; box-shadow: 3px 3px 0 #3a2e22; }
+.te-btn-secondary { background: #ffe0c2; box-shadow: 3px 3px 0 #3a2e22; color: #3a2e22; }
+.te-btn-accent { background: #d85a30; box-shadow: 3px 3px 0 #3a2e22; color: #ffffff; }
+.te-btn-kakao { background: #FEE500; color: #191600; border: 3px solid #3a2e22; box-shadow: 3px 3px 0 #3a2e22; }
+
+.te-btn-choice {
+  background: #fff9f0;
+  color: #3a2e22;
+  border: 3px solid #3a2e22;
+  border-radius: 20px;
+  box-shadow: 3px 3px 0 #3a2e22;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+.te-btn-choice:active { background: #ffe0c2; transform: translate(2px, 2px); box-shadow: 1px 1px 0 #3a2e22; }
+
+.te-progress-track { background: #ffe0c2; border-radius: 999px; border: 2px solid #3a2e22; }
+.te-progress-fill { background: #1d9e75; border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #3a2e22;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(29, 158, 117, 0.18);
+  border-top-color: #1d9e75;
+}
