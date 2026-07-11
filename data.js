@@ -5214,6 +5214,27 @@ window.AppData = {
       engagementKey: 'site-drunkmbti-plays', baseCount: 275,
       addedAt: '2026-07-10', isNew: true, theme: 'neon',
     },
+    {
+      id: 'villain-mbti', title: '내 안의 빌런 MBTI', emoji: '🦹',
+      hook: '빡치는 순간 튀어나오는 진짜 인격, 화나면 나오는 내 안의 MBTI 빌런은?',
+      url: '/test-engine/tests/14-villain-mbti/index.html',
+      engagementKey: 'site-villainmbti-plays', baseCount: 214,
+      addedAt: '2026-07-11', isNew: true, theme: 'comic-panel',
+    },
+    {
+      id: 'crush-mode-mbti', title: '좋아하는 사람 앞에서 나오는 MBTI (크러쉬 모드)', emoji: '💘',
+      hook: '짝사랑 상대 앞에서만 나오는 반전 MBTI, 8문항으로 확인하는 크러쉬 모드',
+      url: '/test-engine/tests/15-crush-mode-mbti/index.html',
+      engagementKey: 'site-crushmodembti-plays', baseCount: 198,
+      addedAt: '2026-07-11', isNew: true, theme: 'riso-letter',
+    },
+    {
+      id: 'brain-structure-report', title: '내 뇌 구조 분석 보고서', emoji: '🧠',
+      hook: '평소 사고방식 8문항으로 뽑아보는 내 뇌 구조 분석 보고서',
+      url: '/test-engine/tests/16-brain-structure-report/index.html',
+      engagementKey: 'site-brainstructurereport-plays', baseCount: 233,
+      addedAt: '2026-07-11', isNew: true, theme: 'brain-scan',
+    },
   ],
 };
 

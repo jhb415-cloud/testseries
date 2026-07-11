@@ -4523,6 +4523,9 @@ const THEME_TITLE_FONTS = {
   papercut:         { family: '"Baloo 2","Noto Sans KR",sans-serif', google: 'family=Baloo+2:wght@500;700;800' },
   neon:             { family: '"Do Hyeon","Noto Sans KR",sans-serif', google: 'family=Do+Hyeon' },
   fantasy:          { family: '"Cinzel","Noto Sans KR",serif', google: 'family=Cinzel:wght@600;700' },
+  'comic-panel':    { family: '"Bangers","Noto Sans KR",sans-serif', google: 'family=Bangers' },
+  'riso-letter':    { family: '"Gamja Flower","Noto Sans KR",cursive', google: 'family=Gamja+Flower' },
+  'brain-scan':     { family: '"Share Tech Mono","Noto Sans KR",monospace', google: 'family=Share+Tech+Mono' },
 };
 const _loadedThemeFonts = new Set();
 function themeTitleFontFamily(theme) {

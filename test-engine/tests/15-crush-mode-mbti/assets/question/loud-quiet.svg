@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Q1: 좋아하는 사람 앞에서 나는 — 오히려 더 나댐(오렌지, 신난 반짝임+팔 벌린 사람) vs 갑자기 조용해짐(청록, 고개숙인 사람+점점점) -->
+  <rect width="200" height="200" fill="#fffcf5"/>
+  <circle cx="58" cy="86" r="12" fill="#b8471f"/>
+  <path d="M58 100c-14 0-22 10-22 22v12h44v-12c0-12-8-22-22-22z" fill="#b8471f"/>
+  <path d="M30 84l-8-8M86 84l8-8M44 66l-4-10M72 66l4-10" stroke="#b8471f" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="142" cy="86" r="11" fill="#1D9E75" opacity="0.9"/>
+  <path d="M142 99c-12 0-19 9-19 19v16h38v-16c0-10-7-19-19-19z" fill="#1D9E75" opacity="0.9"/>
+  <circle cx="118" cy="150" r="2.6" fill="#1D9E75" opacity="0.6"/>
+  <circle cx="112" cy="160" r="2" fill="#1D9E75" opacity="0.4"/>
+  <circle cx="107" cy="169" r="1.5" fill="#1D9E75" opacity="0.25"/>
+</svg>

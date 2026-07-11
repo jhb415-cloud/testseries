@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Q3: 화날 때 머릿속은 — 추상적 큰 그림(오렌지 소용돌이 물음표) vs 정확한 팩트(청록 돋보기+체크) -->
+  <rect width="200" height="200" fill="#fffaf2"/>
+  <path d="M56 100c0-16 13-26 26-26 12 0 20 8 20 18 0 8-6 13-13 16-6 2-9 6-9 11"
+        fill="none" stroke="#D85A30" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="80" cy="132" r="4" fill="#D85A30"/>
+  <g>
+    <circle cx="140" cy="92" r="20" fill="none" stroke="#1D9E75" stroke-width="5"/>
+    <path d="M154 106l16 16" stroke="#1D9E75" stroke-width="6" stroke-linecap="round"/>
+    <path d="M131 92l6 7 12-14" fill="none" stroke="#1D9E75" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

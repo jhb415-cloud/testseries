@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Q5: 크러쉬가 힘들어하면 — 해결해주고 싶음(오렌지 렌치) vs 같이 마음아파함(청록 겹친 하트+눈물) -->
+  <rect width="200" height="200" fill="#fffcf5"/>
+  <path d="M48 96c-8-8-9-19-3-27l10 10 8-8-10-10c8-6 19-5 27 3 7 7 8 17 4 25l30 30-14 14-30-30c-8 4-18 3-25-4-3-3-5-2-3-3z"
+        fill="none" stroke="#b8471f" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M140 76c8-6 20-4 25 5 4 8 2 17-6 24l-19 17-19-17c-8-7-10-16-6-24 5-9 17-11 25-5z" fill="#1D9E75" opacity="0.9"/>
+  <path d="M158 108l-2 8 6-3 3 9" stroke="#1D9E75" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.7"/>
+</svg>

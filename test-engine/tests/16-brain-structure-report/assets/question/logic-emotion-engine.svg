@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Q5: 판단할 때 뇌가 쓰는 것 — 논리 엔진(오렌지 뇌+톱니) vs 감정 엔진(청록 뇌+파형) -->
+  <rect width="200" height="200" fill="#0d1a2c"/>
+  <path d="M42 90c0-14 12-24 24-22 4-8 16-8 20 0 12-2 22 8 20 20 6 6 6 16-2 22 0 12-12 20-24 16-6 6-16 4-20-4-12 0-20-10-18-22-4-4-4-8 0-10z"
+        fill="none" stroke="#ff9d6e" stroke-width="3.2"/>
+  <circle cx="70" cy="86" r="12" fill="none" stroke="#ff9d6e" stroke-width="2"/>
+  <path d="M70 74v-6M70 98v6M58 86h-6M82 86h6M62 78l-4-4M78 78l4-4M62 94l-4 4M78 94l4 4" stroke="#ff9d6e" stroke-width="2" stroke-linecap="round"/>
+  <path d="M126 84c0-14 12-24 24-22 4-8 16-8 20 0 12-2 22 8 20 20 6 6 6 16-2 22 0 12-12 20-24 16-6 6-16 4-20-4-12 0-20-10-18-22-4-4-4-8 0-10z"
+        fill="none" stroke="#5de7c2" stroke-width="3.2"/>
+  <path d="M126 88h8l4-12 6 20 5-14 4 8h9" fill="none" stroke="#5de7c2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

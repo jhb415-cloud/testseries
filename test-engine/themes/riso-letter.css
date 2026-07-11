@@ -1,0 +1,90 @@
+/* test-engine — themes/riso-letter.css — 신규 테마: 리소그래프 러브레터 zine 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   crush-mode-mbti(#15 자리)가 1호 사용처. 크림 종이 + 리소그래프 특유의 2도 인쇄
+   미스레지스트레이션(청록/오렌지 색 어긋남) 이펙트 — comic-panel(하프톤 코믹)/
+   scrapbook·papercut(콜라주 계열)과도 확실히 다른 무드(잉크 인쇄 zine). */
+
+@import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Noto+Sans+KR:wght@400;600;700&display=swap');
+
+.te-app {
+  --te-footer-bg: #faf3e8; /* 고정 버튼바 배경(engine.css 참고) — 페이지 하단 배경과 동일 톤 */
+  background:
+    radial-gradient(circle, rgba(216, 90, 48, 0.10) 1px, transparent 1px) 0 0/12px 12px,
+    radial-gradient(circle, rgba(29, 158, 117, 0.10) 1px, transparent 1px) 6px 6px/12px 12px,
+    #faf3e8;
+  color: #2c2016;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #fffcf5;
+  border: 2px dashed #1D9E75;
+  border-radius: 18px;
+  box-shadow:
+    -3px -3px 0 rgba(29, 158, 117, 0.28),
+    3px 3px 0 rgba(216, 90, 48, 0.28),
+    0 10px 24px rgba(44, 32, 22, 0.18);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Gamja Flower", "Noto Sans KR", cursive;
+  color: #b8471f;
+  letter-spacing: 0.01em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #5c4a3a; }
+
+.te-chip {
+  background: rgba(29, 158, 117, 0.12);
+  border: 1.5px dashed #1D9E75;
+  color: #12654a;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.te-btn {
+  background: #b8471f;
+  color: #fffcf5;
+  border-radius: 999px;
+  border: 2px solid #b8471f;
+  font-weight: 700;
+}
+.te-btn-primary { background: #1D9E75; border-color: #1D9E75; color: #fffcf5; }
+.te-btn-secondary { background: #fffcf5; color: #b8471f; border: 2px dashed #b8471f; }
+.te-btn-accent { background: #D85A30; border-color: #D85A30; color: #fffcf5; }
+.te-btn-kakao { background: #FEE500; color: #2c2016; border-color: #FEE500; }
+
+.te-btn-choice {
+  background: #fffcf5;
+  color: #2c2016;
+  border: 2px dashed #c9a988;
+  border-radius: 999px;
+  box-shadow: none;
+  font-weight: 600;
+}
+.te-btn-choice:active {
+  border: 2px dashed #1D9E75;
+  background: rgba(29, 158, 117, 0.1);
+}
+
+.te-progress-track { background: #efe1cd; border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #D85A30, #1D9E75); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #2c2016;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(216, 90, 48, 0.2);
+  border-top-color: #1D9E75;
+}

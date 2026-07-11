@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Q3: 내 뇌의 기본 모드 — 상상 회로(오렌지 뇌+궤도 별) vs 현실 회로(청록 뇌+체크 그리드) -->
+  <rect width="200" height="200" fill="#0d1a2c"/>
+  <path d="M42 90c0-14 12-24 24-22 4-8 16-8 20 0 12-2 22 8 20 20 6 6 6 16-2 22 0 12-12 20-24 16-6 6-16 4-20-4-12 0-20-10-18-22-4-4-4-8 0-10z"
+        fill="none" stroke="#ff9d6e" stroke-width="3.2"/>
+  <ellipse cx="70" cy="86" rx="30" ry="12" fill="none" stroke="#ff9d6e" stroke-width="1.4" opacity="0.6" transform="rotate(-18 70 86)"/>
+  <circle cx="42" cy="70" r="2.4" fill="#ff9d6e"/>
+  <circle cx="98" cy="98" r="1.8" fill="#ff9d6e"/>
+  <path d="M126 84c0-14 12-24 24-22 4-8 16-8 20 0 12-2 22 8 20 20 6 6 6 16-2 22 0 12-12 20-24 16-6 6-16 4-20-4-12 0-20-10-18-22-4-4-4-8 0-10z"
+        fill="none" stroke="#5de7c2" stroke-width="3.2"/>
+  <path d="M128 80h44M128 90h44M128 100h44M144 74v32" stroke="#5de7c2" stroke-width="1.4" opacity="0.55"/>
+</svg>

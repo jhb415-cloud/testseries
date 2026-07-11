@@ -1,0 +1,106 @@
+/* test-engine — themes/brain-scan.css — 신규 테마: 임상 뇌스캔 모니터 HUD 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   brain-structure-report(#16 자리)가 1호 사용처. 어두운 네이비 + 그리드 오버레이 +
+   각진 모노스페이스 판독 UI — neon(글로우 라인아트 알약버튼)과는 확실히 다른 무드
+   (부드러운 글로우가 아니라 딱딱한 격자/브라켓 계기판 느낌).*/
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+KR:wght@400;600;700&display=swap');
+
+.te-app {
+  --te-footer-bg: #060b14; /* 고정 버튼바 배경(engine.css 참고) — 페이지 하단 배경과 동일 톤 */
+  background:
+    linear-gradient(rgba(93, 231, 194, 0.07) 1px, transparent 1px) 0 0/100% 22px,
+    linear-gradient(90deg, rgba(93, 231, 194, 0.07) 1px, transparent 1px) 0 0/22px 100%,
+    radial-gradient(ellipse at 50% 0%, rgba(29, 158, 117, 0.16), transparent 55%),
+    linear-gradient(180deg, #0a1220 0%, #060b14 100%);
+  color: #d7f5ec;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: linear-gradient(180deg, #0d1a2c 0%, #081420 100%);
+  border: 1px solid rgba(93, 231, 194, 0.55);
+  border-radius: 2px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 1px rgba(93, 231, 194, 0.12),
+    0 0 20px rgba(29, 158, 117, 0.22),
+    0 10px 28px rgba(0, 0, 0, 0.6);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+.te-intro-body::before,
+.te-question-body::before,
+.te-result-body::before {
+  content: "";
+  position: absolute;
+  top: 8px; left: 8px; right: 8px; bottom: 8px;
+  border: 1px solid rgba(93, 231, 194, 0.18);
+  pointer-events: none;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Share Tech Mono", "Noto Sans KR", monospace;
+  color: #5de7c2;
+  letter-spacing: 0.03em;
+  text-shadow: 0 0 8px rgba(93, 231, 194, 0.5);
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #9fc4ba; font-family: "Share Tech Mono", "Noto Sans KR", monospace; }
+
+.te-chip {
+  background: rgba(93, 231, 194, 0.08);
+  border: 1px solid rgba(93, 231, 194, 0.5);
+  color: #5de7c2;
+  border-radius: 2px;
+  font-family: "Share Tech Mono", monospace;
+}
+
+.te-btn {
+  background: rgba(93, 231, 194, 0.08);
+  color: #5de7c2;
+  border-radius: 2px;
+  border: 1px solid #5de7c2;
+  font-weight: 700;
+  font-family: "Share Tech Mono", "Noto Sans KR", monospace;
+  letter-spacing: 0.04em;
+}
+.te-btn-primary { background: rgba(29, 158, 117, 0.28); border-color: #5de7c2; color: #eafffa; box-shadow: 0 0 12px rgba(93, 231, 194, 0.35); }
+.te-btn-secondary { background: rgba(255, 255, 255, 0.03); color: #9fc4ba; border-color: rgba(159, 196, 186, 0.45); }
+.te-btn-accent { background: rgba(216, 90, 48, 0.22); border-color: #ff9d6e; color: #ffd9c4; box-shadow: 0 0 12px rgba(255, 157, 110, 0.3); }
+.te-btn-kakao { background: #FEE500; color: #06210f; border-color: #FEE500; }
+
+.te-btn-choice {
+  background: rgba(255, 255, 255, 0.02);
+  color: #d7f5ec;
+  border: 1px solid rgba(93, 231, 194, 0.35);
+  border-radius: 2px;
+  box-shadow: none;
+  font-family: "Share Tech Mono", "Noto Sans KR", monospace;
+}
+.te-btn-choice:active {
+  border-color: #5de7c2;
+  background: rgba(93, 231, 194, 0.14);
+  box-shadow: 0 0 10px rgba(93, 231, 194, 0.4);
+}
+
+.te-progress-track { background: rgba(93, 231, 194, 0.1); border-radius: 2px; }
+.te-progress-fill { background: linear-gradient(90deg, #1D9E75, #5de7c2); border-radius: 2px; box-shadow: 0 0 8px rgba(93, 231, 194, 0.55); }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #d7f5ec;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(93, 231, 194, 0.2);
+  border-top-color: #5de7c2;
+  box-shadow: 0 0 10px rgba(93, 231, 194, 0.4);
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Q5: 화났을 때 상대에게 — 논리로 팩폭(오렌지 번개 POW) vs 서운함·감정 폭발(청록 깨진 하트) -->
+  <rect width="200" height="200" fill="#fffaf2"/>
+  <path d="M78 44l-30 52h22l-16 46 44-58h-24z" fill="#D85A30" stroke="#1a1410" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M128 60c14-10 34-10 46 4 10 12 10 30-2 44-12 14-30 24-42 30-4-10-8-30-6-46 2-14 2-24 4-32z"
+        fill="none" stroke="#1D9E75" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M136 84l16 18-14 4 10 22" fill="none" stroke="#1D9E75" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

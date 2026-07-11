@@ -21,22 +21,22 @@
     "tip": "밖에선 인싸, 회사에선 유령 — 다들 이 가면 하나씩은 있잖아"
   },
   "questions": [
-    { "text": "회사에서 나는?", "image": null,
-      "choices": [{ "label": "먼저 말 걸고 어울림", "axis": "E" }, { "label": "필요할 때만 최소한", "axis": "I" }] },
-    { "text": "회식 자리에서?", "image": null,
-      "choices": [{ "label": "분위기 주도", "axis": "E" }, { "label": "구석에서 조용히", "axis": "I" }] },
-    { "text": "업무 지시를 받을 때?", "image": null,
-      "choices": [{ "label": "\"왜, 어떤 의미로?\" 물음", "axis": "N" }, { "label": "\"정확히 뭘, 언제까지?\" 물음", "axis": "S" }] },
-    { "text": "일하는 방식은?", "image": null,
-      "choices": [{ "label": "큰 방향·개선 아이디어", "axis": "N" }, { "label": "매뉴얼·정확한 실행", "axis": "S" }] },
-    { "text": "동료와 의견 충돌 시?", "image": null,
-      "choices": [{ "label": "논리로 설득", "axis": "T" }, { "label": "관계 생각해서 조율", "axis": "F" }] },
-    { "text": "피드백을 줄 때?", "image": null,
-      "choices": [{ "label": "팩트 위주로 직설", "axis": "T" }, { "label": "돌려서 부드럽게", "axis": "F" }] },
-    { "text": "프로젝트 스타일은?", "image": null,
-      "choices": [{ "label": "일정·계획 먼저 짬", "axis": "J" }, { "label": "유연하게 대응", "axis": "P" }] },
-    { "text": "마감 관리는?", "image": null,
-      "choices": [{ "label": "미리미리 끝냄", "axis": "J" }, { "label": "데드라인 파워", "axis": "P" }] }
+    { "text": "회사 사람들 앞에서, 평소 성격과 상관없이 나는 어떤 모습으로 있을까?", "image": null,
+      "choices": [{ "label": "먼저 말을 걸고 자연스럽게 어울리는 편", "axis": "E" }, { "label": "업무상 필요할 때만 최소한으로 대화함", "axis": "I" }] },
+    { "text": "피할 수 없는 회식 자리에 앉아 있을 때, 나는 어떤 모습일까?", "image": null,
+      "choices": [{ "label": "먼저 나서서 분위기를 주도하는 편", "axis": "E" }, { "label": "구석 자리에서 조용히 시간을 보내는 편", "axis": "I" }] },
+    { "text": "상사에게 새로운 업무 지시를 받았다. 그 순간 내 머릿속에 먼저 드는 질문은?", "image": null,
+      "choices": [{ "label": "\"왜 이걸, 어떤 의미로 하는 거지?\" 하는 물음이 먼저 듦", "axis": "N" }, { "label": "\"정확히 뭘, 언제까지 해야 하지?\" 하는 물음이 먼저 듦", "axis": "S" }] },
+    { "text": "실제로 업무를 처리할 때, 나는 어떤 방식으로 일을 풀어나갈까?", "image": null,
+      "choices": [{ "label": "큰 방향과 개선 아이디어부터 고민하는 편", "axis": "N" }, { "label": "정해진 매뉴얼대로 정확하게 실행하는 편", "axis": "S" }] },
+    { "text": "회의 중에 동료와 의견이 부딪혔다. 이럴 때 나는 어떻게 풀어갈까?", "image": null,
+      "choices": [{ "label": "논리적으로 근거를 대며 설득하려 함", "axis": "T" }, { "label": "관계를 생각해서 한발 물러나 조율함", "axis": "F" }] },
+    { "text": "동료나 후배에게 업무 피드백을 줘야 하는 상황이다. 나는 어떤 식으로 말할까?", "image": null,
+      "choices": [{ "label": "돌리지 않고 팩트 위주로 직설적으로 말함", "axis": "T" }, { "label": "상처받지 않게 돌려서 부드럽게 말함", "axis": "F" }] },
+    { "text": "새 프로젝트를 맡게 됐을 때, 나는 어떤 식으로 진행해나갈까?", "image": null,
+      "choices": [{ "label": "시작 전에 일정과 계획부터 먼저 짜둠", "axis": "J" }, { "label": "계획보다는 상황에 맞춰 유연하게 대응함", "axis": "P" }] },
+    { "text": "정해진 마감일이 다가올 때, 나는 어떤 식으로 그 시간을 관리할까?", "image": null,
+      "choices": [{ "label": "여유 있게 미리미리 끝내놓는 편", "axis": "J" }, { "label": "마감 직전 몰아치는 데드라인 파워로 끝냄", "axis": "P" }] }
   ],
   "results": []
 }

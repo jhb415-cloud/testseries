@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Q3: 좋아하는 사람 생각할 때 — 온갖 상상·시나리오(오렌지 몽글몽글 생각구름+별) vs 실제 있었던 일 곱씹음(청록 필름 프레임) -->
+  <rect width="200" height="200" fill="#fffcf5"/>
+  <circle cx="46" cy="122" r="6" fill="#b8471f" opacity="0.7"/>
+  <circle cx="58" cy="108" r="9" fill="#b8471f" opacity="0.8"/>
+  <ellipse cx="82" cy="86" rx="26" ry="20" fill="#b8471f" opacity="0.9"/>
+  <path d="M82 66l3 8-8 2 8 3-4 8" stroke="#fffcf5" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <rect x="126" y="70" width="52" height="38" rx="4" fill="none" stroke="#1D9E75" stroke-width="4"/>
+  <path d="M136 70v38M148 70v38M160 70v38" stroke="#1D9E75" stroke-width="2" opacity="0.5"/>
+  <circle cx="152" cy="89" r="6" fill="#1D9E75"/>
+</svg>
