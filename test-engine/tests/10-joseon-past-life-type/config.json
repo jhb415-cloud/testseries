@@ -10,7 +10,8 @@
   ],
   "theme": "minhwa",
   "cover_image": "assets/cover.webp",
-  "seed_count": 45,
+  "seed_count": 208,
+  "engagement_key": "site-joseonpastlife-plays",
   "scoring_type": "type",
   "loading": {
     "text": "전생 기록 조회 중..",

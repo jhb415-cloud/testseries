@@ -10,7 +10,8 @@
   ],
   "theme": "papercut",
   "cover_image": "assets/cover.webp",
-  "seed_count": 134,
+  "seed_count": 223,
+  "engagement_key": "site-lovemodembti-plays",
   "scoring_type": "mbti4",
   "loading": {
     "text": "연애 모드 MBTI 분석 중..",

@@ -10,7 +10,8 @@
   ],
   "theme": "noir-comic",
   "cover_image": "assets/cover.webp",
-  "seed_count": 171,
+  "seed_count": 268,
+  "engagement_key": "site-villainindex-plays",
   "scoring_type": "sum",
   "loading": {
     "text": "빌런 지수 계산 중..",

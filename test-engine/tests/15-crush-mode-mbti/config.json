@@ -10,7 +10,8 @@
   ],
   "theme": "riso-letter",
   "cover_image": "assets/cover.webp",
-  "seed_count": 57,
+  "seed_count": 198,
+  "engagement_key": "site-crushmodembti-plays",
   "scoring_type": "mbti4",
   "loading": {
     "text": "크러쉬 모드 분석 중..",

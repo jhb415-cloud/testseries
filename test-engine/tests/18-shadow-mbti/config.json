@@ -10,7 +10,8 @@
   ],
   "theme": "ink-wash",
   "cover_image": "assets/cover.webp",
-  "seed_count": 71,
+  "seed_count": 195,
+  "engagement_key": "site-shadowmbti-plays",
   "scoring_type": "mbti4",
   "loading": {
     "text": "그림자 인격 분석 중..",

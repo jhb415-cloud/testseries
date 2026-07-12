@@ -10,7 +10,8 @@
   ],
   "theme": "sticker-chat",
   "cover_image": "assets/cover.webp",
-  "seed_count": 74,
+  "seed_count": 226,
+  "engagement_key": "site-groupchatcharacter-plays",
   "scoring_type": "type",
   "loading": {
     "text": "단톡방 캐릭터 분석 중..",

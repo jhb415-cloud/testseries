@@ -10,7 +10,8 @@
   ],
   "theme": "cyber-court",
   "cover_image": "assets/cover.webp",
-  "seed_count": 49,
+  "seed_count": 238,
+  "engagement_key": "site-aimbtijudge-plays",
   "scoring_type": "mbti4",
   "loading": {
     "text": "AI가 진짜 유형 재판정 중..",

@@ -10,7 +10,8 @@
   ],
   "theme": "brain-scan",
   "cover_image": "assets/cover.webp",
-  "seed_count": 83,
+  "seed_count": 233,
+  "engagement_key": "site-brainstructurereport-plays",
   "scoring_type": "mbti4",
   "loading": {
     "text": "뇌 구조 스캔 중..",

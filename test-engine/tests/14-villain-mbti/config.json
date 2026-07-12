@@ -10,7 +10,8 @@
   ],
   "theme": "comic-panel",
   "cover_image": "assets/cover.webp",
-  "seed_count": 68,
+  "seed_count": 214,
+  "engagement_key": "site-villainmbti-plays",
   "scoring_type": "mbti4",
   "loading": {
     "text": "빌런 인격 분석 중..",

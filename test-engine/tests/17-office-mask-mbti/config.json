@@ -10,7 +10,8 @@
   ],
   "theme": "double-exposure",
   "cover_image": "assets/cover.webp",
-  "seed_count": 63,
+  "seed_count": 217,
+  "engagement_key": "site-officemaskmbti-plays",
   "scoring_type": "mbti4",
   "loading": {
     "text": "회사 모드 MBTI 분석 중..",

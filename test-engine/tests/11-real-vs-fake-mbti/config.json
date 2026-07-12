@@ -10,7 +10,8 @@
   ],
   "theme": "scrapbook",
   "cover_image": "assets/cover.webp",
-  "seed_count": 156,
+  "seed_count": 241,
+  "engagement_key": "site-realvsfakembti-plays",
   "scoring_type": "mbti4_dual",
   "loading": {
     "text": "겉과 속의 온도차 측정 중..",

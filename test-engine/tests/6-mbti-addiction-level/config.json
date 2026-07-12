@@ -10,7 +10,8 @@
   ],
   "theme": "stained-glass",
   "cover_image": "assets/cover.webp",
-  "seed_count": 129,
+  "seed_count": 205,
+  "engagement_key": "site-mbtiaddiction-plays",
   "scoring_type": "sum",
   "loading": {
     "text": "과몰입 레벨 측정 중..",

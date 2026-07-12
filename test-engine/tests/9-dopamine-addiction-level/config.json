@@ -10,7 +10,8 @@
   ],
   "theme": "glitch-crt",
   "cover_image": "assets/cover.webp",
-  "seed_count": 88,
+  "seed_count": 264,
+  "engagement_key": "site-dopamineaddiction-plays",
   "scoring_type": "sum",
   "loading": {
     "text": "도파민 중독 레벨 측정 중..",

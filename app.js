@@ -933,8 +933,11 @@ async function renderHomeSections() {
       return;
     }
 
-    /* v0.8.9~: 심리테스트 3그룹 — 가로 스크롤 포스터 캐러셀(실제 cover.webp 재사용) */
+    /* v0.8.9~: 심리테스트 그룹 — 가로 스크롤 포스터 캐러셀(실제 cover.webp 재사용).
+       2026-07-12 후속: 우측 화살표 힌트를 위해 .home-grp-wrap으로 감싸고 고유 id 부여 —
+       bindHomeCarouselArrows()가 렌더링 직후 실제 overflow 여부에 따라 화살표를 붙이거나 뗀다. */
     if (sec.style === 'poster-carousel') {
+      const rowId = 'home-grp-row-' + (bindSeq++);
       const rowsHTML = cards.map(c => {
         const bindId = 'home-card-bind-' + (bindSeq++);
         bindings.push({ id: bindId, run: c.run || (() => App.navigate(c.section)) });
@@ -943,7 +946,10 @@ async function renderHomeSections() {
       }).join('');
       html += `
         <div class="home-grp-head">${sec.title}</div>
-        <div class="home-grp-row">${rowsHTML}</div>`;
+        <div class="home-grp-wrap">
+          <div class="home-grp-row" id="${rowId}">${rowsHTML}</div>
+          <div class="home-grp-arrow hide">→</div>
+        </div>`;
       return;
     }
 
@@ -980,6 +986,27 @@ async function renderHomeSections() {
   bindings.forEach(b => {
     const el = document.getElementById(b.id);
     if (el) el.onclick = b.run;
+  });
+  bindHomeCarouselArrows();
+}
+
+/* v0.8.9 후속(2026-07-12): 포스터 캐러셀 우측 화살표 힌트 — 실제로 더 스크롤할 내용이 있을
+   때만 보이고, 끝까지 밀면 사라짐(스크롤 위치를 실시간 반영). 카드 전체 개수가 화면에 다
+   들어와 애초에 스크롤이 필요 없는 그룹(예: 3~4개짜리 그룹을 넓은 데스크톱에서 볼 때)은
+   화살표 자체를 숨김. */
+function bindHomeCarouselArrows() {
+  document.querySelectorAll('.home-grp-wrap').forEach(wrap => {
+    const row = wrap.querySelector('.home-grp-row');
+    const arrow = wrap.querySelector('.home-grp-arrow');
+    if (!row || !arrow) return;
+    const update = () => {
+      const hasOverflow = row.scrollWidth > row.clientWidth + 2;
+      const atEnd = row.scrollLeft + row.clientWidth >= row.scrollWidth - 4;
+      arrow.classList.toggle('hide', !hasOverflow || atEnd);
+    };
+    update();
+    row.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
   });
 }
 

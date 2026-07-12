@@ -10,7 +10,8 @@
   ],
   "theme": "photocard",
   "cover_image": "assets/cover.webp",
-  "seed_count": 61,
+  "seed_count": 189,
+  "engagement_key": "site-idolposition-plays",
   "scoring_type": "type",
   "loading": {
     "text": "데뷔 포지션 분석 중..",

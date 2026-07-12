@@ -71,7 +71,7 @@
   // engine.js 자체가 바뀔 때마다 이 번호를 올리고, 위 헤더 안내대로 10개 index.html의
   // engine.js/engine.css/result-card.js ?v=도 같은 번호로 맞출 것 — themes/*.css는
   // injectThemeCSS()가 이 상수를 그대로 재사용해 자동으로 캐시버스팅된다(파일별로 안 챙겨도 됨).
-  var ENGINE_ASSET_VERSION = '9';
+  var ENGINE_ASSET_VERSION = '10';
 
   // 최상단에서 즉시 캡처해야 함 — defer 스크립트라도 동기 실행 구간에서만 currentScript가 유효함
   var ENGINE_SCRIPT = document.currentScript;
@@ -180,7 +180,14 @@
   }
 
   // ---------- localStorage 완료 카운터 ----------
+  // v0.8.9~: 메인 사이트 홈 화면 "이번주 인기 TOP"이 이 테스트를 가리킬 때 보여주는 숫자와
+  // 이 화면 자체가 보여주는 "지금까지 N명이 확인했어요"가 서로 다른 카운터라 숫자가 어긋나는
+  // 문제를 사용자가 실기기에서 발견 — config.json에 engagement_key(메인 사이트 data.js의
+  // engagementKey와 동일 문자열)가 있으면 메인 사이트와 완전히 같은 localStorage 키
+  // (engage_{engagementKey})를 그대로 읽고 써서 두 화면의 숫자가 항상 정확히 일치하게 함.
+  // engagement_key가 없는 테스트(아직 메인 사이트에 연동 전인 초안)는 기존 방식 그대로 유지.
   function getCompletionKey() {
+    if (state.config.engagement_key) return 'engage_' + state.config.engagement_key;
     return 'test_engine_done_' + (state.testId || state.config.id);
   }
 

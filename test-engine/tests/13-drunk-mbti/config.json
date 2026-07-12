@@ -10,7 +10,8 @@
   ],
   "theme": "neon",
   "cover_image": "assets/cover.webp",
-  "seed_count": 189,
+  "seed_count": 275,
+  "engagement_key": "site-drunkmbti-plays",
   "scoring_type": "mbti4",
   "loading": {
     "text": "취중 인격 분석 중..",
