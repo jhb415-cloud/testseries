@@ -7995,6 +7995,7 @@ function lottodrawSaveImage() {
 ══════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
 
+  handleOAuthRedirectError();
   updateVisitStreak();
 
   /* ── 효과음 토글 버튼 (v0.0.54~) ── */
