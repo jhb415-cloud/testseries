@@ -934,10 +934,11 @@ async function renderHomeSections() {
     }
 
     /* v0.8.9~: 심리테스트 그룹 — 가로 스크롤 포스터 캐러셀(실제 cover.webp 재사용).
-       2026-07-12 후속: 우측 화살표 힌트를 위해 .home-grp-wrap으로 감싸고 고유 id 부여 —
-       bindHomeCarouselArrows()가 렌더링 직후 실제 overflow 여부에 따라 화살표를 붙이거나 뗀다. */
+       2026-07-12 후속(1차): 우측 화살표를 렌더링 후 JS로 overflow를 측정해 붙였다 뗐다 했는데,
+       모바일 실기기에서 이미지 로딩 타이밍 등으로 측정이 어긋나 화살표가 안 보인다는 제보 —
+       측정 자체를 없애고 "카드 3개 이상이면 항상 화살표 노출"로 단순화(cards.length는 이미
+       서버(클라이언트) 렌더링 시점에 알고 있어 타이밍 문제가 원천적으로 없음). */
     if (sec.style === 'poster-carousel') {
-      const rowId = 'home-grp-row-' + (bindSeq++);
       const rowsHTML = cards.map(c => {
         const bindId = 'home-card-bind-' + (bindSeq++);
         bindings.push({ id: bindId, run: c.run || (() => App.navigate(c.section)) });
@@ -947,8 +948,8 @@ async function renderHomeSections() {
       html += `
         <div class="home-grp-head">${sec.title}</div>
         <div class="home-grp-wrap">
-          <div class="home-grp-row" id="${rowId}">${rowsHTML}</div>
-          <div class="home-grp-arrow hide">→</div>
+          <div class="home-grp-row">${rowsHTML}</div>
+          ${cards.length >= 3 ? '<div class="home-grp-arrow">→</div>' : ''}
         </div>`;
       return;
     }
@@ -987,26 +988,52 @@ async function renderHomeSections() {
     const el = document.getElementById(b.id);
     if (el) el.onclick = b.run;
   });
-  bindHomeCarouselArrows();
+  bindHomeCarouselDrag();
 }
 
-/* v0.8.9 후속(2026-07-12): 포스터 캐러셀 우측 화살표 힌트 — 실제로 더 스크롤할 내용이 있을
-   때만 보이고, 끝까지 밀면 사라짐(스크롤 위치를 실시간 반영). 카드 전체 개수가 화면에 다
-   들어와 애초에 스크롤이 필요 없는 그룹(예: 3~4개짜리 그룹을 넓은 데스크톱에서 볼 때)은
-   화살표 자체를 숨김. */
-function bindHomeCarouselArrows() {
-  document.querySelectorAll('.home-grp-wrap').forEach(wrap => {
-    const row = wrap.querySelector('.home-grp-row');
-    const arrow = wrap.querySelector('.home-grp-arrow');
-    if (!row || !arrow) return;
-    const update = () => {
-      const hasOverflow = row.scrollWidth > row.clientWidth + 2;
-      const atEnd = row.scrollLeft + row.clientWidth >= row.scrollWidth - 4;
-      arrow.classList.toggle('hide', !hasOverflow || atEnd);
-    };
-    update();
-    row.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
+/* v0.8.9 후속 2차(2026-07-12): 데스크톱(마우스)에서 캐러셀을 클릭드래그해도 안 움직인다는
+   제보 — `overflow-x:auto`는 터치 스와이프나 스크롤바 드래그는 브라우저가 기본 지원하지만,
+   마우스로 카드 자체를 눌러서 옆으로 끄는 "드래그 스크롤"은 별도 구현이 필요해서 발생한
+   문제(터치 기기는 원래도 정상 동작 — 이건 마우스 전용 보강). pointer 타입이 'mouse'일 때만
+   동작시켜 터치 스크롤과 충돌하지 않게 함. 드래그 중엔 카드 클릭(onclick)이 오발동하지
+   않도록 일정 거리 이상 움직였을 때만 클릭을 막는다.
+   버그 노트: 처음엔 pointerdown에서 무조건 row.setPointerCapture()를 걸었는데, 이러면
+   단순 클릭(드래그 없음)에서도 포인터가 row에 캡처되면서 실제 클릭 이벤트가 카드(target)가
+   아닌 row로 재타겟팅되어 카드의 onclick이 아예 안 먹는 회귀가 생겼음(Playwright로 재현·확인).
+   pointermove/pointerup을 document에 걸어 capture 없이도 커서가 카드 밖으로 나가도 계속
+   추적되게 하는 방식으로 교체해 해결.
+   이 함수는 홈을 다시 방문할 때마다(renderHomeSections) 재호출된다 — row별 pointerdown/click
+   리스너는 매번 새로 그려지는 새 엘리먼트에 다시 붙어야 하니 그대로 두되, document 레벨
+   pointermove/pointerup 리스너는 방문할 때마다 계속 누적되지 않도록 전역에서 딱 한 번만
+   등록하고 "지금 드래그 중인 row"를 가리키는 공용 상태(_homeDragState)를 여러 캐러셀이
+   공유한다. 드래그가 끝나면 그 row에 `_homeJustDragged` 플래그를 남겨, 뒤이어 브라우저가
+   자동으로 쏘는 click 이벤트에서 그 플래그를 보고 카드 이동을 막는다(캡처 단계). */
+let _homeDragState = null; // { row, startX, startScroll }
+if (!window._homeCarouselDragInit) {
+  window._homeCarouselDragInit = true;
+  document.addEventListener('pointermove', (e) => {
+    const s = _homeDragState;
+    if (!s) return;
+    const dx = e.clientX - s.startX;
+    if (Math.abs(dx) > 4) s.row._homeJustDragged = true;
+    if (s.row._homeJustDragged) s.row.scrollLeft = s.startScroll - dx;
+  });
+  const endHomeDrag = () => { _homeDragState = null; };
+  document.addEventListener('pointerup', endHomeDrag);
+  document.addEventListener('pointercancel', endHomeDrag);
+}
+function bindHomeCarouselDrag() {
+  document.querySelectorAll('.home-grp-row').forEach(row => {
+    row.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      row._homeJustDragged = false;
+      _homeDragState = { row, startX: e.clientX, startScroll: row.scrollLeft };
+    });
+    // 드래그로 판단되면(4px 이상 이동) 그 뒤에 따라오는 click은 카드 이동으로 이어지지
+    // 않게 캡처 단계에서 막는다 — 순수 클릭(드래그 없음)은 이 플래그가 false라 그대로 통과.
+    row.addEventListener('click', (e) => {
+      if (row._homeJustDragged) { e.preventDefault(); e.stopPropagation(); row._homeJustDragged = false; }
+    }, true);
   });
 }
 

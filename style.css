@@ -1100,12 +1100,16 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
 /* v0.8.9 후속(2026-07-12): 카드 20% 확대(112px→134px) + 스크롤스냅 스와이프 + 우측 화살표 힌트.
    .home-grp-wrap(래퍼)이 position:relative로 화살표를 절대배치할 기준을 잡고,
    bindHomeCarouselArrows()가 렌더링 직후 실제 overflow 여부/스크롤 위치를 확인해
-   화살표를 보이거나 숨김(끝까지 스크롤하면 자동으로 사라짐). */
+   화살표를 보이거나 숨김. 2026-07-12 2차: 모바일에서 JS 측정 타이밍 문제로 화살표가 간헐적으로
+   안 보인다는 제보 → 측정 없이 "카드 3개 이상이면 항상 노출"로 단순화(app.js에서 렌더링 시점에
+   조건부로 마크업 자체를 넣거나 뺌, JS 토글 없음). 데스크톱 마우스 드래그 스크롤도 이때 추가
+   (bindHomeCarouselDrag(), cursor:grab으로 드래그 가능함을 시각적으로 힌트). */
 .home-grp-wrap { position: relative; }
 .home-grp-row {
   display: grid; grid-auto-flow: column; grid-auto-columns: 134px; gap: 10px; overflow-x: auto; padding-bottom: 4px;
-  scroll-snap-type: x proximity; scroll-behavior: smooth;
+  scroll-snap-type: x proximity; scroll-behavior: smooth; cursor: grab; touch-action: pan-x;
 }
+.home-grp-row:active { cursor: grabbing; scroll-behavior: auto; }
 .home-poster {
   border: 2px solid rgb(var(--ink)); border-radius: 0.7rem; overflow: hidden; display: block;
   box-shadow: 3px 3px 0 0 rgb(var(--ink)); background: rgb(var(--surface-lowest)); text-decoration: none; color: inherit;
@@ -1124,9 +1128,7 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
   display: flex; align-items: center; justify-content: flex-end; padding-right: 2px;
   background: linear-gradient(to right, rgb(var(--surface) / 0), rgb(var(--surface)) 70%);
   pointer-events: none; font-size: 1.2rem; font-weight: 900; color: rgb(var(--ink));
-  opacity: 1; transition: opacity 0.2s ease;
 }
-.home-grp-arrow.hide { opacity: 0; }
 
 .home-challenge {
   background: rgb(var(--secondary-container) / 0.22); border: 2.5px solid rgb(var(--ink)); border-radius: 0.9rem;
