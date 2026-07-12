@@ -19,7 +19,15 @@ async function ensureAnonSession() {
     return null;
   }
 }
-ensureAnonSession();
+/* v0.9.9~: 페이지 로드 즉시 ensureAnonSession()을 부르던 걸 제거 — OAuth 로그인 후 리다이렉트로
+   막 돌아온 시점엔 Supabase 클라이언트가 URL의 인가 코드를 세션으로 교환하는 작업을 내부적으로
+   비동기 처리 중인데, 이 타이밍에 곧바로 getSession()을 부르면 "아직 세션 없음"으로 보고
+   새 익명 세션을 만들어버려 방금 로그인한 세션이 무시되는 경쟁 상태(race condition)가 있었음
+   (실제로 로그인 후에도 is_anonymous:true로 남는 버그로 재현됨). onAuthStateChange의
+   INITIAL_SESSION 이벤트는 이 초기 교환이 끝난 뒤에만 발생하므로, 그 시점에만 판단하도록 변경 */
+window.sb.auth.onAuthStateChange((event, session) => {
+  if (event === 'INITIAL_SESSION' && !session) ensureAnonSession();
+});
 
 /* ══════════════════════════════════════════════════
    🔑 로그인 (v0.9.5~) — 온라인 랭킹(기기간 동기화)을 위한 토대. 댓글 등 다른 기능은 로그인 없이도
