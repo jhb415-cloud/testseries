@@ -15,3 +15,36 @@ A traditional Korean ink wash painting, minimalist black ink brushstrokes on cre
 ## generic
 
 A traditional Korean ink wash painting, expressive black ink brushstrokes and splattered ink droplets exploding outward on cream rice paper, a dynamic silhouette figure in an aggressive wide combat stance emerging from a burst of chaotic ink splashes, two glowing teal eyes piercing through the dark ink silhouette, dramatic intense energy, no text, no letters, no numbers, no watermark, square format.
+
+## pair-stj
+
+A traditional Korean ink wash painting, expressive black ink brushstrokes and splattered ink droplets exploding outward on cream rice paper, a dynamic silhouette figure emerging from a burst of chaotic ink splashes, two glowing teal eyes piercing through the dark ink silhouette, dramatic intense energy. Scene: the silhouette stands rigidly straight with both fists clenched tightly at their sides, sharp straight ink lines radiating outward like bars. no text, no letters, no numbers, no watermark, square format.
+
+## pair-sfj
+
+A traditional Korean ink wash painting, expressive black ink brushstrokes and splattered ink droplets exploding outward on cream rice paper, a dynamic silhouette figure emerging from a burst of chaotic ink splashes, two glowing teal eyes piercing through the dark ink silhouette, dramatic intense energy. Scene: the silhouette curls inward with arms wrapped around itself, soft scattered ink droplets falling like tears around it. no text, no letters, no numbers, no watermark, square format.
+
+## pair-nfj
+
+A traditional Korean ink wash painting, expressive black ink brushstrokes and splattered ink droplets exploding outward on cream rice paper, a dynamic silhouette figure emerging from a burst of chaotic ink splashes, two glowing teal eyes piercing through the dark ink silhouette, dramatic intense energy. Scene: the silhouette sits perfectly still with head bowed, thin wisps of ink smoke curling silently upward around it. no text, no letters, no numbers, no watermark, square format.
+
+## pair-ntj
+
+A traditional Korean ink wash painting, expressive black ink brushstrokes and splattered ink droplets exploding outward on cream rice paper, a dynamic silhouette figure emerging from a burst of chaotic ink splashes, two glowing teal eyes piercing through the dark ink silhouette, dramatic intense energy. Scene: the silhouette stands with one arm raised in a sharp commanding gesture, jagged angular ink splashes bursting outward. no text, no letters, no numbers, no watermark, square format.
+
+## pair-stp
+
+A traditional Korean ink wash painting, expressive black ink brushstrokes and splattered ink droplets exploding outward on cream rice paper, a dynamic silhouette figure emerging from a burst of chaotic ink splashes, two glowing teal eyes piercing through the dark ink silhouette, dramatic intense energy. Scene: the silhouette is frozen mid-step with head slightly turned away, faint ink trailing off as if fading from view. no text, no letters, no numbers, no watermark, square format.
+
+## pair-sfp
+
+A traditional Korean ink wash painting, expressive black ink brushstrokes and splattered ink droplets exploding outward on cream rice paper, a dynamic silhouette figure emerging from a burst of chaotic ink splashes, two glowing teal eyes piercing through the dark ink silhouette, dramatic intense energy. Scene: the silhouette sits hunched with knees drawn up, a few soft ink droplets scattered quietly around its feet. no text, no letters, no numbers, no watermark, square format.
+
+## pair-nfp
+
+A traditional Korean ink wash painting, expressive black ink brushstrokes and splattered ink droplets exploding outward on cream rice paper, a dynamic silhouette figure emerging from a burst of chaotic ink splashes, two glowing teal eyes piercing through the dark ink silhouette, dramatic intense energy. Scene: the silhouette kneels with both hands covering its face, heavy ink droplets streaming downward like rain. no text, no letters, no numbers, no watermark, square format.
+
+## pair-ntp
+
+A traditional Korean ink wash painting, expressive black ink brushstrokes and splattered ink droplets exploding outward on cream rice paper, a dynamic silhouette figure emerging from a burst of chaotic ink splashes, two glowing teal eyes piercing through the dark ink silhouette, dramatic intense energy. Scene: the silhouette stands with arms crossed and head tilted back, sharp scattered ink specks floating motionless in the air around it. no text, no letters, no numbers, no watermark, square format.
+
