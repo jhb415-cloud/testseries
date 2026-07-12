@@ -1189,6 +1189,7 @@ function renderMbtiView(view) {
     // 랭킹 저장
     saveRanking('mbti', state.nickname, type);
     renderLocalRanking('mbti-ranking-list', 'mbti');
+    initComments('mbti', null);
   }
 }
 
@@ -1676,6 +1677,7 @@ function renderFortuneView(view) {
 
     saveRanking('fortune', state.year + '년생 ' + zodiac + '띠', avgScore + '점');
     renderLocalRanking('fortune-ranking-list', 'fortune');
+    initComments('fortune', null);
   }
 }
 
@@ -1903,6 +1905,7 @@ function renderBrainView(view) {
     renderPercentileBadge('brain', tier, state.difficulty);
     if (tier === 'S') playSound('tierS');
     renderLocalRanking('brain-ranking-list', 'brain');
+    initComments('brain', null);
   }
 }
 
@@ -2108,6 +2111,7 @@ function renderAdhdView(view) {
 
     saveRanking('adhd', state.nickname, '등급 ' + result.grade + ' (' + score + '점)');
     renderLocalRanking('adhd-ranking-list', 'adhd');
+    initComments('adhd', null);
   }
 }
 
@@ -2278,6 +2282,7 @@ function renderReactionView(view) {
     renderPercentileBadge('reaction', tier, state.difficulty);
     if (tier === 'S') playSound('tierS');
     renderLocalRanking('reaction-ranking-list', 'reaction');
+    initComments('reaction', null);
   }
 }
 
@@ -2535,6 +2540,7 @@ function renderMemdigitView(view) {
     renderPercentileBadge('memdigit', tier, state.difficulty);
     if (tier === 'S') playSound('tierS');
     renderLocalRanking('memdigit-ranking-list', 'memdigit');
+    initComments('memdigit', null);
   }
 }
 
@@ -2841,6 +2847,7 @@ function renderSeqmemView(view) {
     renderPercentileBadge('seqmem', tier, state.difficulty);
     if (tier === 'S') playSound('tierS');
     renderLocalRanking('seqmem-ranking-list', 'seqmem');
+    initComments('seqmem', null);
   }
 }
 
@@ -3127,6 +3134,7 @@ function renderColorvisionView(view) {
     renderPercentileBadge('colorvision', tier, state.difficulty);
     if (tier === 'S') playSound('tierS');
     renderLocalRanking('colorvision-ranking-list', 'colorvision');
+    initComments('colorvision', null);
   }
 }
 
@@ -3433,6 +3441,7 @@ function renderLogicView(view) {
     renderPercentileBadge('logic', tier, state.difficulty);
     if (tier === 'S') playSound('tierS');
     renderLocalRanking('logic-ranking-list', 'logic');
+    initComments('logic', null);
   }
 }
 
@@ -3681,6 +3690,7 @@ function renderImpulseView(view) {
     renderPercentileBadge('impulse', tier, state.difficulty);
     if (tier === 'S') playSound('tierS');
     renderLocalRanking('impulse-ranking-list', 'impulse');
+    initComments('impulse', null);
   }
 }
 
@@ -3977,6 +3987,7 @@ function renderShortfocusView(view) {
     renderPercentileBadge('shortfocus', tier, state.difficulty);
     if (tier === 'S') playSound('tierS');
     renderLocalRanking('shortfocus-ranking-list', 'shortfocus');
+    initComments('shortfocus', null);
   }
 }
 
@@ -4213,6 +4224,7 @@ function renderInsaView(view) {
 
     saveRanking('insa', state.nickname, '등급 ' + result.grade + ' (' + score + '점)');
     renderLocalRanking('insa-ranking-list', 'insa');
+    initComments('insa', null);
   }
 }
 
@@ -4340,6 +4352,7 @@ function renderProverbView(view) {
 
     saveRanking('proverb', state.nickname, '등급 ' + result.grade + ' (' + state.correctCount + '/' + total + ')');
     renderLocalRanking('proverb-ranking-list', 'proverb');
+    initComments('proverb', null);
   }
 }
 
@@ -4498,6 +4511,7 @@ function renderPricequizView(view) {
 
     saveRanking('pricequiz', state.nickname, '등급 ' + result.grade + ' (' + state.correctCount + '/' + total + ')');
     renderLocalRanking('pricequiz-ranking-list', 'pricequiz');
+    initComments('pricequiz', null);
   }
 }
 
@@ -6357,16 +6371,7 @@ function renderPlaceholderUI(section, value) {
     </div>
 
     <!-- ③ 댓글 지면 -->
-    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5">
-      <h4 class="text-slate-300 font-bold mb-1">💬 한마디 남기기</h4>
-      <p class="text-slate-500 text-xs mb-3">※ 추후 백엔드 연동 예정 — 현재 로컬 임시 저장</p>
-      <div id="${section}-comments-list" class="space-y-2 mb-3 max-h-40 overflow-y-auto"></div>
-      <div class="flex gap-2">
-        <input id="${section}-comment-input" type="text" maxlength="80" placeholder="결과에 대한 한마디..."
-          class="flex-1 bg-slate-700 border border-slate-600 rounded-xl px-3 py-2 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-violet-500 transition"/>
-        <button onclick="submitComment('${section}')" class="bg-violet-600 hover:bg-violet-500 text-white text-sm font-bold px-4 py-2 rounded-xl transition">등록</button>
-      </div>
-    </div>
+    ${commentSectionHTML(section, null)}
 
     ${ADSENSE_REVIEW_MODE ? '' : `
     <!-- ④ 제휴 상품 추천 배너 (Phase 4 로드맵 11-4, v0.2.3~)
@@ -6465,29 +6470,208 @@ function renderLocalRanking(listId, section) {
     </div>`).join('');
 }
 
-/* ──── 댓글 임시 저장 ──── */
-function submitComment(section) {
-  const input = document.getElementById(`${section}-comment-input`);
-  if (!input || !input.value.trim()) { showToast('댓글을 입력해주세요!'); return; }
-  const key = `comments_${section}`;
-  const list = JSON.parse(localStorage.getItem(key) || '[]');
-  list.unshift({ text: input.value.trim(), time: new Date().toLocaleTimeString('ko-KR') });
-  localStorage.setItem(key, JSON.stringify(list.slice(0, 20)));
-  input.value = '';
-  renderComments(section);
+/* ══════════════════════════════════════════════════
+   💬 댓글 시스템 (Supabase 실연동, v0.9.2~)
+   - comments/comment_reports/comment_votes 테이블(사용자가 SQL Editor에서 직접 생성) 사용
+   - 두뇌테스트존 13개+오늘의운세(renderPlaceholderUI 공용) / 심리테스트존 / 과몰입투표소에서
+     commentSectionHTML(section, itemId)로 마크업 삽입 + initComments(section, itemId)로 로드
+   - 비로그인 사용자는 항상 익명_XXXXX로 강제 표시(기기별 고정, localStorage) — 로그인하면
+     profiles.public_nickname으로 표시(로그인 유도 장치, 사용자 확정 방침)
+   - 금칙어는 클라이언트(빠른 피드백)+DB 트리거(최종 방어선) 이중 체크,
+     실제 단어 목록은 scripts/banned-words-ko.json이 단일 소스(SQL 트리거와 동기화 유지할 것)
+══════════════════════════════════════════════════ */
+const COMMENT_BANNED_WORDS = ["씨발","시발","씨팔","시팔","씨1발","ㅆㅂ","ㅅㅂ","개새끼","개새기","개색기","새끼","새기","병신","븅신","ㅂㅅ","좆","좃","존나","졸라","지랄","ㅈㄹ","미친놈","미친년","또라이","닥쳐","꺼져","걸레","창녀","썅","느금","니미","니에미","애미","fuck","fucking","shit","bitch","asshole"];
+function containsBannedWord(text) {
+  const lower = (text || '').toLowerCase();
+  return COMMENT_BANNED_WORDS.some(w => lower.includes(w.toLowerCase()));
 }
 
-function renderComments(section) {
-  const el = document.getElementById(`${section}-comments-list`);
+function getAnonLabel() {
+  let v = localStorage.getItem('app_anon_label');
+  if (!v) {
+    v = '익명_' + Math.floor(10000 + Math.random() * 90000);
+    localStorage.setItem('app_anon_label', v);
+  }
+  return v;
+}
+
+function avatarHTML(nickname, avatarUrl, size) {
+  size = size || 28;
+  if (avatarUrl) return `<img src="${escapeHtml(avatarUrl)}" class="comment-avatar" style="width:${size}px;height:${size}px" alt="">`;
+  const ch = (nickname || '?').charAt(0);
+  return `<div class="comment-avatar comment-avatar-empty" style="width:${size}px;height:${size}px">${escapeHtml(ch)}</div>`;
+}
+
+async function isLoggedIn() {
+  if (!window.sb) return false;
+  const { data: { session } } = await window.sb.auth.getSession();
+  return !!(session && session.user && session.user.is_anonymous === false);
+}
+
+async function getMyProfile() {
+  if (!window.sb) return null;
+  try {
+    const { data: { session } } = await window.sb.auth.getSession();
+    if (!session || !session.user || session.user.is_anonymous !== false) return null;
+    const { data } = await window.sb.from('profiles').select('public_nickname,avatar_url').eq('id', session.user.id).maybeSingle();
+    return data;
+  } catch (e) { return null; }
+}
+
+const COMMENT_RATE_LIMIT_MS = 10000;
+/* 신고 누적 임계치(3회)는 DB 트리거 auto_hide_reported_comment()에 있음 — 클라이언트는 관여 안 함 */
+
+function commentSectionHTML(section, itemId) {
+  const key = itemId ? `${section}-${itemId}` : section;
+  return `
+    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5">
+      <h4 class="text-slate-300 font-bold mb-1">💬 댓글</h4>
+      <p class="text-slate-500 text-xs mb-3" id="comment-login-hint-${key}"></p>
+      <div id="comments-list-${key}" class="space-y-2 mb-3 max-h-72 overflow-y-auto">
+        <p class="text-slate-500 text-xs text-center py-2">불러오는 중...</p>
+      </div>
+      <div class="flex gap-2">
+        <input type="text" style="position:absolute;left:-9999px;width:1px;height:1px" tabindex="-1" autocomplete="off" id="comment-hp-${key}" />
+        <input id="comment-input-${key}" type="text" maxlength="300" placeholder="댓글을 남겨보세요..."
+          class="flex-1 bg-slate-700 border border-slate-600 rounded-xl px-3 py-2 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-violet-500 transition"/>
+        <button onclick="submitComment('${section}', ${itemId ? `'${itemId}'` : 'null'})" class="bg-violet-600 hover:bg-violet-500 text-white text-sm font-bold px-4 py-2 rounded-xl transition shrink-0">등록</button>
+      </div>
+    </div>`;
+}
+
+async function initComments(section, itemId) {
+  const key = itemId ? `${section}-${itemId}` : section;
+  const hintEl = document.getElementById(`comment-login-hint-${key}`);
+  if (hintEl) {
+    try {
+      const loggedIn = await isLoggedIn();
+      hintEl.innerHTML = loggedIn ? '' : '🔑 로그인하면 내가 정한 닉네임으로 댓글을 남길 수 있어요! 카카오/구글로 3초 가입';
+    } catch (e) { /* noop */ }
+  }
+  await renderComments(section, itemId);
+}
+
+async function fetchMyVotes(commentIds, userId) {
+  if (!userId || !commentIds.length) return {};
+  try {
+    const { data } = await window.sb.from('comment_votes').select('comment_id,vote_type').eq('user_id', userId).in('comment_id', commentIds);
+    const map = {};
+    (data || []).forEach(v => { map[v.comment_id] = v.vote_type; });
+    return map;
+  } catch (e) { return {}; }
+}
+
+async function renderComments(section, itemId) {
+  const key = itemId ? `${section}-${itemId}` : section;
+  const el = document.getElementById(`comments-list-${key}`);
   if (!el) return;
-  const key = `comments_${section}`;
-  const list = JSON.parse(localStorage.getItem(key) || '[]');
-  if (list.length === 0) { el.innerHTML = '<p class="text-slate-500 text-xs text-center">아직 댓글이 없어요</p>'; return; }
-  el.innerHTML = list.map(c => `
-    <div class="bg-slate-700/50 rounded-lg px-3 py-2 flex gap-2">
-      <span class="text-slate-300 text-sm flex-1">${c.text}</span>
-      <span class="text-slate-500 text-xs whitespace-nowrap">${c.time}</span>
-    </div>`).join('');
+  if (!window.sb) { el.innerHTML = '<p class="text-slate-500 text-xs text-center py-2">댓글을 불러올 수 없어요</p>'; return; }
+  try {
+    let q = window.sb.from('comments').select('*').eq('section', section).order('created_at', { ascending: false }).limit(50);
+    q = itemId ? q.eq('item_id', itemId) : q.is('item_id', null);
+    const { data, error } = await q;
+    if (error) throw error;
+    if (!data || data.length === 0) { el.innerHTML = '<p class="text-slate-500 text-xs text-center py-2">아직 댓글이 없어요. 첫 댓글을 남겨보세요!</p>'; return; }
+    const { data: { session } } = await window.sb.auth.getSession();
+    const myVotes = await fetchMyVotes(data.map(c => c.id), session && session.user && session.user.id);
+    const itemArg = itemId ? `'${itemId}'` : 'null';
+    el.innerHTML = data.map(c => {
+      const dateStr = new Date(c.created_at).toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' });
+      const myVote = myVotes[c.id];
+      return `
+      <div class="bg-slate-700/50 rounded-lg px-3 py-2">
+        <div class="flex items-start gap-2">
+          ${avatarHTML(c.nickname, c.avatar_url, 28)}
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-slate-200 text-xs font-bold">${escapeHtml(c.nickname)}</span>
+              <span class="text-slate-500 text-xs">${dateStr}</span>
+            </div>
+            <p class="text-slate-300 text-sm mt-0.5 break-words">${escapeHtml(c.body)}</p>
+            <div class="flex items-center gap-3 mt-1">
+              <button onclick="voteComment(${c.id},'like','${section}',${itemArg})" class="text-xs ${myVote === 'like' ? 'text-violet-400' : 'text-slate-500'} hover:text-violet-400 transition">👍 ${c.likes || 0}</button>
+              <button onclick="voteComment(${c.id},'dislike','${section}',${itemArg})" class="text-xs ${myVote === 'dislike' ? 'text-rose-400' : 'text-slate-500'} hover:text-rose-400 transition">👎 ${c.dislikes || 0}</button>
+              <button onclick="reportComment(${c.id},'${section}',${itemArg})" class="text-xs text-slate-600 hover:text-amber-400 transition ml-auto">🚩 신고</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch (e) {
+    console.error('댓글 조회 실패:', e);
+    el.innerHTML = '<p class="text-slate-500 text-xs text-center py-2">댓글을 불러오지 못했어요</p>';
+  }
+}
+
+async function submitComment(section, itemId) {
+  const key = itemId ? `${section}-${itemId}` : section;
+  const hp = document.getElementById(`comment-hp-${key}`);
+  if (hp && hp.value) return; // 봇 허니팟 — 값이 채워져 있으면 조용히 무시
+  const input = document.getElementById(`comment-input-${key}`);
+  if (!input) return;
+  const body = input.value.trim();
+  if (!body) { showToast('댓글을 입력해주세요!'); return; }
+  if (body.length > 300) { showToast('댓글은 300자 이내로 작성해주세요'); return; }
+  if (containsBannedWord(body)) { showToast('부적절한 표현이 포함되어 있어요'); return; }
+  const lastAt = parseInt(localStorage.getItem('comment_last_at') || '0', 10);
+  if (Date.now() - lastAt < COMMENT_RATE_LIMIT_MS) { showToast('잠시 후 다시 시도해주세요'); return; }
+  if (!window.sb) { showToast('댓글 기능을 사용할 수 없어요'); return; }
+  try {
+    if (typeof ensureAnonSession === 'function') await ensureAnonSession();
+    const profile = await getMyProfile();
+    const nickname = (profile && profile.public_nickname) ? profile.public_nickname : getAnonLabel();
+    const avatarUrl = profile ? profile.avatar_url : null;
+    const { error } = await window.sb.from('comments').insert({
+      section, item_id: itemId || null,
+      is_anonymous: !(profile && profile.public_nickname),
+      nickname, avatar_url: avatarUrl, body
+    });
+    if (error) throw error;
+    input.value = '';
+    localStorage.setItem('comment_last_at', String(Date.now()));
+    showToast('댓글이 등록됐어요!');
+    await renderComments(section, itemId);
+  } catch (e) {
+    console.error('댓글 등록 실패:', e);
+    if (String((e && e.message) || '').includes('부적절')) showToast('부적절한 표현이 포함되어 있어요');
+    else showToast('댓글 등록에 실패했어요');
+  }
+}
+
+async function voteComment(commentId, voteType, section, itemId) {
+  if (!window.sb) return;
+  try {
+    if (typeof ensureAnonSession === 'function') await ensureAnonSession();
+    const { data: { session } } = await window.sb.auth.getSession();
+    const userId = session && session.user && session.user.id;
+    if (!userId) return;
+    const { data: existing } = await window.sb.from('comment_votes').select('vote_type').eq('comment_id', commentId).eq('user_id', userId).maybeSingle();
+    if (existing && existing.vote_type === voteType) {
+      await window.sb.from('comment_votes').delete().eq('comment_id', commentId).eq('user_id', userId);
+    } else if (existing) {
+      await window.sb.from('comment_votes').update({ vote_type: voteType }).eq('comment_id', commentId).eq('user_id', userId);
+    } else {
+      await window.sb.from('comment_votes').insert({ comment_id: commentId, vote_type: voteType });
+    }
+    await renderComments(section, itemId);
+  } catch (e) { console.error('투표 실패:', e); }
+}
+
+async function reportComment(commentId, section, itemId) {
+  if (!window.sb) return;
+  if (!confirm('이 댓글을 신고하시겠어요?')) return;
+  try {
+    if (typeof ensureAnonSession === 'function') await ensureAnonSession();
+    const { error } = await window.sb.from('comment_reports').insert({ comment_id: commentId });
+    if (error) {
+      if (error.code === '23505') { showToast('이미 신고한 댓글이에요'); return; }
+      throw error;
+    }
+    // 신고 누적 임계치 도달 시 자동 숨김은 DB 트리거(auto_hide_reported_comment)가 처리 —
+    // 클라이언트에 comments UPDATE 권한을 주지 않기 위해(그러면 댓글 본문 변조도 가능해짐) 여기선 insert만 함
+    showToast('신고가 접수됐어요');
+    await renderComments(section, itemId);
+  } catch (e) { console.error('신고 실패:', e); showToast('신고에 실패했어요'); }
 }
 
 /* ══════════════════════════════════════════════════

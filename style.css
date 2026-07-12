@@ -1047,6 +1047,14 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
   height: 5px; border-radius: 999px; margin-top: 4px; overflow: hidden;
   background: rgb(var(--surface-container)); border: 1px solid rgb(var(--ink));
 }
+
+/* 💬 댓글 아바타 (v0.9.2~) — 로그인 사용자는 업로드 이미지, 아니면 이니셜 원형(홈 내정보 카드와 동일 패턴) */
+.comment-avatar { border-radius: 999px; flex: none; object-fit: cover; }
+.comment-avatar-empty {
+  display: flex; align-items: center; justify-content: center;
+  background: rgb(var(--tertiary-container)); color: rgb(var(--on-tertiary-container, var(--ink)));
+  font-weight: 800; font-size: 0.75rem;
+}
 .home-identity-bar > i { display: block; height: 100%; background: rgb(var(--secondary-container)); }
 
 .home-ticker {
