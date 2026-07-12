@@ -30,7 +30,10 @@ ensureAnonSession();
 async function loginWithProvider(provider, scopes) {
   try {
     const options = { redirectTo: location.origin + '/#home' };
-    if (scopes) options.scopes = scopes;
+    /* scopes==='' (빈 문자열)도 "명시적으로 스코프 없음"이라는 유효한 값이라 falsy 체크(if(scopes))가 아니라
+       undefined 여부로만 판단해야 함 — 예전엔 if(scopes)라 빈 문자열이 무시되고 Supabase 기본 스코프
+       (account_email,profile_image,profile_nickname)가 그대로 요청돼 카카오 KOE205 에러가 났었음 */
+    if (scopes !== undefined) options.scopes = scopes;
     const { error } = await window.sb.auth.linkIdentity({ provider, options });
     if (error) {
       console.error(`${provider} 로그인 연결 실패:`, error);
