@@ -241,6 +241,32 @@ button, a[class*="rounded"], .nav-item, .service-card, .option-btn, .cat-tab-btn
   }
 }
 
+/* 사이드바 "심리 테스트존" 그룹 헤더 HOT 배지 — 반짝이는 강조로 클릭 유도(2026-07-12) */
+.badge-hot-nav {
+  margin-left: auto;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: linear-gradient(135deg, #FF5A36, #FF8A00);
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  border: 1px solid #FFD08A;
+  animation: badge-hot-sparkle 1.4s ease-in-out infinite;
+}
+
+@keyframes badge-hot-sparkle {
+  0%, 100% {
+    box-shadow: 0 0 2px rgba(255, 90, 54, 0.35);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(255, 138, 0, 0.95), 0 0 18px rgba(255, 90, 54, 0.6);
+    transform: scale(1.08);
+  }
+}
+
 /* 심리테스트존 카테고리 탭 (v0.2.4~) */
 .cat-tab-btn {
   font-size: 0.78rem;
