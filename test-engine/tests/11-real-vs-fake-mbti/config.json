@@ -270,5 +270,198 @@
       ]
     }
   ],
-  "results": []
+  "results": [
+    {
+      "code": "ISTJ",
+      "title": "🗂️ 겉 원칙주의자(ISTJ) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-stj.webp",
+      "traits": [
+        "회사·모임에선 한 치의 흐트러짐도 없어 보임",
+        "약속·규칙 얘기만 나오면 자동으로 {outer} 모드 발동",
+        "근데 편한 사람 앞에서는 완전히 {inner}로 풀어짐"
+      ],
+      "tip": "겉모습만 보고 판단하면 반은 틀린 거임"
+    },
+    {
+      "code": "ISFJ",
+      "title": "🛡️ 겉 다정한 배려꾼(ISFJ) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-sfj.webp",
+      "traits": [
+        "처음 보는 사람한테도 살갑게 다 챙겨주는 이미지",
+        "단체 자리에선 완벽하게 {outer}처럼 행동함",
+        "혼자 있거나 편한 사람 앞에선 {inner}로 확 바뀜"
+      ],
+      "tip": "밖에서 보이는 다정함, 사실 절반은 가면일 수도"
+    },
+    {
+      "code": "INFJ",
+      "title": "🔮 겉 차분한 관찰자(INFJ) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-nfj.webp",
+      "traits": [
+        "말수 적고 신중한 {outer} 이미지로 자리 잡음",
+        "속으로는 이미 다 계산 끝냈는데 티 하나도 안 남",
+        "진짜 편한 사람 앞에서만 {inner}가 슬쩍 드러남"
+      ],
+      "tip": "겉모습이 다가 아니라는 거, 이 결과가 증명해줌"
+    },
+    {
+      "code": "INTJ",
+      "title": "♟️ 겉 냉철한 전략가(INTJ) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-ntj.webp",
+      "traits": [
+        "회의·모임에선 흔들림 없는 {outer}로 각인됨",
+        "효율적이고 논리적인 이미지가 굳어져 있음",
+        "혼자 있을 땐 의외로 {inner}스러운 면이 튀어나옴"
+      ],
+      "tip": "완벽해 보이는 겉모습, 사실 반전 있는 사람이었음"
+    },
+    {
+      "code": "ISTP",
+      "title": "🔧 겉 쿨한 무심러(ISTP) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-stp.webp",
+      "traits": [
+        "감정 표현 없는 {outer} 이미지로 다들 인식함",
+        "무슨 일 있어도 표정 변화 없어서 속마음 예측 불가",
+        "친한 사람 앞에서는 은근 {inner}스러운 티가 남"
+      ],
+      "tip": "무표정 뒤에 이런 반전이 있을 줄 아무도 몰랐을 듯"
+    },
+    {
+      "code": "ISFP",
+      "title": "🎨 겉 순한 예술가(ISFP) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-sfp.webp",
+      "traits": [
+        "부드럽고 순둥순둥한 {outer} 이미지로 보임",
+        "갈등 상황에서 늘 한발 물러나는 사람으로 인식됨",
+        "진짜 편한 자리에선 {inner}가 은근히 드러남"
+      ],
+      "tip": "순해 보이는 겉모습 뒤에 은근한 고집이 숨어있는 타입"
+    },
+    {
+      "code": "INFP",
+      "title": "🌙 겉 잔잔한 몽상가(INFP) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-nfp.webp",
+      "traits": [
+        "조용하고 담담한 {outer} 이미지로 다들 기억함",
+        "속으로는 온갖 감정이 소용돌이치는데 티 안 남",
+        "마음 여는 사람 앞에서만 {inner}가 툭 튀어나옴"
+      ],
+      "tip": "겉으로 보이는 것보다 훨씬 감정 풍부한 사람이었음"
+    },
+    {
+      "code": "INTP",
+      "title": "🧪 겉 논리적인 관찰자(INTP) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-ntp.webp",
+      "traits": [
+        "말수 적고 분석적인 {outer} 이미지로 굳어짐",
+        "궁금한 거 있어도 겉으로는 티 안 내는 편",
+        "친해지면 의외로 {inner}스러운 수다쟁이 면모 나옴"
+      ],
+      "tip": "무심해 보이는 겉모습, 알고 보면 할 말 진짜 많은 타입"
+    },
+    {
+      "code": "ESTP",
+      "title": "🏍️ 겉 자신감 넘치는 행동파(ESTP) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-stp.webp",
+      "traits": [
+        "어디서든 당당한 {outer} 이미지로 인식됨",
+        "망설임 없어 보이는 겉모습이 확고하게 자리잡음",
+        "혼자 있을 땐 의외로 {inner}스러운 순간도 있음"
+      ],
+      "tip": "자신만만해 보이는 겉모습 뒤에도 다른 결이 있음"
+    },
+    {
+      "code": "ESFP",
+      "title": "🎉 겉 텐션 만렙 인싸(ESFP) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-sfp.webp",
+      "traits": [
+        "어디서든 밝고 에너지 넘치는 {outer}로 각인됨",
+        "분위기 메이커 이미지가 완전히 고정돼있음",
+        "혼자 있을 땐 생각보다 {inner}스러운 조용한 면 있음"
+      ],
+      "tip": "항상 밝아 보이는 사람도 혼자만의 시간은 다르게 보냄"
+    },
+    {
+      "code": "ENFP",
+      "title": "✨ 겉 열정 가득 텐션러(ENFP) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-nfp.webp",
+      "traits": [
+        "누구한테나 밝고 친근한 {outer} 이미지로 보임",
+        "처음 보는 사람과도 금방 친해지는 걸로 유명함",
+        "깊게 친해지면 의외로 {inner}스러운 진지한 면 나옴"
+      ],
+      "tip": "밝은 겉모습 뒤에 생각보다 깊은 고민이 자리잡고 있음"
+    },
+    {
+      "code": "ENTP",
+      "title": "💡 겉 재치 있는 논쟁러(ENTP) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-ntp.webp",
+      "traits": [
+        "말빨 좋고 재밌는 {outer} 이미지로 기억됨",
+        "가벼운 농담꾼처럼 보이지만 사실 다 계산돼있음",
+        "진지해지면 의외의 {inner}스러운 면이 드러남"
+      ],
+      "tip": "장난스러운 겉모습 뒤에 꽤 진지한 속내가 있는 타입"
+    },
+    {
+      "code": "ESTJ",
+      "title": "📋 겉 믿음직한 리더(ESTJ) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-stj.webp",
+      "traits": [
+        "조직에서 확실한 {outer} 이미지로 자리 잡음",
+        "흔들림 없어 보이는 카리스마가 트레이드마크임",
+        "편한 사람 앞에서는 의외로 {inner}스러운 허당미 나옴"
+      ],
+      "tip": "밖에서 보는 완벽한 이미지, 사실 빈틈도 있는 사람이었음"
+    },
+    {
+      "code": "ESFJ",
+      "title": "🧡 겉 다정한 분위기 메이커(ESFJ) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-sfj.webp",
+      "traits": [
+        "누구에게나 친절한 {outer} 이미지로 각인됨",
+        "모임 분위기를 자연스레 살리는 사람으로 유명함",
+        "혼자 있을 땐 의외로 {inner}스러운 예민한 면 있음"
+      ],
+      "tip": "밝은 겉모습 뒤에 생각보다 섬세한 마음이 있는 타입"
+    },
+    {
+      "code": "ENFJ",
+      "title": "🌟 겉 카리스마 있는 조언자(ENFJ) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-nfj.webp",
+      "traits": [
+        "사람들을 이끄는 확실한 {outer} 이미지로 보임",
+        "다들 의지하는 든든한 존재로 자리잡고 있음",
+        "진짜 편한 사람 앞에서는 {inner}스러운 여린 면 나옴"
+      ],
+      "tip": "든든해 보이는 겉모습 뒤에도 기대고 싶은 순간이 있음"
+    },
+    {
+      "code": "ENTJ",
+      "title": "👑 겉 압도적인 야망가(ENTJ) / 속 {inner}",
+      "subtitle": "다들 {outer}인 줄 아는데, 속마음은 {inner}",
+      "image": "assets/result/pair-ntj.webp",
+      "traits": [
+        "누가 봐도 확실한 {outer} 카리스마로 인식됨",
+        "추진력 있고 강해 보이는 이미지가 굳어져 있음",
+        "혼자 있을 땐 의외로 {inner}스러운 섬세한 면도 있음"
+      ],
+      "tip": "강해 보이는 겉모습 뒤에 생각보다 다정한 구석이 있는 타입"
+    }
+  ]
 }
