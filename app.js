@@ -5218,8 +5218,11 @@ function balancePick(gameId, choice) {
 
       ${shareRow}
 
+      <div class="mt-4">${commentSectionHTML('balance', gameId)}</div>
+
       <button onclick="renderBalanceFeed()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">목록으로</button>
     </div>`;
+  initComments('balance', gameId);
 
   balanceSubmitVote(gameId, 'q1', choice);
   balanceFetchStats(gameId, 'q1').then(stats => {
@@ -5356,11 +5359,14 @@ function renderBalanceSpResult() {
 
       <p class="text-slate-600 text-xs text-center my-4">지금까지 ▷ ${engagementCount('balance-sp-' + g.id + '-plays', 180)}명이 플레이했어요 <span class="text-slate-700">(추후 실데이터 연동 예정)</span></p>
 
+      <div class="mb-4">${commentSectionHTML('balance', g.id)}</div>
+
       <div class="flex gap-2">
         <button onclick="balanceSpStart('${g.id}')" class="flex-1 bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl transition">🔄 다시 하기</button>
         <button onclick="renderBalanceFeed()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">목록으로</button>
       </div>
     </div>`;
+  initComments('balance', g.id);
 
   /* v0.6.0~: 문항별 실서버 집계(balance_stats)를 조회해 이 유저의 답변 중 몇 개가 소수의견이었는지 계산 —
      표본이 BALANCE_MIN_SAMPLE 미만인 문항은 비교 대상에서 제외(percentile_cache/worldcup과 동일한 표본 게이트),
@@ -6329,8 +6335,12 @@ function wcRenderResult(pack, state) {
         <button onclick="wcOpenIntro('${pack.packId}')" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">🔄 다시하기</button>
         <button onclick="wcOpenRank('${pack.packId}')" class="flex-1 wc-btn-accent">📊 랭킹보기</button>
       </div>
+
+      <div class="text-left my-4">${commentSectionHTML('worldcup', pack.packId)}</div>
+
       <button onclick="wcRenderExplore()" class="w-full mt-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 rounded-xl transition">목록으로</button>
     </div>`;
+  initComments('worldcup', pack.packId);
 }
 
 /* ── ⑥ rank page ── */
