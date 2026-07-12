@@ -11,5 +11,5 @@ jobs:
     steps:
       - name: Call percentile-refresh endpoint
         run: |
-          curl -sf -X POST https://testseries1.pages.dev/api/percentile-refresh \
+          curl -sf -X POST https://gwamol-lab.xyz/api/percentile-refresh \
             -H "X-Cron-Secret: ${{ secrets.CRON_SECRET }}"
