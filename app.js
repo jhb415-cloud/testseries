@@ -280,7 +280,7 @@ function renderIdentityShareRow(section, landingParams, imageUrl, kakaoTitle, ka
    🆚 친구 대결 모드 (v0.0.31~)
    - Tier(S~D) 채점을 쓰는 8개 테스트(두뇌나이/반응속도/숫자기억/순서기억/색각/논리력/충동억제/숏폼집중력) 대상
    - 백엔드 없이 URL 파라미터(#{section}?vs=...)에 상대 결과를 담아 공유 → 같은 테스트를 마치면 Tier끼리 비교
-   - Tier 점수 환산은 renderCognitiveRadarCard()의 RADAR_TIER_SCORE와 동일 기준 재사용
+   - Tier 점수 환산 기준(S=100~D=20)은 이 파일 곳곳에서 재사용되는 공용 관례
 ══════════════════════════════════════════════════ */
 const CHALLENGE_TIER_SCORE = { S: 100, A: 80, B: 60, C: 40, D: 20 };
 const CHALLENGE_SECTIONS = ['brain', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus'];
@@ -848,6 +848,37 @@ async function renderHomeSections() {
   let html = '';
 
   sections.forEach(sec => {
+    /* v0.8.9~(홈화면 대대적 변경): 카드 없이 제목만 찍는 구분선 */
+    if (sec.type === 'heading') {
+      html += `<div class="home-section-title">${sec.title}</div>`;
+      return;
+    }
+    /* v0.8.9~: 예전엔 별도 컨테이너(#home-daily-challenge)에 독립 렌더링하던 오늘의 챌린지를
+       세로형으로 바꿔 이 큐레이션 흐름 안에 자연스럽게 끼워 넣음(getDailyChallengeTests/
+       DAILY_CHALLENGE_META는 기존 로직 그대로 재사용, 렌더링 방식만 변경) */
+    if (sec.type === 'daily-challenge') {
+      const picks = getDailyChallengeTests();
+      const rowsHTML = picks.map(s => {
+        const meta = DAILY_CHALLENGE_META[s];
+        const done = isDone(s);
+        const bindId = 'home-card-bind-' + (bindSeq++);
+        bindings.push({ id: bindId, run: () => App.navigate(s) });
+        return `
+          <div id="${bindId}" class="home-ch-row">
+            <span class="ic">${meta.emoji}</span>
+            <span class="lbl">${meta.label}</span>
+            <span class="go ${done ? 'done' : ''}">${done ? '✅ 완료' : '도전하기 →'}</span>
+          </div>`;
+      }).join('');
+      html += `
+        <div class="home-challenge" style="margin-top:20px;">
+          <div class="home-challenge-head">${sec.title}</div>
+          <div class="home-challenge-desc">매일 바뀌는 추천 테스트 3가지, 오늘 다 깨보세요!</div>
+          ${rowsHTML}
+        </div>`;
+      return;
+    }
+
     let cards;
     if (sec.dynamic === 'popularity') {
       cards = buildPopularCandidates()
@@ -880,6 +911,60 @@ async function renderHomeSections() {
       return;
     }
 
+    /* v0.8.9~: "이번주 인기 TOP" 리더보드 카드 — 순위/썸네일/제목/참여수 한 줄 리스트 */
+    if (sec.style === 'leaderboard') {
+      const rowsHTML = cards.map((c, i) => {
+        const bindId = 'home-card-bind-' + (bindSeq++);
+        bindings.push({ id: bindId, run: c.run || (() => App.navigate(c.section)) });
+        const thumb = c.image ? `<img src="${c.image}" alt="" onerror="wcImgFallback(this)">` : (c.emoji || '🔥');
+        return `
+          <div id="${bindId}" class="home-lb-row">
+            <span class="home-lb-rank ${i === 0 ? 'first' : ''}">${i + 1}</span>
+            <span class="home-lb-thumb">${thumb}</span>
+            <span class="home-lb-title">${c.title}</span>
+            <span class="home-lb-count">▶ ${formatCount(c.score)}</span>
+          </div>`;
+      }).join('');
+      html += `
+        <div class="home-lb-card" style="margin-top:20px;">
+          <div class="home-lb-head">${sec.title}</div>
+          ${rowsHTML}
+        </div>`;
+      return;
+    }
+
+    /* v0.8.9~: 심리테스트 3그룹 — 가로 스크롤 포스터 캐러셀(실제 cover.webp 재사용) */
+    if (sec.style === 'poster-carousel') {
+      const rowsHTML = cards.map(c => {
+        const bindId = 'home-card-bind-' + (bindSeq++);
+        bindings.push({ id: bindId, run: c.run || (() => App.navigate(c.section)) });
+        const art = c.image ? `<img src="${c.image}" alt="" onerror="wcImgFallback(this)">` : `<span>${c.emoji || '🧠'}</span>`;
+        return `<div id="${bindId}" class="home-poster"><div class="art">${art}</div><div class="cap">${c.title}</div></div>`;
+      }).join('');
+      html += `
+        <div class="home-grp-head">${sec.title}</div>
+        <div class="home-grp-row">${rowsHTML}</div>`;
+      return;
+    }
+
+    /* v0.8.9~: 도구 모음 — 가로 리스트(아이콘+제목+설명) */
+    if (sec.style === 'tool-list') {
+      const rowsHTML = cards.map(c => {
+        const bindId = 'home-card-bind-' + (bindSeq++);
+        bindings.push({ id: bindId, run: c.run || (() => App.navigate(c.section)) });
+        return `
+          <div id="${bindId}" class="home-tool-row">
+            <span class="ic" style="background:rgb(var(--tertiary-container) / 0.5);">${c.emoji}</span>
+            <div class="body"><div class="ti">${c.title}</div><div class="de">${c.desc}</div></div>
+            <span class="go">시작하기 →</span>
+          </div>`;
+      }).join('');
+      html += `
+        <div class="home-grp-head" style="margin-top:20px;">${sec.title}</div>
+        <div>${rowsHTML}</div>`;
+      return;
+    }
+
     const rowHTML = cards.map(c => {
       const bindId = 'home-card-bind-' + (bindSeq++);
       bindings.push({ id: bindId, run: c.run || (() => App.navigate(c.section)) });
@@ -899,23 +984,9 @@ async function renderHomeSections() {
 }
 
 function initHome() {
-  const quotes = AppData.quotes;
-  const idx = Math.floor(seededRandom(dailyQuoteSeed()) * quotes.length);
-  const quote = quotes[idx];
-
-  document.getElementById('home-quote-text').textContent = `"${quote.text}"`;
-  document.getElementById('home-quote-author').textContent = `— ${quote.author} (${quote.role})`;
-  document.getElementById('home-copy-btn').onclick = () => copyToClipboard(`"${quote.text}" — ${quote.author}`);
-
-  renderDailyChallengeCard();
+  renderHomeIdentity();
+  initHomeTicker();
   renderHomeSections();
-
-  // 오늘 날짜 표시
-  const now = new Date();
-  const dateStr = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 (${['일','월','화','수','목','금','토'][now.getDay()]})`;
-  document.getElementById('home-date').textContent = dateStr;
-
-  renderHomeMypage();
 }
 
 /* ══════════════════════════════════════════════════
@@ -4550,6 +4621,79 @@ function ensureThemeFontLoaded(theme) {
   document.head.appendChild(link);
 }
 
+/* 몰입테스트/MBTI존 21개를 합친 조회용 배열(v0.8.9~) — 캐싱 없이 매번 계산(21개라 비용 미미) */
+function allExternalPsychTests() {
+  return [...(AppData.externalTests || []), ...(AppData.mbtiZoneTests || [])];
+}
+
+/* "🔥 클릭을 유도하는 장치들" #06 제안 중 신규 2건(v0.8.9~) — 순위 리본/조회수 만단위 표기는
+   이미 v0.6.8부터 적용돼 있음(externalTestsFeedHTML 참고), 아래 두 함수가 이번에 새로 추가된 것.
+
+   ①이번 주 인기 TOP 미니리스트: 카테고리 탭 바로 아래, 대표 히어로 배너보다 위에 배치.
+   몰입테스트/MBTI존 21개 전체를 통틀어 조회수 TOP N — 두 탭 중 어디서 봐도 동일한 목록(카테고리별
+   순위가 아니라 "지금 사이트에서 제일 핫한 것"을 먼저 보여주는 용도). 기존 sortExternalTests
+   ('popular')를 합친 배열에 그대로 재사용, 신규 정렬 로직 없음. */
+function weeklyPsychTopMiniListHTML(limit) {
+  limit = limit || 4;
+  const top = sortExternalTests(allExternalPsychTests(), 'popular').slice(0, limit);
+  if (!top.length) return '';
+  const rows = top.map((t, i) => {
+    const count = engagementCount(t.engagementKey, t.baseCount || 0);
+    return `
+      <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="mini-top-row">
+        <span class="mini-top-rank">${i + 1}</span>
+        <img class="mini-top-thumb" src="${psyCoverImage(t)}" alt="" onerror="wcImgFallback(this)">
+        <div class="mini-top-text">
+          <div class="mini-top-name">${t.title}</div>
+          <div class="mini-top-count">▶ ${formatCount(count)}</div>
+        </div>
+      </a>`;
+  }).join('');
+  return `
+    <div class="mini-top-wrap mb-5">
+      <div class="mini-top-head">
+        <span class="mini-top-title">🔥 이번 주 인기 TOP</span>
+        <span class="mini-top-sub">몰입테스트 · MBTI존 통합</span>
+      </div>
+      ${rows}
+    </div>`;
+}
+
+/* ②테마별 큐레이션 가로 스크롤: data.js의 psychtestCurations 그룹마다 한 줄씩, testIds를
+   실제 카드 데이터(제목/커버/링크)로 조회해 렌더링 — sections.json이 홈 화면에서 하던 것과 같은
+   "설정 파일만 고치면 코드 변경 없이 진열대가 바뀌는" 원리를 심리테스트존 내부에도 적용한 것.
+   그룹에 아직 존재하지 않는 id가 섞여 있어도 조용히 걸러내고, 매칭되는 항목이 하나도 없는 그룹은
+   그 줄 자체를 렌더하지 않는다(빈 섹션은 숨긴다는 기존 sections.json 원칙과 동일). */
+function curatedPsychRowsHTML() {
+  const index = {};
+  allExternalPsychTests().forEach(t => { index[t.id] = t; });
+  const rows = (AppData.psychtestCurations || []).map(group => {
+    const items = (group.testIds || []).map(id => index[id]).filter(Boolean);
+    if (!items.length) return '';
+    const cards = items.map(t => {
+      const cardFont = themeTitleFontFamily(t.theme);
+      ensureThemeFontLoaded(t.theme);
+      return `
+        <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="curation-card">
+          <div class="curation-tile">
+            <img src="${psyCoverImage(t)}" alt="" onerror="wcImgFallback(this)">
+            <div class="curation-scrim"></div>
+            <div class="curation-card-title line-clamp-2"${cardFont ? ` style='font-family:${cardFont}'` : ''}>${t.title}</div>
+          </div>
+        </a>`;
+    }).join('');
+    return `
+      <div class="curation-row">
+        <div class="curation-head">
+          <div class="curation-title">${group.title}</div>
+          <div class="curation-hook">${group.hook}</div>
+        </div>
+        <div class="curation-scroll">${cards}</div>
+      </div>`;
+  }).join('');
+  return rows ? `<div class="mb-5">${rows}</div>` : '';
+}
+
 /* STEP 3.1(2026-07-10): 몰입테스트/MBTI존 둘 다 전용 목록(externalTests/mbtiZoneTests)이
    실콘텐츠로만 채워지게 되며(잠금 placeholder 없음), 기존 전체너비 배너 1줄 나열 대신
    character/trait 등 기존 카테고리와 동일한 "인기 대표 1개 강조 + 3열 그리드" 레이아웃으로
@@ -6250,27 +6394,8 @@ function getLevelInfo() {
   return { xp, level, xpInLevel };
 }
 
-/* ══════════════════════════════════════════════════
-   🏅 칭호 시스템 (v0.0.33~)
-   - 방문 스트릭·완주 개수·Tier 성적 등 이미 쌓여있는 로컬 기록만으로 계산 (신규 저장소 불필요)
-══════════════════════════════════════════════════ */
-function getLatestResult(section) {
-  const list = JSON.parse(localStorage.getItem('ranking_' + section) || '[]');
-  return list.length ? list[0].result : null;
-}
-
-const BADGES = [
-  { emoji: '🔥', label: '개근왕', check: () => parseInt(localStorage.getItem('visit_streak') || '0', 10) >= 7 },
-  { emoji: '🌟', label: '올라운더', check: () => ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus', 'insa', 'proverb', 'pricequiz'].every(isDone) },
-  { emoji: '🧠', label: '천재 과몰입러', check: () => CHALLENGE_SECTIONS.every(s => { const r = getLatestResult(s); return r && parseTierFromResult(r) === 'S'; }) },
-  { emoji: '🎉', label: '인싸력 만렙', check: () => { const r = getLatestResult('insa'); return r && r.includes('등급 S'); } },
-  { emoji: '📜', label: '지혜로운 어른', check: () => { const r = getLatestResult('proverb'); return r && r.includes('등급 S'); } },
-];
-
-function getEarnedBadges() {
-  return BADGES.filter(b => b.check());
-}
-
+/* 🏅 칭호 시스템(BADGES/getEarnedBadges/getLatestResult)은 v0.8.9 홈화면 대대적 변경으로
+   홈 화면에서 더 이상 노출하지 않게 되어 제거 — git 히스토리에서 복원 가능 */
 function renderLocalRanking(listId, section) {
   const el = document.getElementById(listId);
   if (!el) return;
@@ -6332,198 +6457,94 @@ function getDailyChallengeTests() {
     .slice(0, 3);
 }
 
-function renderDailyChallengeCard() {
-  const container = document.getElementById('home-daily-challenge');
-  if (!container) return;
-  const picks = getDailyChallengeTests();
-  container.innerHTML = `
-    <div class="rounded-2xl p-5" style="background:rgb(var(--secondary-container) / 0.4); border:3px solid rgb(var(--ink)); box-shadow:5px 5px 0 0 rgb(var(--ink));">
-      <h4 class="font-bold mb-1" style="color:rgb(var(--ink));">🔥 오늘의 챌린지</h4>
-      <p class="text-xs mb-3" style="color:rgb(var(--ink) / 0.65);">매일 바뀌는 추천 테스트 3가지, 오늘 다 깨보세요!</p>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        ${picks.map(s => {
-          const meta = DAILY_CHALLENGE_META[s];
-          const done = isDone(s);
-          return `
-            <div onclick="App.navigate('${s}')" class="cursor-pointer rounded-xl p-3 text-center transition"
-              style="background:rgb(var(--surface-lowest)); border:2px solid rgb(var(--ink)); box-shadow:3px 3px 0 0 rgb(var(--ink));">
-              <div class="text-2xl mb-1">${meta.emoji}</div>
-              <div class="text-sm font-semibold" style="color:rgb(var(--ink));">${meta.label}</div>
-              <div class="text-xs mt-1 ${done ? 'text-emerald-400' : 'text-slate-500'}">${done ? '✅ 완료' : '도전하기 →'}</div>
-            </div>`;
-        }).join('')}
-      </div>
-    </div>`;
-}
+/* renderDailyChallengeCard()는 v0.8.9 홈화면 대대적 변경으로 renderHomeSections()의
+   daily-challenge 타입 처리로 흡수됨 — git 히스토리에서 복원 가능 */
+
 
 /* ══════════════════════════════════════════════════
-   🕸️ 종합 인지 프로필 (레이더 차트, v0.0.29~)
-   - 7개 인지테스트(두뇌나이/반응속도/숫자기억/순서기억/색각/논리력/충동억제) Tier를 0~100으로 환산해 시각화
-   - 숏폼집중력은 충동억제와 동일 엔진이라 중복 측정 방지 차원에서 축에서 제외
-   - 외부 차트 라이브러리 없이 순수 SVG로 렌더링 (빌드 도구 없는 프로젝트 구조에 맞춤)
+   🙂 홈 내 정보 미니카드 (v0.8.9~ 홈화면 대대적 변경)
+   - 예전 "마이홈 대시보드"(닉네임입력+저장버튼/칭호뱃지/완주현황그리드/레이더차트/최근기록리스트,
+     ~90줄)를 한 줄짜리 압축 카드로 교체. 닉네임은 별도 저장 버튼 없이 blur 시 자동 저장.
+     예전 버전 전체는 git 히스토리에 보존돼있어 필요시 되돌릴 수 있음.
 ══════════════════════════════════════════════════ */
-const RADAR_AXES = [
-  { key: 'brain',       label: '두뇌나이', emoji: '🧠' },
-  { key: 'reaction',    label: '반응속도', emoji: '⚡' },
-  { key: 'memdigit',    label: '숫자기억', emoji: '🔢' },
-  { key: 'seqmem',      label: '순서기억', emoji: '🧩' },
-  { key: 'colorvision', label: '색각',     emoji: '🎨' },
-  { key: 'logic',       label: '논리력',   emoji: '📊' },
-  { key: 'impulse',     label: '충동억제', emoji: '🚦' },
-];
-const RADAR_TIER_SCORE = { S: 100, A: 80, B: 60, C: 40, D: 20 };
-const RADAR_MIN_DONE = 5;
-
-function renderCognitiveRadarCard() {
-  const axes = RADAR_AXES.map(a => {
-    const list = JSON.parse(localStorage.getItem('ranking_' + a.key) || '[]');
-    const m = list.length && list[0].result.match(/Tier ([SABCD])/);
-    return { ...a, score: m ? RADAR_TIER_SCORE[m[1]] : 0, done: !!m };
-  });
-  const doneCount = axes.filter(a => a.done).length;
-
-  if (doneCount < RADAR_MIN_DONE) {
-    return `
-      <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 mb-6 text-center">
-        <h4 class="text-slate-300 font-bold mb-2">🕸️ 종합 인지 프로필</h4>
-        <p class="text-slate-500 text-sm mb-3">인지테스트 7종(두뇌나이·반응속도·숫자기억·순서기억·색각·논리력·충동억제) 중 ${RADAR_MIN_DONE}개 이상 완료하면 나만의 인지 프로필이 열립니다.</p>
-        <div class="text-violet-400 font-bold text-lg mb-1">${doneCount} / ${RADAR_AXES.length}</div>
-        <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${doneCount/RADAR_AXES.length*100}%"></div></div>
-      </div>`;
-  }
-
-  const n = axes.length;
-  const cx = 190, cy = 190, R = 90;
-  const angle = i => -Math.PI / 2 + i * (2 * Math.PI / n);
-  const pointAt = (i, ratio) => {
-    const a = angle(i);
-    return [cx + R * ratio * Math.cos(a), cy + R * ratio * Math.sin(a)];
-  };
-
-  const gridPolygons = [0.25, 0.5, 0.75, 1].map(ratio => {
-    const pts = axes.map((_, i) => pointAt(i, ratio).join(',')).join(' ');
-    return `<polygon points="${pts}" fill="none" class="stroke-slate-600" stroke-width="1"/>`;
-  }).join('');
-
-  const axisLines = axes.map((_, i) => {
-    const [x, y] = pointAt(i, 1);
-    return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" class="stroke-slate-600" stroke-width="1"/>`;
-  }).join('');
-
-  const dataPoints = axes.map((a, i) => pointAt(i, a.score / 100).join(',')).join(' ');
-
-  const labels = axes.map((a, i) => {
-    const [x, y] = pointAt(i, 1.25);
-    let anchor = 'middle';
-    if (x < cx - 10) anchor = 'end';
-    else if (x > cx + 10) anchor = 'start';
-    return `<text x="${x}" y="${y}" text-anchor="${anchor}" dominant-baseline="middle" class="fill-slate-300" font-size="12">${a.emoji} ${a.label}</text>`;
-  }).join('');
-
-  return `
-    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 mb-6">
-      <h4 class="text-slate-300 font-bold mb-3">🕸️ 종합 인지 프로필</h4>
-      <div class="flex justify-center">
-        <svg viewBox="0 0 380 380" class="w-full max-w-xs">
-          ${gridPolygons}
-          ${axisLines}
-          <polygon points="${dataPoints}" class="fill-violet-500/25 stroke-violet-500" stroke-width="2"/>
-          ${labels}
-        </svg>
-      </div>
-      <p class="text-slate-500 text-xs text-center mt-2">각 축은 최근 기록 기준 (S=100 · A=80 · B=60 · C=40 · D=20)</p>
-    </div>`;
-}
-
-/* ══════════════════════════════════════════════════
-   🏡 마이홈 대시보드 (v0.0.10~ 홈 섹션에 통합)
-══════════════════════════════════════════════════ */
-function renderHomeMypage() {
-  const container = document.getElementById('home-mypage-container');
+function renderHomeIdentity() {
+  const container = document.getElementById('home-identity-container');
   if (!container) return;
-
   const nickname = getNickname();
   const streak = updateVisitStreak();
-  const sections = ['mbti', 'dream', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus', 'insa', 'proverb', 'pricequiz'];
-  const sectionLabels = { mbti: '성격 파탄(MBTI)', dream: '꿈 해몽', fortune: '오늘의 운세', brain: '두뇌 나이', adhd: '프로 미루러', reaction: '반응속도', memdigit: '숫자 기억력', seqmem: '순서 기억력', colorvision: '색각 테스트', logic: '논리력', impulse: '충동억제', shortfocus: '숏폼 집중력', insa: '인싸력', proverb: '속담 완성', pricequiz: '그 시절 물가' };
-  const doneCount = sections.filter(isDone).length;
   const { level, xpInLevel } = getLevelInfo();
-  const earnedBadges = getEarnedBadges();
-
-  // 최근 테스트 기록 모아보기 (섹션별 가장 최근 1건씩)
-  const historyItems = [];
-  ['mbti', 'fortune', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus', 'insa', 'proverb', 'pricequiz'].forEach(sec => {
-    const list = JSON.parse(localStorage.getItem('ranking_' + sec) || '[]');
-    if (list.length) historyItems.push({ section: sec, ...list[0] });
-  });
 
   container.innerHTML = `
-    <div class="rounded-2xl p-6 mb-6" style="background:rgb(var(--surface-lowest)); border:3px solid rgb(var(--ink)); box-shadow:6px 6px 0 0 rgb(var(--ink));">
-      <div class="flex items-center gap-4 mb-4">
-        <div class="w-14 h-14 rounded-full flex items-center justify-center text-2xl font-black shrink-0"
-          style="background:rgb(var(--secondary-container)); color:rgb(var(--ink)); border:3px solid rgb(var(--ink)); box-shadow:3px 3px 0 0 rgb(var(--ink));">
-          ${nickname ? nickname.charAt(0) : '?'}
+    <div class="home-identity">
+      <div class="avatar ${nickname ? '' : 'empty'}">${nickname ? nickname.charAt(0) : '?'}</div>
+      <div class="home-identity-body">
+        <div class="home-identity-name-row">
+          <input id="home-nickname-input" class="home-identity-name" maxlength="12" value="${nickname}" placeholder="닉네임을 입력하세요"
+            onblur="homeSaveNicknameInline(this.value)" onkeydown="if(event.key==='Enter')this.blur();" />
+          <span class="home-identity-sub">Lv.${level} · ${xpInLevel}/${XP_PER_LEVEL}XP</span>
         </div>
-        <div class="flex-1">
-          <input id="home-nickname-input" type="text" maxlength="12" value="${nickname}" placeholder="닉네임을 입력하세요"
-            class="bg-transparent border-b border-slate-600 text-slate-100 font-bold text-lg focus:outline-none w-full py-1" style="border-color:rgb(var(--ink) / 0.3);"/>
-        </div>
-        <button onclick="homeSaveNickname()" class="text-xs font-bold px-3 py-2 rounded-lg transition border-2"
-          style="background:rgb(var(--primary-container)); border-color:rgb(var(--ink)); color:rgb(var(--ink));">저장</button>
+        <div class="home-identity-bar"><i style="width:${xpInLevel}%"></i></div>
       </div>
-      <div class="flex items-center gap-2 text-amber-300 text-sm font-semibold mb-3">🔥 ${streak}일 연속 방문 중</div>
-
-      <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-        <span class="font-bold" style="color:rgb(var(--ink));">⭐ Lv.${level}</span>
-        <span>${xpInLevel} / ${XP_PER_LEVEL} XP</span>
-      </div>
-      <div class="progress-bar-track mb-3"><div class="progress-bar-fill" style="width:${xpInLevel}%"></div></div>
-
-      ${earnedBadges.length ? `
-        <div class="flex flex-wrap gap-2">
-          ${earnedBadges.map(b => `
-            <span class="text-xs font-semibold px-3 py-1 rounded-full border-2" style="background:rgb(var(--surface-container)); border-color:rgb(var(--ink)); color:rgb(var(--ink));">${b.emoji} ${b.label}</span>`).join('')}
-        </div>` : `
-        <p class="text-slate-300 text-xs">테스트를 완주하면 칭호를 얻을 수 있어요!</p>`}
-    </div>
-
-    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 mb-6">
-      <div class="flex items-center justify-between mb-2">
-        <h4 class="text-slate-300 font-bold">📋 테스트 완주 현황</h4>
-        <span class="text-violet-400 font-bold text-sm">${doneCount} / ${sections.length}</span>
-      </div>
-      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${doneCount/sections.length*100}%"></div></div>
-      <div class="flex flex-wrap gap-2 mt-3">
-        ${sections.map(s => `
-          <span onclick="App.navigate('${s}')" class="cursor-pointer text-xs px-3 py-1.5 rounded-full transition ${isDone(s) ? 'bg-emerald-700/40 text-emerald-300 border border-emerald-600' : 'bg-slate-700 text-slate-300 border border-slate-600 hover:border-slate-500'}">
-            ${isDone(s) ? '✅' : '⬜'} ${sectionLabels[s]}
-          </span>`).join('')}
-      </div>
-    </div>
-
-    ${renderCognitiveRadarCard()}
-
-    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5">
-      <h4 class="text-slate-300 font-bold mb-3">🕓 최근 테스트 기록</h4>
-      ${historyItems.length === 0 ? `
-        <p class="text-slate-300 text-sm text-center py-4">아직 완료한 테스트가 없어요. 테스트를 해보세요!</p>` : `
-        <div class="space-y-2">
-          ${historyItems.map(h => `
-            <div class="flex items-center justify-between bg-slate-700/50 rounded-lg px-3 py-2 gap-2">
-              <span class="text-slate-100 text-sm font-semibold shrink-0">${sectionLabels[h.section]}</span>
-              <span class="text-violet-400 text-sm font-bold flex-1 text-right truncate">${h.result}</span>
-              <span class="text-slate-500 text-xs shrink-0">${h.time}</span>
-            </div>`).join('')}
-        </div>`}
+      <div class="home-identity-streak">🔥 ${streak}일</div>
     </div>`;
 }
 
-function homeSaveNickname() {
-  const input = document.getElementById('home-nickname-input');
-  if (!input) return;
-  setNickname(input.value.trim());
-  showToast('닉네임이 저장되었습니다! 👋');
-  renderHomeMypage();
+function homeSaveNicknameInline(value) {
+  const trimmed = (value || '').trim();
+  if (trimmed === getNickname()) return;
+  setNickname(trimmed);
+  renderHomeIdentity();
+}
+
+/* ══════════════════════════════════════════════════
+   📢 홈 실시간 활동 티커 (v0.8.9~)
+   - 실제 유저 활동을 집계하는 서버 인프라가 없어, 존재하는 콘텐츠+그럴듯한 결과를 조합한
+     연출용 문구 pool을 10초 간격으로 순환 표시(실데이터 아님, 장식 요소).
+   - 진짜 문제는 애드센스 심사가 아니라 "아무도 안 했는데 방금 누가 한 것처럼" 보여주는
+     것 자체(2026-07-12 사용자 판단) — 그래서 ADSENSE_REVIEW_MODE와는 별개의
+     HOME_TICKER_ENABLED로 게이팅한다. 실방문자가 어느 정도 쌓이면(사용자 기준 "일방문자
+     100명" 언급, 자동 임계치 판단 인프라는 아직 없음) 이 값을 true로 직접 바꿔서 켤 것 —
+     그 시점엔 이왕이면 문구도 완전 픽션 대신 실제 완료 이벤트 기반으로 바꾸는 걸 권장.
+══════════════════════════════════════════════════ */
+const HOME_TICKER_ENABLED = false;
+const HOME_TICKER_POOL = [
+  '누군가 방금 <b>취중 MBTI 테스트</b>에서 "잠수 술" 나왔어요',
+  '누군가 방금 <b>내 안의 빌런 지수</b>에서 "은둔형 빌런" 나왔어요',
+  '누군가 방금 <b>진짜 정신연령 테스트</b>에서 "17세" 나왔어요',
+  '누군가 방금 <b>연애하면 바뀌는 내 MBTI</b>에서 "츤데레형" 나왔어요',
+  '누군가 방금 <b>전생에 나는 조선시대 누구?</b>에서 "장원급제 선비" 나왔어요',
+  '누군가 방금 <b>두뇌 나이 측정기</b>에서 "Tier S" 받았어요',
+  '누군가 방금 <b>색각 테스트</b>에서 "Tier S" 받았어요',
+  '누군가 방금 <b>성격 파탄(MBTI)</b> 결과를 확인했어요',
+];
+let _homeTickerTimer = null;
+function initHomeTicker() {
+  const container = document.getElementById('home-ticker-container');
+  if (!container) return;
+  if (_homeTickerTimer) { clearInterval(_homeTickerTimer); _homeTickerTimer = null; }
+  if (!HOME_TICKER_ENABLED) { container.innerHTML = ''; return; }
+
+  container.innerHTML = `
+    <div class="home-ticker">
+      <span class="dot"></span>
+      <div class="home-ticker-viewport"><div class="home-ticker-text" id="home-ticker-text">${HOME_TICKER_POOL[0]}</div></div>
+    </div>`;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let idx = 0;
+  _homeTickerTimer = setInterval(() => {
+    if (App.state.currentSection !== 'home') { clearInterval(_homeTickerTimer); _homeTickerTimer = null; return; }
+    const el = document.getElementById('home-ticker-text');
+    if (!el) { clearInterval(_homeTickerTimer); _homeTickerTimer = null; return; }
+    el.classList.add('leaving');
+    setTimeout(() => {
+      idx = (idx + 1) % HOME_TICKER_POOL.length;
+      el.classList.remove('leaving');
+      el.classList.add('entering');
+      el.innerHTML = HOME_TICKER_POOL[idx];
+      requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove('entering')));
+    }, 450);
+  }, 10000);
 }
 
 /* ══════════════════════════════════════════════════

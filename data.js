@@ -5299,5 +5299,38 @@ window.AppData = {
       addedAt: '2026-07-12', isNew: true, theme: 'cyber-court',
     },
   ],
+
+  /* 몰입테스트/MBTI존 21개 전량을 무드별로 묶은 가로 스크롤 큐레이션 (v0.8.9~).
+     externalTests/mbtiZoneTests의 id를 참조만 할 뿐 데이터를 복제하지 않음 —
+     app.js의 curatedPsychRowsHTML()이 buildTestIndex()류로 실제 카드 정보(이미지/제목/훅/링크)를
+     조회해서 렌더링한다. 새 테스트를 추가할 때는 이 6개 그룹 중 어울리는 곳에 id만 추가하면 됨
+     (그룹을 늘리거나 새 그룹을 만들어도 코드 변경 없이 반영됨 — sections.json과 동일한 사상).
+     21개 id 전부 정확히 한 그룹에만 속하도록 관리할 것(중복/누락 없음, 2026-07-12 최초 구성 시점 기준). */
+  psychtestCurations: [
+    {
+      title: '🍺 못 숨기는 또 다른 나', hook: '술기운·스트레스가 훅 밀어올리는 인격',
+      testIds: ['drunk-mbti', 'villain-mbti', 'shadow-mbti', 'villain-index'],
+    },
+    {
+      title: '💘 연애만 하면 딴사람 되는 유형', hook: '평소랑 다르게 튀어나오는 연애 모드',
+      testIds: ['love-mode-mbti', 'crush-mode-mbti', 'text-reply-love-type'],
+    },
+    {
+      title: '🏢 회사·단톡방에서만 나오는 부캐', hook: '출근하는 순간, 알림이 뜨는 순간 스위치가 켜진다',
+      testIds: ['k-office-type', 'office-mask-mbti', 'group-chat-character'],
+    },
+    {
+      title: '📊 숫자로 재보는 요즘 나', hook: '감으로 말고 문항으로 진짜 파악하는 나',
+      testIds: ['mbti-addiction-level', 'dopamine-addiction-level', 'mental-age', 'mbti-stat-window'],
+    },
+    {
+      title: '🎬 다른 세계관 속의 나', hook: '조선시대부터 무인도까지, 다른 세상에 떨어진 나는?',
+      testIds: ['desert-island-type', 'idol-position-type', 'joseon-past-life-type', 'ai-mbti-judge'],
+    },
+    {
+      title: '🎭 진짜 나 vs 겉모습', hook: '남들이 보는 나와 진짜 속마음, 정말 같을까',
+      testIds: ['real-vs-fake-mbti', 'brain-structure-report', 'spending-type'],
+    },
+  ],
 };
 

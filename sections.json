@@ -1,27 +1,11 @@
 {
   "sections": [
-    {
-      "id": "psych-trending",
-      "title": "🆕 요즘 뜨는 심리테스트",
-      "highlight": true,
-      "dynamic": "psych-trending",
-      "limit": 3
-    },
-    {
-      "id": "popular",
-      "title": "🔥 이번주 인기",
-      "dynamic": "popularity",
-      "limit": 3
-    },
-    {
-      "id": "tools",
-      "title": "🎯 도구 모음",
-      "test_ids": ["dream", "fortune", "lotto"]
-    },
-    {
-      "id": "season",
-      "title": "☀️ 시즌 기획전",
-      "test_ids": []
-    }
+    { "id": "popular", "title": "🔥 이번주 인기 TOP", "style": "leaderboard", "dynamic": "popularity", "limit": 3 },
+    { "id": "psych-heading", "type": "heading", "title": "🧠 심리테스트" },
+    { "id": "psych-1", "title": "😏 못 숨기는 또 다른 나", "style": "poster-carousel", "test_ids": ["drunk-mbti", "villain-mbti", "shadow-mbti", "villain-index"] },
+    { "id": "psych-2", "title": "❤️ 연애만 하면 딴사람", "style": "poster-carousel", "test_ids": ["love-mode-mbti", "crush-mode-mbti", "text-reply-love-type"] },
+    { "id": "psych-3", "title": "🎬 다른 세계관 속의 나", "style": "poster-carousel", "test_ids": ["desert-island-type", "idol-position-type", "joseon-past-life-type", "ai-mbti-judge"] },
+    { "id": "daily-challenge", "type": "daily-challenge", "title": "🔥 오늘의 챌린지" },
+    { "id": "tools", "title": "🧰 도구 모음", "style": "tool-list", "test_ids": ["dream", "fortune", "lotto"] }
   ]
 }
