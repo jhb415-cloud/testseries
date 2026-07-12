@@ -4947,8 +4947,6 @@ function renderPsychtestResult() {
   const result = t.results.find(r => score >= r.range[0] && score <= r.range[1]) || t.results[t.results.length - 1];
   const nickname = getNickname() || '나';
   const shareText = `나 「${t.title}」 해봤는데 ${result.title} 나왔어! 너도 해봐 👉`;
-  const funKey = 'psychtest-' + t.id + '-' + result.grade + '-fun';
-
   const shareRow = renderIdentityShareRow('psychtest',
     { testId: t.id, grade: result.grade, nickname, result: result.title },
     `${location.origin}/share-cards/psychtest-${t.id}-${result.grade}.jpg`,
@@ -4974,20 +4972,71 @@ function renderPsychtestResult() {
 
       ${shareRow}
 
-      <div class="flex justify-center gap-8 my-6">
-        <button onclick="bumpEngagement('${funKey}'); this.querySelector('.n').textContent = engagementCount('${funKey}', 110);" class="text-center text-xs text-slate-500">
-          <span class="block text-xl mb-1">😂</span>공감돼요<div class="n text-slate-100 font-bold text-xs mt-0.5">${engagementCount(funKey, 110)}</div>
-        </button>
+      <div id="psych-reaction-row-${t.id}" class="flex justify-center gap-8 my-6">
+        ${['save', 'funny', 'accurate'].map(type => `
+        <button onclick="togglePsychReaction('${t.id}','${type}')" data-reaction-btn="${type}" class="text-center text-xs text-slate-500 transition">
+          <span class="block text-xl mb-1">${PSYCH_REACTION_META[type].emoji}</span>${PSYCH_REACTION_META[type].label}<div class="n text-slate-100 font-bold text-xs mt-0.5">0</div>
+        </button>`).join('')}
       </div>
-      <p class="text-slate-600 text-xs text-center mb-6">※ 공감 수는 추후 실데이터 연동 예정 — 현재 이 기기 기준 더미 표시</p>
 
-      <div class="border-t border-slate-700 pt-4 mb-4">
-        <p class="text-slate-300 font-bold text-sm mb-2">댓글 0</p>
-        <p class="text-slate-500 text-xs bg-slate-800 border border-dashed border-slate-700 rounded-lg p-3 text-center">💬 댓글은 로그인 후 작성할 수 있어요 (준비 중)</p>
-      </div>
+      <div class="mb-4">${commentSectionHTML('psychtest', t.id)}</div>
 
       <button onclick="renderPsychtestFeed('${App.state.psychtest.category}')" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">목록으로</button>
     </div>`;
+  initPsychtestReactions(t.id);
+  initComments('psychtest', t.id);
+}
+
+/* ══════════════════════════════════════════════════
+   🔖 심리테스트존 저장하기/재밌어요/정확해요 (v0.9.3~, poomang 스타일)
+   - content_reactions(익명 insert, 1인 1표 토글) + content_reaction_counts(공개 집계 뷰) 재사용
+   - worldcup_votes/balance_responses와 동일한 "표는 즉시 익명 기록, 카운트는 뷰로 공개" 패턴
+══════════════════════════════════════════════════ */
+const PSYCH_REACTION_META = {
+  save: { emoji: '🔖', label: '저장하기' },
+  funny: { emoji: '😂', label: '재밌어요' },
+  accurate: { emoji: '🎯', label: '정확해요' },
+};
+
+async function initPsychtestReactions(testId) {
+  const row = document.getElementById(`psych-reaction-row-${testId}`);
+  if (!row || !window.sb) return;
+  try {
+    if (typeof ensureAnonSession === 'function') await ensureAnonSession();
+    const { data: counts } = await window.sb.from('content_reaction_counts').select('reaction_type,count').eq('section', 'psychtest').eq('item_id', testId);
+    const { data: { session } } = await window.sb.auth.getSession();
+    const userId = session && session.user && session.user.id;
+    let mine = [];
+    if (userId) {
+      const { data: myRows } = await window.sb.from('content_reactions').select('reaction_type').eq('section', 'psychtest').eq('item_id', testId).eq('user_id', userId);
+      mine = (myRows || []).map(r => r.reaction_type);
+    }
+    Object.keys(PSYCH_REACTION_META).forEach(type => {
+      const btn = row.querySelector(`[data-reaction-btn="${type}"]`);
+      if (!btn) return;
+      const found = (counts || []).find(c => c.reaction_type === type);
+      btn.querySelector('.n').textContent = found ? found.count : 0;
+      btn.classList.toggle('text-violet-400', mine.includes(type));
+      btn.classList.toggle('text-slate-500', !mine.includes(type));
+    });
+  } catch (e) { console.error('리액션 조회 실패:', e); }
+}
+
+async function togglePsychReaction(testId, type) {
+  if (!window.sb) return;
+  try {
+    if (typeof ensureAnonSession === 'function') await ensureAnonSession();
+    const { data: { session } } = await window.sb.auth.getSession();
+    const userId = session && session.user && session.user.id;
+    if (!userId) return;
+    const { data: existing } = await window.sb.from('content_reactions').select('*').eq('section', 'psychtest').eq('item_id', testId).eq('user_id', userId).eq('reaction_type', type).maybeSingle();
+    if (existing) {
+      await window.sb.from('content_reactions').delete().eq('section', 'psychtest').eq('item_id', testId).eq('user_id', userId).eq('reaction_type', type);
+    } else {
+      await window.sb.from('content_reactions').insert({ section: 'psychtest', item_id: testId, reaction_type: type });
+    }
+    await initPsychtestReactions(testId);
+  } catch (e) { console.error('리액션 토글 실패:', e); }
 }
 
 /* ══════════════════════════════════════════════════
