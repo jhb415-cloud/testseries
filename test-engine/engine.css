@@ -1,10 +1,29 @@
-/* test-engine v4 (한글 글씨 뭉개짐 방지 + 질문/답 폰트 15% 확대) | engine.css — 테마 무관 공통 레이아웃(골격)
+/* test-engine v6 (하단 버튼바 fixed→sticky 전환, 겹침 버그 근본 수정) | engine.css — 테마 무관 공통 레이아웃(골격)
    2026-07-11: ①.te-app에 font-synthesis:none 추가 — Do Hyeon/Black Han Sans/Song Myung처럼 단일
    굵기만 있는 한글 타이틀 폰트에 <h1>/<h2> 기본 bold가 걸려 브라우저가 합성 볼드로 흉내내며 글씨가
    뭉개지던 버그 수정(neon/office/vintage-collage/stained-glass 테마 영향, 실사용 제보). ②질문/답 등
    콘텐츠 폰트 크기를 전반적으로 약 15% 확대(.te-title/.te-desc/.te-question-text/.te-btn/
-   .te-result-* 등) — 9개 테마 전체에 이 파일 한 곳 수정으로 자동 반영됨. 캐시버스팅: 10개
-   index.html의 engine.css?v=4 → ?v=5로 갱신(engine.js/result-card.js는 이번에 변경 없어 그대로 유지). */
+   .te-result-* 등) — 9개 테마 전체에 이 파일 한 곳 수정으로 자동 반영됨.
+
+   2026-07-12: 하단 버튼바(.te-choices-fixed) 겹침 버그를 v0.6.9/v0.7.0/v0.7.1에서 세 차례
+   땜질(padding-bottom 재측정/캐시버스팅/불투명 배경)했는데도 사용자가 실제 화면 스크린샷으로
+   재차 제보 — 인트로/결과 화면에서 본문(설명/해시태그/드롭다운/불릿/팁)이 처음 진입 시(스크롤
+   전) 버튼바 아래에 가려 보이는 문제. 원인은 `position: fixed` 버튼바 자체의 구조적 한계 —
+   실제 버튼바 높이를 JS로 측정해 본문에 그만큼 padding-bottom을 미리 얹어두는 방식이라, 웹폰트
+   로딩 지연·문항별 버튼 개수 차이 등 측정 타이밍이 어긋나는 모든 경우에 재발할 수밖에 없는
+   구조였음(3번의 수정이 전부 "측정을 더 정확히/더 늦게" 하는 대증요법이었음).
+   **근본 수정**: `position: fixed` + JS 높이 측정(`syncFixedFooterHeight`, engine.js에서 완전
+   제거)을 걷어내고, 플렉스박스 "sticky footer" 패턴으로 교체 — `.te-app`은 이미
+   `display:flex; flex-direction:column; min-height:100vh`였으므로, 버튼바를 `position:sticky;
+   bottom:0; margin-top:auto`로 바꾸기만 하면 본문이 짧을 땐 뷰포트 맨 아래에 붙고(기존 fixed와
+   시각적으로 동일), 본문이 길 땐 그냥 본문 다음(문서의 진짜 끝)에 자연스럽게 이어져 겹침이
+   **구조적으로 불가능**해진다(padding-bottom 보정이 아예 필요 없어짐 — 버튼바가 언제나 본문
+   "다음"에 있으므로). 위 세 번의 수정과 달리 이번엔 측정값을 더 정확히 하는 게 아니라 애초에
+   측정이 필요 없는 레이아웃으로 바꾼 것이라 재발 여지가 없음. `--te-footer-height` 변수와
+   `.te-has-fixed-footer`/`.te-screen-result.te-has-fixed-footer`의 padding-bottom 규칙은
+   전부 불필요해져 삭제(클래스명 자체는 engine.js 마크업에 남아있지만 이제 아무 CSS도 안 걸림,
+   무해). 캐시버스팅: engine.css?v=5→6, engine.js?v=8→9(21개 테스트 index.html 전부 일괄 교체,
+   result-card.js는 이번에 변경 없어 v=2 그대로 유지). */
 
 html, body {
   height: 100%;
@@ -24,7 +43,6 @@ body {
 
 :root {
   --te-max-width: 500px;
-  --te-footer-height: 132px;
 }
 
 .te-app {
@@ -45,27 +63,31 @@ body {
   font-synthesis: none;
 }
 
-.te-has-fixed-footer {
-  padding-bottom: var(--te-footer-height);
-}
-
-/* 하단 고정 액션 바 — 모바일 풀폭에서도 항상 최대 500px 폭을 유지하며 중앙정렬 */
+/* 하단 액션 바 — 2026-07-12: position:fixed를 버리고 순수 flexbox 정렬로 전환(상세 경위는
+   파일 상단 v6 코멘트 참고). `.te-app`(display:flex; flex-direction:column; min-height:100vh)의
+   마지막 자식으로 두고 `margin-top:auto`만 적용 — 본문이 뷰포트보다 짧을 땐 이 여백이 남는
+   공간을 전부 흡수해 버튼바를 맨 아래로 밀어붙이고(기존 fixed와 시각적으로 동일), 본문이 길 땐
+   흡수할 여백 자체가 없어(컨테이너가 이미 content 높이만큼 늘어나 있음) 그냥 본문 바로 다음
+   (문서의 진짜 끝)에 자연스럽게 이어진다 — 어느 경우든 본문 위에 겹쳐 그려질 수 없는 구조.
+   **주의**: `position: sticky; bottom: 0`을 함께 쓰지 말 것 — 처음 이 방식으로 시도했다가
+   sticky가 "본문이 긴 경우에도 스크롤 여부와 무관하게 항상 뷰포트 하단에 즉시 도킹"돼버려
+   fixed와 똑같이 겹치는 걸 실측으로 확인(.te-app이 body 스크롤을 그대로 쓰는 전체 페이지
+   컨테이너라, sticky 기준 컨테이닝 블록이 사실상 문서 전체라 스크롤 전에도 즉시 달라붙음).
+   순수 `margin-top:auto`(position 없음, 기본 static)만으로 겹침 방지가 완전히 보장된다.
+   모바일 풀폭에서도 부모(.te-app)가 이미 max-width:500px+중앙정렬이라 버튼바에 별도
+   폭 제한(left/transform 트릭)이 필요 없어짐. */
 .te-choices-fixed {
-  position: fixed;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
+  margin-top: auto;
   width: 100%;
-  max-width: var(--te-max-width);
   padding: 26px 16px calc(16px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   gap: 10px;
   z-index: 10;
   /* 버튼바가 투명하면 스크롤 중 본문(이미지/텍스트)이 버튼 사이로 그대로 비쳐
-     겹쳐 보인다(2026-07-11 사용자 제보 — padding-bottom 보정과는 별개 문제).
-     테마마다 페이지 배경색이 다르므로 각 테마가 .te-app에 --te-footer-bg를
-     정의하고, 여기서 상단만 살짝 페이드되는 불투명 배경으로 본문을 가린다. */
+     겹쳐 보인다(2026-07-11 사용자 제보). 테마마다 페이지 배경색이 다르므로 각 테마가
+     .te-app에 --te-footer-bg를 정의하고, 여기서 상단만 살짝 페이드되는 불투명 배경으로
+     (sticky 도킹 과정에서의) 스침을 자연스럽게 가린다. */
   background: linear-gradient(180deg, transparent 0, var(--te-footer-bg, #0f172a) 22px);
 }
 
@@ -182,11 +204,6 @@ body {
 .te-seen-count { text-align: center; font-size: 13px; margin: 8px 0 0; opacity: 0.8; }
 
 .te-error { text-align: center; padding: 40px 20px; }
-
-/* 결과 화면은 버튼이 4개(카카오/이미지저장/공유하기/다시하기)라 하단 여백을 더 확보 */
-.te-screen-result.te-has-fixed-footer {
-  padding-bottom: 266px;
-}
 
 .te-btn-accent {
   background: #D85A30;

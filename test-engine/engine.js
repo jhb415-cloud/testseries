@@ -1,4 +1,4 @@
-/* test-engine v7 (버튼바 불투명 배경 — 스크롤 시 본문 비침 수정) | engine.js — 공통 로직
+/* test-engine v9 (하단 버튼바 fixed→sticky 전환, 겹침 버그 근본 수정) | engine.js — 공통 로직
    (config 로드, 화면 전환, 채점, 렌더, 결과 공유카드 저장, 관련 테스트 배너, 카카오톡 공유,
    메인 사이트로 돌아가기 링크) 순수 바닐라 JS. 외부 라이브러리 없음. 기능별 함수로 분리해 유지보수.
    결과 화면의 "이미지 저장" 기능은 별도 파일 result-card.js(window.TestEngineResultCard)에 위임한다.
@@ -56,7 +56,14 @@
    (겉모습이 주 정체성이므로), 있으면 그 항목을, 없으면 기존처럼 resultTemplate을 폴백으로 쓴다.
    vars에 {outer}/{inner}는 그대로 유지해 매칭된 결과 텍스트 안에서도 "{inner}"로 속마음 코드를
    계속 언급할 수 있다. results가 비어있는 기존/향후 mbti4_dual config는 완전히 그대로 동작
-   (하위호환, 이 변경 이전 동작과 동일). */
+   (하위호환, 이 변경 이전 동작과 동일).
+
+   v9(2026-07-12): 하단 버튼바-본문 겹침 버그를 근본 수정 — engine.css가 `.te-choices-fixed`를
+   `position:fixed`에서 플렉스박스 sticky footer 패턴(`position:sticky; bottom:0;
+   margin-top:auto`, 상세는 engine.css 상단 v6 코멘트 참고)으로 전환하면서, 버튼바 실제 높이를
+   측정해 본문에 padding-bottom을 미리 얹어두던 `syncFixedFooterHeight()`가 완전히 불필요해져
+   삭제(호출 3곳 + resize 리스너 + document.fonts.ready 후처리까지 전부 제거). 새 레이아웃은
+   버튼바가 항상 본문 "다음"에 위치하는 구조라 애초에 겹칠 수 없으므로 별도 JS 측정이 필요 없음. */
 
 (function () {
   'use strict';
@@ -64,7 +71,7 @@
   // engine.js 자체가 바뀔 때마다 이 번호를 올리고, 위 헤더 안내대로 10개 index.html의
   // engine.js/engine.css/result-card.js ?v=도 같은 번호로 맞출 것 — themes/*.css는
   // injectThemeCSS()가 이 상수를 그대로 재사용해 자동으로 캐시버스팅된다(파일별로 안 챙겨도 됨).
-  var ENGINE_ASSET_VERSION = '8';
+  var ENGINE_ASSET_VERSION = '9';
 
   // 최상단에서 즉시 캡처해야 함 — defer 스크립트라도 동기 실행 구간에서만 currentScript가 유효함
   var ENGINE_SCRIPT = document.currentScript;
@@ -107,9 +114,6 @@
     }
     injectHomeLink();
     loadKakaoSdk(); // fire-and-forget: 결과 화면에 도달할 즈음엔 로드가 끝나있을 것으로 기대, 실패해도 공유 버튼이 안내 문구로 우아하게 처리함
-    // 화면 회전/모바일 브라우저 주소창 접힘 등으로 뷰포트가 바뀔 때도 버튼바-본문 겹침이
-    // 생기지 않도록 전역 1회 등록(2026-07-11, 아래 syncFixedFooterHeight 주석 참고)
-    window.addEventListener('resize', syncFixedFooterHeight);
     loadConfig()
       .then(function (config) {
         state.config = config;
@@ -232,7 +236,6 @@
       state.introInputValue = inputEl ? inputEl.value : '';
       startTest();
     });
-    syncFixedFooterHeight();
   }
 
   function startTest() {
@@ -290,7 +293,6 @@
         selectChoice(q, choiceIndex);
       });
     });
-    syncFixedFooterHeight();
   }
 
   function selectChoice(question, choiceIndex) {
@@ -551,7 +553,6 @@
     qs('#te-share-btn').addEventListener('click', function () { shareResult(result); });
     qs('#te-save-btn').addEventListener('click', function () { handleSaveImageClick(result); });
     qs('#te-kakao-btn').addEventListener('click', function () { shareResultToKakao(result); });
-    syncFixedFooterHeight();
 
     if (relatedIds.length) loadRelatedBanner(relatedIds);
   }
@@ -684,28 +685,6 @@
   // ---------- 유틸 ----------
   function qs(sel) { return rootEl.querySelector(sel); }
   function qsa(sel) { return Array.prototype.slice.call(rootEl.querySelectorAll(sel)); }
-
-  // 하단 고정 버튼바(.te-choices-fixed)는 화면마다 버튼 개수가 다른데(인트로 1개/질문 2~N개/
-  // 결과 4개), engine.css의 --te-footer-height(132px)는 고정값이라 선택지가 3개 이상인 질문
-  // (예: type 채점처럼 선택지가 6개인 테스트)에서 버튼바가 실제로는 더 커져 본문과 겹치거나
-  // 화면 아래로 잘려 보이는 문제가 있었음(2026-07-10 발견). 렌더 직후 실제 버튼바 높이를
-  // 측정해 .te-app의 padding-bottom을 정확히 맞춰준다 — 버튼 개수와 무관하게 항상 정확.
-  function syncFixedFooterHeight() {
-    function measure() {
-      var appEl = qs('.te-app');
-      var footerEl = qs('.te-choices-fixed');
-      if (!appEl || !footerEl) return;
-      appEl.style.paddingBottom = footerEl.offsetHeight + 'px';
-    }
-    requestAnimationFrame(measure);
-    // 테마 대부분이 Google Fonts를 @import로 비동기 로드하는데, 최초 측정 시점(위 RAF)엔
-    // 폴백 폰트로 렌더링된 상태라 실제 웹폰트가 늦게 적용되며 버튼 줄바꿈/높이가 커지면
-    // padding이 모자라 본문과 겹치는 문제가 있었음(2026-07-11, 실사용 스크린샷으로 발견 —
-    // 폰트 로딩이 빠른 환경/헤드리스 테스트에선 재현이 잘 안 됨). 폰트 로딩 완료 후 한 번 더 재측정.
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(function () { requestAnimationFrame(measure); });
-    }
-  }
 
   function escapeHtml(str) {
     return String(str == null ? '' : str).replace(/[&<>"']/g, function (ch) {

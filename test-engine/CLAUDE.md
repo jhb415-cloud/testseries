@@ -174,8 +174,8 @@
 - [ ] 결과 공유카드 저장이 동작하는가
 - [ ] 텍스트 볼륨이 충분한가(질문+결과 설명 합쳐 애드센스 콘텐츠 기준에 부족하지 않은지)
 - [ ] `seed_count`가 두세 자리 안팎의 현실적인 값인가(5~6자리 큰 수 금지 — README.md 표 참고, 2026-07-11 21개 테스트가 15만~29만대로 잘못 세팅됐던 사례 있음)
-- [ ] 결과 화면을 끝까지 스크롤했을 때 하단 고정 버튼바가 본문과 겹치지 않는가(웹폰트 로딩 지연 시나리오 — `engine.js`의 `syncFixedFooterHeight()`가 엔진 레벨에서 자동 처리하지만, 새 테마가 `.te-app`/`.te-choices-fixed`에 `!important`로 레이아웃을 덮어쓰면 재발할 수 있으니 확인)
-- [ ] **새 테마를 만들 땐 반드시 `.te-app`에 `--te-footer-bg`(페이지 하단 배경과 같은 톤)를 정의했는가** — 안 하면 고정 버튼바가 어두운 폴백색(#0f172a)으로 깔려 밝은 테마에서 이질적으로 보임(스크롤 시 본문이 버튼 사이로 비치는 문제를 막는 불투명 배경, v0.7.1에서 도입 — engine.css의 `.te-choices-fixed` 주석 참고)
+- [ ] 인트로/결과 화면에서 본문(설명·해시태그·드롭다운·불릿·팁)이 버튼바에 가려지지 않는가 — 2026-07-12부터 `.te-choices-fixed`가 `position:fixed`(JS로 높이를 측정해 본문에 padding-bottom을 얹는 방식, `syncFixedFooterHeight()`)가 아니라 **순수 flexbox 정렬**(`.te-app`의 마지막 자식, `margin-top:auto`만 사용)로 바뀌어 이 문제가 구조적으로 재발 불가능해짐 — **새 테마를 만들 때 절대 `.te-choices-fixed`에 `position`(fixed/sticky 둘 다)이나 `margin-top`을 덮어쓰지 말 것**(sticky를 함께 쓰면 fixed와 똑같이 겹치는 버그가 재현됨, engine.css `.te-choices-fixed` 주석 참고). `.te-app`도 `display:flex; flex-direction:column; min-height:100vh`를 유지해야 이 정렬이 성립한다.
+- [ ] **새 테마를 만들 땐 반드시 `.te-app`에 `--te-footer-bg`(페이지 하단 배경과 같은 톤)를 정의했는가** — 안 하면 고정 버튼바가 어두운 폴백색(#0f172a)으로 깔려 밝은 테마에서 이질적으로 보임(스크롤 중 본문이 버튼 사이로 비치는 걸 막는 불투명 배경, v0.7.1에서 도입 — engine.css의 `.te-choices-fixed` 주석 참고)
 - [ ] sections.json / sitemap.xml 반영 확인
 - [ ] tests/index.json에 항목 추가/버전 갱신
 - [ ] style-guide.md에 이번 컨셉 기록 추가
