@@ -17,3 +17,36 @@ A cinematic double-exposure portrait photograph, a generic anonymous person's si
 ## generic
 
 A cinematic double-exposure portrait photograph, a generic anonymous person's side profile silhouette in a business blazer blended with a cold fluorescent office ceiling grid of lights, desaturated teal-gray color grading, sterile corporate atmosphere, shallow depth of field, symbolizing a different professional mask worn only at the office, photographic realism, no readable text, no logos, no watermark, square format.
+
+## pair-stj
+
+A cinematic double-exposure portrait photograph, a generic anonymous person's side profile silhouette blended with a grid of orderly city windows lit uniformly at night, cool steel-gray color grading, moody dramatic lighting, shallow depth of field, symbolizing rigid disciplined structure, photographic realism, no readable text, no logos, no watermark, square format.
+
+## pair-sfj
+
+A cinematic double-exposure portrait photograph, a generic anonymous person's side profile silhouette blended with a warm softly lit home interior with a gentle lamp glow, warm amber color grading, moody dramatic lighting, shallow depth of field, symbolizing quiet devoted care, photographic realism, no readable text, no logos, no watermark, square format.
+
+## pair-nfj
+
+A cinematic double-exposure portrait photograph, a generic anonymous person's side profile silhouette blended with a foggy quiet forest at dawn, muted teal-grey color grading, moody dramatic lighting, shallow depth of field, symbolizing deep private insight, photographic realism, no readable text, no logos, no watermark, square format.
+
+## pair-ntj
+
+A cinematic double-exposure portrait photograph, a generic anonymous person's side profile silhouette blended with a sharp geometric skyscraper grid viewed from below, cold blue-steel color grading, moody dramatic lighting, shallow depth of field, symbolizing calculated ambition, photographic realism, no readable text, no logos, no watermark, square format.
+
+## pair-stp
+
+A cinematic double-exposure portrait photograph, a generic anonymous person's side profile silhouette blended with sparks from an industrial workshop at night, dark amber-orange color grading, moody dramatic lighting, shallow depth of field, symbolizing hands-on composure, photographic realism, no readable text, no logos, no watermark, square format.
+
+## pair-sfp
+
+A cinematic double-exposure portrait photograph, a generic anonymous person's side profile silhouette blended with colorful string lights over a lively street market, warm saturated color grading, moody dramatic lighting, shallow depth of field, symbolizing lively expressive energy, photographic realism, no readable text, no logos, no watermark, square format.
+
+## pair-nfp
+
+A cinematic double-exposure portrait photograph, a generic anonymous person's side profile silhouette blended with drifting clouds and soft golden sunbeams, pastel warm color grading, moody dramatic lighting, shallow depth of field, symbolizing quiet idealistic longing, photographic realism, no readable text, no logos, no watermark, square format.
+
+## pair-ntp
+
+A cinematic double-exposure portrait photograph, a generic anonymous person's side profile silhouette blended with a chalkboard covered in scribbled diagrams and equations, cool desaturated color grading, moody dramatic lighting, shallow depth of field, symbolizing restless curious analysis, photographic realism, no readable text, no logos, no watermark, square format.
+
