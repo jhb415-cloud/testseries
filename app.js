@@ -8123,38 +8123,52 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ── hash 기반 초기 라우팅 ── */
-  const rawHash = location.hash.replace('#', '') || 'home';
-  const [hash, hashQuery] = rawHash.split('?');
-  if (hashQuery) {
-    const params = new URLSearchParams(hashQuery);
-    const vs = params.get('vs');
-    if (vs) {
-      try { App.pendingChallenge = { section: hash, data: JSON.parse(vs) }; } catch (e) { App.pendingChallenge = null; }
+  /* ── hash 기반 초기 라우팅 ──
+     v1.0.1~: OAuth 로그인 리다이렉트로 돌아온 직후엔 Supabase 클라이언트가 URL에 실린 로그인
+     정보를 아직 처리 중일 수 있는데, 여기서 곧바로 location.hash='home'으로 덮어써버리면
+     그 정보가 든 URL이 지워져 로그인이 무시되는 문제가 있었음 — Supabase의 초기 세션 처리가
+     끝났다는 신호(sb-ready, supabase-client.js)를 받은 뒤에만 라우팅하도록 순서 강제.
+     신호가 예상대로 안 오는 경우(예: window.sb 자체가 없는 극단적 상황)를 대비해 1.5초
+     안전장치도 둠 — 정상 케이스에선 INITIAL_SESSION이 항상 훨씬 빨리 발생해 타임아웃은 안 걸림 */
+  function runInitialHashRouting() {
+    const rawHash = location.hash.replace('#', '') || 'home';
+    const [hash, hashQuery] = rawHash.split('?');
+    if (hashQuery) {
+      const params = new URLSearchParams(hashQuery);
+      const vs = params.get('vs');
+      if (vs) {
+        try { App.pendingChallenge = { section: hash, data: JSON.parse(vs) }; } catch (e) { App.pendingChallenge = null; }
+      }
+      const match = params.get('match');
+      if (match) {
+        try { App.pendingMatch = { section: hash, data: JSON.parse(match) }; } catch (e) { App.pendingMatch = null; }
+      }
+      /* App.navigate()가 곧바로 location.hash = sectionId로 덮어써 쿼리스트링이 사라지므로,
+         initSharedPreview()가 나중에 읽을 수 있도록 지금 이 시점에 미리 떼어 저장해둔다 (v0.1.1~) */
+      if (hash === 'shared-preview') {
+        App._sharedPreviewParams = params;
+      }
+      /* 로또 공유 링크(?drawn=...)도 같은 이유로 이 시점에 미리 떼어둔다 (v0.1.2~, v0.1.3에서 조합기도 추가) */
+      if (hash === 'lottodraw') {
+        App._lottodrawSharedDrawn = params.get('drawn') || '';
+      }
+      if (hash === 'lotto') {
+        App._lottoSharedDrawn = params.get('drawn') || '';
+      }
+      /* 월드컵 팩 탐색/플레이/랭킹은 진짜 URL 경로가 없어 #worldcup?play=/?rank=로 대체(v0.6.1~) —
+         initWorldcup()이 이 시점에 미리 떼어둔 값을 읽어 곧바로 해당 팩 화면으로 진입시킴 */
+      if (hash === 'worldcup') {
+        App._worldcupInitialParams = params;
+      }
     }
-    const match = params.get('match');
-    if (match) {
-      try { App.pendingMatch = { section: hash, data: JSON.parse(match) }; } catch (e) { App.pendingMatch = null; }
-    }
-    /* App.navigate()가 곧바로 location.hash = sectionId로 덮어써 쿼리스트링이 사라지므로,
-       initSharedPreview()가 나중에 읽을 수 있도록 지금 이 시점에 미리 떼어 저장해둔다 (v0.1.1~) */
-    if (hash === 'shared-preview') {
-      App._sharedPreviewParams = params;
-    }
-    /* 로또 공유 링크(?drawn=...)도 같은 이유로 이 시점에 미리 떼어둔다 (v0.1.2~, v0.1.3에서 조합기도 추가) */
-    if (hash === 'lottodraw') {
-      App._lottodrawSharedDrawn = params.get('drawn') || '';
-    }
-    if (hash === 'lotto') {
-      App._lottoSharedDrawn = params.get('drawn') || '';
-    }
-    /* 월드컵 팩 탐색/플레이/랭킹은 진짜 URL 경로가 없어 #worldcup?play=/?rank=로 대체(v0.6.1~) —
-       initWorldcup()이 이 시점에 미리 떼어둔 값을 읽어 곧바로 해당 팩 화면으로 진입시킴 */
-    if (hash === 'worldcup') {
-      App._worldcupInitialParams = params;
-    }
+    App.navigate(hash in sectionInits ? hash : 'home');
   }
-  App.navigate(hash in sectionInits ? hash : 'home');
+  (function waitForSbReadyThenRoute() {
+    let routed = false;
+    const go = () => { if (routed) return; routed = true; runInitialHashRouting(); };
+    window.addEventListener('sb-ready', go, { once: true });
+    setTimeout(go, 1500); /* 안전장치 */
+  })();
 
   /* ── hashchange 이벤트 (뒤로가기/앞으로가기) ──
      쿼리스트링(?play=... 등)은 떼어내고 섹션 id만 비교할 것 — 안 떼면 월드컵처럼

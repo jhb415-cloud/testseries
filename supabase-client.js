@@ -25,8 +25,18 @@ async function ensureAnonSession() {
    새 익명 세션을 만들어버려 방금 로그인한 세션이 무시되는 경쟁 상태(race condition)가 있었음
    (실제로 로그인 후에도 is_anonymous:true로 남는 버그로 재현됨). onAuthStateChange의
    INITIAL_SESSION 이벤트는 이 초기 교환이 끝난 뒤에만 발생하므로, 그 시점에만 판단하도록 변경 */
+/* v1.0.1~: v0.9.9 수정으로도 여전히 로그인 후 익명 세션으로 남는 문제가 재현됨 — 실제 원인은
+   ensureAnonSession() 타이밍이 아니라, 이 앱이 해시(#) 기반 SPA 라우팅을 쓰는데
+   app.js의 DOMContentLoaded 초기 라우팅이 곧바로 location.hash='home'으로 덮어써버려서,
+   Supabase 클라이언트가 리다이렉트 URL에 실린 로그인 정보를 다 처리하기도 전에 그 정보가 든
+   URL이 지워질 수 있는 구조적 경쟁이 있었음(요청 로그를 봐도 토큰 교환 요청 자체가 안 잡힘 —
+   Supabase가 URL을 읽기도 전에 우리 라우팅이 먼저 덮어쓴 것으로 추정). INITIAL_SESSION이
+   확정된 뒤에만 app.js가 초기 라우팅을 하도록 신호(sb-ready 이벤트)를 보내 순서를 강제함 */
 window.sb.auth.onAuthStateChange((event, session) => {
-  if (event === 'INITIAL_SESSION' && !session) ensureAnonSession();
+  if (event === 'INITIAL_SESSION') {
+    if (!session) ensureAnonSession();
+    window.dispatchEvent(new CustomEvent('sb-ready'));
+  }
 });
 
 /* ══════════════════════════════════════════════════
