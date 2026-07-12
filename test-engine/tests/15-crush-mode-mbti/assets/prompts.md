@@ -35,3 +35,36 @@ their hip, no phone or device visible anywhere, a mischievous happy grin, cheeks
 hand-drawn butterflies fluttering around their head, giving off a "caught being extra around my
 crush" vibe. No text, no watermark, no logos, no real people, no panel border, no second figure, no
 smartphone, square format.
+
+## pair-stj
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any panel border or divider line. Risograph two-color print illustration on warm cream paper, teal and orange duotone with visible halftone dot texture and slight color misregistration typical of riso printing, hand-drawn zine linework, filling the entire square canvas edge-to-edge, IMPORTANT: use the attached reference image only to match the risograph duotone printing technique, dot texture, line quality, and cream/teal/orange palette. Scene: a person standing stiffly with hands clasped tightly in front, cheeks faintly blushing, small hand-drawn checkmark doodles floating nearby. No text, no watermark, no logos, no real people, no panel border, no second figure, no smartphone, square format.
+
+## pair-sfj
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any panel border or divider line. Risograph two-color print illustration on warm cream paper, teal and orange duotone with visible halftone dot texture and slight color misregistration typical of riso printing, hand-drawn zine linework, filling the entire square canvas edge-to-edge, IMPORTANT: use the attached reference image only to match the risograph duotone printing technique, dot texture, line quality, and cream/teal/orange palette. Scene: a person leaning slightly forward offering a small wrapped gift with both hands, cheeks blushing, small hand-drawn ribbon doodles floating nearby. No text, no watermark, no logos, no real people, no panel border, no second figure, no smartphone, square format.
+
+## pair-nfj
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any panel border or divider line. Risograph two-color print illustration on warm cream paper, teal and orange duotone with visible halftone dot texture and slight color misregistration typical of riso printing, hand-drawn zine linework, filling the entire square canvas edge-to-edge, IMPORTANT: use the attached reference image only to match the risograph duotone printing technique, dot texture, line quality, and cream/teal/orange palette. Scene: a person standing calmly with a knowing gentle smile and downcast eyes, small hand-drawn swirl doodles floating quietly around their head. No text, no watermark, no logos, no real people, no panel border, no second figure, no smartphone, square format.
+
+## pair-ntj
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any panel border or divider line. Risograph two-color print illustration on warm cream paper, teal and orange duotone with visible halftone dot texture and slight color misregistration typical of riso printing, hand-drawn zine linework, filling the entire square canvas edge-to-edge, IMPORTANT: use the attached reference image only to match the risograph duotone printing technique, dot texture, line quality, and cream/teal/orange palette. Scene: a person standing confidently with one hand in pocket and a subtle smirk, small hand-drawn spark doodles floating near their eyes. No text, no watermark, no logos, no real people, no panel border, no second figure, no smartphone, square format.
+
+## pair-stp
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any panel border or divider line. Risograph two-color print illustration on warm cream paper, teal and orange duotone with visible halftone dot texture and slight color misregistration typical of riso printing, hand-drawn zine linework, filling the entire square canvas edge-to-edge, IMPORTANT: use the attached reference image only to match the risograph duotone printing technique, dot texture, line quality, and cream/teal/orange palette. Scene: a person leaning against an invisible wall with hands in pockets, glancing sideways, a small hand-drawn wrench doodle floating nearby. No text, no watermark, no logos, no real people, no panel border, no second figure, no smartphone, square format.
+
+## pair-sfp
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any panel border or divider line. Risograph two-color print illustration on warm cream paper, teal and orange duotone with visible halftone dot texture and slight color misregistration typical of riso printing, hand-drawn zine linework, filling the entire square canvas edge-to-edge, IMPORTANT: use the attached reference image only to match the risograph duotone printing technique, dot texture, line quality, and cream/teal/orange palette. Scene: a person mid-spin with arms open and hair flowing, small hand-drawn flower doodles floating around them. No text, no watermark, no logos, no real people, no panel border, no second figure, no smartphone, square format.
+
+## pair-nfp
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any panel border or divider line. Risograph two-color print illustration on warm cream paper, teal and orange duotone with visible halftone dot texture and slight color misregistration typical of riso printing, hand-drawn zine linework, filling the entire square canvas edge-to-edge, IMPORTANT: use the attached reference image only to match the risograph duotone printing technique, dot texture, line quality, and cream/teal/orange palette. Scene: a person hugging their own knees while sitting, gazing dreamily to the side, small hand-drawn heart doodles floating above their head. No text, no watermark, no logos, no real people, no panel border, no second figure, no smartphone, square format.
+
+## pair-ntp
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any panel border or divider line. Risograph two-color print illustration on warm cream paper, teal and orange duotone with visible halftone dot texture and slight color misregistration typical of riso printing, hand-drawn zine linework, filling the entire square canvas edge-to-edge, IMPORTANT: use the attached reference image only to match the risograph duotone printing technique, dot texture, line quality, and cream/teal/orange palette. Scene: a person tilting their head with a playful raised eyebrow and one finger near their chin, small hand-drawn question-mark doodles floating nearby. No text, no watermark, no logos, no real people, no panel border, no second figure, no smartphone, square format.
+
