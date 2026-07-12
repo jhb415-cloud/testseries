@@ -48,7 +48,15 @@
    보정과는 별개 이슈, 사용자 스크린샷 제보). engine.css가 버튼바에 상단만 페이드되는 불투명
    배경(var(--te-footer-bg))을 깔고, 테마 10종 전부가 .te-app에 자기 페이지 배경과 같은 톤의
    --te-footer-bg를 정의. engine.js 자체 로직 변경은 없고 ENGINE_ASSET_VERSION만 6→7
-   (themes/*.css 캐시버스팅용). */
+   (themes/*.css 캐시버스팅용).
+
+   v8(2026-07-12): mbti4_dual이 지금까지 resultTemplate 하나로만 렌더링돼(겉/속 256개 조합이
+   전부 같은 문구) MBTI존 9개 테스트가 전부 "결과가 하나뿐"이라는 지적을 받아, mbti4와 동일한
+   패턴으로 computeMbti4DualResult에도 c.results 매칭을 추가 — outer.code로 results[]를 찾고
+   (겉모습이 주 정체성이므로), 있으면 그 항목을, 없으면 기존처럼 resultTemplate을 폴백으로 쓴다.
+   vars에 {outer}/{inner}는 그대로 유지해 매칭된 결과 텍스트 안에서도 "{inner}"로 속마음 코드를
+   계속 언급할 수 있다. results가 비어있는 기존/향후 mbti4_dual config는 완전히 그대로 동작
+   (하위호환, 이 변경 이전 동작과 동일). */
 
 (function () {
   'use strict';
@@ -56,7 +64,7 @@
   // engine.js 자체가 바뀔 때마다 이 번호를 올리고, 위 헤더 안내대로 10개 index.html의
   // engine.js/engine.css/result-card.js ?v=도 같은 번호로 맞출 것 — themes/*.css는
   // injectThemeCSS()가 이 상수를 그대로 재사용해 자동으로 캐시버스팅된다(파일별로 안 챙겨도 됨).
-  var ENGINE_ASSET_VERSION = '7';
+  var ENGINE_ASSET_VERSION = '8';
 
   // 최상단에서 즉시 캡처해야 함 — defer 스크립트라도 동기 실행 구간에서만 currentScript가 유효함
   var ENGINE_SCRIPT = document.currentScript;
@@ -480,7 +488,10 @@
     var outer = codeFromCounts(state.mbtiCountsOuter);
     var inner = codeFromCounts(state.mbtiCountsInner);
     var vars = { outer: outer.code, inner: inner.code };
-    var merged = fillVarsTemplate(c.resultTemplate || {}, vars);
+    // v8: mbti4와 동일하게 겉모습(outer) 코드로 results[]를 우선 매칭 — 손으로 쓴 16종 결과가
+    // 있으면 그걸 쓰고, 없으면(results 비어있음) 기존처럼 resultTemplate 폴백(하위호환).
+    var matched = (c.results || []).filter(function (res) { return res.code === outer.code; })[0];
+    var merged = fillVarsTemplate(matched || c.resultTemplate || {}, vars);
     merged.outerCode = outer.code;
     merged.innerCode = inner.code;
     return merged;
