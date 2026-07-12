@@ -27,12 +27,11 @@ ensureAnonSession();
    지금까지 쌓인 XP/스트릭/완주기록(같은 user_id)이 그대로 유지됨(Stage D 때 "Allow manual linking"을
    미리 켜둔 이유). 리다이렉트 방식 OAuth라 이 함수 호출 후 브라우저가 실제로 이동함 —
    돌아온 뒤에는 supabase-client.js가 페이지 로드 시 다시 실행되며 세션을 자동으로 인식함 */
-async function loginWithProvider(provider) {
+async function loginWithProvider(provider, scopes) {
   try {
-    const { error } = await window.sb.auth.linkIdentity({
-      provider,
-      options: { redirectTo: location.origin + '/#home' }
-    });
+    const options = { redirectTo: location.origin + '/#home' };
+    if (scopes) options.scopes = scopes;
+    const { error } = await window.sb.auth.linkIdentity({ provider, options });
     if (error) {
       console.error(`${provider} 로그인 연결 실패:`, error);
       if (typeof showToast === 'function') showToast('로그인에 실패했어요. 다시 시도해주세요');
@@ -46,7 +45,10 @@ async function loginWithProvider(provider) {
   }
 }
 function loginWithGoogle() { return loginWithProvider('google'); }
-function loginWithKakao() { return loginWithProvider('kakao'); }
+/* 카카오는 닉네임/프로필사진을 저희가 자동으로 안 가져오도록 설계해서(직접 아바타/닉네임 설정) 굳이
+   필요 없음 — 빈 스코프로 요청해 카카오 개발자 콘솔에서 동의항목을 켜지 않아도 되게 함
+   (동의항목이 안 켜진 스코프를 요청하면 KOE205 "잘못된 요청" 에러가 남) */
+function loginWithKakao() { return loginWithProvider('kakao', ''); }
 
 /* saveRanking()에서 호출 — 실패해도 로컬스토리지 기록엔 영향 없도록 항상 catch로 감쌈
    difficulty는 Tier 채점 8개 테스트만 실제 값(easy/normal/hard/hell)을 넘기고, 나머지 7개 테스트는 undefined —

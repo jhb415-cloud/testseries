@@ -6839,7 +6839,7 @@ function openLoginModal() {
       <h3 class="text-slate-100 font-bold text-lg mb-1">로그인하고 기록 지키기</h3>
       <p class="text-slate-400 text-xs mb-5">지금은 기기를 바꾸면 기록이 사라져요. 로그인하면 앞으로 나올 온라인 랭킹에서도 내 기록을 계속 이어갈 수 있어요. (댓글은 로그인 없이도 쓸 수 있어요)</p>
       <button onclick="loginWithKakao()" class="w-full bg-[#FEE500] text-[#191919] font-bold py-3 rounded-xl mb-2 transition hover:brightness-95">💬 카카오로 3초 로그인</button>
-      <button onclick="loginWithGoogle()" class="w-full bg-white text-slate-800 font-bold py-3 rounded-xl mb-4 border border-slate-300 transition hover:bg-slate-100">🔍 구글로 로그인</button>
+      <button onclick="loginWithGoogle()" class="w-full font-bold py-3 rounded-xl mb-4 transition hover:brightness-95" style="background:#ffffff;color:#3c4043;border:1px solid #dadce0;">🔍 구글로 로그인</button>
       <button onclick="closeLoginModal()" class="w-full text-slate-500 text-sm">닫고 게스트로 계속하기</button>
     </div>`;
   document.body.appendChild(div);
