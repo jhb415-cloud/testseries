@@ -4526,6 +4526,14 @@ const THEME_TITLE_FONTS = {
   'comic-panel':    { family: '"Bangers","Noto Sans KR",sans-serif', google: 'family=Bangers' },
   'riso-letter':    { family: '"Gamja Flower","Noto Sans KR",cursive', google: 'family=Gamja+Flower' },
   'brain-scan':     { family: '"Share Tech Mono","Noto Sans KR",monospace', google: 'family=Share+Tech+Mono' },
+  messenger:        { family: '"Noto Sans KR",sans-serif' },
+  photocard:        { family: '"Baloo 2","Noto Sans KR",sans-serif', google: 'family=Baloo+2:wght@500;700;800' },
+  'sticker-chat':   { family: '"Jua","Noto Sans KR",sans-serif', google: 'family=Jua' },
+  'glitch-crt':     { family: '"Share Tech Mono","Noto Sans KR",monospace', google: 'family=Share+Tech+Mono' },
+  minhwa:           { family: '"Gowun Batang","Noto Sans KR",serif', google: 'family=Gowun+Batang:wght@400;700' },
+  'double-exposure':{ family: '"Oswald","Noto Sans KR",sans-serif', google: 'family=Oswald:wght@400;500;600;700' },
+  'ink-wash':       { family: '"Nanum Myeongjo","Noto Sans KR",serif', google: 'family=Nanum+Myeongjo:wght@400;700;800' },
+  'cyber-court':    { family: '"Orbitron","Noto Sans KR",sans-serif', google: 'family=Orbitron:wght@600;700;800;900' },
 };
 const _loadedThemeFonts = new Set();
 function themeTitleFontFamily(theme) {

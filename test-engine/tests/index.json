@@ -37,7 +37,7 @@
       "title": "텍스트 답장 스타일로 보는 연애 유형",
       "category": "몰입테스트",
       "scoring_type": "type",
-      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 3-text-reply-love-type, 신규 테마 messenger.css",
+      "status": "완료(이미지·QA까지, 사이트 연동 완료 2026-07-12) — 폴더 3-text-reply-love-type, 신규 테마 messenger.css",
       "concept_style": "깔끔/위트형 — 코믹 말풍선 아이콘 일러스트(폰 UI 흉내 아님), themes/messenger.css",
       "note": "이미지 컨셉을 3차례 재설계 — 1차(레퍼런스 images/edits로 폰 UI 그대로 스타일 참조)는 상단바/타임스탬프까지 흉내내다 깨진 가짜 영문 텍스트 발생, 2차(레퍼런스 없이 'messaging app' 문구 사용)는 gpt-image-1이 로고/앱아이콘으로 오인해 'MESSAGING APP' 텍스트 배너가 박힌 제네릭 이미지로 나옴, 3차(레퍼런스 미사용+'app/UI/phone' 단어 제거+말풍선을 순수 만화 소재로 묘사)로 최종 성공. **이 과정에서 generate-assets.js 프롬프트 파서가 `##` 헤딩 다음 '한 줄'만 읽는다는 기존 함정(k-office-type에서 이미 발견됐던 것)을 모르고 여러 줄로 줄바꿈해서 써서 프롬프트가 중간에 잘려있었던 게 3차 시도 초반까지도 실패 원인이었음 — 한 줄로 재작성 후 정상화. 앞으로 prompts.md 작성 시 항상 한 줄 유지할 것(README.md에도 있는 규칙, 재차 확인).**"
     },
@@ -77,7 +77,7 @@
       "title": "내가 아이돌 그룹에 들어가면 포지션은?",
       "category": "몰입테스트",
       "scoring_type": "type",
-      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 7-idol-position-type, 신규 테마 photocard.css",
+      "status": "완료(이미지·QA까지, 사이트 연동 완료 2026-07-12) — 폴더 7-idol-position-type, 신규 테마 photocard.css",
       "concept_style": "밈/드립형 — 홀로그램 K-pop 포토카드(무지개 홀로포일), themes/photocard.css",
       "note": "사용자 Gemini 레퍼런스(2장 합성 포토카드)를 images/edits로 스타일 참조, 오리지널 아이돌 캐릭터 1명을 고정해두고 6개 포지션마다 포즈·표정·소품만 바꿔 재사용(단일 카드 강제 문구로 2패널 복제 없이 1회 생성 성공). single-line 프롬프트 규칙 준수."
     },
@@ -87,7 +87,7 @@
       "title": "단톡방에서 나는 무슨 캐릭터?",
       "category": "몰입테스트",
       "scoring_type": "type",
-      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 8-group-chat-character, 신규 테마 sticker-chat.css",
+      "status": "완료(이미지·QA까지, 사이트 연동 완료 2026-07-12) — 폴더 8-group-chat-character, 신규 테마 sticker-chat.css",
       "concept_style": "밈/드립형 — 채팅 스티커팩 캐릭터(치비+굵은 화이트 다이컷 아웃라인), themes/sticker-chat.css",
       "note": "레퍼런스가 카카오톡 UI 배경 위에 스티커가 합성된 이미지라, 채팅 UI 크롬(헤더/입력창)까지 스타일 참조하면 #3에서 겪은 깨진 텍스트 문제가 재발할 위험이 있어 캐릭터 디자인만 가져오고 배경은 단색 그라데이션으로 대체(프롬프트에 명시적으로 UI 크롬 배제) — 7장 전량 1회 생성 성공, 캐릭터 일관성 양호."
     },
@@ -97,7 +97,7 @@
       "title": "나의 도파민 중독 레벨 테스트",
       "category": "몰입테스트",
       "scoring_type": "sum",
-      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 9-dopamine-addiction-level, 신규 테마 glitch-crt.css",
+      "status": "완료(이미지·QA까지, 사이트 연동 완료 2026-07-12) — 폴더 9-dopamine-addiction-level, 신규 테마 glitch-crt.css",
       "concept_style": "밈/드립형 — 글리치/CRT 노이즈 아트, themes/glitch-crt.css",
       "note": "레퍼런스가 마침 '차분한 실루엣 vs RGB 크로마틱 애버레이션으로 갈라진 실루엣' 2장이라, 이 글리치 강도 차이를 5단계 중독 레벨의 시각적 은유로 그대로 활용 — 같은 구도(책상+모니터+대각선 빛줄기)를 유지한 채 글리치 강도·화면 밝기만 점진적으로 증가시켜 6장 전량 1회 생성 성공, 단계별 악화가 한눈에 보임."
     },
@@ -107,7 +107,7 @@
       "title": "전생에 나는 조선시대 누구? (사주/명리 연계)",
       "category": "몰입테스트",
       "scoring_type": "type",
-      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 10-joseon-past-life-type, 신규 테마 minhwa.css",
+      "status": "완료(이미지·QA까지, 사이트 연동 완료 2026-07-12) — 폴더 10-joseon-past-life-type, 신규 테마 minhwa.css",
       "concept_style": "밈/드립형 — 조선 민화(전통 채색화), themes/minhwa.css",
       "note": "레퍼런스(안개 산길 나그네+궁궐 관복 관리, 청록/주황 배색)의 팔레트가 브랜드 컬러와 잘 맞아 그대로 채택, 6개 인물유형마다 배경(궁궐/저잣거리/서당/산속)과 복식·소품만 바꿔 7장 전량 1회 생성 성공."
     },
@@ -177,7 +177,7 @@
       "title": "회사에서의 내 MBTI (K-직장인 가면)",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 17-office-mask-mbti, 신규 테마 double-exposure.css",
+      "status": "완료(이미지·QA까지, 사이트 연동 완료 2026-07-12) — 폴더 17-office-mask-mbti, 신규 테마 double-exposure.css",
       "concept_style": "밈/드립형 — 이중노출 시네마틱 사진(다른 9개 테스트가 전부 일러스트인 것과 차별화되는 사진 매체), themes/double-exposure.css",
       "note": "resultTemplate 공용 구조라 이미지 2장(cover+generic)만 필요 — 레퍼런스의 두 패널(도시 노을 이중노출/사무실 형광등 이중노출)을 각각 cover(진짜 나)/generic(회사 가면) 컨셉으로 그대로 매칭, 1회 생성 성공. [2026-07-12 갱신] 결과를 resultTemplate 공용 1개 → 16종(코드별 제목/부제/특징/팁 전부 다름, 이미지는 E/I만 다른 8쌍 공유)으로 세분화 완료."
     },
@@ -187,7 +187,7 @@
       "title": "스트레스 받으면 튀어나오는 그림자 MBTI",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 18-shadow-mbti, 신규 테마 ink-wash.css",
+      "status": "완료(이미지·QA까지, 사이트 연동 완료 2026-07-12) — 폴더 18-shadow-mbti, 신규 테마 ink-wash.css",
       "concept_style": "밈/드립형 — 수묵 잉크워시 실루엣, themes/ink-wash.css",
       "note": "resultTemplate 공용 구조라 이미지 2장(cover+generic)만 필요 — 레퍼런스의 두 패널(차분한 평소 실루엣/먹 폭발 속 청록 형광눈 그림자 자아)이 컨셉과 정확히 일치해 그대로 cover/generic으로 매칭, 1회 생성 성공. [2026-07-12 갱신] 결과를 resultTemplate 공용 1개 → 16종(코드별 제목/부제/특징/팁 전부 다름, 이미지는 E/I만 다른 8쌍 공유)으로 세분화 완료."
     },
@@ -197,7 +197,7 @@
       "title": "내 MBTI 능력치 스탯창 (원안 'MBTI 커플 조합 궁합기'에서 교체됨)",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 19-mbti-stat-window, 16유형 전원 게임 클래스 초상화(한글 라벨 각인) + results[] 16종 클래스별 문구",
+      "status": "완료(이미지·QA까지, 사이트 연동 완료 2026-07-12) — 폴더 19-mbti-stat-window, 16유형 전원 게임 클래스 초상화(한글 라벨 각인) + results[] 16종 클래스별 문구",
       "note": "레거시 원안은 test-engine/tests/mbti-couple-match/DESIGN.md에 보존. 2026-07-11 질문 문구를 단답형에서 상황 서술형 완결 문장으로 전면 리라이팅(axis 값 무변경, 오타였던 1번 문항 \"먼저 말 검\"도 함께 수정), Playwright로 완주 재검증 완료"
     },
     {
@@ -206,7 +206,7 @@
       "title": "AI가 판별하는 진짜 내 MBTI (과몰입 검거)",
       "category": "MBTI존",
       "scoring_type": "mbti4+intro_input",
-      "status": "완료(이미지·QA까지, 사이트 연동 전) — 폴더 20-ai-mbti-judge, 신규 테마 cyber-court.css",
+      "status": "완료(이미지·QA까지, 사이트 연동 완료 2026-07-12) — 폴더 20-ai-mbti-judge, 신규 테마 cyber-court.css",
       "concept_style": "밈/드립형 — 사이버펑크 법정 스캐너(홀로그램 UI), themes/cyber-court.css",
       "note": "resultTemplate 공용 구조라 이미지 2장(cover+generic)만 필요 — 레퍼런스의 두 패널(마젠타 와이어프레임 전신 스캔/시안 홀로그램 저울+증거패널 판결 장면)을 각각 cover(신문 당하는 중)/generic(판결 순간)으로 매칭, 1회 생성 성공. intro_input 드롭다운(자기신고 유형)+{claimed} vs {code} 비교 subtitle Playwright로 정상 동작 확인, 20개 목록 전체(1~20+mental-age) 완료. [2026-07-12 갱신] 결과를 resultTemplate 공용 1개 → 16종(코드별 제목/부제/특징/팁 전부 다름, 이미지는 E/I만 다른 8쌍 공유)으로 세분화 완료."
     }

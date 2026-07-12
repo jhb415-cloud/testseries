@@ -65,4 +65,49 @@
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/3-text-reply-love-type/index.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/7-idol-position-type/index.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/8-group-chat-character/index.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/9-dopamine-addiction-level/index.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/10-joseon-past-life-type/index.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/17-office-mask-mbti/index.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/18-shadow-mbti/index.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/19-mbti-stat-window/index.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/20-ai-mbti-judge/index.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
 </urlset>

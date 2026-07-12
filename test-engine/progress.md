@@ -13,14 +13,14 @@
 - [x] mental-age (번호 없음, 20개 목록 이전 1호 콘텐츠) — 완료 · 연동 O
 - [x] #1 k-office-type — 완료 · 연동 O
 - [x] #2 desert-island-type — 완료 · 연동 O
-- [x] #3 text-reply-love-type — 완료 (commit: 4cc0470, 2026-07-11) · 연동 X(다음 배치)
+- [x] #3 text-reply-love-type — 완료 (commit: 4cc0470, 2026-07-11) · 연동 O(2026-07-12)
 - [x] #4 spending-type — 완료 · 연동 O
 - [x] #5 villain-index — 완료 · 연동 O
 - [x] #6 mbti-addiction-level — 완료 · 연동 O
-- [x] #7 idol-position-type — 완료 (commit: 630b8ba, 2026-07-11) · 연동 X(다음 배치)
-- [x] #8 group-chat-character — 완료 (2026-07-11) · 연동 X(다음 배치)
-- [x] #9 dopamine-addiction-level — 완료 (2026-07-11) · 연동 X(다음 배치)
-- [x] #10 joseon-past-life-type — 완료 (2026-07-11) · 연동 X(다음 배치)
+- [x] #7 idol-position-type — 완료 (commit: 630b8ba, 2026-07-11) · 연동 O(2026-07-12)
+- [x] #8 group-chat-character — 완료 (2026-07-11) · 연동 O(2026-07-12)
+- [x] #9 dopamine-addiction-level — 완료 (2026-07-11) · 연동 O(2026-07-12)
+- [x] #10 joseon-past-life-type — 완료 (2026-07-11) · 연동 O(2026-07-12)
 
 **몰입테스트(1~10) 전체 완료.**
 
@@ -31,18 +31,18 @@
 - [x] #14 villain-mbti — 완료 · 연동 O (commit: 8256ff3, 2026-07-11)
 - [x] #15 crush-mode-mbti — 완료 · 연동 O (commit: 8256ff3, 2026-07-11)
 - [x] #16 brain-structure-report — 완료 · 연동 O (commit: 8256ff3, 2026-07-11)
-- [x] #17 office-mask-mbti — 완료 (2026-07-11) · 연동 X(다음 배치)
-- [x] #18 shadow-mbti — 완료 (2026-07-11) · 연동 X(다음 배치)
-- [x] #19 mbti-stat-window — **콘텐츠 완료**(이미지·QA까지, commit: 8256ff3에서 질문 텍스트만 추가 수정) · **연동 X**(다음 배치에서 진행)
-- [x] #20 ai-mbti-judge — 완료 (commit: 305e6ba, 2026-07-11) · 연동 X(다음 배치)
+- [x] #17 office-mask-mbti — 완료 (2026-07-11) · 연동 O(2026-07-12)
+- [x] #18 shadow-mbti — 완료 (2026-07-11) · 연동 O(2026-07-12)
+- [x] #19 mbti-stat-window — **콘텐츠 완료**(이미지·QA까지, commit: 8256ff3에서 질문 텍스트만 추가 수정) · 연동 O(2026-07-12)
+- [x] #20 ai-mbti-judge — 완료 (commit: 305e6ba, 2026-07-11) · 연동 O(2026-07-12)
 
-**MBTI존(11~20) 전체 완료. 20개 목록 + mental-age 전체 콘텐츠 제작 완료.**
+**MBTI존(11~20) 전체 완료. 20개 목록 + mental-age 전체 콘텐츠 제작 완료. 전체 사이트 연동도 완료.**
 
 ## 다음 배치 후보
-콘텐츠 제작 대상은 없음. 남은 작업은 **사이트 연동**(#3/#7/#8/#9/#10/#17/#18/#19/#20, 총 9개 —
-`data.js`/`app.js`(THEME_TITLE_FONTS)/`sections.json`/`sitemap.xml` 반영 + `git push`)뿐이며,
-이는 CLAUDE.md 4-8·4-5 규칙상 항상 사용자 승인이 필요해 무인 배치 세션 범위 밖. 사용자가 있는
-세션에서 스크린샷 확인 후 진행할 것.
+콘텐츠 제작·사이트 연동 대상 모두 없음 — **20개 목록 + mental-age 전체가 콘텐츠 제작과 사이트
+연동(`data.js`/`app.js`/`sitemap.xml`) 모두 완료된 상태**(2026-07-12). `sections.json`은
+`dynamic:"psych-trending"`이 `AppData.externalTests`/`mbtiZoneTests`를 자동으로 읽어가는 구조라
+이번에도 별도 수정 불필요. 다음 콘텐츠 추가 요청이 오면 이 파일에 새 항목을 등록하고 진행할 것.
 
 ## 품질 개선 — MBTI존 9개(#11~18,#20) 16종 결과 세분화 (2026-07-12)
 사용자가 "#19 빼고는 결과가 다 하나뿐이라 노잼"이라고 지적해 진행. `resultTemplate` 공용 템플릿
