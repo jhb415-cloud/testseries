@@ -15,3 +15,36 @@ A dark cyberpunk illustration, a generic anonymous person sitting on a simple ch
 ## generic
 
 A dark cyberpunk illustration, a generic anonymous person sitting calmly beneath a large glowing holographic scale-of-justice icon rendered in cyan and magenta neon light, surrounded by many floating glowing holographic data panels and evidence screens filled with abstract charts and graph lines (no readable words), dramatic verdict-being-delivered atmosphere, no readable text, no logos, no watermark, square format.
+
+## pair-stj
+
+A dark cyberpunk illustration, a generic anonymous person sitting calmly on a simple chair, surrounded by floating glowing holographic data panels and evidence screens filled with abstract charts and graph lines (no readable words), cyan and magenta neon lighting, dramatic verdict atmosphere. Scene: the panels around them form a neat orderly grid, magenta light steady and unwavering. no readable text, no logos, no watermark, square format.
+
+## pair-sfj
+
+A dark cyberpunk illustration, a generic anonymous person sitting calmly on a simple chair, surrounded by floating glowing holographic data panels and evidence screens filled with abstract charts and graph lines (no readable words), cyan and magenta neon lighting, dramatic verdict atmosphere. Scene: the panels around them glow softly warm, one panel appears to gently curve toward the person like it is offering comfort. no readable text, no logos, no watermark, square format.
+
+## pair-nfj
+
+A dark cyberpunk illustration, a generic anonymous person sitting calmly on a simple chair, surrounded by floating glowing holographic data panels and evidence screens filled with abstract charts and graph lines (no readable words), cyan and magenta neon lighting, dramatic verdict atmosphere. Scene: the panels around them are mostly dim except one glowing brightly in violet directly above the person's head. no readable text, no logos, no watermark, square format.
+
+## pair-ntj
+
+A dark cyberpunk illustration, a generic anonymous person sitting calmly on a simple chair, surrounded by floating glowing holographic data panels and evidence screens filled with abstract charts and graph lines (no readable words), cyan and magenta neon lighting, dramatic verdict atmosphere. Scene: the panels around them are arranged in a precise geometric spiral, sharp cyan light beams connecting each one. no readable text, no logos, no watermark, square format.
+
+## pair-stp
+
+A dark cyberpunk illustration, a generic anonymous person sitting calmly on a simple chair, surrounded by floating glowing holographic data panels and evidence screens filled with abstract charts and graph lines (no readable words), cyan and magenta neon lighting, dramatic verdict atmosphere. Scene: the panels around them flicker rapidly as if just activated, the person leaning forward with sharp alert posture. no readable text, no logos, no watermark, square format.
+
+## pair-sfp
+
+A dark cyberpunk illustration, a generic anonymous person sitting calmly on a simple chair, surrounded by floating glowing holographic data panels and evidence screens filled with abstract charts and graph lines (no readable words), cyan and magenta neon lighting, dramatic verdict atmosphere. Scene: the panels around them pulse in rhythm like a heartbeat, warm magenta glow reflecting off the person's relaxed posture. no readable text, no logos, no watermark, square format.
+
+## pair-nfp
+
+A dark cyberpunk illustration, a generic anonymous person sitting calmly on a simple chair, surrounded by floating glowing holographic data panels and evidence screens filled with abstract charts and graph lines (no readable words), cyan and magenta neon lighting, dramatic verdict atmosphere. Scene: the panels around them drift slowly like clouds, soft lavender glow surrounding the person in a gentle halo. no readable text, no logos, no watermark, square format.
+
+## pair-ntp
+
+A dark cyberpunk illustration, a generic anonymous person sitting calmly on a simple chair, surrounded by floating glowing holographic data panels and evidence screens filled with abstract charts and graph lines (no readable words), cyan and magenta neon lighting, dramatic verdict atmosphere. Scene: the panels around them overlap chaotically with crackling cyan sparks jumping between them, the person tilting their head with intrigue. no readable text, no logos, no watermark, square format.
+
