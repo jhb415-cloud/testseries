@@ -6820,12 +6820,18 @@ async function initHomeLoginState() {
     }
     const { data: profile } = await window.sb.from('profiles').select('public_nickname,avatar_url').eq('id', session.user.id).maybeSingle();
     if (profile && profile.public_nickname) {
-      el.innerHTML = `<span class="home-login-link home-login-link-done">${avatarHTML(profile.public_nickname, profile.avatar_url, 18)} ${escapeHtml(profile.public_nickname)}님 로그인됨</span>`;
+      el.innerHTML = `<span class="home-login-link home-login-link-done">${avatarHTML(profile.public_nickname, profile.avatar_url, 18)} ${escapeHtml(profile.public_nickname)}님 로그인됨</span>
+        <button onclick="confirmLogout()" class="home-login-link home-logout-link">로그아웃</button>`;
     } else {
       el.innerHTML = `<button onclick="openNicknameSetupModal()" class="home-login-link">✅ 로그인 완료 · 닉네임 설정하기</button>`;
       if (!_nicknameSetupAutoShown) { _nicknameSetupAutoShown = true; openNicknameSetupModal(); }
     }
   } catch (e) { console.error('로그인 상태 조회 실패:', e); }
+}
+
+function confirmLogout() {
+  if (!confirm('로그아웃할까요? 로그아웃하면 다음부터는 익명으로 표시돼요(다시 로그인하면 이 계정으로 돌아올 수 있어요).')) return;
+  if (typeof logout === 'function') logout();
 }
 
 function openLoginModal() {

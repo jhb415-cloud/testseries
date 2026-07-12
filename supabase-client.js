@@ -64,6 +64,22 @@ function loginWithGoogle() { return loginWithProvider('google'); }
    (동의항목이 안 켜진 스코프를 요청하면 KOE205 "잘못된 요청" 에러가 남) */
 function loginWithKakao() { return loginWithProvider('kakao', ''); }
 
+/* 로그아웃(v0.9.10~) — 세션을 완전히 끝내고 새 익명 세션으로 즉시 되돌림(로그인 전과 동일한
+   "기록이 이 기기에만 로컬로 남는" 상태). 같은 계정으로 다시 로그인하면 identity_already_exists
+   흐름을 통해 원래 계정으로 다시 돌아올 수 있음(위 handleOAuthRedirectError 참고) */
+async function logout() {
+  try {
+    await window.sb.auth.signOut();
+    await ensureAnonSession();
+    if (typeof renderHomeIdentity === 'function') renderHomeIdentity();
+    if (typeof initHomeLoginState === 'function') initHomeLoginState();
+    if (typeof showToast === 'function') showToast('로그아웃됐어요');
+  } catch (e) {
+    console.error('로그아웃 실패:', e);
+    if (typeof showToast === 'function') showToast('로그아웃에 실패했어요');
+  }
+}
+
 /* ══════════════════════════════════════════════════
    🔀 이미 다른 계정에 연결된 소셜 아이디로 재시도한 경우 (v0.9.8~)
    linkIdentity는 "현재 익명 세션에 이 소셜 계정을 새로 연결"하는 동작이라, 그 소셜 계정이

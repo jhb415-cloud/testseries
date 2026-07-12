@@ -1,6 +1,6 @@
 # CLAUDE.md — 5-in-1 Dashboard SPA 아키텍처 규칙
 
-## 현재 버전: v0.9.9
+## 현재 버전: v1.0.0
 
 ## 프로젝트 개요
 Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보드 SPA.
@@ -112,6 +112,7 @@ Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보�
 ## 4. 변경 이력 (요약)
 | 일자 | 버전 | 내용 |
 |---|---|---|
+| 2026-07-12 | v1.0.0 | **로그아웃 기능 추가 + 버전 규칙에 따라 v0.9.9→v1.0.0 자리올림.** 사용자가 로그인 성공을 실제로 확인한 뒤 "로그아웃은 어떻게 하는데?" 질문 — 애초에 온라인 랭킹 토대 범위엔 로그아웃이 없었으나 바로 필요해져 추가. `supabase-client.js`에 `logout()`(세션 종료 후 즉시 새 익명 세션으로 복귀, 홈 화면 갱신) 신규, `app.js`에 `confirmLogout()`(확인창 후 `logout()` 호출) 신규 — 홈 화면 "OO님 로그인됨" 문구 옆에 작은 "로그아웃" 링크로 노출(`.home-logout-link`). 로그아웃 후 같은 계정으로 다시 로그인하면 v0.9.8의 `identity_already_exists` 처리 흐름을 통해 원래 계정으로 정상 복귀 가능. **검증**: `node --check` 통과, Playwright로 비로그인 상태 홈 로그인 행 렌더링 회귀 없음 확인, 콘솔 에러 0건. **이번 세션의 댓글+로그인 작업(v0.9.2~v1.0.0) 전체가 실제 배포 환경에서 로그인→닉네임 설정→홈 표시→로그아웃까지 end-to-end로 검증 완료됨** |
 | 2026-07-12 | v0.9.9 | **로그인해도 계속 익명 세션으로 남는 경쟁 상태(race condition) 버그 수정.** 사용자가 구글 로그인을 완료했는데도 콘솔에서 `is_anonymous:true`로 확인돼 근본 원인 조사 — `supabase-client.js`가 페이지 로드 즉시 무조건 `ensureAnonSession()`을 호출하는데, OAuth 리다이렉트로 막 돌아온 시점엔 Supabase 클라이언트가 URL의 인가 코드를 세션으로 교환하는 내부 비동기 작업이 아직 끝나지 않은 상태라, 이 타이밍에 `getSession()`을 부르면 "세션 없음"으로 판단해 새 익명 세션을 만들어버리고 방금 로그인해서 생긴 진짜 세션이 무시되는 구조였음. 무조건 즉시 호출하던 `ensureAnonSession();`을 제거하고, `onAuthStateChange`의 `INITIAL_SESSION` 이벤트(내부 코드 교환이 끝난 뒤에만 발생)에서만 세션 유무를 판단하도록 변경(Supabase 공식 권장 패턴). **검증**: `node --check` 통과, Playwright로 일반 페이지 로드 시 여전히 정상적으로 익명 세션이 생성됨을 확인(회귀 없음) — 실제 OAuth 리다이렉트 왕복 자체는 헤드리스 환경에서 재현 불가해 배포 후 실사용 재확인 필요 |
 | 2026-07-12 | v0.9.8 | **OAuth 리다이렉트 에러(identity_already_exists) 처리 추가.** 사용자가 구글 로그인 시도 후 "반응이 없다"고 제보 — 실제로는 주소창에 `?error=server_error&error_code=identity_already_exists...`가 그대로 남아있었는데 앱이 이걸 전혀 처리하지 않고 조용히 무시하고 있었음. `linkIdentity()`(현재 익명 세션에 소셜 계정을 새로 연결)는 그 소셜 계정이 이미 다른 user_id에 연결돼 있으면 서버가 거부하는데, 이 에러는 JS Promise가 아니라 리다이렉트 URL 쿼리스트링으로 돌아오는 방식이라 페이지 로드 시점에 별도 파싱이 필요했음. `supabase-client.js`에 `handleOAuthRedirectError()` 신규(쿼리스트링에서 `error_code` 감지 → URL 정리 → `identity_already_exists`면 확인창으로 "이미 연결된 그 계정으로 전환할지" 물어보고 동의 시 `linkIdentity` 대신 일반 `signInWithOAuth()`로 재시도), `loginWithProvider()`가 시도 직전 `sessionStorage`에 provider를 기록해 리다이렉트 후에도 어떤 프로바이더였는지 알 수 있게 함. `app.js`의 `DOMContentLoaded` 최상단에서 호출. **검증**: `node --check` 통과, Playwright로 에러 쿼리스트링을 가진 URL 진입 시뮬레이션 — URL이 `#home`으로 깨끗이 정리되고 확인창이 정상 노출됨을 확인, 콘솔 에러 0건 |
 | 2026-07-12 | v0.9.7 | **카카오 KOE205 에러 근본 수정 — v0.9.6 빈 스코프 처리 자체에 버그.** 배포 후에도 사용자가 KOE205를 재현, 브라우저 콘솔로 정확한 원인 확인 — `loginWithProvider(provider, scopes)`의 `if (scopes) options.scopes = scopes;`가 빈 문자열(`''`)을 falsy로 취급해 무시하는 바람에, `loginWithKakao()`가 넘긴 `''`가 실제로는 전달되지 않고 Supabase(GoTrue)의 카카오 기본 스코프(`account_email,profile_image,profile_nickname`)가 그대로 요청되고 있었음(v0.9.6은 코드를 작성만 하고 실배포 재확인 없이 완료 처리한 게 문제) — `if (scopes !== undefined)`로 교체해 빈 문자열도 유효한 오버라이드로 인정되게 수정. **구글 로그인 별도 이슈**(`AuthApiError: Unsupported provider: missing OAuth secret`)는 코드가 아닌 Supabase 대시보드 Authentication > Providers > Google의 Client Secret이 비어있어서 나는 외부 설정 문제로 확인 — 사용자에게 재입력 안내(코드 변경 없음). **검증**: `node --check` 통과. 카카오 스코프 수정은 배포 후 실사용 재확인 필요 |
