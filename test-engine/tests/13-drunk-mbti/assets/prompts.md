@@ -9,6 +9,35 @@ Minimalist neon sign line-art illustration, glowing outline style on a dark navy
 ## generic
 Minimalist neon sign line-art illustration, glowing outline style on a dark navy night background with a faint dark city skyline silhouette along the bottom edge, single continuous teal-mint neon outline with soft outer glow halo, no fill just pure glowing line strokes, IMPORTANT: use the attached reference image closely to match the neon line-art rendering technique, glow style, line weight, dark navy night palette, and the emotional slouched tipsy pose shown in the right result panel. Scene: a person kneeling forward on the ground, head tilted down with a wobbly emotional teary expression, one hand braced on the ground and the other loosely dangling holding a small bottle, small sparkle accent in the bottom corner, conveys a sentimental overwhelmed drunk mood. No text, no watermark, no logos, no real people, square format.
 
-## question-5
+## pair-stj
 
-Minimalist neon sign line-art illustration, glowing outline style on a dark navy night background with a faint dark city skyline silhouette along the bottom edge, warm coral-orange and teal-mint neon outlines with soft outer glow halo, no fill just pure glowing line strokes, IMPORTANT: use the attached reference image only to match the neon line-art rendering technique, glow style, line weight, and dark navy night palette. Scene: a tipsy person sitting at a small bar table with a tilted glass in hand and flushed swirl marks on their cheeks, above their head float two glowing neon icons showing the two ways the mood could explode — a jagged lightning bolt on one side and a big teardrop on the other. No text, no watermark, no logos, no real people, square format.
+Minimalist neon sign line-art illustration, glowing outline style on a dark navy night background with a faint dark city skyline silhouette along the bottom edge, warm coral-orange and teal-mint neon outlines with soft outer glow halo, no fill just pure glowing line strokes, IMPORTANT: use the attached reference image only to match the neon line-art rendering technique, glow style, line weight, and dark navy night palette. Scene: a person sitting upright at a bar table with arms neatly folded, a small neon glowing checklist icon beside them. No text, no watermark, no logos, no real people, square format.
+
+## pair-sfj
+
+Minimalist neon sign line-art illustration, glowing outline style on a dark navy night background with a faint dark city skyline silhouette along the bottom edge, warm coral-orange and teal-mint neon outlines with soft outer glow halo, no fill just pure glowing line strokes, IMPORTANT: use the attached reference image only to match the neon line-art rendering technique, glow style, line weight, and dark navy night palette. Scene: a person leaning over pouring a drink into a friend's glass off-frame, a small neon glowing water-glass icon nearby. No text, no watermark, no logos, no real people, square format.
+
+## pair-nfj
+
+Minimalist neon sign line-art illustration, glowing outline style on a dark navy night background with a faint dark city skyline silhouette along the bottom edge, warm coral-orange and teal-mint neon outlines with soft outer glow halo, no fill just pure glowing line strokes, IMPORTANT: use the attached reference image only to match the neon line-art rendering technique, glow style, line weight, and dark navy night palette. Scene: a person sitting quietly with eyes closed and one hand on their chest, a small neon glowing swirl thought-bubble above their head. No text, no watermark, no logos, no real people, square format.
+
+## pair-ntj
+
+Minimalist neon sign line-art illustration, glowing outline style on a dark navy night background with a faint dark city skyline silhouette along the bottom edge, warm coral-orange and teal-mint neon outlines with soft outer glow halo, no fill just pure glowing line strokes, IMPORTANT: use the attached reference image only to match the neon line-art rendering technique, glow style, line weight, and dark navy night palette. Scene: a person leaning back with arms crossed and a sharp knowing smirk, a small neon glowing chess-piece icon beside them. No text, no watermark, no logos, no real people, square format.
+
+## pair-stp
+
+Minimalist neon sign line-art illustration, glowing outline style on a dark navy night background with a faint dark city skyline silhouette along the bottom edge, warm coral-orange and teal-mint neon outlines with soft outer glow halo, no fill just pure glowing line strokes, IMPORTANT: use the attached reference image only to match the neon line-art rendering technique, glow style, line weight, and dark navy night palette. Scene: a person leaning casually against a wall with one hand in pocket, a small neon glowing wrench icon nearby. No text, no watermark, no logos, no real people, square format.
+
+## pair-sfp
+
+Minimalist neon sign line-art illustration, glowing outline style on a dark navy night background with a faint dark city skyline silhouette along the bottom edge, warm coral-orange and teal-mint neon outlines with soft outer glow halo, no fill just pure glowing line strokes, IMPORTANT: use the attached reference image only to match the neon line-art rendering technique, glow style, line weight, and dark navy night palette. Scene: a person mid-twirl with arms flowing outward joyfully, small neon glowing music-note icons floating around them. No text, no watermark, no logos, no real people, square format.
+
+## pair-nfp
+
+Minimalist neon sign line-art illustration, glowing outline style on a dark navy night background with a faint dark city skyline silhouette along the bottom edge, warm coral-orange and teal-mint neon outlines with soft outer glow halo, no fill just pure glowing line strokes, IMPORTANT: use the attached reference image only to match the neon line-art rendering technique, glow style, line weight, and dark navy night palette. Scene: a person sitting cross-legged on the floor gazing dreamily upward with both hands clasped near their chest, a small neon glowing heart above their head. No text, no watermark, no logos, no real people, square format.
+
+## pair-ntp
+
+Minimalist neon sign line-art illustration, glowing outline style on a dark navy night background with a faint dark city skyline silhouette along the bottom edge, warm coral-orange and teal-mint neon outlines with soft outer glow halo, no fill just pure glowing line strokes, IMPORTANT: use the attached reference image only to match the neon line-art rendering technique, glow style, line weight, and dark navy night palette. Scene: a person leaning forward mid-conversation with one finger raised as if making a point, a small neon glowing lightbulb icon above their head. No text, no watermark, no logos, no real people, square format.
+
