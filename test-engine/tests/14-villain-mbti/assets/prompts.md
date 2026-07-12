@@ -30,3 +30,36 @@ only the confident villain reveal pose (the reference's RIGHT panel content only
 standing tall with arms crossed, a confident smug smirk, a faint flame-like aura outline glowing
 around their whole body, clearly enjoying having let their true villain persona take over. No text,
 no watermark, no logos, no real people, no panel border, no second figure, square format.
+
+## pair-stj
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any diagonal divider line. Duotone halftone comic book illustration in warm orange and teal, dynamic radiating speed-line burst background filling the entire square canvas edge-to-edge, bold black comic ink outlines, IMPORTANT: use the attached reference image only to match the duotone halftone comic rendering technique, ink line weight, radiating burst background, and orange/teal palette. Scene: a figure standing rigidly with arms crossed and a stern commanding glare, a faint clipboard-shaped energy aura hovering beside them. No text, no watermark, no logos, no real people, no panel border, no second figure, square format.
+
+## pair-sfj
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any diagonal divider line. Duotone halftone comic book illustration in warm orange and teal, dynamic radiating speed-line burst background filling the entire square canvas edge-to-edge, bold black comic ink outlines, IMPORTANT: use the attached reference image only to match the duotone halftone comic rendering technique, ink line weight, radiating burst background, and orange/teal palette. Scene: a figure standing with head lowered and shoulders trembling slightly, faint jagged energy cracks radiating outward from clenched fists. No text, no watermark, no logos, no real people, no panel border, no second figure, square format.
+
+## pair-nfj
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any diagonal divider line. Duotone halftone comic book illustration in warm orange and teal, dynamic radiating speed-line burst background filling the entire square canvas edge-to-edge, bold black comic ink outlines, IMPORTANT: use the attached reference image only to match the duotone halftone comic rendering technique, ink line weight, radiating burst background, and orange/teal palette. Scene: a figure standing perfectly still with eyes closed, faint glowing energy lines radiating silently outward like a held breath about to release. No text, no watermark, no logos, no real people, no panel border, no second figure, square format.
+
+## pair-ntj
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any diagonal divider line. Duotone halftone comic book illustration in warm orange and teal, dynamic radiating speed-line burst background filling the entire square canvas edge-to-edge, bold black comic ink outlines, IMPORTANT: use the attached reference image only to match the duotone halftone comic rendering technique, ink line weight, radiating burst background, and orange/teal palette. Scene: a figure standing with one hand raised as if commanding unseen forces, sharp geometric energy shards radiating around them. No text, no watermark, no logos, no real people, no panel border, no second figure, square format.
+
+## pair-stp
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any diagonal divider line. Duotone halftone comic book illustration in warm orange and teal, dynamic radiating speed-line burst background filling the entire square canvas edge-to-edge, bold black comic ink outlines, IMPORTANT: use the attached reference image only to match the duotone halftone comic rendering technique, ink line weight, radiating burst background, and orange/teal palette. Scene: a figure crouched low and ready to spring, fists loosely clenched, faint sharp motion-line energy trailing behind them. No text, no watermark, no logos, no real people, no panel border, no second figure, square format.
+
+## pair-sfp
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any diagonal divider line. Duotone halftone comic book illustration in warm orange and teal, dynamic radiating speed-line burst background filling the entire square canvas edge-to-edge, bold black comic ink outlines, IMPORTANT: use the attached reference image only to match the duotone halftone comic rendering technique, ink line weight, radiating burst background, and orange/teal palette. Scene: a figure turning away with one hand raised as if pushing something back, faint soft flame-like energy fading at the edges. No text, no watermark, no logos, no real people, no panel border, no second figure, square format.
+
+## pair-nfp
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any diagonal divider line. Duotone halftone comic book illustration in warm orange and teal, dynamic radiating speed-line burst background filling the entire square canvas edge-to-edge, bold black comic ink outlines, IMPORTANT: use the attached reference image only to match the duotone halftone comic rendering technique, ink line weight, radiating burst background, and orange/teal palette. Scene: a figure standing with tears welling and both fists clenched at their sides, faint wavering watery energy lines radiating outward. No text, no watermark, no logos, no real people, no panel border, no second figure, square format.
+
+## pair-ntp
+
+SINGLE unified illustration, ONE panel only, ONE figure only — do NOT split the image into two panels, do NOT include any diagonal divider line. Duotone halftone comic book illustration in warm orange and teal, dynamic radiating speed-line burst background filling the entire square canvas edge-to-edge, bold black comic ink outlines, IMPORTANT: use the attached reference image only to match the duotone halftone comic rendering technique, ink line weight, radiating burst background, and orange/teal palette. Scene: a figure with arms spread wide mid-argument, faint jagged lightning-bolt energy crackling between their raised hands. No text, no watermark, no logos, no real people, no panel border, no second figure, square format.
+
