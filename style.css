@@ -1048,6 +1048,17 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
   background: rgb(var(--surface-container)); border: 1px solid rgb(var(--ink));
 }
 
+/* 🔑 로그인 진입점 (v0.9.5~) — 눈에 띄지 않는 작은 링크, 강제 아님 */
+.home-login-row { margin-top: 6px; text-align: right; }
+.home-login-link {
+  font-size: 0.68rem; font-weight: 700; color: rgb(var(--ink-variant));
+  background: none; border: none; padding: 0; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.home-login-link:hover { color: rgb(var(--ink)); text-decoration: underline; }
+.home-login-link-done { cursor: default; }
+.home-login-link-done:hover { text-decoration: none; }
+
 /* 💬 댓글 아바타 (v0.9.2~) — 로그인 사용자는 업로드 이미지, 아니면 이니셜 원형(홈 내정보 카드와 동일 패턴) */
 .comment-avatar { border-radius: 999px; flex: none; object-fit: cover; }
 .comment-avatar-empty {

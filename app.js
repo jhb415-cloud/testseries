@@ -1041,6 +1041,7 @@ function initHome() {
   renderHomeIdentity();
   initHomeTicker();
   renderHomeSections();
+  initHomeLoginState();
 }
 
 /* ══════════════════════════════════════════════════
@@ -6783,7 +6784,8 @@ function renderHomeIdentity() {
         <div class="home-identity-bar"><i style="width:${xpInLevel}%"></i></div>
       </div>
       <div class="home-identity-streak">🔥 ${streak}일</div>
-    </div>`;
+    </div>
+    <div id="home-login-row" class="home-login-row"></div>`;
 }
 
 function homeSaveNicknameInline(value) {
@@ -6791,6 +6793,154 @@ function homeSaveNicknameInline(value) {
   if (trimmed === getNickname()) return;
   setNickname(trimmed);
   renderHomeIdentity();
+}
+
+/* ══════════════════════════════════════════════════
+   🔑 로그인 UI + 닉네임/아바타 설정 (v0.9.5~)
+   - 온라인 랭킹(기기간 동기화)만을 위한 토대 — 댓글 등 다른 기능은 로그인 없이도 이미 전부 동작함,
+     그래서 눈에 띄지 않는 작은 링크 하나로만 노출(강제 아님)
+   - linkIdentity()는 기존 익명 세션을 그대로 "업그레이드"하므로 로그인해도 지금까지의 XP/스트릭/
+     완주기록이 그대로 유지됨(같은 user_id) — 로컬 닉네임(app_nickname, 테스트 시작화면 프리필용)과
+     공개 댓글용 닉네임(profiles.public_nickname)은 의도적으로 분리해서 관리(하나가 다른 하나를
+     덮어쓰지 않음, 온라인 랭킹 기획 메모의 "실명 대신 공개용 닉네임 분리" 원칙과 일치)
+══════════════════════════════════════════════════ */
+const RESERVED_NICKNAME_RE = /(관리자|admin|운영자|과몰입\s*연구소|공지|notice)/i;
+let _nicknameSetupAutoShown = false;
+let _pendingAvatarBlob = null;
+
+async function initHomeLoginState() {
+  const el = document.getElementById('home-login-row');
+  if (!el || !window.sb) return;
+  try {
+    const { data: { session } } = await window.sb.auth.getSession();
+    const loggedIn = !!(session && session.user && session.user.is_anonymous === false);
+    if (!loggedIn) {
+      el.innerHTML = `<button onclick="openLoginModal()" class="home-login-link">🔑 로그인하고 기록 지키기</button>`;
+      return;
+    }
+    const { data: profile } = await window.sb.from('profiles').select('public_nickname,avatar_url').eq('id', session.user.id).maybeSingle();
+    if (profile && profile.public_nickname) {
+      el.innerHTML = `<span class="home-login-link home-login-link-done">${avatarHTML(profile.public_nickname, profile.avatar_url, 18)} ${escapeHtml(profile.public_nickname)}님 로그인됨</span>`;
+    } else {
+      el.innerHTML = `<button onclick="openNicknameSetupModal()" class="home-login-link">✅ 로그인 완료 · 닉네임 설정하기</button>`;
+      if (!_nicknameSetupAutoShown) { _nicknameSetupAutoShown = true; openNicknameSetupModal(); }
+    }
+  } catch (e) { console.error('로그인 상태 조회 실패:', e); }
+}
+
+function openLoginModal() {
+  closeLoginModal();
+  const div = document.createElement('div');
+  div.id = 'login-modal';
+  div.className = 'fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4';
+  div.setAttribute('onclick', "if(event.target===this)closeLoginModal()");
+  div.innerHTML = `
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-sm w-full">
+      <h3 class="text-slate-100 font-bold text-lg mb-1">로그인하고 기록 지키기</h3>
+      <p class="text-slate-400 text-xs mb-5">지금은 기기를 바꾸면 기록이 사라져요. 로그인하면 앞으로 나올 온라인 랭킹에서도 내 기록을 계속 이어갈 수 있어요. (댓글은 로그인 없이도 쓸 수 있어요)</p>
+      <button onclick="loginWithKakao()" class="w-full bg-[#FEE500] text-[#191919] font-bold py-3 rounded-xl mb-2 transition hover:brightness-95">💬 카카오로 3초 로그인</button>
+      <button onclick="loginWithGoogle()" class="w-full bg-white text-slate-800 font-bold py-3 rounded-xl mb-4 border border-slate-300 transition hover:bg-slate-100">🔍 구글로 로그인</button>
+      <button onclick="closeLoginModal()" class="w-full text-slate-500 text-sm">닫고 게스트로 계속하기</button>
+    </div>`;
+  document.body.appendChild(div);
+}
+function closeLoginModal() { const el = document.getElementById('login-modal'); if (el) el.remove(); }
+
+function openNicknameSetupModal() {
+  closeNicknameSetupModal();
+  _pendingAvatarBlob = null;
+  const div = document.createElement('div');
+  div.id = 'nickname-setup-modal';
+  div.className = 'fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4';
+  div.innerHTML = `
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-sm w-full">
+      <h3 class="text-slate-100 font-bold text-lg mb-1">닉네임을 정해주세요</h3>
+      <p class="text-slate-400 text-xs mb-3">댓글과 앞으로 나올 온라인 랭킹에 이 닉네임으로 표시돼요.</p>
+      <div class="flex items-center gap-3 mb-3">
+        <label class="cursor-pointer shrink-0 text-center">
+          <div id="nickname-setup-avatar-wrap" class="w-14 h-14 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center text-slate-500 text-xl overflow-hidden">📷</div>
+          <input type="file" accept="image/*" class="hidden" onchange="handleAvatarSelect(event)"/>
+          <span class="text-slate-500 text-[10px] block mt-1">사진 선택</span>
+        </label>
+        <input id="nickname-setup-input" maxlength="12" placeholder="닉네임 (2~12자)"
+          class="flex-1 bg-slate-700 border border-slate-600 rounded-xl px-3 py-2 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-violet-500 transition"/>
+      </div>
+      <p id="nickname-setup-error" class="text-rose-400 text-xs mb-2 hidden"></p>
+      <button onclick="submitNicknameSetup()" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 rounded-xl transition">확인</button>
+    </div>`;
+  document.body.appendChild(div);
+}
+function closeNicknameSetupModal() { const el = document.getElementById('nickname-setup-modal'); if (el) el.remove(); }
+
+function handleAvatarSelect(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      const size = 128;
+      const canvas = document.createElement('canvas');
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const scale = Math.max(size / img.width, size / img.height);
+      const w = img.width * scale, h = img.height * scale;
+      ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+      canvas.toBlob((blob) => {
+        _pendingAvatarBlob = blob;
+        const wrap = document.getElementById('nickname-setup-avatar-wrap');
+        if (wrap) wrap.innerHTML = `<img src="${canvas.toDataURL('image/jpeg', 0.85)}" class="w-full h-full object-cover"/>`;
+      }, 'image/jpeg', 0.85);
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function submitNicknameSetup() {
+  const input = document.getElementById('nickname-setup-input');
+  const errEl = document.getElementById('nickname-setup-error');
+  const value = (input && input.value || '').trim();
+  if (errEl) errEl.classList.add('hidden');
+  if (value.length < 2 || value.length > 12) {
+    if (errEl) { errEl.textContent = '닉네임은 2~12자로 입력해주세요'; errEl.classList.remove('hidden'); }
+    return;
+  }
+  if (RESERVED_NICKNAME_RE.test(value)) {
+    if (errEl) { errEl.textContent = '사용할 수 없는 닉네임이에요'; errEl.classList.remove('hidden'); }
+    return;
+  }
+  try {
+    const { data: { session } } = await window.sb.auth.getSession();
+    if (!session || !session.user) return;
+    const userId = session.user.id;
+    let avatarUrl = null;
+    if (_pendingAvatarBlob) {
+      const path = `${userId}/avatar.jpg`;
+      const { error: upErr } = await window.sb.storage.from('avatars').upload(path, _pendingAvatarBlob, { upsert: true, contentType: 'image/jpeg' });
+      if (!upErr) {
+        const { data: pub } = window.sb.storage.from('avatars').getPublicUrl(path);
+        avatarUrl = pub.publicUrl;
+      } else {
+        console.error('아바타 업로드 실패(닉네임은 그대로 저장됩니다):', upErr);
+      }
+    }
+    const patch = { id: userId, public_nickname: value, provider: session.user.app_metadata && session.user.app_metadata.provider };
+    if (avatarUrl) patch.avatar_url = avatarUrl;
+    const { error } = await window.sb.from('profiles').upsert(patch);
+    if (error) {
+      if (error.code === '23505') { if (errEl) { errEl.textContent = '이미 사용 중인 닉네임이에요'; errEl.classList.remove('hidden'); } return; }
+      if (String((error && error.message) || '').includes('사용할 수 없는')) { if (errEl) { errEl.textContent = '사용할 수 없는 닉네임이에요'; errEl.classList.remove('hidden'); } return; }
+      throw error;
+    }
+    _pendingAvatarBlob = null;
+    closeNicknameSetupModal();
+    showToast('설정이 완료됐어요!');
+    initHomeLoginState();
+  } catch (e) {
+    console.error('닉네임 설정 실패:', e);
+    if (errEl) { errEl.textContent = '설정에 실패했어요. 다시 시도해주세요'; errEl.classList.remove('hidden'); }
+  }
 }
 
 /* ══════════════════════════════════════════════════
