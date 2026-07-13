@@ -6800,19 +6800,35 @@ function renderHomeIdentity() {
   const { level, xpInLevel } = getLevelInfo();
 
   container.innerHTML = `
-    <div class="home-identity">
-      <div class="avatar ${nickname ? '' : 'empty'}">${nickname ? nickname.charAt(0) : '?'}</div>
+    <div class="home-identity" onclick="homeIdentityCardClick(event)">
+      <div id="home-identity-avatar" class="avatar guest ${nickname ? '' : 'empty'}">${nickname ? nickname.charAt(0) : '?'}</div>
       <div class="home-identity-body">
         <div class="home-identity-name-row">
           <input id="home-nickname-input" class="home-identity-name" maxlength="12" value="${nickname}" placeholder="닉네임을 입력하세요"
             onblur="homeSaveNicknameInline(this.value)" onkeydown="if(event.key==='Enter')this.blur();" />
           <span class="home-identity-sub">Lv.${level} · ${xpInLevel}/${XP_PER_LEVEL}XP</span>
+          <span id="home-identity-title" class="home-identity-title locked">🔒 칭호: ???</span>
         </div>
         <div class="home-identity-bar"><i style="width:${xpInLevel}%"></i></div>
       </div>
       <div class="home-identity-streak">🔥 ${streak}일</div>
     </div>
     <div id="home-login-row" class="home-login-row"></div>`;
+}
+
+/* v1.1.2~: 내 정보 카드 자체가 클릭 영역 — 닉네임 인풋(로컬 닉네임 편집, 로그인과 무관한
+   별개 기능)을 누른 경우만 제외하고, 나머지 어디를 눌러도 로그인 상태에 따라 로그인 모달
+   또는 내 정보 모달을 연다 */
+async function homeIdentityCardClick(e) {
+  if (e && e.target && e.target.id === 'home-nickname-input') return;
+  if (!window.sb) return;
+  try {
+    const { data: { session } } = await window.sb.auth.getSession();
+    const loggedIn = !!(session && session.user && session.user.is_anonymous === false);
+    if (!loggedIn) { openLoginModal(); return; }
+    const { data: profile } = await window.sb.from('profiles').select('public_nickname').eq('id', session.user.id).maybeSingle();
+    openProfileModal(!(profile && profile.public_nickname));
+  } catch (err) { console.error('내 정보 열기 실패:', err); }
 }
 
 function homeSaveNicknameInline(value) {
@@ -6837,12 +6853,16 @@ let _pendingAvatarBlob = null;
 
 async function initHomeLoginState() {
   const el = document.getElementById('home-login-row');
+  const avatarEl = document.getElementById('home-identity-avatar');
+  const titleEl = document.getElementById('home-identity-title');
   if (!el || !window.sb) return;
   try {
     const { data: { session } } = await window.sb.auth.getSession();
     const loggedIn = !!(session && session.user && session.user.is_anonymous === false);
+    if (avatarEl) avatarEl.classList.toggle('guest', !loggedIn);
     if (!loggedIn) {
-      el.innerHTML = `<button onclick="openLoginModal()" class="home-login-link">🔑 로그인하고 기록 지키기</button>`;
+      el.innerHTML = `<span class="home-login-hint">🔒 지금 이 레벨, 저장 안 하고 갈 거야?</span>`;
+      if (titleEl) { titleEl.className = 'home-identity-title locked'; titleEl.textContent = '🔒 칭호: ???'; }
       return;
     }
     const { data: profile } = await window.sb.from('profiles').select('public_nickname,avatar_url,xp').eq('id', session.user.id).maybeSingle();
@@ -6852,11 +6872,15 @@ async function initHomeLoginState() {
       const localXp = parseInt(localStorage.getItem('app_xp') || '0', 10);
       if (profile.xp > localXp) localStorage.setItem('app_xp', String(profile.xp));
     }
+    if (titleEl) {
+      const { level } = getLevelInfo();
+      titleEl.className = 'home-identity-title unlocked';
+      titleEl.textContent = `🏅 ${getTitleForLevel(level)}`;
+    }
     if (profile && profile.public_nickname) {
-      el.innerHTML = `<button onclick="openProfileModal(false)" class="home-login-btn">${avatarHTML(profile.public_nickname, profile.avatar_url, 18)} ${escapeHtml(profile.public_nickname)}</button>
-        <button onclick="confirmLogout()" class="home-login-link home-logout-link">로그아웃</button>`;
+      el.innerHTML = `<span class="home-login-hint">${escapeHtml(profile.public_nickname)}님으로 로그인됨</span>`;
     } else {
-      el.innerHTML = `<button onclick="openProfileModal(true)" class="home-login-link">✅ 로그인 완료 · 닉네임 설정하기</button>`;
+      el.innerHTML = `<span class="home-login-hint">✅ 로그인 완료! 닉네임을 설정해주세요</span>`;
       if (!_nicknameSetupAutoShown) { _nicknameSetupAutoShown = true; openProfileModal(true); }
     }
   } catch (e) { console.error('로그인 상태 조회 실패:', e); }
