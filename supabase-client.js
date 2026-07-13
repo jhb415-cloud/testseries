@@ -75,10 +75,15 @@ async function loginWithProvider(provider, scopes) {
   }
 }
 function loginWithGoogle() { return loginWithProvider('google'); }
-/* 카카오는 닉네임/프로필사진을 저희가 자동으로 안 가져오도록 설계해서(직접 아바타/닉네임 설정) 굳이
-   필요 없음 — 빈 스코프로 요청해 카카오 개발자 콘솔에서 동의항목을 켜지 않아도 되게 함
-   (동의항목이 안 켜진 스코프를 요청하면 KOE205 "잘못된 요청" 에러가 남) */
-function loginWithKakao() { return loginWithProvider('kakao', ''); }
+/* ⚠️ 카카오 KOE205는 클라이언트 코드로 못 고침 — 여기서 스코프를 비워 넘겨도 소용없음(v0.9.6/0.9.7의
+   "빈 스코프로 해결"은 틀린 전제였음). Supabase 인증 서버(GoTrue)의 카카오 provider가
+   account_email/profile_image/profile_nickname 세 스코프를 소스에 하드코딩해두고, 우리가 넘기는
+   스코프는 거기에 "추가"만 될 뿐 절대 제거되지 않기 때문(supabase/auth internal/api/provider/kakao.go).
+   → 유일한 해결책은 카카오 개발자 콘솔에서 세 동의항목을 전부 켜는 것. 특히 account_email은
+     '앱 설정 > 비즈니스 > 개인 개발자 비즈니스 전환'(사업자등록증 불필요, 무료)을 먼저 해야 켤 수 있음.
+     세 항목을 '선택 동의'로 켜면 KOE205 사라짐(이메일 실제 수신까지는 필요 없고, 우리는 안 씀).
+   빈 문자열은 이제 아무 효과도 없으므로 제거하고 기본값으로 호출 */
+function loginWithKakao() { return loginWithProvider('kakao'); }
 
 /* 로그아웃(v0.9.10~) — 세션을 완전히 끝내고 새 익명 세션으로 즉시 되돌림(로그인 전과 동일한
    "기록이 이 기기에만 로컬로 남는" 상태). 같은 계정으로 다시 로그인하면 identity_already_exists
@@ -115,9 +120,7 @@ async function handleOAuthRedirectError() {
     if (!provider) return;
     if (confirm('이 계정은 이미 다른 기기(또는 이전 시도)에서 로그인에 사용됐어요.\n그 계정으로 전환해서 로그인할까요? (지금 기기의 로컬 진행 기록은 유지되지 않아요)')) {
       try {
-        const scopes = provider === 'kakao' ? '' : undefined;
         const options = { redirectTo: location.origin + '/' }; /* '#home' 금지 — 위 loginWithProvider 주석 참고 (v1.0.2) */
-        if (scopes !== undefined) options.scopes = scopes;
         const { error } = await window.sb.auth.signInWithOAuth({ provider, options });
         if (error) { console.error('기존 계정 로그인 실패:', error); if (typeof showToast === 'function') showToast('로그인에 실패했어요. 다시 시도해주세요'); }
       } catch (e) { console.error('기존 계정 로그인 오류:', e); }
