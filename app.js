@@ -6853,7 +6853,7 @@ async function initHomeLoginState() {
       if (profile.xp > localXp) localStorage.setItem('app_xp', String(profile.xp));
     }
     if (profile && profile.public_nickname) {
-      el.innerHTML = `<span class="home-login-link home-login-link-done home-login-link-open" onclick="openProfileModal(false)">${avatarHTML(profile.public_nickname, profile.avatar_url, 18)} ${escapeHtml(profile.public_nickname)}님 로그인됨</span>
+      el.innerHTML = `<button onclick="openProfileModal(false)" class="home-login-btn">${avatarHTML(profile.public_nickname, profile.avatar_url, 18)} ${escapeHtml(profile.public_nickname)}</button>
         <button onclick="confirmLogout()" class="home-login-link home-logout-link">로그아웃</button>`;
     } else {
       el.innerHTML = `<button onclick="openProfileModal(true)" class="home-login-link">✅ 로그인 완료 · 닉네임 설정하기</button>`;
