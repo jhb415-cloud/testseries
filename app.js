@@ -6503,7 +6503,20 @@ function computeXP(result) {
 
 function addXP(amount) {
   const cur = parseInt(localStorage.getItem('app_xp') || '0', 10);
-  localStorage.setItem('app_xp', String(cur + amount));
+  const next = cur + amount;
+  localStorage.setItem('app_xp', String(next));
+  syncXpToProfile(next);
+}
+
+/* 로그인 상태면 XP를 profiles.xp에도 미러링(기기 간 동기화용 백업, 진실 원천은 여전히
+   localStorage) — 실패해도(비로그인/네트워크 오류 등) 로컬 진행에는 영향 없게 조용히 무시 */
+async function syncXpToProfile(xp) {
+  try {
+    if (!window.sb) return;
+    const { data: { session } } = await window.sb.auth.getSession();
+    if (!session || !session.user || session.user.is_anonymous !== false) return;
+    await window.sb.from('profiles').upsert({ id: session.user.id, xp });
+  } catch (e) { /* noop */ }
 }
 
 function getLevelInfo() {
@@ -6513,8 +6526,19 @@ function getLevelInfo() {
   return { xp, level, xpInLevel };
 }
 
-/* 🏅 칭호 시스템(BADGES/getEarnedBadges/getLatestResult)은 v0.8.9 홈화면 대대적 변경으로
-   홈 화면에서 더 이상 노출하지 않게 되어 제거 — git 히스토리에서 복원 가능 */
+/* 🏅 칭호 시스템(v1.1.0~ 재도입) — 예전 5종 성취뱃지(v0.0.33, v0.8.9 개편 때 제거·git 히스토리에만
+   남음)는 부활시키지 않고, 레벨 구간별 자동 칭호로 단순화(로그인 인센티브 겸용: 레벨이 계정에
+   저장되므로 칭호도 기기를 옮겨도 그대로 유지됨) */
+const LEVEL_TITLES = [
+  { min: 1,  title: '초보 과몰입러' },
+  { min: 3,  title: '열정 과몰입러' },
+  { min: 6,  title: '찐 과몰입러' },
+  { min: 10, title: '경지에 오른 과몰입러' },
+  { min: 15, title: '전설의 과몰입러' },
+];
+function getTitleForLevel(level) {
+  return LEVEL_TITLES.slice().reverse().find(t => level >= t.min).title;
+}
 function renderLocalRanking(listId, section) {
   const el = document.getElementById(listId);
   if (!el) return;
@@ -6573,7 +6597,7 @@ async function getMyProfile() {
   try {
     const { data: { session } } = await window.sb.auth.getSession();
     if (!session || !session.user || session.user.is_anonymous !== false) return null;
-    const { data } = await window.sb.from('profiles').select('public_nickname,avatar_url').eq('id', session.user.id).maybeSingle();
+    const { data } = await window.sb.from('profiles').select('public_nickname,avatar_url,xp').eq('id', session.user.id).maybeSingle();
     return data;
   } catch (e) { return null; }
 }
@@ -6645,6 +6669,7 @@ async function renderComments(section, itemId) {
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2">
               <span class="text-slate-200 text-xs font-bold">${escapeHtml(c.nickname)}</span>
+              ${c.level ? `<span class="comment-level-chip">Lv.${c.level}</span>` : ''}
               <span class="text-slate-500 text-xs">${dateStr}</span>
             </div>
             <p class="text-slate-300 text-sm mt-0.5 break-words">${escapeHtml(c.body)}</p>
@@ -6681,10 +6706,12 @@ async function submitComment(section, itemId) {
     const profile = await getMyProfile();
     const nickname = (profile && profile.public_nickname) ? profile.public_nickname : getAnonLabel();
     const avatarUrl = profile ? profile.avatar_url : null;
+    // 레벨은 작성 시점 스냅샷(comments에 user_id가 없어 실시간 join이 불가능 — nickname/avatar_url과 동일한 방식)
+    const level = (profile && profile.public_nickname) ? Math.floor((profile.xp || 0) / XP_PER_LEVEL) + 1 : null;
     const { error } = await window.sb.from('comments').insert({
       section, item_id: itemId || null,
       is_anonymous: !(profile && profile.public_nickname),
-      nickname, avatar_url: avatarUrl, body
+      nickname, avatar_url: avatarUrl, body, level
     });
     if (error) throw error;
     input.value = '';
@@ -6818,13 +6845,19 @@ async function initHomeLoginState() {
       el.innerHTML = `<button onclick="openLoginModal()" class="home-login-link">🔑 로그인하고 기록 지키기</button>`;
       return;
     }
-    const { data: profile } = await window.sb.from('profiles').select('public_nickname,avatar_url').eq('id', session.user.id).maybeSingle();
+    const { data: profile } = await window.sb.from('profiles').select('public_nickname,avatar_url,xp').eq('id', session.user.id).maybeSingle();
+    // 서버 xp가 로컬보다 크면(다른 기기에서 로그인한 경우 등) 로컬을 서버 값으로 끌어올림 —
+    // 반대로 로컬이 더 크면(방금 이 기기에서 쌓은 XP가 아직 서버에 안 올라간 경우) 그대로 둠
+    if (profile && typeof profile.xp === 'number') {
+      const localXp = parseInt(localStorage.getItem('app_xp') || '0', 10);
+      if (profile.xp > localXp) localStorage.setItem('app_xp', String(profile.xp));
+    }
     if (profile && profile.public_nickname) {
-      el.innerHTML = `<span class="home-login-link home-login-link-done">${avatarHTML(profile.public_nickname, profile.avatar_url, 18)} ${escapeHtml(profile.public_nickname)}님 로그인됨</span>
+      el.innerHTML = `<span class="home-login-link home-login-link-done home-login-link-open" onclick="openProfileModal(false)">${avatarHTML(profile.public_nickname, profile.avatar_url, 18)} ${escapeHtml(profile.public_nickname)}님 로그인됨</span>
         <button onclick="confirmLogout()" class="home-login-link home-logout-link">로그아웃</button>`;
     } else {
-      el.innerHTML = `<button onclick="openNicknameSetupModal()" class="home-login-link">✅ 로그인 완료 · 닉네임 설정하기</button>`;
-      if (!_nicknameSetupAutoShown) { _nicknameSetupAutoShown = true; openNicknameSetupModal(); }
+      el.innerHTML = `<button onclick="openProfileModal(true)" class="home-login-link">✅ 로그인 완료 · 닉네임 설정하기</button>`;
+      if (!_nicknameSetupAutoShown) { _nicknameSetupAutoShown = true; openProfileModal(true); }
     }
   } catch (e) { console.error('로그인 상태 조회 실패:', e); }
 }
@@ -6841,42 +6874,61 @@ function openLoginModal() {
   div.className = 'fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4';
   div.setAttribute('onclick', "if(event.target===this)closeLoginModal()");
   div.innerHTML = `
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-sm w-full">
-      <h3 class="text-slate-100 font-bold text-lg mb-1">로그인하고 기록 지키기</h3>
-      <p class="text-slate-400 text-xs mb-5">지금은 기기를 바꾸면 기록이 사라져요. 로그인하면 앞으로 나올 온라인 랭킹에서도 내 기록을 계속 이어갈 수 있어요. (댓글은 로그인 없이도 쓸 수 있어요)</p>
-      <button onclick="loginWithKakao()" class="w-full bg-[#FEE500] text-[#191919] font-bold py-3 rounded-xl mb-2 transition hover:brightness-95">💬 카카오로 3초 로그인</button>
-      <button onclick="loginWithGoogle()" class="w-full font-bold py-3 rounded-xl mb-4 transition hover:brightness-95" style="background:#ffffff;color:#3c4043;border:1px solid #dadce0;">🔍 구글로 로그인</button>
-      <button onclick="closeLoginModal()" class="w-full text-slate-500 text-sm">닫고 게스트로 계속하기</button>
+    <div class="login-modal">
+      <div class="login-modal-logo"><img src="assets/brand/logo-icon-96.png" alt=""/></div>
+      <h3>로그인하고 기록 지키기</h3>
+      <p class="sub">로그인하면 레벨·XP가 계정에 저장돼서 기기를 바꿔도 안 사라져요. 댓글에도 내 레벨이 표시되고, 프로필 사진도 바꿀 수 있어요.</p>
+      <button onclick="loginWithKakao()" class="login-btn kakao"><span class="login-btn-icon-kakao"></span>카카오로 3초 로그인</button>
+      <button onclick="loginWithGoogle()" class="login-btn google"><span class="login-btn-icon-google"></span>구글로 로그인</button>
+      <button onclick="closeLoginModal()" class="login-modal-skip">닫고 게스트로 계속하기</button>
     </div>`;
   document.body.appendChild(div);
 }
 function closeLoginModal() { const el = document.getElementById('login-modal'); if (el) el.remove(); }
 
-function openNicknameSetupModal() {
-  closeNicknameSetupModal();
+/* 🪪 내 정보(프로필) 모달 — 최초 로그인 직후 닉네임 설정과, 이후 아바타/닉네임 재편집을
+   같은 화면 하나로 처리(isFirstSetup은 안내 문구만 다르고 로직은 동일) */
+async function openProfileModal(isFirstSetup) {
+  closeProfileModal();
   _pendingAvatarBlob = null;
+  const profile = isFirstSetup ? null : await getMyProfile();
+  const { data: { session } } = await window.sb.auth.getSession();
+  if (!session || !session.user) return;
+  const provider = session.user.app_metadata && session.user.app_metadata.provider;
+  const providerLabel = provider === 'kakao' ? '💬 카카오 계정' : (provider === 'google' ? '🔍 구글 계정' : '계정');
+  const streak = updateVisitStreak();
+  const { level, xpInLevel } = getLevelInfo();
+  const nickname = (profile && profile.public_nickname) || '';
+  const avatarUrl = (profile && profile.avatar_url) || null;
   const div = document.createElement('div');
-  div.id = 'nickname-setup-modal';
+  div.id = 'profile-modal';
   div.className = 'fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4';
+  div.setAttribute('onclick', "if(event.target===this)closeProfileModal()");
   div.innerHTML = `
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-sm w-full">
-      <h3 class="text-slate-100 font-bold text-lg mb-1">닉네임을 정해주세요</h3>
-      <p class="text-slate-400 text-xs mb-3">댓글과 앞으로 나올 온라인 랭킹에 이 닉네임으로 표시돼요.</p>
-      <div class="flex items-center gap-3 mb-3">
-        <label class="cursor-pointer shrink-0 text-center">
-          <div id="nickname-setup-avatar-wrap" class="w-14 h-14 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center text-slate-500 text-xl overflow-hidden">📷</div>
+    <div class="profile-modal">
+      <h3>${isFirstSetup ? '닉네임을 정해주세요' : '내 정보'}</h3>
+      <p class="sub">${isFirstSetup ? '댓글에 이 닉네임과 레벨이 함께 표시돼요.' : '닉네임·프로필 사진을 언제든 바꿀 수 있어요.'}</p>
+      <div class="profile-avatar-wrap" style="--xp-pct:${xpInLevel}%">
+        <div class="profile-avatar-ring"></div>
+        <label class="profile-avatar" id="profile-avatar-label">
+          <span id="profile-avatar-inner">${avatarUrl ? `<img src="${escapeHtml(avatarUrl)}" alt=""/>` : (nickname ? escapeHtml(nickname.charAt(0)) : '📷')}</span>
           <input type="file" accept="image/*" class="hidden" onchange="handleAvatarSelect(event)"/>
-          <span class="text-slate-500 text-[10px] block mt-1">사진 선택</span>
         </label>
-        <input id="nickname-setup-input" maxlength="12" placeholder="닉네임 (2~12자)"
-          class="flex-1 bg-slate-700 border border-slate-600 rounded-xl px-3 py-2 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-violet-500 transition"/>
+        <div class="profile-lv-pill">LV.${level}</div>
+        <div class="profile-edit-pencil" onclick="document.getElementById('profile-avatar-label').querySelector('input').click()">✏️</div>
       </div>
-      <p id="nickname-setup-error" class="text-rose-400 text-xs mb-2 hidden"></p>
-      <button onclick="submitNicknameSetup()" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 rounded-xl transition">확인</button>
+      <input id="profile-nickname-input" class="profile-name-input" maxlength="12" placeholder="닉네임 (2~12자)" value="${escapeHtml(nickname)}"/>
+      <div class="profile-title-chip">🏅 ${getTitleForLevel(level)}</div>
+      <p class="profile-meta-line">${providerLabel} · 🔥 ${streak}일째 접속</p>
+      <div class="profile-xp-row"><span>XP</span><span>${xpInLevel} / ${XP_PER_LEVEL}</span></div>
+      <div class="profile-xp-bar"><i style="width:${xpInLevel}%"></i></div>
+      <p id="profile-edit-error" class="profile-error hidden"></p>
+      <button onclick="submitProfileEdit()" class="profile-save-btn">${isFirstSetup ? '확인' : '저장'}</button>
+      ${isFirstSetup ? '' : '<button onclick="confirmLogout()" class="profile-logout-link">로그아웃</button>'}
     </div>`;
   document.body.appendChild(div);
 }
-function closeNicknameSetupModal() { const el = document.getElementById('nickname-setup-modal'); if (el) el.remove(); }
+function closeProfileModal() { const el = document.getElementById('profile-modal'); if (el) el.remove(); }
 
 function handleAvatarSelect(e) {
   const file = e.target.files[0];
@@ -6894,8 +6946,8 @@ function handleAvatarSelect(e) {
       ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
       canvas.toBlob((blob) => {
         _pendingAvatarBlob = blob;
-        const wrap = document.getElementById('nickname-setup-avatar-wrap');
-        if (wrap) wrap.innerHTML = `<img src="${canvas.toDataURL('image/jpeg', 0.85)}" class="w-full h-full object-cover"/>`;
+        const inner = document.getElementById('profile-avatar-inner');
+        if (inner) inner.innerHTML = `<img src="${canvas.toDataURL('image/jpeg', 0.85)}" alt=""/>`;
       }, 'image/jpeg', 0.85);
     };
     img.src = ev.target.result;
@@ -6903,9 +6955,9 @@ function handleAvatarSelect(e) {
   reader.readAsDataURL(file);
 }
 
-async function submitNicknameSetup() {
-  const input = document.getElementById('nickname-setup-input');
-  const errEl = document.getElementById('nickname-setup-error');
+async function submitProfileEdit() {
+  const input = document.getElementById('profile-nickname-input');
+  const errEl = document.getElementById('profile-edit-error');
   const value = (input && input.value || '').trim();
   if (errEl) errEl.classList.add('hidden');
   if (value.length < 2 || value.length > 12) {
@@ -6940,11 +6992,11 @@ async function submitNicknameSetup() {
       throw error;
     }
     _pendingAvatarBlob = null;
-    closeNicknameSetupModal();
+    closeProfileModal();
     showToast('설정이 완료됐어요!');
     initHomeLoginState();
   } catch (e) {
-    console.error('닉네임 설정 실패:', e);
+    console.error('프로필 저장 실패:', e);
     if (errEl) { errEl.textContent = '설정에 실패했어요. 다시 시도해주세요'; errEl.classList.remove('hidden'); }
   }
 }

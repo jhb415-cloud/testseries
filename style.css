@@ -1061,6 +1061,108 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
 .home-logout-link { margin-left: 6px; opacity: 0.6; }
 .home-logout-link:hover { opacity: 1; }
 
+/* 🔑 로그인 완료 표시를 감싸는 클릭 가능 영역 (v1.1.0~) — 이름/아바타를 누르면 내 정보 모달이 열림 */
+.home-login-link-open { cursor: pointer; }
+.home-login-link-open:hover { text-decoration: underline; }
+
+/* 🪪 로그인 모달 + 내 정보(프로필) 모달 (v1.1.0~)
+   - Kinetic Logic 톤(굵은 잉크 테두리 + 항상 잉크색 하드 오프셋 섀도, 그라데이션 없음)을 그대로 따름
+   - 색 역할을 3분할해 한 화면 안에서 같은 색이 두 번 겹치지 않게 함:
+     골드(primary)=액션/CTA, 시안(secondary)=정체성(아바타), 핑크(tertiary)=성장/성취(XP링·칭호칩) */
+.login-modal, .profile-modal {
+  width: 100%; max-width: 380px; background: rgb(var(--surface-lowest));
+  border: 2.5px solid rgb(var(--ink)); border-radius: 16px;
+  box-shadow: 6px 6px 0 0 rgb(var(--ink)); padding: 22px;
+}
+.login-modal-logo { display: flex; justify-content: center; margin-bottom: 12px; }
+.login-modal-logo img { width: 40px; height: 40px; }
+.login-modal h3, .profile-modal h3 { font-size: 17px; font-weight: 900; margin: 0 0 6px; color: rgb(var(--ink)); text-align: center; }
+.login-modal .sub, .profile-modal .sub { font-size: 12.5px; color: rgb(var(--ink-variant)); margin: 0 0 18px; text-align: center; line-height: 1.5; }
+
+.login-btn {
+  width: 100%; display: flex; align-items: center; gap: 10px; padding: 13px 15px;
+  border: 2.5px solid rgb(var(--ink)); border-radius: 12px; font-weight: 800; font-size: 14px;
+  box-shadow: 3px 3px 0 0 rgb(var(--ink)); margin-bottom: 10px; cursor: pointer;
+  transition: transform 0.08s;
+}
+.login-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 0 rgb(var(--ink)); }
+.login-btn.kakao { background: #FEE500; color: #191919; }
+.login-btn.google { background: rgb(var(--surface-lowest)); color: rgb(var(--ink)); }
+.login-btn-icon-kakao { width: 24px; height: 22px; background: #191919; border-radius: 8px 8px 8px 2px; position: relative; flex: none; }
+.login-btn-icon-kakao::after { content: ''; position: absolute; inset: 5px; border-radius: 5px 5px 5px 1px; background: #FEE500; }
+.login-btn-icon-google {
+  width: 22px; height: 22px; border-radius: 50%; flex: none;
+  background: conic-gradient(#4285F4 0deg 90deg, #34A853 90deg 180deg, #FBBC05 180deg 270deg, #EA4335 270deg 360deg);
+  -webkit-mask: radial-gradient(circle, transparent 0 5px, #000 5.5px);
+          mask: radial-gradient(circle, transparent 0 5px, #000 5.5px);
+}
+.login-modal-skip {
+  width: 100%; text-align: center; font-size: 12px; font-weight: 700; color: rgb(var(--ink-variant));
+  background: none; border: none; padding: 4px 0 0; cursor: pointer;
+}
+
+.profile-modal { text-align: center; }
+.profile-avatar-wrap { position: relative; width: 84px; height: 84px; margin: 0 auto 10px; }
+.profile-avatar-ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(rgb(var(--tertiary-container)) var(--xp-pct, 0%), rgb(var(--surface-container)) 0);
+}
+.profile-avatar {
+  position: absolute; inset: 6px; border-radius: 50%; overflow: hidden;
+  background: rgb(var(--secondary-container) / 0.5); border: 2.5px solid rgb(var(--ink));
+  display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 24px; color: rgb(var(--ink));
+  cursor: pointer;
+}
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.profile-lv-pill {
+  /* 우하단 편집 연필 배지와 겹치지 않도록 중앙보다 살짝 왼쪽에 배치 */
+  position: absolute; left: 38%; bottom: -6px; transform: translateX(-50%);
+  background: rgb(var(--ink)); color: rgb(var(--surface-lowest)); font-size: 10px; font-weight: 800;
+  padding: 2px 8px; border-radius: 999px; font-family: ui-monospace, "SF Mono", Menlo, monospace; white-space: nowrap;
+}
+.profile-edit-pencil {
+  position: absolute; right: -2px; bottom: -2px; width: 26px; height: 26px; border-radius: 50%;
+  background: rgb(var(--primary-container)); border: 2.5px solid rgb(var(--ink));
+  display: flex; align-items: center; justify-content: center; font-size: 11px;
+  box-shadow: 2px 2px 0 0 rgb(var(--ink)); cursor: pointer;
+}
+.profile-name-input {
+  font-weight: 900; font-size: 16px; text-align: center; background: transparent; border: none;
+  border-bottom: 1.5px dashed rgb(var(--outline-variant)); color: rgb(var(--ink)); font-family: inherit;
+  padding: 0 0 3px; margin: 6px 0 10px; width: 100%;
+}
+.profile-name-input:focus { outline: none; border-bottom-color: rgb(var(--ink)); }
+.profile-title-chip {
+  display: inline-block; font-size: 11.5px; font-weight: 800; color: rgb(var(--on-tertiary-container));
+  background: rgb(var(--tertiary-container) / 0.5); border: 1.5px solid rgb(var(--ink));
+  border-radius: 999px; padding: 3px 11px; margin-bottom: 10px;
+}
+.profile-meta-line { font-size: 11px; font-weight: 700; color: rgb(var(--ink-variant)); margin-bottom: 12px; }
+.profile-xp-row { display: flex; justify-content: space-between; font-size: 10.5px; font-weight: 800; color: rgb(var(--ink-variant)); margin-bottom: 3px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.profile-xp-bar {
+  height: 6px; border-radius: 999px; margin-bottom: 16px; overflow: hidden;
+  background: rgb(var(--surface-container)); border: 1px solid rgb(var(--ink));
+}
+.profile-xp-bar > i { display: block; height: 100%; background: rgb(var(--secondary-container)); }
+.profile-error { font-size: 11.5px; color: #b3261e; font-weight: 700; margin: 0 0 8px; }
+.profile-save-btn {
+  width: 100%; padding: 12px; border: 2.5px solid rgb(var(--ink)); border-radius: 12px;
+  background: rgb(var(--primary-container)); color: rgb(var(--on-primary-container)); font-weight: 900; font-size: 14px;
+  box-shadow: 3px 3px 0 0 rgb(var(--ink)); margin-bottom: 10px; cursor: pointer; transition: transform 0.08s;
+}
+.profile-save-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 0 rgb(var(--ink)); }
+.profile-logout-link {
+  font-size: 11.5px; color: rgb(var(--ink-variant)); font-weight: 700; text-decoration: underline;
+  background: none; border: none; cursor: pointer;
+}
+
+/* 💬 댓글 레벨 칩 (v1.1.0~) — 로그인 사용자만(comments.level 스냅샷 값이 있을 때만) 닉네임 옆에 노출 */
+.comment-level-chip {
+  font-size: 10px; font-weight: 800; color: rgb(var(--on-tertiary-container));
+  background: rgb(var(--tertiary-container) / 0.5); border: 1px solid rgb(var(--ink) / 0.35);
+  border-radius: 999px; padding: 1px 6px; font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
 /* 💬 댓글 아바타 (v0.9.2~) — 로그인 사용자는 업로드 이미지, 아니면 이니셜 원형(홈 내정보 카드와 동일 패턴) */
 .comment-avatar { border-radius: 999px; flex: none; object-fit: cover; }
 .comment-avatar-empty {
@@ -1128,7 +1230,7 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
 .home-grp-wrap { position: relative; }
 .home-grp-row {
   display: grid; grid-auto-flow: column; grid-auto-columns: 134px; gap: 10px; overflow-x: auto; padding-bottom: 4px;
-  scroll-snap-type: x proximity; scroll-behavior: smooth; cursor: grab; touch-action: pan-x;
+  scroll-snap-type: x proximity; scroll-behavior: smooth; cursor: grab; touch-action: pan-x pan-y;
 }
 .home-grp-row:active { cursor: grabbing; scroll-behavior: auto; }
 .home-poster {
