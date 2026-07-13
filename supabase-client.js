@@ -1,4 +1,4 @@
-/* v0.0.53 | 5-in-1 Dashboard SPA — supabase-client.js
+/* v1.0.2 | 5-in-1 Dashboard SPA — supabase-client.js
    Stage D 1단계: 익명 인증 + test_results 이중 기록(로컬스토리지 유지 + Supabase에도 write)
    anon(publishable) 키는 RLS로 보호되는 공개 키라 하드코딩해도 안전함 — service_role 키는 절대 여기에 넣지 않음 */
 
@@ -50,7 +50,13 @@ async function loginWithProvider(provider, scopes) {
     /* handleOAuthRedirectError()가 리다이렉트로 돌아온 뒤 어떤 provider로 재시도할지 알아야 해서
        기억해둠(리다이렉트 방식이라 이 함수의 반환값/state로는 전달 불가, sessionStorage로 왕복) */
     sessionStorage.setItem('oauth_last_provider', provider);
-    const options = { redirectTo: location.origin + '/#home' };
+    /* v1.0.2~: redirectTo에 '#home' 같은 해시를 절대 넣지 말 것 — GoTrue는 implicit flow 성공 시
+       redirectURL + "#" + 토큰파라미터를 "문자열로 그냥 이어붙여" 반환하므로(서버 소스 확인),
+       해시가 이미 있으면 최종 URL이 /#home#access_token=... 이 되고 supabase-js가 첫 파라미터
+       이름을 "home#access_token"으로 읽어 토큰을 통째로 무시 → 로그인해도 계속 익명으로 남고
+       identity_already_exists 무한 루프가 생기는 실제 버그의 근본 원인이었음.
+       해시 없이 돌아와도 초기 라우팅이 기본값 home으로 진입하므로 UX 차이 없음 */
+    const options = { redirectTo: location.origin + '/' };
     /* scopes==='' (빈 문자열)도 "명시적으로 스코프 없음"이라는 유효한 값이라 falsy 체크(if(scopes))가 아니라
        undefined 여부로만 판단해야 함 — 예전엔 if(scopes)라 빈 문자열이 무시되고 Supabase 기본 스코프
        (account_email,profile_image,profile_nickname)가 그대로 요청돼 카카오 KOE205 에러가 났었음 */
@@ -110,7 +116,7 @@ async function handleOAuthRedirectError() {
     if (confirm('이 계정은 이미 다른 기기(또는 이전 시도)에서 로그인에 사용됐어요.\n그 계정으로 전환해서 로그인할까요? (지금 기기의 로컬 진행 기록은 유지되지 않아요)')) {
       try {
         const scopes = provider === 'kakao' ? '' : undefined;
-        const options = { redirectTo: location.origin + '/#home' };
+        const options = { redirectTo: location.origin + '/' }; /* '#home' 금지 — 위 loginWithProvider 주석 참고 (v1.0.2) */
         if (scopes !== undefined) options.scopes = scopes;
         const { error } = await window.sb.auth.signInWithOAuth({ provider, options });
         if (error) { console.error('기존 계정 로그인 실패:', error); if (typeof showToast === 'function') showToast('로그인에 실패했어요. 다시 시도해주세요'); }
