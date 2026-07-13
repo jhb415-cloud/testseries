@@ -1028,12 +1028,13 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
 .home-identity:hover { box-shadow: 6px 6px 0 0 rgb(var(--ink)); transform: translate(-2px, -2px); }
 .home-identity:active { box-shadow: 2px 2px 0 0 rgb(var(--ink)); transform: translate(0, 0); }
 .home-identity .avatar {
-  width: 28px; height: 28px; border-radius: 999px; flex: none;
+  width: 34px; height: 34px; border-radius: 999px; flex: none; overflow: hidden;
   background: rgb(var(--secondary-container) / 0.5); border: 2px solid rgb(var(--ink));
-  display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.68rem;
+  display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.78rem;
   transition: filter 0.2s, opacity 0.2s;
 }
 .home-identity .avatar.empty { background: rgb(var(--surface-container)); }
+.home-identity .avatar img { width: 100%; height: 100%; object-fit: cover; }
 /* 비로그인(게스트) 상태는 흑백 처리 — "이 계정 아직 안 채워짐"을 시각적으로 드러냄(로그인하면
    컬러로 전환). 기본값을 guest로 잡아두고(대부분 방문객은 비로그인이라 이 쪽이 안전한 기본값),
    initHomeLoginState()가 실제 로그인 여부를 확인하는 즉시 클래스를 갱신함 */

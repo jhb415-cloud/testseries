@@ -6877,6 +6877,11 @@ async function initHomeLoginState() {
       titleEl.className = 'home-identity-title unlocked';
       titleEl.textContent = `🏅 ${getTitleForLevel(level)}`;
     }
+    // 구글 계정 아이콘처럼 내 정보 카드 아바타에도 실제 프로필 사진을 보여줌(있으면) —
+    // 초기 렌더링은 항상 이니셜 문자라서 로그인 확인 후에만 실제 사진으로 교체 가능
+    if (avatarEl && profile && profile.avatar_url) {
+      avatarEl.innerHTML = `<img src="${escapeHtml(profile.avatar_url)}" alt=""/>`;
+    }
     if (profile && profile.public_nickname) {
       el.innerHTML = `<span class="home-login-hint">${escapeHtml(profile.public_nickname)}님으로 로그인됨</span>`;
     } else {
@@ -7002,7 +7007,10 @@ async function submitProfileEdit() {
       const { error: upErr } = await window.sb.storage.from('avatars').upload(path, _pendingAvatarBlob, { upsert: true, contentType: 'image/jpeg' });
       if (!upErr) {
         const { data: pub } = window.sb.storage.from('avatars').getPublicUrl(path);
-        avatarUrl = pub.publicUrl;
+        // 경로(userId/avatar.jpg)가 항상 같아 getPublicUrl()이 매번 동일한 URL을 반환 —
+        // 브라우저/CDN이 예전 이미지를 계속 캐싱해서 "저장해도 다시 들어가면 안 바뀜" 버그의
+        // 원인이었음. 매 업로드마다 값이 달라지는 쿼리스트링을 붙여 새 URL로 만들어 캐시 무효화.
+        avatarUrl = pub.publicUrl + '?t=' + Date.now();
       } else {
         console.error('아바타 업로드 실패(닉네임은 그대로 저장됩니다):', upErr);
       }
