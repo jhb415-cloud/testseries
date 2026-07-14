@@ -1,0 +1,130 @@
+/* test-engine engage.css v1 | 댓글 UI
+   engine.js/engine.css와 완전히 분리된 독립 파일(별도 캐시버스팅 버전) — 상세 이유는
+   test-engine/CLAUDE.md 갱신분 및 /home/codespace/.claude/plans/3-drifting-quilt.md 참고.
+
+   전부 .te-engage- 접두사로 네임스페이스(테마 CSS는 .te-app/.te-intro-body/.te-btn/.te-title 등만
+   건드리므로 충돌 없음 확인됨). 21개 테마마다 색이 전부 달라 하나하나 맞추지 않고, 테마 커스텀
+   프로퍼티(--te-*)를 전혀 참조하지 않는 고정 뉴트럴(흰 배경) 패널로 설계 — 어떤 테마 위에 얹혀도
+   "따로 붙은 위젯"처럼 자연스럽게 읽히는 걸 목표로 함.
+
+   반응 버튼(저장/소름돋/빵터짐/킹정) 스타일은 설계만 하고 구현을 보류함(2026-07-14) — 재구현 시
+   /home/codespace/.claude/plans/distributed-sauteeing-babbage.md 및 3-drifting-quilt.md 참고. */
+
+.te-engage-panel {
+  /* .te-app의 마지막 자식(테스트 시작 버튼 다음)으로 append됨 — margin-top:auto가 걸린
+     .te-choices-fixed는 클래스 규칙이라 뒤에 형제가 와도 정상 동작(확인 완료) */
+  margin: 0 16px 24px;
+  background: #ffffff;
+  border: 1.5px solid #e5e0d4;
+  border-radius: 14px;
+  padding: 14px 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  color: #1b1c1c;
+  font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+}
+
+.te-engage-comment-head {
+  font-size: 12.5px;
+  font-weight: 900;
+  margin: 0 0 9px;
+  color: #1b1c1c;
+}
+
+.te-engage-comment-form {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.te-engage-comment-input {
+  flex: 1;
+  min-width: 0;
+  border: 1.5px solid #e5e0d4;
+  border-radius: 10px;
+  padding: 8px 11px;
+  font-size: 12px;
+  background: #faf8f4;
+  color: #1b1c1c;
+  font-family: inherit;
+}
+.te-engage-comment-input::placeholder { color: #a39c8c; }
+.te-engage-comment-input:focus { outline: none; border-color: #7c5cff; }
+.te-engage-comment-submit {
+  flex: none;
+  background: #7c5cff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0 15px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+}
+.te-engage-comment-submit:active { transform: scale(0.97); }
+.te-engage-comment-hint {
+  font-size: 10.5px;
+  color: #9b9484;
+  margin: -4px 0 9px;
+}
+
+.te-engage-comment-list { display: flex; flex-direction: column; }
+.te-engage-comment-item {
+  display: flex;
+  gap: 8px;
+  padding: 8px 0;
+  border-top: 1px solid #f0ece2;
+}
+.te-engage-comment-item:first-child { border-top: none; }
+.te-engage-comment-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  flex: none;
+  background: #e5e0d4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #6b6552;
+}
+.te-engage-comment-body { flex: 1; min-width: 0; }
+.te-engage-comment-body .name { font-size: 11.5px; font-weight: 800; color: #1b1c1c; }
+.te-engage-comment-body .date { font-size: 9.5px; color: #a39c8c; margin-left: 5px; }
+.te-engage-comment-body p { font-size: 12px; margin: 2px 0 0; line-height: 1.45; word-break: break-word; }
+.te-engage-comment-actions { display: flex; gap: 10px; margin-top: 4px; }
+.te-engage-comment-actions button {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #9b9484;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.te-engage-comment-actions button.is-active { color: #7c5cff; }
+.te-engage-comment-empty {
+  font-size: 11.5px;
+  color: #a39c8c;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.te-engage-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  background: #1b1c1c;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 9px 16px;
+  border-radius: 999px;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.te-engage-toast.show { opacity: 1; }

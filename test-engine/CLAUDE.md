@@ -86,6 +86,9 @@
 내부의 `"id"` 필드나 `index.html`의 `data-test-id`는 번호 없는 순수 test_id 그대로 유지
 (localStorage 완료 카운터 키 등에 쓰이므로 폴더명과 다르게 둬도 무방, 실제로도 다름).
 기존 엔진 파일(engine.js/engine.css/themes/*)은 절대 수정하지 않는다.
+**`index.html`을 복사할 때 `engine.css`/`engine.js` 스크립트 태그 다음 줄에 있는
+`engage.css?v=1`/`engage.js?v=1` 태그 2줄도 그대로 딸려오는지 확인할 것** — 댓글 기능은
+2026-07-14부터 모든 신규 콘텐츠의 표준 구성요소다(4-5 참고).
 
 ## 4-4. 이미지 — 샘플 우선 승인 절차 (★ 핵심, 항상 준수)
 1. `style-guide.md`를 참고해 이 테스트에 **가장 재미있게 어울리는 톤**(병맛/진지·감성/
@@ -148,6 +151,16 @@
 이 실수를 반복하지 않도록 처음부터 내용을 읽고 그릴 것.
 
 ## 4-5. 배포 연동
+- **댓글 기능은 모든 신규 콘텐츠의 표준 구성요소다(2026-07-14 확정)**: `index.html`에
+  `<link rel="stylesheet" href="../../engage.css?v=1">`(engine.css 태그 다음 줄)와
+  `<script src="../../engage.js?v=1" defer></script>`(engine.js 태그 다음 줄)를 항상 포함한다.
+  `engage.js`는 `MutationObserver`로 인트로 화면의 `.te-choices-fixed`(시작 버튼) 등장을
+  감지해 `.te-app`의 마지막 자식으로 댓글 패널을 자동 마운트하므로, 이 두 줄만 넣으면 `id`
+  필드(=`data-test-id`)를 자동으로 읽어 `section:'testengine', item_id:{id}`로 댓글이
+  연결된다 — 이 파일 안에서 추가로 손댈 코드는 없다. **반응 버튼(저장/소름돋/빵터짐/킹정)은
+  설계만 해두고 구현 보류 중**(저장 버튼이 로그인+마이페이지 스크랩 연동을 전제로 하는 기능이라,
+  로그인 기능이 test-engine까지 확장되기 전엔 의미가 약하다고 판단 — 재개 시
+  `/home/codespace/.claude/plans/distributed-sauteeing-babbage.md` 참고).
 - 메인 사이트 `data.js`의 `AppData.externalTests`(몰입테스트) 또는 `AppData.mbtiZoneTests`
   (MBTI존)에 항목 추가 — `id`/`title`/`emoji`/`hook`/`url`/`engagementKey`/`baseCount`/
   `addedAt`/`isNew`와 함께 **`theme` 필드를 반드시 포함**한다(이 테스트의 `config.json`
