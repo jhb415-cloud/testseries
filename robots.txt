@@ -49,7 +49,6 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-Sitemap: https://gwamol-lab.xyz/sitemap.xml
 Sitemap: https://gwamol-lab.xyz/sitemap-main.xml
 Sitemap: https://gwamol-lab.xyz/sitemap-kkum.xml
 Sitemap: https://gwamol-lab.xyz/sitemap-mbti.xml
