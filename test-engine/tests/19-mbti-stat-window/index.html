@@ -8,9 +8,137 @@
 <meta name="description" content="게임 시작 전에 내 캐릭터 스펙부터 확인 — 실제 응답 기반으로 계산되는 진짜 내 스탯">
 <link rel="stylesheet" href="../../engine.css?v=6">
 <link rel="stylesheet" href="../../engage.css?v=1">
+<link rel="canonical" href="https://gwamol-lab.xyz/test-engine/tests/19-mbti-stat-window/">
 </head>
 <body>
 <div id="test-engine-root"></div>
+<!-- te-seo:start (generate-seo-content.js가 생성 — 직접 수정 금지, config.json 수정 후 재실행) -->
+<style>
+.te-seo{max-width:500px;margin:0 auto;padding:28px 16px 60px;font-family:"Noto Sans KR","Apple SD Gothic Neo",sans-serif;font-synthesis:none;}
+.te-seo-card{background:#fffdf7;color:#1f2328;border:3px solid #1f2328;border-radius:16px;box-shadow:6px 6px 0 0 rgba(31,35,40,.9);padding:22px 18px;line-height:1.65;font-size:15px;}
+.te-seo h2{font-size:20px;font-weight:800;margin:0 0 10px;}
+.te-seo h3{font-size:17px;font-weight:800;margin:22px 0 8px;padding-top:14px;border-top:2px dashed #d8d2c4;}
+.te-seo h4{font-size:15px;font-weight:800;margin:14px 0 4px;}
+.te-seo p{margin:6px 0;}
+.te-seo ul{margin:6px 0 10px;padding-left:20px;}
+.te-seo li{margin:3px 0;}
+.te-seo-tags{color:#0d7a5f;font-weight:700;font-size:13px;}
+.te-seo-sub{color:#555;font-size:13.5px;margin-top:0;}
+.te-seo-tip{background:#f4efe3;border-radius:8px;padding:8px 10px;font-size:13.5px;}
+.te-seo-result{margin-bottom:14px;}
+.te-seo-links a{color:#0d5fd7;font-weight:700;}
+</style>
+<section class="te-seo" lang="ko">
+<div class="te-seo-card">
+<h2>내 MBTI 능력치 스탯창 — 어떤 테스트인가요?</h2>
+<p>게임 시작 전에 내 캐릭터 스펙부터 확인 — 실제 응답 기반으로 계산되는 진짜 내 스탯</p>
+<p>MBTI 4가지 축(E-I / S-N / T-F / J-P)을 문항 응답으로 각각 계산해, 16가지 유형 중 하나가 결과로 나와요. 총 <strong>8문항</strong>이고 약 <strong>1분</strong>이면 끝나요. 결과는 <strong>16가지 유형</strong> 중 하나로 나오고, 회원가입 없이 무료로 할 수 있어요. 결과 화면에서는 전용 일러스트와 함께 카카오톡 공유·이미지 저장도 지원해요.</p>
+<p class="te-seo-tags"><span class="te-seo-tag">#MBTI스탯</span> <span class="te-seo-tag">#심리테스트</span> <span class="te-seo-tag">#MBTI능력치</span> <span class="te-seo-tag">#MBTI밈</span></p>
+<h3>이런 질문이 나와요</h3>
+<ul>
+<li>&ldquo;전혀 모르는 사람들이 모인 새로운 자리에 가게 됐다. 그 자리에서 나는 어떻게 행동할까?&rdquo;</li>
+<li>&ldquo;정신없이 바쁜 한 주를 보내고 맞은 주말, 나는 어떻게 해야 진짜 에너지가 충전될까?&rdquo;</li>
+<li>&ldquo;새로운 프로젝트를 막 시작하게 됐다. 나는 제일 먼저 무엇부터 챙길까?&rdquo;</li>
+<li>&hellip; 외 5문항</li>
+</ul>
+<h3>결과 유형 미리보기 (총 16가지)</h3>
+<p>어떤 답을 고르면 어떤 유형이 나오는지는 비밀! 대신 어떤 유형들이 기다리고 있는지 미리 구경해보세요.</p>
+<div class="te-seo-result">
+<h4>🛡️ 성기사 (ISTJ)</h4>
+<p class="te-seo-sub">매뉴얼대로 안 하면 버프 안 줌. 원칙이 곧 스킬트리인 철벽 팔라딘</p>
+<p class="te-seo-tip">💡 성기사답게 재측정도 계획표에 넣어두자 — 스탯은 그날 컨디션 따라 살짝 바뀔 수 있음</p>
+</div>
+<div class="te-seo-result">
+<h4>🏰 수호기사 (ISFJ)</h4>
+<p class="te-seo-sub">파티원 다 지키느라 정작 자기 HP는 안 챙기는 대형 방패</p>
+<p class="te-seo-tip">💡 가끔은 방패 내려놓고 본인 스탯도 챙길 것 — 재도전하면 스탯 새로고침 가능</p>
+</div>
+<div class="te-seo-result">
+<h4>🔮 현자 (INFJ)</h4>
+<p class="te-seo-sub">3턴 뒤 상대 패까지 읽고 있는데 굳이 말은 안 해주는 예언가</p>
+<p class="te-seo-tip">💡 미래가 보여도 스탯은 오늘 기준 — 재도전하면 새 예언(스탯)으로 갱신됨</p>
+</div>
+<div class="te-seo-result">
+<h4>🌑 흑마법사 (INTJ)</h4>
+<p class="te-seo-sub">이미 엔딩까지 전략 다 짜놓음. 파티는 그냥 따라오면 되는 마스터마인드</p>
+<p class="te-seo-tip">💡 계획에 없던 재도전도 가끔은 유효함 — 스탯은 그날 컨디션 따라 살짝 바뀜</p>
+</div>
+<div class="te-seo-result">
+<h4>🗡️ 암살자 (ISTP)</h4>
+<p class="te-seo-sub">말 없이 사라졌다가 어느새 보스 처치 로그만 남기는 원샷원킬</p>
+<p class="te-seo-tip">💡 굳이 설명 안 해도 됨. 조용히 재도전해서 스탯만 갱신하고 가면 됨</p>
+</div>
+<div class="te-seo-result">
+<h4>🌿 드루이드 (ISFP)</h4>
+<p class="te-seo-sub">전투보다 필드 야생동물 쓰다듬기 콘텐츠에 진심인 자연인</p>
+<p class="te-seo-tip">💡 동물 친구들이 지켜보는 중 — 기분 따라 스탯 바뀌니 재도전으로 새로고침 가능</p>
+</div>
+<div class="te-seo-result">
+<h4>✨ 백마법사 (INFP)</h4>
+<p class="te-seo-sub">적 몬스터도 불쌍해서 힐 주다가 팀한테 혼나는 성수 그 자체</p>
+<p class="te-seo-tip">💡 너무 몰입해서 상처받지 말 것 — 스탯은 그날 감정 상태 따라 살짝 바뀜</p>
+</div>
+<div class="te-seo-result">
+<h4>⚗️ 연금술사 (INTP)</h4>
+<p class="te-seo-sub">'이거 섞으면 어떻게 되지?' → 공방 폭발 3회차. 그래도 이론은 완벽함</p>
+<p class="te-seo-tip">💡 실험 정신 발동됐다면 재도전 ㄱㄱ — 표본이 늘수록 스탯이 정확해짐(이론상)</p>
+</div>
+<div class="te-seo-result">
+<h4>⚔️ 검투사 (ESTP)</h4>
+<p class="te-seo-sub">관중 함성 들리면 스탯 2배 되는 아레나의 타고난 쇼맨</p>
+<p class="te-seo-tip">💡 지금 이 스탯도 관중 없어서 낮게 나온 걸 수도? 재도전해서 증명하자</p>
+</div>
+<div class="te-seo-result">
+<h4>🎸 음유시인 (ESFP)</h4>
+<p class="te-seo-sub">전투 중에도 스포트라이트는 내 거. 버프곡이 아니라 단독 콘서트</p>
+<p class="te-seo-tip">💡 앵콜 요청 들어옴 — 재도전하면 오늘의 무대(스탯)로 새로고침 가능</p>
+</div>
+<div class="te-seo-result">
+<h4>🎲 소환사 (ENFP)</h4>
+<p class="te-seo-sub">뭐가 소환될지 본인도 모름. 근데 일단 재밌으면 된 거 아님?</p>
+<p class="te-seo-tip">💡 재도전할 때마다 다른 스탯이 소환될 수 있음 — 그게 소환사의 묘미</p>
+</div>
+<div class="te-seo-result">
+<h4>⚙️ 마도공학자 (ENTP)</h4>
+<p class="te-seo-sub">'이론상 가능함'으로 시작해서 결국 공성병기까지 만들어오는 발명가</p>
+<p class="te-seo-tip">💡 이 스탯도 반박 가능함 — 재도전으로 데이터 더 모아서 논파해보자</p>
+</div>
+<div class="te-seo-result">
+<h4>🚩 기사단장 (ESTJ)</h4>
+<p class="te-seo-sub">레이드 공대장. 딜찍누 금지, 오더 안 들으면 강퇴인 완벽 지휘관</p>
+<p class="te-seo-tip">💡 오늘 공략 끝났으면 다음 스케줄에 재측정 넣어둘 것 — 스탯은 갱신됨</p>
+</div>
+<div class="te-seo-result">
+<h4>💖 힐러 (ESFJ)</h4>
+<p class="te-seo-sub">'포션 먹었어? 버프 받았어?' 파티의 공식 엄마이자 진짜 주인공</p>
+<p class="te-seo-tip">💡 남 챙기다 본인 스탯 확인 늦었지? 가끔은 본인 것도 재측정해주기</p>
+</div>
+<div class="te-seo-result">
+<h4>🌟 대사제 (ENFJ)</h4>
+<p class="te-seo-sub">만렙 찍고도 뉴비 마을에서 길 안내해주고 있는 서버 인망캐</p>
+<p class="te-seo-tip">💡 다들 따라오게 만드는 그 스탯, 재도전하면 오늘 컨디션으로 갱신 가능</p>
+</div>
+<div class="te-seo-result">
+<h4>👑 마왕 (ENTJ)</h4>
+<p class="te-seo-sub">정복 스케줄이 분기별로 짜여 있는 최종보스. 근데 유능해서 할 말 없음</p>
+<p class="te-seo-tip">💡 정복 일정에 재측정도 넣어두자 — 스탯은 그날 컨디션 따라 살짝 바뀜</p>
+</div>
+<h3>자주 묻는 질문</h3>
+<p><strong>Q. 결과가 정확한가요?</strong><br>재미로 즐기는 오락용 심리테스트예요. 전문적인 심리 검사나 진단을 대체하지 않아요.</p>
+<p><strong>Q. 다시 할 수 있나요?</strong><br>네, 결과 화면의 &ldquo;다시하기&rdquo; 버튼으로 몇 번이든 다시 해볼 수 있어요.</p>
+<p><strong>Q. 결과를 공유할 수 있나요?</strong><br>결과 화면에서 카카오톡 공유와 결과 카드 이미지 저장을 지원해요.</p>
+<h3>함께 해보면 좋은 테스트</h3>
+<ul class="te-seo-links">
+<li><a href="https://gwamol-lab.xyz/test-engine/tests/2-desert-island-type/">무인도에 떨어지면 나는? (생존 유형)</a> — 구조선 오기 전까지 나는 살아남을 수 있을까, 8문항 생존 성향 테스트</li>
+<li><a href="https://gwamol-lab.xyz/test-engine/tests/20-ai-mbti-judge/">AI가 판별하는 진짜 내 MBTI (과몰입 검거)</a> — 당신이 주장하는 그 유형, 진짜 맞을까? AI가 8문항으로 재판정합니다</li>
+<li><a href="https://gwamol-lab.xyz/test-engine/tests/3-text-reply-love-type/">텍스트 답장 스타일로 보는 연애 유형</a> — 좋아하는 사람한테 오는 톡, 나는 어떻게 답장할까? 8문항 연애 답장 테스트</li>
+<li><a href="https://gwamol-lab.xyz/test-engine/tests/4-spending-type/">나의 소비 유형: 거지방 vs 욜로</a> — 월급날부터 세일 시즌까지, 8문항으로 알아보는 진짜 소비 습관</li>
+<li><a href="https://gwamol-lab.xyz/">과몰입 연구소 홈</a> — MBTI·두뇌 나이·오늘의 운세·꿈해몽 등 전체 테스트 모음</li>
+<li><a href="https://gwamol-lab.xyz/kkum/">꿈해몽 사전</a> — 174가지 꿈 풀이 전체 보기</li>
+</ul>
+</div>
+</section>
+<!-- te-seo:end -->
 <script src="../../result-card.js?v=2" defer></script>
 <script src="../../engine.js?v=10" data-test-id="mbti-stat-window" defer></script>
 <script src="../../engage.js?v=1" defer></script>
