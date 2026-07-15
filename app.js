@@ -1065,8 +1065,9 @@ function renderMbtiView(view) {
         <h2 class="text-2xl font-bold text-slate-100 mb-2">성격 파탄 MBTI</h2>
         <p class="text-slate-400 mb-6">솔직한 성격 분석<br>결과가 팩폭일 수도 있습니다.</p>
         ${renderMatchBanner(state.match, state.match ? state.match.type : '')}
-        <input id="mbti-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력 (최대 12자)"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-violet-500 transition"/>
+        <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
+          <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
+        </div>
         <p class="text-slate-400 text-sm mb-3">모드 선택</p>
         <div class="grid grid-cols-2 gap-3">
           <button onclick="mbtiStart('simple')" class="bg-violet-800/50 hover:bg-violet-700/70 border border-violet-600 text-violet-300 font-bold py-4 rounded-xl transition">
@@ -1195,9 +1196,7 @@ function renderMbtiView(view) {
 }
 
 function mbtiStart(mode) {
-  const nickname = document.getElementById('mbti-nickname').value.trim();
-  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  setNickname(nickname);
+  const nickname = getEffectiveNickname();
   bumpEngagement('site-mbti-plays');
   const state = App.state.mbti;
   state.nickname = nickname;
@@ -1761,8 +1760,9 @@ function renderBrainView(view) {
           ['화면에 색깔 글자가 나타나요 (예: 파란색으로 쓰인 "빨강")', '글자의 뜻이 아니라 실제 색상에 해당하는 버튼을 누르세요', '제한시간 안에 최대한 정확하고 빠르게 답할수록 좋아요']
         )}
         ${renderChallengeBanner(state.challenge)}
-        <input id="brain-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-emerald-500 transition"/>
+        <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
+          <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
+        </div>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-3">
           <button onclick="brainSelectDifficulty('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-4 rounded-xl transition">
@@ -1911,9 +1911,7 @@ function renderBrainView(view) {
 }
 
 function brainSelectDifficulty(difficulty) {
-  const nickname = document.getElementById('brain-nickname').value.trim();
-  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  setNickname(nickname);
+  const nickname = getEffectiveNickname();
   bumpEngagement('site-brain-plays');
   const state = App.state.brain;
   state.nickname = nickname;
@@ -1994,8 +1992,9 @@ function renderAdhdView(view) {
         <div class="text-6xl mb-4">⚡</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">프로 미루러 (ADHD 성향 진단)</h2>
         <p class="text-slate-400 mb-6">집중력 결핍 성향 자가 체크<br>결과는 전문 진단이 아닌 참고용입니다.</p>
-        <input id="adhd-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-rose-500 transition"/>
+        <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
+          <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
+        </div>
         <p class="text-slate-400 text-sm mb-3">모드 선택</p>
         <div class="grid grid-cols-2 gap-3">
           <button onclick="adhdStart('simple')" class="bg-rose-800/50 hover:bg-rose-700/70 border border-rose-600 text-rose-300 font-bold py-4 rounded-xl transition">
@@ -2117,9 +2116,7 @@ function renderAdhdView(view) {
 }
 
 function adhdStart(mode) {
-  const nickname = document.getElementById('adhd-nickname').value.trim();
-  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  setNickname(nickname);
+  const nickname = getEffectiveNickname();
   bumpEngagement('site-adhd-plays');
   const state = App.state.adhd;
   state.nickname = nickname;
@@ -2175,8 +2172,9 @@ function renderReactionView(view) {
           ['화면이 빨간색일 땐 그냥 기다리세요 (너무 빨리 누르면 반칙!)', '초록색으로 바뀌는 순간 화면을 최대한 빨리 탭하세요', '여러 번 반복해서 평균 반응속도를 측정해요']
         )}
         ${renderChallengeBanner(state.challenge)}
-        <input id="reaction-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
+          <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
+        </div>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-2">
           <button onclick="reactionStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
@@ -2288,10 +2286,7 @@ function renderReactionView(view) {
 }
 
 function reactionStart(difficulty) {
-  const input = document.getElementById('reaction-nickname');
-  const nickname = input ? input.value.trim() : '';
-  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  setNickname(nickname);
+  const nickname = getEffectiveNickname();
   bumpEngagement('site-reaction-plays');
   const cfg = REACTION_CONFIG[difficulty];
   App.state.reaction = {
@@ -2442,8 +2437,9 @@ function renderMemdigitView(view) {
           ['화면에 숫자가 순서대로 하나씩 나타나요', '다 보여주면 방금 본 순서 그대로 숫자를 입력하세요', '맞히면 자릿수가 늘고, 틀리면 줄어들어요 — 본인 한계까지 도전해보세요']
         )}
         ${renderChallengeBanner(state.challenge)}
-        <input id="memdigit-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
+          <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
+        </div>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-2">
           <button onclick="memdigitStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
@@ -2546,10 +2542,7 @@ function renderMemdigitView(view) {
 }
 
 function memdigitStart(difficulty) {
-  const input = document.getElementById('memdigit-nickname');
-  const nickname = input ? input.value.trim() : '';
-  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  setNickname(nickname);
+  const nickname = getEffectiveNickname();
   bumpEngagement('site-memdigit-plays');
   const cfg = MEMDIGIT_CONFIG[difficulty];
   App.state.memdigit = {
@@ -2746,8 +2739,9 @@ function renderSeqmemView(view) {
           ['타일이 순서대로 반짝반짝 빛나요, 그 순서를 잘 보세요', '다 보여주면 같은 순서로 타일을 눌러보세요', '맞히면 칸 수가 늘어나요 — 몇 칸까지 기억하는지 도전해보세요']
         )}
         ${renderChallengeBanner(state.challenge)}
-        <input id="seqmem-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
+          <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
+        </div>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-2">
           <button onclick="seqmemStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
@@ -2853,10 +2847,7 @@ function renderSeqmemView(view) {
 }
 
 function seqmemStart(difficulty) {
-  const input = document.getElementById('seqmem-nickname');
-  const nickname = input ? input.value.trim() : '';
-  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  setNickname(nickname);
+  const nickname = getEffectiveNickname();
   bumpEngagement('site-seqmem-plays');
   const cfg = SEQMEM_CONFIG[difficulty];
   App.state.seqmem = {
@@ -3029,8 +3020,9 @@ function renderColorvisionView(view) {
           ['격자 안에 타일이 여러 개 있어요, 그중 딱 하나만 미묘하게 색이 달라요', '제한시간 안에 다른 색 타일을 찾아 탭하세요', '정확도와 속도를 함께 채점해요']
         )}
         ${renderChallengeBanner(state.challenge)}
-        <input id="colorvision-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
+          <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
+        </div>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-2">
           <button onclick="colorvisionStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
@@ -3140,10 +3132,7 @@ function renderColorvisionView(view) {
 }
 
 function colorvisionStart(difficulty) {
-  const input = document.getElementById('colorvision-nickname');
-  const nickname = input ? input.value.trim() : '';
-  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  setNickname(nickname);
+  const nickname = getEffectiveNickname();
   bumpEngagement('site-colorvision-plays');
   const cfg = COLORVISION_CONFIG[difficulty];
   App.state.colorvision = {
@@ -3338,8 +3327,9 @@ function renderLogicView(view) {
           ['숫자가 몇 개 나열되어 있어요, 그 안에 숨은 규칙(더하기·곱하기 등)을 찾아보세요', '규칙에 맞는 다음 숫자를 4개 보기 중에서 고르세요', '제한시간 안에 정확히 맞힐수록 등급이 올라가요']
         )}
         ${renderChallengeBanner(state.challenge)}
-        <input id="logic-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
+          <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
+        </div>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-2">
           <button onclick="logicStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
@@ -3447,10 +3437,7 @@ function renderLogicView(view) {
 }
 
 function logicStart(difficulty) {
-  const input = document.getElementById('logic-nickname');
-  const nickname = input ? input.value.trim() : '';
-  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  setNickname(nickname);
+  const nickname = getEffectiveNickname();
   bumpEngagement('site-logic-plays');
   const cfg = LOGIC_CONFIG[difficulty];
   App.state.logic = {
@@ -3584,8 +3571,9 @@ function renderImpulseView(view) {
           ['🟢 초록 신호가 뜨면 최대한 빨리 탭하세요', '🔴 빨간 신호가 뜨면 절대 누르지 말고 참으세요', '성급하게 누른 횟수(참지 못한 횟수)로 채점해요']
         )}
         ${renderChallengeBanner(state.challenge)}
-        <input id="impulse-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
+          <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
+        </div>
         <p class="text-slate-400 text-sm mb-3">난이도 선택</p>
         <div class="grid grid-cols-3 gap-2">
           <button onclick="impulseStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
@@ -3696,10 +3684,7 @@ function renderImpulseView(view) {
 }
 
 function impulseStart(difficulty) {
-  const input = document.getElementById('impulse-nickname');
-  const nickname = input ? input.value.trim() : '';
-  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  setNickname(nickname);
+  const nickname = getEffectiveNickname();
   bumpEngagement('site-impulse-plays');
   const cfg = IMPULSE_CONFIG[difficulty];
   App.state.impulse = {
@@ -3871,8 +3856,9 @@ function renderShortfocusView(view) {
           ['라운드마다 "이번엔 ○○ 찾기" 목표가 먼저 제시돼요', '카드들이 동시에 뜨면 목표와 일치하는 카드만 빠르게 탭하세요', '목표가 이번 피드에 없을 수도 있어요 — 그럴 땐 아무것도 누르지 말고 기다리세요']
         )}
         ${renderChallengeBanner(state.challenge)}
-        <input id="shortfocus-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 transition"/>
+        <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
+          <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
+        </div>
         <p class="text-slate-400 text-sm mb-3">피드 속도(난이도) 선택</p>
         <div class="grid grid-cols-3 gap-2">
           <button onclick="shortfocusStart('easy')" class="bg-emerald-800/50 hover:bg-emerald-700/70 border border-emerald-600 text-emerald-300 font-bold py-3 rounded-xl transition text-sm">
@@ -3993,10 +3979,7 @@ function renderShortfocusView(view) {
 }
 
 function shortfocusStart(difficulty) {
-  const input = document.getElementById('shortfocus-nickname');
-  const nickname = input ? input.value.trim() : '';
-  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  setNickname(nickname);
+  const nickname = getEffectiveNickname();
   bumpEngagement('site-shortfocus-plays');
   const cfg = SHORTFOCUS_CONFIG[difficulty];
   App.state.shortfocus = {
@@ -4144,8 +4127,9 @@ function renderInsaView(view) {
         <h2 class="text-2xl font-bold text-slate-100 mb-2">인싸력 테스트</h2>
         <p class="text-slate-400 mb-6">10문항으로 알아보는 나의 사교성 지수<br>인싸든 아싸든, 다 각자의 매력이 있는 법!</p>
         ${renderMatchBanner(state.match, state.match ? state.match.score + '점' : '')}
-        <input id="insa-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-orange-500 transition"/>
+        <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
+          <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
+        </div>
         <button onclick="insaStart()" class="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-400 hover:to-pink-500 text-white font-bold py-3 rounded-xl transition">
           테스트 시작하기
         </button>
@@ -4230,9 +4214,7 @@ function renderInsaView(view) {
 }
 
 function insaStart() {
-  const nickname = document.getElementById('insa-nickname').value.trim();
-  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  setNickname(nickname);
+  const nickname = getEffectiveNickname();
   bumpEngagement('site-insa-plays');
   App.state.insa.nickname = nickname;
   App.state.insa.answers = [];
@@ -4271,8 +4253,9 @@ function renderProverbView(view) {
         <div class="text-6xl mb-4">📜</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">속담 완성 퀴즈</h2>
         <p class="text-slate-400 mb-6">옛 어른들의 지혜, 속담 10문항!<br>매번 다른 문제가 나와요. 시간 제한 없이 편하게 풀어보세요 😊</p>
-        <input id="proverb-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-amber-500 transition"/>
+        <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
+          <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
+        </div>
         <button onclick="proverbStart()" class="w-full bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-bold py-3 rounded-xl transition">
           퀴즈 시작하기
         </button>
@@ -4358,10 +4341,7 @@ function renderProverbView(view) {
 }
 
 function proverbStart() {
-  const input = document.getElementById('proverb-nickname');
-  const nickname = input ? input.value.trim() : '';
-  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  setNickname(nickname);
+  const nickname = getEffectiveNickname();
   bumpEngagement('site-proverb-plays');
   const questions = shuffleArray(AppData.proverbQuestions).slice(0, 10);
   App.state.proverb = { nickname, step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [], questions };
@@ -4424,8 +4404,9 @@ function renderPricequizView(view) {
         <div class="text-6xl mb-4">🧾</div>
         <h2 class="text-2xl font-bold text-slate-100 mb-2">그 시절 물가 맞히기</h2>
         <p class="text-slate-400 mb-6">추억의 그 시절 물가, 10문항!<br>매번 다른 문제가 나와요. 시간 제한 없이 편하게 풀어보세요 😊</p>
-        <input id="pricequiz-nickname" type="text" maxlength="12" value="${getNickname()}" placeholder="별명 또는 닉네임 입력"
-          class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 mb-4 focus:outline-none focus:border-amber-500 transition"/>
+        <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
+          <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
+        </div>
         <button onclick="pricequizStart()" class="w-full bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-bold py-3 rounded-xl transition">
           퀴즈 시작하기
         </button>
@@ -4517,10 +4498,7 @@ function renderPricequizView(view) {
 }
 
 function pricequizStart() {
-  const input = document.getElementById('pricequiz-nickname');
-  const nickname = input ? input.value.trim() : '';
-  if (!nickname) { showToast('별명을 입력해주세요!'); return; }
-  setNickname(nickname);
+  const nickname = getEffectiveNickname();
   bumpEngagement('site-pricequiz-plays');
   const questions = shuffleArray(AppData.priceQuizQuestions).slice(0, 10);
   App.state.pricequiz = { nickname, step: 0, correctCount: 0, options: [], answerIndex: 0, phase: 'idle', log: [], questions };
@@ -6602,6 +6580,32 @@ async function getMyProfile() {
   } catch (e) { return null; }
 }
 
+/* ── 로그인 여부에 따른 "표시용 닉네임" 통합 (v1.1.5~) ──
+   댓글과 동일한 규칙을 내 정보 카드·두뇌테스트존 등 닉네임을 쓰는 모든 곳에 적용: 로그인 시엔
+   profiles.public_nickname, 비로그인 시엔 익명_XXXXX(getAnonLabel)를 자동으로 쓰고, 더 이상
+   자유 텍스트로 임의 닉네임을 지정할 수 없게 함(로그인 여부만으로 결정).
+   테스트 시작 버튼을 누를 때마다 네트워크 조회를 하면 클릭 반응이 느려 보이므로, 섹션 이동마다
+   (App.navigate) 미리 캐시를 갱신해두고 실제 사용 시점엔 캐시를 동기적으로 읽기만 함 —
+   캐시가 아직 없는 극초반엔 게스트 라벨로 안전하게 폴백 */
+let _effectiveNicknameCache = null;
+function getEffectiveNickname() {
+  return _effectiveNicknameCache || getAnonLabel();
+}
+function refreshNicknameDisplays() {
+  const label = getEffectiveNickname();
+  document.querySelectorAll('.nickname-display-value').forEach(el => { el.textContent = label; });
+}
+async function refreshEffectiveNickname() {
+  try {
+    const profile = await getMyProfile();
+    _effectiveNicknameCache = (profile && profile.public_nickname) ? profile.public_nickname : getAnonLabel();
+  } catch (e) {
+    _effectiveNicknameCache = getAnonLabel();
+  }
+  refreshNicknameDisplays();
+  return _effectiveNicknameCache;
+}
+
 const COMMENT_RATE_LIMIT_MS = 10000;
 /* 신고 누적 임계치(3회)는 DB 트리거 auto_hide_reported_comment()에 있음 — 클라이언트는 관여 안 함 */
 
@@ -6789,23 +6793,24 @@ function getDailyChallengeTests() {
 /* ══════════════════════════════════════════════════
    🙂 홈 내 정보 미니카드 (v0.8.9~ 홈화면 대대적 변경)
    - 예전 "마이홈 대시보드"(닉네임입력+저장버튼/칭호뱃지/완주현황그리드/레이더차트/최근기록리스트,
-     ~90줄)를 한 줄짜리 압축 카드로 교체. 닉네임은 별도 저장 버튼 없이 blur 시 자동 저장.
-     예전 버전 전체는 git 히스토리에 보존돼있어 필요시 되돌릴 수 있음.
+     ~90줄)를 한 줄짜리 압축 카드로 교체. 예전 버전 전체는 git 히스토리에 보존돼있어 필요시
+     되돌릴 수 있음.
+   - v1.1.5~: 자유 텍스트로 아무 닉네임이나 입력할 수 있던 인라인 편집을 없애고, 댓글과 동일한
+     규칙(로그인=public_nickname / 비로그인=익명_XXXXX)으로 자동 표시 — getEffectiveNickname() 참고.
 ══════════════════════════════════════════════════ */
 function renderHomeIdentity() {
   const container = document.getElementById('home-identity-container');
   if (!container) return;
-  const nickname = getNickname();
+  const displayName = getEffectiveNickname();
   const streak = updateVisitStreak();
   const { level, xpInLevel } = getLevelInfo();
 
   container.innerHTML = `
-    <div class="home-identity" onclick="homeIdentityCardClick(event)">
-      <div id="home-identity-avatar" class="avatar guest ${nickname ? '' : 'empty'}">${nickname ? nickname.charAt(0) : '?'}</div>
+    <div class="home-identity" onclick="homeIdentityCardClick()">
+      <div id="home-identity-avatar" class="avatar guest">${escapeHtml(displayName.charAt(0))}</div>
       <div class="home-identity-body">
         <div class="home-identity-name-row">
-          <input id="home-nickname-input" class="home-identity-name" maxlength="12" value="${nickname}" placeholder="닉네임을 입력하세요"
-            onblur="homeSaveNicknameInline(this.value)" onkeydown="if(event.key==='Enter')this.blur();" />
+          <span id="home-identity-name" class="home-identity-name">${escapeHtml(displayName)}</span>
           <span class="home-identity-sub">Lv.${level} · ${xpInLevel}/${XP_PER_LEVEL}XP</span>
           <span id="home-identity-title" class="home-identity-title locked">🔒 칭호: ???</span>
         </div>
@@ -6816,11 +6821,10 @@ function renderHomeIdentity() {
     <div id="home-login-row" class="home-login-row"></div>`;
 }
 
-/* v1.1.2~: 내 정보 카드 자체가 클릭 영역 — 닉네임 인풋(로컬 닉네임 편집, 로그인과 무관한
-   별개 기능)을 누른 경우만 제외하고, 나머지 어디를 눌러도 로그인 상태에 따라 로그인 모달
-   또는 내 정보 모달을 연다 */
-async function homeIdentityCardClick(e) {
-  if (e && e.target && e.target.id === 'home-nickname-input') return;
+/* v1.1.2~: 내 정보 카드 자체가 클릭 영역 — 어디를 눌러도 로그인 상태에 따라 로그인 모달
+   또는 내 정보 모달을 연다(v1.1.5~ 카드 안의 닉네임이 자유 편집 텍스트가 아니라 순수 표시용
+   `<span>`으로 바뀌면서, 예전에 닉네임 인풋만 클릭 예외 처리하던 로직은 더 이상 필요 없음) */
+async function homeIdentityCardClick() {
   if (!window.sb) return;
   try {
     const { data: { session } } = await window.sb.auth.getSession();
@@ -6829,13 +6833,6 @@ async function homeIdentityCardClick(e) {
     const { data: profile } = await window.sb.from('profiles').select('public_nickname').eq('id', session.user.id).maybeSingle();
     openProfileModal(!(profile && profile.public_nickname));
   } catch (err) { console.error('내 정보 열기 실패:', err); }
-}
-
-function homeSaveNicknameInline(value) {
-  const trimmed = (value || '').trim();
-  if (trimmed === getNickname()) return;
-  setNickname(trimmed);
-  renderHomeIdentity();
 }
 
 /* ══════════════════════════════════════════════════
@@ -6855,12 +6852,16 @@ async function initHomeLoginState() {
   const el = document.getElementById('home-login-row');
   const avatarEl = document.getElementById('home-identity-avatar');
   const titleEl = document.getElementById('home-identity-title');
+  const nameEl = document.getElementById('home-identity-name');
   if (!el || !window.sb) return;
   try {
     const { data: { session } } = await window.sb.auth.getSession();
     const loggedIn = !!(session && session.user && session.user.is_anonymous === false);
     if (avatarEl) avatarEl.classList.toggle('guest', !loggedIn);
     if (!loggedIn) {
+      _effectiveNicknameCache = getAnonLabel();
+      if (nameEl) nameEl.textContent = _effectiveNicknameCache;
+      if (avatarEl) avatarEl.innerHTML = escapeHtml(_effectiveNicknameCache.charAt(0));
       el.innerHTML = `<span class="home-login-hint">🔒 지금 이 레벨, 저장 안 하고 갈 거야?</span>`;
       if (titleEl) { titleEl.className = 'home-identity-title locked'; titleEl.textContent = '🔒 칭호: ???'; }
       return;
@@ -6877,13 +6878,19 @@ async function initHomeLoginState() {
       titleEl.className = 'home-identity-title unlocked';
       titleEl.textContent = `🏅 ${getTitleForLevel(level)}`;
     }
+    // 로그인=public_nickname / 비로그인=익명 라벨을 이 카드뿐 아니라 두뇌테스트존 등 다른 화면의
+    // 닉네임 표시(nickname-display-value)에도 그대로 동기화(getEffectiveNickname() 참고)
+    _effectiveNicknameCache = (profile && profile.public_nickname) ? profile.public_nickname : getAnonLabel();
+    if (nameEl) nameEl.textContent = _effectiveNicknameCache;
     // 구글 계정 아이콘처럼 내 정보 카드 아바타에도 실제 프로필 사진을 보여줌(있으면) —
     // 초기 렌더링은 항상 이니셜 문자라서 로그인 확인 후에만 실제 사진으로 교체 가능
-    if (avatarEl && profile && profile.avatar_url) {
-      avatarEl.innerHTML = `<img src="${escapeHtml(profile.avatar_url)}" alt=""/>`;
+    if (avatarEl) {
+      avatarEl.innerHTML = (profile && profile.avatar_url)
+        ? `<img src="${escapeHtml(profile.avatar_url)}" alt=""/>`
+        : escapeHtml(_effectiveNicknameCache.charAt(0));
     }
     if (profile && profile.public_nickname) {
-      el.innerHTML = `<span class="home-login-hint">${escapeHtml(profile.public_nickname)}님으로 로그인됨</span>`;
+      el.innerHTML = `<span class="home-login-hint">🔓 로그인됨</span>`;
     } else {
       el.innerHTML = `<span class="home-login-hint">✅ 로그인 완료! 닉네임을 설정해주세요</span>`;
       if (!_nicknameSetupAutoShown) { _nicknameSetupAutoShown = true; openProfileModal(true); }
@@ -6893,6 +6900,8 @@ async function initHomeLoginState() {
 
 function confirmLogout() {
   if (!confirm('로그아웃할까요? 로그아웃하면 다음부터는 익명으로 표시돼요(다시 로그인하면 이 계정으로 돌아올 수 있어요).')) return;
+  // 확인 즉시 모달부터 닫아 "된 건지 안 된 건지" 애매한 상태(모달이 뜬 채로 토스트만 뜨는 것)를 없앰
+  closeProfileModal();
   if (typeof logout === 'function') logout();
 }
 
@@ -8159,6 +8168,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const origNavigate = App.navigate.bind(App);
   App.navigate = function(sectionId) {
     origNavigate(sectionId);
+    refreshEffectiveNickname(); // 다음 화면의 닉네임 표시/사용을 위해 미리 갱신(fire-and-forget)
     if (sectionInits[sectionId]) sectionInits[sectionId]();
   };
 

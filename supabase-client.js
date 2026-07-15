@@ -94,7 +94,7 @@ async function logout() {
     await ensureAnonSession();
     if (typeof renderHomeIdentity === 'function') renderHomeIdentity();
     if (typeof initHomeLoginState === 'function') initHomeLoginState();
-    if (typeof showToast === 'function') showToast('로그아웃됐어요');
+    if (typeof showToast === 'function') showToast('👋 로그아웃 완료');
   } catch (e) {
     console.error('로그아웃 실패:', e);
     if (typeof showToast === 'function') showToast('로그아웃에 실패했어요');

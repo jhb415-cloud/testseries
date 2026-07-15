@@ -1041,13 +1041,12 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
 .home-identity .avatar.guest { filter: grayscale(1) contrast(0.9); opacity: 0.75; }
 .home-identity-body { flex: 1; min-width: 0; }
 .home-identity-name-row { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+/* v1.1.5~: 자유 입력 <input>에서 순수 표시용 <span>으로 변경(로그인 여부로만 값이 결정됨) —
+   긴 익명 라벨(익명_12345 등)도 줄바꿈 없이 말줄임되도록 인라인블록+ellipsis 처리 */
 .home-identity-name {
-  font-weight: 800; font-size: 0.8rem; background: transparent; border: none;
-  border-bottom: 1.5px dashed transparent; color: rgb(var(--ink)); padding: 0 0 1px; font-family: inherit;
-  max-width: 150px; min-width: 60px; cursor: text;
+  display: inline-block; font-weight: 800; font-size: 0.8rem; color: rgb(var(--ink));
+  max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom;
 }
-.home-identity-name:focus { outline: none; border-bottom-color: rgb(var(--outline-variant)); }
-.home-identity-name::placeholder { color: rgb(var(--ink-variant)); opacity: 0.75; }
 .home-identity-sub { font-size: 0.66rem; color: rgb(var(--ink-variant)); font-weight: 700; white-space: nowrap; }
 .home-identity-streak {
   font-size: 0.62rem; font-weight: 800; white-space: nowrap; flex: none;
