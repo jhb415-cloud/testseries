@@ -51,3 +51,4 @@ Allow: /
 
 Sitemap: https://gwamol-lab.xyz/sitemap.xml
 Sitemap: https://gwamol-lab.xyz/sitemap-kkum.xml
+Sitemap: https://gwamol-lab.xyz/sitemap-mbti.xml

@@ -1,4 +1,4 @@
-<!-- v1.1.5 | 5-in-1 Dashboard SPA -->
+<!-- v1.1.6 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -165,7 +165,7 @@
       }
     };
   </script>
-  <link rel="stylesheet" href="style.css?v=1.1.5"/>
+  <link rel="stylesheet" href="style.css?v=1.1.6"/>
   <!-- SEO 체크업 도구 지적사항 반영(v0.5.4~): 기존 39자는 권장 범위(150~220자) 대비 너무 짧았음 -->
   <meta name="description" content="과몰입 연구소는 MBTI, 두뇌 나이 측정기, 심리테스트, 밸런스 게임, 오늘의 운세, 꿈 해몽 검색, 로또 번호 조합기까지 다양한 테스트와 콘텐츠를 무료로 즐길 수 있는 종합 테스트 모음 사이트입니다. 재미로 시작했다가 뼈 맞고 공유하게 되는 콘텐츠들을 지금 바로 확인해보세요."/>
 </head>
@@ -333,7 +333,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4 border-t border-slate-800">
-    <p class="text-slate-600 text-xs">v1.1.5 · 2026-07-14</p>
+    <p class="text-slate-600 text-xs">v1.1.6 · 2026-07-15</p>
   </div>
 </aside>
 
@@ -382,6 +382,34 @@
              심리테스트 3그룹(포스터 캐러셀)→오늘의 챌린지(세로형)→도구 모음을 전부 채워 넣는다. -->
         <div id="home-sections-container"></div>
         <p class="text-slate-400 text-xs mt-3">※ 인기 순위는 이 홈 화면에서의 클릭 수 기준 추정치예요 — 추후 실데이터 연동 예정. 전체 테스트 목록은 사이드바에서 확인하세요.</p>
+
+        <!-- 사이트 안내 (v1.1.6~, 애드센스 "가치가 별로 없는 콘텐츠" 거절 대응): 크롤러와 방문자
+             모두에게 보이는 정적 소개 글. 홈 화면이 카드 나열뿐이라 사이트의 주제·구성을 파악할
+             텍스트가 없다는 문제를 해소. 링크는 해시 앵커라 클릭 시 SPA 라우팅이 그대로 동작. -->
+        <h2 class="text-slate-100 font-bold text-lg mt-10 mb-4">🔬 과몰입 연구소는 이런 곳이에요</h2>
+        <div class="bg-slate-800 border border-slate-700 rounded-xl px-5 py-5 space-y-4 text-sm text-slate-300 leading-relaxed">
+          <p>과몰입 연구소는 <strong class="text-slate-100">"재미로 시작했다가 뼈 맞고 공유하는"</strong> 종합 테스트 모음이에요. 심리테스트·두뇌 게임·운세·꿈해몽·밸런스 게임까지, 심심할 때 하나씩 꺼내 하다 보면 나도 몰랐던 내 모습이 나오는 콘텐츠를 전부 직접 만들어 모아뒀어요. 회원가입 없이 전부 무료입니다.</p>
+          <div>
+            <h3 class="font-bold text-slate-100 mb-1">🧪 두뇌 테스트존 — 내 뇌 스펙 실측하기</h3>
+            <p><a href="#brain" class="text-indigo-300 font-semibold">두뇌 나이 측정기</a>(스트룹 검사 방식)를 비롯해 <a href="#reaction" class="text-indigo-300 font-semibold">반응속도</a>, <a href="#memdigit" class="text-indigo-300 font-semibold">숫자 기억력</a>, <a href="#seqmem" class="text-indigo-300 font-semibold">순서 기억력</a>, <a href="#colorvision" class="text-indigo-300 font-semibold">색각</a>, <a href="#logic" class="text-indigo-300 font-semibold">논리력</a>, <a href="#impulse" class="text-indigo-300 font-semibold">충동억제</a>, <a href="#shortfocus" class="text-indigo-300 font-semibold">숏폼 집중력</a>까지 13가지 인지 능력을 게임처럼 측정해요. 난이도 3단계 + 악명 높은 HELL 모드, Tier(S~D) 등급과 동물 비유 카드, 친구 대결 기능까지 있어서 "한 판만 더"가 계속 나옵니다. 12/24문항 <a href="#mbti" class="text-indigo-300 font-semibold">MBTI 테스트</a>도 여기에 있고, 유형별 자세한 해설은 <a href="/mbti/" class="text-indigo-300 font-semibold">MBTI 16유형 사전</a>에서 읽을 수 있어요.</p>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-100 mb-1">🃏 심리 테스트존 — 못 숨기는 또 다른 나</h3>
+            <p><a href="/test-engine/tests/mental-age/" class="text-indigo-300 font-semibold">진짜 정신연령 테스트</a>, <a href="/test-engine/tests/5-villain-index/" class="text-indigo-300 font-semibold">내 안의 빌런지수</a>, <a href="/test-engine/tests/13-drunk-mbti/" class="text-indigo-300 font-semibold">취중 MBTI</a>, <a href="/test-engine/tests/11-real-vs-fake-mbti/" class="text-indigo-300 font-semibold">찐 MBTI vs 겉 MBTI</a> 등 20가지가 넘는 몰입형 심리테스트가 있어요. 테스트마다 전용 일러스트와 테마 디자인, 8~16가지 결과 유형 해설을 직접 만들었고, 결과는 카드 이미지로 저장해 카카오톡으로 바로 자랑할 수 있어요. <a href="#psychtest" class="text-indigo-300 font-semibold">전체 목록 보기 →</a></p>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-100 mb-1">🗳️ 과몰입 투표소 — 오늘도 댓글창이 뜨겁다</h3>
+            <p><a href="#balance" class="text-indigo-300 font-semibold">밸런스 게임</a>에서는 "전애인 SNS 차단 여부"나 "워라밸 vs 연봉" 같은 국민 논쟁 소재를 고르고 실시간 응답 비율로 내가 다수파인지 소수파인지 확인할 수 있어요. <a href="#worldcup" class="text-indigo-300 font-semibold">이상형 월드컵</a>에는 귀여운 동물 32강, 소울푸드 32강, 극한의 귀찮음 월드컵 등 6가지 팩, 160개 아이템이 준비돼 있습니다.</p>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-100 mb-1">🔭 운명 관측소 — 오늘의 운세와 꿈 풀이</h3>
+            <p><a href="#fortune" class="text-indigo-300 font-semibold">오늘의 운세</a>는 12간지 띠별로 총운·재물운·애정운·건강운을 매일 다른 문구로 보여주고, 행운의 숫자는 로또 조합기와 바로 연동돼요. <a href="#dream" class="text-indigo-300 font-semibold">꿈 해몽 검색</a>은 174가지 꿈 테마와 546가지 세부 풀이를 직접 집필해 담았고, 사전에 없는 꿈은 AI가 새로 해몽해줍니다. 전체 풀이는 <a href="/kkum/" class="text-indigo-300 font-semibold">꿈해몽 사전</a>에서 읽을 수 있어요.</p>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-100 mb-1">🎲 가족오락관 & 🎱 로또 조합기 — 모이면 켜는 도구</h3>
+            <p><a href="#family" class="text-indigo-300 font-semibold">가족오락관</a>은 폰 하나로 진행하는 스피드 퀴즈·몸으로 말해요·라이어 게임 진행 도우미예요(제시어 252개 내장). <a href="#lotto" class="text-indigo-300 font-semibold">로또 번호 조합기</a>는 완전 랜덤부터 실제 최근 당첨 통계 기반, 운세·꿈 행운숫자 연동, 물리 엔진으로 직접 공을 뽑는 추첨기 게임까지 4가지 방식을 지원합니다.</p>
+          </div>
+        </div>
 
         <!-- 자주 묻는 질문 (v0.5.7~, GEO 3단계): <details>/<summary>는 접혀있어도 텍스트가 DOM에
              그대로 남아있는 네이티브 HTML 요소라 크롤러가 온전히 읽을 수 있음. 아래 질문/답변 문구는
@@ -664,7 +692,7 @@
       </div>
       <p class="text-slate-300 mb-4">재미로 시작했다가 뼈 맞고 공유하는 종합 테스트 모음 — 본 플랫폼의 모든 테스트 결과는 오락 목적이며 전문 진단을 대체하지 않습니다.</p>
       <!-- 콘텐츠 최신화 신호 (v0.5.7~, GEO 5단계): 크롤러가 읽을 수 있는 위치에 갱신 시점을 명시 -->
-      <p class="text-slate-400 mb-4">마지막 업데이트: 2026-07-14</p>
+      <p class="text-slate-400 mb-4">마지막 업데이트: 2026-07-15</p>
       <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
         <span>© 2026 과몰입 연구소. All rights reserved.</span>
         <div class="flex items-center gap-4">
@@ -673,6 +701,7 @@
           <span class="hover:text-slate-300 cursor-pointer transition" onclick="openPartnershipModal()">제휴문의</span>
           <span class="hover:text-slate-300 cursor-pointer transition" onclick="openFeedbackModal()">의견 보내기</span>
           <a href="/kkum/" class="hover:text-slate-300 transition">꿈해몽 사전</a>
+          <a href="/mbti/" class="hover:text-slate-300 transition">MBTI 유형 사전</a>
           <span>문의: <a href="mailto:contact@gwamol-lab.xyz" class="hover:text-slate-300 transition">contact@gwamol-lab.xyz</a></span>
         </div>
       </div>
@@ -738,9 +767,9 @@
          transition-opacity duration-500 opacity-0 pointer-events-none">
 </div>
 
-<script defer src="data.js?v=1.1.5"></script>
-<script defer src="supabase-client.js?v=1.1.5"></script>
-<script defer src="kakao-share.js?v=1.1.5"></script>
-<script defer src="app.js?v=1.1.5"></script>
+<script defer src="data.js?v=1.1.6"></script>
+<script defer src="supabase-client.js?v=1.1.6"></script>
+<script defer src="kakao-share.js?v=1.1.6"></script>
+<script defer src="app.js?v=1.1.6"></script>
 </body>
 </html>
