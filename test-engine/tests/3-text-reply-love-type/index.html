@@ -14,7 +14,7 @@
 <div id="test-engine-root"></div>
 <!-- te-seo:start (generate-seo-content.js가 생성 — 직접 수정 금지, config.json 수정 후 재실행) -->
 <style>
-.te-seo{max-width:500px;margin:0 auto;padding:28px 16px 60px;font-family:"Noto Sans KR","Apple SD Gothic Neo",sans-serif;font-synthesis:none;}
+.te-seo{max-width:500px;margin:0 auto;padding:clamp(64px,18vh,220px) 16px 60px;font-family:"Noto Sans KR","Apple SD Gothic Neo",sans-serif;font-synthesis:none;}
 .te-seo-card{background:#fffdf7;color:#1f2328;border:3px solid #1f2328;border-radius:16px;box-shadow:6px 6px 0 0 rgba(31,35,40,.9);padding:22px 18px;line-height:1.65;font-size:15px;}
 .te-seo h2{font-size:20px;font-weight:800;margin:0 0 10px;}
 .te-seo h3{font-size:17px;font-weight:800;margin:22px 0 8px;padding-top:14px;border-top:2px dashed #d8d2c4;}
@@ -27,6 +27,13 @@
 .te-seo-tip{background:#f4efe3;border-radius:8px;padding:8px 10px;font-size:13.5px;}
 .te-seo-result{margin-bottom:14px;}
 .te-seo-links a{color:#0d5fd7;font-weight:700;}
+.te-seo-details{margin:22px 0 8px;padding-top:14px;border-top:2px dashed #d8d2c4;}
+.te-seo-details summary{font-size:17px;font-weight:800;cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;}
+.te-seo-details summary::-webkit-details-marker{display:none;}
+.te-seo-details summary::before{content:"▶";font-size:12px;color:#0d7a5f;transition:transform .15s;flex:none;}
+.te-seo-details[open] summary::before{transform:rotate(90deg);}
+.te-seo-details-body{margin-top:12px;}
+.te-seo-spoiler{font-size:12.5px;font-weight:600;color:#8a6d3b;}
 </style>
 <section class="te-seo" lang="ko">
 <div class="te-seo-card">
@@ -41,7 +48,9 @@
 <li>&ldquo;톡을 보냈는데 상대에게서 한참 동안 답이 없다. 이럴 때 나는 어떻게 할까?&rdquo;</li>
 <li>&hellip; 외 5문항</li>
 </ul>
-<h3>결과 유형 미리보기 (총 6가지)</h3>
+<details class="te-seo-details">
+<summary>결과 유형 미리보기 (총 6가지) <span class="te-seo-spoiler">— 스포 방지, 이미 완료하셨던 분만 클릭하세요</span></summary>
+<div class="te-seo-details-body">
 <p>어떤 답을 고르면 어떤 유형이 나오는지는 비밀! 대신 어떤 유형들이 기다리고 있는지 미리 구경해보세요.</p>
 <div class="te-seo-result">
 <h4>ㅇㅇ단답러</h4>
@@ -103,6 +112,8 @@
 </ul>
 <p class="te-seo-tip">💡 그 밀당, 상대도 모르게 넘어가고 있을 걸? 계속 그렇게 해</p>
 </div>
+</div>
+</details>
 <h3>자주 묻는 질문</h3>
 <p><strong>Q. 결과가 정확한가요?</strong><br>재미로 즐기는 오락용 심리테스트예요. 전문적인 심리 검사나 진단을 대체하지 않아요.</p>
 <p><strong>Q. 다시 할 수 있나요?</strong><br>네, 결과 화면의 &ldquo;다시하기&rdquo; 버튼으로 몇 번이든 다시 해볼 수 있어요.</p>

@@ -74,8 +74,13 @@ function buildSection(cfg, folder, siblings) {
     html += '<li>&hellip; 외 ' + Math.max(0, qs.length - preview.length) + '문항</li>\n</ul>\n';
   }
 
-  // 결과 유형 전체 해설 — 이 페이지의 핵심 고유 콘텐츠
-  html += '<h3>결과 유형 미리보기 (총 ' + rs.length + '가지)</h3>\n';
+  // 결과 유형 전체 해설 — 이 페이지의 핵심 고유 콘텐츠.
+  // <details>는 기본 접힘 상태라도 텍스트가 DOM에 그대로 남아있어 크롤러(검색엔진/애드센스봇)는
+  // 전문을 다 읽지만, 화면상으로는 접혀 있어 결과 스포일러가 재미를 반감시키지 않는다.
+  // (나중에 이 블록 자체를 완전히 빼고 싶으면 <details>...</details> 통째로 지우면 됨)
+  html += '<details class="te-seo-details">\n';
+  html += '<summary>결과 유형 미리보기 (총 ' + rs.length + '가지) <span class="te-seo-spoiler">— 스포 방지, 이미 완료하셨던 분만 클릭하세요</span></summary>\n';
+  html += '<div class="te-seo-details-body">\n';
   html += '<p>어떤 답을 고르면 어떤 유형이 나오는지는 비밀! 대신 어떤 유형들이 기다리고 있는지 미리 구경해보세요.</p>\n';
   rs.forEach(function (r) {
     const title = cleanText(r.title, r);
@@ -93,6 +98,7 @@ function buildSection(cfg, folder, siblings) {
     if (tip) html += '<p class="te-seo-tip">💡 ' + esc(tip) + '</p>\n';
     html += '</div>\n';
   });
+  html += '</div>\n</details>\n';
 
   // FAQ (짧게 — 페이지 간 중복 최소화를 위해 3개만)
   html += '<h3>자주 묻는 질문</h3>\n';
@@ -117,7 +123,11 @@ function buildSection(cfg, folder, siblings) {
 
 // 섹션 공용 스타일 (테마와 무관하게 어떤 배경 위에서도 읽히는 자체완결 카드)
 const SEO_STYLE = '<style>\n' +
-  '.te-seo{max-width:500px;margin:0 auto;padding:28px 16px 60px;font-family:"Noto Sans KR","Apple SD Gothic Neo",sans-serif;font-synthesis:none;}\n' +
+  // 인트로 화면(.te-app, min-height:100vh)이 실제 콘텐츠 높이가 짧으면 버튼이 화면 하단에
+  // 딱 붙어 렌더링돼, 살짝만 스크롤해도 바로 이 섹션이 코앞에 나타나 몰입이 깨짐(2026-07-15
+  // 사용자 스크린샷 제보) — 상단 여백을 뷰포트 비례(clamp)로 넉넉히 둬서 "의도적으로 더
+  // 스크롤해야만" 보이도록 확실한 거리를 둔다.
+  '.te-seo{max-width:500px;margin:0 auto;padding:clamp(64px,18vh,220px) 16px 60px;font-family:"Noto Sans KR","Apple SD Gothic Neo",sans-serif;font-synthesis:none;}\n' +
   '.te-seo-card{background:#fffdf7;color:#1f2328;border:3px solid #1f2328;border-radius:16px;box-shadow:6px 6px 0 0 rgba(31,35,40,.9);padding:22px 18px;line-height:1.65;font-size:15px;}\n' +
   '.te-seo h2{font-size:20px;font-weight:800;margin:0 0 10px;}\n' +
   '.te-seo h3{font-size:17px;font-weight:800;margin:22px 0 8px;padding-top:14px;border-top:2px dashed #d8d2c4;}\n' +
@@ -130,6 +140,13 @@ const SEO_STYLE = '<style>\n' +
   '.te-seo-tip{background:#f4efe3;border-radius:8px;padding:8px 10px;font-size:13.5px;}\n' +
   '.te-seo-result{margin-bottom:14px;}\n' +
   '.te-seo-links a{color:#0d5fd7;font-weight:700;}\n' +
+  '.te-seo-details{margin:22px 0 8px;padding-top:14px;border-top:2px dashed #d8d2c4;}\n' +
+  '.te-seo-details summary{font-size:17px;font-weight:800;cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;}\n' +
+  '.te-seo-details summary::-webkit-details-marker{display:none;}\n' +
+  '.te-seo-details summary::before{content:"▶";font-size:12px;color:#0d7a5f;transition:transform .15s;flex:none;}\n' +
+  '.te-seo-details[open] summary::before{transform:rotate(90deg);}\n' +
+  '.te-seo-details-body{margin-top:12px;}\n' +
+  '.te-seo-spoiler{font-size:12.5px;font-weight:600;color:#8a6d3b;}\n' +
   '</style>\n';
 
 function main() {
