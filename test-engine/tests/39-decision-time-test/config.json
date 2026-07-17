@@ -1,0 +1,177 @@
+{
+  "id": "decision-time-test",
+  "title": "결정장애 실측 테스트: 나의 평균 고민 시간",
+  "description": "배달앱 메뉴 고르기부터 여행지 정하기까지, 가벼운 상황극으로 실제로 재보는 나의 평균 고민 속도.",
+  "hashtags": [
+    "결정장애",
+    "심리테스트",
+    "우유부단",
+    "선택장애밈"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 216,
+  "engagement_key": "site-decisiontime-plays",
+  "scoring_type": "reaction_time",
+  "loading": {
+    "text": "고민 시간 집계 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "배달앱을 켰다. 뭘 시킬까?",
+      "image": null,
+      "choices": [
+        { "label": "치킨" },
+        { "label": "피자" },
+        { "label": "마라탕" },
+        { "label": "아무거나" }
+      ]
+    },
+    {
+      "text": "카페에서 메뉴를 골라야 한다.",
+      "image": null,
+      "choices": [
+        { "label": "아메리카노" },
+        { "label": "라떼" },
+        { "label": "신메뉴" },
+        { "label": "저번에 먹은 거" }
+      ]
+    },
+    {
+      "text": "넷플릭스를 켰는데 뭘 볼지 모르겠다.",
+      "image": null,
+      "choices": [
+        { "label": "예전에 본 거 재시청" },
+        { "label": "신작" },
+        { "label": "다큐" },
+        { "label": "그냥 끔" }
+      ]
+    },
+    {
+      "text": "옷장 앞, 오늘 뭐 입지?",
+      "image": null,
+      "choices": [
+        { "label": "어제 입은 거 또" },
+        { "label": "새 옷" },
+        { "label": "편한 거" },
+        { "label": "고민하다 결국 아무거나" }
+      ]
+    },
+    {
+      "text": "친구가 \"아무거나\"라고 답했다. 장소를 정해야 한다.",
+      "image": null,
+      "choices": [
+        { "label": "늘 가던 곳" },
+        { "label": "새로운 곳" },
+        { "label": "친구에게 다시 물어봄" },
+        { "label": "그냥 검색만 계속 함" }
+      ]
+    },
+    {
+      "text": "쇼핑몰 장바구니에 3개가 담겨 있다. 뭘 살까?",
+      "image": null,
+      "choices": [
+        { "label": "제일 필요한 것" },
+        { "label": "제일 싼 것" },
+        { "label": "다 삼" },
+        { "label": "다음에 사기로 함" }
+      ]
+    },
+    {
+      "text": "여행지를 정해야 하는데 후보가 너무 많다.",
+      "image": null,
+      "choices": [
+        { "label": "가장 가고 싶었던 곳" },
+        { "label": "가장 저렴한 곳" },
+        { "label": "다시 검색해봄" },
+        { "label": "동행에게 미룸" }
+      ]
+    },
+    {
+      "text": "헤어스타일을 바꾸려는데 사진이 너무 많다.",
+      "image": null,
+      "choices": [
+        { "label": "예전부터 찜한 스타일" },
+        { "label": "미용사 추천" },
+        { "label": "계속 사진만 봄" },
+        { "label": "결국 그냥 다듬기만 함" }
+      ]
+    },
+    {
+      "text": "선물을 사야 하는데 뭐가 좋을지 모르겠다.",
+      "image": null,
+      "choices": [
+        { "label": "평소 좋아하던 것" },
+        { "label": "그냥 무난한 것" },
+        { "label": "검색을 계속 함" },
+        { "label": "상품권으로 해결" }
+      ]
+    },
+    {
+      "text": "마지막 질문, 이 테스트 결과를 공유할지 말지 정해야 한다.",
+      "image": null,
+      "choices": [
+        { "label": "바로 공유" },
+        { "label": "고민하다 공유" },
+        { "label": "저장만 해둠" },
+        { "label": "안 함" }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "min": 0,
+      "max": 1500,
+      "title": "결단력 甲",
+      "subtitle": "실측 평균 {avgSec}초 수준",
+      "image": "assets/result/decision-fast.webp",
+      "traits": [
+        "화면이 뜨자마자 거의 반사적으로 고름",
+        "고민할 시간에 이미 하나를 선택하고 넘어감",
+        "너무 빠른 결정 때문에 놓치는 디테일도 있을 수 있음"
+      ],
+      "tip": "실측 평균 {avgSec}초, 생각이 아니라 반사신경으로 사는 사람"
+    },
+    {
+      "min": 1501,
+      "max": 3000,
+      "title": "보통",
+      "subtitle": "실측 평균 {avgSec}초 수준",
+      "image": "assets/result/decision-average.webp",
+      "traits": [
+        "적당히 생각하고 무난하게 결정함",
+        "너무 빠르지도 느리지도 않은 평균적인 속도",
+        "대부분의 선택에서 크게 스트레스받지 않음"
+      ],
+      "tip": "실측 평균 {avgSec}초, 세상에서 제일 평범한 고민 속도"
+    },
+    {
+      "min": 3001,
+      "max": 5000,
+      "title": "결정장애 초기",
+      "subtitle": "실측 평균 {avgSec}초 수준",
+      "image": "assets/result/decision-slow.webp",
+      "traits": [
+        "선택지를 여러 번 다시 훑어보고 결정함",
+        "신중한 성격이지만 매번 이 시간이 아깝다고 느낌",
+        "화면 앞에서 눈이 왔다갔다하는 편"
+      ],
+      "tip": "실측 평균 {avgSec}초, 커서가 옵션 사이를 방황하는 게 눈에 보임"
+    },
+    {
+      "min": 5001,
+      "max": 999999,
+      "title": "메뉴판 앞에서 길 잃음",
+      "subtitle": "실측 평균 {avgSec}초 수준",
+      "image": "assets/result/decision-lost.webp",
+      "traits": [
+        "화면 앞에서 시간이 가장 오래 걸림",
+        "선택지를 다 읽고도 결정을 못 내려 처음부터 다시 읽음",
+        "아무거나가 제일 어려운 말"
+      ],
+      "tip": "실측 평균 {avgSec}초, 이 테스트 하나 고르는 데도 인생 최대 고민"
+    }
+  ]
+}
