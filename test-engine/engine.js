@@ -63,7 +63,30 @@
    margin-top:auto`, 상세는 engine.css 상단 v6 코멘트 참고)으로 전환하면서, 버튼바 실제 높이를
    측정해 본문에 padding-bottom을 미리 얹어두던 `syncFixedFooterHeight()`가 완전히 불필요해져
    삭제(호출 3곳 + resize 리스너 + document.fonts.ready 후처리까지 전부 제거). 새 레이아웃은
-   버튼바가 항상 본문 "다음"에 위치하는 구조라 애초에 겹칠 수 없으므로 별도 JS 측정이 필요 없음. */
+   버튼바가 항상 본문 "다음"에 위치하는 구조라 애초에 겹칠 수 없으므로 별도 JS 측정이 필요 없음.
+
+   v10(2026-07-17): 21~40번 배치 기획서(gwamol_test_ideas md 맨 끝 "작업 메모")에 명시돼 있던
+   "novel mechanic 5종"이 실제 콘텐츠 제작 때 전부 누락된 걸 발견해 복구 — 전부 opt-in
+   config 필드/신규 scoring_type이라 이 필드들을 쓰지 않는 기존 config는 렌더링·채점에
+   아무 변화가 없다(기존 STEP 4~6과 동일한 하위호환 원칙).
+   ① `config.timer_sec`(숫자): 문항마다 카운트다운을 띄우고, 시간 안에 못 고르면
+      `handleTimeout()`이 그 문항을 무응답 처리하며 `state.timeoutCount`만 올리고 다음 문항으로
+      진행(#21). 클릭/타임아웃 중 하나만 한 번 처리되도록 `state.questionLocked`로 이중 진행을
+      막고, 기존 `selectChoice()`의 "다음 문항 또는 로딩" 진행부를 `advance()`로 추출해
+      `handleTimeout()`과 공유한다.
+   ② `config.chat_ui`(불리언): 질문/선택지를 평문 버튼 대신 카카오톡풍 말풍선으로 렌더(#25).
+      스코어링(`type`)은 완전히 동일 — 렌더링 전용 레이어라 `applyScoring`/`computeResult`는
+      손대지 않았다.
+   ③ `config.questions_tree`(노드맵) + `config.start_node`: 기존 `questions[]` 배열 대신 노드
+      그래프를 순회하는 분기 시나리오(#30). 각 choice의 `next`가 다음 노드 id, 없으면 결과로
+      진행. `renderQuestion()`이 최상단에서 `c.questions_tree` 유무로 분기해 `renderTreeQuestion()`
+      으로 위임하므로 `questions_tree`가 없는 기존 config는 이 분기 자체를 안 탄다.
+   ④ `config.slider_ui`(불리언): 기존 `sum`/`score` 로직은 그대로 두고 렌더링만 range input
+      슬라이더로 교체(#33) — choices[].score가 이미 등간격이라 스코어링 변경이 전혀 필요 없었다.
+   ⑤ 신규 `scoring_type: 'reaction_time'`: 문항 렌더 시각(`state.questionShownAt`)과 클릭 시각의
+      차이를 `state.reactionTimes[]`에 쌓아 평균을 `results[].min/max`(ms 단위)로 매칭한다(#39).
+      결과 텍스트의 `{avgSec}` 플레이스홀더는 `applyStatTemplate()`이 실제 평균(초)으로 치환한다
+      (기존 `{tag}` 치환 패턴과 동일 방식). */
 
 (function () {
   'use strict';
@@ -71,7 +94,7 @@
   // engine.js 자체가 바뀔 때마다 이 번호를 올리고, 위 헤더 안내대로 10개 index.html의
   // engine.js/engine.css/result-card.js ?v=도 같은 번호로 맞출 것 — themes/*.css는
   // injectThemeCSS()가 이 상수를 그대로 재사용해 자동으로 캐시버스팅된다(파일별로 안 챙겨도 됨).
-  var ENGINE_ASSET_VERSION = '10';
+  var ENGINE_ASSET_VERSION = '11';
 
   // 최상단에서 즉시 캡처해야 함 — defer 스크립트라도 동기 실행 구간에서만 currentScript가 유효함
   var ENGINE_SCRIPT = document.currentScript;
@@ -91,7 +114,16 @@
     mbtiCounts: makeMbtiCounter(),
     mbtiCountsOuter: makeMbtiCounter(),
     mbtiCountsInner: makeMbtiCounter(),
-    introInputValue: ''
+    introInputValue: '',
+    // v10: novel mechanic 5종용 상태 — 옵트인 config 필드를 안 쓰는 테스트는 아래 값들이
+    // 그냥 초기값(0/빈 배열/false)으로만 남아있고 아무 로직에도 관여하지 않는다.
+    timeoutCount: 0,       // config.timer_sec(#21)
+    reactionTimes: [],     // scoring_type 'reaction_time'(#39)
+    currentNode: '',       // config.questions_tree(#30)
+    pathLength: 0,         // config.questions_tree(#30) — 진행률 표시용
+    questionShownAt: 0,    // scoring_type 'reaction_time'(#39)
+    questionLocked: false, // 타이머/클릭 이중 진행 방지(#21)
+    timerHandle: null      // config.timer_sec(#21) — clearActiveTimer() 대상
   };
 
   var MBTI_PAIRS = [['E', 'I'], ['S', 'N'], ['T', 'F'], ['J', 'P']];
@@ -246,6 +278,7 @@
   }
 
   function startTest() {
+    var c = state.config;
     state.questionIndex = 0;
     state.answers = [];
     state.sumScore = 0;
@@ -256,12 +289,27 @@
     state.mbtiCounts = makeMbtiCounter();
     state.mbtiCountsOuter = makeMbtiCounter();
     state.mbtiCountsInner = makeMbtiCounter();
+    state.timeoutCount = 0;
+    state.reactionTimes = [];
+    state.currentNode = c.questions_tree ? c.start_node : '';
+    state.pathLength = 0;
+    state.questionLocked = false;
+    clearActiveTimer();
     renderQuestion();
   }
 
   // ---------- 화면: 질문 (루프) ----------
   function renderQuestion() {
     var c = state.config;
+    state.questionLocked = false;
+
+    // v10: config.questions_tree(#30)가 있으면 인덱스 배열이 아니라 노드 그래프를 순회한다 —
+    // 이 필드가 없는 기존 24개 테스트는 아래로 내려가지 않고 기존 경로 그대로 탄다.
+    if (c.questions_tree) {
+      renderTreeQuestion();
+      return;
+    }
+
     var total = c.questions.length;
     var idx = state.questionIndex;
     var q = c.questions[idx];
@@ -271,7 +319,118 @@
       ? '<img src="' + escapeAttr(q.image) + '" alt="" class="te-question-img" />'
       : '';
 
-    var choicesHtml = q.choices
+    var questionTextHtml = c.chat_ui
+      ? '<div class="te-chat-thread">' +
+          '<div class="te-chat-bubble te-chat-bubble-them te-chat-typing" id="te-chat-typing"><span></span><span></span><span></span></div>' +
+          '<div class="te-chat-bubble te-chat-bubble-them" id="te-chat-message" style="display:none;">' + escapeHtml(q.text) + '</div>' +
+        '</div>'
+      : '<h2 class="te-question-text">' + escapeHtml(q.text) + '</h2>';
+
+    var timerHtml = c.timer_sec
+      ? '<div class="te-timer-wrap">' +
+          '<div class="te-timer-count" id="te-timer-count">' + c.timer_sec + '</div>' +
+          '<div class="te-timer-bar"><div class="te-timer-bar-fill" id="te-timer-bar-fill"></div></div>' +
+        '</div>'
+      : '';
+
+    var choicesHtml;
+    if (c.slider_ui) {
+      var mid = Math.floor((q.choices.length - 1) / 2);
+      choicesHtml =
+        '<p class="te-slider-label" id="te-slider-label">' + escapeHtml(q.choices[mid].label) + '</p>' +
+        '<input type="range" class="te-slider-input" id="te-slider-input" min="0" max="' + (q.choices.length - 1) + '" step="1" value="' + mid + '">' +
+        '<button type="button" class="te-btn te-btn-primary te-slider-confirm" id="te-slider-confirm">다음</button>';
+    } else if (c.chat_ui) {
+      choicesHtml = q.choices
+        .map(function (choice, i) {
+          return '<button type="button" class="te-btn te-chat-bubble te-chat-bubble-me" data-choice-index="' + i + '">' +
+            escapeHtml(choice.label) +
+          '</button>';
+        })
+        .join('');
+    } else {
+      choicesHtml = q.choices
+        .map(function (choice, i) {
+          return '<button type="button" class="te-btn te-btn-choice" data-choice-index="' + i + '">' +
+            escapeHtml(choice.label) +
+          '</button>';
+        })
+        .join('');
+    }
+
+    rootEl.innerHTML =
+      '<div class="te-app te-screen-question te-has-fixed-footer">' +
+        '<div style="padding:12px 20px 0;">' +
+          '<div class="te-progress-track"><div class="te-progress-fill" style="width:' + progress + '%"></div></div>' +
+        '</div>' +
+        '<div class="te-question-body">' +
+          '<p class="te-question-counter">' + (idx + 1) + ' / ' + total + '</p>' +
+          timerHtml +
+          imageHtml +
+          questionTextHtml +
+        '</div>' +
+        '<div class="te-choices-fixed te-question-footer">' +
+          choicesHtml +
+        '</div>' +
+      '</div>';
+
+    // scoring_type 'reaction_time'(#39): 문항이 실제로 화면에 커밋된 직후 시각을 기준점으로 삼는다.
+    if (c.scoring_type === 'reaction_time') state.questionShownAt = performance.now();
+
+    if (c.chat_ui) {
+      setTimeout(function () {
+        var typingEl = qs('#te-chat-typing');
+        var msgEl = qs('#te-chat-message');
+        if (typingEl) typingEl.style.display = 'none';
+        if (msgEl) msgEl.style.display = '';
+      }, 400);
+    }
+
+    if (c.slider_ui) {
+      var sliderEl = qs('#te-slider-input');
+      var sliderLabelEl = qs('#te-slider-label');
+      sliderEl.addEventListener('input', function () {
+        sliderLabelEl.textContent = q.choices[Number(sliderEl.value)].label;
+      });
+      qs('#te-slider-confirm').addEventListener('click', function () {
+        selectChoice(q, Number(sliderEl.value));
+      });
+    } else {
+      qsa('[data-choice-index]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var choiceIndex = Number(btn.dataset.choiceIndex);
+          selectChoice(q, choiceIndex);
+        });
+      });
+    }
+
+    // config.timer_sec(#21): 렌더가 끝나고 리스너까지 붙은 뒤에 카운트다운을 시작한다.
+    if (c.timer_sec) {
+      startCountdown(c.timer_sec, function (remainingMs) {
+        var countEl = qs('#te-timer-count');
+        var barEl = qs('#te-timer-bar-fill');
+        if (countEl) countEl.textContent = String(Math.ceil(remainingMs / 1000));
+        if (barEl) barEl.style.width = Math.max(0, (remainingMs / (c.timer_sec * 1000)) * 100) + '%';
+      }, function () {
+        handleTimeout(q);
+      });
+    }
+  }
+
+  // ---------- 화면: 질문 (분기 트리, #30) ----------
+  // config.questions_tree: { [nodeId]: { text, image, choices: [{ label, type, next }] } },
+  // config.start_node: 시작 노드 id. choice.next가 없으면 그 선택으로 시나리오가 종료되고
+  // 결과 화면으로 진행한다(예: 초반 선택으로 조기 사망하는 경로).
+  function renderTreeQuestion() {
+    var c = state.config;
+    var node = c.questions_tree[state.currentNode];
+    state.pathLength += 1;
+
+    var imageHtml = node.image
+      ? '<img src="' + escapeAttr(node.image) + '" alt="" class="te-question-img" />'
+      : '';
+
+    var choicesHtml = node.choices
       .map(function (choice, i) {
         return '<button type="button" class="te-btn te-btn-choice" data-choice-index="' + i + '">' +
           escapeHtml(choice.label) +
@@ -281,37 +440,89 @@
 
     rootEl.innerHTML =
       '<div class="te-app te-screen-question te-has-fixed-footer">' +
-        '<div style="padding:12px 20px 0;">' +
-          '<div class="te-progress-track"><div class="te-progress-fill" style="width:' + progress + '%"></div></div>' +
-        '</div>' +
         '<div class="te-question-body">' +
-          '<p class="te-question-counter">' + (idx + 1) + ' / ' + total + '</p>' +
+          '<p class="te-question-counter">' + state.pathLength + '번째 선택</p>' +
           imageHtml +
-          '<h2 class="te-question-text">' + escapeHtml(q.text) + '</h2>' +
+          '<h2 class="te-question-text">' + escapeHtml(node.text) + '</h2>' +
         '</div>' +
         '<div class="te-choices-fixed te-question-footer">' +
           choicesHtml +
         '</div>' +
       '</div>';
 
-    qsa('.te-btn-choice').forEach(function (btn) {
+    qsa('[data-choice-index]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var choiceIndex = Number(btn.dataset.choiceIndex);
-        selectChoice(q, choiceIndex);
+        selectTreeChoice(node, choiceIndex);
       });
     });
   }
 
+  function selectTreeChoice(node, choiceIndex) {
+    if (state.questionLocked) return;
+    state.questionLocked = true;
+    var choice = node.choices[choiceIndex];
+    state.answers.push(choice);
+    applyScoring(choice, node);
+    if (choice.next) {
+      state.currentNode = choice.next;
+      renderQuestion();
+    } else {
+      renderLoading();
+    }
+  }
+
   function selectChoice(question, choiceIndex) {
+    if (state.questionLocked) return;
+    state.questionLocked = true;
+    clearActiveTimer();
     var choice = question.choices[choiceIndex];
     state.answers.push(choice);
     applyScoring(choice, question);
+    advance();
+  }
 
+  // config.timer_sec(#21): 시간 안에 못 고른 문항 — 채점에는 반영하지 않고(무응답) 카운트만 올린다.
+  function handleTimeout(question) {
+    if (state.questionLocked) return;
+    state.questionLocked = true;
+    state.timeoutCount += 1;
+    state.answers.push(null);
+    advance();
+  }
+
+  // selectChoice/handleTimeout 공통 진행부 — "다음 문항으로" 또는 "로딩(결과 계산)으로".
+  function advance() {
     if (state.questionIndex < state.config.questions.length - 1) {
       state.questionIndex += 1;
       renderQuestion();
     } else {
       renderLoading();
+    }
+  }
+
+  // config.timer_sec(#21) 전용 카운트다운 — Date.now() 기준 deadline과의 차이로 매 tick을
+  // 계산해서(고정 카운터 감소가 아니라) 탭이 잠깐 비활성화돼 setInterval이 밀리는 경우에도
+  // 어긋나지 않는다.
+  function startCountdown(seconds, onTick, onExpire) {
+    var deadline = Date.now() + seconds * 1000;
+    function tick() {
+      var remaining = deadline - Date.now();
+      if (remaining <= 0) {
+        clearActiveTimer();
+        onExpire();
+        return;
+      }
+      onTick(remaining);
+    }
+    tick();
+    state.timerHandle = setInterval(tick, 100);
+  }
+
+  function clearActiveTimer() {
+    if (state.timerHandle) {
+      clearInterval(state.timerHandle);
+      state.timerHandle = null;
     }
   }
 
@@ -348,6 +559,10 @@
           var bucket = (question && question.block === 'inner') ? state.mbtiCountsInner : state.mbtiCountsOuter;
           if (bucket.hasOwnProperty(choice.axis)) bucket[choice.axis] += Number(choice.weight) || 1;
         }
+        break;
+      case 'reaction_time':
+        // choice 내용 자체는 채점에 안 쓰인다 — 문항 렌더~클릭 사이의 실제 경과시간(ms)만 누적(#39).
+        state.reactionTimes.push(performance.now() - state.questionShownAt);
         break;
       default:
         console.warn('[test-engine] 알 수 없는 scoring_type: ' + state.config.scoring_type);
@@ -389,6 +604,7 @@
       case 'axis': return computeAxisResult(c);
       case 'mbti4': return computeMbti4Result(c);
       case 'mbti4_dual': return computeMbti4DualResult(c);
+      case 'reaction_time': return computeReactionTimeResult(c);
       default:
         console.warn('[test-engine] 알 수 없는 scoring_type: ' + c.scoring_type);
         return c.results[0];
@@ -450,6 +666,30 @@
     Object.keys(base).forEach(function (k) { merged[k] = base[k]; });
     merged.axisRatio = rightRatio;
     return merged;
+  }
+
+  // scoring_type 'reaction_time'(#39): 문항별 실측 경과시간(ms) 평균을 기존 sum/quiz와 같은
+  // results[].min/max(단, 단위는 ms) 구간 매칭에 그대로 재사용한다.
+  function computeReactionTimeResult(c) {
+    var times = state.reactionTimes;
+    var avgMs = times.length ? (times.reduce(function (a, b) { return a + b; }, 0) / times.length) : 0;
+    var matched = c.results.filter(function (r) { return avgMs >= r.min && avgMs <= r.max; })[0];
+    var base = matched || c.results[c.results.length - 1];
+    var avgSec = (avgMs / 1000).toFixed(1);
+    var merged = {};
+    Object.keys(base).forEach(function (k) { merged[k] = base[k]; });
+    merged.title = applyStatTemplate(merged.title, avgSec);
+    merged.subtitle = applyStatTemplate(merged.subtitle, avgSec);
+    merged.tip = applyStatTemplate(merged.tip, avgSec);
+    merged.traits = (merged.traits || []).map(function (t) { return applyStatTemplate(t, avgSec); });
+    merged.avgReactionMs = Math.round(avgMs);
+    return merged;
+  }
+
+  // {tag} 치환(applyTagTemplate)과 동일한 패턴 — 결과 텍스트의 "{avgSec}"를 실측 평균(초)으로 치환.
+  function applyStatTemplate(str, avgSec) {
+    if (str == null) return str;
+    return String(str).replace(/\{avgSec\}/g, avgSec);
   }
 
   // choice.axis 카운트(E/I/S/N/T/F/J/P)에서 4글자 MBTI 코드 산출 — 동점이면 각 쌍의 앞 글자
@@ -537,6 +777,11 @@
     var relatedIds = (state.config.related || []).filter(Boolean);
     var relatedHtml = relatedIds.length ? '<div id="te-related-container" class="te-related"></div>' : '';
 
+    // config.timer_sec(#21) 테스트에서만 노출되는 부가 스탯 — 없는 24개 테스트는 이 줄 자체가 렌더되지 않는다.
+    var timeoutStatHtml = state.config.timer_sec
+      ? '<p class="te-result-stat">⏱ 3초 안에 답하지 못한 문항: ' + state.timeoutCount + '개</p>'
+      : '';
+
     rootEl.innerHTML =
       '<div class="te-app te-screen-result te-has-fixed-footer">' +
         '<div class="te-result-body">' +
@@ -545,6 +790,7 @@
           '<p class="te-result-subtitle">' + escapeHtml(applyTagTemplate(result.subtitle || '', result.tag)) + '</p>' +
           '<ul class="te-result-traits">' + traits + '</ul>' +
           '<p class="te-result-tip">' + escapeHtml(applyTagTemplate(result.tip || '', result.tag)) + '</p>' +
+          timeoutStatHtml +
           '<p class="te-save-hint">📸 이미지를 꾹 눌러 저장해보세요</p>' +
           relatedHtml +
         '</div>' +

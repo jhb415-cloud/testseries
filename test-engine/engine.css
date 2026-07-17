@@ -1,4 +1,4 @@
-/* test-engine v6 (하단 버튼바 fixed→sticky 전환, 겹침 버그 근본 수정) | engine.css — 테마 무관 공통 레이아웃(골격)
+/* test-engine v10 (novel mechanic 5종 공통 스타일 추가) | engine.css — 테마 무관 공통 레이아웃(골격)
    2026-07-11: ①.te-app에 font-synthesis:none 추가 — Do Hyeon/Black Han Sans/Song Myung처럼 단일
    굵기만 있는 한글 타이틀 폰트에 <h1>/<h2> 기본 bold가 걸려 브라우저가 합성 볼드로 흉내내며 글씨가
    뭉개지던 버그 수정(neon/office/vintage-collage/stained-glass 테마 영향, 실사용 제보). ②질문/답 등
@@ -204,6 +204,93 @@ body {
 .te-seen-count { text-align: center; font-size: 13px; margin: 8px 0 0; opacity: 0.8; }
 
 .te-error { text-align: center; padding: 40px 20px; }
+
+/* v10(2026-07-17) — novel mechanic 5종 공통 스타일. 옵트인 config 필드가 없는 기존 테스트는
+   이 마크업 자체가 렌더되지 않아 아래 규칙과 무관하다. */
+
+/* config.timer_sec(#21) — 카운트다운 숫자 + 줄어드는 바 */
+.te-timer-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.te-timer-count {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+  min-width: 1.4em;
+  text-align: center;
+}
+.te-timer-bar {
+  flex: 1;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.te-timer-bar-fill {
+  height: 100%;
+  width: 100%;
+  background: currentColor;
+  transition: width 0.1s linear;
+}
+.te-result-stat { font-size: 14px; opacity: 0.75; margin-top: 8px; }
+
+/* config.chat_ui(#25) — 상대 말풍선(좌)/내 답장 말풍선(우) */
+.te-chat-thread { display: flex; flex-direction: column; margin: 8px 0 20px; }
+.te-chat-bubble {
+  max-width: 82%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 18px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+.te-chat-bubble-them {
+  align-self: flex-start;
+  background: rgba(0, 0, 0, 0.06);
+  border-bottom-left-radius: 4px;
+}
+.te-chat-bubble-me {
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  text-align: left;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.te-chat-typing { display: flex; gap: 4px; padding: 16px; }
+.te-chat-typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.5;
+  animation: te-chat-typing-bounce 1s infinite ease-in-out;
+}
+.te-chat-typing span:nth-child(2) { animation-delay: 0.15s; }
+.te-chat-typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes te-chat-typing-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 0.9; }
+}
+
+/* config.slider_ui(#33) — range input 기반 슬라이더 */
+.te-slider-label {
+  font-size: 19px;
+  font-weight: 700;
+  text-align: center;
+  min-height: 2.6em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.te-slider-input {
+  width: 100%;
+  margin: 8px 0 24px;
+  accent-color: currentColor;
+}
 
 .te-btn-accent {
   background: #D85A30;
