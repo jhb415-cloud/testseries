@@ -80,7 +80,10 @@
    ③ `config.questions_tree`(노드맵) + `config.start_node`: 기존 `questions[]` 배열 대신 노드
       그래프를 순회하는 분기 시나리오(#30). 각 choice의 `next`가 다음 노드 id, 없으면 결과로
       진행. `renderQuestion()`이 최상단에서 `c.questions_tree` 유무로 분기해 `renderTreeQuestion()`
-      으로 위임하므로 `questions_tree`가 없는 기존 config는 이 분기 자체를 안 탄다.
+      으로 위임하므로 `questions_tree`가 없는 기존 config는 이 분기 자체를 안 탄다. 조기 종료
+      경로(예: 초반에 죽는 엔딩)에서도 의도한 결과가 확실히 나오도록 `type` 채점이 `choice.weight`
+      (선택, 기본 1)를 반영하도록 같이 확장 — weight를 안 쓰는 기존 type 테스트는 매 선택 +1
+      그대로라 무변화.
    ④ `config.slider_ui`(불리언): 기존 `sum`/`score` 로직은 그대로 두고 렌더링만 range input
       슬라이더로 교체(#33) — choices[].score가 이미 등간격이라 스코어링 변경이 전혀 필요 없었다.
    ⑤ 신규 `scoring_type: 'reaction_time'`: 문항 렌더 시각(`state.questionShownAt`)과 클릭 시각의
@@ -535,8 +538,11 @@
         }
         break;
       case 'type':
+        // v10(#30): choice.weight(선택)이 있으면 그 값만큼, 없으면 기존과 동일하게 1을 더한다 —
+        // 분기 트리의 조기 종료 지점처럼 "이 선택 하나가 이전 선택들보다 결과를 확정지어야 하는"
+        // 경우에만 쓰고, weight 필드가 없는 기존 type 테스트는 전부 그대로 매 선택 +1이라 무변화.
         if (choice.type) {
-          state.typeCounts[choice.type] = (state.typeCounts[choice.type] || 0) + 1;
+          state.typeCounts[choice.type] = (state.typeCounts[choice.type] || 0) + (Number(choice.weight) || 1);
         }
         break;
       case 'quiz':
