@@ -1,0 +1,342 @@
+{
+  "id": "lucky-vicky-index",
+  "title": "나의 럭키비키 지수",
+  "description": "안 좋은 일이 생겨도 이걸 럭키비키로 받아들일 수 있을까? 정신승리 능력을 측정하는 테스트.",
+  "hashtags": [
+    "럭키비키",
+    "심리테스트",
+    "긍정회로",
+    "MZ밈"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 233,
+  "engagement_key": "site-luckyvicky-plays",
+  "scoring_type": "sum",
+  "slider_ui": true,
+  "loading": {
+    "text": "럭키비키 지수 측정 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "지하철을 눈앞에서 놓쳤다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "오늘 완전 망했다 싶다",
+          "score": 0
+        },
+        {
+          "label": "짜증 나지만 곧 잊는다",
+          "score": 1
+        },
+        {
+          "label": "다음 차 기다리는 시간도 나쁘지 않다",
+          "score": 2
+        },
+        {
+          "label": "이 시간에 딴 걸 할 수 있어서 럭키다",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "text": "갑자기 비가 온다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "하루 종일 기분이 가라앉는다",
+          "score": 0
+        },
+        {
+          "label": "불편하지만 그냥 넘긴다",
+          "score": 1
+        },
+        {
+          "label": "운치 있다고 생각한다",
+          "score": 2
+        },
+        {
+          "label": "우산 장수처럼 이것도 기회다 싶다",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "text": "친구와의 약속이 취소됐다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "서운하고 속상하다",
+          "score": 0
+        },
+        {
+          "label": "아쉽지만 다음을 기약한다",
+          "score": 1
+        },
+        {
+          "label": "혼자만의 시간이 생겨 좋다",
+          "score": 2
+        },
+        {
+          "label": "이 시간에 하고 싶던 거 할 수 있어 럭키다",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "text": "시험을 망쳤다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "자책하며 오래 힘들어한다",
+          "score": 0
+        },
+        {
+          "label": "속상하지만 다음을 준비한다",
+          "score": 1
+        },
+        {
+          "label": "배운 게 있다고 생각한다",
+          "score": 2
+        },
+        {
+          "label": "오히려 다음엔 더 잘될 계기라 여긴다",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "text": "지갑을 잃어버렸다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "완전 재수 없다고 느낀다",
+          "score": 0
+        },
+        {
+          "label": "속상하지만 정리하며 대처한다",
+          "score": 1
+        },
+        {
+          "label": "새 지갑 살 핑계 생겼다고 생각한다",
+          "score": 2
+        },
+        {
+          "label": "짐 정리하는 계기 됐다며 웃어넘긴다",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "text": "몸살감기에 걸렸다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "몸도 마음도 축 처진다",
+          "score": 0
+        },
+        {
+          "label": "불편하지만 쉬면서 넘긴다",
+          "score": 1
+        },
+        {
+          "label": "강제 휴식이라 생각한다",
+          "score": 2
+        },
+        {
+          "label": "이 참에 푹 쉴 수 있어 럭키다",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "text": "실수로 커피를 쏟았다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "짜증이 확 밀려온다",
+          "score": 0
+        },
+        {
+          "label": "아깝지만 치우고 만다",
+          "score": 1
+        },
+        {
+          "label": "새 커피 마실 핑계 생겼다",
+          "score": 2
+        },
+        {
+          "label": "닦으면서 스트레칭도 하고 럭키다",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "text": "원하는 자리에 못 앉았다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "하루 기분이 안 좋아진다",
+          "score": 0
+        },
+        {
+          "label": "아쉽지만 그러려니 한다",
+          "score": 1
+        },
+        {
+          "label": "다른 풍경을 볼 수 있어 좋다",
+          "score": 2
+        },
+        {
+          "label": "새로운 자리도 나쁘지 않다며 즐긴다",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "text": "예약한 식당이 갑자기 문을 닫았다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "화가 나고 하루를 망친 기분",
+          "score": 0
+        },
+        {
+          "label": "아쉽지만 다른 곳을 찾는다",
+          "score": 1
+        },
+        {
+          "label": "새로운 맛집 탐방 기회다",
+          "score": 2
+        },
+        {
+          "label": "모험하는 재미가 생겼다며 웃는다",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "text": "산 물건이 다음날 반값 세일을 한다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "속이 쓰리고 억울하다",
+          "score": 0
+        },
+        {
+          "label": "아쉽지만 넘긴다",
+          "score": 1
+        },
+        {
+          "label": "어제 먼저 산 게 나은 선택이었다고 생각",
+          "score": 2
+        },
+        {
+          "label": "미리 산 덕에 오늘 다른 걸 살 수 있어 럭키",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "text": "중요한 발표 날 목이 쉬었다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "최악의 타이밍이라 좌절한다",
+          "score": 0
+        },
+        {
+          "label": "긴장되지만 어떻게든 해낸다",
+          "score": 1
+        },
+        {
+          "label": "색다른 느낌으로 발표할 수 있겠다 생각",
+          "score": 2
+        },
+        {
+          "label": "오히려 더 진지해 보일 거라며 웃는다",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "text": "오랜만에 나간 약속에 늦잠으로 못 갔다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "하루 종일 자책한다",
+          "score": 0
+        },
+        {
+          "label": "미안하지만 다음에 만회한다",
+          "score": 1
+        },
+        {
+          "label": "푹 잔 게 몸에는 좋았다고 생각",
+          "score": 2
+        },
+        {
+          "label": "그만큼 피곤했다는 신호였다며 다행이라 여김",
+          "score": 3
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "min": 0,
+      "max": 9,
+      "title": "세상비관러",
+      "subtitle": "감정에 솔직한 사람",
+      "image": "assets/result/pessimist-type.webp",
+      "traits": [
+        "안 좋은 일이 생기면 그 감정에 오래 머무름",
+        "작은 불운도 크게 다가와 하루 기분을 좌우함",
+        "감정에 솔직하다는 뜻이기도 함"
+      ],
+      "tip": "오늘도 세상이 나만 미워하는 것 같죠, 근데 다 지나갑니다"
+    },
+    {
+      "min": 10,
+      "max": 18,
+      "title": "현실주의자",
+      "subtitle": "균형 잡힌 사람",
+      "image": "assets/result/realist-type.webp",
+      "traits": [
+        "좋은 일과 나쁜 일을 있는 그대로 받아들임",
+        "굳이 좋게 포장하지도 우울해하지도 않음",
+        "감정 기복이 적어 주변이 편하게 느낌"
+      ],
+      "tip": "장단점을 정확히 보는 타입, 근데 가끔은 그냥 좋게 생각해도 돼요"
+    },
+    {
+      "min": 19,
+      "max": 27,
+      "title": "긍정회로러",
+      "subtitle": "배울 점부터 찾는 사람",
+      "image": "assets/result/positive-circuit.webp",
+      "traits": [
+        "웬만한 일은 다 좋게 넘김",
+        "안 좋은 상황에서도 배울 점을 먼저 찾음",
+        "어떻게 그렇게 긍정적이냐는 말을 자주 들음"
+      ],
+      "tip": "웬만한 건 다 좋게 넘기는 편, 그 정신력 어디서 나오는 거예요"
+    },
+    {
+      "min": 28,
+      "max": 36,
+      "title": "럭키비키만렙",
+      "subtitle": "정신승리 만렙",
+      "image": "assets/result/lucky-vicky-master.webp",
+      "traits": [
+        "넘어져도 땅부터 확인하는 타입",
+        "어떤 불운도 결국 좋은 쪽으로 해석해냄",
+        "이 결과지도 럭키비키로 받아들일 확률 높음"
+      ],
+      "tip": "정신승리 만렙, 이 결과도 럭키비키로 받아들일 듯"
+    }
+  ]
+}
