@@ -59,9 +59,28 @@ baseCount/engagementKey/theme이 각 config.json의 seed_count/engagement_key/th
 psych-1엔 이번엔 해당 없음), `sitemap.xml`/`sitemap-main.xml`(10개 URL 추가), `llms.txt`/
 `llms-full.txt`(21종→31종 갱신) 전부 반영 후 push 완료.
 
+## novel mechanic 5종 복구 (2026-07-17)
+`gwamol_test_ideas_2026_v0.0.6.md` 원안(맨 끝 "🛠 Claude Code 작업 메모" 절)에 21~40번 중
+5개(#21/#25/#30/#33/#39)는 일반 카드형 Q&A와 다른 특수 인터랙션으로 만들라고 명시돼 있었는데,
+문항 스켈레톤을 옮겨 적는 단계에서 전부 누락된 채 평범한 `type`/`sum` 구조로만 만들어졌던 걸
+사용자가 "#21에 카운트다운이 안 뜬다"고 지적해 발견. 이 요구사항이 progress.md/index.json 같은
+실제 추적 파일이 아니라 md 파일 맨 끝에만 적혀있어 유실된 것으로 추정(재발 방지책은 아래 참고).
+engine.js에 opt-in 필드/신규 scoring_type 5종을 추가해 전부 복구:
+- [x] #21 balance-3sec-speed — `timer_sec:3` 추가(3초 카운트다운+타임아웃 시 무응답 처리+결과에
+  타임아웃 개수 표시)
+- [x] #25 katok-reply-style — `chat_ui:true` 추가(말풍선 UI, 텍스트의 "(상대) " 표기 제거)
+- [x] #30 zombie-apocalypse-survival — `questions_tree`+`start_node`로 분기 시나리오 재설계
+  (6개 결과 중 4개가 조기 종료되는 짧은 경로를 가짐). `type` 채점에 `choice.weight` 지원 추가.
+- [x] #33 lucky-vicky-index — `slider_ui:true` 추가(range input, 기존 sum/score 로직 그대로)
+- [x] #39 decision-time-test — `scoring_type: reaction_time` 신설(문항 노출~클릭 실측 ms 평균),
+  자기신고형이던 선택지를 원안 md의 중립 선택지로 교체
+전부 Playwright로 로컬 검증(정상 경로/각 조기종료 경로/기존 24개 테스트 회귀 없음) 완료,
+테스트별 개별 커밋. `#33`/`#39`는 아직 이미지 제작 전(`theme: "pending"`) 단계라 사이트 연동은
+별도 — 이미지 준비되면 나머지 배치(31~60)와 함께 진행.
+
 ## 다음 배치 후보
-#21~30 완료. #31~60(2026-07-16 스켈레톤 생성분, 문항·결과 텍스트만 있고 이미지 컨셉 미정)이
-다음 배치 후보 — 시작 전 레퍼런스 이미지 확보 절차(4-4)부터 진행할 것.
+#21~30 완료(novel mechanic 포함). #31~60(2026-07-16 스켈레톤 생성분, 문항·결과 텍스트만 있고
+이미지 컨셉 미정)이 다음 배치 후보 — 시작 전 레퍼런스 이미지 확보 절차(4-4)부터 진행할 것.
 
 ## 품질 개선 — MBTI존 9개(#11~18,#20) 16종 결과 세분화 (2026-07-12)
 사용자가 "#19 빼고는 결과가 다 하나뿐이라 노잼"이라고 지적해 진행. `resultTemplate` 공용 템플릿

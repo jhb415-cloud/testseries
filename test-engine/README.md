@@ -22,6 +22,16 @@
 - **STEP 3 추가**: 결과 화면 카카오톡 공유 버튼(메인 사이트와 같은 Kakao 앱 키 재사용, 같은 도메인이라 추가 등록 불필요), 모든 화면에 "← 메인으로" 고정 링크 — 둘 다 `engine.js`가 `init()` 시점에 자동으로 주입하므로 **새 테스트를 추가해도 별도 설정 없이 자동 적용됩니다.**
 - **STEP 4 추가**: `sum` 채점 전용 선택적 보조 태그 집계 — 등급 구간(예: 천사~찐빌런)과 별개로 문항 선택지에 `tag`를 달아두면 가장 많이 나온 태그가 결과에 merge되고, 결과 텍스트의 `{tag}` 플레이스홀더가 자동 치환됩니다(`tests/villain-index/config.json` 참고). `tag`가 없는 기존 `sum` 테스트(mental-age 등)는 완전히 그대로 동작(하위호환 Playwright 검증 완료).
 - **STEP 5 추가**: 신규 `scoring_type` 2종 — `mbti4`(choice.axis로 E/I·S/N·T/F·J/P 4쌍을 동시 집계해 4글자 MBTI 코드 산출)와 `mbti4_dual`(question.block: `outer`/`inner`로 두 세트를 독립 집계, "겉 MBTI/속 MBTI"류). 기존 `axis`는 좌/우 단일 축만 지원해 16유형 MBTI 산출이 불가능했던 걸 보완. 결과 콘텐츠는 `config.resultTemplate`(제목/부제/특징/팁에 `{code}`/`{outer}`/`{inner}`/`{claimed}` 플레이스홀더)로 즉석 생성하는 게 기본 전략이라 16개(또는 그 이상) 결과를 전부 손으로 안 써도 됩니다. 인트로 화면에 `config.intro_input`(라벨+옵션 배열)을 넣으면 테스트 시작 전 자기신고 값을 드롭다운으로 받아 `{claimed}`로 쓸 수 있습니다("AI가 판별하는 진짜 내 MBTI"류). `intro_input`이 없으면 렌더링에 변화 없음(하위호환).
+- **v10(2026-07-17) 추가 — "novel mechanic" 5종**: 21~40번 배치 기획서에 명시돼 있던 특수
+  인터랙션이 실제 제작 때 누락됐던 걸 복구하며 추가(전부 opt-in, 안 쓰는 기존 config는 무변화).
+  `config.timer_sec`(숫자): 문항마다 카운트다운, 시간 초과 시 무응답 처리(#21). `config.chat_ui`
+  (불리언): 질문/선택지를 카카오톡풍 말풍선으로 렌더(#25, 스코어링은 기존 `type` 그대로).
+  `config.questions_tree`(노드맵) + `config.start_node`: `questions[]` 배열 대신 분기 그래프를
+  순회(#30, 각 choice의 `next`가 다음 노드 id). `config.slider_ui`(불리언): 버튼 대신 range input
+  슬라이더로 렌더(#33, `sum`/`score` 로직 그대로 재사용). 신규 `scoring_type: 'reaction_time'`:
+  문항 노출~클릭 실제 경과시간(ms) 평균을 `results[].min/max`로 매칭, 결과 텍스트의 `{avgSec}`
+  플레이스홀더가 실측 평균(초)으로 치환됨(#39). `type` 채점도 조기 종료 분기에서 확실한 결과가
+  나오도록 `choice.weight`(선택, 기본 1)를 지원하도록 함께 확장.
 
 ## 로컬에서 확인하는 방법
 `config.json`을 `fetch()`로 불러오기 때문에 `file://`로 직접 열면 CORS 에러가 납니다. **반드시 로컬 서버로 열어야 합니다.**
@@ -85,19 +95,26 @@ test-engine/
 | `theme` | `themes/{theme}.css` 파일명 (확장자 제외) |
 | `cover_image` | 인트로 커버 이미지 경로 (config.json 기준 상대경로) |
 | `seed_count` | "N명이 확인했어요"의 기준값. 실제 표시값 = seed + 로컬 완료 카운트. **항상 두세 자리 안팎(대략 40~200)의 현실적인 값만 쓸 것** — 2026-07-11 21개 테스트 전부 15만~29만대의 비현실적인 값으로 잘못 세팅돼 있던 걸 사용자가 실사용 중 "말도 안되는 숫자"라고 지적해 전량 수정한 사례가 있음(경위는 CLAUDE.md 변경이력 v0.6.9 참고). 이 테스트가 메인 사이트 카드 그리드에 연동돼있다면(`data.js`의 `externalTests`/`mbtiZoneTests`의 `baseCount`, 조회수) 그보다 낮은 값으로 맞출 것(완료자 ≤ 조회자가 자연스러움) |
-| `scoring_type` | `sum` \| `type` \| `quiz` \| `axis` |
+| `scoring_type` | `sum` \| `type` \| `quiz` \| `axis` \| `mbti4` \| `mbti4_dual` \| `reaction_time`(v10) |
 | `loading.text` / `loading.duration_ms` | 로딩 연출 문구/지속시간(ms) |
-| `questions[]` | `text`, `image`(nullable), `choices[]` |
+| `questions[]` | `text`, `image`(nullable), `choices[]`. `questions_tree`가 있으면 이 필드는 안 쓰인다 |
 | `results[]` | 채점 방식별로 매칭 필드가 다름 (아래 참고) |
 | `related[]` | (STEP 2) 결과 화면 하단에 노출할 다른 테스트의 `id` 배열. 각 id로 `../{id}/config.json`을 fetch해 제목/커버를 가져옴. 빈 배열이면 배너 자체가 렌더되지 않음 |
+| `timer_sec`(선택, v10) | 문항마다 카운트다운(초)을 띄우고, 시간 초과 시 무응답 처리 + 결과에 타임아웃 개수 표시(#21 사용) |
+| `chat_ui`(선택, v10) | 질문/선택지를 카카오톡풍 말풍선으로 렌더(스코어링은 무관, #25 사용) |
+| `slider_ui`(선택, v10) | 선택지 버튼 대신 range input 슬라이더로 렌더(`sum`/`score` 로직 그대로 재사용, #33 사용) |
+| `questions_tree` / `start_node`(선택, v10) | `questions[]` 대신 분기 그래프를 순회(노드 id → `{text, image, choices[{label, type, next}]}`), `next`가 없으면 결과로 진행(#30 사용) |
 
-### scoring_type 4종
-| 타입 | 선택지 필드 | 결과 매칭 방식 | 1호 사용 여부 |
-|---|---|---|---|
-| `sum` | `score`(숫자) | 합산 점수가 `results[].min`~`max` 구간에 속하는 항목 | ✅ 실사용 |
-| `type` | `type`(문자열) | 가장 많이 나온 `type`과 `results[].type`이 일치하는 항목 | 스키마/분기만 준비 |
-| `quiz` | `correct`(true/false) | 정답 개수가 `results[].min`~`max` 구간에 속하는 항목 | 스키마/분기만 준비 |
-| `axis` | `axis`(`'left'`\|`'right'`), `weight`(숫자, 기본 1) | `right` 비율(%)이 `results[].min`~`max` 구간에 속하는 항목. 결과에 `axisRatio` 필드가 추가로 붙음 | 스키마/분기만 준비 (2호 MBTI용) |
+### scoring_type 7종
+| 타입 | 선택지 필드 | 결과 매칭 방식 |
+|---|---|---|
+| `sum` | `score`(숫자), `tag`(선택, STEP 4) | 합산 점수가 `results[].min`~`max` 구간에 속하는 항목 |
+| `type` | `type`(문자열), `weight`(선택, 기본 1, v10) | 가장 많이 나온 `type`과 `results[].type`이 일치하는 항목 |
+| `quiz` | `correct`(true/false) | 정답 개수가 `results[].min`~`max` 구간에 속하는 항목 |
+| `axis` | `axis`(`'left'`\|`'right'`), `weight`(숫자, 기본 1) | `right` 비율(%)이 `results[].min`~`max` 구간에 속하는 항목. 결과에 `axisRatio` 필드가 추가로 붙음 |
+| `mbti4` | `choice.axis`(E/I·S/N·T/F·J/P), `weight`(선택) | E/I·S/N·T/F·J/P 4쌍을 동시 집계해 4글자 코드 산출, `results[].code` 매칭 또는 `resultTemplate` |
+| `mbti4_dual` | `choice.axis` + `question.block`(`'outer'`\|`'inner'`) | 겉/속 두 세트를 독립 집계해 코드 2개 산출, `results[].code`는 `outer` 코드로 매칭 |
+| `reaction_time`(v10) | (선택지 내용은 채점에 안 쓰임) | 문항 노출~클릭 실제 경과시간(ms) 평균이 `results[].min`~`max`(ms) 구간에 속하는 항목, `{avgSec}` 플레이스홀더 지원 |
 
 ## 새 테스트를 추가하려면
 1. `tests/{새-id}/` 폴더 생성
