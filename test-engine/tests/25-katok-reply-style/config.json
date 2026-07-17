@@ -1,0 +1,265 @@
+{
+  "id": "katok-reply-style",
+  "title": "카톡 채팅창 시뮬레이터: 못 숨기는 내 답장 스타일",
+  "description": "좋아하는 사람과의 카톡방. 상대 말풍선에 답장을 고르며 완성되는 나만의 대화 스크롤.",
+  "hashtags": [
+    "카톡스타일",
+    "심리테스트",
+    "답장습관",
+    "연애밈"
+  ],
+  "theme": "stickynote",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 266,
+  "engagement_key": "site-katokreply-plays",
+  "scoring_type": "type",
+  "loading": {
+    "text": "대화 스크롤 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "(상대) \"뭐해?\"",
+      "image": "assets/question/whatcha-doing.svg",
+      "choices": [
+        {
+          "label": "ㅇㅇ 그냥 있어",
+          "type": "ㅇㅇ단답러"
+        },
+        {
+          "label": "어! 방금까지 넷플릭스 보다가 심심해서 폰 봤어ㅋㅋ",
+          "type": "장문폭격기"
+        }
+      ]
+    },
+    {
+      "text": "(상대) \"오늘 저녁에 뭐 먹었어?\"",
+      "image": null,
+      "choices": [
+        {
+          "label": "(한참 있다가) 아까 밥먹음",
+          "type": "읽씹빌런"
+        },
+        {
+          "label": "🍚🍜😋",
+          "type": "이모지도배러"
+        }
+      ]
+    },
+    {
+      "text": "(상대) \"나 오늘 회사에서 완전 힘들었어ㅠㅠ\"",
+      "image": null,
+      "choices": [
+        {
+          "label": "(알림 뜨자마자) 헐 왜 무슨 일 있었어?",
+          "type": "3초답장각"
+        },
+        {
+          "label": "(읽고 한참 뒤) 고생했네",
+          "type": "ㅇㅇ단답러"
+        }
+      ]
+    },
+    {
+      "text": "(상대) \"주말에 시간 되면 뭐할 거야?\"",
+      "image": "assets/question/weekend-plans.svg",
+      "choices": [
+        {
+          "label": "궁금하면 만나서 얘기해줄게",
+          "type": "밀당고수"
+        },
+        {
+          "label": "음... 딱히 계획은 없어",
+          "type": "ㅇㅇ단답러"
+        }
+      ]
+    },
+    {
+      "text": "(상대가 사진을 보냈다: \"이거 어때?\")",
+      "image": null,
+      "choices": [
+        {
+          "label": "우와 대박!!! 완전 잘 어울려!!! 어디서 산 거야??",
+          "type": "장문폭격기"
+        },
+        {
+          "label": "👍👍👍",
+          "type": "이모지도배러"
+        }
+      ]
+    },
+    {
+      "text": "(상대) \"자니...?\" (새벽 1시)",
+      "image": null,
+      "choices": [
+        {
+          "label": "(아까 읽었지만 답 안 함)",
+          "type": "읽씹빌런"
+        },
+        {
+          "label": "아니 아직 안 자ㅋㅋ (알림 뜨자마자)",
+          "type": "3초답장각"
+        }
+      ]
+    },
+    {
+      "text": "(상대) \"너 프사 바꿨네? 무슨 일 있어?\"",
+      "image": "assets/question/profile-pic-change.svg",
+      "choices": [
+        {
+          "label": "어 그냥 바꿔봤어ㅎㅎ 그나저나 너는 요즘 어때?",
+          "type": "밀당고수"
+        },
+        {
+          "label": "ㅇㅇ 그냥",
+          "type": "ㅇㅇ단답러"
+        }
+      ]
+    },
+    {
+      "text": "(상대가 장문의 고민 메시지를 보냈다)",
+      "image": null,
+      "choices": [
+        {
+          "label": "🥺💭 짧게만 반응",
+          "type": "이모지도배러"
+        },
+        {
+          "label": "문단마다 정성껏 공감하며 긴 답장",
+          "type": "장문폭격기"
+        }
+      ]
+    },
+    {
+      "text": "(상대) \"우리 다음 주에 볼까?\"",
+      "image": null,
+      "choices": [
+        {
+          "label": "(읽고 답 안 하고 넘어간다)",
+          "type": "읽씹빌런"
+        },
+        {
+          "label": "좋아! 몇 시에 어디서 볼까? (바로)",
+          "type": "3초답장각"
+        }
+      ]
+    },
+    {
+      "text": "(상대) \"너 요즘 바빠 보인다?\"",
+      "image": "assets/question/looking-busy.svg",
+      "choices": [
+        {
+          "label": "그냥 좀... 궁금하면 직접 물어봐",
+          "type": "밀당고수"
+        },
+        {
+          "label": "ㅇㅇ 좀 바빠",
+          "type": "ㅇㅇ단답러"
+        }
+      ]
+    },
+    {
+      "text": "(다투고 난 뒤, 상대가 먼저 \"미안해\")",
+      "image": null,
+      "choices": [
+        {
+          "label": "🥹💔 이모지로만 답한다",
+          "type": "이모지도배러"
+        },
+        {
+          "label": "마음을 다 담은 긴 답장을 쓴다",
+          "type": "장문폭격기"
+        }
+      ]
+    },
+    {
+      "text": "(상대) \"잘자~\"",
+      "image": null,
+      "choices": [
+        {
+          "label": "(다음날 아침에야 확인한다)",
+          "type": "읽씹빌런"
+        },
+        {
+          "label": "ㅇㅇ 잘자",
+          "type": "ㅇㅇ단답러"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "type": "ㅇㅇ단답러",
+      "title": "ㅇㅇ단답러",
+      "subtitle": "짧지만 무관심은 아닌 사람",
+      "image": "assets/result/short-reply.webp",
+      "traits": [
+        "감정 표현을 길게 늘어놓는 게 어색함",
+        "ㅇㅇ ㄱㅅ 같은 짧은 답장이 습관",
+        "사실 그 안에 마음이 없는 건 아님"
+      ],
+      "tip": "츤데레의 정석, 근데 진짜 무관심은 아님"
+    },
+    {
+      "type": "장문폭격기",
+      "title": "장문폭격기",
+      "subtitle": "답장이 곧 편지인 사람",
+      "image": "assets/result/long-text-reply.webp",
+      "traits": [
+        "마음이 생기면 카톡 창에 다 쏟아냄",
+        "메시지 하나에도 문단을 나눠 답장",
+        "텐션을 상대가 못 따라오면 혼자 걱정"
+      ],
+      "tip": "답장이 곧 편지, 받는 사람 조금 부담스러울 수도"
+    },
+    {
+      "type": "읽씹빌런",
+      "title": "읽씹빌런",
+      "subtitle": "나쁜 의도는 없는데 타이밍을 놓침",
+      "image": "assets/result/read-no-reply.webp",
+      "traits": [
+        "딱히 나쁜 의도 없이 답장 타이밍을 놓침",
+        "읽음 표시는 뜨는데 답이 한참 뒤",
+        "은근 상대 반응을 신경 씀"
+      ],
+      "tip": "1 표시는 사라졌는데 답은 다음날, 상대 속만 타들어감"
+    },
+    {
+      "type": "이모지도배러",
+      "title": "이모지도배러",
+      "subtitle": "말보다 이모지가 진심",
+      "image": "assets/result/emoji-spam.webp",
+      "traits": [
+        "이모지 하나가 더 진심을 잘 전달한다고 믿음",
+        "글자보다 이모지 조합으로 감정을 압축",
+        "정확한 답을 원할 땐 좀 답답할 수도"
+      ],
+      "tip": "문장보다 이모지가 편한 사람, 근데 은근 감정 표현은 다 함"
+    },
+    {
+      "type": "3초답장각",
+      "title": "3초답장각",
+      "subtitle": "솔직함이 다 드러나는 사람",
+      "image": "assets/result/3sec-reply.webp",
+      "traits": [
+        "좋아하는 사람 메시지엔 알림 뜨자마자 반응",
+        "티 내기 싫어도 답장 속도에서 마음이 드러남",
+        "밀당은 못하지만 솔직함으로 승부"
+      ],
+      "tip": "밀당 실패, 근데 그게 더 매력있는 타입"
+    },
+    {
+      "type": "밀당고수",
+      "title": "밀당고수",
+      "subtitle": "궁금증 유발 마스터",
+      "image": "assets/result/pushpull-master.webp",
+      "traits": [
+        "궁금증은 유발하되 다 보여주지 않음",
+        "살짝 흘리며 상대가 더 궁금해하게 만듦",
+        "밀당이 길어지면 상대가 지칠 수도 있음"
+      ],
+      "tip": "궁금하면 500원... 아니 만나서 얘기해줄게 스타일"
+    }
+  ]
+}

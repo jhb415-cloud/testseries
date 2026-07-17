@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="10" fill="#0a0e1a" stroke="#1e2b4a" stroke-width="6"/>
+  <!-- left: pixel phone with heart (insta) -->
+  <rect x="80" y="110" width="90" height="140" fill="#141b30" stroke="#ff8a3d" stroke-width="6"/>
+  <rect x="96" y="128" width="58" height="90" fill="#1a2340"/>
+  <polygon points="125,190 108,172 116,160 125,168 134,160 142,172" fill="#ff8a3d"/>
+  <rect x="112" y="234" width="26" height="8" fill="#ff8a3d"/>
+  <!-- right: pixel steaming bowl (noodle shop) -->
+  <path d="M420 190 h100 l-14 40 a52 20 0 0 1 -72 0 z" fill="#00e5ff" stroke="#e7fbff" stroke-width="4"/>
+  <rect x="410" y="182" width="120" height="14" rx="6" fill="#00e5ff" stroke="#e7fbff" stroke-width="4"/>
+  <path d="M448 160 q6 -14 0 -26 M470 160 q6 -14 0 -26 M492 160 q6 -14 0 -26" stroke="#9fd8e6" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <text x="300" y="300" font-family="Arial, sans-serif" font-size="20" fill="#9fd8e6" text-anchor="middle" opacity="0.7">VS</text>
+</svg>

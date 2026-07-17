@@ -1,0 +1,89 @@
+/* test-engine — themes/stencil.css — 신규 테마: 스프레이 스텐실 그래피티 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   zombie-apocalypse-survival(#30)가 1호 사용처. 크랙 콘크리트 벽 + 형광 옐로/블랙 스텐실 +
+   스텐실 컷 폰트(Stardos Stencil)로 "거리 그래피티 경고문" 톤을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Stardos+Stencil:wght@400;700&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #16140f; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    radial-gradient(ellipse at 20% 15%, rgba(210, 230, 40, 0.08), transparent 55%),
+    radial-gradient(ellipse at 80% 85%, rgba(210, 230, 40, 0.06), transparent 55%),
+    #16140f;
+  color: #eceadf;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #1e1c15;
+  border-radius: 2px;
+  border: 2px solid #3a3626;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Stardos Stencil", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  color: #d2e628;
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 10px rgba(210, 230, 40, 0.35);
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #b8b39e; }
+
+.te-chip {
+  background: rgba(210, 230, 40, 0.1);
+  border: 1px solid #d2e628;
+  color: #d2e628;
+  font-family: "Stardos Stencil", sans-serif;
+  border-radius: 2px;
+}
+
+.te-btn {
+  background: #d2e628;
+  color: #16140f;
+  border-radius: 2px;
+  border: none;
+  box-shadow: 0 0 18px rgba(210, 230, 40, 0.4);
+  font-family: "Stardos Stencil", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+.te-btn-primary { background: #d2e628; box-shadow: 0 0 18px rgba(210, 230, 40, 0.4); }
+.te-btn-secondary { background: #2a2719; color: #eceadf; border: 1px solid #3a3626; box-shadow: none; }
+.te-btn-accent { background: #e8621f; color: #1a0c02; box-shadow: 0 0 18px rgba(232, 98, 31, 0.4); }
+.te-btn-kakao { background: #FEE500; color: #191600; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+.te-btn-choice {
+  background: #242118;
+  color: #eceadf;
+  border: 1px solid rgba(210, 230, 40, 0.25);
+  border-radius: 2px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: rgba(232, 98, 31, 0.15); border-color: #e8621f; }
+
+.te-progress-track { background: #2a2719; border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #d2e628, #e8621f); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #eceadf;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(210, 230, 40, 0.2);
+  border-top-color: #d2e628;
+}

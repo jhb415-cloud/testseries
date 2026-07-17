@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" fill="#d8c19a"/>
+  <!-- green sticky note with question mark + eyes doodle (curiosity/suspicion) -->
+  <g transform="rotate(2.5 300 180)">
+    <rect x="200" y="100" width="200" height="170" fill="#dcf2c4"/>
+    <path d="M270 135 q16 -16 32 0 q0 16 -16 20 v8" stroke="#2a2a2a" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <circle cx="286" cy="180" r="4" fill="#2a2a2a"/>
+    <ellipse cx="260" cy="220" rx="14" ry="9" fill="none" stroke="#2a2a2a" stroke-width="4"/>
+    <circle cx="260" cy="220" r="3" fill="#2a2a2a"/>
+    <ellipse cx="320" cy="220" rx="14" ry="9" fill="none" stroke="#2a2a2a" stroke-width="4"/>
+    <circle cx="320" cy="220" r="3" fill="#2a2a2a"/>
+  </g>
+</svg>

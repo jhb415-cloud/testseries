@@ -1,0 +1,265 @@
+{
+  "id": "balance-3sec-speed",
+  "title": "밸런스게임 3초 스피드전",
+  "description": "질문이 뜨면 3초, 고민할 틈 없이 골라야 하는 밸런스게임. 순간 반응으로 드러나는 진짜 나.",
+  "hashtags": [
+    "밸런스게임",
+    "심리테스트",
+    "3초",
+    "MZ밈"
+  ],
+  "theme": "arcade",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 210,
+  "engagement_key": "site-balance3sec-plays",
+  "scoring_type": "type",
+  "loading": {
+    "text": "순간 반응 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "평생 여름 나라 vs 평생 겨울 나라, 이민 간다면?",
+      "image": "assets/question/summer-winter.svg",
+      "choices": [
+        {
+          "label": "땀 좀 흘려도 활동적인 여름이 낫지",
+          "type": "쾌락추구형"
+        },
+        {
+          "label": "조용하고 정적인 겨울이 내 체질이야",
+          "type": "안정추구형"
+        }
+      ]
+    },
+    {
+      "text": "로또 1등 20억, 조건은 평생 베프와 절연.",
+      "image": null,
+      "choices": [
+        {
+          "label": "그래도 20억 받는다, 손절도 자산이지",
+          "type": "이성뇌형"
+        },
+        {
+          "label": "돈보다 사람이지, 그 조건이면 안 받는다",
+          "type": "감정뇌형"
+        }
+      ]
+    },
+    {
+      "text": "유명해지되 매일 욕먹기 vs 무명이지만 평온하게 살기",
+      "image": null,
+      "choices": [
+        {
+          "label": "관심 받으면서 사는 게 사는 거지",
+          "type": "관종형"
+        },
+        {
+          "label": "욕먹느니 그냥 조용히 사는 게 낫다",
+          "type": "잠수함형"
+        }
+      ]
+    },
+    {
+      "text": "인스타 감성 맛집(맛없음) vs 허름한 노포(찐맛집)",
+      "image": "assets/question/insta-vs-real.svg",
+      "choices": [
+        {
+          "label": "사진 잘 나오면 맛은 크게 안 중요해",
+          "type": "쾌락추구형"
+        },
+        {
+          "label": "결국 다시 갈 거면 맛집이 진리지",
+          "type": "안정추구형"
+        }
+      ]
+    },
+    {
+      "text": "연봉 2배지만 워라밸 제로 vs 칼퇴 확정, 연봉 그대로",
+      "image": null,
+      "choices": [
+        {
+          "label": "숫자가 결국 제일 확실한 보상이야",
+          "type": "이성뇌형"
+        },
+        {
+          "label": "워라밸 무너지면 다 무슨 소용이야",
+          "type": "감정뇌형"
+        }
+      ]
+    },
+    {
+      "text": "회식 자리, 분위기 주도 vs 구석에서 조용히",
+      "image": null,
+      "choices": [
+        {
+          "label": "있는 존재감 다 써서 분위기 띄운다",
+          "type": "관종형"
+        },
+        {
+          "label": "빨리 먹고 집에 갈 생각만 한다",
+          "type": "잠수함형"
+        }
+      ]
+    },
+    {
+      "text": "주말, 새로 생긴 힙플레이스 vs 늘 가던 단골집",
+      "image": "assets/question/new-vs-usual.svg",
+      "choices": [
+        {
+          "label": "인생 뭐 있나, 새로운 데 가서 즐기자",
+          "type": "쾌락추구형"
+        },
+        {
+          "label": "실패 없는 단골집이 마음 편하고 좋다",
+          "type": "안정추구형"
+        }
+      ]
+    },
+    {
+      "text": "친구 고민 상담, 해결책 제시 vs 일단 같이 속상해하기",
+      "image": null,
+      "choices": [
+        {
+          "label": "원인부터 분석하고 방법을 제시해준다",
+          "type": "이성뇌형"
+        },
+        {
+          "label": "일단 옆에서 같이 마음 아파해준다",
+          "type": "감정뇌형"
+        }
+      ]
+    },
+    {
+      "text": "단톡방에서 내 톡만 계속 읽씹 vs 나만 항상 3초 안에 답장",
+      "image": null,
+      "choices": [
+        {
+          "label": "읽씹 당해도 별 신경 안 쓰고 넘긴다",
+          "type": "잠수함형"
+        },
+        {
+          "label": "답장이 늦으면 괜히 신경 쓰이고 불안하다",
+          "type": "관종형"
+        }
+      ]
+    },
+    {
+      "text": "다이어트 중 눈앞의 디저트, 먹는다 vs 참는다",
+      "image": "assets/question/dessert-temptation.svg",
+      "choices": [
+        {
+          "label": "지금 행복이 더 중요하니 일단 먹는다",
+          "type": "쾌락추구형"
+        },
+        {
+          "label": "장기 목표가 있으니 꾹 참는다",
+          "type": "안정추구형"
+        }
+      ]
+    },
+    {
+      "text": "중요한 결정, 데이터로 vs 직감으로",
+      "image": null,
+      "choices": [
+        {
+          "label": "장단점 리스트 뽑고 숫자로 비교한다",
+          "type": "이성뇌형"
+        },
+        {
+          "label": "그 순간 느낌을 믿고 결정한다",
+          "type": "감정뇌형"
+        }
+      ]
+    },
+    {
+      "text": "단체 사진, 가운데서 튀기 vs 구석에서 숨기",
+      "image": null,
+      "choices": [
+        {
+          "label": "가운데 서서 제일 튀는 포즈를 잡는다",
+          "type": "관종형"
+        },
+        {
+          "label": "구석에 서서 최대한 안 나오려고 한다",
+          "type": "잠수함형"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "type": "이성뇌형",
+      "title": "이성뇌형",
+      "subtitle": "냉철한 판단러",
+      "image": "assets/result/logic-brain.webp",
+      "traits": [
+        "감정보다 팩트와 손익계산이 우선",
+        "중요한 선택도 데이터와 논리로 정리",
+        "위로보다 해결책을 원하는 편"
+      ],
+      "tip": "3초 안에도 계산이 끝나는 사람, 위기 상황 대표 소환 1순위"
+    },
+    {
+      "type": "감정뇌형",
+      "title": "감정뇌형",
+      "subtitle": "마음이 먼저인 사람",
+      "image": "assets/result/heart-brain.webp",
+      "traits": [
+        "논리보다 마음이 먼저 움직임",
+        "손해를 보더라도 관계와 감정을 지킴",
+        "위로가 필요한 사람 옆에 가장 먼저"
+      ],
+      "tip": "3초 안에 마음부터 움직이는 사람, 그래서 매번 손해 보면서도 못 끊음"
+    },
+    {
+      "type": "쾌락추구형",
+      "title": "쾌락추구형",
+      "subtitle": "지금 이 순간 주의자",
+      "image": "assets/result/pleasure-seeker.webp",
+      "traits": [
+        "지금 이 순간의 즐거움이 제일 중요",
+        "나중 걱정보다 오늘의 행복을 먼저 챙김",
+        "어디서든 분위기 메이커"
+      ],
+      "tip": "고민할 시간도 아까운 사람, 통장은 텅장이지만 마음만은 풍족함"
+    },
+    {
+      "type": "안정추구형",
+      "title": "안정추구형",
+      "subtitle": "확실한 걸 지키는 사람",
+      "image": "assets/result/stability-seeker.webp",
+      "traits": [
+        "예측 가능하고 안전한 선택을 우선시",
+        "화려한 도전보다 확실한 걸 지키는 편",
+        "꾸준함으로 신뢰를 쌓는 사람"
+      ],
+      "tip": "3초 동안에도 안전한 선택만 하는 사람, 그게 바로 어른의 선택"
+    },
+    {
+      "type": "관종형",
+      "title": "관종형",
+      "subtitle": "존재감이 곧 에너지",
+      "image": "assets/result/attention-seeker.webp",
+      "traits": [
+        "사람들의 시선과 반응 속에서 에너지를 얻음",
+        "화제의 중심에 서는 쪽이 훨씬 살아있음",
+        "인정 욕구가 강해 무관심을 못 견딤"
+      ],
+      "tip": "관심은 산소, 없으면 숨 막히는 사람"
+    },
+    {
+      "type": "잠수함형",
+      "title": "잠수함형",
+      "subtitle": "존재감 최소화 생존러",
+      "image": "assets/result/submarine-type.webp",
+      "traits": [
+        "존재감을 최소화하고 조용히 지내는 게 편함",
+        "나서지 않아도 되면 스리슬쩍 뒤로 빠짐",
+        "필요한 순간엔 확실하게 존재감을 드러냄"
+      ],
+      "tip": "평소엔 유령, 결정적일 때 한 방 있는 사람"
+    }
+  ]
+}

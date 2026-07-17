@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" fill="#f4efe2" stroke="#1f2e3d" stroke-width="4"/>
+  <!-- shopping bag with price tag -->
+  <path d="M200 160 h90 l8 110 h-106 z" fill="none" stroke="#1f2e3d" stroke-width="5"/>
+  <path d="M223 160 q0 -28 22 -28 q22 0 22 28" fill="none" stroke="#1f2e3d" stroke-width="4"/>
+  <rect x="222" y="200" width="46" height="30" rx="4" fill="none" stroke="#c23b3b" stroke-width="4"/>
+  <!-- game controller with heart -->
+  <rect x="360" y="190" width="120" height="60" rx="26" fill="none" stroke="#1f2e3d" stroke-width="5"/>
+  <path d="M388 210 v20 M378 220 h20" stroke="#1f2e3d" stroke-width="4"/>
+  <circle cx="450" cy="212" r="6" fill="#1f2e3d"/>
+  <circle cx="462" cy="224" r="6" fill="#1f2e3d"/>
+  <path d="M410 175 q-10 -12 -20 0 q0 12 20 24 q20 -12 20 -24 q-10 -12 -20 0 z" fill="none" stroke="#c23b3b" stroke-width="4"/>
+</svg>

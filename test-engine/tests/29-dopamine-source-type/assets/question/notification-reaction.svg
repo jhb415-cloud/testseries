@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" fill="#f4efe2" stroke="#1f2e3d" stroke-width="4"/>
+  <!-- notification bell with heart -->
+  <path d="M300 130 q30 0 30 40 v40 q0 20 16 30 h-92 q16 -10 16 -30 v-40 q0 -40 30 -40 z" fill="none" stroke="#1f2e3d" stroke-width="5"/>
+  <rect x="288" y="112" width="24" height="14" rx="6" fill="none" stroke="#1f2e3d" stroke-width="4"/>
+  <path d="M280 250 q20 20 40 0" fill="none" stroke="#1f2e3d" stroke-width="4"/>
+  <path d="M300 175 q-16 -18 -32 0 q0 18 32 36 q32 -18 32 -36 q-16 -18 -32 0 z" fill="none" stroke="#c23b3b" stroke-width="4"/>
+  <circle cx="360" cy="140" r="34" fill="none" stroke="#c23b3b" stroke-width="4"/>
+</svg>

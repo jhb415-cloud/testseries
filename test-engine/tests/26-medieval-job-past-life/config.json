@@ -1,0 +1,265 @@
+{
+  "id": "medieval-job-past-life",
+  "title": "직업 전생 판별: 조선시대 말고 중세 유럽",
+  "description": "RPG 클래스 배정 컨셉으로 알아보는 중세 유럽 전생 직업. 결과가 게임 캐릭터 시트처럼 나온다.",
+  "hashtags": [
+    "전생직업",
+    "심리테스트",
+    "RPG밈",
+    "중세판타지"
+  ],
+  "theme": "tapestry",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 172,
+  "engagement_key": "site-medievaljob-plays",
+  "scoring_type": "type",
+  "loading": {
+    "text": "전생 클래스 판정 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "파티에서 위기가 닥쳤을 때 내 역할은?",
+      "image": "assets/question/party-crisis.svg",
+      "choices": [
+        {
+          "label": "앞장서서 몸으로 막아선다",
+          "type": "성기사"
+        },
+        {
+          "label": "몰래 실속부터 챙기고 본다",
+          "type": "도적길드"
+        }
+      ]
+    },
+    {
+      "text": "여행 중 오래된 유물을 발견했다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "뒤에서 조용히 연구하고 분석해본다",
+          "type": "연금술사"
+        },
+        {
+          "label": "이야깃거리로 삼아 사람들에게 들려준다",
+          "type": "음유시인"
+        }
+      ]
+    },
+    {
+      "text": "동료들 사이 분위기가 가라앉았을 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "농담을 던져서 분위기를 띄운다",
+          "type": "궁정광대"
+        },
+        {
+          "label": "필요한 장비를 손보며 묵묵히 돕는다",
+          "type": "대장장이"
+        }
+      ]
+    },
+    {
+      "text": "보물을 나눠야 하는 상황이 왔다.",
+      "image": "assets/question/treasure-share.svg",
+      "choices": [
+        {
+          "label": "공평하게 나누자며 앞장서서 정리한다",
+          "type": "성기사"
+        },
+        {
+          "label": "눈치껏 좋은 걸 먼저 챙긴다",
+          "type": "도적길드"
+        }
+      ]
+    },
+    {
+      "text": "새로운 마을에 도착했을 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "정보를 모으고 조용히 관찰한다",
+          "type": "연금술사"
+        },
+        {
+          "label": "사람들과 어울리며 이야기를 나눈다",
+          "type": "음유시인"
+        }
+      ]
+    },
+    {
+      "text": "무기나 장비가 고장 났다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "직접 뚝딱 고쳐서 쓴다",
+          "type": "대장장이"
+        },
+        {
+          "label": "웃긴 상황으로 만들어서 넘긴다",
+          "type": "궁정광대"
+        }
+      ]
+    },
+    {
+      "text": "강한 적을 마주쳤을 때",
+      "image": "assets/question/strong-enemy.svg",
+      "choices": [
+        {
+          "label": "동료들을 지키며 앞에 나선다",
+          "type": "성기사"
+        },
+        {
+          "label": "몰래 뒤로 빠져서 기회를 노린다",
+          "type": "도적길드"
+        }
+      ]
+    },
+    {
+      "text": "여가 시간이 생기면",
+      "image": null,
+      "choices": [
+        {
+          "label": "책이나 재료를 연구하며 시간을 보낸다",
+          "type": "연금술사"
+        },
+        {
+          "label": "시나 노래를 지으며 시간을 보낸다",
+          "type": "음유시인"
+        }
+      ]
+    },
+    {
+      "text": "팀에 갈등이 생겼을 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "분위기를 풀어보려고 우스갯소리를 한다",
+          "type": "궁정광대"
+        },
+        {
+          "label": "묵묵히 각자 할 일을 하게 둔다",
+          "type": "대장장이"
+        }
+      ]
+    },
+    {
+      "text": "목표를 달성하는 방식은?",
+      "image": "assets/question/goal-method.svg",
+      "choices": [
+        {
+          "label": "정면 돌파로 부딪혀서 해결한다",
+          "type": "성기사"
+        },
+        {
+          "label": "은밀하게 실속을 챙기며 해결한다",
+          "type": "도적길드"
+        }
+      ]
+    },
+    {
+      "text": "나의 가장 큰 능력치는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "손재주, 뭐든 만들어낼 수 있다",
+          "type": "대장장이"
+        },
+        {
+          "label": "이야기와 사람을 다루는 재주",
+          "type": "음유시인"
+        }
+      ]
+    },
+    {
+      "text": "위험한 실험이나 도전 앞에서",
+      "image": null,
+      "choices": [
+        {
+          "label": "호기심이 생겨서 일단 시도해본다",
+          "type": "연금술사"
+        },
+        {
+          "label": "웃으며 가볍게 넘기고 안 한다",
+          "type": "궁정광대"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "type": "음유시인",
+      "title": "음유시인",
+      "subtitle": "CLASS: 이야기꾼 · 매력 92 · 지능 78 · 체력 40",
+      "image": "assets/result/bard-class.webp",
+      "traits": [
+        "이야기와 노래로 사람들의 마음을 움직임",
+        "분위기를 만드는 재주가 있음",
+        "교류에서 에너지를 얻지만 혼자면 지침"
+      ],
+      "tip": "궁극기 분위기 장악 · 파티의 분위기 메이커 담당"
+    },
+    {
+      "type": "연금술사",
+      "title": "연금술사",
+      "subtitle": "CLASS: 은둔 연구가 · 지능 95 · 사교 20 · 집중력 90",
+      "image": "assets/result/alchemist-class.webp",
+      "traits": [
+        "혼자 파고들어 연구하는 게 제일 편함",
+        "새 지식·원리를 알아내는 데서 재미를 느낌",
+        "파티에서 가장 의외의 해결책을 만듦"
+      ],
+      "tip": "스킬 혼자 실험실 3일 잠수 · 없으면 안 되는 존재"
+    },
+    {
+      "type": "도적길드",
+      "title": "도적길드",
+      "subtitle": "CLASS: 실속형 생존러 · 민첩 88 · 눈치 95 · 정직도 30",
+      "image": "assets/result/rogue-class.webp",
+      "traits": [
+        "상황을 빠르게 읽고 실속을 챙김",
+        "위험한 상황에서도 침착하게 계산",
+        "파티가 위기일 때 제일 먼저 살아남음"
+      ],
+      "tip": "스킬 눈치 100단 · 위기 상황 생존율 1위"
+    },
+    {
+      "type": "성기사",
+      "title": "성기사",
+      "subtitle": "CLASS: 앞장서는 수호자 · 체력 90 · 정의감 95 · 융통성 25",
+      "image": "assets/result/paladin-class.webp",
+      "traits": [
+        "위기가 오면 자연스럽게 앞으로 나섬",
+        "동료를 지키는 게 우선이라 손해도 감수",
+        "너무 원칙적이라 융통성이 부족하다는 평가"
+      ],
+      "tip": "궁극기 몸빵 각오 · 신뢰도 만렙"
+    },
+    {
+      "type": "대장장이",
+      "title": "대장장이",
+      "subtitle": "CLASS: 손재주 장인 · 손재주 93 · 인내심 85 · 표현력 30",
+      "image": "assets/result/blacksmith-class.webp",
+      "traits": [
+        "말보다 행동으로 보여주는 타입",
+        "필요한 걸 묵묵히 만들고 고쳐줌",
+        "표현이 서툴러도 없으면 티가 나는 존재"
+      ],
+      "tip": "스킬 뭐든 뚝딱 · 파티의 숨은 주역"
+    },
+    {
+      "type": "궁정광대",
+      "title": "궁정광대",
+      "subtitle": "CLASS: 분위기 메이커 · 유머 96 · 눈치 80 · 진지함 15",
+      "image": "assets/result/jester-class.webp",
+      "traits": [
+        "어색한 분위기를 못 견디고 늘 농담으로 풀어냄",
+        "웃음 뒤에 은근 예리한 관찰력이 있음",
+        "분위기를 읽는 능력은 파티 최고 수준"
+      ],
+      "tip": "궁극기 분위기 반전 · 웃음 뒤에 숨은 눈치왕"
+    }
+  ]
+}

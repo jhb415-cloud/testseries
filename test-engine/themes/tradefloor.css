@@ -1,0 +1,87 @@
+/* test-engine — themes/tradefloor.css — 신규 테마: 트레이딩 차트 밈 스티커 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   hold-or-sell-index(#28)가 1호 사용처. 다크 트레이딩 터미널 배경 + 캔들 레드/틸 컬러 +
+   모노스페이스 숫자 폰트(Space Mono, 기존 IBM Plex Mono/Share Tech Mono와 다른 슬랩 느낌). */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #0a0f14; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 200, 160, 0.04) 0px, transparent 1px, transparent 40px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0px, transparent 1px, transparent 40px),
+    #0a0f14;
+  color: #e7f3ee;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #101820;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 200, 160, 0.25);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Space Mono", "Noto Sans KR", monospace;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #9fb8ae; }
+
+.te-chip {
+  background: rgba(0, 200, 160, 0.12);
+  border: 1px solid #00c8a0;
+  color: #00c8a0;
+  font-family: "Space Mono", monospace;
+  border-radius: 3px;
+}
+
+.te-btn {
+  background: #00c8a0;
+  color: #05100c;
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0 0 16px rgba(0, 200, 160, 0.35);
+  font-family: "Space Mono", "Noto Sans KR", monospace;
+  font-weight: 700;
+}
+.te-btn-primary { background: #00c8a0; box-shadow: 0 0 16px rgba(0, 200, 160, 0.35); }
+.te-btn-secondary { background: #1a242c; color: #e7f3ee; border: 1px solid rgba(255,255,255,0.12); box-shadow: none; }
+.te-btn-accent { background: #ff4d4d; color: #fff; box-shadow: 0 0 16px rgba(255, 77, 77, 0.35); }
+.te-btn-kakao { background: #FEE500; color: #191600; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+.te-btn-choice {
+  background: #141d24;
+  color: #e7f3ee;
+  border: 1px solid rgba(0, 200, 160, 0.2);
+  border-radius: 6px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: rgba(255, 77, 77, 0.12); border-color: #ff4d4d; }
+
+.te-progress-track { background: #1a242c; border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #00c8a0, #ff4d4d); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #e7f3ee;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(0, 200, 160, 0.18);
+  border-top-color: #00c8a0;
+}

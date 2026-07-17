@@ -1,0 +1,237 @@
+{
+  "id": "village-animal-neighbor",
+  "title": "MBTI 말고 마을 주민 유형",
+  "description": "게임 감성이지만 자체 제작 캐릭터로 IP 걱정 없이 즐기는 마을 주민 동물 유형 테스트.",
+  "hashtags": [
+    "마을주민",
+    "심리테스트",
+    "동물유형",
+    "귀여운밈"
+  ],
+  "theme": "diorama",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 203,
+  "engagement_key": "site-villageanimal-plays",
+  "scoring_type": "type",
+  "loading": {
+    "text": "마을 주민 배정 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "이웃이 예고 없이 놀러 왔다.",
+      "image": "assets/question/surprise-visit.svg",
+      "choices": [
+        {
+          "label": "귀찮지만 그래도 반갑게 맞아준다",
+          "type": "느긋한나무늘보"
+        },
+        {
+          "label": "간식부터 챙겨서 대접한다",
+          "type": "부지런한다람쥐"
+        }
+      ]
+    },
+    {
+      "text": "마을에 새로운 소식이 생겼다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "제일 먼저 알아내서 소문을 낸다",
+          "type": "오지라퍼강아지"
+        },
+        {
+          "label": "관심 없다는 듯 시크하게 넘긴다",
+          "type": "새침한고양이"
+        }
+      ]
+    },
+    {
+      "text": "아침에 눈을 뜨면",
+      "image": null,
+      "choices": [
+        {
+          "label": "일단 좀 더 눕는다",
+          "type": "느긋한나무늘보"
+        },
+        {
+          "label": "바로 오늘 할 일을 계획한다",
+          "type": "부지런한다람쥐"
+        }
+      ]
+    },
+    {
+      "text": "누가 선물을 주면",
+      "image": "assets/question/gift-given.svg",
+      "choices": [
+        {
+          "label": "고맙다고 하면서도 살짝 예민하게 반응한다",
+          "type": "예민한고슴도치"
+        },
+        {
+          "label": "혼잣말로 알 수 없는 반응을 한다",
+          "type": "4차원부엉이"
+        }
+      ]
+    },
+    {
+      "text": "마을에 갈등이 생겼을 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "다 관심 갖고 끼어들어 중재하려 한다",
+          "type": "오지라퍼강아지"
+        },
+        {
+          "label": "그냥 내 할 일이나 하며 지켜본다",
+          "type": "느긋한나무늘보"
+        }
+      ]
+    },
+    {
+      "text": "대화 중 예상 못한 질문을 받으면",
+      "image": null,
+      "choices": [
+        {
+          "label": "엉뚱한 대답으로 다들 당황하게 만든다",
+          "type": "4차원부엉이"
+        },
+        {
+          "label": "날카롭게 정곡을 찌르는 대답을 한다",
+          "type": "새침한고양이"
+        }
+      ]
+    },
+    {
+      "text": "스트레스를 받으면 나는",
+      "image": "assets/question/stress-response.svg",
+      "choices": [
+        {
+          "label": "혼자 조용히 가시를 세운다",
+          "type": "예민한고슴도치"
+        },
+        {
+          "label": "일단 먹을 걸 쟁여두고 안심한다",
+          "type": "부지런한다람쥐"
+        }
+      ]
+    },
+    {
+      "text": "밤에 주로 하는 활동은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "혼자 생각에 잠겨 시간을 보낸다",
+          "type": "4차원부엉이"
+        },
+        {
+          "label": "일찌감치 잠들어 버린다",
+          "type": "느긋한나무늘보"
+        }
+      ]
+    },
+    {
+      "text": "친한 친구가 힘들어할 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "바로 달려가서 이것저것 챙겨준다",
+          "type": "오지라퍼강아지"
+        },
+        {
+          "label": "예민하게 걱정하면서도 티는 안 낸다",
+          "type": "예민한고슴도치"
+        }
+      ]
+    },
+    {
+      "text": "낯선 사람을 만나면",
+      "image": "assets/question/meeting-stranger.svg",
+      "choices": [
+        {
+          "label": "거리를 두고 시크하게 지켜본다",
+          "type": "새침한고양이"
+        },
+        {
+          "label": "부지런히 먼저 다가가서 챙겨준다",
+          "type": "부지런한다람쥐"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "type": "느긋한나무늘보",
+      "title": "느긋한나무늘보",
+      "subtitle": "마을에서 제일 스트레스 없는 주민",
+      "image": "assets/result/lazy-sloth.webp",
+      "traits": [
+        "뭐든 서두르지 않고 자기만의 속도로 삼",
+        "급한 일도 결국 다 된다는 여유",
+        "스트레스를 잘 안 받는 편"
+      ],
+      "tip": "말버릇 어떻게든 되겠지 · 마을에서 제일 스트레스 없는 주민"
+    },
+    {
+      "type": "부지런한다람쥐",
+      "title": "부지런한다람쥐",
+      "subtitle": "저장강박 그 자체",
+      "image": "assets/result/busy-squirrel.webp",
+      "traits": [
+        "뭐든 미리미리 준비해야 마음이 놓임",
+        "간식이든 할 일이든 쟁여두는 습관",
+        "마을에서 제일 믿음직한 주민"
+      ],
+      "tip": "저장강박 그 자체, 근데 그게 다 도움이 됨"
+    },
+    {
+      "type": "새침한고양이",
+      "title": "새침한고양이",
+      "subtitle": "겉바속촉의 정석",
+      "image": "assets/result/aloof-cat.webp",
+      "traits": [
+        "겉으로는 시크하지만 속은 다정함",
+        "먼저 다가가진 않아도 챙길 건 다 챙김",
+        "한 번 마음을 열면 의외로 깊은 사람"
+      ],
+      "tip": "겉바속촉의 정석, 안 친한 척하면서 다 챙겨줌"
+    },
+    {
+      "type": "오지라퍼강아지",
+      "title": "오지라퍼강아지",
+      "subtitle": "마을 정보통이자 도움왕",
+      "image": "assets/result/nosy-dog.webp",
+      "traits": [
+        "남의 일에도 진심으로 관심을 가짐",
+        "무슨 일만 생기면 제일 먼저 달려감",
+        "가끔 과하지만 진심은 다들 알아줌"
+      ],
+      "tip": "마을 정보통이자 도움왕, 근데 가끔 오지랖 넘침"
+    },
+    {
+      "type": "예민한고슴도치",
+      "title": "예민한고슴도치",
+      "subtitle": "가시는 방어용, 속은 순두부",
+      "image": "assets/result/sensitive-hedgehog.webp",
+      "traits": [
+        "겉으로는 가시를 세우지만 속은 여림",
+        "작은 일에도 쉽게 상처받음",
+        "남의 감정도 세심하게 살피는 편"
+      ],
+      "tip": "가시는 방어용, 진짜 마음은 순두부"
+    },
+    {
+      "type": "4차원부엉이",
+      "title": "4차원부엉이",
+      "subtitle": "무슨 생각 하는지 아무도 모름",
+      "image": "assets/result/4d-owl.webp",
+      "traits": [
+        "남들과는 조금 다른 시선으로 세상을 봄",
+        "예상 못한 대답이나 행동으로 주변을 당황시킴",
+        "알고 보면 은근 통찰력이 있음"
+      ],
+      "tip": "무슨 생각 하는지 아무도 모름, 근데 은근 다 맞는 말임"
+    }
+  ]
+}

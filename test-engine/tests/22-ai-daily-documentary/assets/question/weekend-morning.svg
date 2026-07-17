@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" fill="#0b0b0b" stroke="#3a3a3a" stroke-width="4"/>
+  <g stroke="#e6e6e2" stroke-width="3" opacity="0.5" fill="none">
+    <path d="M24 24 h30 M24 24 v30"/>
+    <path d="M576 24 h-30 M576 24 v30"/>
+    <path d="M24 336 h30 M24 336 v-30"/>
+    <path d="M576 336 h-30 M576 336 v-30"/>
+  </g>
+  <circle cx="46" cy="46" r="7" fill="#ff3b30"/>
+  <text x="62" y="52" font-family="monospace" font-size="16" fill="#ff3b30">REC</text>
+  <!-- torn resolution list + phone with messages -->
+  <rect x="120" y="120" width="120" height="150" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="3"/>
+  <path d="M136 145 h88 M136 165 h88 M136 185 h60" stroke="#4a4a4a" stroke-width="4"/>
+  <path d="M120 250 l40 -30" stroke="#ff3b30" stroke-width="4"/>
+  <rect x="360" y="140" width="90" height="140" rx="10" fill="#e6e6e2" opacity="0.9"/>
+  <rect x="372" y="160" width="66" height="18" rx="4" fill="#232323" opacity="0.7"/>
+  <rect x="372" y="184" width="66" height="18" rx="4" fill="#232323" opacity="0.7"/>
+  <circle cx="440" cy="150" r="6" fill="#ff3b30"/>
+</svg>

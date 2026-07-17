@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="8" fill="#123539" stroke="#c9a227" stroke-width="4"/>
+  <rect x="16" y="16" width="568" height="328" rx="4" fill="none" stroke="#c9a227" stroke-width="1.5" opacity="0.6"/>
+  <!-- pile of coins with figure reaching -->
+  <circle cx="270" cy="250" r="26" fill="#0d2b2e" stroke="#c9a227" stroke-width="3"/>
+  <circle cx="310" cy="255" r="26" fill="#0d2b2e" stroke="#c9a227" stroke-width="3"/>
+  <circle cx="290" cy="220" r="26" fill="#0d2b2e" stroke="#c9a227" stroke-width="3"/>
+  <circle cx="330" cy="220" r="22" fill="#0d2b2e" stroke="#c9a227" stroke-width="3"/>
+  <path d="M280 160 v-40 q0 -22 22 -22 q22 0 22 22 v40 z" fill="#0d2b2e" stroke="#c9a227" stroke-width="3"/>
+  <circle cx="302" cy="90" r="16" fill="#0d2b2e" stroke="#c9a227" stroke-width="3"/>
+  <path d="M420 120 l14 40 l42 4 l-32 28 l10 40 l-34 -22 l-34 22 l10 -40 l-32 -28 l42 -4 z" fill="none" stroke="#c9a227" stroke-width="2" opacity="0.5"/>
+</svg>

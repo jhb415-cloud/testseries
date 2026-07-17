@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="14" fill="#1c1c1c" stroke="#2c2c2c" stroke-width="4"/>
+  <rect x="150" y="70" width="300" height="180" rx="10" fill="#141414" stroke="#3a3a3a" stroke-width="3"/>
+  <!-- comic mask left (sitcom) / tense clock right (revenge tension) -->
+  <path d="M210 130 q30 -30 60 0 q6 40 -30 50 q-36 -10 -30 -50 z" fill="#ffd166" opacity="0.9"/>
+  <circle cx="228" cy="140" r="5" fill="#1c1c1c"/>
+  <circle cx="252" cy="140" r="5" fill="#1c1c1c"/>
+  <path d="M222 158 q18 14 36 0" stroke="#1c1c1c" stroke-width="3" fill="none"/>
+  <circle cx="360" cy="150" r="34" fill="none" stroke="#e50914" stroke-width="6"/>
+  <path d="M360 130 v22 l16 10" stroke="#e50914" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <rect x="230" y="270" width="140" height="10" rx="5" fill="#e50914"/>
+</svg>

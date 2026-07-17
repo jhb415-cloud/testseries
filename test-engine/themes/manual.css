@@ -1,0 +1,83 @@
+/* test-engine — themes/manual.css — 신규 테마: 빈티지 기술 매뉴얼 라인아이콘 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   dopamine-source-type(#29)가 1호 사용처. 크림 종이 + 네이비 라인아이콘 + 레드 서클
+   콜아웃, 기하학적 기술 폰트(Space Grotesk)로 "낡은 사용설명서" 톤을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #aebfcf; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background: linear-gradient(180deg, #c3d2df 0%, #aebfcf 100%);
+  color: #1f2e3d;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #f4efe2;
+  border: 2px solid #1f2e3d;
+  border-radius: 4px;
+  box-shadow: 4px 4px 0 rgba(31, 46, 61, 0.25), 0 16px 32px rgba(31, 46, 61, 0.2);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Space Grotesk", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  color: #1f2e3d;
+  letter-spacing: -0.01em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #4a5c6e; }
+
+.te-chip {
+  background: rgba(31, 46, 61, 0.08);
+  border: 1px solid #1f2e3d;
+  color: #1f2e3d;
+  font-family: "Space Grotesk", sans-serif;
+  border-radius: 2px;
+}
+
+.te-btn {
+  background: #1f2e3d;
+  color: #f4efe2;
+  border-radius: 4px;
+  border: none;
+  box-shadow: 0 3px 0 #0f1822;
+  font-family: "Space Grotesk", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+.te-btn-primary { background: #c23b3b; box-shadow: 0 3px 0 #7c2323; }
+.te-btn-secondary { background: #dfd6bf; color: #1f2e3d; box-shadow: 0 3px 0 #b8ac8c; }
+.te-btn-accent { background: #c23b3b; box-shadow: 0 3px 0 #7c2323; }
+.te-btn-kakao { background: #FEE500; color: #191600; box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
+
+.te-btn-choice {
+  background: #faf6ea;
+  color: #1f2e3d;
+  border: 1px solid #1f2e3d;
+  border-radius: 4px;
+  box-shadow: none;
+}
+.te-btn-choice:active { background: rgba(194, 59, 59, 0.1); border-color: #c23b3b; }
+
+.te-progress-track { background: rgba(31, 46, 61, 0.12); }
+.te-progress-fill { background: linear-gradient(90deg, #1f2e3d, #c23b3b); }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #1f2e3d;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(31, 46, 61, 0.2);
+  border-top-color: #c23b3b;
+}

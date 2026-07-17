@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="8" fill="#123539" stroke="#c9a227" stroke-width="4"/>
+  <rect x="16" y="16" width="568" height="328" rx="4" fill="none" stroke="#c9a227" stroke-width="1.5" opacity="0.6"/>
+  <!-- figure holding heart, gazing at two others facing each other -->
+  <path d="M180 270 v-80 q0 -24 24 -24 q24 0 24 24 v80 z" fill="#0d2b2e" stroke="#c9a227" stroke-width="3"/>
+  <circle cx="204" cy="150" r="18" fill="#0d2b2e" stroke="#c9a227" stroke-width="3"/>
+  <path d="M204 180 l-16 20 l16 18 l16 -18 z" fill="none" stroke="#c9a227" stroke-width="3"/>
+  <path d="M360 270 v-70 q0 -22 22 -22 q22 0 22 22 v70 z" fill="#0d2b2e" stroke="#c9a227" stroke-width="2.5" opacity="0.8"/>
+  <circle cx="382" cy="160" r="16" fill="#0d2b2e" stroke="#c9a227" stroke-width="2.5" opacity="0.8"/>
+  <path d="M470 270 v-70 q0 -22 22 -22 q22 0 22 22 v70 z" fill="#0d2b2e" stroke="#c9a227" stroke-width="2.5" opacity="0.8"/>
+  <circle cx="492" cy="160" r="16" fill="#0d2b2e" stroke="#c9a227" stroke-width="2.5" opacity="0.8"/>
+</svg>

@@ -38,11 +38,29 @@
 
 **MBTI존(11~20) 전체 완료. 20개 목록 + mental-age 전체 콘텐츠 제작 완료. 전체 사이트 연동도 완료.**
 
+## 몰입테스트 2차 배치 (21~30)
+문항/선택지/결과 텍스트는 이전 세션에서 스켈레톤으로 이미 작성돼 있었고, 이번 세션은 사용자가
+`assets/reference/`에 미리 올려둔 레퍼런스를 보고 톤·매체·신규 테마 CSS 확정 + 이미지 생성 + 문항
+SVG 제작 + config.json 연결까지 진행(상세 컨셉은 `style-guide.md` "2026-07-17 추가" 절 참고).
+- [x] #21 balance-3sec-speed — 완료 (2026-07-17, theme: arcade)
+- [x] #22 ai-daily-documentary — 완료 (2026-07-17, theme: camcorder)
+- [x] #23 past-life-death-cause — 완료 (2026-07-17, theme: tarot)
+- [x] #24 life-drama-genre — 완료 (2026-07-17, theme: streamcard)
+- [x] #25 katok-reply-style — 완료 (2026-07-17, theme: stickynote)
+- [x] #26 medieval-job-past-life — 완료 (2026-07-17, theme: tapestry)
+- [x] #27 village-animal-neighbor — 완료 (2026-07-17, theme: diorama)
+- [x] #28 hold-or-sell-index — 완료 (2026-07-17, theme: tradefloor)
+- [x] #29 dopamine-source-type — 완료 (2026-07-17, theme: manual)
+- [x] #30 zombie-apocalypse-survival — 완료 (2026-07-17, theme: stencil)
+
+**#21~30 전체 콘텐츠 제작 완료(문항+답변+이미지+문항 SVG+채점 스키마).** 사이트 연동
+(`data.js`/`app.js`/`sections.json`/`sitemap.xml`, tests/index.json 상태는 이미 갱신)은 아직 —
+사용자 승인 후 별도 세션에서 진행.
+
 ## 다음 배치 후보
-콘텐츠 제작·사이트 연동 대상 모두 없음 — **20개 목록 + mental-age 전체가 콘텐츠 제작과 사이트
-연동(`data.js`/`app.js`/`sitemap.xml`) 모두 완료된 상태**(2026-07-12). `sections.json`은
-`dynamic:"psych-trending"`이 `AppData.externalTests`/`mbtiZoneTests`를 자동으로 읽어가는 구조라
-이번에도 별도 수정 불필요. 다음 콘텐츠 추가 요청이 오면 이 파일에 새 항목을 등록하고 진행할 것.
+#21~30 콘텐츠 제작은 완료, 사이트 연동만 남음. #31~60(2026-07-16 스켈레톤 생성분, 문항·결과
+텍스트만 있고 이미지 컨셉 미정)이 다음 배치 후보 — 시작 전 레퍼런스 이미지 확보 절차(4-4)부터
+진행할 것.
 
 ## 품질 개선 — MBTI존 9개(#11~18,#20) 16종 결과 세분화 (2026-07-12)
 사용자가 "#19 빼고는 결과가 다 하나뿐이라 노잼"이라고 지적해 진행. `resultTemplate` 공용 템플릿
@@ -99,6 +117,13 @@ result-card.js는 무변경이라 v=2 그대로). **검증**: `node --check` 통
    별도로 진행한다.
 
 ## 세션 로그
+- 2026-07-17 (콘텐츠 제작 세션): 몰입테스트 #21~30 콘텐츠 제작 완료 — 신규 테마 10종(arcade/
+  camcorder/tarot/streamcard/stickynote/tapestry/diorama/tradefloor/manual/stencil) 설계,
+  각 테스트 cover+결과 이미지 전량 생성(katok-reply-style 결과 2장은 도중 OpenAI 결제 하드리밋에
+  걸렸다가 사용자 크레딧 충전 후 재시도로 해결), 문항 SVG 20장(2지선다 8개 테스트 × 1/4/7/10번)
+  제작, config.json theme/image 필드 연결, Node 스크립트로 10개 전수 검증(파일 존재+seed_count
+  범위) 통과. `tests/index.json` 상태/concept_style 갱신, `style-guide.md`에 컨셉 기록 추가.
+  사이트 연동(data.js 등)과 git push는 이번 세션 범위 밖 — 사용자 승인 후 진행.
 - 2026-07-12 (버그 수정 세션): 인트로/결과 화면 하단 버튼바-본문 겹침을 근본 수정 — 상세는 위
   "버그 수정" 절 참고. `engine.css`/`engine.js` v9, 21개 테스트 index.html 캐시버스팅 갱신.
 - 2026-07-12 (사용자 실시간 세션, "이번 세션 한정 승인 없이 자동 진행" 위임받음): MBTI존 9개

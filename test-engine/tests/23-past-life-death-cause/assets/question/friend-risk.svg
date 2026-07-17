@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="8" fill="#123539" stroke="#c9a227" stroke-width="4"/>
+  <rect x="16" y="16" width="568" height="328" rx="4" fill="none" stroke="#c9a227" stroke-width="1.5" opacity="0.6"/>
+  <!-- two figures, one reaching to stop the other -->
+  <path d="M180 260 v-70 q0 -24 24 -24 q24 0 24 24 v70 z" fill="#0d2b2e" stroke="#c9a227" stroke-width="3"/>
+  <circle cx="204" cy="150" r="18" fill="#0d2b2e" stroke="#c9a227" stroke-width="3"/>
+  <path d="M380 250 v-90 q0 -26 26 -26 q26 0 26 26 v90 z" fill="#0d2b2e" stroke="#c9a227" stroke-width="3"/>
+  <circle cx="406" cy="120" r="18" fill="#0d2b2e" stroke="#c9a227" stroke-width="3"/>
+  <path d="M228 210 q60 -10 130 -60" fill="none" stroke="#c9a227" stroke-width="4" stroke-linecap="round"/>
+  <g stroke="#c9a227" stroke-width="3" opacity="0.7">
+    <path d="M450 110 l14 -10 M460 130 l16 0 M450 150 l14 10"/>
+  </g>
+</svg>

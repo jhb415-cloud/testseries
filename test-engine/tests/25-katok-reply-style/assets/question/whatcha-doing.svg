@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" fill="#d8c19a"/>
+  <!-- yellow sticky note with speech bubble doodle -->
+  <g transform="rotate(-2 300 180)">
+    <rect x="200" y="100" width="200" height="170" fill="#fff6a8" stroke="#000" stroke-width="0"/>
+    <path d="M240 140 q0 -20 20 -20 h80 q20 0 20 20 v50 q0 20 -20 20 h-60 l-20 20 v-20 h-0 q-20 0 -20 -20 z" fill="none" stroke="#2a2a2a" stroke-width="5"/>
+    <circle cx="270" cy="165" r="4" fill="#2a2a2a"/>
+    <circle cx="290" cy="165" r="4" fill="#2a2a2a"/>
+    <circle cx="310" cy="165" r="4" fill="#2a2a2a"/>
+  </g>
+  <rect x="220" y="88" width="50" height="20" fill="#f2d9b0" opacity="0.8" transform="rotate(-6 245 98)"/>
+</svg>

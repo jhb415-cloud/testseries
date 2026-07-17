@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="10" fill="#0a0e1a" stroke="#1e2b4a" stroke-width="6"/>
+  <!-- left: pixel cake slice glowing (temptation) -->
+  <polygon points="90,220 190,220 140,130" fill="#ff8a3d" stroke="#e7fbff" stroke-width="6"/>
+  <rect x="100" y="220" width="80" height="14" fill="#e7fbff"/>
+  <circle cx="140" cy="150" r="10" fill="#ffffff"/>
+  <g opacity="0.6" stroke="#ff8a3d" stroke-width="4">
+    <path d="M100 110 l-10 -14 M140 100 l0 -18 M180 110 l10 -14"/>
+  </g>
+  <!-- right: pixel clock with checkmark (willpower) -->
+  <circle cx="470" cy="175" r="55" fill="none" stroke="#00e5ff" stroke-width="8"/>
+  <path d="M470 145 v34 l26 16" stroke="#00e5ff" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M448 176 l14 16 l28 -32" stroke="#e7fbff" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="300" y="300" font-family="Arial, sans-serif" font-size="20" fill="#9fd8e6" text-anchor="middle" opacity="0.7">VS</text>
+</svg>

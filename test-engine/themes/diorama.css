@@ -1,0 +1,83 @@
+/* test-engine — themes/diorama.css — 신규 테마: 3D 아이소메트릭 클레이 디오라마 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   village-animal-neighbor(#27)가 1호 사용처. 파스텔 크림 배경 + 나무/잔디 톤 + 동글동글한
+   폰트(Fredoka, 기존 Baloo2/Jua와 다른 라운드 산세리프)로 "귀여운 미니어처 마을" 느낌을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #fdf3d7; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background: radial-gradient(ellipse at 50% 0%, #fff9e6, #fdf3d7 70%);
+  color: #4a3a20;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #ffffff;
+  border-radius: 22px;
+  border: 3px solid #e8d7a8;
+  box-shadow: 0 16px 30px rgba(160, 130, 60, 0.18);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Fredoka", "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  color: #4a3a20;
+  letter-spacing: 0;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #8a7550; }
+
+.te-chip {
+  background: #eaf7e0;
+  border: 1px solid #b9dfa0;
+  color: #4f7a34;
+  font-family: "Fredoka", sans-serif;
+  border-radius: 999px;
+}
+
+.te-btn {
+  background: #ffb347;
+  color: #4a2e0a;
+  border-radius: 18px;
+  border: none;
+  box-shadow: 0 4px 0 #cf8a26;
+  font-family: "Fredoka", "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-primary { background: #8fd06a; color: #1f3d0f; box-shadow: 0 4px 0 #5fa53c; }
+.te-btn-secondary { background: #f1ead4; color: #4a3a20; box-shadow: 0 4px 0 #d9cba3; }
+.te-btn-accent { background: #8fd06a; color: #1f3d0f; box-shadow: 0 4px 0 #5fa53c; }
+.te-btn-kakao { background: #FEE500; color: #191600; box-shadow: 0 4px 0 rgba(0,0,0,0.15); }
+
+.te-btn-choice {
+  background: #fbf6e6;
+  color: #4a3a20;
+  border: 2px solid #eadfbb;
+  border-radius: 16px;
+  box-shadow: none;
+}
+.te-btn-choice:active { background: #f1ead4; }
+
+.te-progress-track { background: #f1ead4; border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #ffb347, #8fd06a); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #4a3a20;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(255, 179, 71, 0.2);
+  border-top-color: #ffb347;
+}

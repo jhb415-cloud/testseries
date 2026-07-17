@@ -54,6 +54,16 @@
 - 이중노출 사진 아트(시네마틱) — office-mask-mbti(#17)
 - 수묵 잉크워시 실루엣 — shadow-mbti(#18)
 - 사이버펑크 법정 스캐너(홀로그램 UI, 마젠타 추가) — ai-mbti-judge(#20)
+- 8비트 픽셀 아케이드 CRT 화면(청록/오렌지 네온 글로우) — balance-3sec-speed(#21)
+- 파운드 푸티지 캠코더 다큐 POV(REC/타임코드 HUD) — ai-daily-documentary(#22)
+- 빈티지 타로카드 페인터리 일러스트(금박 필리그리 틀) — past-life-death-cause(#23)
+- 스트리밍 앱 상세페이지 목업 + 시네마틱 사진 — life-drama-genre(#24)
+- 스티키노트 손글씨 낙서 데스크 사진 — katok-reply-style(#25)
+- 중세 자수/태피스트리 헤럴드리(리넨 질감 + 문장) — medieval-job-past-life(#26)
+- 3D 아이소메트릭 클레이/우드 디오라마 — village-animal-neighbor(#27)
+- 다크 트레이딩 터미널 차트 + 이모지 스티커 콜라주 — hold-or-sell-index(#28)
+- 빈티지 기술 매뉴얼 라인아이콘 다이어그램(레드서클 콜아웃) — dopamine-source-type(#29)
+- 스프레이 스텐실 그래피티(크랙 콘크리트 벽) — zombie-apocalypse-survival(#30)
 
 ## 테스트별 사용 톤·컨셉 기록 (매번 추가)
 - mental-age: 병맛(장르 미스매치) — "정신연령 측정을 국가 공인 신체검사처럼 근엄하게"
@@ -236,3 +246,38 @@ SVG로 전환하기 전(2026-07-10) 남아있던 미사용 `## question-5` 프�
 플레이스홀더 미치환 잔존 없음+결과 이미지 정상 로드(700px)+두 결과 제목이 서로 다름+콘솔 에러 0건
 확인. #11(dual)은 결과 제목이 매칭된 results[] 항목(겉 코드 기준)으로 정확히 나오는 것까지 확인해
 엔진 확장이 의도대로 동작함을 증명.
+
+### 2026-07-17 추가 — 몰입테스트 #21~30 콘텐츠 제작(문항·결과 텍스트는 기존 스켈레톤, 이미지·테마·문항 SVG 신규)
+사용자가 사전에 `assets/reference/`에 테스트별 레퍼런스 이미지를 직접 올려두고(Gemini/ChatGPT로
+뽑은 것) "21~30번 제작, 5개씩 만들고 중간 QA"를 요청 — 문항/선택지/결과 텍스트는 이전 세션에서
+이미 스켈레톤으로 작성되어 있었고, 이번 세션은 레퍼런스를 보고 톤·매체·신규 테마 CSS를 확정한 뒤
+prompts.md 작성 → `generate-assets.js`로 커버+결과 이미지 생성 → 문항 SVG 제작 → config.json
+theme/image 필드 연결까지 진행. 10개 전부 매체가 서로 겹치지 않음(위 "사용된 매체 목록" 참고).
+- balance-3sec-speed(#21): 레퍼런스가 픽셀아트 아케이드 오락기 CRT 화면(청록/오렌지 듀오톤 밸런스
+  게임 연출)이라 그대로 채택, 신규 `themes/arcade.css`(Press Start 2P + 스캔라인).
+- ai-daily-documentary(#22): 레퍼런스가 저조도 캠코더 파운드 푸티지(REC/배터리/타임코드 HUD)라
+  그대로 채택, 신규 `themes/camcorder.css`(IBM Plex Mono + REC 도트 오버레이).
+- past-life-death-cause(#23): 레퍼런스가 금박 틀 빈티지 타로카드(수정구슬 점술사)라 그대로 채택,
+  신규 `themes/tarot.css`(Marcellus SC, 기존 fantasy.css의 Cinzel과 다른 서체로 구분).
+- life-drama-genre(#24): 레퍼런스가 CapCut류 영상편집 앱 UI + 시네마틱 사진(파스텔 팔레트 스와치)
+  라 그대로 채택, 신규 `themes/streamcard.css`(Bebas Neue + 넷플릭스풍 다크 크롬).
+- katok-reply-style(#25): 레퍼런스가 나무책상 위 포스트잇 손낙서 사진이라 그대로 채택, 신규
+  `themes/stickynote.css`(Nanum Pen Script, 기존 Gaegu/Gamja Flower와 다른 손글씨체).
+- medieval-job-past-life(#26): 레퍼런스가 리넨 자수 태피스트리(헤럴드리 문장+인물 자수)라 그대로
+  채택, 신규 `themes/tapestry.css`(EB Garamond).
+- village-animal-neighbor(#27): 레퍼런스가 3D 아이소메트릭 클레이/우드 디오라마(귀여운 동물
+  피규어 마을)라 그대로 채택, 신규 `themes/diorama.css`(Fredoka, 기존 Baloo2/Jua와 다른 라운드체).
+- hold-or-sell-index(#28): 레퍼런스가 다크 트레이딩 차트 위 이모지 스티커 콜라주(불꽃/폭발/가위/
+  로켓)라 그대로 채택, 신규 `themes/tradefloor.css`(Space Mono).
+- dopamine-source-type(#29): 레퍼런스가 크림 접힌 종이 위 네이비 라인아이콘 기술 매뉴얼(레드서클
+  콜아웃)이라 그대로 채택, 신규 `themes/manual.css`(Space Grotesk).
+- zombie-apocalypse-survival(#30): 레퍼런스가 크랙 콘크리트 벽 위 스프레이 스텐실 그래피티(옐로/
+  블랙, 청록·오렌지 글로우 아이콘)라 그대로 채택, 신규 `themes/stencil.css`(Stardos Stencil).
+
+**문항 이미지(4-4-1)**: #28(4지선다)·#30(3지선다)은 선택지 3개 이상 규칙상 대상 제외, 나머지
+8개(#21~27,#29, 전부 2지선다)는 전체 문항 중 1/4/7/10번(nq=10인 #24/#27도 동일 간격)에만 그
+문항의 실제 내용을 형상화한 SVG를 제작(장식용 도형 재사용 금지 원칙 준수). **QA**: Node 스크립트로
+10개 config.json 전부 theme/cover/results[].image/questions[].image 파일 존재 + seed_count
+현실적 범위(172~266) 기계 검증 완료(전수, 샘플 아님). 이미지 생성 도중 OpenAI 계정 결제 하드리밋에
+걸려 katok-reply-style 결과 2장이 막혔다가 사용자가 크레딧 충전 후 재시도해 해결 — 이후 배치는
+문제 없이 진행. 사이트 연동(data.js/sections.json/sitemap.xml)은 이번 세션 범위 밖(콘텐츠 제작만).

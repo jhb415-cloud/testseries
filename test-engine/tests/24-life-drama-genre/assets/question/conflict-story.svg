@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="14" fill="#1c1c1c" stroke="#2c2c2c" stroke-width="4"/>
+  <!-- episode thumbnail card -->
+  <rect x="150" y="70" width="300" height="180" rx="10" fill="#141414" stroke="#3a3a3a" stroke-width="3"/>
+  <!-- split tension: calm left / sharp jagged right -->
+  <path d="M170 220 q60 -60 130 -60" fill="none" stroke="#7ec9a0" stroke-width="6" stroke-linecap="round"/>
+  <path d="M310 220 l20 -40 l-10 -10 l30 -30 l-8 30 l24 -12 l-30 46 z" fill="#e50914"/>
+  <circle cx="300" cy="180" r="28" fill="none" stroke="#f2f2f2" stroke-width="4" opacity="0.8"/>
+  <polygon points="292,168 292,192 314,180" fill="#f2f2f2" opacity="0.8"/>
+  <rect x="230" y="270" width="140" height="10" rx="5" fill="#e50914"/>
+</svg>

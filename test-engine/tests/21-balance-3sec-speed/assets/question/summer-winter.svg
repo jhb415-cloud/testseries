@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="10" fill="#0a0e1a" stroke="#1e2b4a" stroke-width="6"/>
+  <!-- scanlines -->
+  <g opacity="0.15">
+    <rect x="4" y="20" width="592" height="2" fill="#00e5ff"/>
+    <rect x="4" y="60" width="592" height="2" fill="#00e5ff"/>
+    <rect x="4" y="100" width="592" height="2" fill="#00e5ff"/>
+  </g>
+  <!-- left: pixel sun (summer) -->
+  <g>
+    <rect x="100" y="120" width="24" height="24" fill="#ff8a3d"/>
+    <rect x="76" y="144" width="24" height="24" fill="#ff8a3d"/>
+    <rect x="124" y="144" width="24" height="24" fill="#ff8a3d"/>
+    <rect x="100" y="168" width="24" height="24" fill="#ff8a3d"/>
+    <rect x="60" y="100" width="16" height="16" fill="#ff8a3d"/>
+    <rect x="148" y="100" width="16" height="16" fill="#ff8a3d"/>
+    <rect x="60" y="188" width="16" height="16" fill="#ff8a3d"/>
+    <rect x="148" y="188" width="16" height="16" fill="#ff8a3d"/>
+  </g>
+  <!-- suitcase center -->
+  <rect x="272" y="150" width="56" height="44" fill="#e7fbff" stroke="#0a0e1a" stroke-width="4"/>
+  <rect x="288" y="138" width="24" height="14" fill="none" stroke="#e7fbff" stroke-width="6"/>
+  <!-- right: pixel snowflake (winter) -->
+  <g fill="#00e5ff">
+    <rect x="464" y="120" width="16" height="72"/>
+    <rect x="432" y="152" width="80" height="16"/>
+    <rect x="440" y="128" width="16" height="16"/>
+    <rect x="488" y="128" width="16" height="16"/>
+    <rect x="440" y="176" width="16" height="16"/>
+    <rect x="488" y="176" width="16" height="16"/>
+  </g>
+  <text x="300" y="300" font-family="Arial, sans-serif" font-size="20" fill="#9fd8e6" text-anchor="middle" opacity="0.7">VS</text>
+</svg>

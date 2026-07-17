@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="10" fill="#0a0e1a" stroke="#1e2b4a" stroke-width="6"/>
+  <!-- left: pixel storefront with sparkle (new hip place) -->
+  <rect x="86" y="140" width="120" height="90" fill="#141b30" stroke="#ff8a3d" stroke-width="6"/>
+  <rect x="86" y="140" width="120" height="20" fill="#ff8a3d"/>
+  <rect x="126" y="180" width="40" height="50" fill="#0a0e1a" stroke="#ff8a3d" stroke-width="4"/>
+  <polygon points="230,110 236,126 252,126 239,136 244,152 230,142 216,152 221,136 208,126 224,126" fill="#ff8a3d"/>
+  <!-- right: pixel door with loyalty stamp (usual spot) -->
+  <rect x="420" y="130" width="90" height="100" fill="#141b30" stroke="#00e5ff" stroke-width="6"/>
+  <rect x="450" y="180" width="30" height="50" fill="#0a0e1a" stroke="#00e5ff" stroke-width="4"/>
+  <circle cx="465" cy="150" r="14" fill="none" stroke="#00e5ff" stroke-width="4"/>
+  <path d="M459 150 l4 5 l9 -10" stroke="#00e5ff" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <text x="300" y="300" font-family="Arial, sans-serif" font-size="20" fill="#9fd8e6" text-anchor="middle" opacity="0.7">VS</text>
+</svg>

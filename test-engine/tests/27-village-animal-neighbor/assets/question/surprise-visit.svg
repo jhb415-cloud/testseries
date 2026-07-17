@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="24" fill="#fdf3d7" stroke="#e8d7a8" stroke-width="6"/>
+  <!-- cottage door -->
+  <rect x="240" y="140" width="120" height="150" rx="10" fill="#ffffff" stroke="#4a3a20" stroke-width="5"/>
+  <rect x="270" y="180" width="60" height="110" rx="6" fill="#ffb347" opacity="0.4"/>
+  <circle cx="316" cy="235" r="6" fill="#4a3a20"/>
+  <!-- paw print approaching -->
+  <g fill="#8fd06a">
+    <ellipse cx="430" cy="270" rx="10" ry="14"/>
+    <circle cx="412" cy="252" r="6"/>
+    <circle cx="428" cy="246" r="6"/>
+    <circle cx="446" cy="250" r="6"/>
+  </g>
+  <path d="M340 160 l16 -16 M356 176 l16 -16" stroke="#4a3a20" stroke-width="4" opacity="0.6"/>
+</svg>

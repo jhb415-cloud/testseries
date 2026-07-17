@@ -1,0 +1,85 @@
+/* test-engine — themes/streamcard.css — 신규 테마: 스트리밍 앱 상세페이지 목업 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   life-drama-genre(#24)가 1호 사용처. 다크 앱 크롬 배경 + 레드 포인트 + 파스텔 장르칩으로
+   "넷플릭스류 스트리밍 앱" 톤을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #141414; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background: linear-gradient(180deg, #1a1a1a 0%, #0e0e0e 100%);
+  color: #f2f2f2;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #1c1c1c;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Bebas Neue", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #b3b3b3; }
+
+.te-chip {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #f2c9c9;
+  border-radius: 999px;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.te-btn {
+  background: #e50914;
+  color: #ffffff;
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0 4px 14px rgba(229, 9, 20, 0.4);
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+.te-btn-primary { background: #e50914; box-shadow: 0 4px 14px rgba(229, 9, 20, 0.4); }
+.te-btn-secondary { background: #2c2c2c; color: #f2f2f2; border: 1px solid rgba(255,255,255,0.15); box-shadow: none; }
+.te-btn-accent { background: #e50914; box-shadow: 0 4px 14px rgba(229, 9, 20, 0.4); }
+.te-btn-kakao { background: #FEE500; color: #191600; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+.te-btn-choice {
+  background: #262626;
+  color: #f2f2f2;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: rgba(229, 9, 20, 0.18); border-color: #e50914; }
+
+.te-progress-track { background: #2c2c2c; border-radius: 999px; }
+.te-progress-fill { background: #e50914; border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #f2f2f2;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(255, 255, 255, 0.15);
+  border-top-color: #e50914;
+}

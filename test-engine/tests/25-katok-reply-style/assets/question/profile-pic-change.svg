@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" fill="#d8c19a"/>
+  <!-- blue sticky note with profile circle + question mark doodle -->
+  <g transform="rotate(-3 300 180)">
+    <rect x="200" y="100" width="200" height="170" fill="#c9e4ff"/>
+    <circle cx="270" cy="175" r="40" fill="none" stroke="#2a2a2a" stroke-width="5"/>
+    <path d="M330 150 q20 -20 40 0 q0 20 -20 24 v10" stroke="#2a2a2a" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <circle cx="350" cy="205" r="4" fill="#2a2a2a"/>
+  </g>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" fill="#f3e8cc" stroke="#8b6c2f" stroke-width="6"/>
+  <rect x="16" y="16" width="568" height="328" fill="none" stroke="#8b6c2f" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.6"/>
+  <!-- shield with crossed sword and dagger stitched icon -->
+  <path d="M300 100 l90 30 v70 q0 80 -90 110 q-90 -30 -90 -110 v-70 z" fill="none" stroke="#16584a" stroke-width="6"/>
+  <path d="M260 150 l80 80 M340 150 l-80 80" stroke="#a8471f" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="300" cy="190" r="6" fill="#8b6c2f"/>
+</svg>

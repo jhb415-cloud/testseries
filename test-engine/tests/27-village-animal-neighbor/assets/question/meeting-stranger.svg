@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="24" fill="#fdf3d7" stroke="#e8d7a8" stroke-width="6"/>
+  <!-- wooden fence gate -->
+  <g stroke="#4a3a20" stroke-width="6">
+    <path d="M200 300 v-90 M240 300 v-90 M240 255 h-40 M240 210 h-40"/>
+    <path d="M400 300 v-90 M440 300 v-90 M400 255 h40 M400 210 h40"/>
+  </g>
+  <!-- shadow figure approaching between -->
+  <ellipse cx="300" cy="230" rx="26" ry="32" fill="#9a8a6a" opacity="0.7"/>
+  <circle cx="300" cy="185" r="18" fill="#9a8a6a" opacity="0.7"/>
+</svg>

@@ -1,0 +1,265 @@
+{
+  "id": "past-life-death-cause",
+  "title": "전생 사망 원인 판별기",
+  "description": "현재 성격과 습관으로 역추적하는 전생 사망 원인. 결과지는 부고 기사 스타일.",
+  "hashtags": [
+    "전생테스트",
+    "심리테스트",
+    "부고밈",
+    "다크유머"
+  ],
+  "theme": "tarot",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 245,
+  "engagement_key": "site-pastlifedeath-plays",
+  "scoring_type": "type",
+  "loading": {
+    "text": "전생 사망 기록 조회 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "친구가 위험한 일을 벌이려 한다.",
+      "image": "assets/question/friend-risk.svg",
+      "choices": [
+        {
+          "label": "말리다가 같이 휘말려 버린다",
+          "type": "오지랖으로요절"
+        },
+        {
+          "label": "알아서 하겠지, 내 할 일이나 한다",
+          "type": "게을러서굶음"
+        }
+      ]
+    },
+    {
+      "text": "큰돈이 생겼을 때 나는",
+      "image": null,
+      "choices": [
+        {
+          "label": "더 불리려다 무리한 곳에 손을 댄다",
+          "type": "돈욕심에화를당함"
+        },
+        {
+          "label": "완벽하게 굴리려다 스트레스만 쌓인다",
+          "type": "너무완벽해서스트레스사"
+        }
+      ]
+    },
+    {
+      "text": "낯선 문이 열려 있는 걸 봤다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "뭐가 있는지 궁금해서 일단 들어가 본다",
+          "type": "호기심에고양이처럼"
+        },
+        {
+          "label": "누가 열어놨겠지, 신경 안 쓰고 지나간다",
+          "type": "게을러서굶음"
+        }
+      ]
+    },
+    {
+      "text": "좋아하는 사람이 다른 사람을 좋아한다.",
+      "image": "assets/question/crush-likes-another.svg",
+      "choices": [
+        {
+          "label": "그래도 진심을 다해 마음을 표현한다",
+          "type": "사랑에배신당함"
+        },
+        {
+          "label": "감정 소모하기 싫어서 빠르게 정리한다",
+          "type": "너무완벽해서스트레스사"
+        }
+      ]
+    },
+    {
+      "text": "동네에 이상한 소문이 돌고 있다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "사실관계를 바로잡겠다며 나서서 참견한다",
+          "type": "오지랖으로요절"
+        },
+        {
+          "label": "나랑 상관없으니 조용히 지켜만 본다",
+          "type": "게을러서굶음"
+        }
+      ]
+    },
+    {
+      "text": "위험해 보이는 새로운 투자 기회가 왔다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "대박 날 것 같아서 크게 베팅한다",
+          "type": "돈욕심에화를당함"
+        },
+        {
+          "label": "궁금해서 일단 발을 담가 본다",
+          "type": "호기심에고양이처럼"
+        }
+      ]
+    },
+    {
+      "text": "계획한 일이 틀어지기 시작했다.",
+      "image": "assets/question/plan-falls-apart.svg",
+      "choices": [
+        {
+          "label": "완벽하게 되돌리려다 몸살이 날 지경이다",
+          "type": "너무완벽해서스트레스사"
+        },
+        {
+          "label": "어차피 안 될 거 그냥 놔둔다",
+          "type": "게을러서굶음"
+        }
+      ]
+    },
+    {
+      "text": "연인이 서운한 티를 낸다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "다 맞춰주려다 정작 나를 잃어간다",
+          "type": "사랑에배신당함"
+        },
+        {
+          "label": "이유가 궁금해서 파고들다 일이 커진다",
+          "type": "호기심에고양이처럼"
+        }
+      ]
+    },
+    {
+      "text": "회사에서 부당한 일을 목격했다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "참지 못하고 바로 문제를 제기한다",
+          "type": "오지랖으로요절"
+        },
+        {
+          "label": "괜히 나섰다가 손해 볼까 봐 가만있는다",
+          "type": "돈욕심에화를당함"
+        }
+      ]
+    },
+    {
+      "text": "남들이 다 하는 재테크 얘기를 들었다.",
+      "image": "assets/question/investment-fomo.svg",
+      "choices": [
+        {
+          "label": "놓치기 싫어서 무리해서 따라 들어간다",
+          "type": "돈욕심에화를당함"
+        },
+        {
+          "label": "나만 뒤처지는 것 같아 불안해진다",
+          "type": "너무완벽해서스트레스사"
+        }
+      ]
+    },
+    {
+      "text": "위험하다고 소문난 곳에 초대받았다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "소문이 진짜인지 직접 확인하러 간다",
+          "type": "호기심에고양이처럼"
+        },
+        {
+          "label": "굳이 갈 필요 없다며 거절한다",
+          "type": "게을러서굶음"
+        }
+      ]
+    },
+    {
+      "text": "사랑하는 사람이 힘들어할 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "내 모든 걸 걸고 곁을 지킨다",
+          "type": "사랑에배신당함"
+        },
+        {
+          "label": "완벽한 해결책을 찾을 때까지 스스로를 몰아붙인다",
+          "type": "너무완벽해서스트레스사"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "type": "오지랖으로요절",
+      "title": "오지랖으로요절",
+      "subtitle": "故 오지라퍼, 향년 -- 세",
+      "image": "assets/result/meddler-death.webp",
+      "traits": [
+        "남의 일에도 진심을 다하다 결국 제 명에 못 삼",
+        "불의를 보면 참지 못하고 나서는 정의감",
+        "크고 작은 사건에 늘 휘말림"
+      ],
+      "tip": "사인: 남의 싸움에 낀 것"
+    },
+    {
+      "type": "게을러서굶음",
+      "title": "게을러서굶음",
+      "subtitle": "故 게으름뱅이",
+      "image": "assets/result/lazy-starve.webp",
+      "traits": [
+        "웬만한 일은 다 흘려보내고 최소한의 에너지로 생활",
+        "급한 일도 어떻게든 되겠지로 넘김",
+        "큰일을 당했을 가능성이 높음"
+      ],
+      "tip": "유언: 조금만 더 누워있을게"
+    },
+    {
+      "type": "사랑에배신당함",
+      "title": "사랑에배신당함",
+      "subtitle": "故 순정파",
+      "image": "assets/result/love-betrayed.webp",
+      "traits": [
+        "누군가를 사랑하면 모든 걸 다 내어줌",
+        "그 헌신이 늘 돌아오는 건 아니었음",
+        "다시 사랑에 뛰어드는 게 바로 당신"
+      ],
+      "tip": "사인: 못 믿을 사람을 믿은 죄"
+    },
+    {
+      "type": "돈욕심에화를당함",
+      "title": "돈욕심에화를당함",
+      "subtitle": "故 투자왕",
+      "image": "assets/result/greed-doomed.webp",
+      "traits": [
+        "기회다 싶으면 무리해서라도 뛰어듦",
+        "더 벌고 싶은 마음이 앞서다 화를 입음",
+        "과한 욕심은 늘 조심할 필요"
+      ],
+      "tip": "사인: 몰빵의 저주"
+    },
+    {
+      "type": "너무완벽해서스트레스사",
+      "title": "너무완벽해서스트레스사",
+      "subtitle": "故 완벽주의자",
+      "image": "assets/result/perfectionist-stress.webp",
+      "traits": [
+        "뭐든 완벽하게 해내야 직성이 풀림",
+        "스스로를 몰아붙이다 몸과 마음이 먼저 지침",
+        "적당히 내려놓는 법이 필요"
+      ],
+      "tip": "사인: 스스로에게 준 압박"
+    },
+    {
+      "type": "호기심에고양이처럼",
+      "title": "호기심에고양이처럼",
+      "subtitle": "故 호기심쟁이",
+      "image": "assets/result/curious-cat.webp",
+      "traits": [
+        "궁금한 건 못 참고 일단 확인해야 직성이 풀림",
+        "그 호기심 덕분에 새로운 걸 많이 경험",
+        "위험한 상황에도 자주 발을 들임"
+      ],
+      "tip": "유언: 가보면 알겠지"
+    }
+  ]
+}

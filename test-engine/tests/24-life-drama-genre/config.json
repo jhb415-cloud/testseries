@@ -1,0 +1,225 @@
+{
+  "id": "life-drama-genre",
+  "title": "내 인생 장르 판별기",
+  "description": "내 인생이 드라마라면 무슨 장르일까? 넷플릭스 상세페이지 스타일로 알아보는 인생 장르.",
+  "hashtags": [
+    "인생드라마",
+    "심리테스트",
+    "넷플릭스밈",
+    "장르테스트"
+  ],
+  "theme": "streamcard",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 187,
+  "engagement_key": "site-lifegenre-plays",
+  "scoring_type": "type",
+  "loading": {
+    "text": "인생 장르 편성 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "갈등 상황이 생기면 내 스토리는?",
+      "image": "assets/question/conflict-story.svg",
+      "choices": [
+        {
+          "label": "조용히 해결하고 훈훈하게 마무리된다",
+          "type": "잔잔한힐링드라마"
+        },
+        {
+          "label": "반드시 되갚아야 직성이 풀린다",
+          "type": "막장복수극"
+        }
+      ]
+    },
+    {
+      "text": "내 하루를 한 단어로 요약하면?",
+      "image": null,
+      "choices": [
+        {
+          "label": "어쩌다 자꾸 웃긴 사고가 터진다",
+          "type": "좌충우돌시트콤"
+        },
+        {
+          "label": "무게감 있게 혼자 다니는 편이다",
+          "type": "느와르누아르"
+        }
+      ]
+    },
+    {
+      "text": "인간관계에서 나는",
+      "image": null,
+      "choices": [
+        {
+          "label": "왁자지껄하게 사람들과 어울리는 걸 좋아한다",
+          "type": "좌충우돌시트콤"
+        },
+        {
+          "label": "혼자 조용히 사색하는 시간이 더 좋다",
+          "type": "느와르누아르"
+        }
+      ]
+    },
+    {
+      "text": "위기가 닥쳤을 때 내 선택은?",
+      "image": "assets/question/crisis-choice.svg",
+      "choices": [
+        {
+          "label": "끝까지 되갚아 응징하는 쪽을 택한다",
+          "type": "막장복수극"
+        },
+        {
+          "label": "용서하고 평온을 되찾는 쪽을 택한다",
+          "type": "잔잔한힐링드라마"
+        }
+      ]
+    },
+    {
+      "text": "연애할 때 나는",
+      "image": null,
+      "choices": [
+        {
+          "label": "상상 속 로맨스처럼 감성이 풍부해진다",
+          "type": "로맨스판타지"
+        },
+        {
+          "label": "감정 소모 없이 담백하게 만난다",
+          "type": "느와르누아르"
+        }
+      ]
+    },
+    {
+      "text": "예상치 못한 반전이 생긴다면?",
+      "image": null,
+      "choices": [
+        {
+          "label": "그 반전이 이야기를 더 흥미롭게 만든다",
+          "type": "느와르누아르"
+        },
+        {
+          "label": "그런 거 없이 잔잔하게 흘러가면 좋겠다",
+          "type": "잔잔한힐링드라마"
+        }
+      ]
+    },
+    {
+      "text": "에피소드 하나의 톤을 고른다면?",
+      "image": "assets/question/episode-tone.svg",
+      "choices": [
+        {
+          "label": "코믹하고 정신없는 텐션이 좋다",
+          "type": "좌충우돌시트콤"
+        },
+        {
+          "label": "긴장감 넘치는 전개가 좋다",
+          "type": "막장복수극"
+        }
+      ]
+    },
+    {
+      "text": "인생에서 로맨스 비중은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "판타지 소설처럼 큰 비중을 차지한다",
+          "type": "로맨스판타지"
+        },
+        {
+          "label": "거의 없다시피 하다",
+          "type": "느와르누아르"
+        }
+      ]
+    },
+    {
+      "text": "예상되는 결말은?",
+      "image": "assets/question/expected-ending.svg",
+      "choices": [
+        {
+          "label": "다 응징하고 통쾌하게 끝난다",
+          "type": "막장복수극"
+        },
+        {
+          "label": "모두가 화해하고 평화롭게 끝난다",
+          "type": "잔잔한힐링드라마"
+        }
+      ]
+    },
+    {
+      "text": "인생 명대사를 남긴다면?",
+      "image": null,
+      "choices": [
+        {
+          "label": "아 몰라, 일단 사고부터 치고 보자",
+          "type": "좌충우돌시트콤"
+        },
+        {
+          "label": "다 지나갈 거야, 괜찮아질 거야",
+          "type": "잔잔한힐링드라마"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "type": "잔잔한힐링드라마",
+      "title": "잔잔한힐링드라마",
+      "subtitle": "시청등급 전체관람가 · 시즌 3개",
+      "image": "assets/result/healing-drama.webp",
+      "traits": [
+        "갈등이 생겨도 결국 훈훈하게 마무리됨",
+        "소소한 일상의 위로가 주된 서사",
+        "보는 사람도 마음이 편안해지는 힐링 콘텐츠"
+      ],
+      "tip": "명대사 괜찮아, 다 지나갈 거야 · 별점 4.5, 편안함 보장"
+    },
+    {
+      "type": "막장복수극",
+      "title": "막장복수극",
+      "subtitle": "시청등급 15세 이상 · 시즌 8개(무한 연장)",
+      "image": "assets/result/revenge-drama.webp",
+      "traits": [
+        "당한 만큼 반드시 되갚아야 직성이 풀림",
+        "갈등이 생기면 절대 그냥 넘어가지 않음",
+        "끝까지 파고드는 전개가 매력"
+      ],
+      "tip": "명대사 내가 이대로 끝낼 것 같아? · 시청률 보장 각"
+    },
+    {
+      "type": "좌충우돌시트콤",
+      "title": "좌충우돌시트콤",
+      "subtitle": "시청등급 15세 이상 · 시즌 4개",
+      "image": "assets/result/sitcom-genre.webp",
+      "traits": [
+        "조용히 지나가는 날이 거의 없음",
+        "본인은 진지한데 주변은 다 웃김",
+        "예측불가능한 전개"
+      ],
+      "tip": "명대사 아 몰라 · 매회 사고, 매회 웃김"
+    },
+    {
+      "type": "느와르누아르",
+      "title": "느와르누아르",
+      "subtitle": "시청등급 15세 이상 · 시즌 2개(짧고 굵게)",
+      "image": "assets/result/noir-genre.webp",
+      "traits": [
+        "무게감 있고 고독한 분위기",
+        "말이 많지 않아도 존재감이 확실함",
+        "예상치 못한 반전이 매력 포인트"
+      ],
+      "tip": "명대사(대사 없음, 눈빛으로 다 설명) · 컬트적인 인기"
+    },
+    {
+      "type": "로맨스판타지",
+      "title": "로맨스판타지",
+      "subtitle": "시청등급 12세 이상 · 시즌 5개",
+      "image": "assets/result/romance-fantasy.webp",
+      "traits": [
+        "사랑이 인생 서사의 중심",
+        "현실보다 조금 더 낭만적이고 감성적인 전개",
+        "상상력이 풍부한 게 매력"
+      ],
+      "tip": "명대사 운명이라는 게 있다면 아마 너일 거야 · 팬층 두터움"
+    }
+  ]
+}
