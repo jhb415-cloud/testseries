@@ -13,6 +13,7 @@
   "seed_count": 210,
   "engagement_key": "site-balance3sec-plays",
   "scoring_type": "type",
+  "timer_sec": 3,
   "loading": {
     "text": "순간 반응 분석 중..",
     "duration_ms": 2000
