@@ -4652,6 +4652,16 @@ const THEME_TITLE_FONTS = {
   'double-exposure':{ family: '"Oswald","Noto Sans KR",sans-serif', google: 'family=Oswald:wght@400;500;600;700' },
   'ink-wash':       { family: '"Nanum Myeongjo","Noto Sans KR",serif', google: 'family=Nanum+Myeongjo:wght@400;700;800' },
   'cyber-court':    { family: '"Orbitron","Noto Sans KR",sans-serif', google: 'family=Orbitron:wght@600;700;800;900' },
+  arcade:           { family: '"Press Start 2P","Noto Sans KR",sans-serif', google: 'family=Press+Start+2P' },
+  camcorder:        { family: '"IBM Plex Mono","Noto Sans KR",monospace', google: 'family=IBM+Plex+Mono:wght@400;600;700' },
+  tarot:            { family: '"Marcellus SC","Noto Serif KR",serif', google: 'family=Marcellus+SC' },
+  streamcard:       { family: '"Bebas Neue","Noto Sans KR",sans-serif', google: 'family=Bebas+Neue' },
+  stickynote:       { family: '"Nanum Pen Script","Noto Sans KR",cursive', google: 'family=Nanum+Pen+Script' },
+  tapestry:         { family: '"EB Garamond","Noto Serif KR",serif', google: 'family=EB+Garamond:wght@500;600;700' },
+  diorama:          { family: '"Fredoka","Noto Sans KR",sans-serif', google: 'family=Fredoka:wght@500;600;700' },
+  tradefloor:       { family: '"Space Mono","Noto Sans KR",monospace', google: 'family=Space+Mono:wght@400;700' },
+  manual:           { family: '"Space Grotesk","Noto Sans KR",sans-serif', google: 'family=Space+Grotesk:wght@500;600;700' },
+  stencil:          { family: '"Stardos Stencil","Noto Sans KR",sans-serif', google: 'family=Stardos+Stencil:wght@400;700' },
 };
 const _loadedThemeFonts = new Set();
 function themeTitleFontFamily(theme) {

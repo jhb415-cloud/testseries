@@ -53,14 +53,15 @@ SVG 제작 + config.json 연결까지 진행(상세 컨셉은 `style-guide.md` "
 - [x] #29 dopamine-source-type — 완료 (2026-07-17, theme: manual)
 - [x] #30 zombie-apocalypse-survival — 완료 (2026-07-17, theme: stencil)
 
-**#21~30 전체 콘텐츠 제작 완료(문항+답변+이미지+문항 SVG+채점 스키마).** 사이트 연동
-(`data.js`/`app.js`/`sections.json`/`sitemap.xml`, tests/index.json 상태는 이미 갱신)은 아직 —
-사용자 승인 후 별도 세션에서 진행.
+**#21~30 전체 콘텐츠 제작 + 사이트 연동 완료(2026-07-17).** `data.js`(externalTests 10개 추가,
+baseCount/engagementKey/theme이 각 config.json의 seed_count/engagement_key/theme과 정확히 일치
+확인), `app.js`(THEME_TITLE_FONTS에 신규 테마 10종 등록), `sections.json`(psych-2/3/4 그룹에 분배 —
+psych-1엔 이번엔 해당 없음), `sitemap.xml`/`sitemap-main.xml`(10개 URL 추가), `llms.txt`/
+`llms-full.txt`(21종→31종 갱신) 전부 반영 후 push 완료.
 
 ## 다음 배치 후보
-#21~30 콘텐츠 제작은 완료, 사이트 연동만 남음. #31~60(2026-07-16 스켈레톤 생성분, 문항·결과
-텍스트만 있고 이미지 컨셉 미정)이 다음 배치 후보 — 시작 전 레퍼런스 이미지 확보 절차(4-4)부터
-진행할 것.
+#21~30 완료. #31~60(2026-07-16 스켈레톤 생성분, 문항·결과 텍스트만 있고 이미지 컨셉 미정)이
+다음 배치 후보 — 시작 전 레퍼런스 이미지 확보 절차(4-4)부터 진행할 것.
 
 ## 품질 개선 — MBTI존 9개(#11~18,#20) 16종 결과 세분화 (2026-07-12)
 사용자가 "#19 빼고는 결과가 다 하나뿐이라 노잼"이라고 지적해 진행. `resultTemplate` 공용 템플릿

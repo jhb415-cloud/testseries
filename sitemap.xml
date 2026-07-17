@@ -110,4 +110,54 @@
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/21-balance-3sec-speed/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/22-ai-daily-documentary/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/23-past-life-death-cause/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/24-life-drama-genre/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/25-katok-reply-style/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/26-medieval-job-past-life/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/27-village-animal-neighbor/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/28-hold-or-sell-index/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/29-dopamine-source-type/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/30-zombie-apocalypse-survival/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
 </urlset>
