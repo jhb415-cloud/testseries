@@ -1,4 +1,4 @@
-/* test-engine v9 (하단 버튼바 fixed→sticky 전환, 겹침 버그 근본 수정) | engine.js — 공통 로직
+/* test-engine v12 (config.awaken_meter #41 각성 게이지 추가) | engine.js — 공통 로직
    (config 로드, 화면 전환, 채점, 렌더, 결과 공유카드 저장, 관련 테스트 배너, 카카오톡 공유,
    메인 사이트로 돌아가기 링크) 순수 바닐라 JS. 외부 라이브러리 없음. 기능별 함수로 분리해 유지보수.
    결과 화면의 "이미지 저장" 기능은 별도 파일 result-card.js(window.TestEngineResultCard)에 위임한다.
@@ -89,7 +89,17 @@
    ⑤ 신규 `scoring_type: 'reaction_time'`: 문항 렌더 시각(`state.questionShownAt`)과 클릭 시각의
       차이를 `state.reactionTimes[]`에 쌓아 평균을 `results[].min/max`(ms 단위)로 매칭한다(#39).
       결과 텍스트의 `{avgSec}` 플레이스홀더는 `applyStatTemplate()`이 실제 평균(초)으로 치환한다
-      (기존 `{tag}` 치환 패턴과 동일 방식). */
+      (기존 `{tag}` 치환 패턴과 동일 방식).
+
+   v11(2026-07-18): MBTI존 41~60 배치용 novel mechanic 확장 — `config.awaken_meter`(#41 히어로
+   각성). mbti4 채점이 이미 쌓아둔 축별 카운트(state.mbtiCounts)를 진행 중에 미리 꺼내, 문항을
+   풀수록 "각성률(진행률) + 4축(E/I·N/S·T/F·J/P) 우세도 막대"가 차오르는 진행형 시각화를
+   문항 화면 상단에 얹는다. 새 scoring_type이 아니라 mbti4의 파생값을 렌더링만 하는 것이라
+   채점 결과에는 영향이 없고(computeAwakenTargets는 순수 함수), `awaken_meter`가 없는 config는
+   awakenMeterHtml/animateAwakenMeter가 호출되지 않아 렌더링에 아무 변화가 없다(하위호환).
+   매 문항 렌더 때 직전 프레임값(state.awakenPrev)에서 목표값으로 CSS width 트랜지션을 걸어
+   "스르륵 차오르는" 애니메이션을 만든다. #50(스탯 시트)은 STEP 6의 {ebar}류를, #58(전생/환생)은
+   STEP 5의 intro_input을 재사용하므로 엔진 변경 없이 config만으로 처리된다. */
 
 (function () {
   'use strict';
@@ -97,7 +107,7 @@
   // engine.js 자체가 바뀔 때마다 이 번호를 올리고, 위 헤더 안내대로 10개 index.html의
   // engine.js/engine.css/result-card.js ?v=도 같은 번호로 맞출 것 — themes/*.css는
   // injectThemeCSS()가 이 상수를 그대로 재사용해 자동으로 캐시버스팅된다(파일별로 안 챙겨도 됨).
-  var ENGINE_ASSET_VERSION = '11';
+  var ENGINE_ASSET_VERSION = '12';
 
   // 최상단에서 즉시 캡처해야 함 — defer 스크립트라도 동기 실행 구간에서만 currentScript가 유효함
   var ENGINE_SCRIPT = document.currentScript;
@@ -126,7 +136,12 @@
     pathLength: 0,         // config.questions_tree(#30) — 진행률 표시용
     questionShownAt: 0,    // scoring_type 'reaction_time'(#39)
     questionLocked: false, // 타이머/클릭 이중 진행 방지(#21)
-    timerHandle: null      // config.timer_sec(#21) — clearActiveTimer() 대상
+    timerHandle: null,     // config.timer_sec(#21) — clearActiveTimer() 대상
+    // v11: config.awaken_meter(#41) — 문항을 풀수록 4개 축 게이지가 차오르는 진행형 시각화의
+    // "직전 프레임" 값(각 축의 앞글자 우세 %, overall=각성률 %). 다음 문항 렌더 때 이 값에서
+    // 목표값으로 CSS 트랜지션을 걸어 "스르륵 차오르는" 애니메이션을 만든다. awaken_meter를 안
+    // 쓰는 config는 이 값이 초기값으로만 남고 아무 로직에도 관여하지 않는다.
+    awakenPrev: { overall: 0, EI: 50, NS: 50, TF: 50, JP: 50 }
   };
 
   var MBTI_PAIRS = [['E', 'I'], ['S', 'N'], ['T', 'F'], ['J', 'P']];
@@ -294,6 +309,7 @@
     state.mbtiCountsInner = makeMbtiCounter();
     state.timeoutCount = 0;
     state.reactionTimes = [];
+    state.awakenPrev = { overall: 0, EI: 50, NS: 50, TF: 50, JP: 50 }; // v11(#41)
     state.currentNode = c.questions_tree ? c.start_node : '';
     state.pathLength = 0;
     state.questionLocked = false;
@@ -336,6 +352,9 @@
         '</div>'
       : '';
 
+    // config.awaken_meter(#41): 각성률 + 4축 게이지 (mbti4 전용, 이미 쌓인 카운트 기준)
+    var awakenHtml = c.awaken_meter ? awakenMeterHtml() : '';
+
     var choicesHtml;
     if (c.slider_ui) {
       var mid = Math.floor((q.choices.length - 1) / 2);
@@ -368,6 +387,7 @@
         '</div>' +
         '<div class="te-question-body">' +
           '<p class="te-question-counter">' + (idx + 1) + ' / ' + total + '</p>' +
+          awakenHtml +
           timerHtml +
           imageHtml +
           questionTextHtml +
@@ -406,6 +426,9 @@
         });
       });
     }
+
+    // config.awaken_meter(#41): 렌더 커밋 직후 직전 프레임값 → 이번 목표값으로 게이지를 채운다.
+    if (c.awaken_meter) animateAwakenMeter(idx, total);
 
     // config.timer_sec(#21): 렌더가 끝나고 리스너까지 붙은 뒤에 카운트다운을 시작한다.
     if (c.timer_sec) {
@@ -718,6 +741,63 @@
   function statBar(pct) {
     var filled = Math.max(0, Math.min(10, Math.round(pct / 10)));
     return '█'.repeat(filled) + '░'.repeat(10 - filled);
+  }
+
+  // v11: config.awaken_meter(#41 히어로 각성) — mbti4가 이미 쌓아둔 축별 카운트(state.mbtiCounts)를
+  // 진행 중에 미리 꺼내, "각성률(진행률)" + 4개 축 우세도 막대를 보여주는 진행형 시각화. 새
+  // scoring_type이 아니라 mbti4의 파생값을 렌더링만 하는 것이라 채점 결과엔 영향이 없고,
+  // awaken_meter가 없는 config는 아래 함수들이 호출되지 않는다(하위호환).
+  var AWAKEN_AXES = [
+    { key: 'EI', l: 'E', r: 'I', lWord: '표출', rWord: '내면' },
+    { key: 'NS', l: 'N', r: 'S', lWord: '직관', rWord: '감각' },
+    { key: 'TF', l: 'T', r: 'F', lWord: '이성', rWord: '감성' },
+    { key: 'JP', l: 'J', r: 'P', lWord: '계획', rWord: '즉흥' }
+  ];
+  function computeAwakenTargets(answered, total) {
+    var counts = state.mbtiCounts;
+    var t = { overall: total ? Math.round((answered / total) * 100) : 0 };
+    AWAKEN_AXES.forEach(function (ax) {
+      var a = counts[ax.l] || 0, b = counts[ax.r] || 0;
+      t[ax.key] = (a + b) ? Math.round((a / (a + b)) * 100) : 50; // 앞글자(왼쪽) 우세 %
+    });
+    return t;
+  }
+  function awakenMeterHtml() {
+    var p = state.awakenPrev; // 직전 프레임 값에서 시작 → 목표값으로 CSS 트랜지션 애니메이션
+    var rows = AWAKEN_AXES.map(function (ax) {
+      var lead = (state.mbtiCounts[ax.l] || 0) >= (state.mbtiCounts[ax.r] || 0) ? 'l' : 'r';
+      var tie = ((state.mbtiCounts[ax.l] || 0) + (state.mbtiCounts[ax.r] || 0)) === 0;
+      return '<div class="te-awaken-axis">' +
+          '<span class="te-awaken-side te-awaken-side-l' + (!tie && lead === 'l' ? ' is-lead' : '') + '">' +
+            ax.l + '<i>' + ax.lWord + '</i></span>' +
+          '<div class="te-awaken-track"><div class="te-awaken-fill" data-axis="' + ax.key + '" style="width:' + p[ax.key] + '%"></div></div>' +
+          '<span class="te-awaken-side te-awaken-side-r' + (!tie && lead === 'r' ? ' is-lead' : '') + '">' +
+            ax.r + '<i>' + ax.rWord + '</i></span>' +
+        '</div>';
+    }).join('');
+    return '<div class="te-awaken" id="te-awaken">' +
+        '<div class="te-awaken-head">' +
+          '<span class="te-awaken-label">⚡ 각성률</span>' +
+          '<span class="te-awaken-pct" id="te-awaken-pct">' + p.overall + '%</span>' +
+        '</div>' +
+        '<div class="te-awaken-overall"><div class="te-awaken-overall-fill" id="te-awaken-overall" style="width:' + p.overall + '%"></div></div>' +
+        '<div class="te-awaken-axes">' + rows + '</div>' +
+      '</div>';
+  }
+  // 렌더가 커밋된 뒤 목표값으로 폭을 옮겨(트랜지션 발동) 다음 프레임의 시작값으로 저장.
+  function animateAwakenMeter(answered, total) {
+    var t = computeAwakenTargets(answered, total);
+    requestAnimationFrame(function () {
+      var pctEl = qs('#te-awaken-pct');
+      var ovEl = qs('#te-awaken-overall');
+      if (pctEl) pctEl.textContent = t.overall + '%';
+      if (ovEl) ovEl.style.width = t.overall + '%';
+      qsa('#te-awaken .te-awaken-fill').forEach(function (el) {
+        var k = el.dataset.axis;
+        if (t.hasOwnProperty(k)) el.style.width = t[k] + '%';
+      });
+    });
+    state.awakenPrev = t;
   }
 
   function computeMbti4Result(c) {

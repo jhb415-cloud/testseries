@@ -13,8 +13,9 @@
   "seed_count": 296,
   "engagement_key": "site-mbtihero-plays",
   "scoring_type": "mbti4",
+  "awaken_meter": true,
   "loading": {
-    "text": "MBTI 히어로 각성 테스트 분석 중..",
+    "text": "각성률 100% 도달... 당신의 히어로 정체가 발현됩니다",
     "duration_ms": 2000
   },
   "related": [],

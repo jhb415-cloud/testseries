@@ -203,6 +203,10 @@
       "subtitle": "J라면 완벽한 공략으로 움직입니다",
       "image": "assets/result/ent-rpg-strategy-commander.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "파티 전체를 지휘하는 두뇌형 캐릭터",
         "큰 그림을 그리며 승리로 이끄는 전략가",
         "예상 밖의 변수에는 잠시 당황함"
@@ -215,6 +219,10 @@
       "subtitle": "P라면 임기응변으로 게임을 풉니다",
       "image": "assets/result/ent-rpg-strategy-commander.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "파티 전체를 지휘하는 두뇌형 캐릭터",
         "큰 그림을 그리며 승리로 이끄는 전략가",
         "예상 밖의 변수에는 잠시 당황함"
@@ -227,6 +235,10 @@
       "subtitle": "J라면 정확한 타이밍으로 움직입니다",
       "image": "assets/result/enf-rpg-support-healer.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "파티의 사기를 끌어올리는 서포터",
         "밝은 에너지로 팀을 이끔",
         "화력은 낮지만 팀워크 기여도가 최고"
@@ -239,6 +251,10 @@
       "subtitle": "P라면 즉흥적인 케어로 서포트합니다",
       "image": "assets/result/enf-rpg-support-healer.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "파티의 사기를 끌어올리는 서포터",
         "밝은 에너지로 팀을 이끔",
         "화력은 낮지만 팀워크 기여도가 최고"
@@ -251,6 +267,10 @@
       "subtitle": "J라면 정교한 딜사이클로 움직입니다",
       "image": "assets/result/est-rpg-melee-dealer.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "화끈한 화력으로 밀어붙이는 딜러",
         "확실한 데미지로 전투를 주도함",
         "신중함은 다소 부족한 편"
@@ -263,6 +283,10 @@
       "subtitle": "P라면 몸으로 부딪히며 딜을 넣습니다",
       "image": "assets/result/est-rpg-melee-dealer.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "화끈한 화력으로 밀어붙이는 딜러",
         "확실한 데미지로 전투를 주도함",
         "신중함은 다소 부족한 편"
@@ -275,6 +299,10 @@
       "subtitle": "J라면 철저한 어그로 관리로 움직입니다",
       "image": "assets/result/esf-rpg-shield-tank.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "파티를 몸으로 지켜내는 탱커",
         "따뜻한 마음으로 동료를 챙기며 최전방을 지킴"
       ],
@@ -286,6 +314,10 @@
       "subtitle": "P라면 순간 판단으로 막아냅니다",
       "image": "assets/result/esf-rpg-shield-tank.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "파티를 몸으로 지켜내는 탱커",
         "따뜻한 마음으로 동료를 챙기며 최전방을 지킴"
       ],
@@ -297,6 +329,10 @@
       "subtitle": "J라면 완성된 스킬 조합으로 움직입니다",
       "image": "assets/result/int-rpg-mage-dealer.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "압도적인 지력으로 전투를 설계하는 딜러",
         "혼자 파고드는 연구력 덕분에 최적의 빌드를 찾음",
         "파티플은 다소 서툼"
@@ -309,6 +345,10 @@
       "subtitle": "P라면 즉석 콤보로 딜을 넣습니다",
       "image": "assets/result/int-rpg-mage-dealer.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "압도적인 지력으로 전투를 설계하는 딜러",
         "혼자 파고드는 연구력 덕분에 최적의 빌드를 찾음",
         "파티플은 다소 서툼"
@@ -321,6 +361,10 @@
       "subtitle": "J라면 정확한 힐 타이밍으로 움직입니다",
       "image": "assets/result/inf-rpg-pure-healer.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "파티원의 상태를 세심히 살피는 힐러",
         "조용히 팀을 지탱하는 존재",
         "자기 관리는 소홀한 편"
@@ -333,6 +377,10 @@
       "subtitle": "P라면 그때그때 필요한 케어로 돕습니다",
       "image": "assets/result/inf-rpg-pure-healer.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "파티원의 상태를 세심히 살피는 힐러",
         "조용히 팀을 지탱하는 존재",
         "자기 관리는 소홀한 편"
@@ -345,6 +393,10 @@
       "subtitle": "J라면 완벽한 타이밍으로 움직입니다",
       "image": "assets/result/ist-rpg-assassin.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "조용히 정확하게 임무를 완수하는 암살자",
         "말은 없지만 실력만큼은 파티 최고 수준"
       ],
@@ -356,6 +408,10 @@
       "subtitle": "P라면 즉흥 기습으로 처리합니다",
       "image": "assets/result/ist-rpg-assassin.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "조용히 정확하게 임무를 완수하는 암살자",
         "말은 없지만 실력만큼은 파티 최고 수준"
       ],
@@ -367,6 +423,10 @@
       "subtitle": "J라면 정해진 패턴으로 움직입니다",
       "image": "assets/result/isf-rpg-summoner-support.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "섬세하게 파티를 서포트하는 소환사",
         "조용히 필요한 순간마다 도움을 줌"
       ],
@@ -378,6 +438,10 @@
       "subtitle": "P라면 즉흥적으로 소환수를 활용합니다",
       "image": "assets/result/isf-rpg-summoner-support.webp",
       "traits": [
+        "🗡️ 사교력 SOC   {ebar} {e}",
+        "🔮 직관력 INT   {nbar} {n}",
+        "❤️ 공감력 EMP   {fbar} {f}",
+        "🛡️ 계획성 PLN   {jbar} {j}",
         "섬세하게 파티를 서포트하는 소환사",
         "조용히 필요한 순간마다 도움을 줌"
       ],

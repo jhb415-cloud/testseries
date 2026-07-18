@@ -416,9 +416,9 @@
       "title": "MBTI 히어로 각성 테스트",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 41-mbti-hero-awakening, 사이트 연동 전(승인 대기)",
+      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 41-mbti-hero-awakening, novel mechanic 엔진필드 적용됨(engine v12) — 이미지 없음, 사이트 연동 전",
       "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
-      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
+      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현. || novel mechanic: awaken_meter(각성 게이지) — 문항 진행 중 4축(E/I·N/S·T/F·J/P) 우세도 막대 + 각성률이 실시간으로 차오르는 진행형 시각화. mbti4 파생값 렌더링일 뿐 채점 불변. engine v12 `config.awaken_meter:true`."
     },
     {
       "number": 42,
@@ -506,9 +506,9 @@
       "title": "MBTI 게임 캐릭터 스탯 시트",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 50-mbti-rpg-character-sheet, 사이트 연동 전(승인 대기)",
+      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 50-mbti-rpg-character-sheet, novel mechanic 엔진필드 적용됨(engine v12) — 이미지 없음, 사이트 연동 전",
       "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
-      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
+      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현. || novel mechanic: 스탯 시트 시각화 — 16종 결과 traits 앞에 실측 퍼센트 스탯바(`{ebar}/{e}`류, STEP6 재사용) 4줄 추가. 고정 스탯이 아니라 내 응답 기반 실측치."
     },
     {
       "number": 51,
@@ -586,9 +586,9 @@
       "title": "MBTI 전생 + 환생 예고 (윤회 세계관)",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 58-mbti-past-future-life, 사이트 연동 전(승인 대기)",
+      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 58-mbti-past-future-life, novel mechanic 엔진필드 적용됨(engine v12) — 이미지 없음, 사이트 연동 전",
       "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
-      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
+      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현. || novel mechanic: intro_input(띠 선택 드롭다운) 추가 — 결과 traits에 `{claimed}` 개인화(전생·환생 예고에 내 띠 반영), STEP5 재사용. 채점 불변."
     },
     {
       "number": 59,
@@ -610,5 +610,6 @@
       "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
       "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
     }
-  ]
+  ],
+  "_source_41_60": "No.41~60(MBTI존)의 기획 정본은 test-engine/mbti41~60.md 이다(사용자가 gwamol_test_ideas_2026_v0.0.6.md에서 MBTI존만 분리·저장). 41~60 문항/결과/오프닝·중반이벤트는 이 파일을 기준으로 제작한다."
 }

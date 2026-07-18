@@ -13,6 +13,23 @@
   "seed_count": 227,
   "engagement_key": "site-mbtipastfuture-plays",
   "scoring_type": "mbti4",
+  "intro_input": {
+    "label": "당신의 띠를 골라주세요 🐉 (전생·환생 예고에 반영돼요)",
+    "options": [
+      "쥐띠",
+      "소띠",
+      "호랑이띠",
+      "토끼띠",
+      "용띠",
+      "뱀띠",
+      "말띠",
+      "양띠",
+      "원숭이띠",
+      "닭띠",
+      "개띠",
+      "돼지띠"
+    ]
+  },
   "loading": {
     "text": "MBTI 전생 + 환생 예고 (윤회 세계관) 분석 중..",
     "duration_ms": 2000
@@ -203,6 +220,7 @@
       "subtitle": "지략가 장군",
       "image": "assets/result/ent-past-life-strategist-general.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 전략으로 나라를 지켰던 영혼",
         "현생 과제는 겸손 배우기"
       ],
@@ -214,6 +232,7 @@
       "subtitle": "지략가 장군",
       "image": "assets/result/ent-past-life-strategist-general.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 전략으로 나라를 지켰던 영혼",
         "현생 과제는 겸손 배우기"
       ],
@@ -225,6 +244,7 @@
       "subtitle": "유랑 시인",
       "image": "assets/result/enf-past-life-wandering-poet.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 노래와 이야기로 사람들을 위로했던 영혼",
         "현생 과제는 한곳에 정착하는 법"
       ],
@@ -236,6 +256,7 @@
       "subtitle": "유랑 시인",
       "image": "assets/result/enf-past-life-wandering-poet.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 노래와 이야기로 사람들을 위로했던 영혼",
         "현생 과제는 한곳에 정착하는 법"
       ],
@@ -247,6 +268,7 @@
       "subtitle": "용맹한 무사",
       "image": "assets/result/est-past-life-brave-warrior.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 몸으로 부딪히며 사람들을 지켰던 영혼",
         "현생 과제는 섬세함 배우기"
       ],
@@ -258,6 +280,7 @@
       "subtitle": "용맹한 무사",
       "image": "assets/result/est-past-life-brave-warrior.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 몸으로 부딪히며 사람들을 지켰던 영혼",
         "현생 과제는 섬세함 배우기"
       ],
@@ -269,6 +292,7 @@
       "subtitle": "마을의 어머니 같은 존재",
       "image": "assets/result/esf-past-life-village-mother.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 마을 사람들을 품고 돌봤던 영혼",
         "현생 과제는 나를 먼저 돌보기"
       ],
@@ -280,6 +304,7 @@
       "subtitle": "마을의 어머니 같은 존재",
       "image": "assets/result/esf-past-life-village-mother.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 마을 사람들을 품고 돌봤던 영혼",
         "현생 과제는 나를 먼저 돌보기"
       ],
@@ -291,6 +316,7 @@
       "subtitle": "은둔한 학자",
       "image": "assets/result/int-past-life-reclusive-scholar.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 혼자 진리를 탐구했던 영혼",
         "현생 과제는 세상과 소통하기"
       ],
@@ -302,6 +328,7 @@
       "subtitle": "은둔한 학자",
       "image": "assets/result/int-past-life-reclusive-scholar.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 혼자 진리를 탐구했던 영혼",
         "현생 과제는 세상과 소통하기"
       ],
@@ -313,6 +340,7 @@
       "subtitle": "예언자",
       "image": "assets/result/inf-past-life-prophet.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 조용히 미래를 예견했던 영혼",
         "현생 과제는 내 목소리 내기"
       ],
@@ -324,6 +352,7 @@
       "subtitle": "예언자",
       "image": "assets/result/inf-past-life-prophet.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 조용히 미래를 예견했던 영혼",
         "현생 과제는 내 목소리 내기"
       ],
@@ -335,6 +364,7 @@
       "subtitle": "충직한 문지기",
       "image": "assets/result/ist-past-life-loyal-gatekeeper.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 묵묵히 자리를 지켰던 영혼",
         "현생 과제는 마음을 표현하는 법"
       ],
@@ -346,6 +376,7 @@
       "subtitle": "충직한 문지기",
       "image": "assets/result/ist-past-life-loyal-gatekeeper.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 묵묵히 자리를 지켰던 영혼",
         "현생 과제는 마음을 표현하는 법"
       ],
@@ -357,6 +388,7 @@
       "subtitle": "마을 치유사",
       "image": "assets/result/isf-past-life-village-healer.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 조용히 사람들의 상처를 어루만졌던 영혼",
         "현생 과제는 나를 위한 치유"
       ],
@@ -368,6 +400,7 @@
       "subtitle": "마을 치유사",
       "image": "assets/result/isf-past-life-village-healer.webp",
       "traits": [
+        "🔮 {claimed}의 기운을 품고 이 유형으로 환생한 영혼",
         "전생에서 조용히 사람들의 상처를 어루만졌던 영혼",
         "현생 과제는 나를 위한 치유"
       ],

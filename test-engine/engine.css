@@ -237,6 +237,79 @@ body {
 }
 .te-result-stat { font-size: 14px; opacity: 0.75; margin-top: 8px; }
 
+/* config.awaken_meter(#41) — 문항을 풀수록 차오르는 각성률 + 4축 게이지.
+   색은 테마 텍스트색(currentColor)을 그대로 상속받아 어느 테마에서든 이질감 없이 얹힌다. */
+.te-awaken {
+  margin: 4px 0 18px;
+  padding: 12px 14px 14px;
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  border-radius: 14px;
+  background: rgba(127, 127, 127, 0.06);
+}
+.te-awaken-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+.te-awaken-label { font-size: 13px; font-weight: 800; letter-spacing: 0.04em; }
+.te-awaken-pct {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.te-awaken-overall {
+  height: 8px;
+  background: rgba(127, 127, 127, 0.18);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.te-awaken-overall-fill {
+  height: 100%;
+  width: 0;
+  background: currentColor;
+  border-radius: 999px;
+  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.te-awaken-axes {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.te-awaken-axis {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  align-items: center;
+  gap: 8px;
+}
+.te-awaken-side {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.1;
+  opacity: 0.4;
+  transition: opacity 0.35s ease;
+}
+.te-awaken-side i { display: block; font-size: 9px; font-style: normal; font-weight: 600; opacity: 0.85; }
+.te-awaken-side-l { text-align: right; }
+.te-awaken-side-r { text-align: left; }
+.te-awaken-side.is-lead { opacity: 1; }
+.te-awaken-track {
+  position: relative;
+  height: 7px;
+  background: rgba(127, 127, 127, 0.18);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.te-awaken-fill {
+  height: 100%;
+  width: 50%;
+  background: currentColor;
+  opacity: 0.85;
+  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* config.chat_ui(#25) — 상대 말풍선(좌)/내 답장 말풍선(우) */
 .te-chat-thread { display: flex; flex-direction: column; margin: 8px 0 20px; }
 .te-chat-bubble {
