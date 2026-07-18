@@ -1,0 +1,225 @@
+{
+  "id": "godsaeng-fail-type",
+  "title": "나의 갓생 실패 유형",
+  "description": "갓생 살자 실패담 공감 밈. 조롱이 아닌 위로하는 결과지.",
+  "hashtags": [
+    "갓생실패",
+    "심리테스트",
+    "자기계발밈",
+    "공감위로"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 205,
+  "engagement_key": "site-godsaengfail-plays",
+  "scoring_type": "type",
+  "loading": {
+    "text": "갓생 실패 패턴 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "갓생을 결심한 후 첫 행동은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "노션이나 다이어리에 계획표부터 짠다",
+          "type": "계획만세우는자"
+        },
+        {
+          "label": "운동복이나 필요한 장비부터 산다",
+          "type": "장비만사는자"
+        }
+      ]
+    },
+    {
+      "text": "결심한 지 3일이 지나면",
+      "image": null,
+      "choices": [
+        {
+          "label": "이미 흐지부지되어 있다",
+          "type": "3일천하형"
+        },
+        {
+          "label": "인스타에 인증샷은 계속 올리고 있다",
+          "type": "SNS인증용형"
+        }
+      ]
+    },
+    {
+      "text": "계획을 실천하지 못한 날에는",
+      "image": null,
+      "choices": [
+        {
+          "label": "내일부터 다시 하면 된다고 생각한다",
+          "type": "내일부터병"
+        },
+        {
+          "label": "계획을 더 세밀하게 다시 짠다",
+          "type": "계획만세우는자"
+        }
+      ]
+    },
+    {
+      "text": "새로운 습관을 만들 때 제일 먼저 하는 건?",
+      "image": null,
+      "choices": [
+        {
+          "label": "관련 앱이나 도구부터 다운받는다",
+          "type": "장비만사는자"
+        },
+        {
+          "label": "SNS에 다짐 스토리부터 올린다",
+          "type": "SNS인증용형"
+        }
+      ]
+    },
+    {
+      "text": "작심삼일이 반복될 때 나는",
+      "image": null,
+      "choices": [
+        {
+          "label": "그래도 계획 세우는 것 자체가 재밌다",
+          "type": "계획만세우는자"
+        },
+        {
+          "label": "매번 내일부터라며 미룬다",
+          "type": "내일부터병"
+        }
+      ]
+    },
+    {
+      "text": "운동을 결심했다면",
+      "image": null,
+      "choices": [
+        {
+          "label": "운동화와 운동복부터 완벽하게 갖춘다",
+          "type": "장비만사는자"
+        },
+        {
+          "label": "헬스장 인증샷부터 남긴다",
+          "type": "SNS인증용형"
+        }
+      ]
+    },
+    {
+      "text": "목표를 실천한 지 며칠 안 됐는데",
+      "image": null,
+      "choices": [
+        {
+          "label": "벌써 지쳐서 그만두고 싶어진다",
+          "type": "3일천하형"
+        },
+        {
+          "label": "완벽한 계획을 짜느라 시작을 못한다",
+          "type": "계획만세우는자"
+        }
+      ]
+    },
+    {
+      "text": "갓생 실패를 반복하면서도",
+      "image": null,
+      "choices": [
+        {
+          "label": "다음엔 다를 거라고 계속 믿는다",
+          "type": "내일부터병"
+        },
+        {
+          "label": "그래도 시도했다는 것에 의미를 둔다",
+          "type": "3일천하형"
+        }
+      ]
+    },
+    {
+      "text": "SNS에 올리는 갓생 인증은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "실제 실천보다 인증 자체에 더 신경 쓴다",
+          "type": "SNS인증용형"
+        },
+        {
+          "label": "장비 사진만 잔뜩 올려둔다",
+          "type": "장비만사는자"
+        }
+      ]
+    },
+    {
+      "text": "갓생 프로젝트가 끝날 때쯤 남는 건?",
+      "image": null,
+      "choices": [
+        {
+          "label": "안 쓰는 장비들뿐이다",
+          "type": "장비만사는자"
+        },
+        {
+          "label": "다음 계획을 세우는 나 자신이다",
+          "type": "계획만세우는자"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "type": "계획만세우는자",
+      "title": "계획만세우는자",
+      "subtitle": "계획은 이미 완벽함",
+      "image": "assets/result/plan-only-type.webp",
+      "traits": [
+        "계획을 세우는 순간이 제일 즐거움",
+        "완벽한 계획표를 만드는 데는 진심",
+        "실천은 계획만큼 따라가지 못하는 편"
+      ],
+      "tip": "계획은 이미 완벽함, 실천만 조금 남았을 뿐"
+    },
+    {
+      "type": "3일천하형",
+      "title": "3일천하형",
+      "subtitle": "그 도전 자체가 이미 갓생",
+      "image": "assets/result/three-day-empire.webp",
+      "traits": [
+        "시작은 힘차지만 오래가지 못함",
+        "처음 3일은 누구보다 열심이지만 이후 흐지부지",
+        "매번 다시 시도한다는 것 자체가 대단함"
+      ],
+      "tip": "3일이라도 한 게 어디야, 그 도전 자체가 이미 갓생"
+    },
+    {
+      "type": "장비만사는자",
+      "title": "장비만사는자",
+      "subtitle": "장비는 완벽한데 실천은 어디로",
+      "image": "assets/result/gear-only-buyer.webp",
+      "traits": [
+        "시작 전 완벽한 세팅부터 갖춰야 함",
+        "운동화 다이어리 앱까지 다 준비했는데 실천은 뒷전",
+        "장비빨만큼은 이미 프로급"
+      ],
+      "tip": "장비는 완벽한데 실천만 어디로 갔을까"
+    },
+    {
+      "type": "SNS인증용형",
+      "title": "SNS인증용형",
+      "subtitle": "인증샷은 완벽",
+      "image": "assets/result/sns-cert-type.webp",
+      "traits": [
+        "인증 자체가 목표가 되어버림",
+        "실제 실천보다 인증샷에 더 신경씀",
+        "인증하려는 마음 자체는 시작하려는 의지의 증거"
+      ],
+      "tip": "인증샷은 완벽, 근데 그 뒤로 이어졌는지는 비밀"
+    },
+    {
+      "type": "내일부터병",
+      "title": "내일부터병",
+      "subtitle": "내일부터 3년째",
+      "image": "assets/result/tomorrow-disease.webp",
+      "traits": [
+        "내일부터가 몇 년째 이어짐",
+        "오늘은 못 해도 내일은 꼭 할 거라는 믿음",
+        "그 믿음 덕분에 언젠가는 진짜 시작할 수도"
+      ],
+      "tip": "내일부터 3년째, 근데 그 마음만큼은 늘 진심"
+    }
+  ]
+}

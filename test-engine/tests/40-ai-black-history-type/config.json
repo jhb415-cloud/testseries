@@ -1,0 +1,225 @@
+{
+  "id": "ai-black-history-type",
+  "title": "AI가 분석한 너의 흑역사 유형",
+  "description": "AI가 과거 흑역사 패턴을 저격하는 컨셉. B급 유머로 즐기는 흑역사 소환 테스트.",
+  "hashtags": [
+    "흑역사",
+    "심리테스트",
+    "과거소환",
+    "추억밈"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 238,
+  "engagement_key": "site-blackhistory-plays",
+  "scoring_type": "type",
+  "loading": {
+    "text": "흑역사 기록 조회 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "예전에 SNS 프로필에 자주 쓰던 문구는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "알 수 없는 영어 문장이나 시 구절",
+          "type": "중2병시인형"
+        },
+        {
+          "label": "일상 사진에 감성 글귀를 얹었다",
+          "type": "감성글귀도배러"
+        }
+      ]
+    },
+    {
+      "text": "옛날에 자주 저장하던 이미지는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "최애 관련 이미지나 짤",
+          "type": "과몰입덕질러"
+        },
+        {
+          "label": "배경화면용 감성 사진",
+          "type": "싸이월드감성러"
+        }
+      ]
+    },
+    {
+      "text": "예전 닉네임 스타일은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "영어와 특수문자가 섞인 중2병 감성",
+          "type": "중2병시인형"
+        },
+        {
+          "label": "본명 대신 감성 있는 별명",
+          "type": "감성글귀도배러"
+        }
+      ]
+    },
+    {
+      "text": "옛날 SNS 게시물을 다시 보면",
+      "image": null,
+      "choices": [
+        {
+          "label": "손발이 오그라들어서 이불킥한다",
+          "type": "SNS이불킥러"
+        },
+        {
+          "label": "그때 그 감성이 그립기도 하다",
+          "type": "싸이월드감성러"
+        }
+      ]
+    },
+    {
+      "text": "좋아하던 대상에 대한 몰입도는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "생활 전체가 그것 중심으로 돌아갔다",
+          "type": "과몰입덕질러"
+        },
+        {
+          "label": "특별히 몰입한 대상은 없었다",
+          "type": "SNS이불킥러"
+        }
+      ]
+    },
+    {
+      "text": "예전 다이어리나 노트를 보면",
+      "image": null,
+      "choices": [
+        {
+          "label": "손발 오그라드는 문장들이 가득하다",
+          "type": "중2병시인형"
+        },
+        {
+          "label": "그때 유행하던 감성 글귀가 잔뜩 있다",
+          "type": "감성글귀도배러"
+        }
+      ]
+    },
+    {
+      "text": "과거의 나를 한마디로 표현하면?",
+      "image": null,
+      "choices": [
+        {
+          "label": "감성이 넘치던 시인 지망생",
+          "type": "중2병시인형"
+        },
+        {
+          "label": "옛날 감성에 진심이었던 사람",
+          "type": "싸이월드감성러"
+        }
+      ]
+    },
+    {
+      "text": "그 시절 나의 SNS 사용 패턴은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "하루에도 여러 번 감성 글을 올렸다",
+          "type": "감성글귀도배러"
+        },
+        {
+          "label": "최애 관련 게시물만 올렸다",
+          "type": "과몰입덕질러"
+        }
+      ]
+    },
+    {
+      "text": "지금 그때를 돌아보면",
+      "image": null,
+      "choices": [
+        {
+          "label": "부정하고 싶지만 사실이다",
+          "type": "SNS이불킥러"
+        },
+        {
+          "label": "오히려 그리운 감정이 든다",
+          "type": "싸이월드감성러"
+        }
+      ]
+    },
+    {
+      "text": "흑역사를 마주했을 때 반응은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "삭제 버튼부터 찾는다",
+          "type": "SNS이불킥러"
+        },
+        {
+          "label": "그때도 나였다며 인정한다",
+          "type": "과몰입덕질러"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "type": "중2병시인형",
+      "title": "중2병시인형",
+      "subtitle": "그때 쓴 글 지금 보면 이불킥",
+      "image": "assets/result/adolescent-poet.webp",
+      "traits": [
+        "감성과 오글거림 사이 어딘가의 문장들을 남김",
+        "알 수 없는 영어 문구나 심오한 척하는 글",
+        "지금 보면 이불킥이지만 그땐 최선의 진심"
+      ],
+      "tip": "그때 쓴 글 지금 보면 이불킥, 근데 그땐 최선이었음"
+    },
+    {
+      "type": "SNS이불킥러",
+      "title": "SNS이불킥러",
+      "subtitle": "흑역사 소환되면 이불부터 걷어참",
+      "image": "assets/result/social-media-cringe.webp",
+      "traits": [
+        "과거 게시물을 다시 보면 손발이 오그라듦",
+        "흑역사를 마주하면 바로 삭제 버튼부터 찾음",
+        "그때의 나도 진짜 나였다는 걸 부정 못함"
+      ],
+      "tip": "흑역사 소환되면 이불부터 걷어차는 사람"
+    },
+    {
+      "type": "감성글귀도배러",
+      "title": "감성글귀도배러",
+      "subtitle": "감성 없이는 사진 못 올리던 시절",
+      "image": "assets/result/aesthetic-quote-spammer.webp",
+      "traits": [
+        "일상 사진마다 감성 글귀를 얹었음",
+        "그 시절 유행하던 문구들을 열심히 찾아다님",
+        "지금은 오글거려도 그 감성만큼은 순수했음"
+      ],
+      "tip": "감성 글귀 없이는 사진 못 올리던 시절, 다들 있었잖아"
+    },
+    {
+      "type": "과몰입덕질러",
+      "title": "과몰입덕질러",
+      "subtitle": "과몰입이 지금의 나를 만듦",
+      "image": "assets/result/hyper-fandom-immersion.webp",
+      "traits": [
+        "좋아하는 대상에 온 마음을 다 쏟음",
+        "일상의 많은 부분이 그 대상 중심으로 돌아감",
+        "그 몰입이 지금의 취향과 열정을 만든 원동력"
+      ],
+      "tip": "그때의 과몰입이 지금의 나를 만듦, 부정 못하지?"
+    },
+    {
+      "type": "싸이월드감성러",
+      "title": "싸이월드감성러",
+      "subtitle": "향수 돋는 유형",
+      "image": "assets/result/cyworld-nostalgia.webp",
+      "traits": [
+        "그 시절 감성을 진심으로 즐겼음",
+        "배경음악 미니홈피 스타일 감성 사진까지 신경씀",
+        "지금 보면 유치해도 그 시절이 그리움"
+      ],
+      "tip": "그때 그 감성 다시 오면 또 할 사람, 향수 돋는 유형"
+    }
+  ]
+}

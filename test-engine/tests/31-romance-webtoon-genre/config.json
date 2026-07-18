@@ -1,0 +1,225 @@
+{
+  "id": "romance-webtoon-genre",
+  "title": "내 연애 세계관 장르",
+  "description": "연애 스타일을 웹툰·웹소설 장르로 치환해보는 테스트.",
+  "hashtags": [
+    "연애장르",
+    "심리테스트",
+    "웹툰밈",
+    "연애스타일"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 196,
+  "engagement_key": "site-romancegenre-plays",
+  "scoring_type": "type",
+  "loading": {
+    "text": "연애 세계관 편성 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "고백은 주로 어떻게 하는 편인가요?",
+      "image": null,
+      "choices": [
+        {
+          "label": "직진으로 진심을 다 보여준다",
+          "type": "순정만화형"
+        },
+        {
+          "label": "티는 안 내고 오래 짝사랑만 한다",
+          "type": "짝사랑고인물형"
+        }
+      ]
+    },
+    {
+      "text": "좋아하는 사람이 생기면",
+      "image": null,
+      "choices": [
+        {
+          "label": "밀당부터 시작해서 애태운다",
+          "type": "계약연애형"
+        },
+        {
+          "label": "학교나 동아리처럼 자연스럽게 가까워진다",
+          "type": "캠퍼스로맨스형"
+        }
+      ]
+    },
+    {
+      "text": "회사에서 마음이 가는 사람이 생긴다면?",
+      "image": null,
+      "choices": [
+        {
+          "label": "티 내지 않고 조심스럽게 접근한다",
+          "type": "사내연애스릴러형"
+        },
+        {
+          "label": "솔직하게 마음을 표현한다",
+          "type": "순정만화형"
+        }
+      ]
+    },
+    {
+      "text": "표현 방식은 어느 쪽에 가까운가요?",
+      "image": null,
+      "choices": [
+        {
+          "label": "직접적이고 애정 표현이 확실한 편",
+          "type": "순정만화형"
+        },
+        {
+          "label": "은근하게 튕기면서 밀당하는 편",
+          "type": "계약연애형"
+        }
+      ]
+    },
+    {
+      "text": "짝사랑이 시작되면",
+      "image": null,
+      "choices": [
+        {
+          "label": "몇 년째 마음속에만 담아둔다",
+          "type": "짝사랑고인물형"
+        },
+        {
+          "label": "친구처럼 지내다 자연스럽게 발전한다",
+          "type": "캠퍼스로맨스형"
+        }
+      ]
+    },
+    {
+      "text": "사내연애를 하게 된다면?",
+      "image": null,
+      "choices": [
+        {
+          "label": "들킬까 봐 조마조마하지만 짜릿하다",
+          "type": "사내연애스릴러형"
+        },
+        {
+          "label": "숨기지 않고 자연스럽게 알린다",
+          "type": "순정만화형"
+        }
+      ]
+    },
+    {
+      "text": "질투가 날 때 나는",
+      "image": null,
+      "choices": [
+        {
+          "label": "솔직하게 서운함을 표현한다",
+          "type": "순정만화형"
+        },
+        {
+          "label": "티 내지 않고 혼자 삭힌다",
+          "type": "짝사랑고인물형"
+        }
+      ]
+    },
+    {
+      "text": "이별을 겪으면",
+      "image": null,
+      "choices": [
+        {
+          "label": "오래도록 마음에 담아둔다",
+          "type": "짝사랑고인물형"
+        },
+        {
+          "label": "다음 사람이 생길 때까지 밀당하며 지낸다",
+          "type": "계약연애형"
+        }
+      ]
+    },
+    {
+      "text": "연애할 때 가장 중요한 건?",
+      "image": null,
+      "choices": [
+        {
+          "label": "몰래 만나는 스릴과 긴장감",
+          "type": "사내연애스릴러형"
+        },
+        {
+          "label": "편안하고 자연스러운 일상 공유",
+          "type": "캠퍼스로맨스형"
+        }
+      ]
+    },
+    {
+      "text": "재회 가능성이 생긴다면?",
+      "image": null,
+      "choices": [
+        {
+          "label": "못 이기는 척 다시 시작한다",
+          "type": "계약연애형"
+        },
+        {
+          "label": "오래 참았던 마음을 다시 꺼낸다",
+          "type": "짝사랑고인물형"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "type": "순정만화형",
+      "title": "순정만화형",
+      "subtitle": "명대사 너 아니면 안 돼",
+      "image": "assets/result/pure-romance.webp",
+      "traits": [
+        "마음을 숨기지 않고 직진하는 연애 스타일",
+        "좋아하면 좋아한다고 솔직하게 표현",
+        "상처받을 때도 있지만 진심이 잘 전달됨"
+      ],
+      "tip": "완결까지 순탄한 스토리"
+    },
+    {
+      "type": "캠퍼스로맨스형",
+      "title": "캠퍼스로맨스형",
+      "subtitle": "명대사 오늘도 같이 밥 먹을래?",
+      "image": "assets/result/campus-romance.webp",
+      "traits": [
+        "자연스럽게 가까워지는 걸 좋아함",
+        "친구에서 시작해 편안하게 발전하는 관계",
+        "일상 공유 자체를 로맨스라고 느낌"
+      ],
+      "tip": "잔잔하고 편안한 전개"
+    },
+    {
+      "type": "계약연애형",
+      "title": "계약연애형(밀당)",
+      "subtitle": "명대사 네가 더 좋아하는 거 아니야?",
+      "image": "assets/result/pushpull-romance.webp",
+      "traits": [
+        "튕기고 애태우는 걸 은근 즐김",
+        "너무 쉽게 마음을 다 보여주면 재미없다고 생각",
+        "밀당이 길어지면 상대가 지칠 수도"
+      ],
+      "tip": "밀당 만렙"
+    },
+    {
+      "type": "짝사랑고인물형",
+      "title": "짝사랑고인물형",
+      "subtitle": "명대사 언젠가는 말할 거야 (n년째)",
+      "image": "assets/result/unrequited-love.webp",
+      "traits": [
+        "마음을 오래 품고만 있는 연애 스타일",
+        "좋아하는 티를 잘 못 내고 혼자 키워감",
+        "순정파고 진심이 깊지만 타이밍을 놓침"
+      ],
+      "tip": "명대사 언젠가는 말할 거야 (n년째)"
+    },
+    {
+      "type": "사내연애스릴러형",
+      "title": "사내연애스릴러형",
+      "subtitle": "명대사 오늘 회의실에서 눈 마주친 거 봤어?",
+      "image": "assets/result/office-romance-thriller.webp",
+      "traits": [
+        "몰래 만나는 긴장감에서 짜릿함을 느낌",
+        "들킬까 봐 조심스러운 만큼 서로에게 집중",
+        "스릴 넘치지만 스트레스도 상당함"
+      ],
+      "tip": "긴장감 최고조"
+    }
+  ]
+}
