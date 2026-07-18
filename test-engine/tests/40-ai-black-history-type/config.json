@@ -8,7 +8,7 @@
     "과거소환",
     "추억밈"
   ],
-  "theme": "pending",
+  "theme": "vhsnoir",
   "cover_image": "assets/cover.webp",
   "seed_count": 238,
   "engagement_key": "site-blackhistory-plays",
@@ -21,7 +21,7 @@
   "questions": [
     {
       "text": "예전에 SNS 프로필에 자주 쓰던 문구는?",
-      "image": null,
+      "image": "assets/question/profile-quote.svg",
       "choices": [
         {
           "label": "알 수 없는 영어 문장이나 시 구절",
@@ -63,7 +63,7 @@
     },
     {
       "text": "옛날 SNS 게시물을 다시 보면",
-      "image": null,
+      "image": "assets/question/rereading-posts.svg",
       "choices": [
         {
           "label": "손발이 오그라들어서 이불킥한다",
@@ -105,7 +105,7 @@
     },
     {
       "text": "과거의 나를 한마디로 표현하면?",
-      "image": null,
+      "image": "assets/question/past-self-word.svg",
       "choices": [
         {
           "label": "감성이 넘치던 시인 지망생",
@@ -147,7 +147,7 @@
     },
     {
       "text": "흑역사를 마주했을 때 반응은?",
-      "image": null,
+      "image": "assets/question/facing-black-history.svg",
       "choices": [
         {
           "label": "삭제 버튼부터 찾는다",

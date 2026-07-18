@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="14" fill="#fffaf0" stroke="#d8c39e" stroke-width="3"/>
+  <!-- two figures facing off -->
+  <circle cx="200" cy="170" r="20" fill="#3a2e1e"/>
+  <path d="M178 210 q22 -14 44 0 l0 60 q-22 10 -44 0 z" fill="#8c2f2f" opacity="0.8"/>
+  <circle cx="400" cy="170" r="20" fill="#3a2e1e"/>
+  <path d="M378 210 q22 -14 44 0 l0 60 q-22 10 -44 0 z" fill="#8c2f2f" opacity="0.8"/>
+  <!-- jagged tension lines between -->
+  <path d="M244 190 l30 -18 l-14 20 l30 -10 l-20 24 l24 -6" stroke="#b8763a" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- mediator figure below, calmer -->
+  <circle cx="300" cy="270" r="18" fill="#3a2e1e"/>
+  <path d="M280 306 q20 -12 40 0 l0 40 q-20 8 -40 0 z" fill="#5c7a5a"/>
+</svg>

@@ -1,0 +1,89 @@
+/* test-engine — themes/blueprint.css — 신규 테마: 플랫 청사진 벡터 도면 포스터 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   room-state-psychology(#38)가 1호 사용처. 틸 톤 청사진 배경 + 흰색 도면 라인아트 + 모눈
+   그리드로 "방 평면도 인포그래픽" 톤을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #0f3d3a; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px) 0 0 / 24px 24px,
+    #0f3d3a;
+  color: #eaf5f2;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #12463f;
+  border-radius: 4px;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Chakra Petch", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #a9cfc8; }
+
+.te-chip {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #eaf5f2;
+  font-family: "Chakra Petch", sans-serif;
+  border-radius: 4px;
+}
+
+.te-btn {
+  background: #ffffff;
+  color: #0f3d3a;
+  border-radius: 4px;
+  border: none;
+  box-shadow: none;
+  font-family: "Chakra Petch", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.te-btn-primary { background: #ffffff; }
+.te-btn-secondary { background: transparent; color: #eaf5f2; box-shadow: none; border: 1px solid rgba(255,255,255,0.4); }
+.te-btn-accent { background: #e8622e; color: #fff; box-shadow: none; }
+.te-btn-kakao { background: #FEE500; color: #191600; box-shadow: none; }
+
+.te-btn-choice {
+  background: rgba(255, 255, 255, 0.05);
+  color: #eaf5f2;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: rgba(255, 255, 255, 0.14); border-color: #ffffff; }
+
+.te-progress-track { background: rgba(255, 255, 255, 0.15); border-radius: 999px; }
+.te-progress-fill { background: #ffffff; border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #eaf5f2;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(255, 255, 255, 0.2);
+  border-top-color: #ffffff;
+}

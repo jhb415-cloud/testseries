@@ -8,7 +8,7 @@
     "공간심리학",
     "뜨끔밈"
   ],
-  "theme": "pending",
+  "theme": "blueprint",
   "cover_image": "assets/cover.webp",
   "seed_count": 194,
   "engagement_key": "site-roomstate-plays",
@@ -21,7 +21,7 @@
   "questions": [
     {
       "text": "책상 위 상태는?",
-      "image": null,
+      "image": "assets/question/desk-state.svg",
       "choices": [
         {
           "label": "필요한 것만 딱 올려져 있다",
@@ -63,7 +63,7 @@
     },
     {
       "text": "방 분위기를 위해 신경 쓰는 건?",
-      "image": null,
+      "image": "assets/question/room-mood-care.svg",
       "choices": [
         {
           "label": "조명이나 소품으로 감성을 챙긴다",
@@ -105,7 +105,7 @@
     },
     {
       "text": "손님이 갑자기 온다고 하면",
-      "image": null,
+      "image": "assets/question/guest-visit.svg",
       "choices": [
         {
           "label": "겉만 빠르게 치우고 서랍에 다 쑤셔넣는다",
@@ -147,7 +147,7 @@
     },
     {
       "text": "방에 대한 만족도는?",
-      "image": null,
+      "image": "assets/question/room-satisfaction.svg",
       "choices": [
         {
           "label": "정리는 안 돼 있어도 분위기는 마음에 든다",

@@ -115,13 +115,23 @@ engine.js를 조사해 확인(선택 로직이 렌더링과 분리돼 있어 기
 - [x] #35 caffeine-addiction-type — 완료 (2026-07-18, theme: kraftbag)
 
 **#31~35 콘텐츠 제작 완료.** Playwright 전수 QA(5/5 PASS: 콘솔 에러 0, 결과 이미지 정상 로드,
-버튼바-본문 겹침 0, 플레이스홀더 미치환 없음, 320px 가로 스크롤 없음) 통과 후 테스트별 개별 커밋
-예정. 사이트 연동(data.js 등)과 git push는 사용자 확인 후 별도 진행. 다음은 #36~40.
+버튼바-본문 겹침 0, 플레이스홀더 미치환 없음, 320px 가로 스크롤 없음) 통과, 커밋(`00a2b83`)+push
+완료, 라이브 사이트 5개 URL 200 재확인 완료. 사용자 검토 후 "진행해" 승인받아 #36~40 이어서 진행.
+
+- [x] #36 friend-group-position — 완료 (2026-07-18, theme: miniature)
+- [x] #37 godsaeng-fail-type — 완료 (2026-07-18, theme: pennant)
+- [x] #38 room-state-psychology — 완료 (2026-07-18, theme: blueprint)
+- [x] #39 decision-time-test — 완료 (2026-07-18, theme: ekgmonitor, reaction_time 유지)
+- [x] #40 ai-black-history-type — 완료 (2026-07-18, theme: vhsnoir)
+
+**#36~40 콘텐츠 제작 완료.** Playwright 전수 QA(5/5 PASS, #39의 `{avgSec}` 실측 치환 확인 포함)
+통과 후 테스트별 개별 커밋 예정. **이로써 #31~40(3차 배치 전체) 콘텐츠 제작 완료.** 사이트 연동
+(data.js 등)과 41~60 착수는 사용자 확인 후 별도 진행.
 
 ## 다음 배치 후보
-#21~35 완료(novel mechanic 포함). #36~60(2026-07-16 스켈레톤 생성분)이 다음 배치 후보 — 이 중
+#21~40 완료(novel mechanic 포함). #41~60(2026-07-16 스켈레톤 생성분)이 다음 배치 후보 — 이 중
 41/43/48/51/56/60은 위 항목대로 콘텐츠·엔진 구조까지 정리됨, 나머지는 문항·결과 텍스트만 있고
-이미지 컨셉 미정 상태. #36~40은 레퍼런스 이미지가 이미 각 폴더 assets/reference/에 준비돼 있음.
+이미지 컨셉 미정 상태. 시작 전 레퍼런스 이미지 확보 절차(4-4)부터 진행할 것.
 
 ## 품질 개선 — MBTI존 9개(#11~18,#20) 16종 결과 세분화 (2026-07-12)
 사용자가 "#19 빼고는 결과가 다 하나뿐이라 노잼"이라고 지적해 진행. `resultTemplate` 공용 템플릿
@@ -178,6 +188,14 @@ result-card.js는 무변경이라 v=2 그대로). **검증**: `node --check` 통
    별도로 진행한다.
 
 ## 세션 로그
+- 2026-07-18 (콘텐츠 제작 세션, 이어서): 몰입테스트 #36~40 콘텐츠 제작 완료 — 신규 테마 5종
+  (miniature/pennant/blueprint/ekgmonitor/vhsnoir) 설계, 각 테스트 cover+결과 이미지 전량 생성
+  (#40 결과 1장은 세이프티 필터 1차 실패 후 재시도로 성공), 문항 SVG 16장(2지선다 4개 테스트 ×
+  1/4/7/10번, #39는 4지선다+reaction_time이라 제외) 제작, config.json theme/image 필드 연결,
+  Playwright로 5개 전수 완주 QA 통과(#39 `{avgSec}` 실측 치환 확인). `tests/index.json`
+  상태/concept_style/scoring_type(#39는 sum→reaction_time으로 오기 수정) 갱신, `style-guide.md`에
+  컨셉 기록 추가. **이로써 #31~40(3차 배치 전체) 콘텐츠 제작 완료.** 사이트 연동과 #41~60은
+  범위 밖 — 사용자 승인 후 진행.
 - 2026-07-18 (콘텐츠 제작 세션): 몰입테스트 #31~35 콘텐츠 제작 완료 — 신규 테마 5종(goldhour/
   metromap/photobooth/crayonbook/kraftbag) 설계, 각 테스트 cover+결과 이미지 전량 생성(#31 결과
   1장은 세이프티 필터에 1차 실패 후 재시도로 성공), 문항 SVG 16장(2지선다/슬라이더 4개 테스트 ×

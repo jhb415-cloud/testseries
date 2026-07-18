@@ -1,0 +1,103 @@
+/* test-engine — themes/pennant.css — 신규 테마: 라커룸 우승 페넌트 배너 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   godsaeng-fail-type(#37)가 1호 사용처. 낡은 라커룸 배경 + 삼각 페넌트 배너(트로피 아이콘,
+   태슬 프린지) + 대학 스포츠 굿즈풍 굵은 디스플레이 폰트(Anton)로 "실패해도 도전은 우승"이라는
+   위로 톤을 낸다. medieval-job-past-life(#26, 리넨 태피스트리 헤럴드리)와 달리 현대 스포츠
+   페넌트 굿즈 톤이라 매체가 겹치지 않는다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #24211c; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    radial-gradient(ellipse at 30% 10%, rgba(198, 161, 91, 0.08), transparent 55%),
+    #24211c;
+  color: #ece4d4;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #efe4c8;
+  border-radius: 2px;
+  border: 2px solid #1f3a5c;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.5);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+/* 페넌트 배너 삼각 태슬 장식(길이 가변 본문을 자르지 않도록 실제 컨텐츠와 분리된 장식 요소로만 표현) */
+.te-intro-body::before,
+.te-result-body::before {
+  content: '';
+  position: absolute;
+  left: 50%; top: -14px;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-top: 14px solid #c6a15b;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Anton", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  color: #1f3a5c;
+  letter-spacing: 0.01em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #6a5c3e; }
+
+.te-chip {
+  background: #1f3a5c;
+  border: 1px solid #c6a15b;
+  color: #efe4c8;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  border-radius: 999px;
+}
+
+.te-btn {
+  background: #c6a15b;
+  color: #24211c;
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0 8px 18px rgba(198, 161, 91, 0.35);
+  font-family: "Anton", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+.te-btn-primary { background: #c6a15b; }
+.te-btn-secondary { background: transparent; color: #ece4d4; box-shadow: none; border: 1px solid rgba(236, 228, 212, 0.35); }
+.te-btn-accent { background: #8c2f2f; color: #efe4c8; box-shadow: 0 8px 18px rgba(140, 47, 47, 0.35); }
+.te-btn-kakao { background: #FEE500; color: #191600; box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
+
+.te-btn-choice {
+  background: #ece4d4;
+  color: #1f3a5c;
+  border: 2px solid #1f3a5c;
+  border-radius: 6px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+.te-btn-choice:active { background: #c6a15b; border-color: #8c2f2f; }
+
+.te-progress-track { background: #3a3529; border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #c6a15b, #8c2f2f); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #1f3a5c;
+  font-weight: 700;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(198, 161, 91, 0.25);
+  border-top-color: #c6a15b;
+}

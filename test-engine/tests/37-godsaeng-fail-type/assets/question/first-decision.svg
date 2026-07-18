@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="10" fill="#efe4c8" stroke="#1f3a5c" stroke-width="3"/>
+  <!-- flag planted on small hill, determination -->
+  <path d="M100 300 q200 -60 400 0 z" fill="#1f3a5c" opacity="0.15"/>
+  <line x1="300" y1="300" x2="300" y2="100" stroke="#3a3529" stroke-width="6" stroke-linecap="round"/>
+  <path d="M300 100 l90 30 l-90 30 z" fill="#8c2f2f"/>
+  <circle cx="300" cy="300" r="10" fill="#c6a15b"/>
+  <!-- sunrise -->
+  <circle cx="300" cy="90" r="0" fill="none"/>
+  <path d="M420 200 a120 120 0 0 0 -240 0" fill="none" stroke="#c6a15b" stroke-width="4" stroke-dasharray="6 8"/>
+</svg>

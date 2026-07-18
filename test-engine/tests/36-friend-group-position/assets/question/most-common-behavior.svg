@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="14" fill="#fffaf0" stroke="#d8c39e" stroke-width="3"/>
+  <!-- listening ear figure center with speech bubbles from sides -->
+  <circle cx="300" cy="200" r="26" fill="#3a2e1e"/>
+  <path d="M270 250 q30 -18 60 0 l0 70 q-30 14 -60 0 z" fill="#b8763a"/>
+  <!-- speech bubbles from two side friends -->
+  <path d="M110 130 h90 a14 14 0 0 1 14 14 v40 a14 14 0 0 1 -14 14 h-50 l-20 20 v-20 h-20 a14 14 0 0 1 -14 -14 v-40 a14 14 0 0 1 14 -14 z" fill="#5c7a5a"/>
+  <path d="M400 130 h90 a14 14 0 0 1 14 14 v40 a14 14 0 0 1 -14 14 h-20 v20 l-20 -20 h-50 a14 14 0 0 1 -14 -14 v-40 a14 14 0 0 1 14 -14 z" fill="#5c7a5a"/>
+  <circle cx="130" cy="270" r="14" fill="#3a2e1e" opacity="0.6"/>
+  <circle cx="470" cy="270" r="14" fill="#3a2e1e" opacity="0.6"/>
+</svg>

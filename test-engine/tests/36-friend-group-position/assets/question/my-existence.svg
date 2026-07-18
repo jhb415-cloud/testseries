@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="14" fill="#fffaf0" stroke="#d8c39e" stroke-width="3"/>
+  <!-- group of small figures forming circle around one glowing central figure -->
+  <circle cx="300" cy="190" r="60" fill="none" stroke="#b8763a" stroke-width="3" stroke-dasharray="4 8"/>
+  <circle cx="300" cy="190" r="22" fill="#b8763a"/>
+  <path d="M300 168 l0 -18 m-13 18 l0 -12 m26 12 l0 -12" stroke="#3a2e1e" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="220" cy="140" r="14" fill="#3a2e1e" opacity="0.5"/>
+  <circle cx="380" cy="140" r="14" fill="#3a2e1e" opacity="0.5"/>
+  <circle cx="220" cy="250" r="14" fill="#3a2e1e" opacity="0.5"/>
+  <circle cx="380" cy="250" r="14" fill="#3a2e1e" opacity="0.5"/>
+</svg>

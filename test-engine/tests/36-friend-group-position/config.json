@@ -8,7 +8,7 @@
     "모임역할",
     "우정밈"
   ],
-  "theme": "pending",
+  "theme": "miniature",
   "cover_image": "assets/cover.webp",
   "seed_count": 189,
   "engagement_key": "site-friendposition-plays",
@@ -21,7 +21,7 @@
   "questions": [
     {
       "text": "약속을 잡을 때 나는",
-      "image": null,
+      "image": "assets/question/making-plans.svg",
       "choices": [
         {
           "label": "날짜와 장소를 정리해서 공지한다",
@@ -63,7 +63,7 @@
     },
     {
       "text": "모임 중 갈등이 생기면",
-      "image": null,
+      "image": "assets/question/group-conflict.svg",
       "choices": [
         {
           "label": "중재하며 상황을 정리한다",
@@ -105,7 +105,7 @@
     },
     {
       "text": "모임에서 내가 제일 많이 하는 행동은?",
-      "image": null,
+      "image": "assets/question/most-common-behavior.svg",
       "choices": [
         {
           "label": "다들 잘 지내는지 살피며 챙긴다",
@@ -147,7 +147,7 @@
     },
     {
       "text": "무리 내에서 나의 존재는?",
-      "image": null,
+      "image": "assets/question/my-existence.svg",
       "choices": [
         {
           "label": "없으면 계획 자체가 안 굴러가는 존재",

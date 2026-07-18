@@ -1,0 +1,99 @@
+/* test-engine — themes/vhsnoir.css — 신규 테마: 흑백 그레인 VHS/빈티지 시네마틱 사진 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   ai-black-history-type(#40)가 1호 사용처. 고대비 흑백 필름 그레인 + VHS 스캔라인 + 굵은
+   콘덴스드 디스플레이 폰트(Bebas Neue)로 "과거를 되감아보는 흑백 캠코더 영상" 톤을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #0a0a0a; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 3px),
+    #0a0a0a;
+  color: #e8e8e8;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #141414;
+  border-radius: 2px;
+  border: 1px solid #333;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.6);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+.te-intro-body::after,
+.te-result-body::after {
+  content: 'REC ●';
+  position: absolute;
+  top: 12px; right: 16px;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: #ff4444;
+  opacity: 0.85;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Bebas Neue", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  color: #f4f4f4;
+  letter-spacing: 0.02em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #a8a8a8; }
+
+.te-chip {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid #444;
+  color: #d8d8d8;
+  font-family: "Noto Sans KR", sans-serif;
+  border-radius: 2px;
+}
+
+.te-btn {
+  background: #f4f4f4;
+  color: #0a0a0a;
+  border-radius: 2px;
+  border: none;
+  box-shadow: none;
+  font-family: "Bebas Neue", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+.te-btn-primary { background: #f4f4f4; }
+.te-btn-secondary { background: transparent; color: #e8e8e8; box-shadow: none; border: 1px solid #444; }
+.te-btn-accent { background: #ff4444; color: #0a0a0a; box-shadow: none; }
+.te-btn-kakao { background: #FEE500; color: #191600; box-shadow: none; }
+
+.te-btn-choice {
+  background: #1e1e1e;
+  color: #e8e8e8;
+  border: 1px solid #3a3a3a;
+  border-radius: 2px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: #2a2a2a; border-color: #f4f4f4; }
+
+.te-progress-track { background: #2a2a2a; border-radius: 999px; }
+.te-progress-fill { background: #f4f4f4; border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #e8e8e8;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(244, 244, 244, 0.2);
+  border-top-color: #f4f4f4;
+}

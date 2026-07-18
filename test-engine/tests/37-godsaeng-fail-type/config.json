@@ -8,7 +8,7 @@
     "자기계발밈",
     "공감위로"
   ],
-  "theme": "pending",
+  "theme": "pennant",
   "cover_image": "assets/cover.webp",
   "seed_count": 205,
   "engagement_key": "site-godsaengfail-plays",
@@ -21,7 +21,7 @@
   "questions": [
     {
       "text": "갓생을 결심한 후 첫 행동은?",
-      "image": null,
+      "image": "assets/question/first-decision.svg",
       "choices": [
         {
           "label": "노션이나 다이어리에 계획표부터 짠다",
@@ -63,7 +63,7 @@
     },
     {
       "text": "새로운 습관을 만들 때 제일 먼저 하는 건?",
-      "image": null,
+      "image": "assets/question/new-habit-start.svg",
       "choices": [
         {
           "label": "관련 앱이나 도구부터 다운받는다",
@@ -105,7 +105,7 @@
     },
     {
       "text": "목표를 실천한 지 며칠 안 됐는데",
-      "image": null,
+      "image": "assets/question/few-days-in.svg",
       "choices": [
         {
           "label": "벌써 지쳐서 그만두고 싶어진다",
@@ -147,7 +147,7 @@
     },
     {
       "text": "갓생 프로젝트가 끝날 때쯤 남는 건?",
-      "image": null,
+      "image": "assets/question/project-end-remains.svg",
       "choices": [
         {
           "label": "안 쓰는 장비들뿐이다",

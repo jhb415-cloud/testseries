@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="10" fill="#efe4c8" stroke="#1f3a5c" stroke-width="3"/>
+  <!-- phone with app download icon -->
+  <rect x="230" y="90" width="140" height="200" rx="18" fill="#1f3a5c"/>
+  <rect x="244" y="112" width="112" height="150" rx="6" fill="#efe4c8"/>
+  <circle cx="300" cy="187" r="30" fill="none" stroke="#c6a15b" stroke-width="6"/>
+  <path d="M300 170 v34 m-14 -14 l14 14 l14 -14" stroke="#c6a15b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="300" cy="280" r="6" fill="#efe4c8"/>
+  <!-- fresh sparkle -->
+  <path d="M440 130 l6 16 l16 6 l-16 6 l-6 16 l-6 -16 l-16 -6 l16 -6 z" fill="#c6a15b"/>
+</svg>

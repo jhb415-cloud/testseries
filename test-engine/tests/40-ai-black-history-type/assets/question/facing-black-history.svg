@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="4" fill="#141414" stroke="#333" stroke-width="2"/>
+  <!-- old post card with trash/delete icon over it -->
+  <rect x="200" y="90" width="200" height="130" rx="8" fill="#1e1e1e" stroke="#555" stroke-width="3"/>
+  <line x1="220" y1="120" x2="360" y2="120" stroke="#777" stroke-width="4"/>
+  <line x1="220" y1="145" x2="330" y2="145" stroke="#777" stroke-width="4"/>
+  <line x1="220" y1="170" x2="350" y2="170" stroke="#777" stroke-width="4"/>
+  <!-- trash can icon overlapping -->
+  <g transform="translate(330,190)">
+    <rect x="0" y="20" width="60" height="70" rx="6" fill="#0a0a0a" stroke="#aaa" stroke-width="4"/>
+    <line x1="-10" y1="20" x2="70" y2="20" stroke="#aaa" stroke-width="5"/>
+    <line x1="15" y1="0" x2="45" y2="0" stroke="#aaa" stroke-width="5"/>
+    <line x1="15" y1="40" x2="15" y2="75" stroke="#aaa" stroke-width="3"/>
+    <line x1="30" y1="40" x2="30" y2="75" stroke="#aaa" stroke-width="3"/>
+    <line x1="45" y1="40" x2="45" y2="75" stroke="#aaa" stroke-width="3"/>
+  </g>
+</svg>

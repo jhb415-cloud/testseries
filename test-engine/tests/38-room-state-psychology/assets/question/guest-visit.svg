@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="8" fill="#12463f" stroke="#ffffff" stroke-width="2" stroke-opacity="0.4"/>
+  <!-- door with figure knocking + hurried sweep lines -->
+  <rect x="380" y="90" width="90" height="200" fill="none" stroke="#ffffff" stroke-width="4"/>
+  <circle cx="450" cy="190" r="4" fill="#ffffff"/>
+  <!-- knock marks -->
+  <path d="M340 150 l20 -10 M340 170 l20 -10" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <!-- broom sweeping motion lines -->
+  <line x1="150" y1="260" x2="260" y2="260" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <path d="M150 260 l-30 20 M150 260 l-20 -20" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <path d="M260 245 l20 -10 M270 260 l30 -6" stroke="#ffffff" stroke-width="2" stroke-dasharray="2 6"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="4" fill="#141414" stroke="#333" stroke-width="2"/>
+  <!-- face palm silhouette -->
+  <circle cx="300" cy="170" r="46" fill="#2a2a2a" stroke="#555" stroke-width="3"/>
+  <path d="M260 150 q40 -30 80 0" stroke="#888" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- hand covering -->
+  <path d="M330 130 q30 10 30 50 q0 30 -40 30" fill="#0a0a0a" stroke="#666" stroke-width="4"/>
+  <!-- cringe motion lines -->
+  <path d="M420 140 l20 -10 M430 170 l24 0 M420 200 l20 10" stroke="#666" stroke-width="3" stroke-linecap="round"/>
+</svg>

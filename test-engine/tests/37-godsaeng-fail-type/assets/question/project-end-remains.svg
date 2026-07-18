@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="10" fill="#efe4c8" stroke="#1f3a5c" stroke-width="3"/>
+  <!-- empty shelf with dusty unused gear -->
+  <line x1="120" y1="260" x2="480" y2="260" stroke="#3a3529" stroke-width="8" stroke-linecap="round"/>
+  <line x1="120" y1="260" x2="120" y2="180" stroke="#3a3529" stroke-width="6"/>
+  <line x1="480" y1="260" x2="480" y2="180" stroke="#3a3529" stroke-width="6"/>
+  <!-- dumbbell unused -->
+  <rect x="160" y="230" width="60" height="18" rx="4" fill="#c6a15b" opacity="0.5"/>
+  <circle cx="160" cy="239" r="16" fill="#c6a15b" opacity="0.5"/>
+  <circle cx="220" cy="239" r="16" fill="#c6a15b" opacity="0.5"/>
+  <!-- book stack -->
+  <rect x="320" y="225" width="80" height="14" rx="2" fill="#8c2f2f" opacity="0.6"/>
+  <rect x="325" y="211" width="70" height="14" rx="2" fill="#1f3a5c" opacity="0.6"/>
+  <!-- dust sparkle marks -->
+  <circle cx="440" cy="200" r="4" fill="#c6c0ad"/>
+  <circle cx="460" cy="220" r="3" fill="#c6c0ad"/>
+</svg>

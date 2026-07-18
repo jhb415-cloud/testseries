@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="4" fill="#141414" stroke="#333" stroke-width="2"/>
+  <!-- mirror with two reflections: past silhouette vs present -->
+  <rect x="180" y="70" width="240" height="220" rx="20" fill="none" stroke="#666" stroke-width="4"/>
+  <line x1="300" y1="90" x2="300" y2="270" stroke="#444" stroke-width="2" stroke-dasharray="4 8"/>
+  <path d="M240 260 q0 -60 40 -60 q40 0 40 60 z" fill="#2a2a2a"/>
+  <circle cx="280" cy="150" r="26" fill="#2a2a2a"/>
+  <path d="M340 260 q0 -50 40 -50 q40 0 40 50 z" fill="#3a3a3a"/>
+  <circle cx="380" cy="160" r="22" fill="#3a3a3a"/>
+</svg>

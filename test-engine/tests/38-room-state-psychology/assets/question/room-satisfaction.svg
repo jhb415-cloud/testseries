@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="8" fill="#12463f" stroke="#ffffff" stroke-width="2" stroke-opacity="0.4"/>
+  <!-- simple room icon with heart rating above -->
+  <rect x="200" y="150" width="200" height="120" fill="none" stroke="#ffffff" stroke-width="4"/>
+  <line x1="200" y1="150" x2="300" y2="100" stroke="#ffffff" stroke-width="4"/>
+  <line x1="400" y1="150" x2="300" y2="100" stroke="#ffffff" stroke-width="4"/>
+  <rect x="230" y="200" width="40" height="70" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <circle cx="330" cy="230" r="24" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <!-- heart rating icon above -->
+  <path d="M300 60 c-10 -14 -32 -4 -22 12 c6 10 22 20 22 20 c0 0 16 -10 22 -20 c10 -16 -12 -26 -22 -12 z" fill="none" stroke="#ffffff" stroke-width="4"/>
+</svg>

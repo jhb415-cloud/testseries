@@ -366,9 +366,9 @@
       "title": "친구들 사이 내 포지션",
       "category": "몰입테스트",
       "scoring_type": "type",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 36-friend-group-position, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
-      "note": "2026-07-16 대량 배치 스켈레톤 생성분 — novel mechanic 원안이 있었다면 progress.md에 단순화 경위 기록."
+      "status": "콘텐츠 제작 완료(문항·결과·이미지·문항 SVG 전부), 폴더 36-friend-group-position, theme=miniature, 사이트 연동 전(승인 대기)",
+      "concept_style": "귀여운밈형 — 미니어처 피규어 탁상 매크로 사진, themes/miniature.css",
+      "note": "2026-07-18 사용자 제공 레퍼런스(원목 탁상 위 대화하는 피규어들) 기반 images/edits 1회 생성 성공. 문항 SVG 4장(1/4/7/10번). village-animal-neighbor(#27, 3D 클레이 렌더)와 매체 구분됨(실사 매크로 사진 vs 렌더)."
     },
     {
       "number": 37,
@@ -376,9 +376,9 @@
       "title": "나의 갓생 실패 유형",
       "category": "몰입테스트",
       "scoring_type": "type",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 37-godsaeng-fail-type, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
-      "note": "2026-07-16 대량 배치 스켈레톤 생성분 — novel mechanic 원안이 있었다면 progress.md에 단순화 경위 기록."
+      "status": "콘텐츠 제작 완료(문항·결과·이미지·문항 SVG 전부), 폴더 37-godsaeng-fail-type, theme=pennant, 사이트 연동 전(승인 대기)",
+      "concept_style": "공감위로형 — 라커룸 우승 페넌트 배너(실패도 도전이라 우승기), themes/pennant.css",
+      "note": "2026-07-18 사용자 제공 레퍼런스(트로피+체크리스트 페넌트) 기반 images/edits 1회 생성 성공. 문항 SVG 4장(1/4/7/10번). medieval-job-past-life(#26, 리넨 태피스트리 헤럴드리)와 매체 구분됨(현대 스포츠 굿즈 vs 중세 자수)."
     },
     {
       "number": 38,
@@ -386,19 +386,19 @@
       "title": "내 방 상태로 보는 심리",
       "category": "몰입테스트",
       "scoring_type": "type",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 38-room-state-psychology, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
-      "note": "2026-07-16 대량 배치 스켈레톤 생성분 — novel mechanic 원안이 있었다면 progress.md에 단순화 경위 기록."
+      "status": "콘텐츠 제작 완료(문항·결과·이미지·문항 SVG 전부), 폴더 38-room-state-psychology, theme=blueprint, 사이트 연동 전(승인 대기)",
+      "concept_style": "깔끔·위트형 — 틸톤 플랫 청사진 벡터 도면 포스터, themes/blueprint.css",
+      "note": "2026-07-18 사용자 제공 레퍼런스(방 평면도 라인아트) 기반 images/edits 1회 생성 성공. 문항 SVG 4장(1/4/7/10번)."
     },
     {
       "number": 39,
       "id": "decision-time-test",
       "title": "결정장애 실측 테스트: 나의 평균 고민 시간",
       "category": "몰입테스트",
-      "scoring_type": "sum",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 39-decision-time-test, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
-      "note": "2026-07-16 대량 배치 스켈레톤 생성분 — novel mechanic 원안이 있었다면 progress.md에 단순화 경위 기록."
+      "scoring_type": "reaction_time",
+      "status": "콘텐츠 제작 완료(scoring_type: reaction_time, 문항·결과·이미지 전부, 4지선다라 문항 SVG 없음), 폴더 39-decision-time-test, theme=ekgmonitor, 사이트 연동 전(승인 대기)",
+      "concept_style": "밈/드립형 — 레트로 CRT 병원 심박 모니터(EKG 파형으로 고민 시간 시각화), themes/ekgmonitor.css",
+      "note": "2026-07-16 novel mechanic 복구 세션에서 scoring_type: reaction_time + {avgSec} 플레이스홀더 적용된 상태 그대로 유지. 2026-07-18 사용자 제공 레퍼런스(CRT 심박 모니터) 기반 images/edits 1회 생성 성공, Playwright로 {avgSec} 실측 치환 확인."
     },
     {
       "number": 40,
@@ -406,9 +406,9 @@
       "title": "AI가 분석한 너의 흑역사 유형",
       "category": "몰입테스트",
       "scoring_type": "type",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 40-ai-black-history-type, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
-      "note": "2026-07-16 대량 배치 스켈레톤 생성분 — novel mechanic 원안이 있었다면 progress.md에 단순화 경위 기록."
+      "status": "콘텐츠 제작 완료(문항·결과·이미지·문항 SVG 전부), 폴더 40-ai-black-history-type, theme=vhsnoir, 사이트 연동 전(승인 대기)",
+      "concept_style": "다크유머형 — 흑백 그레인 VHS/빈티지 시네마틱 사진, themes/vhsnoir.css",
+      "note": "2026-07-18 사용자 제공 레퍼런스(흑백 그레인 인물 사진) 기반 images/edits 생성(결과 1장은 세이프티 필터 1차 실패 후 재시도로 성공). 문항 SVG 4장(1/4/7/10번)."
     },
     {
       "number": 41,
