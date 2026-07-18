@@ -4568,7 +4568,10 @@ function formatCount(n) {
 ══════════════════════════════════════════════════ */
 /* 카테고리 메타(라벨/이모지) + 잠금 콘텐츠(제목만, 2026-07-05 사용자가 선정 요청한
    "어그로 있는" 향후 주제) — 카테고리당 정원 3개(오픈 1 + 잠금 2) 운영, 신규 주제는
-   CONTENT_PROMPTS.md의 AI 프롬프트로 생성 후 이 배열에 추가 */
+   CONTENT_PROMPTS.md의 AI 프롬프트로 생성 후 이 배열에 추가.
+   v1.1.9~: character/trait/taste는 잠금 2개를 모두 실콘텐츠로 전환해 정원 3개 완주 —
+   national만 아직 실콘텐츠 3개(오픈)로 채워져 있어 잠금 없음, 신규 카테고리 추가 시
+   이 자리에 다시 잠금 패턴을 쓸 수 있음. */
 /* STEP 3(2026-07-10): /test-engine/ 프로토타입존(몰입테스트)과 MBTI존을 신설 카테고리로
    맨 앞에 추가 — `badge: 'NEW'`가 있으면 탭 자체에 배지+굵은 글씨 처리(아래 tabsHTML 참고).
    character/trait/taste/national은 추후(애드센스 승인 후) "일반테스트" 1개로 통합 예정
@@ -4586,9 +4589,9 @@ const PSYCHTEST_LOCKED = {
   mbtizone: [], // 실제 콘텐츠는 AppData.mbtiZoneTests에서 옴(아래 externalTestsFeedHTML). STEP 3.1(2026-07-10)
                 // 전까지는 가짜 잠금 카드 1개뿐이었으나, real-vs-fake-mbti/love-mode-mbti/drunk-mbti
                 // 3개가 실제로 완성되며 잠금 카드를 제거하고 실콘텐츠로 교체.
-  character: [{ emoji: '🏯', title: '나의 사극 빙의 테스트' }, { emoji: '🦹', title: '나의 빌런 각성 테스트' }],
-  trait: [{ emoji: '🧊', title: 'T의 공감능력 테스트' }, { emoji: '💤', title: '관태기 자가진단 테스트' }],
-  taste: [{ emoji: '🏪', title: '나의 편의점 소비 유형 테스트' }, { emoji: '📺', title: 'OTT 정주행 스타일 테스트' }],
+  character: [], // v1.1.9~: 잠금 2개(사극빙의/빌런각성) 전부 실콘텐츠로 전환 완료
+  trait: [], // v1.1.9~: 잠금 2개(T공감능력/관태기)를 실콘텐츠로 전환 완료
+  taste: [], // v1.1.9~: 잠금 2개(편의점소비/OTT정주행)를 실콘텐츠로 전환 완료
   national: [],
 };
 
