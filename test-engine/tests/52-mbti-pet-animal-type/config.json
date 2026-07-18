@@ -1,0 +1,389 @@
+{
+  "id": "mbti-pet-animal-type",
+  "title": "MBTI 반려동물 판별기 (만약 동물이라면)",
+  "description": "신비한 숲속 동물원에서, 당신과 가장 닮은 동물이 우리 밖으로 걸어나온다. 그 동물이 바로 진짜 당신의 모습이다.",
+  "hashtags": [
+    "MBTI반려동물",
+    "심리테스트",
+    "동물판별",
+    "귀여운밈"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 288,
+  "engagement_key": "site-mbtipet-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 반려동물 판별기 (만약 동물이라면) 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "새로운 사람을 만나면 당신은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "먼저 다가가서 꼬리(관심)를 흔든다",
+          "axis": "E"
+        },
+        {
+          "label": "적극적으로 냄새 맡듯 다가간다",
+          "axis": "E"
+        },
+        {
+          "label": "일단 거리를 두고 관찰한다",
+          "axis": "I"
+        },
+        {
+          "label": "숨어서 지켜보다 나중에 다가간다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "집에 손님이 오면",
+      "image": null,
+      "choices": [
+        {
+          "label": "반갑게 뛰어나가 맞이한다",
+          "axis": "E"
+        },
+        {
+          "label": "낯선 사람에게도 스스럼없이 다가간다",
+          "axis": "E"
+        },
+        {
+          "label": "조용히 자기 자리에서 지켜본다",
+          "axis": "I"
+        },
+        {
+          "label": "숨을 곳부터 찾는다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "새로운 장난감(놀거리)을 보면",
+      "image": null,
+      "choices": [
+        {
+          "label": "이걸로 뭘 할 수 있을지 상상해본다",
+          "axis": "N"
+        },
+        {
+          "label": "새로운 놀이 방법을 만들어낸다",
+          "axis": "N"
+        },
+        {
+          "label": "일단 냄새부터 맡고 확인한다",
+          "axis": "S"
+        },
+        {
+          "label": "익숙한 방식으로 갖고 논다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "산책(외출) 중 낯선 길을 만나면",
+      "image": null,
+      "choices": [
+        {
+          "label": "호기심에 새로운 길로 가보고 싶어한다",
+          "axis": "N"
+        },
+        {
+          "label": "이 길 끝에 뭐가 있을지 궁금해한다",
+          "axis": "N"
+        },
+        {
+          "label": "익숙한 길로만 가려고 한다",
+          "axis": "S"
+        },
+        {
+          "label": "낯선 길은 경계하며 피한다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(동물 판별 절반 완료. 사육사가 다가와 묻는다. \"이 아이, 낯선 사람 앞에서는 어떻게 행동하나요?\") (사육사가 묻는다) 다른 동물과 부딪혔을 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "누가 먼저 잘못했는지 상황을 판단한다",
+          "axis": "T"
+        },
+        {
+          "label": "냉정하게 거리를 두고 지켜본다",
+          "axis": "T"
+        },
+        {
+          "label": "속상해서 낑낑거리며 위로를 구한다",
+          "axis": "F"
+        },
+        {
+          "label": "상대의 기분을 살피며 다가간다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "주인이 화를 내면",
+      "image": null,
+      "choices": [
+        {
+          "label": "왜 화를 내는지 이유부터 살핀다",
+          "axis": "T"
+        },
+        {
+          "label": "논리적으로 상황을 이해하려 한다",
+          "axis": "T"
+        },
+        {
+          "label": "눈치를 보며 슬퍼한다",
+          "axis": "F"
+        },
+        {
+          "label": "주인의 기분을 풀어주려 애교를 부린다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "하루 일과 패턴은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "정해진 시간에 밥 먹고 산책한다",
+          "axis": "J"
+        },
+        {
+          "label": "루틴이 정확하게 지켜져야 편하다",
+          "axis": "J"
+        },
+        {
+          "label": "그때그때 기분따라 움직인다",
+          "axis": "P"
+        },
+        {
+          "label": "예측 불가능하게 행동한다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "잠자리(집) 취향은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "정해진 자리에서만 잔다",
+          "axis": "J"
+        },
+        {
+          "label": "익숙한 장소를 고수한다",
+          "axis": "J"
+        },
+        {
+          "label": "아무 데서나 편하게 잔다",
+          "axis": "P"
+        },
+        {
+          "label": "매번 다른 곳에서 자기도 한다",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "도베르만 (ENTJ)",
+      "subtitle": "J라면 철저한 경계 태세로 움직입니다",
+      "image": "assets/result/ent-pet-doberman.webp",
+      "traits": [
+        "영리하고 카리스마 있는 반려동물",
+        "집안의 든든한 보호자 역할을 자처함",
+        "다가가기 어렵다는 오해를 받기도 함"
+      ],
+      "tip": "키우기 난이도 중, 근데 존재감은 최강"
+    },
+    {
+      "code": "ENTP",
+      "title": "도베르만 (ENTP)",
+      "subtitle": "P라면 상황 봐가며 유연하게 반응합니다",
+      "image": "assets/result/ent-pet-doberman.webp",
+      "traits": [
+        "영리하고 카리스마 있는 반려동물",
+        "집안의 든든한 보호자 역할을 자처함",
+        "다가가기 어렵다는 오해를 받기도 함"
+      ],
+      "tip": "키우기 난이도 중, 근데 존재감은 최강"
+    },
+    {
+      "code": "ENFJ",
+      "title": "골든리트리버 (ENFJ)",
+      "subtitle": "J라면 정해진 산책 루틴으로 움직입니다",
+      "image": "assets/result/enf-pet-golden-retriever.webp",
+      "traits": [
+        "밝고 애정 넘치는 반려동물",
+        "누구에게나 사랑받는 사교성",
+        "체력 관리가 필수"
+      ],
+      "tip": "키우기 난이도 하(사랑스러움), 근데 체력 필요"
+    },
+    {
+      "code": "ENFP",
+      "title": "골든리트리버 (ENFP)",
+      "subtitle": "P라면 그때그때 신나게 놉니다",
+      "image": "assets/result/enf-pet-golden-retriever.webp",
+      "traits": [
+        "밝고 애정 넘치는 반려동물",
+        "누구에게나 사랑받는 사교성",
+        "체력 관리가 필수"
+      ],
+      "tip": "키우기 난이도 하(사랑스러움), 근데 체력 필요"
+    },
+    {
+      "code": "ESTJ",
+      "title": "진돗개 (ESTJ)",
+      "subtitle": "J라면 철저한 경비로 움직입니다",
+      "image": "assets/result/est-pet-jindo.webp",
+      "traits": [
+        "충직하고 용감한 반려동물",
+        "확실한 실력으로 집을 지킴",
+        "낯선 사람에게는 경계가 심함"
+      ],
+      "tip": "키우기 난이도 중상, 한 번 믿으면 끝까지 충성"
+    },
+    {
+      "code": "ESTP",
+      "title": "진돗개 (ESTP)",
+      "subtitle": "P라면 상황 봐가며 대응합니다",
+      "image": "assets/result/est-pet-jindo.webp",
+      "traits": [
+        "충직하고 용감한 반려동물",
+        "확실한 실력으로 집을 지킴",
+        "낯선 사람에게는 경계가 심함"
+      ],
+      "tip": "키우기 난이도 중상, 한 번 믿으면 끝까지 충성"
+    },
+    {
+      "code": "ESFJ",
+      "title": "시바견 (ESFJ)",
+      "subtitle": "J라면 정해진 방식으로 움직입니다",
+      "image": "assets/result/esf-pet-shiba.webp",
+      "traits": [
+        "다정하고 사랑스러운 매력",
+        "사람을 잘 따르고 애교가 많음",
+        "가끔 은근히 고집을 부림"
+      ],
+      "tip": "키우기 난이도 중, 근데 미소 하나로 다 용서됨"
+    },
+    {
+      "code": "ESFP",
+      "title": "시바견 (ESFP)",
+      "subtitle": "P라면 그날 기분따라 애교를 부립니다",
+      "image": "assets/result/esf-pet-shiba.webp",
+      "traits": [
+        "다정하고 사랑스러운 매력",
+        "사람을 잘 따르고 애교가 많음",
+        "가끔 은근히 고집을 부림"
+      ],
+      "tip": "키우기 난이도 중, 근데 미소 하나로 다 용서됨"
+    },
+    {
+      "code": "INTJ",
+      "title": "러시안블루 (INTJ)",
+      "subtitle": "J라면 정해진 루틴으로 움직입니다",
+      "image": "assets/result/int-pet-russian-blue.webp",
+      "traits": [
+        "지적이고 독립적인 반려동물",
+        "조용히 자기만의 세계에 있는 걸 좋아함",
+        "필요할 때는 확실하게 곁을 지켜줌"
+      ],
+      "tip": "키우기 난이도 상, 근데 도도한 매력에 다 넘어감"
+    },
+    {
+      "code": "INTP",
+      "title": "러시안블루 (INTP)",
+      "subtitle": "P라면 자유롭게 움직입니다",
+      "image": "assets/result/int-pet-russian-blue.webp",
+      "traits": [
+        "지적이고 독립적인 반려동물",
+        "조용히 자기만의 세계에 있는 걸 좋아함",
+        "필요할 때는 확실하게 곁을 지켜줌"
+      ],
+      "tip": "키우기 난이도 상, 근데 도도한 매력에 다 넘어감"
+    },
+    {
+      "code": "INFJ",
+      "title": "페르시안고양이 (INFJ)",
+      "subtitle": "J라면 정해진 케어로 움직입니다",
+      "image": "assets/result/inf-pet-persian-cat.webp",
+      "traits": [
+        "조용하고 섬세한 반려동물",
+        "낯을 가리지만 마음을 열면 깊은 애정"
+      ],
+      "tip": "키우기 난이도 상, 근데 마음 열면 껌딱지"
+    },
+    {
+      "code": "INFP",
+      "title": "페르시안고양이 (INFP)",
+      "subtitle": "P라면 그때그때 필요한 관심을 줍니다",
+      "image": "assets/result/inf-pet-persian-cat.webp",
+      "traits": [
+        "조용하고 섬세한 반려동물",
+        "낯을 가리지만 마음을 열면 깊은 애정"
+      ],
+      "tip": "키우기 난이도 상, 근데 마음 열면 껌딱지"
+    },
+    {
+      "code": "ISTJ",
+      "title": "그레이하운드 (ISTJ)",
+      "subtitle": "J라면 정확한 루틴으로 움직입니다",
+      "image": "assets/result/ist-pet-greyhound.webp",
+      "traits": [
+        "조용하고 효율적인 반려동물",
+        "말은 없어도 확실하게 자기 할 일을 하는 실속파"
+      ],
+      "tip": "키우기 난이도 중, 근데 손 안 가는 효자"
+    },
+    {
+      "code": "ISTP",
+      "title": "그레이하운드 (ISTP)",
+      "subtitle": "P라면 필요할 때만 움직입니다",
+      "image": "assets/result/ist-pet-greyhound.webp",
+      "traits": [
+        "조용하고 효율적인 반려동물",
+        "말은 없어도 확실하게 자기 할 일을 하는 실속파"
+      ],
+      "tip": "키우기 난이도 중, 근데 손 안 가는 효자"
+    },
+    {
+      "code": "ISFJ",
+      "title": "랙돌고양이 (ISFJ)",
+      "subtitle": "J라면 정해진 케어 루틴으로 움직입니다",
+      "image": "assets/result/isf-pet-ragdoll.webp",
+      "traits": [
+        "순하고 다정한 반려동물",
+        "조용히 곁에 있어주는 존재감",
+        "예민한 부분도 있어 세심한 케어가 필요"
+      ],
+      "tip": "키우기 난이도 중, 근데 안겨있는 모습이 힐링 그 자체"
+    },
+    {
+      "code": "ISFP",
+      "title": "랙돌고양이 (ISFP)",
+      "subtitle": "P라면 그때그때 다정하게 챙깁니다",
+      "image": "assets/result/isf-pet-ragdoll.webp",
+      "traits": [
+        "순하고 다정한 반려동물",
+        "조용히 곁에 있어주는 존재감",
+        "예민한 부분도 있어 세심한 케어가 필요"
+      ],
+      "tip": "키우기 난이도 중, 근데 안겨있는 모습이 힐링 그 자체"
+    }
+  ]
+}

@@ -1,0 +1,430 @@
+{
+  "id": "mbti-cyberpunk-world",
+  "title": "MBTI가 사이버펑크 세계라면",
+  "description": "네온사인이 번쩍이는 도시, 빗물에 젖은 골목. 메가코퍼레이션 서버에 잠입하는 순간부터, 선택 하나하나가 다른 통로로 당신을 이끈다.",
+  "hashtags": [
+    "MBTI사이버펑크",
+    "심리테스트",
+    "해킹시나리오",
+    "분기스토리"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 249,
+  "engagement_key": "site-mbticyberpunk-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI가 사이버펑크 세계라면 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "start_node": "start",
+  "questions_tree": {
+    "start": {
+      "text": "잠입 첫 관문, 경비 드론이 지나가는 골목이다. 당신의 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "동료들과 신호를 주고받으며 화려하게 치고 들어간다",
+          "axis": "E",
+          "next": "n2_e"
+        },
+        {
+          "label": "혼자 그림자 속에 몸을 숨기고 조용히 움직인다",
+          "axis": "I",
+          "next": "n2_i"
+        }
+      ]
+    },
+    "n2_e": {
+      "text": "화려하게 뚫은 통로 안, 낯선 시스템 화면이 눈앞에 떠 있다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "이걸로 뭘 더 해킹할 수 있을지 즉흥적으로 상상해본다",
+          "axis": "N",
+          "next": "n3"
+        },
+        {
+          "label": "이 시스템 뒤에 숨겨진 더 큰 그림부터 그려본다",
+          "axis": "N",
+          "next": "n3"
+        },
+        {
+          "label": "화면에 뜬 데이터부터 하나하나 확인한다",
+          "axis": "S",
+          "next": "n3"
+        },
+        {
+          "label": "지금 당장 필요한 정보만 정확히 추출한다",
+          "axis": "S",
+          "next": "n3"
+        }
+      ]
+    },
+    "n2_i": {
+      "text": "그림자 속에서 이동하다, 낡은 단말기 하나를 발견했다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "이 단말기로 뭘 더 캐낼 수 있을지 상상력을 발휘한다",
+          "axis": "N",
+          "next": "n3"
+        },
+        {
+          "label": "여기 숨겨진 진짜 목적이 뭘지부터 추측해본다",
+          "axis": "N",
+          "next": "n3"
+        },
+        {
+          "label": "단말기에 남은 로그부터 차근차근 살펴본다",
+          "axis": "S",
+          "next": "n3"
+        },
+        {
+          "label": "실제로 쓸 수 있는 정보인지부터 확인한다",
+          "axis": "S",
+          "next": "n3"
+        }
+      ]
+    },
+    "n3": {
+      "text": "경비 AI가 당신의 흔적을 감지하고 접근해온다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "침착하게 손익부터 계산하고 대응한다",
+          "axis": "T",
+          "next": "n4"
+        },
+        {
+          "label": "감정 없이 논리적으로 시스템을 속인다",
+          "axis": "T",
+          "next": "n4"
+        },
+        {
+          "label": "AI의 반응 패턴에서 미묘한 감정을 읽으려 한다",
+          "axis": "F",
+          "next": "n4"
+        },
+        {
+          "label": "혹시 이 AI도 감정이 있는 건 아닐지 신경 쓰인다",
+          "axis": "F",
+          "next": "n4"
+        }
+      ]
+    },
+    "n4": {
+      "text": "탈출 루트를 정해야 하는 순간이 왔다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "미리 짜둔 각본대로 정확히 움직인다",
+          "axis": "J",
+          "next": "n5"
+        },
+        {
+          "label": "모든 변수를 대비해둔 계획대로 간다",
+          "axis": "J",
+          "next": "n5"
+        },
+        {
+          "label": "상황 봐가며 즉흥적으로 루트를 바꾼다",
+          "axis": "P",
+          "next": "n5"
+        },
+        {
+          "label": "일단 움직이면서 그때그때 수습한다",
+          "axis": "P",
+          "next": "n5"
+        }
+      ]
+    },
+    "n5": {
+      "text": "동료 해커가 실시간 통신으로 말을 걸어온다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "곧바로 응답하며 상황을 함께 공유한다",
+          "axis": "E",
+          "next": "n6"
+        },
+        {
+          "label": "먼저 나서서 다음 작전을 제안한다",
+          "axis": "E",
+          "next": "n6"
+        },
+        {
+          "label": "필요한 말만 최소한으로 짧게 답한다",
+          "axis": "I",
+          "next": "n6"
+        },
+        {
+          "label": "혼자 상황을 정리한 뒤에야 답을 보낸다",
+          "axis": "I",
+          "next": "n6"
+        }
+      ]
+    },
+    "n6": {
+      "text": "메인 서버 코어 앞, 마지막 관문에 도착했다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "한 번도 없던 방식으로 즉석에서 뚫어본다",
+          "axis": "N",
+          "next": "n7"
+        },
+        {
+          "label": "상상력을 발휘해 변칙적으로 침투한다",
+          "axis": "N",
+          "next": "n7"
+        },
+        {
+          "label": "검증된 방법으로 확실하게 뚫는다",
+          "axis": "S",
+          "next": "n7"
+        },
+        {
+          "label": "눈앞의 보안 구조부터 꼼꼼히 파악한다",
+          "axis": "S",
+          "next": "n7"
+        }
+      ]
+    },
+    "n7": {
+      "text": "경보가 울리고, 정체가 드러나기 직전이다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "냉정하게 최선의 탈출 확률을 계산한다",
+          "axis": "T",
+          "next": "n8"
+        },
+        {
+          "label": "감정을 배제하고 가장 효율적인 수를 고른다",
+          "axis": "T",
+          "next": "n8"
+        },
+        {
+          "label": "동료들이 무사한지부터 걱정된다",
+          "axis": "F",
+          "next": "n8"
+        },
+        {
+          "label": "누군가 다치지 않을지 마음이 쓰인다",
+          "axis": "F",
+          "next": "n8"
+        }
+      ]
+    },
+    "n8": {
+      "text": "탈출 직전, 마지막 선택의 순간이다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "미리 정해둔 탈출 계획을 그대로 실행한다",
+          "axis": "J"
+        },
+        {
+          "label": "끝까지 각본대로 침착하게 마무리한다",
+          "axis": "J"
+        },
+        {
+          "label": "즉흥적으로 가장 빠른 틈을 찾아 빠져나간다",
+          "axis": "P"
+        },
+        {
+          "label": "상황이 바뀌는 대로 유연하게 대응한다",
+          "axis": "P"
+        }
+      ]
+    }
+  },
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "기업 임원 (ENTJ)",
+      "subtitle": "J라면 완벽한 사업 계획으로 움직입니다",
+      "image": "assets/result/ent-cyberpunk-executive.webp",
+      "traits": [
+        "도시의 판을 짜는 권력자 유형",
+        "냉철한 전략으로 기업을 움직임",
+        "야망 때문에 적도 많음"
+      ],
+      "tip": "코드명 'Overlord' · 명성도 95%"
+    },
+    {
+      "code": "ENTP",
+      "title": "기업 임원 (ENTP)",
+      "subtitle": "P라면 즉흥적인 판단으로 움직입니다",
+      "image": "assets/result/ent-cyberpunk-executive.webp",
+      "traits": [
+        "도시의 판을 짜는 권력자 유형",
+        "냉철한 전략으로 기업을 움직임",
+        "야망 때문에 적도 많음"
+      ],
+      "tip": "코드명 'Overlord' · 명성도 95%"
+    },
+    {
+      "code": "ENFJ",
+      "title": "언더그라운드 인플루언서 (ENFJ)",
+      "subtitle": "J라면 계획된 메시지로 움직입니다",
+      "image": "assets/result/enf-cyberpunk-influencer.webp",
+      "traits": [
+        "도시 대중의 마음을 움직이는 유형",
+        "메시지를 전하는 재주가 있음",
+        "시스템의 표적이 되기도 함"
+      ],
+      "tip": "코드명 'Signal' · 명성도 90%"
+    },
+    {
+      "code": "ENFP",
+      "title": "언더그라운드 인플루언서 (ENFP)",
+      "subtitle": "P라면 즉흥 방송으로 대중을 움직입니다",
+      "image": "assets/result/enf-cyberpunk-influencer.webp",
+      "traits": [
+        "도시 대중의 마음을 움직이는 유형",
+        "메시지를 전하는 재주가 있음",
+        "시스템의 표적이 되기도 함"
+      ],
+      "tip": "코드명 'Signal' · 명성도 90%"
+    },
+    {
+      "code": "ESTJ",
+      "title": "현상금 사냥꾼 (ESTJ)",
+      "subtitle": "J라면 철저한 추적으로 움직입니다",
+      "image": "assets/result/est-cyberpunk-bounty-hunter.webp",
+      "traits": [
+        "몸으로 부딪히며 임무를 완수하는 유형",
+        "확실한 실력으로 표적을 잡아냄",
+        "섬세한 전략은 다소 부족함"
+      ],
+      "tip": "코드명 'Hunter' · 명성도 88%"
+    },
+    {
+      "code": "ESTP",
+      "title": "현상금 사냥꾼 (ESTP)",
+      "subtitle": "P라면 즉흥 대응으로 표적을 잡습니다",
+      "image": "assets/result/est-cyberpunk-bounty-hunter.webp",
+      "traits": [
+        "몸으로 부딪히며 임무를 완수하는 유형",
+        "확실한 실력으로 표적을 잡아냄",
+        "섬세한 전략은 다소 부족함"
+      ],
+      "tip": "코드명 'Hunter' · 명성도 88%"
+    },
+    {
+      "code": "ESFJ",
+      "title": "언더그라운드 힐러(의료상) (ESFJ)",
+      "subtitle": "J라면 체계적인 치료로 움직입니다",
+      "image": "assets/result/esf-cyberpunk-underground-medic.webp",
+      "traits": [
+        "도시 뒷골목 사람들을 돌봄",
+        "따뜻한 마음으로 다친 이들을 챙김"
+      ],
+      "tip": "코드명 'Medic' · 명성도 85%"
+    },
+    {
+      "code": "ESFP",
+      "title": "언더그라운드 힐러(의료상) (ESFP)",
+      "subtitle": "P라면 그때그때 필요한 처치로 돕습니다",
+      "image": "assets/result/esf-cyberpunk-underground-medic.webp",
+      "traits": [
+        "도시 뒷골목 사람들을 돌봄",
+        "따뜻한 마음으로 다친 이들을 챙김"
+      ],
+      "tip": "코드명 'Medic' · 명성도 85%"
+    },
+    {
+      "code": "INTJ",
+      "title": "전설의 해커 (INTJ)",
+      "subtitle": "J라면 완벽한 침투 계획으로 움직입니다",
+      "image": "assets/result/int-cyberpunk-legendary-hacker.webp",
+      "traits": [
+        "도시의 시스템을 뒤흔드는 유형",
+        "혼자 있는 시간에 가장 강력한 능력을 발휘함",
+        "실전에서의 사교는 서투름"
+      ],
+      "tip": "코드명 'Ghost' · 명성도 92%"
+    },
+    {
+      "code": "INTP",
+      "title": "전설의 해커 (INTP)",
+      "subtitle": "P라면 즉석 코딩으로 뚫습니다",
+      "image": "assets/result/int-cyberpunk-legendary-hacker.webp",
+      "traits": [
+        "도시의 시스템을 뒤흔드는 유형",
+        "혼자 있는 시간에 가장 강력한 능력을 발휘함",
+        "실전에서의 사교는 서투름"
+      ],
+      "tip": "코드명 'Ghost' · 명성도 92%"
+    },
+    {
+      "code": "INFJ",
+      "title": "정보상 (INFJ)",
+      "subtitle": "J라면 정제된 정보로 움직입니다",
+      "image": "assets/result/inf-cyberpunk-information-broker.webp",
+      "traits": [
+        "도시의 진실을 모으고 전하는 유형",
+        "조용히 정보의 흐름을 읽음"
+      ],
+      "tip": "코드명 'Whisper' · 명성도 87%"
+    },
+    {
+      "code": "INFP",
+      "title": "정보상 (INFP)",
+      "subtitle": "P라면 그때그때 얻은 정보로 거래합니다",
+      "image": "assets/result/inf-cyberpunk-information-broker.webp",
+      "traits": [
+        "도시의 진실을 모으고 전하는 유형",
+        "조용히 정보의 흐름을 읽음"
+      ],
+      "tip": "코드명 'Whisper' · 명성도 87%"
+    },
+    {
+      "code": "ISTJ",
+      "title": "사이보그 용병 (ISTJ)",
+      "subtitle": "J라면 정확한 작전으로 움직입니다",
+      "image": "assets/result/ist-cyberpunk-cyborg-mercenary.webp",
+      "traits": [
+        "감정 없이 임무를 정확히 수행하는 유형",
+        "누구의 편도 아닌 채 필요한 일만 처리함"
+      ],
+      "tip": "코드명 'Steel' · 명성도 89%"
+    },
+    {
+      "code": "ISTP",
+      "title": "사이보그 용병 (ISTP)",
+      "subtitle": "P라면 즉석 대응으로 임무를 완수합니다",
+      "image": "assets/result/ist-cyberpunk-cyborg-mercenary.webp",
+      "traits": [
+        "감정 없이 임무를 정확히 수행하는 유형",
+        "누구의 편도 아닌 채 필요한 일만 처리함"
+      ],
+      "tip": "코드명 'Steel' · 명성도 89%"
+    },
+    {
+      "code": "ISFJ",
+      "title": "은둔 기술자 (ISFJ)",
+      "subtitle": "J라면 완벽한 설계로 움직입니다",
+      "image": "assets/result/isf-cyberpunk-recluse-engineer.webp",
+      "traits": [
+        "조용히 도시의 뒷단을 지탱하는 유형",
+        "눈에 띄지 않지만 필요한 이들에게 확실한 도움을 줌"
+      ],
+      "tip": "코드명 'Wrench' · 명성도 84%"
+    },
+    {
+      "code": "ISFP",
+      "title": "은둔 기술자 (ISFP)",
+      "subtitle": "P라면 즉석 개조로 도움을 줍니다",
+      "image": "assets/result/isf-cyberpunk-recluse-engineer.webp",
+      "traits": [
+        "조용히 도시의 뒷단을 지탱하는 유형",
+        "눈에 띄지 않지만 필요한 이들에게 확실한 도움을 줌"
+      ],
+      "tip": "코드명 'Wrench' · 명성도 84%"
+    }
+  ]
+}

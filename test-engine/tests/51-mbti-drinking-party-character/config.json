@@ -1,0 +1,384 @@
+{
+  "id": "mbti-drinking-party-character",
+  "title": "MBTI 술자리 캐릭터 + 다음날 후기",
+  "description": "첫 잔이 채워지는 순간, 사람들의 진짜 얼굴이 드러나기 시작한다. 슬라이더를 움직여 지금 내 텐션을 표시해보자 — 오늘 밤, 당신의 술자리 부캐가 깨어난다.",
+  "hashtags": [
+    "MBTI술자리",
+    "심리테스트",
+    "텐션게이지",
+    "다음날후기"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 269,
+  "engagement_key": "site-mbtidrinking-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 술자리 캐릭터 + 다음날 후기 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "술이 들어가기 시작하면, 지금 내 텐션 게이지는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "오히려 조용해지거나 말수가 준다",
+          "axis": "I"
+        },
+        {
+          "label": "한 사람하고만 깊은 얘기를 한다",
+          "axis": "I"
+        },
+        {
+          "label": "텐션이 확 올라가서 더 시끄러워진다",
+          "axis": "E"
+        },
+        {
+          "label": "아무한테나 전화나 톡을 돌린다",
+          "axis": "E"
+        }
+      ]
+    },
+    {
+      "text": "지금 이 술자리에서, 나는 어디쯤 있을까?",
+      "image": null,
+      "choices": [
+        {
+          "label": "혼자 생각에 잠기기도 한다",
+          "axis": "I"
+        },
+        {
+          "label": "친한 사람들과만 조용히 얘기한다",
+          "axis": "I"
+        },
+        {
+          "label": "새로운 사람들과도 스스럼없이 어울린다",
+          "axis": "E"
+        },
+        {
+          "label": "다 같이 왁자지껄하게 떠든다",
+          "axis": "E"
+        }
+      ]
+    },
+    {
+      "text": "취기가 오르면, 대화 주제 게이지는 어느 쪽으로?",
+      "image": null,
+      "choices": [
+        {
+          "label": "눈앞의 안주나 술 얘기에 집중한다",
+          "axis": "S"
+        },
+        {
+          "label": "오늘 있었던 구체적인 일 얘기",
+          "axis": "S"
+        },
+        {
+          "label": "가정법 얘기(만약에 말이야)를 늘어놓는다",
+          "axis": "N"
+        },
+        {
+          "label": "인생, 우주, 미래 같은 철학적인 얘기",
+          "axis": "N"
+        }
+      ]
+    },
+    {
+      "text": "(2차로 넘어간다) 취중진담 타임, 내 얘기 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "있었던 일 그대로를 얘기한다",
+          "axis": "S"
+        },
+        {
+          "label": "구체적인 사건을 예로 들어 말한다",
+          "axis": "S"
+        },
+        {
+          "label": "상징적인 비유로 감정을 표현한다",
+          "axis": "N"
+        },
+        {
+          "label": "추상적으로 마음속 얘기를 꺼낸다",
+          "axis": "N"
+        }
+      ]
+    },
+    {
+      "text": "(2차, 술이 반쯤 들어간 지금부터가 진짜다) 감정이 격해지면 나는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "논리적으로 상황을 정리하려 든다",
+          "axis": "T"
+        },
+        {
+          "label": "팩트로 조목조목 따지기 시작한다",
+          "axis": "T"
+        },
+        {
+          "label": "눈물이 핑 돌거나 울컥한다",
+          "axis": "F"
+        },
+        {
+          "label": "갑자기 사랑 고백을 하기도 한다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "술자리에서 다툼이 생기면, 내 반응 게이지는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "누가 맞고 틀렸는지 따진다",
+          "axis": "T"
+        },
+        {
+          "label": "냉정하게 상황을 분석해서 정리한다",
+          "axis": "T"
+        },
+        {
+          "label": "분위기가 안 좋아져서 속상해한다",
+          "axis": "F"
+        },
+        {
+          "label": "감정이 상해서 눈물부터 난다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "술자리 마무리 스타일 게이지는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "그 자리 분위기에 맞춰 즉흥적으로 정한다",
+          "axis": "P"
+        },
+        {
+          "label": "흐름 따라 가는 대로 흘러간다",
+          "axis": "P"
+        },
+        {
+          "label": "누가 얼마 냈는지 정산까지 다 한다",
+          "axis": "J"
+        },
+        {
+          "label": "2차, 3차 계획을 미리 짜둔다",
+          "axis": "J"
+        }
+      ]
+    },
+    {
+      "text": "다음 날 아침, 기억 게이지는 어디쯤?",
+      "image": null,
+      "choices": [
+        {
+          "label": "친구 톡 보고서야 상황을 파악한다",
+          "axis": "P"
+        },
+        {
+          "label": "필름이 끊겨서 기억이 가물가물하다",
+          "axis": "P"
+        },
+        {
+          "label": "누구랑 뭘 마셨는지 정확히 기억한다",
+          "axis": "J"
+        },
+        {
+          "label": "어제 한 말과 자리를 다 기억한다",
+          "axis": "J"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "좌중 정리형 (ENTJ)",
+      "subtitle": "J라면 정산까지 완벽하게 움직입니다",
+      "image": "assets/result/ent-drinking-organizer.webp",
+      "traits": [
+        "취해도 자리를 정리하는 카리스마",
+        "다음 술자리 계획까지 미리 짜둠",
+        "술자리에서까지 진지하다는 얘기도 들음"
+      ],
+      "tip": "쟤 없으면 술자리 안 굴러감 — 지인 후기"
+    },
+    {
+      "code": "ENTP",
+      "title": "좌중 정리형 (ENTP)",
+      "subtitle": "P라면 분위기 보며 정리합니다",
+      "image": "assets/result/ent-drinking-organizer.webp",
+      "traits": [
+        "취해도 자리를 정리하는 카리스마",
+        "다음 술자리 계획까지 미리 짜둠",
+        "술자리에서까지 진지하다는 얘기도 들음"
+      ],
+      "tip": "쟤 없으면 술자리 안 굴러감 — 지인 후기"
+    },
+    {
+      "code": "ENFJ",
+      "title": "분위기 폭발형 (ENFJ)",
+      "subtitle": "J라면 계획된 텐션으로 움직입니다",
+      "image": "assets/result/enf-drinking-atmosphere-burst.webp",
+      "traits": [
+        "술자리 분위기를 최고조로 끌어올림",
+        "텐션이 오르면 누구보다 신나게 놈",
+        "다음날 텐션을 뒷감당하는 게 문제"
+      ],
+      "tip": "어제 진짜 미쳤었다 — 지인 후기(칭찬임)"
+    },
+    {
+      "code": "ENFP",
+      "title": "분위기 폭발형 (ENFP)",
+      "subtitle": "P라면 그날 흥으로 분위기를 만듭니다",
+      "image": "assets/result/enf-drinking-atmosphere-burst.webp",
+      "traits": [
+        "술자리 분위기를 최고조로 끌어올림",
+        "텐션이 오르면 누구보다 신나게 놈",
+        "다음날 텐션을 뒷감당하는 게 문제"
+      ],
+      "tip": "어제 진짜 미쳤었다 — 지인 후기(칭찬임)"
+    },
+    {
+      "code": "ESTJ",
+      "title": "술게임 승부사 (ESTJ)",
+      "subtitle": "J라면 필승 전략으로 움직입니다",
+      "image": "assets/result/est-drinking-game-competitor.webp",
+      "traits": [
+        "술자리에서도 승부욕이 발동함",
+        "확실하게 이기려는 열정",
+        "과음할 위험도 큼"
+      ],
+      "tip": "게임만 시작하면 눈빛이 바뀜 — 지인 후기"
+    },
+    {
+      "code": "ESTP",
+      "title": "술게임 승부사 (ESTP)",
+      "subtitle": "P라면 그때그때 감으로 승부합니다",
+      "image": "assets/result/est-drinking-game-competitor.webp",
+      "traits": [
+        "술자리에서도 승부욕이 발동함",
+        "확실하게 이기려는 열정",
+        "과음할 위험도 큼"
+      ],
+      "tip": "게임만 시작하면 눈빛이 바뀜 — 지인 후기"
+    },
+    {
+      "code": "ESFJ",
+      "title": "다정한 술친구형 (ESFJ)",
+      "subtitle": "J라면 끝까지 다 챙기고 움직입니다",
+      "image": "assets/result/esf-drinking-friendly-companion.webp",
+      "traits": [
+        "취해도 옆 사람을 챙김",
+        "다들 즐거운지 살피며 분위기를 부드럽게 만듦"
+      ],
+      "tip": "취해도 남 걱정만 함 — 지인 후기"
+    },
+    {
+      "code": "ESFP",
+      "title": "다정한 술친구형 (ESFP)",
+      "subtitle": "P라면 그 순간 필요한 걸 챙깁니다",
+      "image": "assets/result/esf-drinking-friendly-companion.webp",
+      "traits": [
+        "취해도 옆 사람을 챙김",
+        "다들 즐거운지 살피며 분위기를 부드럽게 만듦"
+      ],
+      "tip": "취해도 남 걱정만 함 — 지인 후기"
+    },
+    {
+      "code": "INTJ",
+      "title": "조용한 관찰자형 (INTJ)",
+      "subtitle": "J라면 정확한 타이밍에 움직입니다",
+      "image": "assets/result/int-drinking-quiet-observer.webp",
+      "traits": [
+        "술이 들어가도 크게 흐트러지지 않음",
+        "조용히 상황을 지켜보다 정곡을 찌르는 한마디"
+      ],
+      "tip": "말 없다가 갑자기 팩폭함 — 지인 후기"
+    },
+    {
+      "code": "INTP",
+      "title": "조용한 관찰자형 (INTP)",
+      "subtitle": "P라면 갑자기 툭 한마디를 던집니다",
+      "image": "assets/result/int-drinking-quiet-observer.webp",
+      "traits": [
+        "술이 들어가도 크게 흐트러지지 않음",
+        "조용히 상황을 지켜보다 정곡을 찌르는 한마디"
+      ],
+      "tip": "말 없다가 갑자기 팩폭함 — 지인 후기"
+    },
+    {
+      "code": "INFJ",
+      "title": "취중진담 감성형 (INFJ)",
+      "subtitle": "J라면 정리된 진심으로 움직입니다",
+      "image": "assets/result/inf-drinking-heartfelt.webp",
+      "traits": [
+        "취기가 오르면 진심이 흘러나옴",
+        "평소 못 하던 속마음을 이 순간 꺼냄"
+      ],
+      "tip": "어제 그 말, 진심이었던 거지? — 지인 후기"
+    },
+    {
+      "code": "INFP",
+      "title": "취중진담 감성형 (INFP)",
+      "subtitle": "P라면 갑자기 터지는 감정으로 말합니다",
+      "image": "assets/result/inf-drinking-heartfelt.webp",
+      "traits": [
+        "취기가 오르면 진심이 흘러나옴",
+        "평소 못 하던 속마음을 이 순간 꺼냄"
+      ],
+      "tip": "어제 그 말, 진심이었던 거지? — 지인 후기"
+    },
+    {
+      "code": "ISTJ",
+      "title": "계산·귀가 담당 (ISTJ)",
+      "subtitle": "J라면 완벽한 정산으로 움직입니다",
+      "image": "assets/result/ist-drinking-settlement-guardian.webp",
+      "traits": [
+        "취해도 정신줄만큼은 놓지 않음",
+        "다들 취해있을 때 홀로 정산과 귀가를 책임짐"
+      ],
+      "tip": "얘 없으면 다 집 못 감 — 지인 후기"
+    },
+    {
+      "code": "ISTP",
+      "title": "계산·귀가 담당 (ISTP)",
+      "subtitle": "P라면 그때그때 상황 보며 챙깁니다",
+      "image": "assets/result/ist-drinking-settlement-guardian.webp",
+      "traits": [
+        "취해도 정신줄만큼은 놓지 않음",
+        "다들 취해있을 때 홀로 정산과 귀가를 책임짐"
+      ],
+      "tip": "얘 없으면 다 집 못 감 — 지인 후기"
+    },
+    {
+      "code": "ISFJ",
+      "title": "조용히 취하는형 (ISFJ)",
+      "subtitle": "J라면 적당한 선에서 움직입니다",
+      "image": "assets/result/isf-drinking-quietly-tipsy.webp",
+      "traits": [
+        "술이 들어가면 오히려 더 조용해짐",
+        "티는 안 나지만 은근히 다 취해있는 반전 매력"
+      ],
+      "tip": "쟤 취한 거 티도 안 남 — 지인 후기"
+    },
+    {
+      "code": "ISFP",
+      "title": "조용히 취하는형 (ISFP)",
+      "subtitle": "P라면 분위기 따라 취기를 즐깁니다",
+      "image": "assets/result/isf-drinking-quietly-tipsy.webp",
+      "traits": [
+        "술이 들어가면 오히려 더 조용해짐",
+        "티는 안 나지만 은근히 다 취해있는 반전 매력"
+      ],
+      "tip": "쟤 취한 거 티도 안 남 — 지인 후기"
+    }
+  ],
+  "slider_ui": true
+}

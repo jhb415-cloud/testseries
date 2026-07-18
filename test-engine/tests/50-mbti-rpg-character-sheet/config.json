@@ -1,0 +1,387 @@
+{
+  "id": "mbti-rpg-character-sheet",
+  "title": "MBTI 게임 캐릭터 스탯 시트",
+  "description": "새 게임을 시작하기 전, 캐릭터 생성 화면이 뜬다. \"당신의 스탯을 확인하는 중...\" 로딩바가 채워지기 시작한다.",
+  "hashtags": [
+    "MBTI게임",
+    "심리테스트",
+    "스탯시트",
+    "RPG밈"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 255,
+  "engagement_key": "site-mbtirpgstat-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 게임 캐릭터 스탯 시트 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "마을(로비)에 접속하면 당신은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "다른 플레이어에게 먼저 말을 건다",
+          "axis": "E"
+        },
+        {
+          "label": "파티를 모집하며 적극적으로 나선다",
+          "axis": "E"
+        },
+        {
+          "label": "혼자 조용히 퀘스트를 확인한다",
+          "axis": "I"
+        },
+        {
+          "label": "채팅 없이 혼자 플레이한다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "길드(공대) 활동에서",
+      "image": null,
+      "choices": [
+        {
+          "label": "적극적으로 의견을 내며 참여한다",
+          "axis": "E"
+        },
+        {
+          "label": "분위기를 띄우는 역할을 한다",
+          "axis": "E"
+        },
+        {
+          "label": "필요한 말만 하고 조용히 기여한다",
+          "axis": "I"
+        },
+        {
+          "label": "소수의 사람들과만 소통한다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "새로운 던전에 들어갈 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "숨겨진 스토리와 의미를 상상한다",
+          "axis": "N"
+        },
+        {
+          "label": "새로운 공략법을 직접 만들어본다",
+          "axis": "N"
+        },
+        {
+          "label": "공략집부터 확인하고 들어간다",
+          "axis": "S"
+        },
+        {
+          "label": "검증된 루트대로 진행한다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "아이템을 얻었을 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "이걸로 새로운 빌드를 상상해본다",
+          "axis": "N"
+        },
+        {
+          "label": "독창적인 조합을 시도해본다",
+          "axis": "N"
+        },
+        {
+          "label": "정확한 스펙부터 확인한다",
+          "axis": "S"
+        },
+        {
+          "label": "검증된 세팅에 맞춰 장착한다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(스탯 측정 50% 완료. 갑자기 튜토리얼 보스가 등장한다. 당신의 진짜 전투 스타일이 드러날 차례다.) (튜토리얼 보스 등장) 전투 중 파티원이 위험에 처했다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "효율적으로 딜을 넣어 빨리 끝낸다",
+          "axis": "T"
+        },
+        {
+          "label": "냉정하게 상황을 계산해 대응한다",
+          "axis": "T"
+        },
+        {
+          "label": "일단 파티원부터 구하러 간다",
+          "axis": "F"
+        },
+        {
+          "label": "걱정되는 마음에 몸이 먼저 움직인다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "파티원이 실수로 전멸시켰을 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "원인을 분석하고 다음 전략을 짠다",
+          "axis": "T"
+        },
+        {
+          "label": "냉정하게 무엇이 문제였는지 짚는다",
+          "axis": "T"
+        },
+        {
+          "label": "괜찮다고 다독여준다",
+          "axis": "F"
+        },
+        {
+          "label": "속상해할까 봐 먼저 위로한다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "게임 플레이 스타일은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "공략을 미리 짜고 체계적으로 진행한다",
+          "axis": "J"
+        },
+        {
+          "label": "스킬트리를 계획적으로 찍는다",
+          "axis": "J"
+        },
+        {
+          "label": "그때그때 상황 봐서 진행한다",
+          "axis": "P"
+        },
+        {
+          "label": "즉흥적으로 스킬을 바꿔가며 플레이한다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "인벤토리 관리 상태는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "아이템이 종류별로 정리돼 있다",
+          "axis": "J"
+        },
+        {
+          "label": "필요 없는 건 바로 정리한다",
+          "axis": "J"
+        },
+        {
+          "label": "일단 쌓아두고 나중에 정리한다",
+          "axis": "P"
+        },
+        {
+          "label": "필요할 때만 뒤져서 찾는다",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "전략사령관 (ENTJ)",
+      "subtitle": "J라면 완벽한 공략으로 움직입니다",
+      "image": "assets/result/ent-rpg-strategy-commander.webp",
+      "traits": [
+        "파티 전체를 지휘하는 두뇌형 캐릭터",
+        "큰 그림을 그리며 승리로 이끄는 전략가",
+        "예상 밖의 변수에는 잠시 당황함"
+      ],
+      "tip": "궁극기 이미 계산 끝"
+    },
+    {
+      "code": "ENTP",
+      "title": "전략사령관 (ENTP)",
+      "subtitle": "P라면 임기응변으로 게임을 풉니다",
+      "image": "assets/result/ent-rpg-strategy-commander.webp",
+      "traits": [
+        "파티 전체를 지휘하는 두뇌형 캐릭터",
+        "큰 그림을 그리며 승리로 이끄는 전략가",
+        "예상 밖의 변수에는 잠시 당황함"
+      ],
+      "tip": "궁극기 이미 계산 끝"
+    },
+    {
+      "code": "ENFJ",
+      "title": "서포터 힐러 (ENFJ)",
+      "subtitle": "J라면 정확한 타이밍으로 움직입니다",
+      "image": "assets/result/enf-rpg-support-healer.webp",
+      "traits": [
+        "파티의 사기를 끌어올리는 서포터",
+        "밝은 에너지로 팀을 이끔",
+        "화력은 낮지만 팀워크 기여도가 최고"
+      ],
+      "tip": "궁극기 분위기 메이커 버프"
+    },
+    {
+      "code": "ENFP",
+      "title": "서포터 힐러 (ENFP)",
+      "subtitle": "P라면 즉흥적인 케어로 서포트합니다",
+      "image": "assets/result/enf-rpg-support-healer.webp",
+      "traits": [
+        "파티의 사기를 끌어올리는 서포터",
+        "밝은 에너지로 팀을 이끔",
+        "화력은 낮지만 팀워크 기여도가 최고"
+      ],
+      "tip": "궁극기 분위기 메이커 버프"
+    },
+    {
+      "code": "ESTJ",
+      "title": "근접 딜러 (ESTJ)",
+      "subtitle": "J라면 정교한 딜사이클로 움직입니다",
+      "image": "assets/result/est-rpg-melee-dealer.webp",
+      "traits": [
+        "화끈한 화력으로 밀어붙이는 딜러",
+        "확실한 데미지로 전투를 주도함",
+        "신중함은 다소 부족한 편"
+      ],
+      "tip": "궁극기 일단 들이박기"
+    },
+    {
+      "code": "ESTP",
+      "title": "근접 딜러 (ESTP)",
+      "subtitle": "P라면 몸으로 부딪히며 딜을 넣습니다",
+      "image": "assets/result/est-rpg-melee-dealer.webp",
+      "traits": [
+        "화끈한 화력으로 밀어붙이는 딜러",
+        "확실한 데미지로 전투를 주도함",
+        "신중함은 다소 부족한 편"
+      ],
+      "tip": "궁극기 일단 들이박기"
+    },
+    {
+      "code": "ESFJ",
+      "title": "방패 탱커 (ESFJ)",
+      "subtitle": "J라면 철저한 어그로 관리로 움직입니다",
+      "image": "assets/result/esf-rpg-shield-tank.webp",
+      "traits": [
+        "파티를 몸으로 지켜내는 탱커",
+        "따뜻한 마음으로 동료를 챙기며 최전방을 지킴"
+      ],
+      "tip": "궁극기 내가 다 맞을게"
+    },
+    {
+      "code": "ESFP",
+      "title": "방패 탱커 (ESFP)",
+      "subtitle": "P라면 순간 판단으로 막아냅니다",
+      "image": "assets/result/esf-rpg-shield-tank.webp",
+      "traits": [
+        "파티를 몸으로 지켜내는 탱커",
+        "따뜻한 마음으로 동료를 챙기며 최전방을 지킴"
+      ],
+      "tip": "궁극기 내가 다 맞을게"
+    },
+    {
+      "code": "INTJ",
+      "title": "마법사(원거리 딜러) (INTJ)",
+      "subtitle": "J라면 완성된 스킬 조합으로 움직입니다",
+      "image": "assets/result/int-rpg-mage-dealer.webp",
+      "traits": [
+        "압도적인 지력으로 전투를 설계하는 딜러",
+        "혼자 파고드는 연구력 덕분에 최적의 빌드를 찾음",
+        "파티플은 다소 서툼"
+      ],
+      "tip": "궁극기 이론상 최강 빌드"
+    },
+    {
+      "code": "INTP",
+      "title": "마법사(원거리 딜러) (INTP)",
+      "subtitle": "P라면 즉석 콤보로 딜을 넣습니다",
+      "image": "assets/result/int-rpg-mage-dealer.webp",
+      "traits": [
+        "압도적인 지력으로 전투를 설계하는 딜러",
+        "혼자 파고드는 연구력 덕분에 최적의 빌드를 찾음",
+        "파티플은 다소 서툼"
+      ],
+      "tip": "궁극기 이론상 최강 빌드"
+    },
+    {
+      "code": "INFJ",
+      "title": "힐러(치유 특화) (INFJ)",
+      "subtitle": "J라면 정확한 힐 타이밍으로 움직입니다",
+      "image": "assets/result/inf-rpg-pure-healer.webp",
+      "traits": [
+        "파티원의 상태를 세심히 살피는 힐러",
+        "조용히 팀을 지탱하는 존재",
+        "자기 관리는 소홀한 편"
+      ],
+      "tip": "궁극기 말없이 다 치유해줌"
+    },
+    {
+      "code": "INFP",
+      "title": "힐러(치유 특화) (INFP)",
+      "subtitle": "P라면 그때그때 필요한 케어로 돕습니다",
+      "image": "assets/result/inf-rpg-pure-healer.webp",
+      "traits": [
+        "파티원의 상태를 세심히 살피는 힐러",
+        "조용히 팀을 지탱하는 존재",
+        "자기 관리는 소홀한 편"
+      ],
+      "tip": "궁극기 말없이 다 치유해줌"
+    },
+    {
+      "code": "ISTJ",
+      "title": "암살자 (ISTJ)",
+      "subtitle": "J라면 완벽한 타이밍으로 움직입니다",
+      "image": "assets/result/ist-rpg-assassin.webp",
+      "traits": [
+        "조용히 정확하게 임무를 완수하는 암살자",
+        "말은 없지만 실력만큼은 파티 최고 수준"
+      ],
+      "tip": "궁극기 존재도 몰랐는데 이미 끝남"
+    },
+    {
+      "code": "ISTP",
+      "title": "암살자 (ISTP)",
+      "subtitle": "P라면 즉흥 기습으로 처리합니다",
+      "image": "assets/result/ist-rpg-assassin.webp",
+      "traits": [
+        "조용히 정확하게 임무를 완수하는 암살자",
+        "말은 없지만 실력만큼은 파티 최고 수준"
+      ],
+      "tip": "궁극기 존재도 몰랐는데 이미 끝남"
+    },
+    {
+      "code": "ISFJ",
+      "title": "소환사(서포트) (ISFJ)",
+      "subtitle": "J라면 정해진 패턴으로 움직입니다",
+      "image": "assets/result/isf-rpg-summoner-support.webp",
+      "traits": [
+        "섬세하게 파티를 서포트하는 소환사",
+        "조용히 필요한 순간마다 도움을 줌"
+      ],
+      "tip": "궁극기 조용히 다 챙겨줌"
+    },
+    {
+      "code": "ISFP",
+      "title": "소환사(서포트) (ISFP)",
+      "subtitle": "P라면 즉흥적으로 소환수를 활용합니다",
+      "image": "assets/result/isf-rpg-summoner-support.webp",
+      "traits": [
+        "섬세하게 파티를 서포트하는 소환사",
+        "조용히 필요한 순간마다 도움을 줌"
+      ],
+      "tip": "궁극기 조용히 다 챙겨줌"
+    }
+  ]
+}

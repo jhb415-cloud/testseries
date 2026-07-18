@@ -1,0 +1,379 @@
+{
+  "id": "mbti-magic-school-house",
+  "title": "MBTI 마법학교 기숙사 배정",
+  "description": "입학식 날 밤, 마법의 모자가 당신의 머리 위에 씌워진다. \"흠... 흥미로운 마음이군.\" 모자가 중얼거린다.",
+  "hashtags": [
+    "MBTI마법학교",
+    "심리테스트",
+    "기숙사배정",
+    "판타지학원"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 277,
+  "engagement_key": "site-mbtimagicschool-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 마법학교 기숙사 배정 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "첫 수업 시간, 당신은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "적극적으로 손을 들고 질문한다",
+          "axis": "E"
+        },
+        {
+          "label": "친구들과 조를 짜서 활발히 토론한다",
+          "axis": "E"
+        },
+        {
+          "label": "조용히 필기하며 듣는다",
+          "axis": "I"
+        },
+        {
+          "label": "혼자 이해될 때까지 곱씹는다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "기숙사 공용 라운지에서",
+      "image": null,
+      "choices": [
+        {
+          "label": "다 같이 모여 떠드는 걸 좋아한다",
+          "axis": "E"
+        },
+        {
+          "label": "새 친구를 사귀는 데 적극적이다",
+          "axis": "E"
+        },
+        {
+          "label": "구석에서 혼자 책 읽는 걸 선호한다",
+          "axis": "I"
+        },
+        {
+          "label": "필요할 때만 잠깐 어울린다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "새로운 마법을 배울 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "이 마법의 원리와 가능성부터 상상한다",
+          "axis": "N"
+        },
+        {
+          "label": "응용할 수 있는 새로운 방법을 궁리한다",
+          "axis": "N"
+        },
+        {
+          "label": "정확한 주문과 동작부터 익힌다",
+          "axis": "S"
+        },
+        {
+          "label": "교과서대로 차근차근 연습한다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "마법 실습 시간, 나만의 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "아무도 안 써본 방식으로 시도해본다",
+          "axis": "N"
+        },
+        {
+          "label": "직감을 믿고 변형해서 써본다",
+          "axis": "N"
+        },
+        {
+          "label": "배운 그대로 정확하게 따라한다",
+          "axis": "S"
+        },
+        {
+          "label": "안전하고 검증된 방법을 쓴다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(배정의 절반이 끝났다. 모자가 잠시 침묵하더니 말한다. \"위기의 순간엔 진짜 본성이 드러나는 법이지.\") (모자가 속삭인다) 금지된 구역에서 이상한 소리가 들린다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "규칙을 지켜 선생님께 알린다",
+          "axis": "T"
+        },
+        {
+          "label": "논리적으로 위험성을 판단한다",
+          "axis": "T"
+        },
+        {
+          "label": "친구가 걱정돼서 먼저 가본다",
+          "axis": "F"
+        },
+        {
+          "label": "혹시 누가 다쳤을까 봐 마음이 쓰인다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "친구가 마법 실습에서 실패했을 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "어디서 틀렸는지 정확히 짚어준다",
+          "axis": "T"
+        },
+        {
+          "label": "원리를 다시 냉정하게 분석해준다",
+          "axis": "T"
+        },
+        {
+          "label": "속상해할까 봐 먼저 위로한다",
+          "axis": "F"
+        },
+        {
+          "label": "괜찮다며 다독여준다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "시험 기간, 공부 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "계획표를 짜서 차근차근 준비한다",
+          "axis": "J"
+        },
+        {
+          "label": "범위를 미리 다 정리해둔다",
+          "axis": "J"
+        },
+        {
+          "label": "벼락치기로 몰아서 한다",
+          "axis": "P"
+        },
+        {
+          "label": "그때그때 집중이 될 때 공부한다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "기숙사 방 상태는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "책과 물건이 각 잡혀 정리돼 있다",
+          "axis": "J"
+        },
+        {
+          "label": "시간표대로 생활한다",
+          "axis": "J"
+        },
+        {
+          "label": "필요한 대로 어질러져 있다",
+          "axis": "P"
+        },
+        {
+          "label": "즉흥적으로 계속 바뀐다",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "전략 마법학부 (ENTJ)",
+      "subtitle": "J라면 체계적인 커리큘럼으로 움직입니다",
+      "image": "assets/result/ent-strategy-house.webp",
+      "traits": [
+        "마법을 전략적으로 다루는 학부",
+        "큰 그림을 그리며 마법을 응용하는 능력이 뛰어남",
+        "학부 대표를 도맡는 경우가 많음"
+      ],
+      "tip": "특기 이미 계산 끝난 주문 시전"
+    },
+    {
+      "code": "ENTP",
+      "title": "전략 마법학부 (ENTP)",
+      "subtitle": "P라면 실전 위주로 학습합니다",
+      "image": "assets/result/ent-strategy-house.webp",
+      "traits": [
+        "마법을 전략적으로 다루는 학부",
+        "큰 그림을 그리며 마법을 응용하는 능력이 뛰어남",
+        "학부 대표를 도맡는 경우가 많음"
+      ],
+      "tip": "특기 이미 계산 끝난 주문 시전"
+    },
+    {
+      "code": "ENFJ",
+      "title": "소환 마법학부 (ENFJ)",
+      "subtitle": "J라면 정해진 의식으로 움직입니다",
+      "image": "assets/result/enf-summoning-house.webp",
+      "traits": [
+        "사람과 존재를 이어주는 마법을 다룸",
+        "친화력이 뛰어나 다양한 존재들과 유대를 맺음"
+      ],
+      "tip": "특기 어디서든 친구 만들기"
+    },
+    {
+      "code": "ENFP",
+      "title": "소환 마법학부 (ENFP)",
+      "subtitle": "P라면 즉흥적인 교감으로 소환합니다",
+      "image": "assets/result/enf-summoning-house.webp",
+      "traits": [
+        "사람과 존재를 이어주는 마법을 다룸",
+        "친화력이 뛰어나 다양한 존재들과 유대를 맺음"
+      ],
+      "tip": "특기 어디서든 친구 만들기"
+    },
+    {
+      "code": "ESTJ",
+      "title": "전투 마법학부 (ESTJ)",
+      "subtitle": "J라면 정교한 전술로 움직입니다",
+      "image": "assets/result/est-combat-house.webp",
+      "traits": [
+        "실전 전투 마법에 특화된 학부",
+        "몸으로 부딪히며 확실한 결과를 만드는 실력자"
+      ],
+      "tip": "특기 일단 지팡이부터 드는 편"
+    },
+    {
+      "code": "ESTP",
+      "title": "전투 마법학부 (ESTP)",
+      "subtitle": "P라면 임기응변으로 싸웁니다",
+      "image": "assets/result/est-combat-house.webp",
+      "traits": [
+        "실전 전투 마법에 특화된 학부",
+        "몸으로 부딪히며 확실한 결과를 만드는 실력자"
+      ],
+      "tip": "특기 일단 지팡이부터 드는 편"
+    },
+    {
+      "code": "ESFJ",
+      "title": "치유 마법학부 (ESFJ)",
+      "subtitle": "J라면 체계적인 치유 의식으로 움직입니다",
+      "image": "assets/result/esf-healing-house.webp",
+      "traits": [
+        "다친 자들을 돌보는 마법에 특화됨",
+        "따뜻한 마음으로 동료들을 챙기는 데 진심"
+      ],
+      "tip": "특기 아픈 곳 귀신같이 찾아내기"
+    },
+    {
+      "code": "ESFP",
+      "title": "치유 마법학부 (ESFP)",
+      "subtitle": "P라면 즉흥 처치로 돕습니다",
+      "image": "assets/result/esf-healing-house.webp",
+      "traits": [
+        "다친 자들을 돌보는 마법에 특화됨",
+        "따뜻한 마음으로 동료들을 챙기는 데 진심"
+      ],
+      "tip": "특기 아픈 곳 귀신같이 찾아내기"
+    },
+    {
+      "code": "INTJ",
+      "title": "고대마법 연구학부 (INTJ)",
+      "subtitle": "J라면 정제된 이론으로 움직입니다",
+      "image": "assets/result/int-ancient-magic-house.webp",
+      "traits": [
+        "고대 마법의 원리를 탐구하는 학부",
+        "혼자 연구에 몰두하며 아무도 모르는 지식을 파고듦"
+      ],
+      "tip": "특기 혼자 도서관 3일 잠수"
+    },
+    {
+      "code": "INTP",
+      "title": "고대마법 연구학부 (INTP)",
+      "subtitle": "P라면 즉흥적 발견으로 연구합니다",
+      "image": "assets/result/int-ancient-magic-house.webp",
+      "traits": [
+        "고대 마법의 원리를 탐구하는 학부",
+        "혼자 연구에 몰두하며 아무도 모르는 지식을 파고듦"
+      ],
+      "tip": "특기 혼자 도서관 3일 잠수"
+    },
+    {
+      "code": "INFJ",
+      "title": "예언 마법학부 (INFJ)",
+      "subtitle": "J라면 정해진 예언 절차로 움직입니다",
+      "image": "assets/result/inf-prophecy-house.webp",
+      "traits": [
+        "미래를 읽는 마법에 특화된 학부",
+        "조용히 조짐을 감지하며 위험을 미리 알아챔"
+      ],
+      "tip": "특기 말 안 해도 다 알고 있음"
+    },
+    {
+      "code": "INFP",
+      "title": "예언 마법학부 (INFP)",
+      "subtitle": "P라면 순간의 계시로 예언합니다",
+      "image": "assets/result/inf-prophecy-house.webp",
+      "traits": [
+        "미래를 읽는 마법에 특화된 학부",
+        "조용히 조짐을 감지하며 위험을 미리 알아챔"
+      ],
+      "tip": "특기 말 안 해도 다 알고 있음"
+    },
+    {
+      "code": "ISTJ",
+      "title": "방어 마법학부 (ISTJ)",
+      "subtitle": "J라면 완벽한 방어진으로 움직입니다",
+      "image": "assets/result/ist-defense-house.webp",
+      "traits": [
+        "확실하고 안정적인 방어 마법에 특화됨",
+        "말은 적지만 손끝의 정확함으로 학교를 지킴"
+      ],
+      "tip": "특기 말없이 다 막아내는 편"
+    },
+    {
+      "code": "ISTP",
+      "title": "방어 마법학부 (ISTP)",
+      "subtitle": "P라면 즉석 대응으로 지킵니다",
+      "image": "assets/result/ist-defense-house.webp",
+      "traits": [
+        "확실하고 안정적인 방어 마법에 특화됨",
+        "말은 적지만 손끝의 정확함으로 학교를 지킴"
+      ],
+      "tip": "특기 말없이 다 막아내는 편"
+    },
+    {
+      "code": "ISFJ",
+      "title": "자연 마법학부 (ISFJ)",
+      "subtitle": "J라면 정해진 재배 방식으로 움직입니다",
+      "image": "assets/result/isf-nature-house.webp",
+      "traits": [
+        "자연과 교감하는 마법에 특화됨",
+        "조용히 생명을 돌보는 섬세함으로 학교 정원을 책임짐"
+      ],
+      "tip": "특기 식물도 사람처럼 챙기는 편"
+    },
+    {
+      "code": "ISFP",
+      "title": "자연 마법학부 (ISFP)",
+      "subtitle": "P라면 그때그때 필요한 돌봄으로 키웁니다",
+      "image": "assets/result/isf-nature-house.webp",
+      "traits": [
+        "자연과 교감하는 마법에 특화됨",
+        "조용히 생명을 돌보는 섬세함으로 학교 정원을 책임짐"
+      ],
+      "tip": "특기 식물도 사람처럼 챙기는 편"
+    }
+  ]
+}

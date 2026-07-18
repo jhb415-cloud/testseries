@@ -1,0 +1,393 @@
+{
+  "id": "mbti-fantasy-race",
+  "title": "MBTI 판타지 종족 판별기",
+  "description": "오래된 예언서에 이런 구절이 있다. \"때가 되면, 각자의 피에 흐르는 종족의 힘이 깨어난다.\" 지금이 바로 그때다.",
+  "hashtags": [
+    "MBTI판타지",
+    "심리테스트",
+    "종족판별",
+    "판타지세계관"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 271,
+  "engagement_key": "site-mbtirace-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 판타지 종족 판별기 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "마을에 위기가 닥쳤을 때 당신은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "즉시 사람들 앞에 나서서 상황을 알린다",
+          "axis": "E"
+        },
+        {
+          "label": "마을 광장에 모두를 불러 모은다",
+          "axis": "E"
+        },
+        {
+          "label": "혼자 숲으로 들어가 원인을 찾는다",
+          "axis": "I"
+        },
+        {
+          "label": "조용히 홀로 대비책을 세운다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "다른 종족과 처음 마주쳤을 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "먼저 다가가 말을 건다",
+          "axis": "E"
+        },
+        {
+          "label": "무리를 이끌고 교류를 제안한다",
+          "axis": "E"
+        },
+        {
+          "label": "거리를 두고 지켜본다",
+          "axis": "I"
+        },
+        {
+          "label": "필요할 때만 접촉한다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "오래된 유물을 발견했다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "이 유물에 얽힌 전설과 의미부터 상상한다",
+          "axis": "N"
+        },
+        {
+          "label": "숨겨진 힘의 근원을 추측해본다",
+          "axis": "N"
+        },
+        {
+          "label": "유물의 재질과 상태부터 살핀다",
+          "axis": "S"
+        },
+        {
+          "label": "실제로 쓸 수 있는지 시험해본다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "전투 방식을 고른다면?",
+      "image": null,
+      "choices": [
+        {
+          "label": "직감으로 새로운 기술을 만들어낸다",
+          "axis": "N"
+        },
+        {
+          "label": "상상 속에만 있던 마법을 시도한다",
+          "axis": "N"
+        },
+        {
+          "label": "몸에 익은 정확한 동작을 반복한다",
+          "axis": "S"
+        },
+        {
+          "label": "검증된 무기를 확실하게 다룬다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(각성의 절반을 지났다. 숲 저편에서 낯선 기운이 느껴진다. 당신의 진짜 본성이 드러나기 시작한다.) (숲 저편에서 기운이...) 낯선 존재와 대치했다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "규칙에 따라 정당하게 대응한다",
+          "axis": "T"
+        },
+        {
+          "label": "가장 효율적인 방법을 계산한다",
+          "axis": "T"
+        },
+        {
+          "label": "상대의 사정을 먼저 헤아린다",
+          "axis": "F"
+        },
+        {
+          "label": "다치게 하고 싶지 않은 마음이 앞선다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "동료 종족이 위험에 처했다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "냉정하게 상황을 판단하고 움직인다",
+          "axis": "T"
+        },
+        {
+          "label": "감정보다 전략이 먼저다",
+          "axis": "T"
+        },
+        {
+          "label": "일단 마음이 아파서 뛰어간다",
+          "axis": "F"
+        },
+        {
+          "label": "그의 고통이 내 일처럼 느껴진다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "무리를 이끄는 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "체계적인 규율로 이끈다",
+          "axis": "J"
+        },
+        {
+          "label": "미리 정한 원칙대로 움직인다",
+          "axis": "J"
+        },
+        {
+          "label": "그때그때 상황에 맞게 이끈다",
+          "axis": "P"
+        },
+        {
+          "label": "자유롭게 각자의 방식을 존중한다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "거처(보금자리)의 모습은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "질서 있게 정돈되어 있다",
+          "axis": "J"
+        },
+        {
+          "label": "모든 게 제자리에 있다",
+          "axis": "J"
+        },
+        {
+          "label": "자연스럽게 흩어져 있지만 편안하다",
+          "axis": "P"
+        },
+        {
+          "label": "즉흥적으로 계속 바뀐다",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "용족의 후예 (ENTJ)",
+      "subtitle": "J라면 엄격한 위계로 움직입니다",
+      "image": "assets/result/ent-dragon-descendant.webp",
+      "traits": [
+        "강력한 힘과 전략적 지혜를 함께 가짐",
+        "무리를 이끄는 카리스마가 타고남",
+        "위압감 때문에 가까이 다가오기 어려워하는 이도 있음"
+      ],
+      "tip": "존재 자체가 압도적인 종족"
+    },
+    {
+      "code": "ENTP",
+      "title": "용족의 후예 (ENTP)",
+      "subtitle": "P라면 자유로운 방식으로 무리를 이끕니다",
+      "image": "assets/result/ent-dragon-descendant.webp",
+      "traits": [
+        "강력한 힘과 전략적 지혜를 함께 가짐",
+        "무리를 이끄는 카리스마가 타고남",
+        "위압감 때문에 가까이 다가오기 어려워하는 이도 있음"
+      ],
+      "tip": "존재 자체가 압도적인 종족"
+    },
+    {
+      "code": "ENFJ",
+      "title": "빛의 정령 (ENFJ)",
+      "subtitle": "J라면 정해진 경로로 움직입니다",
+      "image": "assets/result/enf-light-spirit.webp",
+      "traits": [
+        "자유롭고 따뜻한 기운을 가진 종족",
+        "어디든 자유롭게 다니며 희망을 전함",
+        "한곳에 오래 머물지 못함"
+      ],
+      "tip": "어디든 자유롭게, 만나면 기분 좋아지는 존재"
+    },
+    {
+      "code": "ENFP",
+      "title": "빛의 정령 (ENFP)",
+      "subtitle": "P라면 바람 부는 대로 자유롭게 다닙니다",
+      "image": "assets/result/enf-light-spirit.webp",
+      "traits": [
+        "자유롭고 따뜻한 기운을 가진 종족",
+        "어디든 자유롭게 다니며 희망을 전함",
+        "한곳에 오래 머물지 못함"
+      ],
+      "tip": "어디든 자유롭게, 만나면 기분 좋아지는 존재"
+    },
+    {
+      "code": "ESTJ",
+      "title": "전투 드워프 (ESTJ)",
+      "subtitle": "J라면 정교한 무기로 움직입니다",
+      "image": "assets/result/est-battle-dwarf.webp",
+      "traits": [
+        "강인한 체력과 실전 감각을 가진 종족",
+        "몸으로 부딪히며 확실한 결과를 만들어냄",
+        "상상력이 필요한 상황에서는 다소 답답함"
+      ],
+      "tip": "일단 망치부터 드는 종족"
+    },
+    {
+      "code": "ESTP",
+      "title": "전투 드워프 (ESTP)",
+      "subtitle": "P라면 즉석 대장기술로 싸웁니다",
+      "image": "assets/result/est-battle-dwarf.webp",
+      "traits": [
+        "강인한 체력과 실전 감각을 가진 종족",
+        "몸으로 부딪히며 확실한 결과를 만들어냄",
+        "상상력이 필요한 상황에서는 다소 답답함"
+      ],
+      "tip": "일단 망치부터 드는 종족"
+    },
+    {
+      "code": "ESFJ",
+      "title": "수호 엘프 (ESFJ)",
+      "subtitle": "J라면 정해진 경계로 움직입니다",
+      "image": "assets/result/esf-guardian-elf.webp",
+      "traits": [
+        "자연과 동료를 함께 지키는 종족",
+        "따뜻한 마음으로 무리를 챙김",
+        "위협 앞에서는 누구보다 단호함"
+      ],
+      "tip": "다정하지만 건드리면 무서운 종족"
+    },
+    {
+      "code": "ESFP",
+      "title": "수호 엘프 (ESFP)",
+      "subtitle": "P라면 유연한 방식으로 숲을 지킵니다",
+      "image": "assets/result/esf-guardian-elf.webp",
+      "traits": [
+        "자연과 동료를 함께 지키는 종족",
+        "따뜻한 마음으로 무리를 챙김",
+        "위협 앞에서는 누구보다 단호함"
+      ],
+      "tip": "다정하지만 건드리면 무서운 종족"
+    },
+    {
+      "code": "INTJ",
+      "title": "고대 드래곤 (INTJ)",
+      "subtitle": "J라면 정제된 지식으로 움직입니다",
+      "image": "assets/result/int-ancient-dragon.webp",
+      "traits": [
+        "오랜 세월 쌓아온 지혜를 가진 종족",
+        "혼자 있는 시간이 길지만 깊이 있는 통찰을 가짐",
+        "너무 신중해서 행동이 느림"
+      ],
+      "tip": "말은 없어도 다 알고 있는 존재"
+    },
+    {
+      "code": "INTP",
+      "title": "고대 드래곤 (INTP)",
+      "subtitle": "P라면 즉흥적인 통찰로 힘을 씁니다",
+      "image": "assets/result/int-ancient-dragon.webp",
+      "traits": [
+        "오랜 세월 쌓아온 지혜를 가진 종족",
+        "혼자 있는 시간이 길지만 깊이 있는 통찰을 가짐",
+        "너무 신중해서 행동이 느림"
+      ],
+      "tip": "말은 없어도 다 알고 있는 존재"
+    },
+    {
+      "code": "INFJ",
+      "title": "예언자 엘프 (INFJ)",
+      "subtitle": "J라면 체계적인 예언으로 움직입니다",
+      "image": "assets/result/inf-prophet-elf.webp",
+      "traits": [
+        "미래를 보는 눈을 가진 종족",
+        "조용히 세상을 관찰하며 위험을 미리 감지함",
+        "예감을 남들에게 설명하기 어려워함"
+      ],
+      "tip": "이미 다 알고 있지만 말을 아끼는 존재"
+    },
+    {
+      "code": "INFP",
+      "title": "예언자 엘프 (INFP)",
+      "subtitle": "P라면 순간의 직감으로 전합니다",
+      "image": "assets/result/inf-prophet-elf.webp",
+      "traits": [
+        "미래를 보는 눈을 가진 종족",
+        "조용히 세상을 관찰하며 위험을 미리 감지함",
+        "예감을 남들에게 설명하기 어려워함"
+      ],
+      "tip": "이미 다 알고 있지만 말을 아끼는 존재"
+    },
+    {
+      "code": "ISTJ",
+      "title": "그림자 사냥꾼 (ISTJ)",
+      "subtitle": "J라면 철저한 계획으로 움직입니다",
+      "image": "assets/result/ist-shadow-hunter.webp",
+      "traits": [
+        "조용하고 정확하게 움직이는 종족",
+        "필요한 순간 확실하게 임무를 완수함",
+        "말이 없어서 오해받기도 함"
+      ],
+      "tip": "존재도 몰랐는데 이미 임무 완료"
+    },
+    {
+      "code": "ISTP",
+      "title": "그림자 사냥꾼 (ISTP)",
+      "subtitle": "P라면 즉흥 추적으로 사냥합니다",
+      "image": "assets/result/ist-shadow-hunter.webp",
+      "traits": [
+        "조용하고 정확하게 움직이는 종족",
+        "필요한 순간 확실하게 임무를 완수함",
+        "말이 없어서 오해받기도 함"
+      ],
+      "tip": "존재도 몰랐는데 이미 임무 완료"
+    },
+    {
+      "code": "ISFJ",
+      "title": "숲의 치유사 (ISFJ)",
+      "subtitle": "J라면 정해진 치유 의식으로 움직입니다",
+      "image": "assets/result/isf-forest-healer.webp",
+      "traits": [
+        "자연의 힘으로 상처를 어루만지는 종족",
+        "조용히 다가와 필요한 이를 돌봄",
+        "자신을 돌보는 데는 서툰 편"
+      ],
+      "tip": "말없이 다 치유해주고 사라지는 존재"
+    },
+    {
+      "code": "ISFP",
+      "title": "숲의 치유사 (ISFP)",
+      "subtitle": "P라면 그때그때 필요한 방식으로 돌봅니다",
+      "image": "assets/result/isf-forest-healer.webp",
+      "traits": [
+        "자연의 힘으로 상처를 어루만지는 종족",
+        "조용히 다가와 필요한 이를 돌봄",
+        "자신을 돌보는 데는 서툰 편"
+      ],
+      "tip": "말없이 다 치유해주고 사라지는 존재"
+    }
+  ]
+}

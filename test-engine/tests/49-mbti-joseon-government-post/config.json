@@ -1,0 +1,393 @@
+{
+  "id": "mbti-joseon-government-post",
+  "title": "MBTI 조선시대 관직 + 야사(뒷이야기)",
+  "description": "과거에 급제한 지 얼마 되지 않은 어느 날, 임금이 당신을 조용히 부른다. \"그대에게 맡길 자리가 있소.\"",
+  "hashtags": [
+    "MBTI조선",
+    "심리테스트",
+    "관직판별",
+    "사극밈"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 245,
+  "engagement_key": "site-mbtijoseon-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 조선시대 관직 + 야사(뒷이야기) 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "조정 회의에서 당신은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "적극적으로 의견을 내며 나선다",
+          "axis": "E"
+        },
+        {
+          "label": "다른 대신들과 활발히 논쟁한다",
+          "axis": "E"
+        },
+        {
+          "label": "필요할 때만 조용히 아뢴다",
+          "axis": "I"
+        },
+        {
+          "label": "혼자 생각을 정리한 뒤 말한다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "궁궐 내 인맥 관리는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "여러 대신들과 폭넓게 교류한다",
+          "axis": "E"
+        },
+        {
+          "label": "사교 자리에 적극적으로 참석한다",
+          "axis": "E"
+        },
+        {
+          "label": "소수의 신뢰하는 이들과만 가깝다",
+          "axis": "I"
+        },
+        {
+          "label": "혼자 지내는 시간을 선호한다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "새로운 정책을 논할 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "먼 미래를 내다보는 큰 그림을 그린다",
+          "axis": "N"
+        },
+        {
+          "label": "새로운 방식을 상상하며 제안한다",
+          "axis": "N"
+        },
+        {
+          "label": "당장 시행 가능한 방법을 낸다",
+          "axis": "S"
+        },
+        {
+          "label": "구체적인 실행 계획부터 짠다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "백성을 위한 정책을 만든다면",
+      "image": null,
+      "choices": [
+        {
+          "label": "이상적인 방향을 먼저 그려본다",
+          "axis": "N"
+        },
+        {
+          "label": "혁신적인 제도를 상상해본다",
+          "axis": "N"
+        },
+        {
+          "label": "현실적으로 가능한 것부터 시작한다",
+          "axis": "S"
+        },
+        {
+          "label": "예전 제도를 참고해 개선한다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(관직에 오른 지 반 년. 궁궐 안에 은밀한 소문이 돌기 시작한다. 그 소문의 주인공은 다름 아닌 당신이다.) (소문이 돈다) 정적이 모함을 해온다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "냉정하게 사실관계를 밝혀 반박한다",
+          "axis": "T"
+        },
+        {
+          "label": "논리적으로 죄가 없음을 증명한다",
+          "axis": "T"
+        },
+        {
+          "label": "억울한 마음에 잠을 이루지 못한다",
+          "axis": "F"
+        },
+        {
+          "label": "믿어주는 이들에게 서운함을 느낀다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "부하 관리를 처벌해야 할 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "원칙에 따라 엄정하게 처리한다",
+          "axis": "T"
+        },
+        {
+          "label": "규정대로 공정하게 판단한다",
+          "axis": "T"
+        },
+        {
+          "label": "사정을 헤아려 선처를 고민한다",
+          "axis": "F"
+        },
+        {
+          "label": "그의 처지가 안타까워 마음이 무겁다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "정사를 돌보는 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "철저한 계획과 규율로 다스린다",
+          "axis": "J"
+        },
+        {
+          "label": "정해진 절차를 꼼꼼히 따른다",
+          "axis": "J"
+        },
+        {
+          "label": "상황에 따라 유연하게 대처한다",
+          "axis": "P"
+        },
+        {
+          "label": "그때그때 판단해서 처리한다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "개인 서재(사랑방)의 모습은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "책과 문서가 정갈하게 정리돼 있다",
+          "axis": "J"
+        },
+        {
+          "label": "일과가 규칙적으로 짜여 있다",
+          "axis": "J"
+        },
+        {
+          "label": "필요한 대로 어질러져 있다",
+          "axis": "P"
+        },
+        {
+          "label": "그날 기분따라 다르게 지낸다",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "병조판서 (ENTJ)",
+      "subtitle": "J라면 철저한 군율로 움직입니다",
+      "image": "assets/result/ent-military-minister.webp",
+      "traits": [
+        "국방과 전략을 총괄함",
+        "강한 카리스마로 조정을 압도함",
+        "정적들의 견제도 만만치 않음"
+      ],
+      "tip": "야사: 밤마다 홀로 병서를 읽다 잠들었다는 소문"
+    },
+    {
+      "code": "ENTP",
+      "title": "병조판서 (ENTP)",
+      "subtitle": "P라면 임기응변으로 병사를 다스립니다",
+      "image": "assets/result/ent-military-minister.webp",
+      "traits": [
+        "국방과 전략을 총괄함",
+        "강한 카리스마로 조정을 압도함",
+        "정적들의 견제도 만만치 않음"
+      ],
+      "tip": "야사: 밤마다 홀로 병서를 읽다 잠들었다는 소문"
+    },
+    {
+      "code": "ENFJ",
+      "title": "예조판서 (ENFJ)",
+      "subtitle": "J라면 격식을 지키며 움직입니다",
+      "image": "assets/result/enf-rites-minister.webp",
+      "traits": [
+        "국가의 예법과 의전을 담당함",
+        "사람들과의 관계를 소중히 여김",
+        "궁중 분위기를 훈훈하게 만드는 역할"
+      ],
+      "tip": "야사: 궁녀들 사이에서 정이 많다고 소문난 인물"
+    },
+    {
+      "code": "ENFP",
+      "title": "예조판서 (ENFP)",
+      "subtitle": "P라면 상황에 맞게 유연하게 의전을 이끕니다",
+      "image": "assets/result/enf-rites-minister.webp",
+      "traits": [
+        "국가의 예법과 의전을 담당함",
+        "사람들과의 관계를 소중히 여김",
+        "궁중 분위기를 훈훈하게 만드는 역할"
+      ],
+      "tip": "야사: 궁녀들 사이에서 정이 많다고 소문난 인물"
+    },
+    {
+      "code": "ESTJ",
+      "title": "훈련대장 (ESTJ)",
+      "subtitle": "J라면 엄격한 훈련 체계로 움직입니다",
+      "image": "assets/result/est-training-captain.webp",
+      "traits": [
+        "실전 훈련을 책임짐",
+        "몸으로 직접 보여주며 병사들을 가르치는 열정",
+        "잔소리가 많다는 평도 들음"
+      ],
+      "tip": "야사: 병사들이 제일 무서워하면서도 존경하는 인물"
+    },
+    {
+      "code": "ESTP",
+      "title": "훈련대장 (ESTP)",
+      "subtitle": "P라면 실전 감각으로 지도합니다",
+      "image": "assets/result/est-training-captain.webp",
+      "traits": [
+        "실전 훈련을 책임짐",
+        "몸으로 직접 보여주며 병사들을 가르치는 열정",
+        "잔소리가 많다는 평도 들음"
+      ],
+      "tip": "야사: 병사들이 제일 무서워하면서도 존경하는 인물"
+    },
+    {
+      "code": "ESFJ",
+      "title": "이조참판 (ESFJ)",
+      "subtitle": "J라면 원칙에 따라 움직입니다",
+      "image": "assets/result/esf-personnel-official.webp",
+      "traits": [
+        "인재 등용을 담당함",
+        "따뜻한 마음으로 인재를 알아보는 눈이 뛰어남",
+        "정에 이끌려 판단이 흔들리기도 함"
+      ],
+      "tip": "야사: 숨은 인재를 제일 잘 알아본다는 소문의 주인공"
+    },
+    {
+      "code": "ESFP",
+      "title": "이조참판 (ESFP)",
+      "subtitle": "P라면 사람에 따라 유연하게 등용합니다",
+      "image": "assets/result/esf-personnel-official.webp",
+      "traits": [
+        "인재 등용을 담당함",
+        "따뜻한 마음으로 인재를 알아보는 눈이 뛰어남",
+        "정에 이끌려 판단이 흔들리기도 함"
+      ],
+      "tip": "야사: 숨은 인재를 제일 잘 알아본다는 소문의 주인공"
+    },
+    {
+      "code": "INTJ",
+      "title": "책략가 영의정 (INTJ)",
+      "subtitle": "J라면 빈틈없는 국정으로 움직입니다",
+      "image": "assets/result/int-strategist-prime-minister.webp",
+      "traits": [
+        "조정 전체를 뒤에서 움직이는 최고 관직",
+        "치밀한 전략으로 나라를 이끔",
+        "속을 알 수 없다는 평을 듣기도 함"
+      ],
+      "tip": "야사: 뒤에서 다 조종했다는 소문이 파다한 실세"
+    },
+    {
+      "code": "INTP",
+      "title": "책략가 영의정 (INTP)",
+      "subtitle": "P라면 임기응변 책략으로 다스립니다",
+      "image": "assets/result/int-strategist-prime-minister.webp",
+      "traits": [
+        "조정 전체를 뒤에서 움직이는 최고 관직",
+        "치밀한 전략으로 나라를 이끔",
+        "속을 알 수 없다는 평을 듣기도 함"
+      ],
+      "tip": "야사: 뒤에서 다 조종했다는 소문이 파다한 실세"
+    },
+    {
+      "code": "INFJ",
+      "title": "사관 (INFJ)",
+      "subtitle": "J라면 정확한 기록으로 움직입니다",
+      "image": "assets/result/inf-royal-historian.webp",
+      "traits": [
+        "나라의 역사를 기록함",
+        "조용히 모든 것을 지켜보며 진실을 남기는 소명감",
+        "고독함은 아무도 모름"
+      ],
+      "tip": "야사: 임금도 모르게 진실을 다 적어두었다는 소문"
+    },
+    {
+      "code": "INFP",
+      "title": "사관 (INFP)",
+      "subtitle": "P라면 순간의 통찰로 역사를 남깁니다",
+      "image": "assets/result/inf-royal-historian.webp",
+      "traits": [
+        "나라의 역사를 기록함",
+        "조용히 모든 것을 지켜보며 진실을 남기는 소명감",
+        "고독함은 아무도 모름"
+      ],
+      "tip": "야사: 임금도 모르게 진실을 다 적어두었다는 소문"
+    },
+    {
+      "code": "ISTJ",
+      "title": "포도대장 (ISTJ)",
+      "subtitle": "J라면 철저한 순찰 계획으로 움직입니다",
+      "image": "assets/result/ist-police-chief.webp",
+      "traits": [
+        "도성의 치안을 담당함",
+        "말없이 정확하게 일을 처리하는 프로 의식",
+        "감정 표현은 서툰 편"
+      ],
+      "tip": "야사: 밤마다 홀로 순찰 돌다 도둑을 다 잡아냈다는 소문"
+    },
+    {
+      "code": "ISTP",
+      "title": "포도대장 (ISTP)",
+      "subtitle": "P라면 감으로 범인을 잡습니다",
+      "image": "assets/result/ist-police-chief.webp",
+      "traits": [
+        "도성의 치안을 담당함",
+        "말없이 정확하게 일을 처리하는 프로 의식",
+        "감정 표현은 서툰 편"
+      ],
+      "tip": "야사: 밤마다 홀로 순찰 돌다 도둑을 다 잡아냈다는 소문"
+    },
+    {
+      "code": "ISFJ",
+      "title": "상궁 (ISFJ)",
+      "subtitle": "J라면 정해진 법도로 움직입니다",
+      "image": "assets/result/isf-court-lady.webp",
+      "traits": [
+        "왕실을 가까이서 보필함",
+        "조용하고 헌신적인 태도로 신뢰를 받음",
+        "자신의 마음은 잘 드러내지 않음"
+      ],
+      "tip": "야사: 충직하기로 궁궐 안에서 소문이 자자한 인물"
+    },
+    {
+      "code": "ISFP",
+      "title": "상궁 (ISFP)",
+      "subtitle": "P라면 그때그때 필요한 대로 보필합니다",
+      "image": "assets/result/isf-court-lady.webp",
+      "traits": [
+        "왕실을 가까이서 보필함",
+        "조용하고 헌신적인 태도로 신뢰를 받음",
+        "자신의 마음은 잘 드러내지 않음"
+      ],
+      "tip": "야사: 충직하기로 궁궐 안에서 소문이 자자한 인물"
+    }
+  ]
+}

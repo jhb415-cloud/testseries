@@ -1,0 +1,377 @@
+{
+  "id": "mbti-past-future-life",
+  "title": "MBTI 전생 + 환생 예고 (윤회 세계관)",
+  "description": "눈을 감으면 보이는 전생의 조각들. 그리고 어렴풋이 느껴지는, 아직 오지 않은 다음 생의 기운. 지금, 당신의 윤회가 드러난다.",
+  "hashtags": [
+    "MBTI전생환생",
+    "심리테스트",
+    "윤회세계관",
+    "사주연계밈"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 227,
+  "engagement_key": "site-mbtipastfuture-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 전생 + 환생 예고 (윤회 세계관) 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "전생에서 사람들과의 관계는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "많은 사람들에게 영향을 주는 삶이었다",
+          "axis": "E"
+        },
+        {
+          "label": "적극적으로 세상에 나서는 삶이었다",
+          "axis": "E"
+        },
+        {
+          "label": "조용히 홀로 지내는 삶이었다",
+          "axis": "I"
+        },
+        {
+          "label": "소수와만 깊이 교류하는 삶이었다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "전생의 사회적 역할은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "사람들 앞에 나서는 역할이었다",
+          "axis": "E"
+        },
+        {
+          "label": "많은 이들을 이끄는 자리였다",
+          "axis": "E"
+        },
+        {
+          "label": "뒤에서 조용히 돕는 역할이었다",
+          "axis": "I"
+        },
+        {
+          "label": "혼자 수행하는 삶이었다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "전생에서 추구했던 가치는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "이상과 진리를 좇는 삶이었다",
+          "axis": "N"
+        },
+        {
+          "label": "보이지 않는 것을 탐구했다",
+          "axis": "N"
+        },
+        {
+          "label": "현실적인 성취를 추구했다",
+          "axis": "S"
+        },
+        {
+          "label": "눈에 보이는 결과를 중시했다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(기시감이 스친다) 전생의 미련은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "이루지 못한 큰 꿈이 있었다",
+          "axis": "N"
+        },
+        {
+          "label": "다하지 못한 깨달음이 있었다",
+          "axis": "N"
+        },
+        {
+          "label": "다 이루지 못한 현실의 일이 있었다",
+          "axis": "S"
+        },
+        {
+          "label": "구체적으로 남겨둔 것이 있었다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(전생의 절반이 드러났다. 문득 익숙한 기시감이 스친다. 당신은 이 감정을 전에도 느낀 적이 있다.) 전생에서 사람을 대하던 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "원칙과 이치로 사람을 대했다",
+          "axis": "T"
+        },
+        {
+          "label": "공정함을 우선시했다",
+          "axis": "T"
+        },
+        {
+          "label": "마음을 먼저 헤아렸다",
+          "axis": "F"
+        },
+        {
+          "label": "정으로 사람을 대했다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "전생의 마지막 순간, 마음가짐은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "담담하게 이치를 받아들였다",
+          "axis": "T"
+        },
+        {
+          "label": "논리적으로 생을 정리했다",
+          "axis": "T"
+        },
+        {
+          "label": "그리운 사람들 생각에 눈물지었다",
+          "axis": "F"
+        },
+        {
+          "label": "사랑했던 이들을 떠올렸다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "전생의 삶의 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "정해진 도리를 철저히 따랐다",
+          "axis": "J"
+        },
+        {
+          "label": "규칙적인 수행의 삶이었다",
+          "axis": "J"
+        },
+        {
+          "label": "자유롭게 흘러가는 삶이었다",
+          "axis": "P"
+        },
+        {
+          "label": "매인 데 없이 떠도는 삶이었다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "전생에서 남긴 흔적은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "체계적인 가르침이나 기록",
+          "axis": "J"
+        },
+        {
+          "label": "정돈된 유산",
+          "axis": "J"
+        },
+        {
+          "label": "자유로운 이야기나 전설",
+          "axis": "P"
+        },
+        {
+          "label": "정처 없는 발자취",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "전생: 지략가 장군 → 현생 과제: 겸손 배우기 → 내생 예고: 큰 뜻을 이루는 지도자",
+      "subtitle": "지략가 장군",
+      "image": "assets/result/ent-past-life-strategist-general.webp",
+      "traits": [
+        "전생에서 전략으로 나라를 지켰던 영혼",
+        "현생 과제는 겸손 배우기"
+      ],
+      "tip": "전생부터 판을 짜던 사람, 이번 생도 그럴 확률 높음"
+    },
+    {
+      "code": "ENTP",
+      "title": "전생: 지략가 장군 → 현생 과제: 겸손 배우기 → 내생 예고: 큰 뜻을 이루는 지도자",
+      "subtitle": "지략가 장군",
+      "image": "assets/result/ent-past-life-strategist-general.webp",
+      "traits": [
+        "전생에서 전략으로 나라를 지켰던 영혼",
+        "현생 과제는 겸손 배우기"
+      ],
+      "tip": "전생부터 판을 짜던 사람, 이번 생도 그럴 확률 높음"
+    },
+    {
+      "code": "ENFJ",
+      "title": "전생: 유랑 시인 → 현생 과제: 한곳에 정착하는 법 → 내생 예고: 세상을 치유하는 예술가",
+      "subtitle": "유랑 시인",
+      "image": "assets/result/enf-past-life-wandering-poet.webp",
+      "traits": [
+        "전생에서 노래와 이야기로 사람들을 위로했던 영혼",
+        "현생 과제는 한곳에 정착하는 법"
+      ],
+      "tip": "전생부터 분위기 메이커였던 사람, DNA에 새겨진 흥"
+    },
+    {
+      "code": "ENFP",
+      "title": "전생: 유랑 시인 → 현생 과제: 한곳에 정착하는 법 → 내생 예고: 세상을 치유하는 예술가",
+      "subtitle": "유랑 시인",
+      "image": "assets/result/enf-past-life-wandering-poet.webp",
+      "traits": [
+        "전생에서 노래와 이야기로 사람들을 위로했던 영혼",
+        "현생 과제는 한곳에 정착하는 법"
+      ],
+      "tip": "전생부터 분위기 메이커였던 사람, DNA에 새겨진 흥"
+    },
+    {
+      "code": "ESTJ",
+      "title": "전생: 용맹한 무사 → 현생 과제: 섬세함 배우기 → 내생 예고: 사람을 지키는 수호자",
+      "subtitle": "용맹한 무사",
+      "image": "assets/result/est-past-life-brave-warrior.webp",
+      "traits": [
+        "전생에서 몸으로 부딪히며 사람들을 지켰던 영혼",
+        "현생 과제는 섬세함 배우기"
+      ],
+      "tip": "전생부터 몸이 먼저 움직이던 사람, 용맹함이 DNA에"
+    },
+    {
+      "code": "ESTP",
+      "title": "전생: 용맹한 무사 → 현생 과제: 섬세함 배우기 → 내생 예고: 사람을 지키는 수호자",
+      "subtitle": "용맹한 무사",
+      "image": "assets/result/est-past-life-brave-warrior.webp",
+      "traits": [
+        "전생에서 몸으로 부딪히며 사람들을 지켰던 영혼",
+        "현생 과제는 섬세함 배우기"
+      ],
+      "tip": "전생부터 몸이 먼저 움직이던 사람, 용맹함이 DNA에"
+    },
+    {
+      "code": "ESFJ",
+      "title": "전생: 마을의 어머니 같은 존재 → 현생 과제: 나를 먼저 돌보기 → 내생 예고: 모두를 품는 지도자",
+      "subtitle": "마을의 어머니 같은 존재",
+      "image": "assets/result/esf-past-life-village-mother.webp",
+      "traits": [
+        "전생에서 마을 사람들을 품고 돌봤던 영혼",
+        "현생 과제는 나를 먼저 돌보기"
+      ],
+      "tip": "전생부터 다 챙기던 사람, 이번 생도 그 오지랖 여전함"
+    },
+    {
+      "code": "ESFP",
+      "title": "전생: 마을의 어머니 같은 존재 → 현생 과제: 나를 먼저 돌보기 → 내생 예고: 모두를 품는 지도자",
+      "subtitle": "마을의 어머니 같은 존재",
+      "image": "assets/result/esf-past-life-village-mother.webp",
+      "traits": [
+        "전생에서 마을 사람들을 품고 돌봤던 영혼",
+        "현생 과제는 나를 먼저 돌보기"
+      ],
+      "tip": "전생부터 다 챙기던 사람, 이번 생도 그 오지랖 여전함"
+    },
+    {
+      "code": "INTJ",
+      "title": "전생: 은둔한 학자 → 현생 과제: 세상과 소통하기 → 내생 예고: 시대를 앞서는 발명가",
+      "subtitle": "은둔한 학자",
+      "image": "assets/result/int-past-life-reclusive-scholar.webp",
+      "traits": [
+        "전생에서 혼자 진리를 탐구했던 영혼",
+        "현생 과제는 세상과 소통하기"
+      ],
+      "tip": "전생부터 혼자 연구만 하던 사람, 이번 생도 똑같음"
+    },
+    {
+      "code": "INTP",
+      "title": "전생: 은둔한 학자 → 현생 과제: 세상과 소통하기 → 내생 예고: 시대를 앞서는 발명가",
+      "subtitle": "은둔한 학자",
+      "image": "assets/result/int-past-life-reclusive-scholar.webp",
+      "traits": [
+        "전생에서 혼자 진리를 탐구했던 영혼",
+        "현생 과제는 세상과 소통하기"
+      ],
+      "tip": "전생부터 혼자 연구만 하던 사람, 이번 생도 똑같음"
+    },
+    {
+      "code": "INFJ",
+      "title": "전생: 예언자 → 현생 과제: 내 목소리 내기 → 내생 예고: 빛의 치유사",
+      "subtitle": "예언자",
+      "image": "assets/result/inf-past-life-prophet.webp",
+      "traits": [
+        "전생에서 조용히 미래를 예견했던 영혼",
+        "현생 과제는 내 목소리 내기"
+      ],
+      "tip": "전생부터 다 알면서 말 안 하던 사람, 이번 생도 그러함"
+    },
+    {
+      "code": "INFP",
+      "title": "전생: 예언자 → 현생 과제: 내 목소리 내기 → 내생 예고: 빛의 치유사",
+      "subtitle": "예언자",
+      "image": "assets/result/inf-past-life-prophet.webp",
+      "traits": [
+        "전생에서 조용히 미래를 예견했던 영혼",
+        "현생 과제는 내 목소리 내기"
+      ],
+      "tip": "전생부터 다 알면서 말 안 하던 사람, 이번 생도 그러함"
+    },
+    {
+      "code": "ISTJ",
+      "title": "전생: 충직한 문지기 → 현생 과제: 마음을 표현하는 법 → 내생 예고: 세상의 균형을 잡는 자",
+      "subtitle": "충직한 문지기",
+      "image": "assets/result/ist-past-life-loyal-gatekeeper.webp",
+      "traits": [
+        "전생에서 묵묵히 자리를 지켰던 영혼",
+        "현생 과제는 마음을 표현하는 법"
+      ],
+      "tip": "전생부터 말없이 다 지키던 사람, 이번 생도 그러함"
+    },
+    {
+      "code": "ISTP",
+      "title": "전생: 충직한 문지기 → 현생 과제: 마음을 표현하는 법 → 내생 예고: 세상의 균형을 잡는 자",
+      "subtitle": "충직한 문지기",
+      "image": "assets/result/ist-past-life-loyal-gatekeeper.webp",
+      "traits": [
+        "전생에서 묵묵히 자리를 지켰던 영혼",
+        "현생 과제는 마음을 표현하는 법"
+      ],
+      "tip": "전생부터 말없이 다 지키던 사람, 이번 생도 그러함"
+    },
+    {
+      "code": "ISFJ",
+      "title": "전생: 마을 치유사 → 현생 과제: 나를 위한 치유 → 내생 예고: 조용히 세상을 바꾸는 사람",
+      "subtitle": "마을 치유사",
+      "image": "assets/result/isf-past-life-village-healer.webp",
+      "traits": [
+        "전생에서 조용히 사람들의 상처를 어루만졌던 영혼",
+        "현생 과제는 나를 위한 치유"
+      ],
+      "tip": "전생부터 다 돌봐주던 사람, 정작 자기 자신은 뒷전"
+    },
+    {
+      "code": "ISFP",
+      "title": "전생: 마을 치유사 → 현생 과제: 나를 위한 치유 → 내생 예고: 조용히 세상을 바꾸는 사람",
+      "subtitle": "마을 치유사",
+      "image": "assets/result/isf-past-life-village-healer.webp",
+      "traits": [
+        "전생에서 조용히 사람들의 상처를 어루만졌던 영혼",
+        "현생 과제는 나를 위한 치유"
+      ],
+      "tip": "전생부터 다 돌봐주던 사람, 정작 자기 자신은 뒷전"
+    }
+  ]
+}

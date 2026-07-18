@@ -1,0 +1,377 @@
+{
+  "id": "mbti-meme-character",
+  "title": "MBTI 밈 캐릭터 판별기 (2026 밈 세계관)",
+  "description": "인터넷 어딘가, 당신의 성격을 그대로 닮은 밈이 이미 떠돌고 있다. 오늘, 그 밈이 당신 앞에 정체를 드러낸다.",
+  "hashtags": [
+    "MBTI밈캐릭터",
+    "심리테스트",
+    "밈세계관",
+    "인터넷밈"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 293,
+  "engagement_key": "site-mbtimeme-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 밈 캐릭터 판별기 (2026 밈 세계관) 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "SNS에 글을 올릴 때 당신은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "적극적으로 반응을 유도하는 글을 쓴다",
+          "axis": "E"
+        },
+        {
+          "label": "댓글 소통을 즐기며 활발히 올린다",
+          "axis": "E"
+        },
+        {
+          "label": "조용히 올리고 반응은 신경 안 쓴다",
+          "axis": "I"
+        },
+        {
+          "label": "거의 안 올리고 눈팅만 한다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "단톡방이나 커뮤니티에서",
+      "image": null,
+      "choices": [
+        {
+          "label": "먼저 드립을 치며 분위기를 만든다",
+          "axis": "E"
+        },
+        {
+          "label": "적극적으로 댓글을 단다",
+          "axis": "E"
+        },
+        {
+          "label": "필요할 때만 짧게 반응한다",
+          "axis": "I"
+        },
+        {
+          "label": "읽기만 하고 반응은 잘 안 한다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "밈을 만들거나 공유할 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "새로운 드립을 창작해서 만든다",
+          "axis": "N"
+        },
+        {
+          "label": "아무도 안 해본 조합을 시도한다",
+          "axis": "N"
+        },
+        {
+          "label": "이미 유행하는 밈을 그대로 쓴다",
+          "axis": "S"
+        },
+        {
+          "label": "검증된 짤만 골라서 쓴다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(똑 닮은 짤이 올라온다) 유행어를 접하면",
+      "image": null,
+      "choices": [
+        {
+          "label": "새로운 의미로 재해석해서 쓴다",
+          "axis": "N"
+        },
+        {
+          "label": "다르게 비틀어서 활용해본다",
+          "axis": "N"
+        },
+        {
+          "label": "원래 뜻 그대로 정확히 사용한다",
+          "axis": "S"
+        },
+        {
+          "label": "유행하는 그대로 따라 쓴다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(밈 판별 절반 완료. 갑자기 타임라인에 당신과 똑 닮은 짤이 올라온다.) 댓글에서 논쟁이 붙으면",
+      "image": null,
+      "choices": [
+        {
+          "label": "팩트로 조목조목 반박한다",
+          "axis": "T"
+        },
+        {
+          "label": "논리적으로 근거를 든다",
+          "axis": "T"
+        },
+        {
+          "label": "분위기 상할까 봐 조용히 빠진다",
+          "axis": "F"
+        },
+        {
+          "label": "마음이 상해서 신경 쓰인다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "남의 게시물에 반응할 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "정확한 지적이나 피드백을 남긴다",
+          "axis": "T"
+        },
+        {
+          "label": "냉정하게 팩트만 짚는다",
+          "axis": "T"
+        },
+        {
+          "label": "공감하는 댓글을 먼저 남긴다",
+          "axis": "F"
+        },
+        {
+          "label": "따뜻한 리액션을 남긴다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "SNS 활동 패턴은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "정해진 시간에 규칙적으로 활동한다",
+          "axis": "J"
+        },
+        {
+          "label": "계획적으로 콘텐츠를 올린다",
+          "axis": "J"
+        },
+        {
+          "label": "그때그때 내키는 대로 활동한다",
+          "axis": "P"
+        },
+        {
+          "label": "불규칙하게 몰아서 활동한다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "저장해둔 짤·밈 정리 상태는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "폴더별로 체계적으로 정리돼 있다",
+          "axis": "J"
+        },
+        {
+          "label": "필요할 때 바로 찾을 수 있게 해둔다",
+          "axis": "J"
+        },
+        {
+          "label": "그냥 카메라롤에 뒤죽박죽 쌓여 있다",
+          "axis": "P"
+        },
+        {
+          "label": "저장은 하는데 다시 안 본다",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "팩폭짤 (ENTJ)",
+      "subtitle": "J라면 정확한 타이밍에 움직입니다",
+      "image": "assets/result/ent-meme-fact-attack.webp",
+      "traits": [
+        "정확하고 날카로운 드립으로 통함",
+        "한마디로 상황을 정리하는 재주"
+      ],
+      "tip": "쓰이는 상황: 논쟁 끝낼 때 · 저장률 1위"
+    },
+    {
+      "code": "ENTP",
+      "title": "팩폭짤 (ENTP)",
+      "subtitle": "P라면 즉흥적으로 팩폭을 날립니다",
+      "image": "assets/result/ent-meme-fact-attack.webp",
+      "traits": [
+        "정확하고 날카로운 드립으로 통함",
+        "한마디로 상황을 정리하는 재주"
+      ],
+      "tip": "쓰이는 상황: 논쟁 끝낼 때 · 저장률 1위"
+    },
+    {
+      "code": "ENFJ",
+      "title": "텐션 폭발 리액션짤 (ENFJ)",
+      "subtitle": "J라면 정해진 타이밍에 움직입니다",
+      "image": "assets/result/enf-meme-tension-reaction.webp",
+      "traits": [
+        "어디서든 텐션을 끌어올림",
+        "리액션 하나로 대화 분위기를 살림"
+      ],
+      "tip": "쓰이는 상황: 아무 데나 · 유행어 '이왜진'"
+    },
+    {
+      "code": "ENFP",
+      "title": "텐션 폭발 리액션짤 (ENFP)",
+      "subtitle": "P라면 그 순간 바로 리액션합니다",
+      "image": "assets/result/enf-meme-tension-reaction.webp",
+      "traits": [
+        "어디서든 텐션을 끌어올림",
+        "리액션 하나로 대화 분위기를 살림"
+      ],
+      "tip": "쓰이는 상황: 아무 데나 · 유행어 '이왜진'"
+    },
+    {
+      "code": "ESTJ",
+      "title": "드립력 만렙짤 (ESTJ)",
+      "subtitle": "J라면 준비된 드립으로 움직입니다",
+      "image": "assets/result/est-meme-drip-master.webp",
+      "traits": [
+        "확실하고 강렬한 드립으로 통함",
+        "화력이 확실해서 한 번 터지면 그날 대화를 지배함"
+      ],
+      "tip": "쓰이는 상황: 분위기 반전 필요할 때 · 짤 저장 1위"
+    },
+    {
+      "code": "ESTP",
+      "title": "드립력 만렙짤 (ESTP)",
+      "subtitle": "P라면 즉흥 드립으로 터뜨립니다",
+      "image": "assets/result/est-meme-drip-master.webp",
+      "traits": [
+        "확실하고 강렬한 드립으로 통함",
+        "화력이 확실해서 한 번 터지면 그날 대화를 지배함"
+      ],
+      "tip": "쓰이는 상황: 분위기 반전 필요할 때 · 짤 저장 1위"
+    },
+    {
+      "code": "ESFJ",
+      "title": "힐링짤 (ESFJ)",
+      "subtitle": "J라면 정해진 위로 타이밍에 움직입니다",
+      "image": "assets/result/esf-meme-healing.webp",
+      "traits": [
+        "보기만 해도 마음이 따뜻해짐",
+        "위로가 필요한 순간 다들 이 짤을 찾음"
+      ],
+      "tip": "쓰이는 상황: 위로가 필요할 때 · 저장 후 안 지움"
+    },
+    {
+      "code": "ESFP",
+      "title": "힐링짤 (ESFP)",
+      "subtitle": "P라면 그때그때 다정하게 씁니다",
+      "image": "assets/result/esf-meme-healing.webp",
+      "traits": [
+        "보기만 해도 마음이 따뜻해짐",
+        "위로가 필요한 순간 다들 이 짤을 찾음"
+      ],
+      "tip": "쓰이는 상황: 위로가 필요할 때 · 저장 후 안 지움"
+    },
+    {
+      "code": "INTJ",
+      "title": "진지충 드립짤 (INTJ)",
+      "subtitle": "J라면 정제된 문구로 움직입니다",
+      "image": "assets/result/int-meme-serious-drip.webp",
+      "traits": [
+        "남들은 안 하는 생각을 함",
+        "진지한 드립이 은근 웃겨서 다들 캡처해감"
+      ],
+      "tip": "쓰이는 상황: 심오한 타이밍 · 이해하는 사람만 웃김"
+    },
+    {
+      "code": "INTP",
+      "title": "진지충 드립짤 (INTP)",
+      "subtitle": "P라면 즉흥적인 통찰로 씁니다",
+      "image": "assets/result/int-meme-serious-drip.webp",
+      "traits": [
+        "남들은 안 하는 생각을 함",
+        "진지한 드립이 은근 웃겨서 다들 캡처해감"
+      ],
+      "tip": "쓰이는 상황: 심오한 타이밍 · 이해하는 사람만 웃김"
+    },
+    {
+      "code": "INFJ",
+      "title": "우울밈 (INFJ)",
+      "subtitle": "J라면 정제된 감성으로 움직입니다",
+      "image": "assets/result/inf-meme-melancholy.webp",
+      "traits": [
+        "감성적이고 공감되는 밈",
+        "말로 표현 못한 감정을 대신 표현해줌"
+      ],
+      "tip": "쓰이는 상황: 새벽 감성 터질 때 · 공감 저격"
+    },
+    {
+      "code": "INFP",
+      "title": "우울밈 (INFP)",
+      "subtitle": "P라면 그 순간의 감정으로 씁니다",
+      "image": "assets/result/inf-meme-melancholy.webp",
+      "traits": [
+        "감성적이고 공감되는 밈",
+        "말로 표현 못한 감정을 대신 표현해줌"
+      ],
+      "tip": "쓰이는 상황: 새벽 감성 터질 때 · 공감 저격"
+    },
+    {
+      "code": "ISTJ",
+      "title": "무표정 팩폭짤 (ISTJ)",
+      "subtitle": "J라면 정확한 타이밍으로 움직입니다",
+      "image": "assets/result/ist-meme-deadpan-fact-attack.webp",
+      "traits": [
+        "말은 없지만 확실한 임팩트",
+        "감정 없이 툭 던지는 한마디가 제일 웃김"
+      ],
+      "tip": "쓰이는 상황: 아무 말 없이 반박할 때 · 짧고 강렬"
+    },
+    {
+      "code": "ISTP",
+      "title": "무표정 팩폭짤 (ISTP)",
+      "subtitle": "P라면 즉흥적으로 툭 던집니다",
+      "image": "assets/result/ist-meme-deadpan-fact-attack.webp",
+      "traits": [
+        "말은 없지만 확실한 임팩트",
+        "감정 없이 툭 던지는 한마디가 제일 웃김"
+      ],
+      "tip": "쓰이는 상황: 아무 말 없이 반박할 때 · 짧고 강렬"
+    },
+    {
+      "code": "ISFJ",
+      "title": "감성글귀짤 (ISFJ)",
+      "subtitle": "J라면 정해진 감성으로 움직입니다",
+      "image": "assets/result/isf-meme-aesthetic-quote.webp",
+      "traits": [
+        "조용히 마음을 어루만짐",
+        "화려하진 않아도 은근 공감되는 문구"
+      ],
+      "tip": "쓰이는 상황: 조용히 위로하고 싶을 때 · 잔잔한 인기"
+    },
+    {
+      "code": "ISFP",
+      "title": "감성글귀짤 (ISFP)",
+      "subtitle": "P라면 그때그때 다른 감성으로 씁니다",
+      "image": "assets/result/isf-meme-aesthetic-quote.webp",
+      "traits": [
+        "조용히 마음을 어루만짐",
+        "화려하진 않아도 은근 공감되는 문구"
+      ],
+      "tip": "쓰이는 상황: 조용히 위로하고 싶을 때 · 잔잔한 인기"
+    }
+  ]
+}

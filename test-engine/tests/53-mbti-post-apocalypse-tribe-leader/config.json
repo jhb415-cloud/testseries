@@ -1,0 +1,385 @@
+{
+  "id": "mbti-post-apocalypse-tribe-leader",
+  "title": "MBTI 종말 후 부족 리더 판별",
+  "description": "문명이 무너진 지 10년. 살아남은 사람들이 새로운 부족을 이루었다. 당신은 이 부족에서 어떤 역할을 맡게 될까.",
+  "hashtags": [
+    "MBTI포스트아포칼립스",
+    "심리테스트",
+    "부족리더",
+    "생존세계관"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 231,
+  "engagement_key": "site-mbtitribeleader-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 종말 후 부족 리더 판별 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "부족 회의에서 당신은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "적극적으로 의견을 내며 이끈다",
+          "axis": "E"
+        },
+        {
+          "label": "다들 모여 토론하는 걸 즐긴다",
+          "axis": "E"
+        },
+        {
+          "label": "필요할 때만 조용히 의견을 낸다",
+          "axis": "I"
+        },
+        {
+          "label": "혼자 생각을 정리한 뒤 말한다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "새 구성원이 부족에 합류하면",
+      "image": null,
+      "choices": [
+        {
+          "label": "먼저 다가가 환영하고 소개한다",
+          "axis": "E"
+        },
+        {
+          "label": "적극적으로 관계를 만들어간다",
+          "axis": "E"
+        },
+        {
+          "label": "거리를 두고 지켜보는 편이다",
+          "axis": "I"
+        },
+        {
+          "label": "필요한 것만 확인하고 물러난다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "부족의 미래를 계획할 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "먼 미래의 큰 그림을 그려본다",
+          "axis": "N"
+        },
+        {
+          "label": "새로운 가능성을 상상해본다",
+          "axis": "N"
+        },
+        {
+          "label": "당장 필요한 것부터 해결한다",
+          "axis": "S"
+        },
+        {
+          "label": "현실적으로 가능한 계획을 짠다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "자원이 부족할 때 해결책은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "새로운 방식으로 자원을 만들어낸다",
+          "axis": "N"
+        },
+        {
+          "label": "기존에 없던 발상을 시도한다",
+          "axis": "N"
+        },
+        {
+          "label": "예전에 검증된 방법을 쓴다",
+          "axis": "S"
+        },
+        {
+          "label": "확실하게 되는 방법만 쓴다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(부족 구성 절반 완료. 이웃 부족에서 사절이 찾아왔다. 협상인지 전쟁인지, 선택은 당신에게 달렸다.) (사절이 찾아왔다) 이웃 부족과의 협상에서",
+      "image": null,
+      "choices": [
+        {
+          "label": "냉정하게 이득과 손해를 계산한다",
+          "axis": "T"
+        },
+        {
+          "label": "원칙에 따라 협상 조건을 정한다",
+          "axis": "T"
+        },
+        {
+          "label": "상대 부족의 사정을 헤아려본다",
+          "axis": "F"
+        },
+        {
+          "label": "함께 살아갈 방법을 먼저 고민한다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "부족 내 갈등이 생겼을 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "논리적으로 상황을 정리한다",
+          "axis": "T"
+        },
+        {
+          "label": "규칙에 따라 공정하게 판단한다",
+          "axis": "T"
+        },
+        {
+          "label": "감정이 상하지 않게 조율한다",
+          "axis": "F"
+        },
+        {
+          "label": "다들 마음이 다치지 않도록 살핀다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "부족 규칙을 만드는 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "명확한 규율을 세워 다스린다",
+          "axis": "J"
+        },
+        {
+          "label": "체계적인 시스템을 만든다",
+          "axis": "J"
+        },
+        {
+          "label": "상황에 따라 유연하게 대응한다",
+          "axis": "P"
+        },
+        {
+          "label": "그때그때 필요에 따라 정한다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "부족의 하루 일과 관리는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "역할과 시간표가 정확히 짜여 있다",
+          "axis": "J"
+        },
+        {
+          "label": "체계적으로 자원을 배분한다",
+          "axis": "J"
+        },
+        {
+          "label": "그날그날 필요에 맞게 움직인다",
+          "axis": "P"
+        },
+        {
+          "label": "자유롭게 각자 알아서 한다",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "부족장 (ENTJ)",
+      "subtitle": "J라면 철저한 통치 체계로 움직입니다",
+      "image": "assets/result/ent-tribe-chief.webp",
+      "traits": [
+        "부족 전체를 이끄는 리더",
+        "냉철한 판단으로 생존율을 끌어올림",
+        "결단력 때문에 냉정하다는 평도 들음"
+      ],
+      "tip": "부족 기여도 95%, 없으면 부족이 흩어짐"
+    },
+    {
+      "code": "ENTP",
+      "title": "부족장 (ENTP)",
+      "subtitle": "P라면 상황 대응력으로 부족을 이끕니다",
+      "image": "assets/result/ent-tribe-chief.webp",
+      "traits": [
+        "부족 전체를 이끄는 리더",
+        "냉철한 판단으로 생존율을 끌어올림",
+        "결단력 때문에 냉정하다는 평도 들음"
+      ],
+      "tip": "부족 기여도 95%, 없으면 부족이 흩어짐"
+    },
+    {
+      "code": "ENFJ",
+      "title": "화합의 사절 (ENFJ)",
+      "subtitle": "J라면 철저한 협상 준비로 움직입니다",
+      "image": "assets/result/enf-diplomat-envoy.webp",
+      "traits": [
+        "부족 간 관계를 이어주는 외교관",
+        "사람의 마음을 움직이는 재주로 전쟁을 막음",
+        "부담을 혼자 짊어짐"
+      ],
+      "tip": "부족 기여도 88%, 전쟁 대신 평화를 만드는 사람"
+    },
+    {
+      "code": "ENFP",
+      "title": "화합의 사절 (ENFP)",
+      "subtitle": "P라면 즉흥적인 설득력으로 풉니다",
+      "image": "assets/result/enf-diplomat-envoy.webp",
+      "traits": [
+        "부족 간 관계를 이어주는 외교관",
+        "사람의 마음을 움직이는 재주로 전쟁을 막음",
+        "부담을 혼자 짊어짐"
+      ],
+      "tip": "부족 기여도 88%, 전쟁 대신 평화를 만드는 사람"
+    },
+    {
+      "code": "ESTJ",
+      "title": "사냥대장 (ESTJ)",
+      "subtitle": "J라면 정확한 전술로 움직입니다",
+      "image": "assets/result/est-tribe-hunt-captain.webp",
+      "traits": [
+        "부족의 안전을 몸으로 지킴",
+        "확실한 실력으로 위협을 제거함",
+        "계획에 없던 변수 앞에서는 조금 당황함"
+      ],
+      "tip": "부족 기여도 90%, 방패이자 창"
+    },
+    {
+      "code": "ESTP",
+      "title": "사냥대장 (ESTP)",
+      "subtitle": "P라면 즉흥 대응으로 지킵니다",
+      "image": "assets/result/est-tribe-hunt-captain.webp",
+      "traits": [
+        "부족의 안전을 몸으로 지킴",
+        "확실한 실력으로 위협을 제거함",
+        "계획에 없던 변수 앞에서는 조금 당황함"
+      ],
+      "tip": "부족 기여도 90%, 방패이자 창"
+    },
+    {
+      "code": "ESFJ",
+      "title": "공동체 조율자 (ESFJ)",
+      "subtitle": "J라면 체계적인 배분으로 움직입니다",
+      "image": "assets/result/esf-tribe-community-coordinator.webp",
+      "traits": [
+        "부족 전체가 잘 지내도록 돌봄",
+        "갈등을 조율하고 다들 챙기는 따뜻함"
+      ],
+      "tip": "부족 기여도 86%, 부족의 진짜 접착제"
+    },
+    {
+      "code": "ESFP",
+      "title": "공동체 조율자 (ESFP)",
+      "subtitle": "P라면 유연한 배려로 챙깁니다",
+      "image": "assets/result/esf-tribe-community-coordinator.webp",
+      "traits": [
+        "부족 전체가 잘 지내도록 돌봄",
+        "갈등을 조율하고 다들 챙기는 따뜻함"
+      ],
+      "tip": "부족 기여도 86%, 부족의 진짜 접착제"
+    },
+    {
+      "code": "INTJ",
+      "title": "기술 개발자 (INTJ)",
+      "subtitle": "J라면 완성된 설계로 움직입니다",
+      "image": "assets/result/int-tribe-tech-developer.webp",
+      "traits": [
+        "부족의 기술 발전을 책임짐",
+        "물자를 개조하고 새 도구를 만들어내는 능력",
+        "사교적인 역할은 서툼"
+      ],
+      "tip": "부족 기여도 92%, 혼자 정수기를 발명함"
+    },
+    {
+      "code": "INTP",
+      "title": "기술 개발자 (INTP)",
+      "subtitle": "P라면 즉석 발명으로 기여합니다",
+      "image": "assets/result/int-tribe-tech-developer.webp",
+      "traits": [
+        "부족의 기술 발전을 책임짐",
+        "물자를 개조하고 새 도구를 만들어내는 능력",
+        "사교적인 역할은 서툼"
+      ],
+      "tip": "부족 기여도 92%, 혼자 정수기를 발명함"
+    },
+    {
+      "code": "INFJ",
+      "title": "치유사 (INFJ)",
+      "subtitle": "J라면 체계적인 치료로 움직입니다",
+      "image": "assets/result/inf-tribe-healer.webp",
+      "traits": [
+        "몸과 마음을 함께 치유함",
+        "조용히 다가와 필요한 사람을 돌봄"
+      ],
+      "tip": "부족 기여도 85%, 몸도 마음도 돌보는 존재"
+    },
+    {
+      "code": "INFP",
+      "title": "치유사 (INFP)",
+      "subtitle": "P라면 그때그때 필요한 돌봄으로 함께합니다",
+      "image": "assets/result/inf-tribe-healer.webp",
+      "traits": [
+        "몸과 마음을 함께 치유함",
+        "조용히 다가와 필요한 사람을 돌봄"
+      ],
+      "tip": "부족 기여도 85%, 몸도 마음도 돌보는 존재"
+    },
+    {
+      "code": "ISTJ",
+      "title": "정찰병 (ISTJ)",
+      "subtitle": "J라면 철저한 정찰 루트로 움직입니다",
+      "image": "assets/result/ist-tribe-scout.webp",
+      "traits": [
+        "부족의 안전을 위해 정보를 모음",
+        "위험을 미리 파악해 부족을 지킴"
+      ],
+      "tip": "부족 기여도 89%, 존재감은 없는데 없으면 다 위험함"
+    },
+    {
+      "code": "ISTP",
+      "title": "정찰병 (ISTP)",
+      "subtitle": "P라면 즉흥 판단으로 움직입니다",
+      "image": "assets/result/ist-tribe-scout.webp",
+      "traits": [
+        "부족의 안전을 위해 정보를 모음",
+        "위험을 미리 파악해 부족을 지킴"
+      ],
+      "tip": "부족 기여도 89%, 존재감은 없는데 없으면 다 위험함"
+    },
+    {
+      "code": "ISFJ",
+      "title": "물자 관리자 (ISFJ)",
+      "subtitle": "J라면 완벽한 재고 관리로 움직입니다",
+      "image": "assets/result/isf-tribe-supply-manager.webp",
+      "traits": [
+        "부족의 생존 기반을 관리함",
+        "눈에 띄지 않지만 부족이 오래 버티는 핵심"
+      ],
+      "tip": "부족 기여도 87%, 숨은 공로자"
+    },
+    {
+      "code": "ISFP",
+      "title": "물자 관리자 (ISFP)",
+      "subtitle": "P라면 유연한 분배로 관리합니다",
+      "image": "assets/result/isf-tribe-supply-manager.webp",
+      "traits": [
+        "부족의 생존 기반을 관리함",
+        "눈에 띄지 않지만 부족이 오래 버티는 핵심"
+      ],
+      "tip": "부족 기여도 87%, 숨은 공로자"
+    }
+  ]
+}

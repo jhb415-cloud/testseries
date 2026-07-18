@@ -1,0 +1,393 @@
+{
+  "id": "mbti-cafe-drink",
+  "title": "MBTI 카페 음료 판별기",
+  "description": "오늘 아침, 당신도 모르게 손이 향한 그 음료. 사실 그건 당신의 성격을 그대로 담은 시그니처 메뉴다.",
+  "hashtags": [
+    "MBTI카페",
+    "심리테스트",
+    "음료판별",
+    "일상밀착밈"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 248,
+  "engagement_key": "site-mbticafe-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 카페 음료 판별기 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "카페에 들어서면 당신은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "직원과 밝게 인사하며 대화한다",
+          "axis": "E"
+        },
+        {
+          "label": "오늘 있었던 일을 얘기하며 주문한다",
+          "axis": "E"
+        },
+        {
+          "label": "조용히 메뉴판만 보고 주문한다",
+          "axis": "I"
+        },
+        {
+          "label": "최소한의 말로 빠르게 주문한다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "카페에서 시간을 보낼 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "친구들과 왁자지껄하게 대화한다",
+          "axis": "E"
+        },
+        {
+          "label": "사람들 있는 자리를 선호한다",
+          "axis": "E"
+        },
+        {
+          "label": "혼자 조용한 구석 자리를 찾는다",
+          "axis": "I"
+        },
+        {
+          "label": "이어폰을 끼고 혼자만의 시간을 갖는다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "새 메뉴가 나오면",
+      "image": null,
+      "choices": [
+        {
+          "label": "신메뉴의 컨셉과 스토리가 궁금하다",
+          "axis": "N"
+        },
+        {
+          "label": "새로운 조합이 상상돼서 끌린다",
+          "axis": "N"
+        },
+        {
+          "label": "구체적으로 뭐가 들어갔는지 확인한다",
+          "axis": "S"
+        },
+        {
+          "label": "먹어본 사람 후기부터 찾아본다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "커스텀 옵션을 고를 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "새로운 조합을 실험적으로 시도한다",
+          "axis": "N"
+        },
+        {
+          "label": "아무도 안 해본 조합을 만들어본다",
+          "axis": "N"
+        },
+        {
+          "label": "늘 먹던 익숙한 조합을 고수한다",
+          "axis": "S"
+        },
+        {
+          "label": "검증된 조합만 믿고 시킨다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(주문의 절반을 마쳤다. 바리스타가 묻는다. \"오늘 컨디션에 따라 조금 다르게 만들어드릴까요?\") (바리스타가 묻는다) 오늘 컨디션이 별로일 때 시키는 음료는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "그래도 효율적으로 카페인 채우는 걸 고른다",
+          "axis": "T"
+        },
+        {
+          "label": "당 충전 효율이 높은 걸 계산한다",
+          "axis": "T"
+        },
+        {
+          "label": "그날 기분에 맞는 위로가 되는 걸 고른다",
+          "axis": "F"
+        },
+        {
+          "label": "마음이 편안해지는 달콤한 걸 고른다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "음료 가격에 대한 생각은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "가성비를 꼼꼼히 따진다",
+          "axis": "T"
+        },
+        {
+          "label": "합리적인 소비인지 계산한다",
+          "axis": "T"
+        },
+        {
+          "label": "이 정도 행복은 투자할 가치가 있다",
+          "axis": "F"
+        },
+        {
+          "label": "기분 전환 비용이라 생각한다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "자주 가는 카페를 정하는 기준은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "동선과 효율을 계산해서 정한다",
+          "axis": "J"
+        },
+        {
+          "label": "늘 정해진 단골집만 간다",
+          "axis": "J"
+        },
+        {
+          "label": "그날그날 발길 닿는 대로 간다",
+          "axis": "P"
+        },
+        {
+          "label": "기분에 따라 매번 다른 곳을 간다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "주문할 때 습관은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "항상 같은 메뉴를 정확히 주문한다",
+          "axis": "J"
+        },
+        {
+          "label": "커스텀 옵션까지 정해져 있다",
+          "axis": "J"
+        },
+        {
+          "label": "그날 끌리는 걸 즉흥적으로 고른다",
+          "axis": "P"
+        },
+        {
+          "label": "메뉴판 보면서 그때 정한다",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "더블샷 콜드브루 (ENTJ)",
+      "subtitle": "J라면 늘 같은 원두로 움직입니다",
+      "image": "assets/result/ent-cold-brew.webp",
+      "traits": [
+        "강렬하고 효율적인 걸 좋아함",
+        "진하고 깔끔한 맛처럼 확실한 걸 선호함",
+        "그 강렬함이 부담스럽다는 얘기도 들음"
+      ],
+      "tip": "이 음료 시키는 사람치고 평범한 사람 없음"
+    },
+    {
+      "code": "ENTP",
+      "title": "더블샷 콜드브루 (ENTP)",
+      "subtitle": "P라면 그날그날 다른 원두로 즐깁니다",
+      "image": "assets/result/ent-cold-brew.webp",
+      "traits": [
+        "강렬하고 효율적인 걸 좋아함",
+        "진하고 깔끔한 맛처럼 확실한 걸 선호함",
+        "그 강렬함이 부담스럽다는 얘기도 들음"
+      ],
+      "tip": "이 음료 시키는 사람치고 평범한 사람 없음"
+    },
+    {
+      "code": "ENFJ",
+      "title": "무지개 에이드 (ENFJ)",
+      "subtitle": "J라면 정해진 레시피로 움직입니다",
+      "image": "assets/result/enf-rainbow-ade.webp",
+      "traits": [
+        "화려하고 예측불가한 매력",
+        "보기만 해도 기분이 좋아지는 비주얼",
+        "주변 사람들에게 에너지를 줌"
+      ],
+      "tip": "맛보다 텐션으로 마시는 음료"
+    },
+    {
+      "code": "ENFP",
+      "title": "무지개 에이드 (ENFP)",
+      "subtitle": "P라면 매번 다른 조합으로 즐깁니다",
+      "image": "assets/result/enf-rainbow-ade.webp",
+      "traits": [
+        "화려하고 예측불가한 매력",
+        "보기만 해도 기분이 좋아지는 비주얼",
+        "주변 사람들에게 에너지를 줌"
+      ],
+      "tip": "맛보다 텐션으로 마시는 음료"
+    },
+    {
+      "code": "ESTJ",
+      "title": "아이스 아메리카노 트리플샷 (ESTJ)",
+      "subtitle": "J라면 매번 정확한 샷으로 움직입니다",
+      "image": "assets/result/est-triple-shot-americano.webp",
+      "traits": [
+        "효율적이고 확실한 걸 선호함",
+        "화려한 건 필요 없고 효과만 있으면 됨",
+        "실용적인 성격"
+      ],
+      "tip": "이거 없으면 하루 시작이 안 되는 사람"
+    },
+    {
+      "code": "ESTP",
+      "title": "아이스 아메리카노 트리플샷 (ESTP)",
+      "subtitle": "P라면 그날 컨디션 따라 샷을 늘립니다",
+      "image": "assets/result/est-triple-shot-americano.webp",
+      "traits": [
+        "효율적이고 확실한 걸 선호함",
+        "화려한 건 필요 없고 효과만 있으면 됨",
+        "실용적인 성격"
+      ],
+      "tip": "이거 없으면 하루 시작이 안 되는 사람"
+    },
+    {
+      "code": "ESFJ",
+      "title": "딸기라떼 (ESFJ)",
+      "subtitle": "J라면 늘 같은 비율로 움직입니다",
+      "image": "assets/result/esf-strawberry-latte.webp",
+      "traits": [
+        "다정하고 사랑스러운 매력",
+        "달콤한 맛처럼 주변 사람들을 챙기는 마음",
+        "따뜻한 사람"
+      ],
+      "tip": "이 음료 시키는 사람은 다 착함(편견)"
+    },
+    {
+      "code": "ESFP",
+      "title": "딸기라떼 (ESFP)",
+      "subtitle": "P라면 그날 기분 따라 다르게 즐깁니다",
+      "image": "assets/result/esf-strawberry-latte.webp",
+      "traits": [
+        "다정하고 사랑스러운 매력",
+        "달콤한 맛처럼 주변 사람들을 챙기는 마음",
+        "따뜻한 사람"
+      ],
+      "tip": "이 음료 시키는 사람은 다 착함(편견)"
+    },
+    {
+      "code": "INTJ",
+      "title": "핸드드립 싱글오리진 (INTJ)",
+      "subtitle": "J라면 정해진 원두만 움직입니다",
+      "image": "assets/result/int-single-origin-drip.webp",
+      "traits": [
+        "깊이 있고 섬세한 취향",
+        "대충 마시는 법이 없이 원두 산지까지 따짐",
+        "꼼꼼함"
+      ],
+      "tip": "커피 얘기 시작하면 30분은 기본인 사람"
+    },
+    {
+      "code": "INTP",
+      "title": "핸드드립 싱글오리진 (INTP)",
+      "subtitle": "P라면 매번 새로운 원두를 탐구합니다",
+      "image": "assets/result/int-single-origin-drip.webp",
+      "traits": [
+        "깊이 있고 섬세한 취향",
+        "대충 마시는 법이 없이 원두 산지까지 따짐",
+        "꼼꼼함"
+      ],
+      "tip": "커피 얘기 시작하면 30분은 기본인 사람"
+    },
+    {
+      "code": "INFJ",
+      "title": "라벤더 라떼 (INFJ)",
+      "subtitle": "J라면 늘 같은 카페에서 움직입니다",
+      "image": "assets/result/inf-lavender-latte.webp",
+      "traits": [
+        "은은하고 섬세한 감성",
+        "조용히 자신만의 취향을 즐김",
+        "향과 분위기에 예민한 편"
+      ],
+      "tip": "메뉴판 보고 향부터 상상하는 사람"
+    },
+    {
+      "code": "INFP",
+      "title": "라벤더 라떼 (INFP)",
+      "subtitle": "P라면 새로운 감성 카페를 찾아다닙니다",
+      "image": "assets/result/inf-lavender-latte.webp",
+      "traits": [
+        "은은하고 섬세한 감성",
+        "조용히 자신만의 취향을 즐김",
+        "향과 분위기에 예민한 편"
+      ],
+      "tip": "메뉴판 보고 향부터 상상하는 사람"
+    },
+    {
+      "code": "ISTJ",
+      "title": "플랫화이트 (ISTJ)",
+      "subtitle": "J라면 늘 같은 비율로 움직입니다",
+      "image": "assets/result/ist-flat-white.webp",
+      "traits": [
+        "군더더기 없이 확실한 걸 선호함",
+        "화려하지 않아도 본질에 충실한 맛",
+        "실속파"
+      ],
+      "tip": "설명 안 해도 알아서 딱 맞게 주문하는 사람"
+    },
+    {
+      "code": "ISTP",
+      "title": "플랫화이트 (ISTP)",
+      "subtitle": "P라면 그날 원두에 따라 조절합니다",
+      "image": "assets/result/ist-flat-white.webp",
+      "traits": [
+        "군더더기 없이 확실한 걸 선호함",
+        "화려하지 않아도 본질에 충실한 맛",
+        "실속파"
+      ],
+      "tip": "설명 안 해도 알아서 딱 맞게 주문하는 사람"
+    },
+    {
+      "code": "ISFJ",
+      "title": "바닐라빈 라떼 (ISFJ)",
+      "subtitle": "J라면 늘 같은 온도로 움직입니다",
+      "image": "assets/result/isf-vanilla-bean-latte.webp",
+      "traits": [
+        "부드럽고 편안한 매력",
+        "자극적이지 않고 은은하게 곁을 지킴",
+        "존재감"
+      ],
+      "tip": "이 음료처럼 있으면 마음이 편해지는 사람"
+    },
+    {
+      "code": "ISFP",
+      "title": "바닐라빈 라떼 (ISFP)",
+      "subtitle": "P라면 그날 기분 따라 아이스·핫을 바꿉니다",
+      "image": "assets/result/isf-vanilla-bean-latte.webp",
+      "traits": [
+        "부드럽고 편안한 매력",
+        "자극적이지 않고 은은하게 곁을 지킴",
+        "존재감"
+      ],
+      "tip": "이 음료처럼 있으면 마음이 편해지는 사람"
+    }
+  ]
+}

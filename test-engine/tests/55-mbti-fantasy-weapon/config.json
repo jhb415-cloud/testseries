@@ -1,0 +1,385 @@
+{
+  "id": "mbti-fantasy-weapon",
+  "title": "MBTI 판타지 무기 판별기",
+  "description": "전설 속 대장간, 오직 자격을 가진 자만이 무기를 고를 수 있다는 소문이 있다. 오늘, 무기가 당신을 선택한다.",
+  "hashtags": [
+    "MBTI판타지무기",
+    "심리테스트",
+    "무기판별",
+    "판타지밈"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 224,
+  "engagement_key": "site-mbtiweapon-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 판타지 무기 판별기 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "무기를 손에 쥐었을 때 당신은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "당당하게 무기를 치켜들어 보여준다",
+          "axis": "E"
+        },
+        {
+          "label": "동료들 앞에서 힘을 시험해본다",
+          "axis": "E"
+        },
+        {
+          "label": "조용히 무기의 감촉부터 느껴본다",
+          "axis": "I"
+        },
+        {
+          "label": "혼자 있을 때 몰래 시험해본다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "전투 중 무기를 다루는 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "화려하게 힘을 드러내며 싸운다",
+          "axis": "E"
+        },
+        {
+          "label": "무기를 과시하듯 사용한다",
+          "axis": "E"
+        },
+        {
+          "label": "조용히 정확하게 무기를 쓴다",
+          "axis": "I"
+        },
+        {
+          "label": "필요할 때만 힘을 드러낸다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "무기에 담긴 힘의 근원은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "상상 속에만 있던 신비한 힘",
+          "axis": "N"
+        },
+        {
+          "label": "아직 밝혀지지 않은 미지의 힘",
+          "axis": "N"
+        },
+        {
+          "label": "실전에서 검증된 확실한 힘",
+          "axis": "S"
+        },
+        {
+          "label": "눈에 보이는 물리적인 힘",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "무기의 잠재력을 발견할 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "숨겨진 새로운 능력을 상상해본다",
+          "axis": "N"
+        },
+        {
+          "label": "예상 못한 방식으로 힘을 써본다",
+          "axis": "N"
+        },
+        {
+          "label": "기존에 알려진 능력만 사용한다",
+          "axis": "S"
+        },
+        {
+          "label": "검증된 방식으로만 다룬다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(무기의 절반이 각성했다. 대장간 깊은 곳에서 봉인된 힘이 반응하기 시작한다.) (봉인된 힘이 반응한다) 무기가 폭주하려 할 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "냉정하게 원리를 분석해서 제어한다",
+          "axis": "T"
+        },
+        {
+          "label": "논리적으로 힘의 흐름을 계산한다",
+          "axis": "T"
+        },
+        {
+          "label": "무기와 교감하며 마음으로 다독인다",
+          "axis": "F"
+        },
+        {
+          "label": "감정으로 무기를 진정시킨다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "무기를 손질할 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "효율적으로 정확하게 관리한다",
+          "axis": "T"
+        },
+        {
+          "label": "성능을 최적화하는 데 집중한다",
+          "axis": "T"
+        },
+        {
+          "label": "무기에게 말을 걸며 정성껏 다룬다",
+          "axis": "F"
+        },
+        {
+          "label": "애정을 담아 소중히 다룬다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "무기를 다루는 스타일은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "정확한 검법대로 사용한다",
+          "axis": "J"
+        },
+        {
+          "label": "체계적으로 훈련해서 다룬다",
+          "axis": "J"
+        },
+        {
+          "label": "그때그때 즉흥적으로 활용한다",
+          "axis": "P"
+        },
+        {
+          "label": "감에 의존해 자유롭게 쓴다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "무기를 보관하는 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "정해진 자리에 소중히 보관한다",
+          "axis": "J"
+        },
+        {
+          "label": "관리 루틴이 철저하다",
+          "axis": "J"
+        },
+        {
+          "label": "필요할 때 아무 데나 둔다",
+          "axis": "P"
+        },
+        {
+          "label": "그때그때 다르게 보관한다",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "지휘의 창 (ENTJ)",
+      "subtitle": "J라면 완벽한 전술로 움직입니다",
+      "image": "assets/result/ent-weapon-command-spear.webp",
+      "traits": [
+        "전장을 지휘하는 힘을 가진 무기",
+        "주인의 카리스마를 증폭시켜 군세를 이끔",
+        "다루기 어려워 아무나 쓸 수 없음"
+      ],
+      "tip": "등급: 전설 · 봉인 해제 조건 완벽한 계획"
+    },
+    {
+      "code": "ENTP",
+      "title": "지휘의 창 (ENTP)",
+      "subtitle": "P라면 즉흥적인 지휘로 힘을 발휘합니다",
+      "image": "assets/result/ent-weapon-command-spear.webp",
+      "traits": [
+        "전장을 지휘하는 힘을 가진 무기",
+        "주인의 카리스마를 증폭시켜 군세를 이끔",
+        "다루기 어려워 아무나 쓸 수 없음"
+      ],
+      "tip": "등급: 전설 · 봉인 해제 조건 완벽한 계획"
+    },
+    {
+      "code": "ENFJ",
+      "title": "희망의 지팡이 (ENFJ)",
+      "subtitle": "J라면 정교한 마법진으로 움직입니다",
+      "image": "assets/result/enf-weapon-hope-staff.webp",
+      "traits": [
+        "사람들에게 희망을 불어넣는 무기",
+        "화려한 빛으로 아군의 사기를 끌어올림",
+        "유지하려면 큰 에너지가 필요함"
+      ],
+      "tip": "등급: 전설 · 봉인 해제 조건 진심 어린 응원"
+    },
+    {
+      "code": "ENFP",
+      "title": "희망의 지팡이 (ENFP)",
+      "subtitle": "P라면 즉흥적인 축복으로 힘을 씁니다",
+      "image": "assets/result/enf-weapon-hope-staff.webp",
+      "traits": [
+        "사람들에게 희망을 불어넣는 무기",
+        "화려한 빛으로 아군의 사기를 끌어올림",
+        "유지하려면 큰 에너지가 필요함"
+      ],
+      "tip": "등급: 전설 · 봉인 해제 조건 진심 어린 응원"
+    },
+    {
+      "code": "ESTJ",
+      "title": "강철 대검 (ESTJ)",
+      "subtitle": "J라면 정교한 검술로 움직입니다",
+      "image": "assets/result/est-weapon-steel-greatsword.webp",
+      "traits": [
+        "압도적인 파괴력을 가진 무기",
+        "확실한 한 방으로 전투를 끝내는 힘",
+        "섬세한 컨트롤은 다소 어려움"
+      ],
+      "tip": "등급: 영웅 · 봉인 해제 조건 압도적인 힘"
+    },
+    {
+      "code": "ESTP",
+      "title": "강철 대검 (ESTP)",
+      "subtitle": "P라면 힘으로 밀어붙이며 씁니다",
+      "image": "assets/result/est-weapon-steel-greatsword.webp",
+      "traits": [
+        "압도적인 파괴력을 가진 무기",
+        "확실한 한 방으로 전투를 끝내는 힘",
+        "섬세한 컨트롤은 다소 어려움"
+      ],
+      "tip": "등급: 영웅 · 봉인 해제 조건 압도적인 힘"
+    },
+    {
+      "code": "ESFJ",
+      "title": "수호의 방패 (ESFJ)",
+      "subtitle": "J라면 철저한 방어 태세로 움직입니다",
+      "image": "assets/result/esf-weapon-guardian-shield.webp",
+      "traits": [
+        "동료를 지키는 힘을 가진 무기",
+        "주인의 따뜻한 마음에 반응해 강력한 보호막을 만듦"
+      ],
+      "tip": "등급: 영웅 · 봉인 해제 조건 동료를 향한 마음"
+    },
+    {
+      "code": "ESFP",
+      "title": "수호의 방패 (ESFP)",
+      "subtitle": "P라면 순간적인 반응으로 지킵니다",
+      "image": "assets/result/esf-weapon-guardian-shield.webp",
+      "traits": [
+        "동료를 지키는 힘을 가진 무기",
+        "주인의 따뜻한 마음에 반응해 강력한 보호막을 만듦"
+      ],
+      "tip": "등급: 영웅 · 봉인 해제 조건 동료를 향한 마음"
+    },
+    {
+      "code": "INTJ",
+      "title": "봉인된 고대검 (INTJ)",
+      "subtitle": "J라면 완벽한 계획으로 봉인을 풀고 움직입니다",
+      "image": "assets/result/int-weapon-sealed-ancient-sword.webp",
+      "traits": [
+        "오랜 세월 봉인되어 있던 강력한 무기",
+        "주인의 지혜에 반응해 서서히 힘을 드러냄",
+        "완전한 힘을 다루려면 시간이 필요함"
+      ],
+      "tip": "등급: 전설 · 봉인 해제 조건 완벽한 이해"
+    },
+    {
+      "code": "INTP",
+      "title": "봉인된 고대검 (INTP)",
+      "subtitle": "P라면 즉흥적인 발견으로 각성시킵니다",
+      "image": "assets/result/int-weapon-sealed-ancient-sword.webp",
+      "traits": [
+        "오랜 세월 봉인되어 있던 강력한 무기",
+        "주인의 지혜에 반응해 서서히 힘을 드러냄",
+        "완전한 힘을 다루려면 시간이 필요함"
+      ],
+      "tip": "등급: 전설 · 봉인 해제 조건 완벽한 이해"
+    },
+    {
+      "code": "INFJ",
+      "title": "치유의 지팡이 (INFJ)",
+      "subtitle": "J라면 정확한 치유 의식으로 움직입니다",
+      "image": "assets/result/inf-weapon-healing-staff.webp",
+      "traits": [
+        "상처를 치유하는 힘을 가진 무기",
+        "주인의 섬세한 마음에 반응해 조용히 회복의 힘을 발휘함"
+      ],
+      "tip": "등급: 영웅 · 봉인 해제 조건 깊은 공감"
+    },
+    {
+      "code": "INFP",
+      "title": "치유의 지팡이 (INFP)",
+      "subtitle": "P라면 그때그때 필요한 치유로 씁니다",
+      "image": "assets/result/inf-weapon-healing-staff.webp",
+      "traits": [
+        "상처를 치유하는 힘을 가진 무기",
+        "주인의 섬세한 마음에 반응해 조용히 회복의 힘을 발휘함"
+      ],
+      "tip": "등급: 영웅 · 봉인 해제 조건 깊은 공감"
+    },
+    {
+      "code": "ISTJ",
+      "title": "정밀 석궁 (ISTJ)",
+      "subtitle": "J라면 완벽한 조준으로 움직입니다",
+      "image": "assets/result/ist-weapon-precision-crossbow.webp",
+      "traits": [
+        "한 치의 오차도 없는 정확함을 가진 무기",
+        "말없이 확실한 결과를 만들어내는 실속형 무기"
+      ],
+      "tip": "등급: 영웅 · 봉인 해제 조건 완벽한 집중"
+    },
+    {
+      "code": "ISTP",
+      "title": "정밀 석궁 (ISTP)",
+      "subtitle": "P라면 순간의 감으로 명중시킵니다",
+      "image": "assets/result/ist-weapon-precision-crossbow.webp",
+      "traits": [
+        "한 치의 오차도 없는 정확함을 가진 무기",
+        "말없이 확실한 결과를 만들어내는 실속형 무기"
+      ],
+      "tip": "등급: 영웅 · 봉인 해제 조건 완벽한 집중"
+    },
+    {
+      "code": "ISFJ",
+      "title": "감정의 단검 (ISFJ)",
+      "subtitle": "J라면 정제된 감정으로 움직입니다",
+      "image": "assets/result/isf-weapon-emotion-dagger.webp",
+      "traits": [
+        "주인의 감정에 반응하는 섬세한 무기",
+        "눈에 띄지 않지만 결정적인 순간 확실한 힘을 발휘함"
+      ],
+      "tip": "등급: 희귀 · 봉인 해제 조건 진심 어린 마음"
+    },
+    {
+      "code": "ISFP",
+      "title": "감정의 단검 (ISFP)",
+      "subtitle": "P라면 순간의 감정으로 힘을 냅니다",
+      "image": "assets/result/isf-weapon-emotion-dagger.webp",
+      "traits": [
+        "주인의 감정에 반응하는 섬세한 무기",
+        "눈에 띄지 않지만 결정적인 순간 확실한 힘을 발휘함"
+      ],
+      "tip": "등급: 희귀 · 봉인 해제 조건 진심 어린 마음"
+    }
+  ]
+}

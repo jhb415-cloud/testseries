@@ -1,0 +1,393 @@
+{
+  "id": "mbti-hero-awakening",
+  "title": "MBTI 히어로 각성 테스트",
+  "description": "어느 날 정체불명의 상자가 배달된다. 상자를 여는 순간, 몸속에서 낯선 힘이 꿈틀거리기 시작한다.",
+  "hashtags": [
+    "MBTI히어로",
+    "심리테스트",
+    "각성밈",
+    "히어로세계관"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 296,
+  "engagement_key": "site-mbtihero-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 히어로 각성 테스트 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "상자를 여는 순간, 힘이 발현되는 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "손끝에서 빛이 터지며 사람들이 놀란다",
+          "axis": "E"
+        },
+        {
+          "label": "온몸이 뜨거워지지만 겉으로는 티가 안 난다",
+          "axis": "E"
+        },
+        {
+          "label": "조용히 방 안에서 혼자 알아차린다",
+          "axis": "I"
+        },
+        {
+          "label": "아무도 몰래 능력을 확인해본다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "팀원들과 첫 작전 회의, 당신은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "바로 마이크를 잡고 작전을 제안한다",
+          "axis": "E"
+        },
+        {
+          "label": "적극적으로 의견을 주고받는다",
+          "axis": "E"
+        },
+        {
+          "label": "다른 사람 얘기를 듣고 나서 조용히 보탠다",
+          "axis": "I"
+        },
+        {
+          "label": "회의 끝나고 따로 조용히 의견을 전한다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "사건 현장에 도착하면 제일 먼저 보는 건?",
+      "image": null,
+      "choices": [
+        {
+          "label": "이 사건 뒤에 숨겨진 더 큰 그림",
+          "axis": "N"
+        },
+        {
+          "label": "배후 세력의 궁극적인 목적",
+          "axis": "N"
+        },
+        {
+          "label": "눈앞에 쓰러진 사람의 상태",
+          "axis": "S"
+        },
+        {
+          "label": "현장의 물리적 증거들",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "새로운 빌런을 상대하는 전략은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "한 번도 없던 방식으로 즉석에서 짜본다",
+          "axis": "N"
+        },
+        {
+          "label": "상상력을 발휘해 변칙적으로 대응한다",
+          "axis": "N"
+        },
+        {
+          "label": "예전에 검증된 전투 방식을 쓴다",
+          "axis": "S"
+        },
+        {
+          "label": "확실하고 안전한 정공법을 택한다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(각성 50% 진행 중... 갑자기 도시에 비상 사이렌이 울린다. 첫 임무가 당신을 기다리고 있다.) (각성 50%... 사이렌이 울린다) 위급 신고가 들어왔다. 판단 기준은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "규정과 원칙에 따라 움직인다",
+          "axis": "T"
+        },
+        {
+          "label": "가장 효율적인 방법을 계산한다",
+          "axis": "T"
+        },
+        {
+          "label": "신고자의 두려움부터 살핀다",
+          "axis": "F"
+        },
+        {
+          "label": "그 사람 입장에서 먼저 생각한다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "동료가 임무 중 실수를 저질렀다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "원인을 정확히 짚고 재발 방지책을 낸다",
+          "axis": "T"
+        },
+        {
+          "label": "냉정하게 무엇이 잘못됐는지 분석한다",
+          "axis": "T"
+        },
+        {
+          "label": "먼저 괜찮은지 마음부터 살핀다",
+          "axis": "F"
+        },
+        {
+          "label": "다독이며 다음엔 잘할 거라 말해준다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "다음 임무를 준비하는 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "동선과 변수까지 다 계획해둔다",
+          "axis": "J"
+        },
+        {
+          "label": "체크리스트를 만들어 확인한다",
+          "axis": "J"
+        },
+        {
+          "label": "현장에서 그때그때 판단한다",
+          "axis": "P"
+        },
+        {
+          "label": "일단 몸이 먼저 움직이고 본다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "아지트(비밀기지) 상태는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "장비마다 자리가 정해져 있다",
+          "axis": "J"
+        },
+        {
+          "label": "일정표가 벽에 붙어 있다",
+          "axis": "J"
+        },
+        {
+          "label": "필요할 때 즉석에서 뭐든 만든다",
+          "axis": "P"
+        },
+        {
+          "label": "어질러져 있지만 나름의 규칙이 있다",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "전략의 지휘관 (ENTJ)",
+      "subtitle": "J라면 완벽한 작전으로 움직입니다",
+      "image": "assets/result/ent-strategist-commander.webp",
+      "traits": [
+        "팀 전체를 판 위에 놓고 움직임",
+        "목표를 위해서라면 냉정한 판단도 서슴지 않음",
+        "위기의 순간마다 팀을 승리로 이끔"
+      ],
+      "tip": "명령 하나로 판이 뒤집히는 사람"
+    },
+    {
+      "code": "ENTP",
+      "title": "전략의 지휘관 (ENTP)",
+      "subtitle": "P라면 현장 판단력으로",
+      "image": "assets/result/ent-strategist-commander.webp",
+      "traits": [
+        "팀 전체를 판 위에 놓고 움직임",
+        "목표를 위해서라면 냉정한 판단도 서슴지 않음",
+        "위기의 순간마다 팀을 승리로 이끔"
+      ],
+      "tip": "명령 하나로 판이 뒤집히는 사람"
+    },
+    {
+      "code": "ENFJ",
+      "title": "빛의 인도자 (ENFJ)",
+      "subtitle": "J라면 체계적으로 팀을 이끌고 움직입니다",
+      "image": "assets/result/enf-light-guide.webp",
+      "traits": [
+        "흩어진 사람들을 하나로 모아 함께 싸우게 함",
+        "진심 어린 말 한마디로 사기를 끌어올림",
+        "모두를 챙기다 자신을 돌보는 걸 잊음"
+      ],
+      "tip": "말 한마디로 사람 마음을 움직이는 사람"
+    },
+    {
+      "code": "ENFP",
+      "title": "빛의 인도자 (ENFP)",
+      "subtitle": "P라면 즉흥적인 감동으로 이끕니다",
+      "image": "assets/result/enf-light-guide.webp",
+      "traits": [
+        "흩어진 사람들을 하나로 모아 함께 싸우게 함",
+        "진심 어린 말 한마디로 사기를 끌어올림",
+        "모두를 챙기다 자신을 돌보는 걸 잊음"
+      ],
+      "tip": "말 한마디로 사람 마음을 움직이는 사람"
+    },
+    {
+      "code": "ESTJ",
+      "title": "최전선의 질주자 (ESTJ)",
+      "subtitle": "J라면 정공법으로 움직입니다",
+      "image": "assets/result/est-frontline-runner.webp",
+      "traits": [
+        "위기가 닥치면 몸이 먼저 반응함",
+        "확실하고 검증된 방식으로 정면 돌파함",
+        "계획에 없는 변수 앞에서는 잠깐 당황함"
+      ],
+      "tip": "일단 뛰어들고 보는 행동파"
+    },
+    {
+      "code": "ESTP",
+      "title": "최전선의 질주자 (ESTP)",
+      "subtitle": "P라면 몸으로 부딪히며 돌파합니다",
+      "image": "assets/result/est-frontline-runner.webp",
+      "traits": [
+        "위기가 닥치면 몸이 먼저 반응함",
+        "확실하고 검증된 방식으로 정면 돌파함",
+        "계획에 없는 변수 앞에서는 잠깐 당황함"
+      ],
+      "tip": "일단 뛰어들고 보는 행동파"
+    },
+    {
+      "code": "ESFJ",
+      "title": "결계의 수호자 (ESFJ)",
+      "subtitle": "J라면 미리 대비해서 움직입니다",
+      "image": "assets/result/esf-barrier-guardian.webp",
+      "traits": [
+        "동료를 지키는 일이라면 발 벗고 나섬",
+        "따뜻한 마음으로 팀 전체를 챙김",
+        "자신이 다쳤을 땐 티를 내지 않음"
+      ],
+      "tip": "동료 보호율 100%, 자기 보호율은 미지수"
+    },
+    {
+      "code": "ESFP",
+      "title": "결계의 수호자 (ESFP)",
+      "subtitle": "P라면 그 순간 즉시 지켜냅니다",
+      "image": "assets/result/esf-barrier-guardian.webp",
+      "traits": [
+        "동료를 지키는 일이라면 발 벗고 나섬",
+        "따뜻한 마음으로 팀 전체를 챙김",
+        "자신이 다쳤을 땐 티를 내지 않음"
+      ],
+      "tip": "동료 보호율 100%, 자기 보호율은 미지수"
+    },
+    {
+      "code": "INTJ",
+      "title": "이론의 설계자 (INTJ)",
+      "subtitle": "J라면 완성된 이론으로 움직입니다",
+      "image": "assets/result/int-theory-architect.webp",
+      "traits": [
+        "눈앞의 현상을 순식간에 분석해냄",
+        "혼자 있는 시간에 가장 강력한 능력을 발휘함",
+        "실전 배치가 항상 조금 늦음"
+      ],
+      "tip": "혼자 연구실에서 세상을 구하는 사람"
+    },
+    {
+      "code": "INTP",
+      "title": "이론의 설계자 (INTP)",
+      "subtitle": "P라면 즉석 발명으로 승부합니다",
+      "image": "assets/result/int-theory-architect.webp",
+      "traits": [
+        "눈앞의 현상을 순식간에 분석해냄",
+        "혼자 있는 시간에 가장 강력한 능력을 발휘함",
+        "실전 배치가 항상 조금 늦음"
+      ],
+      "tip": "혼자 연구실에서 세상을 구하는 사람"
+    },
+    {
+      "code": "INFJ",
+      "title": "침묵의 치유사 (INFJ)",
+      "subtitle": "J라면 계획된 치유로 움직입니다",
+      "image": "assets/result/inf-silent-healer.webp",
+      "traits": [
+        "조용히 사람들의 상처를 어루만짐",
+        "위기 조짐을 남들보다 먼저 느낌",
+        "자신의 힘듦은 아무에게도 말하지 않음"
+      ],
+      "tip": "말없이 다 알아채는 사람"
+    },
+    {
+      "code": "INFP",
+      "title": "침묵의 치유사 (INFP)",
+      "subtitle": "P라면 그때그때 필요한 위로로 다가갑니다",
+      "image": "assets/result/inf-silent-healer.webp",
+      "traits": [
+        "조용히 사람들의 상처를 어루만짐",
+        "위기 조짐을 남들보다 먼저 느낌",
+        "자신의 힘듦은 아무에게도 말하지 않음"
+      ],
+      "tip": "말없이 다 알아채는 사람"
+    },
+    {
+      "code": "ISTJ",
+      "title": "침묵의 해결사 (ISTJ)",
+      "subtitle": "J라면 준비된 장비로 움직입니다",
+      "image": "assets/result/ist-silent-fixer.webp",
+      "traits": [
+        "필요한 순간 필요한 도구로 상황을 정리함",
+        "말은 적지만 손은 누구보다 빠르고 정확함",
+        "묵묵히 임무를 완수함"
+      ],
+      "tip": "말보다 행동이 먼저인 사람"
+    },
+    {
+      "code": "ISTP",
+      "title": "침묵의 해결사 (ISTP)",
+      "subtitle": "P라면 즉석 개조로 해결합니다",
+      "image": "assets/result/ist-silent-fixer.webp",
+      "traits": [
+        "필요한 순간 필요한 도구로 상황을 정리함",
+        "말은 적지만 손은 누구보다 빠르고 정확함",
+        "묵묵히 임무를 완수함"
+      ],
+      "tip": "말보다 행동이 먼저인 사람"
+    },
+    {
+      "code": "ISFJ",
+      "title": "색채의 예술가 (ISFJ)",
+      "subtitle": "J라면 정제된 형태로 움직입니다",
+      "image": "assets/result/isf-color-artist.webp",
+      "traits": [
+        "마음속 감정을 눈에 보이는 힘으로 바꿔냄",
+        "섬세한 감수성 덕분에 아무도 못 보는 걸 봄",
+        "상처도 그만큼 쉽게 받음"
+      ],
+      "tip": "감정이 곧 무기가 되는 사람"
+    },
+    {
+      "code": "ISFP",
+      "title": "색채의 예술가 (ISFP)",
+      "subtitle": "P라면 즉흥적인 색채로 표현합니다",
+      "image": "assets/result/isf-color-artist.webp",
+      "traits": [
+        "마음속 감정을 눈에 보이는 힘으로 바꿔냄",
+        "섬세한 감수성 덕분에 아무도 못 보는 걸 봄",
+        "상처도 그만큼 쉽게 받음"
+      ],
+      "tip": "감정이 곧 무기가 되는 사람"
+    }
+  ]
+}

@@ -1,0 +1,377 @@
+{
+  "id": "mbti-convenience-store-food",
+  "title": "MBTI 편의점 음식 판별기",
+  "description": "자정 넘은 편의점, 형광등 아래 진열된 수많은 선택지들. 그중 당신의 손이 자연스럽게 향하는 그 음식이, 바로 당신이다.",
+  "hashtags": [
+    "MBTI편의점",
+    "심리테스트",
+    "편의점음식",
+    "일상밀착밈"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 239,
+  "engagement_key": "site-mbticonvenience-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 편의점 음식 판별기 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "편의점에 들어서면 당신은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "알바생과 가볍게 인사를 나눈다",
+          "axis": "E"
+        },
+        {
+          "label": "먹고 싶은 걸 바로 정하고 담는다",
+          "axis": "E"
+        },
+        {
+          "label": "천천히 매대를 둘러보며 고민한다",
+          "axis": "I"
+        },
+        {
+          "label": "혼자 조용히 원하는 걸 찾는다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "편의점에서 먹을 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "테이블에서 사람들과 어울려 먹는다",
+          "axis": "E"
+        },
+        {
+          "label": "누구랑 같이 먹는 걸 좋아한다",
+          "axis": "E"
+        },
+        {
+          "label": "혼자 조용히 먹는 걸 선호한다",
+          "axis": "I"
+        },
+        {
+          "label": "집에 가져가서 혼자 먹는다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "신상 메뉴가 나오면",
+      "image": null,
+      "choices": [
+        {
+          "label": "어떤 맛일지 상상하며 궁금해한다",
+          "axis": "N"
+        },
+        {
+          "label": "새로운 조합이 기대돼서 끌린다",
+          "axis": "N"
+        },
+        {
+          "label": "리뷰나 후기부터 찾아본다",
+          "axis": "S"
+        },
+        {
+          "label": "익숙한 메뉴가 안전하다고 생각한다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(알바생이 묻는다) 조합을 고를 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "아무도 안 해본 조합을 시도해본다",
+          "axis": "N"
+        },
+        {
+          "label": "새로운 궁합을 상상해서 만든다",
+          "axis": "N"
+        },
+        {
+          "label": "검증된 조합만 믿고 산다",
+          "axis": "S"
+        },
+        {
+          "label": "늘 먹던 조합을 고수한다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(선택의 절반을 마쳤다. 알바생이 묻는다. \"이거 데워드릴까요, 그냥 드릴까요?\") 배고픈데 뭘 먹을지 고민될 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "가성비를 계산해서 정한다",
+          "axis": "T"
+        },
+        {
+          "label": "효율적으로 빠르게 결정한다",
+          "axis": "T"
+        },
+        {
+          "label": "그날 기분에 맞는 걸 고른다",
+          "axis": "F"
+        },
+        {
+          "label": "위로가 되는 맛을 찾는다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "같이 먹을 사람의 취향을 고려할 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "합리적으로 다 같이 만족할 걸 고른다",
+          "axis": "T"
+        },
+        {
+          "label": "가격 대비 만족도를 계산한다",
+          "axis": "T"
+        },
+        {
+          "label": "상대가 좋아할 걸 먼저 생각한다",
+          "axis": "F"
+        },
+        {
+          "label": "다 같이 행복할 조합을 고민한다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "편의점 방문 패턴은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "정해진 시간에 정해진 걸 산다",
+          "axis": "J"
+        },
+        {
+          "label": "필요한 것만 계획해서 산다",
+          "axis": "J"
+        },
+        {
+          "label": "그때그때 끌리는 대로 산다",
+          "axis": "P"
+        },
+        {
+          "label": "즉흥적으로 편의점에 들른다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "편의점 음식 취향은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "늘 먹던 메뉴만 고수한다",
+          "axis": "J"
+        },
+        {
+          "label": "정해진 루틴대로 먹는다",
+          "axis": "J"
+        },
+        {
+          "label": "그날 기분따라 매번 다르다",
+          "axis": "P"
+        },
+        {
+          "label": "새로운 걸 즉흥적으로 시도한다",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "삼각김밥 참치마요 + 컵라면 콤보 (ENTJ)",
+      "subtitle": "J라면 늘 같은 조합으로 움직입니다",
+      "image": "assets/result/ent-conv-triangle-kimbap-combo.webp",
+      "traits": [
+        "효율적이고 확실한 조합을 선호함",
+        "화려하진 않아도 실속 있는 선택"
+      ],
+      "tip": "이 조합 고르는 사람치고 계획 없는 사람 없음"
+    },
+    {
+      "code": "ENTP",
+      "title": "삼각김밥 참치마요 + 컵라면 콤보 (ENTP)",
+      "subtitle": "P라면 그날그날 다른 라면을 곁들입니다",
+      "image": "assets/result/ent-conv-triangle-kimbap-combo.webp",
+      "traits": [
+        "효율적이고 확실한 조합을 선호함",
+        "화려하진 않아도 실속 있는 선택"
+      ],
+      "tip": "이 조합 고르는 사람치고 계획 없는 사람 없음"
+    },
+    {
+      "code": "ENFJ",
+      "title": "무지개색 젤리 + 딸기우유 (ENFJ)",
+      "subtitle": "J라면 정해진 조합으로 움직입니다",
+      "image": "assets/result/enf-conv-rainbow-jelly.webp",
+      "traits": [
+        "보기만 해도 기분 좋아지는 조합",
+        "밝은 에너지처럼 주변에 즐거움을 줌"
+      ],
+      "tip": "맛보다 텐션으로 고르는 타입"
+    },
+    {
+      "code": "ENFP",
+      "title": "무지개색 젤리 + 딸기우유 (ENFP)",
+      "subtitle": "P라면 매번 다른 젤리를 고릅니다",
+      "image": "assets/result/enf-conv-rainbow-jelly.webp",
+      "traits": [
+        "보기만 해도 기분 좋아지는 조합",
+        "밝은 에너지처럼 주변에 즐거움을 줌"
+      ],
+      "tip": "맛보다 텐션으로 고르는 타입"
+    },
+    {
+      "code": "ESTJ",
+      "title": "불닭볶음면 + 치킨 (ESTJ)",
+      "subtitle": "J라면 늘 같은 강도로 움직입니다",
+      "image": "assets/result/est-conv-buldak-chicken.webp",
+      "traits": [
+        "확실하고 강렬한 맛을 좋아함",
+        "화끈한 맛처럼 확실한 결과를 선호"
+      ],
+      "tip": "맵다면서 또 시키는 그 사람"
+    },
+    {
+      "code": "ESTP",
+      "title": "불닭볶음면 + 치킨 (ESTP)",
+      "subtitle": "P라면 그날 매운맛을 조절합니다",
+      "image": "assets/result/est-conv-buldak-chicken.webp",
+      "traits": [
+        "확실하고 강렬한 맛을 좋아함",
+        "화끈한 맛처럼 확실한 결과를 선호"
+      ],
+      "tip": "맵다면서 또 시키는 그 사람"
+    },
+    {
+      "code": "ESFJ",
+      "title": "딸기샌드위치 + 밀크티 (ESFJ)",
+      "subtitle": "J라면 늘 같은 비율로 움직입니다",
+      "image": "assets/result/esf-conv-strawberry-sandwich.webp",
+      "traits": [
+        "다정하고 사랑스러운 조합을 좋아함",
+        "달콤한 맛처럼 주변 사람들을 챙기는 마음"
+      ],
+      "tip": "이 조합 고르는 사람은 다 착함(편견)"
+    },
+    {
+      "code": "ESFP",
+      "title": "딸기샌드위치 + 밀크티 (ESFP)",
+      "subtitle": "P라면 그날 기분 따라 다르게 즐깁니다",
+      "image": "assets/result/esf-conv-strawberry-sandwich.webp",
+      "traits": [
+        "다정하고 사랑스러운 조합을 좋아함",
+        "달콤한 맛처럼 주변 사람들을 챙기는 마음"
+      ],
+      "tip": "이 조합 고르는 사람은 다 착함(편견)"
+    },
+    {
+      "code": "INTJ",
+      "title": "프리미엄 도시락 + 블랙커피 (INTJ)",
+      "subtitle": "J라면 늘 같은 브랜드로 움직입니다",
+      "image": "assets/result/int-conv-premium-lunchbox.webp",
+      "traits": [
+        "효율과 품질을 함께 따짐",
+        "성분표까지 확인하는 꼼꼼함"
+      ],
+      "tip": "메뉴 고르는데도 리서치가 필요한 사람"
+    },
+    {
+      "code": "INTP",
+      "title": "프리미엄 도시락 + 블랙커피 (INTP)",
+      "subtitle": "P라면 매번 새로운 도시락을 탐구합니다",
+      "image": "assets/result/int-conv-premium-lunchbox.webp",
+      "traits": [
+        "효율과 품질을 함께 따짐",
+        "성분표까지 확인하는 꼼꼼함"
+      ],
+      "tip": "메뉴 고르는데도 리서치가 필요한 사람"
+    },
+    {
+      "code": "INFJ",
+      "title": "라벤더맛 디저트 + 카모마일차 (INFJ)",
+      "subtitle": "J라면 늘 같은 메뉴로 움직입니다",
+      "image": "assets/result/inf-conv-lavender-dessert.webp",
+      "traits": [
+        "은은하고 섬세한 취향",
+        "자극적이지 않은 맛으로 조용히 자신만의 시간을 즐김"
+      ],
+      "tip": "메뉴판 보고 향부터 상상하는 사람"
+    },
+    {
+      "code": "INFP",
+      "title": "라벤더맛 디저트 + 카모마일차 (INFP)",
+      "subtitle": "P라면 새로운 감성 메뉴를 찾아다닙니다",
+      "image": "assets/result/inf-conv-lavender-dessert.webp",
+      "traits": [
+        "은은하고 섬세한 취향",
+        "자극적이지 않은 맛으로 조용히 자신만의 시간을 즐김"
+      ],
+      "tip": "메뉴판 보고 향부터 상상하는 사람"
+    },
+    {
+      "code": "ISTJ",
+      "title": "편의점 도시락(계란후라이 추가) (ISTJ)",
+      "subtitle": "J라면 늘 같은 조합으로 움직입니다",
+      "image": "assets/result/ist-conv-lunchbox-egg.webp",
+      "traits": [
+        "군더더기 없이 확실한 걸 선호함",
+        "본질에 충실한 조합을 선호하는 실속파"
+      ],
+      "tip": "설명 안 해도 알아서 딱 맞게 고르는 사람"
+    },
+    {
+      "code": "ISTP",
+      "title": "편의점 도시락(계란후라이 추가) (ISTP)",
+      "subtitle": "P라면 그날 반찬을 바꿔봅니다",
+      "image": "assets/result/ist-conv-lunchbox-egg.webp",
+      "traits": [
+        "군더더기 없이 확실한 걸 선호함",
+        "본질에 충실한 조합을 선호하는 실속파"
+      ],
+      "tip": "설명 안 해도 알아서 딱 맞게 고르는 사람"
+    },
+    {
+      "code": "ISFJ",
+      "title": "우유식빵 + 바나나우유 (ISFJ)",
+      "subtitle": "J라면 늘 같은 온도로 움직입니다",
+      "image": "assets/result/isf-conv-milk-bread.webp",
+      "traits": [
+        "부드럽고 편안한 매력",
+        "자극적이지 않고 은은하게 곁을 지켜주는 존재감"
+      ],
+      "tip": "이 조합처럼 있으면 마음이 편해지는 사람"
+    },
+    {
+      "code": "ISFP",
+      "title": "우유식빵 + 바나나우유 (ISFP)",
+      "subtitle": "P라면 그날 기분 따라 다르게 즐깁니다",
+      "image": "assets/result/isf-conv-milk-bread.webp",
+      "traits": [
+        "부드럽고 편안한 매력",
+        "자극적이지 않고 은은하게 곁을 지켜주는 존재감"
+      ],
+      "tip": "이 조합처럼 있으면 마음이 편해지는 사람"
+    }
+  ]
+}

@@ -1,0 +1,393 @@
+{
+  "id": "mbti-mythology-god",
+  "title": "MBTI 신(神) 판별기",
+  "description": "태초의 혼돈 속에서, 각자의 신격이 깨어나 자신만의 영역을 관장하기 시작했다. 당신은 무엇을 다스리는 신인가.",
+  "hashtags": [
+    "MBTI신화",
+    "심리테스트",
+    "판별기밈",
+    "신화세계관"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 263,
+  "engagement_key": "site-mbtigod-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 신(神) 판별기 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "신도들과 소통하는 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "직접 신탁을 내려 소통한다",
+          "axis": "E"
+        },
+        {
+          "label": "축제와 의식으로 함께한다",
+          "axis": "E"
+        },
+        {
+          "label": "조용히 지켜보며 필요할 때만 응답한다",
+          "axis": "I"
+        },
+        {
+          "label": "말없이 존재만으로 영향을 준다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "다른 신들과의 관계는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "적극적으로 회의에 참여한다",
+          "axis": "E"
+        },
+        {
+          "label": "다른 신들과 자주 교류한다",
+          "axis": "E"
+        },
+        {
+          "label": "혼자만의 영역에 머무는 편이다",
+          "axis": "I"
+        },
+        {
+          "label": "필요할 때만 접촉한다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "세상을 창조할 때 관심사는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "상징적인 의미가 담긴 것을 만든다",
+          "axis": "N"
+        },
+        {
+          "label": "미래에 영향을 줄 개념을 만든다",
+          "axis": "N"
+        },
+        {
+          "label": "실제로 쓰일 구체적인 것을 만든다",
+          "axis": "S"
+        },
+        {
+          "label": "당장 필요한 것부터 만든다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "인간에게 힘을 내려줄 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "새로운 가능성을 열어주는 힘을 준다",
+          "axis": "N"
+        },
+        {
+          "label": "상상력을 자극하는 재능을 준다",
+          "axis": "N"
+        },
+        {
+          "label": "생존에 실질적으로 도움되는 힘을 준다",
+          "axis": "S"
+        },
+        {
+          "label": "확실하고 현실적인 능력을 준다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(신격의 절반이 드러났다. 인간들이 당신에게 처음으로 기도를 올리기 시작한다.) (첫 기도가 올라온다) 인간이 부당한 요청을 해온다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "규칙과 섭리에 따라 판단한다",
+          "axis": "T"
+        },
+        {
+          "label": "공정함을 기준으로 응답한다",
+          "axis": "T"
+        },
+        {
+          "label": "그의 절박한 마음을 먼저 헤아린다",
+          "axis": "F"
+        },
+        {
+          "label": "안쓰러운 마음에 마음이 흔들린다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "인간 세상에 재앙이 닥쳤을 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "원인을 분석하고 대책을 세운다",
+          "axis": "T"
+        },
+        {
+          "label": "냉정하게 필요한 조치를 취한다",
+          "axis": "T"
+        },
+        {
+          "label": "고통받는 이들의 마음이 아프다",
+          "axis": "F"
+        },
+        {
+          "label": "함께 슬퍼하며 위로를 전한다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "세상의 질서를 유지하는 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "명확한 규칙과 섭리로 다스린다",
+          "axis": "J"
+        },
+        {
+          "label": "정해진 순환과 질서를 지킨다",
+          "axis": "J"
+        },
+        {
+          "label": "그때그때 필요에 따라 개입한다",
+          "axis": "P"
+        },
+        {
+          "label": "자유롭게 흘러가도록 둔다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "신전(당신의 영역) 분위기는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "질서정연하고 엄숙하다",
+          "axis": "J"
+        },
+        {
+          "label": "정해진 규율이 뚜렷하다",
+          "axis": "J"
+        },
+        {
+          "label": "자유롭고 예측불가능하다",
+          "axis": "P"
+        },
+        {
+          "label": "때에 따라 분위기가 달라진다",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "정복의 신 (ENTJ)",
+      "subtitle": "J라면 확고한 통치로 움직입니다",
+      "image": "assets/result/ent-god-conquest.webp",
+      "traits": [
+        "세상의 질서를 세우고 확장함",
+        "강한 카리스마로 인간들을 이끔",
+        "위엄 때문에 두려움의 대상이 되기도 함"
+      ],
+      "tip": "신도들이 제일 무서워하면서 제일 의지하는 신"
+    },
+    {
+      "code": "ENTP",
+      "title": "정복의 신 (ENTP)",
+      "subtitle": "P라면 정복지마다 다른 방식으로 다스립니다",
+      "image": "assets/result/ent-god-conquest.webp",
+      "traits": [
+        "세상의 질서를 세우고 확장함",
+        "강한 카리스마로 인간들을 이끔",
+        "위엄 때문에 두려움의 대상이 되기도 함"
+      ],
+      "tip": "신도들이 제일 무서워하면서 제일 의지하는 신"
+    },
+    {
+      "code": "ENFJ",
+      "title": "축제의 신 (ENFJ)",
+      "subtitle": "J라면 정해진 축일로 움직입니다",
+      "image": "assets/result/enf-god-festival.webp",
+      "traits": [
+        "사람들에게 기쁨과 희망을 전함",
+        "함께 어울리며 축복을 내리는 걸 좋아함",
+        "정작 혼자만의 고독은 잘 드러내지 않음"
+      ],
+      "tip": "이 신을 믿으면 인생에 축제가 옴"
+    },
+    {
+      "code": "ENFP",
+      "title": "축제의 신 (ENFP)",
+      "subtitle": "P라면 즉흥적인 축복으로 함께합니다",
+      "image": "assets/result/enf-god-festival.webp",
+      "traits": [
+        "사람들에게 기쁨과 희망을 전함",
+        "함께 어울리며 축복을 내리는 걸 좋아함",
+        "정작 혼자만의 고독은 잘 드러내지 않음"
+      ],
+      "tip": "이 신을 믿으면 인생에 축제가 옴"
+    },
+    {
+      "code": "ESTJ",
+      "title": "전쟁의 신 (ESTJ)",
+      "subtitle": "J라면 철저한 전략으로 움직입니다",
+      "image": "assets/result/est-god-war.webp",
+      "traits": [
+        "힘과 용맹을 관장함",
+        "확실하고 강력한 힘으로 승리를 이끔",
+        "섬세한 감정은 다소 서툼"
+      ],
+      "tip": "이 신에게 기도하면 일단 이기고 봄"
+    },
+    {
+      "code": "ESTP",
+      "title": "전쟁의 신 (ESTP)",
+      "subtitle": "P라면 전장의 흐름을 타며 승리합니다",
+      "image": "assets/result/est-god-war.webp",
+      "traits": [
+        "힘과 용맹을 관장함",
+        "확실하고 강력한 힘으로 승리를 이끔",
+        "섬세한 감정은 다소 서툼"
+      ],
+      "tip": "이 신에게 기도하면 일단 이기고 봄"
+    },
+    {
+      "code": "ESFJ",
+      "title": "풍요의 신 (ESFJ)",
+      "subtitle": "J라면 계절의 순환대로 움직입니다",
+      "image": "assets/result/esf-god-harvest.webp",
+      "traits": [
+        "사람들의 삶을 풍요롭게 만듦",
+        "따뜻한 마음으로 축복을 내림",
+        "관대함 때문에 이용당하기도 함"
+      ],
+      "tip": "이 신 믿으면 밥은 굶지 않음"
+    },
+    {
+      "code": "ESFP",
+      "title": "풍요의 신 (ESFP)",
+      "subtitle": "P라면 필요할 때마다 풍요를 내립니다",
+      "image": "assets/result/esf-god-harvest.webp",
+      "traits": [
+        "사람들의 삶을 풍요롭게 만듦",
+        "따뜻한 마음으로 축복을 내림",
+        "관대함 때문에 이용당하기도 함"
+      ],
+      "tip": "이 신 믿으면 밥은 굶지 않음"
+    },
+    {
+      "code": "INTJ",
+      "title": "지혜의 신 (INTJ)",
+      "subtitle": "J라면 정제된 지혜로 움직입니다",
+      "image": "assets/result/int-god-wisdom.webp",
+      "traits": [
+        "세상의 이치를 관장함",
+        "조용히 지식을 쌓으며 깨달음을 전함",
+        "다가가기 어려운 신비로움이 있음"
+      ],
+      "tip": "이 신에게 물으면 답은 있는데 해석이 어려움"
+    },
+    {
+      "code": "INTP",
+      "title": "지혜의 신 (INTP)",
+      "subtitle": "P라면 즉흥적 통찰로 가르침을 줍니다",
+      "image": "assets/result/int-god-wisdom.webp",
+      "traits": [
+        "세상의 이치를 관장함",
+        "조용히 지식을 쌓으며 깨달음을 전함",
+        "다가가기 어려운 신비로움이 있음"
+      ],
+      "tip": "이 신에게 물으면 답은 있는데 해석이 어려움"
+    },
+    {
+      "code": "INFJ",
+      "title": "예언의 신 (INFJ)",
+      "subtitle": "J라면 정해진 예언 방식으로 움직입니다",
+      "image": "assets/result/inf-god-prophecy.webp",
+      "traits": [
+        "미래를 보는 힘을 가짐",
+        "조용히 다가올 일을 예견함",
+        "그 진실을 직접 말해주는 일은 드묾"
+      ],
+      "tip": "이 신은 다 알면서 말을 안 해줌"
+    },
+    {
+      "code": "INFP",
+      "title": "예언의 신 (INFP)",
+      "subtitle": "P라면 순간의 계시로 전합니다",
+      "image": "assets/result/inf-god-prophecy.webp",
+      "traits": [
+        "미래를 보는 힘을 가짐",
+        "조용히 다가올 일을 예견함",
+        "그 진실을 직접 말해주는 일은 드묾"
+      ],
+      "tip": "이 신은 다 알면서 말을 안 해줌"
+    },
+    {
+      "code": "ISTJ",
+      "title": "대장장이 신 (ISTJ)",
+      "subtitle": "J라면 완벽한 설계로 움직입니다",
+      "image": "assets/result/ist-god-blacksmith.webp",
+      "traits": [
+        "세상의 도구와 무기를 만듦",
+        "묵묵히 인간들에게 필요한 것을 만들어줌",
+        "감정 표현에는 서툼"
+      ],
+      "tip": "이 신이 만든 물건은 무조건 명작"
+    },
+    {
+      "code": "ISTP",
+      "title": "대장장이 신 (ISTP)",
+      "subtitle": "P라면 즉석에서 만들어냅니다",
+      "image": "assets/result/ist-god-blacksmith.webp",
+      "traits": [
+        "세상의 도구와 무기를 만듦",
+        "묵묵히 인간들에게 필요한 것을 만들어줌",
+        "감정 표현에는 서툼"
+      ],
+      "tip": "이 신이 만든 물건은 무조건 명작"
+    },
+    {
+      "code": "ISFJ",
+      "title": "치유의 신 (ISFJ)",
+      "subtitle": "J라면 정해진 치유 의식으로 움직입니다",
+      "image": "assets/result/isf-god-healing.webp",
+      "traits": [
+        "아픈 자들을 돌봄",
+        "조용히 다가와 상처를 어루만짐",
+        "자신의 힘듦은 드러내지 않음"
+      ],
+      "tip": "이 신 믿으면 마음까지 나아지는 느낌"
+    },
+    {
+      "code": "ISFP",
+      "title": "치유의 신 (ISFP)",
+      "subtitle": "P라면 필요한 순간마다 돌봅니다",
+      "image": "assets/result/isf-god-healing.webp",
+      "traits": [
+        "아픈 자들을 돌봄",
+        "조용히 다가와 상처를 어루만짐",
+        "자신의 힘듦은 드러내지 않음"
+      ],
+      "tip": "이 신 믿으면 마음까지 나아지는 느낌"
+    }
+  ]
+}

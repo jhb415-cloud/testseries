@@ -1,0 +1,393 @@
+{
+  "id": "mbti-zombie-survival-class",
+  "title": "MBTI 좀비 아포칼립스 생존 클래스",
+  "description": "도시가 무너진 지 사흘째. 살아남은 사람들이 하나둘 모이기 시작했다. 당신은 이 무리에서 어떤 역할을 하게 될까.",
+  "hashtags": [
+    "MBTI좀비",
+    "심리테스트",
+    "생존클래스",
+    "아포칼립스세계관"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 259,
+  "engagement_key": "site-mbtizombieclass-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 좀비 아포칼립스 생존 클래스 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "무리에 합류한 첫날, 당신은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "적극적으로 사람들과 관계를 쌓는다",
+          "axis": "E"
+        },
+        {
+          "label": "먼저 나서서 상황을 설명한다",
+          "axis": "E"
+        },
+        {
+          "label": "일단 거리를 두고 지켜본다",
+          "axis": "I"
+        },
+        {
+          "label": "필요한 말만 하고 관찰한다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "식량을 구하러 나갈 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "여러 사람과 함께 팀으로 움직인다",
+          "axis": "E"
+        },
+        {
+          "label": "적극적으로 정찰을 자원한다",
+          "axis": "E"
+        },
+        {
+          "label": "혼자 조용히 움직이는 걸 선호한다",
+          "axis": "I"
+        },
+        {
+          "label": "최소 인원으로 은밀하게 움직인다",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "새로운 은신처를 찾을 때 기준은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "장기적으로 안전할 만한 위치인지",
+          "axis": "N"
+        },
+        {
+          "label": "미래에 확장 가능한 구조인지",
+          "axis": "N"
+        },
+        {
+          "label": "지금 당장 방어하기 좋은지",
+          "axis": "S"
+        },
+        {
+          "label": "눈에 보이는 물리적 안전도",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "부족한 물자를 대체할 방법은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "창의적으로 새 용도를 생각해낸다",
+          "axis": "N"
+        },
+        {
+          "label": "기존에 없던 방법을 시도한다",
+          "axis": "N"
+        },
+        {
+          "label": "예전에 검증된 방법을 쓴다",
+          "axis": "S"
+        },
+        {
+          "label": "확실히 되는 방법만 쓴다",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "(생존 시뮬레이션 절반 통과. 갑자기 무리 중 하나가 물린 흔적을 발견했다. 선택의 시간이다.) (물린 흔적을 발견했다) 그 사람을 어떻게 할지 결정해야 한다.",
+      "image": null,
+      "choices": [
+        {
+          "label": "원칙대로 무리에서 즉시 격리한다",
+          "axis": "T"
+        },
+        {
+          "label": "냉정하게 최선의 판단을 내린다",
+          "axis": "T"
+        },
+        {
+          "label": "그 사람 입장에서 다시 생각해본다",
+          "axis": "F"
+        },
+        {
+          "label": "마지막까지 기회를 주고 싶다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "무리 내 갈등이 생겼을 때",
+      "image": null,
+      "choices": [
+        {
+          "label": "논리적으로 상황을 정리한다",
+          "axis": "T"
+        },
+        {
+          "label": "감정보다 생존이 우선이라 판단한다",
+          "axis": "T"
+        },
+        {
+          "label": "다들 마음이 다치지 않게 조율한다",
+          "axis": "F"
+        },
+        {
+          "label": "감정을 먼저 살피고 대화한다",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "하루 계획을 세우는 방식은?",
+      "image": null,
+      "choices": [
+        {
+          "label": "역할을 정하고 일과를 관리한다",
+          "axis": "J"
+        },
+        {
+          "label": "물자와 일정을 체계적으로 짠다",
+          "axis": "J"
+        },
+        {
+          "label": "그날그날 상황 보고 정한다",
+          "axis": "P"
+        },
+        {
+          "label": "닥치는 대로 유연하게 대응한다",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "은신처 내부 상태는?",
+      "image": null,
+      "choices": [
+        {
+          "label": "물자가 구역별로 정리돼 있다",
+          "axis": "J"
+        },
+        {
+          "label": "규칙이 명확하게 정해져 있다",
+          "axis": "J"
+        },
+        {
+          "label": "필요한 대로 그때그때 쓴다",
+          "axis": "P"
+        },
+        {
+          "label": "자유롭게 각자 알아서 관리한다",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "부족장 (ENTJ)",
+      "subtitle": "J라면 철저한 규율로 움직입니다",
+      "image": "assets/result/ent-tribe-leader-zombie.webp",
+      "traits": [
+        "위기 상황에서 자연스럽게 리더가 됨",
+        "냉철한 판단으로 무리 전체의 생존율을 끌어올림",
+        "결단력 때문에 냉정하다는 오해도 받음"
+      ],
+      "tip": "생존율 91%, 이 사람 없으면 무리 전체가 위험함"
+    },
+    {
+      "code": "ENTP",
+      "title": "부족장 (ENTP)",
+      "subtitle": "P라면 상황 대응력으로 이끕니다",
+      "image": "assets/result/ent-tribe-leader-zombie.webp",
+      "traits": [
+        "위기 상황에서 자연스럽게 리더가 됨",
+        "냉철한 판단으로 무리 전체의 생존율을 끌어올림",
+        "결단력 때문에 냉정하다는 오해도 받음"
+      ],
+      "tip": "생존율 91%, 이 사람 없으면 무리 전체가 위험함"
+    },
+    {
+      "code": "ENFJ",
+      "title": "희망의 전달자 (ENFJ)",
+      "subtitle": "J라면 체계적으로 움직입니다",
+      "image": "assets/result/enf-hope-bearer.webp",
+      "traits": [
+        "절망적인 상황에서도 희망을 잃지 않게 만듦",
+        "사람들의 사기를 지켜주는 역할",
+        "자신의 두려움은 숨기는 편"
+      ],
+      "tip": "생존율 85%, 무리의 정신적 지주"
+    },
+    {
+      "code": "ENFP",
+      "title": "희망의 전달자 (ENFP)",
+      "subtitle": "P라면 그때그때 필요한 위로를 건넵니다",
+      "image": "assets/result/enf-hope-bearer.webp",
+      "traits": [
+        "절망적인 상황에서도 희망을 잃지 않게 만듦",
+        "사람들의 사기를 지켜주는 역할",
+        "자신의 두려움은 숨기는 편"
+      ],
+      "tip": "생존율 85%, 무리의 정신적 지주"
+    },
+    {
+      "code": "ESTJ",
+      "title": "사냥대장 (ESTJ)",
+      "subtitle": "J라면 정확한 전술로 움직입니다",
+      "image": "assets/result/est-hunt-captain.webp",
+      "traits": [
+        "몸으로 부딪히며 무리를 지킴",
+        "확실한 실력으로 위험을 제거하는 힘",
+        "계획에 없던 변수 앞에서는 조금 당황함"
+      ],
+      "tip": "생존율 88%, 무리의 방패이자 창"
+    },
+    {
+      "code": "ESTP",
+      "title": "사냥대장 (ESTP)",
+      "subtitle": "P라면 즉흥 대응으로 싸웁니다",
+      "image": "assets/result/est-hunt-captain.webp",
+      "traits": [
+        "몸으로 부딪히며 무리를 지킴",
+        "확실한 실력으로 위험을 제거하는 힘",
+        "계획에 없던 변수 앞에서는 조금 당황함"
+      ],
+      "tip": "생존율 88%, 무리의 방패이자 창"
+    },
+    {
+      "code": "ESFJ",
+      "title": "공동체 관리자 (ESFJ)",
+      "subtitle": "J라면 체계적인 배분으로 움직입니다",
+      "image": "assets/result/esf-community-manager.webp",
+      "traits": [
+        "무리 전체가 잘 지내도록 돌봄",
+        "갈등을 조율하고 다들 챙기는 따뜻함",
+        "자신을 챙기는 건 늘 뒷전"
+      ],
+      "tip": "생존율 84%, 무리의 진짜 접착제"
+    },
+    {
+      "code": "ESFP",
+      "title": "공동체 관리자 (ESFP)",
+      "subtitle": "P라면 유연한 배려로 챙깁니다",
+      "image": "assets/result/esf-community-manager.webp",
+      "traits": [
+        "무리 전체가 잘 지내도록 돌봄",
+        "갈등을 조율하고 다들 챙기는 따뜻함",
+        "자신을 챙기는 건 늘 뒷전"
+      ],
+      "tip": "생존율 84%, 무리의 진짜 접착제"
+    },
+    {
+      "code": "INTJ",
+      "title": "기술 개발자 (INTJ)",
+      "subtitle": "J라면 완성된 설계로 움직입니다",
+      "image": "assets/result/int-tech-developer.webp",
+      "traits": [
+        "혼자 있는 시간에 무리에 가장 큰 도움을 줌",
+        "물자를 개조하고 새 도구를 만들어내는 능력",
+        "사교적인 역할은 다소 서툼"
+      ],
+      "tip": "생존율 87%, 없으면 무리가 멸망할 확률 급상승"
+    },
+    {
+      "code": "INTP",
+      "title": "기술 개발자 (INTP)",
+      "subtitle": "P라면 즉석 발명으로 기여합니다",
+      "image": "assets/result/int-tech-developer.webp",
+      "traits": [
+        "혼자 있는 시간에 무리에 가장 큰 도움을 줌",
+        "물자를 개조하고 새 도구를 만들어내는 능력",
+        "사교적인 역할은 다소 서툼"
+      ],
+      "tip": "생존율 87%, 없으면 무리가 멸망할 확률 급상승"
+    },
+    {
+      "code": "INFJ",
+      "title": "치유사 (INFJ)",
+      "subtitle": "J라면 체계적인 치료로 움직입니다",
+      "image": "assets/result/inf-healer-zombie.webp",
+      "traits": [
+        "몸과 마음을 함께 치유함",
+        "조용히 다가와 필요한 사람을 돌보는 섬세함",
+        "자신의 지침은 잘 드러내지 않음"
+      ],
+      "tip": "생존율 82%, 몸도 마음도 돌보는 존재"
+    },
+    {
+      "code": "INFP",
+      "title": "치유사 (INFP)",
+      "subtitle": "P라면 그때그때 필요한 돌봄으로 함께합니다",
+      "image": "assets/result/inf-healer-zombie.webp",
+      "traits": [
+        "몸과 마음을 함께 치유함",
+        "조용히 다가와 필요한 사람을 돌보는 섬세함",
+        "자신의 지침은 잘 드러내지 않음"
+      ],
+      "tip": "생존율 82%, 몸도 마음도 돌보는 존재"
+    },
+    {
+      "code": "ISTJ",
+      "title": "정찰병 (ISTJ)",
+      "subtitle": "J라면 철저한 정찰 루트로 움직입니다",
+      "image": "assets/result/ist-scout-zombie.webp",
+      "traits": [
+        "조용하고 정확하게 정보를 모음",
+        "위험을 미리 파악해 무리를 지킴",
+        "말이 없어 속을 알기 어렵다는 평가"
+      ],
+      "tip": "생존율 90%, 존재감은 없는데 없으면 다 죽음"
+    },
+    {
+      "code": "ISTP",
+      "title": "정찰병 (ISTP)",
+      "subtitle": "P라면 즉흥 판단으로 움직입니다",
+      "image": "assets/result/ist-scout-zombie.webp",
+      "traits": [
+        "조용하고 정확하게 정보를 모음",
+        "위험을 미리 파악해 무리를 지킴",
+        "말이 없어 속을 알기 어렵다는 평가"
+      ],
+      "tip": "생존율 90%, 존재감은 없는데 없으면 다 죽음"
+    },
+    {
+      "code": "ISFJ",
+      "title": "물자 관리자 (ISFJ)",
+      "subtitle": "J라면 완벽한 재고 관리로 움직입니다",
+      "image": "assets/result/isf-supply-manager.webp",
+      "traits": [
+        "조용히 무리의 생존 기반을 관리함",
+        "눈에 띄지 않지만 무리가 오래 버티는 핵심",
+        "자신의 공을 잘 드러내지 않음"
+      ],
+      "tip": "생존율 86%, 숨은 공로자 그 자체"
+    },
+    {
+      "code": "ISFP",
+      "title": "물자 관리자 (ISFP)",
+      "subtitle": "P라면 유연한 분배로 관리합니다",
+      "image": "assets/result/isf-supply-manager.webp",
+      "traits": [
+        "조용히 무리의 생존 기반을 관리함",
+        "눈에 띄지 않지만 무리가 오래 버티는 핵심",
+        "자신의 공을 잘 드러내지 않음"
+      ],
+      "tip": "생존율 86%, 숨은 공로자 그 자체"
+    }
+  ]
+}

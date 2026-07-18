@@ -1,0 +1,390 @@
+{
+  "id": "mbti-idol-debut-position",
+  "title": "MBTI 아이돌 데뷔 포지션 + 팬덤 반응",
+  "description": "데뷔조 발표를 앞두고, 스탭·멤버들과의 단체 채팅방에 쉴 새 없이 메시지가 쏟아진다. 당신이 보낸 답장 하나하나가, 내일 공개될 포지션을 결정한다.",
+  "hashtags": [
+    "MBTI아이돌",
+    "심리테스트",
+    "단톡방",
+    "데뷔포지션"
+  ],
+  "theme": "pending",
+  "cover_image": "assets/cover.webp",
+  "seed_count": 301,
+  "engagement_key": "site-mbtiidol-plays",
+  "scoring_type": "mbti4",
+  "loading": {
+    "text": "MBTI 아이돌 데뷔 포지션 + 팬덤 반응 분석 중..",
+    "duration_ms": 2000
+  },
+  "related": [],
+  "questions": [
+    {
+      "text": "매니저: 리허설 잘 봤어! 근데 너는 무대 위에서 스스로 어떤 스타일인 거 같아?",
+      "image": null,
+      "choices": [
+        {
+          "label": "관객이랑 눈 맞추면서 리액션 이끄는 편이요",
+          "axis": "E"
+        },
+        {
+          "label": "제가 무대 텐션을 끌어올리는 타입이에요",
+          "axis": "E"
+        },
+        {
+          "label": "그냥 제 파트에 묵묵히 집중해요",
+          "axis": "I"
+        },
+        {
+          "label": "카메라보다 무대 자체에 몰입하는 편이에요",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "스탭: 다음 주 팬사인회 있잖아, 너는 팬들 만나면 보통 어떻게 해?",
+      "image": null,
+      "choices": [
+        {
+          "label": "제가 먼저 말 걸면서 텐션 올려요",
+          "axis": "E"
+        },
+        {
+          "label": "팬분들이랑 적극적으로 소통하는 편이에요",
+          "axis": "E"
+        },
+        {
+          "label": "편지 조용히 읽고 답장 써드려요",
+          "axis": "I"
+        },
+        {
+          "label": "한 분 한 분 눈 맞추면서 진심으로 대해요",
+          "axis": "I"
+        }
+      ]
+    },
+    {
+      "text": "PD님: 새 앨범 컨셉 회의 자료 미리 좀 적어줄래? 아이디어 있어?",
+      "image": null,
+      "choices": [
+        {
+          "label": "새로운 세계관이랑 스토리 짜보고 있어요",
+          "axis": "N"
+        },
+        {
+          "label": "아무도 안 해본 컨셉 상상해봤어요",
+          "axis": "N"
+        },
+        {
+          "label": "실현 가능한 안무랑 동선부터 고민해볼게요",
+          "axis": "S"
+        },
+        {
+          "label": "구체적인 디테일부터 정리해서 보낼게요",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "안무 감독: 이번 파트 하나씩 맡아서 짜보자, 너는 어떻게 접근할 거야?",
+      "image": null,
+      "choices": [
+        {
+          "label": "독창적인 동작 즉석에서 만들어볼게요",
+          "axis": "N"
+        },
+        {
+          "label": "상징적인 의미 담은 동작으로 짜볼게요",
+          "axis": "N"
+        },
+        {
+          "label": "정확하고 절도있게 다듬는 쪽으로 할게요",
+          "axis": "S"
+        },
+        {
+          "label": "기본기부터 반복해서 다질게요",
+          "axis": "S"
+        }
+      ]
+    },
+    {
+      "text": "매니저: (유출 영상 반응이 갈리는 중) 악플 좀 봤는데... 너 괜찮아?",
+      "image": null,
+      "choices": [
+        {
+          "label": "사실관계부터 냉정하게 확인해볼게요",
+          "axis": "T"
+        },
+        {
+          "label": "대응해야 하는 건지 논리적으로 판단해볼게요",
+          "axis": "T"
+        },
+        {
+          "label": "솔직히 상처받아서 마음부터 추스르는 중이에요",
+          "axis": "F"
+        },
+        {
+          "label": "속상한 마음이 며칠은 갈 것 같아요",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "멤버: 나 오늘 무대에서 실수한 거 봤지... 어떡하지",
+      "image": null,
+      "choices": [
+        {
+          "label": "정확히 뭐가 문제였는지 짚어줄게",
+          "axis": "T"
+        },
+        {
+          "label": "다음엔 어떻게 개선할지 같이 얘기해보자",
+          "axis": "T"
+        },
+        {
+          "label": "괜찮아? 마음부터 좀 다독여줄게",
+          "axis": "F"
+        },
+        {
+          "label": "무대 끝나고 꼭 안아줄게, 잘했어",
+          "axis": "F"
+        }
+      ]
+    },
+    {
+      "text": "매니저: 다음 주 스케줄표 나왔어, 너는 평소에 스케줄 어떻게 관리해?",
+      "image": null,
+      "choices": [
+        {
+          "label": "일정 철저히 체크하면서 움직여요",
+          "axis": "J"
+        },
+        {
+          "label": "계획표대로 컨디션까지 관리해요",
+          "axis": "J"
+        },
+        {
+          "label": "그때그때 컨디션 따라 조절하는 편이에요",
+          "axis": "P"
+        },
+        {
+          "label": "즉흥적으로 스케줄에 맞춰가요",
+          "axis": "P"
+        }
+      ]
+    },
+    {
+      "text": "매니저: 연습생 때부터 자기관리 어떻게 했어? 요즘 애들이 물어보더라",
+      "image": null,
+      "choices": [
+        {
+          "label": "식단이랑 운동 철저히 계획해서 했어요",
+          "axis": "J"
+        },
+        {
+          "label": "매일 루틴을 정확히 지켰어요",
+          "axis": "J"
+        },
+        {
+          "label": "솔직히 느슨하게 하다가 몰아서 했어요",
+          "axis": "P"
+        },
+        {
+          "label": "그날 컨디션 봐가면서 유동적으로 했어요",
+          "axis": "P"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "code": "ENTJ",
+      "title": "리더 겸 프로듀서 라인 (ENTJ)",
+      "subtitle": "J라면 철저한 자기 관리로 움직입니다",
+      "image": "assets/result/ent-idol-leader-producer.webp",
+      "traits": [
+        "팀을 이끄는 동시에 음악 작업까지 참여",
+        "강한 카리스마로 무대를 장악함",
+        "완벽주의 때문에 스스로에게 엄격함"
+      ],
+      "tip": "팬 반응: 리더력 미쳤다 · 별명 판 짜는 사람"
+    },
+    {
+      "code": "ENTP",
+      "title": "리더 겸 프로듀서 라인 (ENTP)",
+      "subtitle": "P라면 순간의 카리스마로 무대를 채웁니다",
+      "image": "assets/result/ent-idol-leader-producer.webp",
+      "traits": [
+        "팀을 이끄는 동시에 음악 작업까지 참여",
+        "강한 카리스마로 무대를 장악함",
+        "완벽주의 때문에 스스로에게 엄격함"
+      ],
+      "tip": "팬 반응: 리더력 미쳤다 · 별명 판 짜는 사람"
+    },
+    {
+      "code": "ENFJ",
+      "title": "서브보컬 겸 예능 라인 (ENFJ)",
+      "subtitle": "J라면 계획된 텐션으로 움직입니다",
+      "image": "assets/result/enf-idol-variety-vocal.webp",
+      "traits": [
+        "텐션과 친화력으로 팀 분위기를 살림",
+        "예능감이 넘쳐서 팬들에게 웃음을 줌",
+        "밝음 뒤의 노력은 잘 안 보임"
+      ],
+      "tip": "팬 반응: 무대 위 태양 · 입덕 유발 1순위"
+    },
+    {
+      "code": "ENFP",
+      "title": "서브보컬 겸 예능 라인 (ENFP)",
+      "subtitle": "P라면 즉흥 애드리브로 웃깁니다",
+      "image": "assets/result/enf-idol-variety-vocal.webp",
+      "traits": [
+        "텐션과 친화력으로 팀 분위기를 살림",
+        "예능감이 넘쳐서 팬들에게 웃음을 줌",
+        "밝음 뒤의 노력은 잘 안 보임"
+      ],
+      "tip": "팬 반응: 무대 위 태양 · 입덕 유발 1순위"
+    },
+    {
+      "code": "ESTJ",
+      "title": "메인댄서 라인 (ESTJ)",
+      "subtitle": "J라면 완벽하게 짜인 안무로 움직입니다",
+      "image": "assets/result/est-idol-main-dancer.webp",
+      "traits": [
+        "압도적인 실력으로 무대를 장악함",
+        "확실한 실력으로 신뢰받음",
+        "섬세한 감정 표현은 다소 서툼"
+      ],
+      "tip": "팬 반응: 실력으로 증명하는 타입 · 직캠 조회수 1위"
+    },
+    {
+      "code": "ESTP",
+      "title": "메인댄서 라인 (ESTP)",
+      "subtitle": "P라면 그날 텐션에 맞춰 무대를 채웁니다",
+      "image": "assets/result/est-idol-main-dancer.webp",
+      "traits": [
+        "압도적인 실력으로 무대를 장악함",
+        "확실한 실력으로 신뢰받음",
+        "섬세한 감정 표현은 다소 서툼"
+      ],
+      "tip": "팬 반응: 실력으로 증명하는 타입 · 직캠 조회수 1위"
+    },
+    {
+      "code": "ESFJ",
+      "title": "비주얼 센터 라인 (ESFJ)",
+      "subtitle": "J라면 철저한 자기 관리로 움직입니다",
+      "image": "assets/result/esf-idol-visual-center.webp",
+      "traits": [
+        "무대 위에서 시선을 사로잡음",
+        "다정한 팬서비스로 사랑받음",
+        "체력 관리는 뒷전인 편"
+      ],
+      "tip": "팬 반응: 실물이 미쳤다 · 직캠 각 1순위"
+    },
+    {
+      "code": "ESFP",
+      "title": "비주얼 센터 라인 (ESFP)",
+      "subtitle": "P라면 즉흥적인 매력으로 채웁니다",
+      "image": "assets/result/esf-idol-visual-center.webp",
+      "traits": [
+        "무대 위에서 시선을 사로잡음",
+        "다정한 팬서비스로 사랑받음",
+        "체력 관리는 뒷전인 편"
+      ],
+      "tip": "팬 반응: 실물이 미쳤다 · 직캠 각 1순위"
+    },
+    {
+      "code": "INTJ",
+      "title": "작사작곡 겸 서브래퍼 라인 (INTJ)",
+      "subtitle": "J라면 완성도 높은 작업으로 움직입니다",
+      "image": "assets/result/int-idol-writer-rapper.webp",
+      "traits": [
+        "음악적 깊이로 팀에 색깔을 더함",
+        "무대보다 작업실에서 더 빛나는 스타일",
+        "실력만큼은 팀 내에서 인정받음"
+      ],
+      "tip": "팬 반응: 이 사람 진짜 뮤지션 · 자컨 조회수 미쳤음"
+    },
+    {
+      "code": "INTP",
+      "title": "작사작곡 겸 서브래퍼 라인 (INTP)",
+      "subtitle": "P라면 즉흥적 영감으로 곡을 씁니다",
+      "image": "assets/result/int-idol-writer-rapper.webp",
+      "traits": [
+        "음악적 깊이로 팀에 색깔을 더함",
+        "무대보다 작업실에서 더 빛나는 스타일",
+        "실력만큼은 팀 내에서 인정받음"
+      ],
+      "tip": "팬 반응: 이 사람 진짜 뮤지션 · 자컨 조회수 미쳤음"
+    },
+    {
+      "code": "INFJ",
+      "title": "감성 보컬 라인 (INFJ)",
+      "subtitle": "J라면 정제된 감정 표현으로 움직입니다",
+      "image": "assets/result/inf-idol-emotional-vocal.webp",
+      "traits": [
+        "진심을 담은 목소리로 마음을 울림",
+        "무대 밖에서는 조용하지만 노래할 땐 감정이 폭발함"
+      ],
+      "tip": "팬 반응: 노래에 진심이 다 담김 · 라이브 甲"
+    },
+    {
+      "code": "INFP",
+      "title": "감성 보컬 라인 (INFP)",
+      "subtitle": "P라면 그 순간의 진심으로 노래합니다",
+      "image": "assets/result/inf-idol-emotional-vocal.webp",
+      "traits": [
+        "진심을 담은 목소리로 마음을 울림",
+        "무대 밖에서는 조용하지만 노래할 땐 감정이 폭발함"
+      ],
+      "tip": "팬 반응: 노래에 진심이 다 담김 · 라이브 甲"
+    },
+    {
+      "code": "ISTJ",
+      "title": "메인래퍼 라인 (ISTJ)",
+      "subtitle": "J라면 완벽하게 짜인 가사로 움직입니다",
+      "image": "assets/result/ist-idol-main-rapper.webp",
+      "traits": [
+        "절제된 카리스마로 무대를 채움",
+        "말수는 적지만 실력만큼은 확실함",
+        "팬들 사이 신뢰가 두터움"
+      ],
+      "tip": "팬 반응: 말 안 해도 카리스마 넘침 · 반전 매력 甲"
+    },
+    {
+      "code": "ISTP",
+      "title": "메인래퍼 라인 (ISTP)",
+      "subtitle": "P라면 즉흥 프리스타일로 채웁니다",
+      "image": "assets/result/ist-idol-main-rapper.webp",
+      "traits": [
+        "절제된 카리스마로 무대를 채움",
+        "말수는 적지만 실력만큼은 확실함",
+        "팬들 사이 신뢰가 두터움"
+      ],
+      "tip": "팬 반응: 말 안 해도 카리스마 넘침 · 반전 매력 甲"
+    },
+    {
+      "code": "ISFJ",
+      "title": "막내 라인 (ISFJ)",
+      "subtitle": "J라면 정해진 루틴으로 움직입니다",
+      "image": "assets/result/isf-idol-maknae.webp",
+      "traits": [
+        "조용히 팀의 분위기를 부드럽게 만듦",
+        "낯가림이 있지만 마음을 열면 애교가 넘침"
+      ],
+      "tip": "팬 반응: 알고 보니 제일 웃긴 사람 · 반전 甲"
+    },
+    {
+      "code": "ISFP",
+      "title": "막내 라인 (ISFP)",
+      "subtitle": "P라면 그날 기분 따라 애교를 부립니다",
+      "image": "assets/result/isf-idol-maknae.webp",
+      "traits": [
+        "조용히 팀의 분위기를 부드럽게 만듦",
+        "낯가림이 있지만 마음을 열면 애교가 넘침"
+      ],
+      "tip": "팬 반응: 알고 보니 제일 웃긴 사람 · 반전 甲"
+    }
+  ],
+  "chat_ui": true
+}
