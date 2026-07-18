@@ -4670,6 +4670,16 @@ const THEME_TITLE_FONTS = {
   tradefloor:       { family: '"Space Mono","Noto Sans KR",monospace', google: 'family=Space+Mono:wght@400;700' },
   manual:           { family: '"Space Grotesk","Noto Sans KR",sans-serif', google: 'family=Space+Grotesk:wght@500;600;700' },
   stencil:          { family: '"Stardos Stencil","Noto Sans KR",sans-serif', google: 'family=Stardos+Stencil:wght@400;700' },
+  goldhour:         { family: '"Gowun Batang","Noto Sans KR",serif', google: 'family=Gowun+Batang:wght@400;700' },
+  metromap:         { family: '"Black Han Sans","Noto Sans KR",sans-serif', google: 'family=Black+Han+Sans' },
+  photobooth:       { family: '"Gaegu","Noto Sans KR",cursive', google: 'family=Gaegu:wght@400;700' },
+  crayonbook:       { family: '"Gamja Flower","Noto Sans KR",cursive', google: 'family=Gamja+Flower' },
+  kraftbag:         { family: '"Bagel Fat One","Noto Sans KR",sans-serif', google: 'family=Bagel+Fat+One' },
+  miniature:        { family: '"Libre Franklin","Noto Sans KR",sans-serif', google: 'family=Libre+Franklin:wght@500;700;800' },
+  pennant:          { family: '"Anton","Noto Sans KR",sans-serif', google: 'family=Anton' },
+  blueprint:        { family: '"Chakra Petch","Noto Sans KR",sans-serif', google: 'family=Chakra+Petch:wght@500;600;700' },
+  ekgmonitor:       { family: '"VT323","Noto Sans KR",monospace', google: 'family=VT323' },
+  vhsnoir:          { family: '"Bebas Neue","Noto Sans KR",sans-serif', google: 'family=Bebas+Neue' },
 };
 const _loadedThemeFonts = new Set();
 function themeTitleFontFamily(theme) {
@@ -4760,14 +4770,20 @@ function curatedPsychRowsHTML() {
 }
 
 /* 2026-07-18(사용자 확정): 몰입테스트 NEW 박스 후보 — 최근 새 인터랙션(타이머/채팅UI/분기트리/
-   슬라이더/실측반응시간)으로 개편된 5개(#21/#25/#30/#33/#39) 중, 아직 #33(럭키비키)/#39(결정
-   장애)는 test-engine 콘텐츠만 개편됐고 data.js externalTests 연동 전이라 이 3개만 고정 노출.
-   #33/#39가 연동되면 5개 id로 늘리고 매번 3개를 랜덤으로 뽑도록 확장할 것. */
-const IMMERSIVE_NEW_HIGHLIGHT_IDS = ['balance-3sec-speed', 'katok-reply-style', 'zombie-apocalypse-survival'];
+   슬라이더/실측반응시간)으로 개편된 5개(#21/#25/#30/#33/#39). #33(럭키비키)/#39(결정장애)가
+   2026-07-18 externalTests에 연동되어 5개 전부 후보로 확장 — 렌더마다 5개 중 3개를 랜덤으로
+   뽑는다(고정 3개 노출에서 전환). */
+const IMMERSIVE_NEW_HIGHLIGHT_IDS = ['balance-3sec-speed', 'katok-reply-style', 'zombie-apocalypse-survival', 'lucky-vicky-index', 'decision-time-test'];
 function immersiveNewHighlightTests() {
   const index = {};
   (AppData.externalTests || []).forEach(t => { index[t.id] = t; });
-  return IMMERSIVE_NEW_HIGHLIGHT_IDS.map(id => index[id]).filter(Boolean);
+  const pool = IMMERSIVE_NEW_HIGHLIGHT_IDS.map(id => index[id]).filter(Boolean);
+  const shuffled = pool.slice();
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled.slice(0, 3);
 }
 
 /* 2026-07-18: 홈 화면 "이번주 인기 TOP" 리더보드(home-lb-* 클래스, renderHomeSections 참고)와

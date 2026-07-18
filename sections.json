@@ -2,10 +2,10 @@
   "sections": [
     { "id": "popular", "title": "🔥 이번주 인기 TOP", "style": "leaderboard", "dynamic": "psych-trending", "limit": 3 },
     { "id": "psych-heading", "type": "heading", "title": "🧠 심리테스트" },
-    { "id": "psych-1", "title": "😏 못 숨기는 또 다른 나", "style": "poster-carousel", "test_ids": ["drunk-mbti", "villain-mbti", "shadow-mbti", "villain-index"] },
-    { "id": "psych-2", "title": "❤️ 연애만 하면 딴사람", "style": "poster-carousel", "test_ids": ["love-mode-mbti", "crush-mode-mbti", "text-reply-love-type", "katok-reply-style"] },
+    { "id": "psych-1", "title": "😏 못 숨기는 또 다른 나", "style": "poster-carousel", "test_ids": ["drunk-mbti", "villain-mbti", "shadow-mbti", "villain-index", "lucky-vicky-index", "t-factor-index", "friend-group-position", "room-state-psychology", "ai-black-history-type"] },
+    { "id": "psych-2", "title": "❤️ 연애만 하면 딴사람", "style": "poster-carousel", "test_ids": ["love-mode-mbti", "crush-mode-mbti", "text-reply-love-type", "katok-reply-style", "romance-webtoon-genre"] },
     { "id": "psych-3", "title": "🎬 다른 세계관 속의 나", "style": "poster-carousel", "test_ids": ["desert-island-type", "idol-position-type", "joseon-past-life-type", "ai-mbti-judge", "past-life-death-cause", "medieval-job-past-life", "village-animal-neighbor", "zombie-apocalypse-survival"] },
-    { "id": "psych-4", "title": "🗂️ 다른 심리테스트들", "style": "poster-carousel", "test_ids": ["mental-age", "k-office-type", "spending-type", "mbti-addiction-level", "group-chat-character", "dopamine-addiction-level", "real-vs-fake-mbti", "brain-structure-report", "office-mask-mbti", "mbti-stat-window", "balance-3sec-speed", "ai-daily-documentary", "life-drama-genre", "hold-or-sell-index", "dopamine-source-type"] },
+    { "id": "psych-4", "title": "🗂️ 다른 심리테스트들", "style": "poster-carousel", "test_ids": ["mental-age", "k-office-type", "spending-type", "mbti-addiction-level", "group-chat-character", "dopamine-addiction-level", "real-vs-fake-mbti", "brain-structure-report", "office-mask-mbti", "mbti-stat-window", "balance-3sec-speed", "ai-daily-documentary", "life-drama-genre", "hold-or-sell-index", "dopamine-source-type", "office-slacker-skilltree", "caffeine-addiction-type", "godsaeng-fail-type", "decision-time-test"] },
     { "id": "daily-challenge", "type": "daily-challenge", "title": "🔥 오늘의 챌린지" },
     { "id": "tools", "title": "🧰 도구 모음", "style": "tool-list", "test_ids": ["dream", "fortune", "lotto"] }
   ]

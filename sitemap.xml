@@ -160,4 +160,54 @@
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/31-romance-webtoon-genre/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/32-office-slacker-skilltree/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/33-lucky-vicky-index/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/34-t-factor-index/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/35-caffeine-addiction-type/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/36-friend-group-position/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/37-godsaeng-fail-type/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/38-room-state-psychology/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/39-decision-time-test/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/40-ai-black-history-type/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
 </urlset>
