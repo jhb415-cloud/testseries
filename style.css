@@ -963,19 +963,6 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
 .psy-rank-2 { background: #D9DEE3; }
 .psy-rank-3 { background: #E3A063; }
 
-/* 대표 히어로 배너(인기 1위) — 카드보다 와이드한 비율의 동일 스크림 패턴 */
-.psy-hero { position: relative; display: block; border-radius: 1rem; overflow: hidden; aspect-ratio: 16 / 7; border: 3px solid rgb(var(--ink)); box-shadow: 6px 6px 0 0 rgb(var(--ink)); }
-.psy-hero img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; display: block; }
-.psy-hero-scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,18,32,0.92) 0%, rgba(11,18,32,0.55) 45%, rgba(11,18,32,0.1) 100%); }
-.psy-hero-text { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 1.25rem; max-width: 70%; }
-/* 2026-07-11: 히어로 텍스트는 위 .psy-hero-scrim(항상 어두운 그라데이션) 위에 얹히므로 항상
-   밝은 고정색이어야 하는데, 예전 다크모드 시절 관례로 text-slate-100/300 같은 Tailwind 클래스를
-   썼던 게 문제 — Kinetic Logic(v0.8.0~)에서 slate 50~300은 "진한 잉크 텍스트"로 의미가 뒤집혀
-   어두운 스크림 위에서 사실상 안 보이게 됨(글씨가 아예 안 보인다는 실사용 제보). .psy-card-title/
-   -hook과 동일하게 테마 리맵과 무관한 고정 hex로 분리. */
-.psy-hero-eyebrow { color: #fdba74; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
-.psy-hero-title { color: #f8fafc; font-weight: 800; font-size: 1.125rem; line-height: 1.35; margin-bottom: 0.25rem; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
-.psy-hero-subtitle { color: rgb(226 232 240); font-size: 0.875rem; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
 
 /* 아직 커버 아트가 없는 카테고리(캐릭터/성향/취향/국민테스트)의 잠금 카드 — 같은 포스터 틀 유지 */
 .psy-locked-tile {

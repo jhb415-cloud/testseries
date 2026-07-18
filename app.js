@@ -4754,29 +4754,56 @@ function curatedPsychRowsHTML() {
   return rows ? `<div class="mb-5">${rows}</div>` : '';
 }
 
+/* 2026-07-18(사용자 확정): 몰입테스트 NEW 박스 후보 — 최근 새 인터랙션(타이머/채팅UI/분기트리/
+   슬라이더/실측반응시간)으로 개편된 5개(#21/#25/#30/#33/#39) 중, 아직 #33(럭키비키)/#39(결정
+   장애)는 test-engine 콘텐츠만 개편됐고 data.js externalTests 연동 전이라 이 3개만 고정 노출.
+   #33/#39가 연동되면 5개 id로 늘리고 매번 3개를 랜덤으로 뽑도록 확장할 것. */
+const IMMERSIVE_NEW_HIGHLIGHT_IDS = ['balance-3sec-speed', 'katok-reply-style', 'zombie-apocalypse-survival'];
+function immersiveNewHighlightTests() {
+  const index = {};
+  (AppData.externalTests || []).forEach(t => { index[t.id] = t; });
+  return IMMERSIVE_NEW_HIGHLIGHT_IDS.map(id => index[id]).filter(Boolean);
+}
+
+/* 2026-07-18: 홈 화면 "이번주 인기 TOP" 리더보드(home-lb-* 클래스, renderHomeSections 참고)와
+   동일한 박스 디자인을 심리테스트존 상단에도 재사용 — 인기 TOP 3 + NEW 3을 각각 한 줄 리스트로
+   보여준다. items가 비면 박스 자체를 렌더하지 않는다. */
+function psychLbBoxHTML(title, items) {
+  if (!items || !items.length) return '';
+  const rows = items.map((t, i) => {
+    const count = engagementCount(t.engagementKey, t.baseCount || 0);
+    return `
+      <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="home-lb-row">
+        <span class="home-lb-rank ${i === 0 ? 'first' : ''}">${i + 1}</span>
+        <span class="home-lb-thumb"><img src="${psyCoverImage(t)}" alt="" onerror="wcImgFallback(this)"></span>
+        <span class="home-lb-title">${t.title}</span>
+        <span class="home-lb-count">▶ ${formatCount(count)}</span>
+      </a>`;
+  }).join('');
+  return `
+    <div class="home-lb-card mb-4">
+      <div class="home-lb-head">${title}</div>
+      ${rows}
+    </div>`;
+}
+
 /* STEP 3.1(2026-07-10): 몰입테스트/MBTI존 둘 다 전용 목록(externalTests/mbtiZoneTests)이
    실콘텐츠로만 채워지게 되며(잠금 placeholder 없음), 기존 전체너비 배너 1줄 나열 대신
    character/trait 등 기존 카테고리와 동일한 "인기 대표 1개 강조 + 3열 그리드" 레이아웃으로
    통일 — 인기순(popular, 클릭수 기준) 1위를 상단에 큰 카드로, 전체 목록(1위 포함, 기존
    카테고리의 대표카드 중복 노출 관례와 동일)을 아래 3열 그리드로 다시 보여준다.
    v0.6.8: 이모지 원형+회색 배경 카드를 각 테스트가 이미 갖고 있는 cover.webp 포스터 카드로
-   교체(신규 이미지 생성 없음, 기존 자산 재사용). 인기순 1~3위엔 금/은/동 순위 리본을 얹는다. */
-function externalTestsFeedHTML(list) {
+   교체(신규 이미지 생성 없음, 기존 자산 재사용). 인기순 1~3위엔 금/은/동 순위 리본을 얹는다.
+   2026-07-18: 상단 대표 히어로 카드(psy-hero)를 인기 TOP 3 + NEW 3 리더보드 박스 2개로 교체
+   (사용자 요청 — 홈 화면 "이번주 인기 TOP" 박스와 동일한 디자인 언어로 통일). newItems는
+   호출부(renderPsychtestFeed)에서 카테고리별로 다르게 골라 전달한다. */
+function externalTestsFeedHTML(list, newItems) {
   const tests = sortExternalTests(list || [], 'popular');
   if (!tests.length) return '';
-  const top = tests[0];
   tests.forEach(t => ensureThemeFontLoaded(t.theme));
-  const topFont = themeTitleFontFamily(top.theme);
   return `
-    <a href="${top.url}" onclick="bumpEngagement('${top.engagementKey}')" class="psy-hero block mb-4">
-      <img src="${psyCoverImage(top)}" alt="" onerror="wcImgFallback(this)">
-      <div class="psy-hero-scrim"></div>
-      <div class="psy-hero-text">
-        <div class="psy-hero-eyebrow">🔥 지금 가장 인기있는 테스트</div>
-        <h3 class="psy-hero-title line-clamp-2"${topFont ? ` style='font-family:${topFont}'` : ''}>${top.title}</h3>
-        <p class="psy-hero-subtitle line-clamp-2">${top.hook}</p>
-      </div>
-    </a>
+    ${psychLbBoxHTML('🔥 이번 주 인기 TOP', tests.slice(0, 3))}
+    ${psychLbBoxHTML('🆕 NEW', (newItems || []).slice(0, 3))}
     <div class="grid grid-cols-3 gap-3 mb-6">
       ${tests.map((t, i) => {
         const rankClass = i === 0 ? 'psy-rank-1' : i === 1 ? 'psy-rank-2' : i === 2 ? 'psy-rank-3' : '';
@@ -4827,8 +4854,8 @@ function renderPsychtestFeed(category) {
       <p class="text-slate-400 mb-4">요즘 뜨는 심리테스트, 카테고리별로 계속 업데이트됩니다</p>
       <div class="flex flex-wrap gap-2 mb-6">${tabsHTML}</div>
 
-      ${category === 'immersive' ? externalTestsFeedHTML(AppData.externalTests) : ''}
-      ${category === 'mbtizone' ? externalTestsFeedHTML(AppData.mbtiZoneTests) : ''}
+      ${category === 'immersive' ? externalTestsFeedHTML(AppData.externalTests, immersiveNewHighlightTests()) : ''}
+      ${category === 'mbtizone' ? externalTestsFeedHTML(AppData.mbtiZoneTests, sortExternalTests(AppData.mbtiZoneTests, 'latest').slice(0, 3)) : ''}
 
       ${real ? `
       <div class="bg-gradient-to-br from-violet-900/40 to-slate-800 border border-violet-700/40 rounded-2xl p-5 mb-6 cursor-pointer hover:border-violet-500 transition"
