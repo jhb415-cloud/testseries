@@ -810,7 +810,7 @@ function homeCardHTML(c, highlight, bindId) {
   const media = c.thumbHTML
     ? `<div class="rounded-xl overflow-hidden mb-3" style="border:2px solid rgb(var(--ink));">${c.thumbHTML}</div>`
     : c.image
-      ? `<div class="rounded-xl overflow-hidden mb-3" style="aspect-ratio:16/9; border:2px solid rgb(var(--ink));"><img src="${c.image}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="wcImgFallback(this)"></div>`
+      ? `<div class="rounded-xl overflow-hidden mb-3" style="aspect-ratio:16/9; border:2px solid rgb(var(--ink));"><img src="${c.image}" alt="" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="wcImgFallback(this)"></div>`
       : `<div class="text-4xl mb-3">${c.emoji}</div>`;
   return `
     <div id="${bindId}" class="service-card bg-slate-800 border ${highlight ? '' : 'border-slate-700'} rounded-2xl p-5 text-slate-100 shadow cursor-pointer transition hover:opacity-90"
@@ -845,6 +845,10 @@ async function renderHomeSections() {
   const index = buildTestIndex();
   const bindings = [];
   let bindSeq = 0;
+  /* 페이지속도 개선 (v1.2.3): PSI에서 LCP(12.7s) 요소가 첫 번째 포스터 캐러셀의 cover.webp였음 —
+     첫 캐러셀의 처음 4장(첫 화면에 실제로 보이는 개수)만 fetchpriority=high로 최우선 로드하고,
+     나머지 카드/화면 밖 캐러셀은 전부 loading=lazy로 미뤄 초기 페이로드를 줄인다. */
+  let posterGrpSeq = 0;
   let html = '';
 
   sections.forEach(sec => {
@@ -916,7 +920,7 @@ async function renderHomeSections() {
       const rowsHTML = cards.map((c, i) => {
         const bindId = 'home-card-bind-' + (bindSeq++);
         bindings.push({ id: bindId, run: c.run || (() => App.navigate(c.section)) });
-        const thumb = c.image ? `<img src="${c.image}" alt="" onerror="wcImgFallback(this)">` : (c.emoji || '🔥');
+        const thumb = c.image ? `<img src="${c.image}" alt="" decoding="async" onerror="wcImgFallback(this)">` : (c.emoji || '🔥');
         return `
           <div id="${bindId}" class="home-lb-row">
             <span class="home-lb-rank ${i === 0 ? 'first' : ''}">${i + 1}</span>
@@ -939,10 +943,12 @@ async function renderHomeSections() {
        측정 자체를 없애고 "카드 3개 이상이면 항상 화살표 노출"로 단순화(cards.length는 이미
        서버(클라이언트) 렌더링 시점에 알고 있어 타이밍 문제가 원천적으로 없음). */
     if (sec.style === 'poster-carousel') {
-      const rowsHTML = cards.map(c => {
+      const isFirstPosterGrp = (posterGrpSeq++ === 0);
+      const rowsHTML = cards.map((c, ci) => {
         const bindId = 'home-card-bind-' + (bindSeq++);
         bindings.push({ id: bindId, run: c.run || (() => App.navigate(c.section)) });
-        const art = c.image ? `<img src="${c.image}" alt="" onerror="wcImgFallback(this)">` : `<span>${c.emoji || '🧠'}</span>`;
+        const imgAttr = (isFirstPosterGrp && ci < 4) ? 'fetchpriority="high" decoding="async"' : 'loading="lazy" decoding="async"';
+        const art = c.image ? `<img src="${c.image}" alt="" ${imgAttr} onerror="wcImgFallback(this)">` : `<span>${c.emoji || '🧠'}</span>`;
         return `<div id="${bindId}" class="home-poster"><div class="art">${art}</div><div class="cap">${c.title}</div></div>`;
       }).join('');
       html += `
@@ -4751,7 +4757,7 @@ function curatedPsychRowsHTML() {
       return `
         <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="curation-card">
           <div class="curation-tile">
-            <img src="${psyCoverImage(t)}" alt="" onerror="wcImgFallback(this)">
+            <img src="${psyCoverImage(t)}" alt="" loading="lazy" decoding="async" onerror="wcImgFallback(this)">
             <div class="curation-scrim"></div>
             <div class="curation-card-title line-clamp-2"${cardFont ? ` style='font-family:${cardFont}'` : ''}>${t.title}</div>
           </div>
@@ -4833,7 +4839,7 @@ function externalTestsFeedHTML(list, newItems) {
         return `
       <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="psy-card block">
         <div class="psy-card-tile">
-          <img src="${psyCoverImage(t)}" alt="" onerror="wcImgFallback(this)">
+          <img src="${psyCoverImage(t)}" alt="" loading="lazy" decoding="async" onerror="wcImgFallback(this)">
           <div class="psy-card-scrim"></div>
           ${rankClass ? `<span class="psy-card-rank ${rankClass}">${i + 1}</span>` : ''}
           ${t.isNew ? `<span class="psy-card-badge-new">NEW</span>` : ''}

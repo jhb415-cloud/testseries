@@ -1,4 +1,4 @@
-<!-- v1.2.2 | 5-in-1 Dashboard SPA -->
+<!-- v1.2.3 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -96,6 +96,8 @@
   <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png"/>
   <!-- Google AdSense 사이트 소유권 확인 + 광고 스크립트 (v0.2.6~, publisher ID: pub-4825324689294427) -->
   <meta name="google-adsense-account" content="ca-pub-4825324689294427">
+  <!-- PSI 제안(v1.2.3): 애드센스 동의(CMP) 스크립트 출처 사전 연결 — 예상 LCP -300ms -->
+  <link rel="preconnect" href="https://fundingchoicesmessages.google.com" crossorigin>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4825324689294427"
      crossorigin="anonymous"></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -112,13 +114,20 @@
        단계가 전부 실제 폰트 파일이라 어떤 굵기를 요청해도 합성볼드가 생길 일이 없음. 실사용 스크린샷
        기반 폰트 후보 5개(Artifact 실물 비교) 중 "가장 안전한 표준"으로 사용자가 확정. sans/display/
        label 세 역할을 굳이 다른 라틴 폰트로 나눌 필요가 없어져 fontFamily 자체도 하나로 합침(아래
-       사용처마다 실제 쓰던 font-black/extrabold/bold/semibold/medium 굵기만 로드: 400/500/600/700/800/900).
+       사용처마다 실제 쓰던 굵기만 로드 — v1.2.3 전수조사로 500(medium) 미사용 확인 후 제거: 400/600/700/800/900).
        주의: 심리테스트존(몰입테스트·MBTI존) 카드 썸네일 제목은 각 테스트가 내부에서 쓰는 테마 폰트를
        그대로 재사용하도록 app.js에서 별도 처리(THEME_TITLE_FONTS) — 이 전역 폰트와 무관하게 각자의
        컨셉을 유지, 필요한 폰트만 그때그때 지연 로드됨. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- 페이지속도 개선 (v1.2.3): ①이 폰트 CSS(136KiB)가 2.9초 렌더 블로킹 1위였음 —
+       media="print"+onload 트릭으로 비차단 전환. display=swap이라 로드 전엔 시스템 한글 폰트
+       (Malgun Gothic 등)로 즉시 그려지고 도착하면 교체됨. JS 꺼진 브라우저용 noscript 폴백 유지.
+       ②wght 500(medium)은 전수조사 결과(index/app/data/style 전부) 사용처 0건이라 제거 —
+       400/600/700/800/900만 실사용. 500을 다시 쓰려면 여기에 재추가할 것. -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap"
+    rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap" rel="stylesheet"></noscript>
   <script>
     // slate 팔레트를 style.css의 CSS 변수로 remap (index.html의 tailwind.config 참고)
     // (rgb(var(--x) / <alpha-value>) 포맷을 써야 bg-slate-800/60 같은 opacity modifier가 계속 동작함)
@@ -165,7 +174,7 @@
       }
     };
   </script>
-  <link rel="stylesheet" href="style.css?v=1.2.2"/>
+  <link rel="stylesheet" href="style.css?v=1.2.3"/>
   <!-- SEO 체크업 도구 지적사항 반영(v0.5.4~): 기존 39자는 권장 범위(150~220자) 대비 너무 짧았음 -->
   <meta name="description" content="과몰입 연구소는 MBTI, 두뇌 나이 측정기, 심리테스트, 밸런스 게임, 오늘의 운세, 꿈 해몽 검색, 로또 번호 조합기까지 다양한 테스트와 콘텐츠를 무료로 즐길 수 있는 종합 테스트 모음 사이트입니다. 재미로 시작했다가 뼈 맞고 공유하게 되는 콘텐츠들을 지금 바로 확인해보세요."/>
 </head>
@@ -333,7 +342,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4 border-t border-slate-800">
-    <p class="text-slate-600 text-xs">v1.2.2 · 2026-07-18</p>
+    <p class="text-slate-600 text-xs">v1.2.3 · 2026-07-18</p>
   </div>
 </aside>
 
@@ -767,9 +776,9 @@
          transition-opacity duration-500 opacity-0 pointer-events-none">
 </div>
 
-<script defer src="data.js?v=1.2.2"></script>
-<script defer src="supabase-client.js?v=1.2.2"></script>
-<script defer src="kakao-share.js?v=1.2.2"></script>
-<script defer src="app.js?v=1.2.2"></script>
+<script defer src="data.js?v=1.2.3"></script>
+<script defer src="supabase-client.js?v=1.2.3"></script>
+<script defer src="kakao-share.js?v=1.2.3"></script>
+<script defer src="app.js?v=1.2.3"></script>
 </body>
 </html>
