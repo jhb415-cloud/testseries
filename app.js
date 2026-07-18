@@ -4699,6 +4699,16 @@ const THEME_TITLE_FONTS = {
   blueprint:        { family: '"Chakra Petch","Noto Sans KR",sans-serif', google: 'family=Chakra+Petch:wght@500;600;700' },
   ekgmonitor:       { family: '"VT323","Noto Sans KR",monospace', google: 'family=VT323' },
   vhsnoir:          { family: '"Bebas Neue","Noto Sans KR",sans-serif', google: 'family=Bebas+Neue' },
+  halftonepop:      { family: '"Bungee","Noto Sans KR",sans-serif', google: 'family=Bungee' },
+  embroidery:       { family: '"Playfair Display","Noto Serif KR",serif', google: 'family=Playfair+Display:wght@600;700;800' },
+  linocut:          { family: '"Passion One","Noto Sans KR",sans-serif', google: 'family=Passion+One:wght@700;900' },
+  claymation:       { family: '"Chewy","Noto Sans KR",sans-serif', google: 'family=Chewy' },
+  mosaic:           { family: '"Cinzel Decorative","Noto Serif KR",serif', google: 'family=Cinzel+Decorative:wght@700;900' },
+  botanical:        { family: '"Cormorant Garamond","Noto Serif KR",serif', google: 'family=Cormorant+Garamond:wght@600;700' },
+  wizardletter:     { family: '"IM Fell English SC","Noto Serif KR",serif', google: 'family=IM+Fell+English+SC' },
+  lightstick:       { family: '"Righteous","Noto Sans KR",sans-serif', google: 'family=Righteous' },
+  hanjiscroll:      { family: '"Nanum Brush Script","Noto Serif KR",serif', google: 'family=Nanum+Brush+Script' },
+  holocard:         { family: '"Pirata One","Noto Sans KR",sans-serif', google: 'family=Pirata+One' },
 };
 const _loadedThemeFonts = new Set();
 function themeTitleFontFamily(theme) {
