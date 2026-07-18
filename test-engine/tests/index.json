@@ -416,8 +416,8 @@
       "title": "MBTI 히어로 각성 테스트",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 41-mbti-hero-awakening, novel mechanic 엔진필드 적용됨(engine v12) — 이미지 없음, 사이트 연동 전",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
+      "status": "완료(이미지·QA까지) — 폴더 41-mbti-hero-awakening, 신규 테마 halftonepop.css, 사이트 연동 전(승인 대기)",
+      "concept_style": "레트로 팝아트 하프톤 코믹 포스터(네이비/골드/블랙)",
       "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현. || novel mechanic: awaken_meter(각성 게이지) — 문항 진행 중 4축(E/I·N/S·T/F·J/P) 우세도 막대 + 각성률이 실시간으로 차오르는 진행형 시각화. mbti4 파생값 렌더링일 뿐 채점 불변. engine v12 `config.awaken_meter:true`."
     },
     {
@@ -426,8 +426,8 @@
       "title": "MBTI 판타지 종족 판별기",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 42-mbti-fantasy-race, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
+      "status": "완료(이미지·QA까지) — 폴더 42-mbti-fantasy-race, 신규 테마 embroidery.css, 사이트 연동 전(승인 대기)",
+      "concept_style": "자수 후프 크래프트(satin-stitch 크레스트)",
       "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
     },
     {
@@ -436,8 +436,8 @@
       "title": "만약 내가 빌런이라면?",
       "category": "MBTI존",
       "scoring_type": "mbti4_dual",
-      "status": "뼈대(mbti4_dual, 겉/속 이중자아 16문항) 완료 — 이미지 없음, 폴더 43-mbti-villain-story, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
+      "status": "완료(이미지·QA까지) — 폴더 43-mbti-villain-story, 신규 테마 linocut.css, 사이트 연동 전(승인 대기)",
+      "concept_style": "리노컷 목판화(검정/번트오렌지 듀오톤)",
       "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
     },
     {
@@ -446,8 +446,8 @@
       "title": "MBTI 좀비 아포칼립스 생존 클래스",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 44-mbti-zombie-survival-class, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
+      "status": "완료(이미지·QA까지) — 폴더 44-mbti-zombie-survival-class, 신규 테마 claymation.css, 사이트 연동 전(승인 대기)",
+      "concept_style": "클레이 스톱모션 디오라마(폐허 피규어)",
       "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
     },
     {
@@ -456,8 +456,8 @@
       "title": "MBTI 신(神) 판별기",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 45-mbti-mythology-god, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
+      "status": "완료(이미지·QA까지) — 폴더 45-mbti-mythology-god, 신규 테마 mosaic.css, 사이트 연동 전(승인 대기)",
+      "concept_style": "비잔틴 모자이크(금/틸 타일 성화)",
       "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
     },
     {

@@ -149,12 +149,30 @@ engine.js를 조사해 확인(선택 로직이 렌더링과 분리돼 있어 기
 통과 후 테스트별 개별 커밋 예정. **이로써 #31~40(3차 배치 전체) 콘텐츠 제작 완료.** 사이트 연동
 (data.js 등)과 41~60 착수는 사용자 확인 후 별도 진행.
 
+## MBTI존 4차 배치 (41~50, 2026-07-18 야간, 사용자 취침 중 자동 진행 위임)
+사용자가 41~50 문항/결과 텍스트 + 레퍼런스 이미지(`assets/reference/`)를 전부 미리 준비해둔
+상태로 시작. 5개씩 제작→QA→커밋, 다시 5개 반복 후 사이트 연동+push까지 이번 세션 한정 위임받음.
+- [x] #41 mbti-hero-awakening — 완료 (2026-07-18, theme: halftonepop)
+- [x] #42 mbti-fantasy-race — 완료 (2026-07-18, theme: embroidery)
+- [x] #43 mbti-villain-story — 완료 (2026-07-18, theme: linocut, mbti4_dual 유지)
+- [x] #44 mbti-zombie-survival-class — 완료 (2026-07-18, theme: claymation)
+- [x] #45 mbti-mythology-god — 완료 (2026-07-18, theme: mosaic)
+- [x] #46 mbti-cafe-drink — 완료 (2026-07-18, theme: botanical)
+- [x] #47 mbti-magic-school-house — 완료 (2026-07-18, theme: wizardletter)
+- [x] #48 mbti-idol-debut-position — 완료 (2026-07-18, theme: lightstick, chat_ui 유지)
+- [x] #49 mbti-joseon-government-post — 완료 (2026-07-18, theme: hanjiscroll)
+- [x] #50 mbti-rpg-character-sheet — 완료 (2026-07-18, theme: holocard, stat bar 유지)
+
+**#41~50(4차 배치 전체) 콘텐츠 제작 완료.** Playwright 전수 QA 통과(콘솔 에러 0, 깨진 이미지 0,
+버튼바-본문 겹침 0). 문항 이미지는 전부 4지선다라 4-4-1 규칙상 대상 제외. 사이트 연동(data.js/
+app.js/sections.json/sitemap.xml/llms.txt)까지 같은 세션에서 이어서 진행, push 완료.
+
 ## 다음 배치 후보
-#21~40 완료(novel mechanic 포함). #41~60(2026-07-16 스켈레톤 생성분)이 다음 배치 후보 — 이 중
-**novel mechanic 8종(41/43/48/50/51/56/58/60)은 엔진 필드·config 구조까지 정리됨**, 나머지 12개는
-문항·결과 텍스트만 있고 이미지 컨셉 미정 상태. **문항/결과 텍스트를 `mbti41~60.md` 정본의 완성
-문장으로 다듬는 작업 + 이미지·테마 제작**은 4-7 배치 규칙(5개씩)으로 진행 — 시작 전 레퍼런스
-이미지 확보 절차(4-4)부터 진행할 것.
+#21~50 완료(novel mechanic 포함). #51~60(2026-07-16 스켈레톤 생성분)이 다음 배치 후보 — 이 중
+**novel mechanic 나머지(51/56/58/60)는 엔진 필드·config 구조까지 정리됨**, 나머지는 문항·결과
+텍스트만 있고 이미지 컨셉 미정 상태. **문항/결과 텍스트를 `mbti41~60.md` 정본의 완성 문장으로
+다듬는 작업 + 이미지·테마 제작**은 4-7 배치 규칙(5개씩)으로 진행 — 시작 전 레퍼런스 이미지 확보
+절차(4-4)부터 진행할 것.
 
 ## 품질 개선 — MBTI존 9개(#11~18,#20) 16종 결과 세분화 (2026-07-12)
 사용자가 "#19 빼고는 결과가 다 하나뿐이라 노잼"이라고 지적해 진행. `resultTemplate` 공용 템플릿

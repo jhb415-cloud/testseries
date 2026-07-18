@@ -1,0 +1,83 @@
+/* test-engine — themes/halftonepop.css — 신규 테마: 레트로 팝아트 하프톤 코믹 포스터
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   mbti-hero-awakening(#41)이 1호 사용처. 네이비블루+골드옐로+블랙 3색 하프톤 스크린프린트
+   질감을 배경 그라디언트+도트 패턴으로 재현, Bungee 폰트로 코믹 포스터 타이틀감을 살림. */
+
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #0b1f4d;
+  background:
+    radial-gradient(circle at 12px 12px, rgba(247, 197, 26, 0.16) 2px, transparent 2px) 0 0/24px 24px,
+    linear-gradient(180deg, #142c6b 0%, #0b1f4d 100%);
+  color: #f4e9c9;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #f4e9c9;
+  border: 3px solid #0b1f4d;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 4px #f7c51a,
+    0 18px 40px rgba(0, 0, 0, 0.5);
+  margin: 18px 16px 16px;
+  padding-top: 4px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Bungee", "Noto Sans KR", sans-serif;
+  color: #0b1f4d;
+  letter-spacing: 0.01em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #4a3b0a; }
+
+.te-chip {
+  background: rgba(11, 31, 77, 0.1);
+  border: 1px solid #0b1f4d;
+  color: #0b1f4d;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+
+.te-btn {
+  background: #0b1f4d;
+  color: #f4e9c9;
+  border: 2px solid #0b1f4d;
+  box-shadow: 0 3px 0 #061434;
+  font-family: "Bungee", "Noto Sans KR", sans-serif;
+}
+.te-btn-primary { background: #f7c51a; border-color: #0b1f4d; box-shadow: 0 3px 0 #a9860a; color: #0b1f4d; }
+.te-btn-secondary { background: #fdf6e2; border-color: #0b1f4d; box-shadow: 0 3px 0 #c9bd94; color: #0b1f4d; }
+.te-btn-accent { background: #f7c51a; border-color: #0b1f4d; box-shadow: 0 3px 0 #a9860a; color: #0b1f4d; }
+.te-btn-kakao { background: #FEE500; color: #191600; border-color: rgba(0,0,0,0.2); box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
+
+.te-btn-choice {
+  background: #fdf6e2;
+  color: #0b1f4d;
+  border: 2px solid #0b1f4d;
+  box-shadow: none;
+}
+.te-btn-choice:active { background: rgba(247, 197, 26, 0.35); }
+
+.te-progress-track { background: rgba(11, 31, 77, 0.12); }
+.te-progress-fill { background: linear-gradient(90deg, #f7c51a, #0b1f4d); }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #0b1f4d;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(11, 31, 77, 0.2);
+  border-top-color: #f7c51a;
+}

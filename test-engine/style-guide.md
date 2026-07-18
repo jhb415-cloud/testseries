@@ -74,6 +74,11 @@
 - 플랫 청사진 벡터 도면 포스터(틸톤) — room-state-psychology(#38)
 - 레트로 CRT 병원 심박 모니터(EKG 파형) — decision-time-test(#39)
 - 흑백 그레인 VHS/빈티지 시네마틱 사진 — ai-black-history-type(#40)
+- 레트로 팝아트 하프톤 스크린프린트 코믹 포스터(네이비/골드/블랙) — mbti-hero-awakening(#41)
+- 자수 후프 크래프트(satin-stitch 크레스트, 리넨 배경) — mbti-fantasy-race(#42)
+- 리노컷 목판화(검정/번트오렌지 듀오톤) — mbti-villain-story(#43)
+- 클레이 스톱모션 디오라마(폐허 피규어 매크로 사진) — mbti-zombie-survival-class(#44)
+- 비잔틴 모자이크(금/틸 타일 성화) — mbti-mythology-god(#45)
 
 ## 테스트별 사용 톤·컨셉 기록 (매번 추가)
 - mental-age: 병맛(장르 미스매치) — "정신연령 측정을 국가 공인 신체검사처럼 근엄하게"
@@ -346,3 +351,25 @@ sitemap.xml)은 사용자 확인 후 별도 진행.
 정적 서버 + Playwright로 5개 전부 실제 완주 시켜 콘솔 에러 0건·결과 이미지 정상 로드·버튼바-본문
 겹침 0건·플레이스홀더 미치환 없음(특히 #39의 `{avgSec}` 실측 치환 확인)·320px 가로 스크롤 없음을
 전수 확인. 사이트 연동은 사용자 확인 후 별도 진행.
+
+## MBTI존 4차 배치 (41~45, 2026-07-18)
+문항/결과 텍스트는 `mbti41~60.md` 정본으로 이미 작성돼 있었고, 사용자가 `assets/reference/`에
+미리 올려둔 레퍼런스를 보고 톤·매체·신규 테마 CSS 확정 + 이미지 생성 + config.json 연결까지 진행.
+- mbti-hero-awakening(#41): 레퍼런스가 네이비/골드/블랙 하프톤 스크린프린트 코믹 포스터(2패널:
+  상자를 여는 손 / 망토 두른 히어로)라 그대로 채택, 신규 `themes/halftonepop.css`(Bungee).
+  `awaken_meter` novel mechanic 엔진 필드(engine v12)와 함께 사용.
+- mbti-fantasy-race(#42): 레퍼런스가 자수 후프에 담긴 satin-stitch 문장(크레스트)이라 그대로
+  채택, 신규 `themes/embroidery.css`(Playfair Display).
+- mbti-villain-story(#43): 레퍼런스가 검정/번트오렌지 듀오톤 리노컷 목판화(빌런의 눈+도시 미니어처)
+  라 그대로 채택, 신규 `themes/linocut.css`(Anton). `mbti4_dual`(겉모습 8문항=outer/평범한
+  일상 8문항=inner)와 `{inner}` 템플릿 치환 Playwright로 정상 동작 확인.
+- mbti-zombie-survival-class(#44): 레퍼런스가 클레이 스톱모션 폐허 디오라마 피규어 사진이라
+  그대로 채택, 신규 `themes/claymation.css`(Chewy). village-animal-neighbor(#27)의 아이소메트릭
+  마을 디오라마와는 톤(포스트아포칼립스 vs 귀여운 마을)·구도가 달라 매체 다양성 원칙상 별개로 취급.
+- mbti-mythology-god(#45): 레퍼런스가 금/틸 타일의 비잔틴 모자이크 성화라 그대로 채택, 신규
+  `themes/mosaic.css`(Cinzel Decorative).
+
+**문항 이미지(4-4-1)**: 전부 4지선다(mbti4/mbti4_dual)라 문항 이미지 대상 제외(4-4-1 규칙 —
+선택지 3개 이상인 문항형 테스트는 문항 이미지 생략). **QA**: 로컬 정적 서버 + Playwright로 5개
+전부 실제 완주 시켜 콘솔 에러 0건·결과 이미지 정상 로드·버튼바-본문 겹침 0건을 전수 확인. 사이트
+연동은 이번 세션(사용자 취침 중 자동 진행 위임)에서 이어서 진행.

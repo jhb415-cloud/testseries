@@ -1,0 +1,84 @@
+/* test-engine — themes/mosaic.css — 신규 테마: 비잔틴 모자이크 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   mbti-mythology-god(#45)가 1호 사용처. 금색+틸 타일 질감 배경, Cinzel Decorative 폰트로
+   신화적 위엄을 살림(기존 Cinzel/Marcellus SC와 구분되는 다른 굵기의 장식 세리프). */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Noto+Serif+KR:wght@400;600;700&display=swap');
+
+.te-app {
+  --te-footer-bg: #0f3d3a;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(212, 175, 55, 0.14), transparent 55%),
+    linear-gradient(180deg, #14524c 0%, #0f3d3a 100%);
+  color: #f3e6b8;
+  font-family: "Noto Serif KR", serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #123e3a;
+  border: 4px solid #d4af37;
+  border-radius: 8px;
+  box-shadow:
+    inset 0 0 0 2px #0f3d3a,
+    inset 0 0 0 5px #d4af37,
+    0 18px 40px rgba(0, 0, 0, 0.5);
+  margin: 18px 16px 16px;
+  padding-top: 4px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Cinzel Decorative", "Noto Serif KR", serif;
+  color: #f3e6b8;
+  letter-spacing: 0.02em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #c9b878; }
+
+.te-chip {
+  background: rgba(212, 175, 55, 0.14);
+  border: 1px solid #d4af37;
+  color: #f3e6b8;
+  font-family: "Noto Serif KR", serif;
+}
+
+.te-btn {
+  background: #0f3d3a;
+  color: #f3e6b8;
+  border: 1px solid #d4af37;
+  box-shadow: 0 3px 0 #082523;
+  font-family: "Cinzel Decorative", "Noto Serif KR", serif;
+  font-weight: 700;
+}
+.te-btn-primary { background: #d4af37; border-color: #8a6d1e; box-shadow: 0 3px 0 #8a6d1e; color: #0f3d3a; }
+.te-btn-secondary { background: #1c5a54; border-color: #3f8a80; box-shadow: 0 3px 0 #0d332f; color: #f3e6b8; }
+.te-btn-accent { background: #d4af37; border-color: #8a6d1e; box-shadow: 0 3px 0 #8a6d1e; color: #0f3d3a; }
+.te-btn-kakao { background: #FEE500; color: #191600; border-color: rgba(0,0,0,0.2); box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
+
+.te-btn-choice {
+  background: #164943;
+  color: #f3e6b8;
+  border: 1px solid #3f8a80;
+  box-shadow: none;
+}
+.te-btn-choice:active { background: rgba(212, 175, 55, 0.18); }
+
+.te-progress-track { background: rgba(212, 175, 55, 0.14); }
+.te-progress-fill { background: linear-gradient(90deg, #d4af37, #3f8a80); }
+
+.te-result-traits {
+  font-family: "Noto Serif KR", serif;
+  color: #f3e6b8;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(212, 175, 55, 0.25);
+  border-top-color: #d4af37;
+}
