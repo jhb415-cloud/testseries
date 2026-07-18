@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="10" fill="#fbf8f0" stroke="#201f1c" stroke-width="3"/>
+  <path d="M60 300 L200 300 L200 140 L440 140 L440 90" fill="none" stroke="#e8a13a" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="60" cy="300" r="10" fill="#fff" stroke="#201f1c" stroke-width="4"/>
+  <circle cx="200" cy="140" r="12" fill="#fff" stroke="#201f1c" stroke-width="4"/>
+  <circle cx="440" cy="90" r="22" fill="#fff" stroke="#201f1c" stroke-width="5"/>
+  <!-- bar chart icon -->
+  <rect x="120" y="230" width="24" height="40" fill="#2e6ee8"/>
+  <rect x="152" y="200" width="24" height="70" fill="#24a35a"/>
+  <rect x="184" y="170" width="24" height="100" fill="#e0463c"/>
+  <!-- trophy icon at end station -->
+  <path d="M424 74 h32 v14 a16 16 0 0 1 -32 0 z" fill="#e8a13a"/>
+  <rect x="432" y="98" width="16" height="12" fill="#e8a13a"/>
+  <rect x="422" y="110" width="36" height="8" rx="2" fill="#201f1c"/>
+</svg>

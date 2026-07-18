@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="18" fill="#fff2e6" stroke="#e6c3ad" stroke-width="3"/>
+  <!-- left: figure holding out a heart confidently -->
+  <circle cx="180" cy="150" r="34" fill="#4a2f3e"/>
+  <path d="M146 210 q34 -22 68 0 l0 90 q-34 16 -68 0 z" fill="#c96a8e"/>
+  <path d="M214 190 l60 -10" stroke="#4a2f3e" stroke-width="8" stroke-linecap="round"/>
+  <path d="M270 150 c-14 -18 -42 -6 -30 16 c8 14 30 26 42 34 c12 -8 34 -20 42 -34 c12 -22 -16 -34 -30 -16 c-4 6 -8 10 -12 16 c-4 -6 -8 -10 -12 -16 z" fill="#e08a5b"/>
+  <!-- right: shy figure looking away, hands behind back -->
+  <circle cx="430" cy="150" r="34" fill="#7a6472" opacity="0.85"/>
+  <path d="M396 210 q34 -20 68 0 l-6 90 q-28 14 -56 0 z" fill="#9aa0bd"/>
+  <path d="M420 138 q10 -6 20 0" stroke="#fff2e6" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <!-- small hidden heart near right figure, faded -->
+  <path d="M470 220 c-8 -10 -24 -4 -18 8 c4 8 16 14 24 20 c8 -6 20 -12 24 -20 c6 -12 -10 -18 -18 -8 c-2 3 -4 5 -6 8 c-2 -3 -4 -5 -6 -8 z" fill="#c96a8e" opacity="0.4"/>
+  <path d="M300 300 q0 -160 0 -220" stroke="#e6c3ad" stroke-width="2" stroke-dasharray="4 6"/>
+</svg>

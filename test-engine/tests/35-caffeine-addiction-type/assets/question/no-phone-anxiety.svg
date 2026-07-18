@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="14" fill="#c9a876" stroke="#5a3d22" stroke-width="3"/>
+  <circle cx="300" cy="180" r="120" fill="none" stroke="#2e1c0f" stroke-width="6"/>
+  <!-- empty pocket outline -->
+  <path d="M230 140 h140 v100 a70 30 0 0 1 -140 0 z" fill="none" stroke="#2e1c0f" stroke-width="6"/>
+  <path d="M230 140 q70 30 140 0" fill="none" stroke="#2e1c0f" stroke-width="6"/>
+  <!-- anxious wavy lines where phone should be -->
+  <path d="M280 190 q10 -14 20 0 q10 14 20 0" stroke="#2e1c0f" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <line x1="300" y1="210" x2="300" y2="225" stroke="#2e1c0f" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="300" cy="238" r="3" fill="#2e1c0f"/>
+  <!-- small worry marks -->
+  <path d="M340 130 l10 -10 M350 145 l14 -4" stroke="#2e1c0f" stroke-width="4" stroke-linecap="round"/>
+</svg>

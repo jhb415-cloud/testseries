@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="18" fill="#fff2e6" stroke="#e6c3ad" stroke-width="3"/>
+  <!-- left: bold filled speech bubble with solid heart, direct expression -->
+  <path d="M90 100 h190 a20 20 0 0 1 20 20 v90 a20 20 0 0 1 -20 20 h-120 l-30 34 v-34 h-40 a20 20 0 0 1 -20 -20 v-90 a20 20 0 0 1 20 -20 z" fill="#e08a5b"/>
+  <path d="M195 155 c-14 -18 -42 -6 -30 16 c8 14 30 26 42 34 c12 -8 34 -20 42 -34 c12 -22 -16 -34 -30 -16 c-4 6 -8 10 -12 16 c-4 -6 -8 -10 -12 -16 z" fill="#fff8f2"/>
+  <!-- right: dashed outline bubble, small peeking heart, coy expression -->
+  <path d="M330 100 h190 a20 20 0 0 1 20 20 v90 a20 20 0 0 1 -20 20 h-40 v34 l-30 -34 h-120 a20 20 0 0 1 -20 -20 v-90 a20 20 0 0 1 20 -20 z" fill="none" stroke="#c96a8e" stroke-width="4" stroke-dasharray="10 8"/>
+  <path d="M420 165 c-8 -10 -24 -4 -18 8 c4 8 16 14 24 20 c8 -6 20 -12 24 -20 c6 -12 -10 -18 -18 -8 c-2 3 -4 5 -6 8 c-2 -3 -4 -5 -6 -8 z" fill="#c96a8e" opacity="0.55"/>
+  <circle cx="480" cy="130" r="5" fill="#c96a8e" opacity="0.5"/>
+  <circle cx="500" cy="145" r="4" fill="#c96a8e" opacity="0.35"/>
+</svg>

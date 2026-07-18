@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="14" fill="#c9a876" stroke="#5a3d22" stroke-width="3"/>
+  <circle cx="300" cy="180" r="120" fill="none" stroke="#2e1c0f" stroke-width="6"/>
+  <!-- sunrise -->
+  <path d="M240 200 a60 60 0 0 1 120 0" fill="none" stroke="#2e1c0f" stroke-width="7"/>
+  <line x1="300" y1="120" x2="300" y2="100" stroke="#2e1c0f" stroke-width="6" stroke-linecap="round"/>
+  <line x1="250" y1="140" x2="236" y2="126" stroke="#2e1c0f" stroke-width="6" stroke-linecap="round"/>
+  <line x1="350" y1="140" x2="364" y2="126" stroke="#2e1c0f" stroke-width="6" stroke-linecap="round"/>
+  <line x1="220" y1="200" x2="380" y2="200" stroke="#2e1c0f" stroke-width="6" stroke-linecap="round"/>
+  <!-- reaching hand -->
+  <path d="M260 240 q40 -20 80 0" fill="none" stroke="#2e1c0f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M300 240 l0 -24 m-14 24 l0 -18 m28 18 l0 -18" stroke="#2e1c0f" stroke-width="6" stroke-linecap="round"/>
+</svg>

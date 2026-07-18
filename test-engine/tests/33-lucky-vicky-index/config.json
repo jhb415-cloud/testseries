@@ -8,7 +8,7 @@
     "긍정회로",
     "MZ밈"
   ],
-  "theme": "pending",
+  "theme": "photobooth",
   "cover_image": "assets/cover.webp",
   "seed_count": 233,
   "engagement_key": "site-luckyvicky-plays",
@@ -22,7 +22,7 @@
   "questions": [
     {
       "text": "지하철을 눈앞에서 놓쳤다.",
-      "image": null,
+      "image": "assets/question/subway-missed.svg",
       "choices": [
         {
           "label": "오늘 완전 망했다 싶다",
@@ -88,7 +88,7 @@
     },
     {
       "text": "시험을 망쳤다.",
-      "image": null,
+      "image": "assets/question/exam-failed.svg",
       "choices": [
         {
           "label": "자책하며 오래 힘들어한다",
@@ -154,7 +154,7 @@
     },
     {
       "text": "실수로 커피를 쏟았다.",
-      "image": null,
+      "image": "assets/question/coffee-spill.svg",
       "choices": [
         {
           "label": "짜증이 확 밀려온다",
@@ -220,7 +220,7 @@
     },
     {
       "text": "산 물건이 다음날 반값 세일을 한다.",
-      "image": null,
+      "image": "assets/question/half-price-regret.svg",
       "choices": [
         {
           "label": "속이 쓰리고 억울하다",

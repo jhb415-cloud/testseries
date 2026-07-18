@@ -8,7 +8,7 @@
     "웹툰밈",
     "연애스타일"
   ],
-  "theme": "pending",
+  "theme": "goldhour",
   "cover_image": "assets/cover.webp",
   "seed_count": 196,
   "engagement_key": "site-romancegenre-plays",
@@ -21,7 +21,7 @@
   "questions": [
     {
       "text": "고백은 주로 어떻게 하는 편인가요?",
-      "image": null,
+      "image": "assets/question/confession-moment.svg",
       "choices": [
         {
           "label": "직진으로 진심을 다 보여준다",
@@ -63,7 +63,7 @@
     },
     {
       "text": "표현 방식은 어느 쪽에 가까운가요?",
-      "image": null,
+      "image": "assets/question/expression-style.svg",
       "choices": [
         {
           "label": "직접적이고 애정 표현이 확실한 편",
@@ -105,7 +105,7 @@
     },
     {
       "text": "질투가 날 때 나는",
-      "image": null,
+      "image": "assets/question/jealousy-moment.svg",
       "choices": [
         {
           "label": "솔직하게 서운함을 표현한다",
@@ -147,7 +147,7 @@
     },
     {
       "text": "재회 가능성이 생긴다면?",
-      "image": null,
+      "image": "assets/question/reunion-chance.svg",
       "choices": [
         {
           "label": "못 이기는 척 다시 시작한다",

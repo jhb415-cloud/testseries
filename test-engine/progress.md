@@ -103,10 +103,25 @@ engine.js를 조사해 확인(선택 로직이 렌더링과 분리돼 있어 기
 제작과 실제 브라우저 QA는 아직 진행 전**(4-4 이미지 승인 절차부터 시작해야 함) — 나머지
 15개(41,42,44,45,46,47,49,50,52,53,54,55,57,58,59)는 표준 mbti4(8문항×4지선다) 그대로 유지.
 
+## 몰입테스트 3차 배치 (31~40) — 1차 5개 (2026-07-18)
+사용자가 각 폴더 `assets/reference/`에 레퍼런스를 미리 올려두고 "31~40번, 5개씩 제작 후 QA→커밋"
+요청. 문항/선택지/결과 텍스트는 기존 스켈레톤 그대로, 이번 세션은 톤·매체·신규 테마 CSS 확정 +
+이미지 생성 + 문항 SVG 제작 + config.json 연결까지 진행(상세 컨셉은 style-guide.md "2026-07-18
+추가" 절 참고).
+- [x] #31 romance-webtoon-genre — 완료 (2026-07-18, theme: goldhour)
+- [x] #32 office-slacker-skilltree — 완료 (2026-07-18, theme: metromap)
+- [x] #33 lucky-vicky-index — 완료 (2026-07-18, theme: photobooth, slider_ui 유지)
+- [x] #34 t-factor-index — 완료 (2026-07-18, theme: crayonbook)
+- [x] #35 caffeine-addiction-type — 완료 (2026-07-18, theme: kraftbag)
+
+**#31~35 콘텐츠 제작 완료.** Playwright 전수 QA(5/5 PASS: 콘솔 에러 0, 결과 이미지 정상 로드,
+버튼바-본문 겹침 0, 플레이스홀더 미치환 없음, 320px 가로 스크롤 없음) 통과 후 테스트별 개별 커밋
+예정. 사이트 연동(data.js 등)과 git push는 사용자 확인 후 별도 진행. 다음은 #36~40.
+
 ## 다음 배치 후보
-#21~30 완료(novel mechanic 포함). #31~60(2026-07-16 스켈레톤 생성분)이 다음 배치 후보 — 이 중
+#21~35 완료(novel mechanic 포함). #36~60(2026-07-16 스켈레톤 생성분)이 다음 배치 후보 — 이 중
 41/43/48/51/56/60은 위 항목대로 콘텐츠·엔진 구조까지 정리됨, 나머지는 문항·결과 텍스트만 있고
-이미지 컨셉 미정 상태. 시작 전 레퍼런스 이미지 확보 절차(4-4)부터 진행할 것.
+이미지 컨셉 미정 상태. #36~40은 레퍼런스 이미지가 이미 각 폴더 assets/reference/에 준비돼 있음.
 
 ## 품질 개선 — MBTI존 9개(#11~18,#20) 16종 결과 세분화 (2026-07-12)
 사용자가 "#19 빼고는 결과가 다 하나뿐이라 노잼"이라고 지적해 진행. `resultTemplate` 공용 템플릿
@@ -163,6 +178,12 @@ result-card.js는 무변경이라 v=2 그대로). **검증**: `node --check` 통
    별도로 진행한다.
 
 ## 세션 로그
+- 2026-07-18 (콘텐츠 제작 세션): 몰입테스트 #31~35 콘텐츠 제작 완료 — 신규 테마 5종(goldhour/
+  metromap/photobooth/crayonbook/kraftbag) 설계, 각 테스트 cover+결과 이미지 전량 생성(#31 결과
+  1장은 세이프티 필터에 1차 실패 후 재시도로 성공), 문항 SVG 16장(2지선다/슬라이더 4개 테스트 ×
+  1/4/7/10번) 제작, config.json theme/image 필드 연결, Playwright로 5개 전수 완주 QA 통과.
+  `tests/index.json` 상태/concept_style 갱신, `style-guide.md`에 컨셉 기록 추가. 사이트 연동
+  (data.js 등)과 git push는 이번 세션 범위 밖 — 사용자 승인 후 진행. 다음은 #36~40.
 - 2026-07-17 (콘텐츠 제작 세션): 몰입테스트 #21~30 콘텐츠 제작 완료 — 신규 테마 10종(arcade/
   camcorder/tarot/streamcard/stickynote/tapestry/diorama/tradefloor/manual/stencil) 설계,
   각 테스트 cover+결과 이미지 전량 생성(katok-reply-style 결과 2장은 도중 OpenAI 결제 하드리밋에

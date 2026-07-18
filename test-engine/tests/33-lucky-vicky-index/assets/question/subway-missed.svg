@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="16" fill="#fffdf8" stroke="#e8dcc8" stroke-width="3"/>
+  <!-- train departing -->
+  <rect x="300" y="140" width="220" height="90" rx="14" fill="#ff8fab"/>
+  <rect x="330" y="160" width="40" height="34" rx="6" fill="#fffdf8"/>
+  <rect x="390" y="160" width="40" height="34" rx="6" fill="#fffdf8"/>
+  <rect x="450" y="160" width="40" height="34" rx="6" fill="#fffdf8"/>
+  <circle cx="330" cy="240" r="14" fill="#3a2a18"/>
+  <circle cx="480" cy="240" r="14" fill="#3a2a18"/>
+  <path d="M300 185 l-24 0" stroke="#ffce4a" stroke-width="6" stroke-linecap="round" stroke-dasharray="1 14"/>
+  <!-- person reaching, just missing -->
+  <circle cx="140" cy="190" r="24" fill="#3a2a18"/>
+  <path d="M116 240 q24 -16 48 0 l0 60 q-24 12 -48 0 z" fill="#ffce4a"/>
+  <path d="M164 210 l50 -10" stroke="#3a2a18" stroke-width="8" stroke-linecap="round"/>
+  <path d="M300 100 h-30 M300 100 l-10 -10 M300 100 l-10 10" stroke="#ff8fab" stroke-width="4" stroke-linecap="round" fill="none"/>
+</svg>

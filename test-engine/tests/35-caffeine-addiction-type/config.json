@@ -8,7 +8,7 @@
     "직장인공감",
     "의존형"
   ],
-  "theme": "pending",
+  "theme": "kraftbag",
   "cover_image": "assets/cover.webp",
   "seed_count": 222,
   "engagement_key": "site-caffeineaddict-plays",
@@ -21,7 +21,7 @@
   "questions": [
     {
       "text": "아침에 눈뜨자마자 제일 먼저 찾는 건?",
-      "image": null,
+      "image": "assets/question/morning-first-reach.svg",
       "choices": [
         {
           "label": "커피, 이거 없으면 하루 시작이 안 된다",
@@ -63,7 +63,7 @@
     },
     {
       "text": "하루 중 폰이 없으면",
-      "image": null,
+      "image": "assets/question/no-phone-anxiety.svg",
       "choices": [
         {
           "label": "불안해서 아무것도 손에 안 잡힌다",
@@ -105,7 +105,7 @@
     },
     {
       "text": "오후 3시쯤 나는",
-      "image": null,
+      "image": "assets/question/three-pm-slump.svg",
       "choices": [
         {
           "label": "카페인 없인 눈이 감긴다",
@@ -147,7 +147,7 @@
     },
     {
       "text": "요즘 지출이 제일 많이 나가는 곳은?",
-      "image": null,
+      "image": "assets/question/spending-most.svg",
       "choices": [
         {
           "label": "카페, 하루에 한 잔은 꼭 마신다",

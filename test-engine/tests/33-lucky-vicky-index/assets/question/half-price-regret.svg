@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="16" fill="#fffdf8" stroke="#e8dcc8" stroke-width="3"/>
+  <!-- shopping bag -->
+  <path d="M210 150 h150 l16 130 h-182 z" fill="#ff8fab"/>
+  <path d="M240 150 v-24 a45 45 0 0 1 90 0 v24" fill="none" stroke="#3a2a18" stroke-width="8"/>
+  <!-- big sale tag -->
+  <g transform="rotate(-14 430 130)">
+    <path d="M380 90 h100 l30 40 l-30 40 h-100 z" fill="#ff5a4a"/>
+    <circle cx="400" cy="130" r="8" fill="#fffdf8"/>
+    <text x="450" y="140" font-size="26" font-weight="700" fill="#fffdf8" text-anchor="middle" font-family="sans-serif">%</text>
+  </g>
+  <circle cx="150" cy="250" r="6" fill="#ffce4a"/>
+  <circle cx="500" cy="250" r="8" fill="#ffce4a"/>
+</svg>

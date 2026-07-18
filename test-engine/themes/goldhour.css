@@ -1,0 +1,90 @@
+/* test-engine — themes/goldhour.css — 신규 테마: 시네마틱 백라이트 실루엣 로맨스 사진 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   romance-webtoon-genre(#31)가 1호 사용처. 노을/빗속 역광 실루엣 사진(레퍼런스: 피치 톤
+   창가 커플 / 더스티블루 톤 우산 커플)의 필름 감성을 살려 크림-피치 그라데이션 배경 +
+   손글씨풍 붓터치 언더라인 + 세리프 타이틀 폰트로 "감성 로맨스 사진첩" 톤을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #3a3244; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    linear-gradient(165deg, #f6dcc8 0%, #f1c9b8 38%, #cbb8c9 68%, #9aa0bd 100%);
+  color: #3a2f38;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: rgba(255, 250, 245, 0.86);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 20px 44px rgba(90, 60, 70, 0.18);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Gowun Batang", "Noto Sans KR", serif;
+  font-weight: 700;
+  color: #4a2f3e;
+  letter-spacing: 0;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip {
+  color: #7a6472;
+  font-family: "Gowun Batang", "Noto Sans KR", serif;
+}
+
+.te-chip {
+  background: rgba(216, 90, 48, 0.1);
+  border: 1px solid rgba(216, 90, 48, 0.4);
+  color: #b8562e;
+  font-family: "Noto Sans KR", sans-serif;
+  border-radius: 999px;
+}
+
+.te-btn {
+  background: linear-gradient(135deg, #e08a5b, #c96a8e);
+  color: #fff8f2;
+  border-radius: 999px;
+  border: none;
+  box-shadow: 0 10px 22px rgba(201, 106, 142, 0.35);
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+.te-btn-primary { background: linear-gradient(135deg, #e08a5b, #c96a8e); }
+.te-btn-secondary { background: rgba(255,255,255,0.7); color: #7a6472; box-shadow: none; border: 1px solid rgba(122,100,114,0.25); }
+.te-btn-accent { background: linear-gradient(135deg, #6c6f9e, #4a2f3e); box-shadow: 0 10px 22px rgba(74, 47, 62, 0.3); }
+.te-btn-kakao { background: #FEE500; color: #191600; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+
+.te-btn-choice {
+  background: #fff8f2;
+  color: #4a2f3e;
+  border: 1px solid rgba(201, 106, 142, 0.3);
+  border-radius: 14px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: rgba(216, 90, 48, 0.12); border-color: #c96a8e; }
+
+.te-progress-track { background: rgba(122, 100, 114, 0.18); border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #e08a5b, #c96a8e); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #4a2f3e;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(201, 106, 142, 0.2);
+  border-top-color: #c96a8e;
+}

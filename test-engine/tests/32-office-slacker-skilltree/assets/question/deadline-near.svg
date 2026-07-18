@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="10" fill="#fbf8f0" stroke="#201f1c" stroke-width="3"/>
+  <path d="M40 300 L160 300 L200 220 L240 300 L280 180 L320 300 L480 300" fill="none" stroke="#e0463c" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="40" cy="300" r="10" fill="#fff" stroke="#201f1c" stroke-width="4"/>
+  <circle cx="480" cy="300" r="22" fill="#fff" stroke="#201f1c" stroke-width="5"/>
+  <!-- hourglass icon at end -->
+  <path d="M468 284 h24 l-10 16 l10 16 h-24 l10 -16 z" fill="#201f1c"/>
+  <!-- clock icon center top -->
+  <circle cx="300" cy="100" r="46" fill="#fff" stroke="#201f1c" stroke-width="6"/>
+  <path d="M300 100 l0 -28" stroke="#e0463c" stroke-width="6" stroke-linecap="round"/>
+  <path d="M300 100 l20 8" stroke="#201f1c" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="300" cy="100" r="6" fill="#201f1c"/>
+</svg>

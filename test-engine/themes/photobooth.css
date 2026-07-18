@@ -1,0 +1,115 @@
+/* test-engine — themes/photobooth.css — 신규 테마: 즉석사진 포토부스 필름 스트립 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   lucky-vicky-index(#33)가 1호 사용처. 코르크보드 배경 + 무지개 washi tape + 손글씨풍
+   폰트(Gaegu)로 "즉석사진 필름 스트립을 게시판에 붙여놓은" 발랄한 톤을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #b98a5e; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    radial-gradient(circle at 15% 20%, rgba(0,0,0,0.08) 0, transparent 3px),
+    radial-gradient(circle at 55% 65%, rgba(0,0,0,0.08) 0, transparent 3px),
+    radial-gradient(circle at 85% 30%, rgba(0,0,0,0.08) 0, transparent 3px),
+    #c69868;
+  background-size: 34px 34px, 34px 34px, 34px 34px, auto;
+  color: #3a2a18;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #fffdf8;
+  border-radius: 4px;
+  border: none;
+  box-shadow: 0 14px 30px rgba(40, 25, 10, 0.35);
+  margin: 22px 20px 20px;
+  position: relative;
+}
+.te-intro-body::before,
+.te-result-body::before {
+  content: '';
+  position: absolute;
+  top: -12px; left: 24px;
+  width: 70px; height: 24px;
+  background: repeating-linear-gradient(45deg, #ffd4e5, #ffd4e5 6px, #ffe9f0 6px, #ffe9f0 12px);
+  opacity: 0.85;
+  transform: rotate(-4deg);
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Gaegu", "Noto Sans KR", cursive;
+  font-weight: 700;
+  color: #3a2a18;
+  letter-spacing: 0;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip {
+  color: #7a5c3e;
+  font-family: "Gaegu", "Noto Sans KR", cursive;
+}
+
+.te-chip {
+  background: #fff0c2;
+  border: 1.5px dashed #d99a2b;
+  color: #8a5a10;
+  font-family: "Gaegu", sans-serif;
+  font-weight: 700;
+  border-radius: 999px;
+}
+
+.te-btn {
+  background: #ff8fab;
+  color: #3a1420;
+  border-radius: 999px;
+  border: 3px solid #fffdf8;
+  box-shadow: 0 8px 18px rgba(255, 143, 171, 0.5);
+  font-family: "Gaegu", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+.te-btn-primary { background: #ff8fab; }
+.te-btn-secondary { background: #fffdf8; color: #7a5c3e; box-shadow: none; border: 2px solid #e8dcc8; }
+.te-btn-accent { background: #ffce4a; color: #3a2a18; box-shadow: 0 8px 18px rgba(255, 206, 74, 0.5); }
+.te-btn-kakao { background: #FEE500; color: #191600; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+.te-btn-choice {
+  background: #fffdf8;
+  color: #3a2a18;
+  border: 2px solid #e8dcc8;
+  border-radius: 14px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: #fff0c2; border-color: #ffce4a; }
+
+.te-progress-track { background: #e8dcc8; border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #ff8fab, #ffce4a); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #3a2a18;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(255, 143, 171, 0.25);
+  border-top-color: #ff8fab;
+}
+
+/* v10 slider_ui(#33 1호 사용) — 필름 스트립 톤에 맞춘 슬라이더 */
+.te-slider-label {
+  font-family: "Gaegu", "Noto Sans KR", cursive;
+  font-weight: 700;
+  color: #3a2a18;
+  text-align: center;
+}
+.te-slider-input {
+  accent-color: #ff8fab;
+}

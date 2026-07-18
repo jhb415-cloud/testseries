@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="14" fill="#c9a876" stroke="#5a3d22" stroke-width="3"/>
+  <circle cx="300" cy="180" r="120" fill="none" stroke="#2e1c0f" stroke-width="6"/>
+  <!-- clock face showing 3 -->
+  <circle cx="300" cy="170" r="60" fill="none" stroke="#2e1c0f" stroke-width="6"/>
+  <line x1="300" y1="170" x2="300" y2="130" stroke="#2e1c0f" stroke-width="6" stroke-linecap="round"/>
+  <line x1="300" y1="170" x2="336" y2="170" stroke="#2e1c0f" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="300" cy="170" r="5" fill="#2e1c0f"/>
+  <!-- droopy sleepy eyes below -->
+  <path d="M270 260 q10 12 20 0" stroke="#2e1c0f" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M310 260 q10 12 20 0" stroke="#2e1c0f" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <text x="300" y="285" font-size="20" fill="#2e1c0f" text-anchor="middle" font-family="sans-serif">z z z</text>
+</svg>

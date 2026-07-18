@@ -8,7 +8,7 @@
     "직장인밈",
     "스킬트리"
   ],
-  "theme": "pending",
+  "theme": "metromap",
   "cover_image": "assets/cover.webp",
   "seed_count": 257,
   "engagement_key": "site-officeslacker-plays",
@@ -21,7 +21,7 @@
   "questions": [
     {
       "text": "상사가 업무를 물어볼 때",
-      "image": null,
+      "image": "assets/question/boss-question.svg",
       "choices": [
         {
           "label": "최대한 눈에 안 띄게 조용히 있는다",
@@ -63,7 +63,7 @@
     },
     {
       "text": "업무 마감이 얼마 안 남았을 때",
-      "image": null,
+      "image": "assets/question/deadline-near.svg",
       "choices": [
         {
           "label": "그제서야 진짜 집중력을 발휘한다",
@@ -105,7 +105,7 @@
     },
     {
       "text": "성과 보고 시즌이 오면",
-      "image": null,
+      "image": "assets/question/review-season.svg",
       "choices": [
         {
           "label": "안 한 것도 살짝 부풀려서 어필한다",
@@ -147,7 +147,7 @@
     },
     {
       "text": "마감이 촉박한 업무를 받았을 때",
-      "image": null,
+      "image": "assets/question/tight-deadline.svg",
       "choices": [
         {
           "label": "일단 뒤로 미루고 급한 척 안 한다",

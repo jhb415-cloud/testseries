@@ -1,0 +1,99 @@
+/* test-engine — themes/kraftbag.css — 신규 테마: 크래프트 커피백 제품 목업 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   caffeine-addiction-type(#35)가 1호 사용처. 크래프트 종이 질감 배경 + 스탬프 라인 아이콘
+   + 지퍼백 접힘선으로 "원두 봉투 패키지 라벨" 톤을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #6b4a2e; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    repeating-linear-gradient(0deg, rgba(60, 38, 20, 0.03) 0px, rgba(60, 38, 20, 0.03) 2px, transparent 2px, transparent 4px),
+    #8a6238;
+  color: #2e1c0f;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #c9a876;
+  border-radius: 10px;
+  border: 2px solid #5a3d22;
+  box-shadow: 0 16px 34px rgba(30, 18, 8, 0.4);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+.te-intro-body::before,
+.te-result-body::before {
+  content: '';
+  position: absolute;
+  top: 10px; left: 50%;
+  transform: translateX(-50%);
+  width: 60px; height: 14px;
+  border-radius: 4px;
+  background: #5a3d22;
+  opacity: 0.5;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Bagel Fat One", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  color: #2e1c0f;
+  letter-spacing: 0;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #4a3018; }
+
+.te-chip {
+  background: #8a6238;
+  border: 1.5px solid #5a3d22;
+  color: #f4e6cf;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  border-radius: 999px;
+}
+
+.te-btn {
+  background: #5a3d22;
+  color: #f4e6cf;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 8px 18px rgba(30, 18, 8, 0.35);
+  font-family: "Bagel Fat One", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+}
+.te-btn-primary { background: #5a3d22; }
+.te-btn-secondary { background: #c9a876; color: #4a3018; box-shadow: none; border: 2px solid #5a3d22; }
+.te-btn-accent { background: #b3552a; box-shadow: 0 8px 18px rgba(179, 85, 42, 0.35); }
+.te-btn-kakao { background: #FEE500; color: #191600; box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
+
+.te-btn-choice {
+  background: #f4e6cf;
+  color: #2e1c0f;
+  border: 2px solid #5a3d22;
+  border-radius: 8px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+.te-btn-choice:active { background: #e8d3ab; border-color: #b3552a; }
+
+.te-progress-track { background: #5a3d22; border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #b3552a, #f4e6cf); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #2e1c0f;
+  font-weight: 700;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(90, 61, 34, 0.25);
+  border-top-color: #5a3d22;
+}

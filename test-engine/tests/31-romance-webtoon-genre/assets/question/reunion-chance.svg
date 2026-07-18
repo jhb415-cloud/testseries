@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="18" fill="#fff2e6" stroke="#e6c3ad" stroke-width="3"/>
+  <!-- left figure -->
+  <circle cx="150" cy="150" r="32" fill="#4a2f3e"/>
+  <path d="M118 208 q32 -20 64 0 l0 88 q-32 16 -64 0 z" fill="#e08a5b"/>
+  <path d="M182 190 l90 -6" stroke="#4a2f3e" stroke-width="8" stroke-linecap="round" stroke-dasharray="1 16"/>
+  <!-- right figure -->
+  <circle cx="450" cy="150" r="32" fill="#7a6472" opacity="0.85"/>
+  <path d="M418 208 q32 -20 64 0 l0 88 q-32 16 -64 0 z" fill="#9aa0bd"/>
+  <path d="M418 190 l-90 -6" stroke="#7a6472" stroke-width="8" stroke-linecap="round" stroke-dasharray="1 16" opacity="0.7"/>
+  <!-- reconnecting arc between them with heart at center -->
+  <path d="M200 120 q100 -60 200 0" fill="none" stroke="#c96a8e" stroke-width="3" stroke-dasharray="6 8"/>
+  <path d="M300 96 c-14 -18 -42 -6 -30 16 c8 14 30 26 42 34 c12 -8 34 -20 42 -34 c12 -22 -16 -34 -30 -16 c-4 6 -8 10 -12 16 c-4 -6 -8 -10 -12 -16 z" fill="#c96a8e"/>
+  <!-- small circular return arrow icon above -->
+  <path d="M300 40 a20 20 0 1 1 -14 6" fill="none" stroke="#e08a5b" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="286,30 300,40 284,48" fill="#e08a5b"/>
+</svg>

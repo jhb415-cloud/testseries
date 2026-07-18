@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="10" fill="#fbf8f0" stroke="#201f1c" stroke-width="3"/>
+  <path d="M60 300 L60 180 L300 180 L300 80 L540 80" fill="none" stroke="#2e6ee8" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="60" cy="300" r="12" fill="#fff" stroke="#201f1c" stroke-width="4"/>
+  <circle cx="60" cy="180" r="12" fill="#fff" stroke="#201f1c" stroke-width="4"/>
+  <circle cx="300" cy="180" r="12" fill="#fff" stroke="#201f1c" stroke-width="4"/>
+  <circle cx="300" cy="80" r="12" fill="#fff" stroke="#201f1c" stroke-width="4"/>
+  <circle cx="540" cy="80" r="22" fill="#fff" stroke="#201f1c" stroke-width="5"/>
+  <!-- boss silhouette with tie asking question -->
+  <circle cx="150" cy="260" r="26" fill="#201f1c"/>
+  <path d="M124 306 q26 -16 52 0 l0 40 q-26 12 -52 0 z" fill="#e0463c"/>
+  <path d="M150 286 l-8 24 l8 6 l8 -6 z" fill="#fff"/>
+  <!-- question mark icon at end station -->
+  <text x="540" y="94" font-size="34" font-weight="700" fill="#201f1c" text-anchor="middle" font-family="sans-serif">?</text>
+  <!-- small hiding figure behind briefcase barrier -->
+  <rect x="380" y="240" width="60" height="42" rx="4" fill="#e8a13a" stroke="#201f1c" stroke-width="3"/>
+  <circle cx="410" cy="222" r="16" fill="#7a6472"/>
+</svg>

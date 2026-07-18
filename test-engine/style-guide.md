@@ -64,6 +64,11 @@
 - 다크 트레이딩 터미널 차트 + 이모지 스티커 콜라주 — hold-or-sell-index(#28)
 - 빈티지 기술 매뉴얼 라인아이콘 다이어그램(레드서클 콜아웃) — dopamine-source-type(#29)
 - 스프레이 스텐실 그래피티(크랙 콘크리트 벽) — zombie-apocalypse-survival(#30)
+- 시네마틱 백라이트 실루엣 로맨스 사진(노을/빗속 역광) — romance-webtoon-genre(#31)
+- 지하철 노선도 스킬트리 인포그래픽 — office-slacker-skilltree(#32)
+- 즉석사진 포토부스 필름 스트립(컬러/흑백 무드 대비) — lucky-vicky-index(#33)
+- 크레용/색연필 그림책 낙서 일러스트 — t-factor-index(#34)
+- 크래프트 커피백 제품 목업 + 라인 스탬프 아이콘 — caffeine-addiction-type(#35)
 
 ## 테스트별 사용 톤·컨셉 기록 (매번 추가)
 - mental-age: 병맛(장르 미스매치) — "정신연령 측정을 국가 공인 신체검사처럼 근엄하게"
@@ -281,3 +286,32 @@ theme/image 필드 연결까지 진행. 10개 전부 매체가 서로 겹치지 
 현실적 범위(172~266) 기계 검증 완료(전수, 샘플 아님). 이미지 생성 도중 OpenAI 계정 결제 하드리밋에
 걸려 katok-reply-style 결과 2장이 막혔다가 사용자가 크레딧 충전 후 재시도해 해결 — 이후 배치는
 문제 없이 진행. 사이트 연동(data.js/sections.json/sitemap.xml)은 이번 세션 범위 밖(콘텐츠 제작만).
+
+### 2026-07-18 추가 — 몰입테스트 #31~35 콘텐츠 제작(1차 배치, 문항·결과 텍스트는 기존 스켈레톤, 이미지·테마·문항 SVG 신규)
+사용자가 사전에 각 테스트 폴더 `assets/reference/`에 레퍼런스 이미지를 직접 올려두고 "31~40번
+제작, 5개씩 만들고 중간 QA→커밋"을 요청. 문항/선택지/결과 텍스트는 이전 세션 스켈레톤 그대로,
+레퍼런스를 보고 톤·매체·신규 테마 CSS 확정 → prompts.md 작성 → `generate-assets.js`로 커버+결과
+이미지 생성 → 문항 SVG 제작 → config.json theme/image 필드 연결까지 진행. 5개 전부 매체가 서로
+겹치지 않음(위 "사용된 매체 목록" 참고). **주의**: `generate-assets.js`는 인자로 `tests/index.json`의
+number 접두사가 붙은 실제 폴더명(예: `31-romance-webtoon-genre`)을 받아야 한다 — `config.json`의
+번호 없는 `id`값(`romance-webtoon-genre`)으로 호출하면 경로가 안 맞아 "프롬프트 파일이 없습니다"
+에러가 남(4-3의 폴더명/id 분리 규칙과 동일 함정, 재발 방지 위해 기록).
+- romance-webtoon-genre(#31): 레퍼런스가 피치톤 창가 커플/더스티블루 우산 커플 백라이트 실루엣
+  사진 2장이라 그대로 채택, 신규 `themes/goldhour.css`(Gowun Batang, 진지·감성형 톤).
+- office-slacker-skilltree(#32): 레퍼런스가 컬러풀한 지하철 노선도 위에 커피컵/서류가방/시계
+  아이콘이 스테이션으로 박힌 인포그래픽이라 그대로 채택, 신규 `themes/metromap.css`(Black Han
+  Sans, 그리드 종이 배경).
+- lucky-vicky-index(#33): 레퍼런스가 즉석사진 포토부스 필름 스트립(밝은 컬러 스티커 vs 흑백
+  침울)이라 그대로 채택, 신규 `themes/photobooth.css`(Gaegu, 코르크보드+washi tape). 슬라이더
+  UI(2026-07-16 novel mechanic 복구분)와도 무리 없이 조합됨.
+- t-factor-index(#34): 레퍼런스가 크레용으로 그린 네모(T)/하트(F) 캐릭터 그림책 페이지라 그대로
+  채택, 신규 `themes/crayonbook.css`(Gamja Flower). 4지선다라 4-4-1 규칙상 문항 이미지 제외.
+- caffeine-addiction-type(#35): 레퍼런스가 크래프트 원두백 위 라인 스탬프 아이콘(커피컵+원두,
+  체인 커피컵)이라 그대로 채택, 신규 `themes/kraftbag.css`(Bagel Fat One).
+
+**문항 이미지(4-4-1)**: #34(4지선다)는 대상 제외, 나머지 4개(#31/32/33/35, 전부 2지선다 또는
+슬라이더)는 전체 문항 중 1/4/7/10번에 그 문항의 실제 내용을 형상화한 SVG를 제작. **QA**: 로컬
+정적 서버(python http.server) + Playwright로 5개 전부 실제 완주(인트로→전체 문항 답변→결과)
+시켜 콘솔 에러 0건·결과 이미지 정상 로드·인트로/결과 화면 버튼바-본문 겹침 0건·플레이스홀더
+미치환 잔존 없음·320px 가로 스크롤 없음을 전수 확인(샘플 아님). 사이트 연동(data.js/sections.json/
+sitemap.xml)은 사용자 확인 후 별도 진행.

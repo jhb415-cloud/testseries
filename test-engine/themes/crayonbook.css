@@ -1,0 +1,94 @@
+/* test-engine — themes/crayonbook.css — 신규 테마: 크레용 그림책 낙서 일러스트 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   t-factor-index(#34)가 1호 사용처. 크림 스케치북 종이 배경 + 삐뚤빼뚤한 크레용 손그림
+   테두리 + 손글씨 크레용 폰트(Gamja Flower)로 "동화책에 아이가 크레용으로 낙서한" 톤을 낸다. */
+
+@import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #fbf3e3; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    radial-gradient(ellipse at 10% 10%, rgba(255, 200, 90, 0.12), transparent 50%),
+    radial-gradient(ellipse at 90% 90%, rgba(90, 160, 220, 0.1), transparent 50%),
+    #fbf3e3;
+  color: #4a3a28;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #fffdf6;
+  border-radius: 22px 8px 20px 10px / 10px 20px 8px 22px;
+  border: 3px solid #e8622e;
+  box-shadow: 0 12px 26px rgba(74, 58, 40, 0.14);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Gamja Flower", "Noto Sans KR", cursive;
+  font-weight: 400;
+  color: #d2481f;
+  letter-spacing: 0;
+  font-size: 1.5em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip {
+  color: #6a5540;
+  font-family: "Gamja Flower", "Noto Sans KR", cursive;
+  font-size: 1.15em;
+}
+
+.te-chip {
+  background: #dff0e0;
+  border: 2px solid #4a9e5c;
+  color: #2c6b38;
+  font-family: "Gamja Flower", sans-serif;
+  border-radius: 999px;
+}
+
+.te-btn {
+  background: #4a9edd;
+  color: #ffffff;
+  border-radius: 999px;
+  border: 3px solid #fffdf6;
+  box-shadow: 0 8px 0 #2f7bb8;
+  font-family: "Gamja Flower", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  font-size: 1.2em;
+}
+.te-btn-primary { background: #4a9edd; box-shadow: 0 8px 0 #2f7bb8; }
+.te-btn-secondary { background: #fffdf6; color: #6a5540; box-shadow: 0 6px 0 #e8dcc4; border: 2px solid #e8dcc4; }
+.te-btn-accent { background: #e8622e; box-shadow: 0 8px 0 #b2461c; }
+.te-btn-kakao { background: #FEE500; color: #191600; box-shadow: 0 6px 0 #c9b800; }
+
+.te-btn-choice {
+  background: #fffdf6;
+  color: #4a3a28;
+  border: 2.5px solid #f0c14a;
+  border-radius: 16px;
+  box-shadow: 0 4px 0 #e8dcc4;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+.te-btn-choice:active { background: #fff3d0; border-color: #e8622e; }
+
+.te-progress-track { background: #e8dcc4; border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #4a9edd, #f0c14a, #e8622e); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #4a3a28;
+  font-weight: 700;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(74, 158, 221, 0.2);
+  border-top-color: #4a9edd;
+}

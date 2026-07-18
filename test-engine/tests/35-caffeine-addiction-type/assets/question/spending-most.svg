@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="14" fill="#c9a876" stroke="#5a3d22" stroke-width="3"/>
+  <circle cx="300" cy="180" r="120" fill="none" stroke="#2e1c0f" stroke-width="6"/>
+  <!-- wallet -->
+  <rect x="230" y="170" width="120" height="80" rx="10" fill="none" stroke="#2e1c0f" stroke-width="6"/>
+  <path d="M230 195 h120" stroke="#2e1c0f" stroke-width="5"/>
+  <circle cx="320" cy="210" r="8" fill="none" stroke="#2e1c0f" stroke-width="4"/>
+  <!-- coins flying out -->
+  <circle cx="380" cy="150" r="12" fill="none" stroke="#2e1c0f" stroke-width="5"/>
+  <circle cx="410" cy="120" r="9" fill="none" stroke="#2e1c0f" stroke-width="4"/>
+  <circle cx="360" cy="110" r="7" fill="none" stroke="#2e1c0f" stroke-width="4"/>
+</svg>

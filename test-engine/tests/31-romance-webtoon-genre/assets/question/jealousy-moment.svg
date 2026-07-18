@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="18" fill="#fff2e6" stroke="#e6c3ad" stroke-width="3"/>
+  <!-- left: figure speaking up openly, exclamation heart bubble -->
+  <circle cx="170" cy="160" r="34" fill="#4a2f3e"/>
+  <path d="M136 220 q34 -22 68 0 l0 90 q-34 16 -68 0 z" fill="#e08a5b"/>
+  <path d="M220 110 h110 a16 16 0 0 1 16 16 v56 a16 16 0 0 1 -16 16 h-60 l-22 26 v-26 h-28 a16 16 0 0 1 -16 -16 v-56 a16 16 0 0 1 16 -16 z" fill="#e08a5b"/>
+  <text x="275" y="160" font-size="46" font-weight="700" fill="#fff8f2" text-anchor="middle">!</text>
+  <!-- right: figure holding cracked heart quietly, alone -->
+  <circle cx="430" cy="160" r="34" fill="#7a6472" opacity="0.85"/>
+  <path d="M396 220 q34 -20 68 0 l-4 90 q-30 14 -60 0 z" fill="#9aa0bd"/>
+  <path d="M430 210 c-16 -20 -48 -6 -34 20 c9 16 34 30 48 40 c14 -10 39 -24 48 -40 c14 -26 -18 -40 -34 -20 c-5 6 -9 12 -14 20 c-5 -8 -9 -14 -14 -20 z" fill="#c96a8e"/>
+  <path d="M430 214 l-6 20 l10 6 l-8 18" stroke="#fff2e6" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

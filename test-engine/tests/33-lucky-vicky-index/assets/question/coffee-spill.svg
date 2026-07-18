@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="16" fill="#fffdf8" stroke="#e8dcc8" stroke-width="3"/>
+  <rect x="60" y="240" width="480" height="20" rx="6" fill="#c69868"/>
+  <!-- tipped cup -->
+  <g transform="rotate(65 260 200)">
+    <path d="M230 170 h60 l-8 60 a26 26 0 0 1 -44 0 z" fill="#fffdf8" stroke="#3a2a18" stroke-width="5"/>
+    <path d="M290 185 q22 0 22 20 q0 20 -22 20" fill="none" stroke="#3a2a18" stroke-width="5"/>
+  </g>
+  <!-- spilled puddle -->
+  <path d="M300 240 q40 30 -10 46 q-60 18 -110 -6 q-40 -20 10 -40 q60 -22 110 0 z" fill="#b98a5e" opacity="0.85"/>
+  <circle cx="380" cy="150" r="6" fill="#b98a5e" opacity="0.5"/>
+  <circle cx="400" cy="130" r="8" fill="#b98a5e" opacity="0.4"/>
+</svg>

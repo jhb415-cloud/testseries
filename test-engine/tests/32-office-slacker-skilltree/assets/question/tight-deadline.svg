@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <rect x="4" y="4" width="592" height="352" rx="10" fill="#fbf8f0" stroke="#201f1c" stroke-width="3"/>
+  <path d="M50 90 L540 90" fill="none" stroke="#e0463c" stroke-width="10" stroke-linecap="round" stroke-dasharray="2 22"/>
+  <circle cx="50" cy="90" r="12" fill="#fff" stroke="#201f1c" stroke-width="4"/>
+  <circle cx="540" cy="90" r="22" fill="#fff" stroke="#201f1c" stroke-width="5"/>
+  <!-- alarm clock icon at end -->
+  <circle cx="540" cy="90" r="16" fill="none" stroke="#201f1c" stroke-width="4"/>
+  <path d="M540 90 l0 -10" stroke="#201f1c" stroke-width="3" stroke-linecap="round"/>
+  <path d="M540 90 l8 4" stroke="#201f1c" stroke-width="3" stroke-linecap="round"/>
+  <path d="M528 74 l-8 -8 M552 74 l8 -8" stroke="#201f1c" stroke-width="3" stroke-linecap="round"/>
+  <!-- paper stack icon with clipboard, urgent -->
+  <rect x="240" y="200" width="120" height="90" rx="6" fill="#fff" stroke="#201f1c" stroke-width="4"/>
+  <rect x="260" y="190" width="80" height="16" rx="4" fill="#e8a13a" stroke="#201f1c" stroke-width="3"/>
+  <line x1="260" y1="230" x2="340" y2="230" stroke="#201f1c" stroke-width="4"/>
+  <line x1="260" y1="250" x2="320" y2="250" stroke="#201f1c" stroke-width="4"/>
+  <line x1="260" y1="270" x2="330" y2="270" stroke="#e0463c" stroke-width="4"/>
+</svg>
