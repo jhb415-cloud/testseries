@@ -18,8 +18,8 @@ async function qaOne(browser, folder) {
   page.on('console', (msg) => { if (msg.type() === 'error') errors.push('console: ' + msg.text()); });
 
   const url = `${BASE}/${folder}/index.html`;
-  await page.goto(url, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(500);
+  await page.goto(url, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForTimeout(800);
   await page.screenshot({ path: path.join(OUT_DIR, `${folder}-intro.png`) });
 
   // 시작 버튼 클릭 (인트로 화면의 첫 primary 버튼)

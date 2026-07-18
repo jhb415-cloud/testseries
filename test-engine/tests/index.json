@@ -466,8 +466,8 @@
       "title": "MBTI 카페 음료 판별기",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 46-mbti-cafe-drink, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
+      "status": "완료(이미지·QA까지) — 폴더 46-mbti-cafe-drink, 신규 테마 botanical.css, 사이트 연동 전(승인 대기)",
+      "concept_style": "빈티지 보태니컬 필드가이드 판화(세피아 크로스해칭)",
       "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
     },
     {
@@ -476,8 +476,8 @@
       "title": "MBTI 마법학교 기숙사 배정",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 47-mbti-magic-school-house, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
+      "status": "완료(이미지·QA까지) — 폴더 47-mbti-magic-school-house, 신규 테마 wizardletter.css, 사이트 연동 전(승인 대기)",
+      "concept_style": "마법학교 합격통지서 양피지(금박 필리그리+밀랍인장)",
       "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
     },
     {
@@ -486,8 +486,8 @@
       "title": "MBTI 아이돌 데뷔 포지션 + 팬덤 반응",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(chat_ui 단톡방 형식, 8문항) 완료 — 이미지 없음, 폴더 48-mbti-idol-debut-position, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
+      "status": "완료(이미지·QA까지) — 폴더 48-mbti-idol-debut-position, 신규 테마 lightstick.css, 사이트 연동 전(승인 대기)",
+      "concept_style": "K팝 콘서트 응원봉 무대(마젠타/시안 네온)",
       "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
     },
     {
@@ -496,8 +496,8 @@
       "title": "MBTI 조선시대 관직 + 야사(뒷이야기)",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 49-mbti-joseon-government-post, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
+      "status": "완료(이미지·QA까지) — 폴더 49-mbti-joseon-government-post, 신규 테마 hanjiscroll.css, 사이트 연동 전(승인 대기)",
+      "concept_style": "한지 두루마리 먹서예(붉은 인장)",
       "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
     },
     {
@@ -506,8 +506,8 @@
       "title": "MBTI 게임 캐릭터 스탯 시트",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 50-mbti-rpg-character-sheet, novel mechanic 엔진필드 적용됨(engine v12) — 이미지 없음, 사이트 연동 전",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
+      "status": "완료(이미지·QA까지) — 폴더 50-mbti-rpg-character-sheet, 신규 테마 holocard.css, 사이트 연동 전(승인 대기)",
+      "concept_style": "홀로그램 TCG 스탯 카드(무지개 홀로포일)",
       "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현. || novel mechanic: 스탯 시트 시각화 — 16종 결과 traits 앞에 실측 퍼센트 스탯바(`{ebar}/{e}`류, STEP6 재사용) 4줄 추가. 고정 스탯이 아니라 내 응답 기반 실측치."
     },
     {

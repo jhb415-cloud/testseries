@@ -1,0 +1,81 @@
+/* test-engine — themes/wizardletter.css — 신규 테마: 마법학교 합격통지서 양피지 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   mbti-magic-school-house(#47)가 1호 사용처. 양피지 크림톤 + 금박 필리그리 테두리, IM Fell
+   English SC로 고서체 느낌(기존 Cinzel/Marcellus SC/EB Garamond와 구분)을 살림. */
+
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Noto+Serif+KR:wght@400;600;700&display=swap');
+
+.te-app {
+  --te-footer-bg: #3b2a1a;
+  background: linear-gradient(180deg, #6b4a2c 0%, #3b2a1a 100%);
+  color: #f1e2bd;
+  font-family: "Noto Serif KR", serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #ecdcb4;
+  border: 5px solid #a6802f;
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 3px #ecdcb4,
+    inset 0 0 0 4px #a6802f,
+    0 18px 40px rgba(0, 0, 0, 0.45);
+  margin: 18px 16px 16px;
+  padding-top: 4px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "IM Fell English SC", "Noto Serif KR", serif;
+  color: #4a1e14;
+  letter-spacing: 0.02em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #6b4423; }
+
+.te-chip {
+  background: rgba(166, 128, 47, 0.15);
+  border: 1px solid #a6802f;
+  color: #4a1e14;
+  font-family: "Noto Serif KR", serif;
+}
+
+.te-btn {
+  background: #4a1e14;
+  color: #ecdcb4;
+  border: 1px solid #a6802f;
+  box-shadow: 0 3px 0 #2e120c;
+  font-family: "IM Fell English SC", "Noto Serif KR", serif;
+}
+.te-btn-primary { background: #7a1f1f; border-color: #a6802f; box-shadow: 0 3px 0 #4a1212; color: #ecdcb4; }
+.te-btn-secondary { background: #d9c393; border-color: #a6802f; box-shadow: 0 3px 0 #8a6c28; color: #4a1e14; }
+.te-btn-accent { background: #1e4a3a; border-color: #a6802f; box-shadow: 0 3px 0 #123024; color: #ecdcb4; }
+.te-btn-kakao { background: #FEE500; color: #191600; border-color: rgba(0,0,0,0.2); box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
+
+.te-btn-choice {
+  background: #f4e8c8;
+  color: #4a1e14;
+  border: 1px solid #a6802f;
+  box-shadow: none;
+}
+.te-btn-choice:active { background: rgba(166, 128, 47, 0.2); }
+
+.te-progress-track { background: rgba(74, 30, 20, 0.14); }
+.te-progress-fill { background: linear-gradient(90deg, #7a1f1f, #a6802f); }
+
+.te-result-traits {
+  font-family: "Noto Serif KR", serif;
+  color: #4a1e14;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(166, 128, 47, 0.25);
+  border-top-color: #7a1f1f;
+}

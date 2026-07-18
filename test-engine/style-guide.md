@@ -79,6 +79,11 @@
 - 리노컷 목판화(검정/번트오렌지 듀오톤) — mbti-villain-story(#43)
 - 클레이 스톱모션 디오라마(폐허 피규어 매크로 사진) — mbti-zombie-survival-class(#44)
 - 비잔틴 모자이크(금/틸 타일 성화) — mbti-mythology-god(#45)
+- 빈티지 보태니컬 필드가이드 판화(세피아 크로스해칭) — mbti-cafe-drink(#46)
+- 마법학교 합격통지서 양피지(금박 필리그리+밀랍인장) — mbti-magic-school-house(#47)
+- K팝 콘서트 응원봉 무대(마젠타/시안 네온) — mbti-idol-debut-position(#48)
+- 한지 두루마리 먹서예(붉은 인장) — mbti-joseon-government-post(#49)
+- 홀로그램 TCG 스탯 카드(무지개 홀로포일) — mbti-rpg-character-sheet(#50)
 
 ## 테스트별 사용 톤·컨셉 기록 (매번 추가)
 - mental-age: 병맛(장르 미스매치) — "정신연령 측정을 국가 공인 신체검사처럼 근엄하게"
@@ -373,3 +378,24 @@ sitemap.xml)은 사용자 확인 후 별도 진행.
 선택지 3개 이상인 문항형 테스트는 문항 이미지 생략). **QA**: 로컬 정적 서버 + Playwright로 5개
 전부 실제 완주 시켜 콘솔 에러 0건·결과 이미지 정상 로드·버튼바-본문 겹침 0건을 전수 확인. 사이트
 연동은 이번 세션(사용자 취침 중 자동 진행 위임)에서 이어서 진행.
+
+## MBTI존 5차 배치 (46~50, 2026-07-18)
+41~45와 같은 흐름(레퍼런스 기반 images/edits)으로 이어서 진행.
+- mbti-cafe-drink(#46): 레퍼런스가 세피아 크로스해칭 보태니컬 판화(뿌리 달린 음료 일러스트)라
+  그대로 채택, 신규 `themes/botanical.css`(Cormorant Garamond).
+- mbti-magic-school-house(#47): 레퍼런스가 금박 필리그리 테두리+밀랍인장의 마법학교 합격통지서
+  양피지라 그대로 채택, 신규 `themes/wizardletter.css`(IM Fell English SC).
+- mbti-idol-debut-position(#48): 레퍼런스가 마젠타/시안 네온 레이저+응원봉 바다의 콘서트 무대
+  사진이라 그대로 채택, 신규 `themes/lightstick.css`(Righteous). `chat_ui` novel mechanic과 함께 사용.
+- mbti-joseon-government-post(#49): 레퍼런스가 붉은 인장이 찍힌 한지 두루마리 먹서예라 그대로
+  채택, 신규 `themes/hanjiscroll.css`(Nanum Brush Script).
+- mbti-rpg-character-sheet(#50): 레퍼런스가 무지개 홀로포일의 TCG 스탯 카드라 그대로 채택, 신규
+  `themes/holocard.css`(Pirata One). STEP6 `{ebar}/{e}`류 실측 스탯바 재사용, 결과 화면 Playwright
+  캡처로 스탯 퍼센트 정상 렌더링 확인.
+
+**폰트 충돌 정정**: #43 linocut.css 최초 작성 시 Anton을 썼는데 pennant.css(#37)가 이미 Anton을
+쓰고 있는 걸 뒤늦게 발견해 Passion One으로 교체(같은 "굵은 임팩트 산세리프" 계열이지만 다른 서체).
+
+**문항 이미지(4-4-1)**: 전부 4지선다(mbti4)라 대상 제외. **QA**: 로컬 정적 서버 + Playwright로
+5개 전부 실제 완주 시켜 콘솔 에러 0건·결과 이미지 정상 로드·버튼바-본문 겹침 0건 확인. 이로써
+**MBTI존 #41~50(4~5차 배치) 콘텐츠 제작 완료**, 같은 세션에서 사이트 연동+push까지 진행.

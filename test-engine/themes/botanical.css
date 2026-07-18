@@ -1,0 +1,83 @@
+/* test-engine — themes/botanical.css — 신규 테마: 빈티지 보태니컬 판화 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   mbti-cafe-drink(#46)가 1호 사용처. 크림 종이 + 세피아 크로스해칭 라인아트 느낌의 카드
+   프레임, Cormorant Garamond로 식물도감 특유의 우아한 세리프감을 살림. */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Noto+Serif+KR:wght@400;600;700&display=swap');
+
+.te-app {
+  --te-footer-bg: #eee3cc;
+  background: linear-gradient(180deg, #f5ecd8 0%, #eee3cc 100%);
+  color: #4a3c28;
+  font-family: "Noto Serif KR", serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #faf3e2;
+  border: 1px solid #8a7451;
+  border-radius: 3px;
+  box-shadow:
+    inset 0 0 0 5px #faf3e2,
+    inset 0 0 0 6px #8a7451,
+    0 18px 40px rgba(74, 60, 40, 0.25);
+  margin: 18px 16px 16px;
+  padding-top: 4px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Cormorant Garamond", "Noto Serif KR", serif;
+  font-weight: 700;
+  color: #3a2f1f;
+  letter-spacing: 0.01em;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #6b5a3c; }
+
+.te-chip {
+  background: rgba(138, 116, 81, 0.12);
+  border: 1px solid #8a7451;
+  color: #4a3c28;
+  font-family: "Noto Serif KR", serif;
+}
+
+.te-btn {
+  background: #4a3c28;
+  color: #faf3e2;
+  border: 1px solid #2e2416;
+  box-shadow: 0 3px 0 #2e2416;
+  font-family: "Cormorant Garamond", "Noto Serif KR", serif;
+  font-weight: 700;
+}
+.te-btn-primary { background: #3a6656; border-color: #24463a; box-shadow: 0 3px 0 #24463a; color: #faf3e2; }
+.te-btn-secondary { background: #e5d7b6; border-color: #b6a074; box-shadow: 0 3px 0 #9c875e; color: #3a2f1f; }
+.te-btn-accent { background: #3a6656; border-color: #24463a; box-shadow: 0 3px 0 #24463a; color: #faf3e2; }
+.te-btn-kakao { background: #FEE500; color: #191600; border-color: rgba(0,0,0,0.2); box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
+
+.te-btn-choice {
+  background: #fbf6e9;
+  color: #3a2f1f;
+  border: 1px solid #b6a074;
+  box-shadow: none;
+}
+.te-btn-choice:active { background: rgba(138, 116, 81, 0.16); }
+
+.te-progress-track { background: rgba(74, 60, 40, 0.12); }
+.te-progress-fill { background: linear-gradient(90deg, #3a6656, #8a7451); }
+
+.te-result-traits {
+  font-family: "Noto Serif KR", serif;
+  color: #3a2f1f;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(138, 116, 81, 0.25);
+  border-top-color: #3a6656;
+}

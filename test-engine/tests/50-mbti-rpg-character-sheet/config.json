@@ -8,7 +8,7 @@
     "스탯시트",
     "RPG밈"
   ],
-  "theme": "pending",
+  "theme": "holocard",
   "cover_image": "assets/cover.webp",
   "seed_count": 255,
   "engagement_key": "site-mbtirpgstat-plays",

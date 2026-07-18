@@ -1,9 +1,9 @@
 /* test-engine — themes/linocut.css — 신규 테마: 리노컷(목판화) 스킨
    engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
-   mbti-villain-story(#43)가 1호 사용처. 크림지 배경 + 굵은 검정/번트오렌지 듀오톤, Anton
-   폰트로 목판 포스터의 강한 임팩트를 살림. */
+   mbti-villain-story(#43)가 1호 사용처. 크림지 배경 + 굵은 검정/번트오렌지 듀오톤, Passion One
+   폰트로 목판 포스터의 강한 임팩트를 살림(기존 pennant.css의 Anton과 구분). */
 
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
 
 .te-app {
   --te-footer-bg: #171310;
@@ -30,7 +30,7 @@
 .te-title,
 .te-question-text,
 .te-result-title {
-  font-family: "Anton", "Noto Sans KR", sans-serif;
+  font-family: "Passion One", "Noto Sans KR", sans-serif;
   color: #171310;
   letter-spacing: 0.01em;
 }
@@ -52,7 +52,7 @@
   color: #ede3d3;
   border: 2px solid #171310;
   box-shadow: 0 3px 0 #000000;
-  font-family: "Anton", "Noto Sans KR", sans-serif;
+  font-family: "Passion One", "Noto Sans KR", sans-serif;
 }
 .te-btn-primary { background: #c8531f; border-color: #171310; box-shadow: 0 3px 0 #7d3210; color: #ede3d3; }
 .te-btn-secondary { background: #ddd0b6; border-color: #171310; box-shadow: 0 3px 0 #a89b81; color: #171310; }
