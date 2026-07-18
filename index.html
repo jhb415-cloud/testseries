@@ -1,4 +1,4 @@
-<!-- v1.2.3 | 5-in-1 Dashboard SPA -->
+<!-- v1.2.4 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -100,9 +100,13 @@
   <link rel="preconnect" href="https://fundingchoicesmessages.google.com" crossorigin>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4825324689294427"
      crossorigin="anonymous"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- SEO 체크업 도구 지적사항 반영(v0.5.3~): Tailwind CDN은 렌더 전에 유틸리티 스타일을 주입해야
-       FOUC가 안 생기므로 그대로 동기 로드 유지. 아래 두 개(Supabase/Kakao)는 body 끝 스크립트들이
+  <!-- 페이지속도 개선 (v1.2.4): Tailwind CDN(124KB 동기 JS + 저사양 기기에서 런타임 CSS 생성 —
+       PSI 렌더 차단 1위)을 제거하고, 같은 버전(3.4.17) CLI로 미리 컴파일한 정적 tailwind.css(gzip
+       ~7KB)로 교체. 재생성 방법·주의사항은 tailwind.config.js 상단 주석 참고. 인라인 tailwind.config
+       (slate 등 팔레트를 style.css CSS 변수로 remap하던 것)도 통째로 tailwind.config.js로 이사 —
+       rgb(var(--x) / <alpha-value>) remap과 bg-slate-800/60 같은 opacity modifier 동작은 동일. -->
+  <link rel="stylesheet" href="tailwind.css?v=1.2.4"/>
+  <!-- SEO 체크업 도구 지적사항 반영(v0.5.3~): 아래 두 개(Supabase/Kakao)는 body 끝 스크립트들이
        실제로 쓰기 전까지 즉시 실행될 필요가 없어 defer로 전환해 렌더 블로킹만 줄임(body 끝 4개 스크립트도
        함께 defer로 바꿔 실행 순서를 그대로 유지 — defer는 문서 순서대로 실행되므로 안전) -->
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -128,53 +132,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap"
     rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap" rel="stylesheet"></noscript>
-  <script>
-    // slate 팔레트를 style.css의 CSS 변수로 remap (index.html의 tailwind.config 참고)
-    // (rgb(var(--x) / <alpha-value>) 포맷을 써야 bg-slate-800/60 같은 opacity modifier가 계속 동작함)
-    // v0.8.0~: 다크/라이트 토글은 제거되고 이 변수들은 "Kinetic Logic" 단일 팔레트 값만 담음
-    // (인프라 자체는 남겨둬서, 나중에 다크 테마를 다시 원하면 값 세트+토글만 재추가하면 됨)
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Noto Sans KR"', '-apple-system', 'BlinkMacSystemFont', '"Malgun Gothic"', '"Apple SD Gothic Neo"', 'sans-serif'],
-            display: ['"Noto Sans KR"', '-apple-system', '"Malgun Gothic"', 'sans-serif'],
-            label: ['"Noto Sans KR"', '-apple-system', '"Malgun Gothic"', 'sans-serif'],
-          },
-          colors: {
-            slate: {
-              50:  'rgb(var(--slate-50) / <alpha-value>)',
-              100: 'rgb(var(--slate-100) / <alpha-value>)',
-              200: 'rgb(var(--slate-200) / <alpha-value>)',
-              300: 'rgb(var(--slate-300) / <alpha-value>)',
-              400: 'rgb(var(--slate-400) / <alpha-value>)',
-              500: 'rgb(var(--slate-500) / <alpha-value>)',
-              600: 'rgb(var(--slate-600) / <alpha-value>)',
-              700: 'rgb(var(--slate-700) / <alpha-value>)',
-              800: 'rgb(var(--slate-800) / <alpha-value>)',
-              900: 'rgb(var(--slate-900) / <alpha-value>)',
-              950: 'rgb(var(--slate-950) / <alpha-value>)',
-            },
-            // 아래 색상들은 "부드러운 강조 박스"(bg-{color}-900/30 + text-{color}-300 조합)에 쓰이는
-            // 특정 shade만 remap. 500/600(버튼/뱃지 원색)은 테마 무관하게 항상 선명해야 하므로 건드리지 않음.
-            blue:    { 700: 'rgb(var(--blue-700) / <alpha-value>)',    900: 'rgb(var(--blue-900) / <alpha-value>)',    300: 'rgb(var(--blue-300) / <alpha-value>)',    400: 'rgb(var(--blue-400) / <alpha-value>)' },
-            indigo:  { 900: 'rgb(var(--indigo-900) / <alpha-value>)',  700: 'rgb(var(--indigo-700) / <alpha-value>)',  200: 'rgb(var(--indigo-200) / <alpha-value>)',  300: 'rgb(var(--indigo-300) / <alpha-value>)' },
-            violet:  { 900: 'rgb(var(--violet-900) / <alpha-value>)',  800: 'rgb(var(--violet-800) / <alpha-value>)',  700: 'rgb(var(--violet-700) / <alpha-value>)',  200: 'rgb(var(--violet-200) / <alpha-value>)',  300: 'rgb(var(--violet-300) / <alpha-value>)',  400: 'rgb(var(--violet-400) / <alpha-value>)' },
-            purple:  { 800: 'rgb(var(--purple-800) / <alpha-value>)',  700: 'rgb(var(--purple-700) / <alpha-value>)',  300: 'rgb(var(--purple-300) / <alpha-value>)' },
-            emerald: { 700: 'rgb(var(--emerald-700) / <alpha-value>)', 800: 'rgb(var(--emerald-800) / <alpha-value>)', 900: 'rgb(var(--emerald-900) / <alpha-value>)', 200: 'rgb(var(--emerald-200) / <alpha-value>)', 300: 'rgb(var(--emerald-300) / <alpha-value>)', 400: 'rgb(var(--emerald-400) / <alpha-value>)' },
-            rose:    { 700: 'rgb(var(--rose-700) / <alpha-value>)',    800: 'rgb(var(--rose-800) / <alpha-value>)',    900: 'rgb(var(--rose-900) / <alpha-value>)',    200: 'rgb(var(--rose-200) / <alpha-value>)',    300: 'rgb(var(--rose-300) / <alpha-value>)',    400: 'rgb(var(--rose-400) / <alpha-value>)' },
-            amber:   { 900: 'rgb(var(--amber-900) / <alpha-value>)',   800: 'rgb(var(--amber-800) / <alpha-value>)',   700: 'rgb(var(--amber-700) / <alpha-value>)',   300: 'rgb(var(--amber-300) / <alpha-value>)',   400: 'rgb(var(--amber-400) / <alpha-value>)' },
-            yellow:  { 900: 'rgb(var(--yellow-900) / <alpha-value>)',  700: 'rgb(var(--yellow-700) / <alpha-value>)',  200: 'rgb(var(--yellow-200) / <alpha-value>)',  300: 'rgb(var(--yellow-300) / <alpha-value>)',  400: 'rgb(var(--yellow-400) / <alpha-value>)' },
-            pink:    { 900: 'rgb(var(--pink-900) / <alpha-value>)',    800: 'rgb(var(--pink-800) / <alpha-value>)',    700: 'rgb(var(--pink-700) / <alpha-value>)',    200: 'rgb(var(--pink-200) / <alpha-value>)',    300: 'rgb(var(--pink-300) / <alpha-value>)',    400: 'rgb(var(--pink-400) / <alpha-value>)' },
-            fuchsia: { 900: 'rgb(var(--fuchsia-900) / <alpha-value>)', 700: 'rgb(var(--fuchsia-700) / <alpha-value>)', 200: 'rgb(var(--fuchsia-200) / <alpha-value>)' },
-            orange:  { 900: 'rgb(var(--orange-900) / <alpha-value>)', 700: 'rgb(var(--orange-700) / <alpha-value>)',  300: 'rgb(var(--orange-300) / <alpha-value>)',  400: 'rgb(var(--orange-400) / <alpha-value>)' },
-            cyan:    { 700: 'rgb(var(--cyan-700) / <alpha-value>)',    300: 'rgb(var(--cyan-300) / <alpha-value>)',    400: 'rgb(var(--cyan-400) / <alpha-value>)' },
-          }
-        }
-      }
-    };
-  </script>
-  <link rel="stylesheet" href="style.css?v=1.2.3"/>
+  <link rel="stylesheet" href="style.css?v=1.2.4"/>
+  <!-- 페이지속도 개선 (v1.2.4): LCP 요소(첫 포스터 캐러셀 커버)는 data.js+app.js 실행 후에야
+       발견돼 다운로드가 늦게 시작됨 — 첫 캐러셀의 처음 4장(첫 화면 노출분)을 미리 받아둔다.
+       ⚠️ sections.json 첫 poster-carousel 그룹의 처음 4개 test_ids와 반드시 동기화할 것
+       (어긋나도 에러는 없고 preload 효과만 사라짐 — PSI '사용 안 된 preload' 경고로 확인 가능) -->
+  <link rel="preload" as="image" href="/test-engine/tests/13-drunk-mbti/assets/cover-home.webp" fetchpriority="high"/>
+  <link rel="preload" as="image" href="/test-engine/tests/14-villain-mbti/assets/cover-home.webp"/>
+  <link rel="preload" as="image" href="/test-engine/tests/18-shadow-mbti/assets/cover-home.webp"/>
+  <link rel="preload" as="image" href="/test-engine/tests/5-villain-index/assets/cover-home.webp"/>
   <!-- SEO 체크업 도구 지적사항 반영(v0.5.4~): 기존 39자는 권장 범위(150~220자) 대비 너무 짧았음 -->
   <meta name="description" content="과몰입 연구소는 MBTI, 두뇌 나이 측정기, 심리테스트, 밸런스 게임, 오늘의 운세, 꿈 해몽 검색, 로또 번호 조합기까지 다양한 테스트와 콘텐츠를 무료로 즐길 수 있는 종합 테스트 모음 사이트입니다. 재미로 시작했다가 뼈 맞고 공유하게 되는 콘텐츠들을 지금 바로 확인해보세요."/>
 </head>
@@ -342,7 +308,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4 border-t border-slate-800">
-    <p class="text-slate-600 text-xs">v1.2.3 · 2026-07-18</p>
+    <p class="text-slate-600 text-xs">v1.2.4 · 2026-07-18</p>
   </div>
 </aside>
 
@@ -776,9 +742,9 @@
          transition-opacity duration-500 opacity-0 pointer-events-none">
 </div>
 
-<script defer src="data.js?v=1.2.3"></script>
-<script defer src="supabase-client.js?v=1.2.3"></script>
-<script defer src="kakao-share.js?v=1.2.3"></script>
-<script defer src="app.js?v=1.2.3"></script>
+<script defer src="data.js?v=1.2.4"></script>
+<script defer src="supabase-client.js?v=1.2.4"></script>
+<script defer src="kakao-share.js?v=1.2.4"></script>
+<script defer src="app.js?v=1.2.4"></script>
 </body>
 </html>

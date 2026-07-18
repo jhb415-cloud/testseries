@@ -1,6 +1,8 @@
-# CLAUDE.md — 5-in-1 Dashboard SPA 핵심 규칙 (현재 v1.1.7)
+# CLAUDE.md — 5-in-1 Dashboard SPA 핵심 규칙 (현재 v1.2.4)
 
-"과몰입 연구소": Tailwind CDN + Vanilla JS 단일 SPA, 빌드 도구 없음.
+"과몰입 연구소": Tailwind(사전 컴파일 정적 `tailwind.css`, v1.2.4~) + Vanilla JS 단일 SPA,
+런타임 빌드 도구 없음. **새 Tailwind 클래스를 처음 쓰면 `tailwind.css` 재생성 필수**
+(`tailwind.config.js` 상단 주석의 npx 한 줄 — 안 하면 그 클래스만 스타일이 안 먹음).
 
 **작업 전 항상 이 순서로 읽기**: `PRD.md`(목적/제약) → `PROGRESS.md`(기능 현황·변경 이력·
 결정사항 로그, 실행 기준) → `HISTORIC_LOG.md`(최근 세션 맥락). `test-engine/`은 별도

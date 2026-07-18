@@ -743,7 +743,7 @@ const HOME_TOOL_CARDS = [
 function buildPsychTrendingCandidates() {
   return [...(AppData.externalTests || []), ...(AppData.mbtiZoneTests || [])].map(t => ({
     id: t.id, emoji: t.emoji, title: t.title, desc: t.hook,
-    image: psyCoverImage(t), key: t.engagementKey, base: t.baseCount,
+    image: psyCoverThumb(t), key: t.engagementKey, base: t.baseCount,
     run: () => { bumpEngagement(t.engagementKey); location.href = t.url; },
   }));
 }
@@ -4638,6 +4638,19 @@ function psyCoverImage(test) {
   return test.url.replace(/index\.html$/, 'assets/cover.webp');
 }
 
+/* 페이지속도 개선 (v1.2.4): PSI "이미지 전송 개선" 지적(절감 1,387KiB) 대응 — 홈 포스터/큐레이션
+   타일/피드 카드 등 작게 그려지는 자리는 원본 cover.webp(700px, 45~205KB) 대신 미리 생성해둔
+   360px 썸네일 cover-home.webp(평균 ~11KB)를 쓴다(41개 전체 일괄 생성 완료, 원본 합계 1.9MB→435KB).
+   ⚠️ 신규 테스트 연동 시 cover-home.webp도 함께 생성할 것(test-engine/CLAUDE.md 4-5 참고) —
+   깜빡해도 아래 psyThumbFallback이 원본 cover.webp로 폴백해 깨지진 않음(용량만 손해). */
+function psyCoverThumb(test) {
+  return test.url.replace(/index\.html$/, 'assets/cover-home.webp');
+}
+function psyThumbFallback(imgEl) {
+  imgEl.onerror = () => wcImgFallback(imgEl);
+  imgEl.src = imgEl.src.replace(/cover-home\.webp$/, 'cover.webp');
+}
+
 /* 심리테스트존 카드 썸네일 제목 폰트(v0.8.3~) — 사이트 전역 폰트(Noto Sans KR)로 통일하면서,
    각 테스트가 내부에서 쓰는 테마 폰트(test-engine/themes/*.css의 .te-title)를 카드 제목에도
    그대로 반영해 컨셉이 카드 단계에서부터 느껴지게 함. data.js의 externalTests/mbtiZoneTests
@@ -4723,7 +4736,7 @@ function weeklyPsychTopMiniListHTML(limit) {
     return `
       <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="mini-top-row">
         <span class="mini-top-rank">${i + 1}</span>
-        <img class="mini-top-thumb" src="${psyCoverImage(t)}" alt="" onerror="wcImgFallback(this)">
+        <img class="mini-top-thumb" src="${psyCoverThumb(t)}" alt="" onerror="psyThumbFallback(this)">
         <div class="mini-top-text">
           <div class="mini-top-name">${t.title}</div>
           <div class="mini-top-count">▶ ${formatCount(count)}</div>
@@ -4757,7 +4770,7 @@ function curatedPsychRowsHTML() {
       return `
         <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="curation-card">
           <div class="curation-tile">
-            <img src="${psyCoverImage(t)}" alt="" loading="lazy" decoding="async" onerror="wcImgFallback(this)">
+            <img src="${psyCoverThumb(t)}" alt="" loading="lazy" decoding="async" onerror="psyThumbFallback(this)">
             <div class="curation-scrim"></div>
             <div class="curation-card-title line-clamp-2"${cardFont ? ` style='font-family:${cardFont}'` : ''}>${t.title}</div>
           </div>
@@ -4802,7 +4815,7 @@ function psychLbBoxHTML(title, items) {
     return `
       <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="home-lb-row">
         <span class="home-lb-rank ${i === 0 ? 'first' : ''}">${i + 1}</span>
-        <span class="home-lb-thumb"><img src="${psyCoverImage(t)}" alt="" onerror="wcImgFallback(this)"></span>
+        <span class="home-lb-thumb"><img src="${psyCoverThumb(t)}" alt="" onerror="psyThumbFallback(this)"></span>
         <span class="home-lb-title">${t.title}</span>
         <span class="home-lb-count">▶ ${formatCount(count)}</span>
       </a>`;
@@ -4839,7 +4852,7 @@ function externalTestsFeedHTML(list, newItems) {
         return `
       <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="psy-card block">
         <div class="psy-card-tile">
-          <img src="${psyCoverImage(t)}" alt="" loading="lazy" decoding="async" onerror="wcImgFallback(this)">
+          <img src="${psyCoverThumb(t)}" alt="" loading="lazy" decoding="async" onerror="psyThumbFallback(this)">
           <div class="psy-card-scrim"></div>
           ${rankClass ? `<span class="psy-card-rank ${rankClass}">${i + 1}</span>` : ''}
           ${t.isNew ? `<span class="psy-card-badge-new">NEW</span>` : ''}

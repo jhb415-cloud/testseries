@@ -1230,6 +1230,12 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
    뷰포트 한 화면 높이만큼 미리 자리를 잡아 "처음부터 아래 콘텐츠가 화면 밖"이 되게 함
    (실제 콘텐츠는 이보다 훨씬 길어서 채워진 뒤 min-height는 사실상 무의미해짐). */
 #home-sections-container { min-height: 100vh; }
+/* 페이지속도 개선 (v1.2.4): 위 100vh 예약에도 CLS 0.348이 남던 원인 — 그 "위"의 내 정보
+   미니카드 컨테이너가 빈 채로 시작해 JS가 채우는 순간(카드 57px + 로그인 안내줄 6+21px)
+   아래 전체가 밀리던 것. 실제 채워질 높이만큼 미리 예약(카드 구조가 바뀌면 이 값도 갱신할 것).
+   로그인 줄은 Supabase 세션 확인 후 한 박자 늦게 채워지므로 자체 min-height도 예약. */
+#home-identity-container { min-height: 84px; }
+.home-login-row { min-height: 21px; }
 
 .home-grp-wrap { position: relative; }
 .home-grp-row {

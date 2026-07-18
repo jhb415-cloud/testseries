@@ -161,6 +161,12 @@
   설계만 해두고 구현 보류 중**(저장 버튼이 로그인+마이페이지 스크랩 연동을 전제로 하는 기능이라,
   로그인 기능이 test-engine까지 확장되기 전엔 의미가 약하다고 판단 — 재개 시
   `/home/codespace/.claude/plans/distributed-sauteeing-babbage.md` 참고).
+- **홈/피드용 소형 썸네일 `assets/cover-home.webp` 생성(v1.2.4~, 페이지속도)**: 메인 사이트의
+  홈 포스터·큐레이션 타일·피드 카드는 원본 `cover.webp`(700px) 대신 360px 썸네일을 쓴다
+  (`app.js`의 `psyCoverThumb()`). 신규 테스트 연동 시 함께 생성할 것 —
+  `python3 -c "from PIL import Image; im=Image.open('cover.webp').convert('RGB'); w,h=im.size; im.resize((360,round(h*360/w)),Image.LANCZOS).save('cover-home.webp','WEBP',quality=72,method=6)"`
+  (assets 폴더에서 실행). 깜빡해도 `psyThumbFallback()`이 원본으로 폴백해 화면이 깨지진
+  않지만 그 카드만 원본(45~205KB)을 내려받아 용량 손해.
 - 메인 사이트 `data.js`의 `AppData.externalTests`(몰입테스트) 또는 `AppData.mbtiZoneTests`
   (MBTI존)에 항목 추가 — `id`/`title`/`emoji`/`hook`/`url`/`engagementKey`/`baseCount`/
   `addedAt`/`isNew`와 함께 **`theme` 필드를 반드시 포함**한다(이 테스트의 `config.json`
