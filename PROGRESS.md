@@ -5,7 +5,7 @@
 > `CLAUDE.md`는 이 파일을 가리키는 짧은 규칙 문서로만 남는다. 작업 시작 전 `CLAUDE.md` →
 > 이 파일 → `HISTORIC_LOG.md` 순으로 읽을 것.
 
-## 현재 버전: v1.2.0
+## 현재 버전: v1.2.1
 
 ## 프로젝트 개요
 Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보드 SPA.
@@ -117,6 +117,7 @@ Tailwind CSS(CDN) + 순수 Vanilla JS 기반 5-in-1 종합 테스트 대시보�
 ## 4. 변경 이력 (요약)
 | 일자 | 버전 | 내용 |
 |---|---|---|
+| 2026-07-18 | v1.2.1 | **홈 화면 심리테스트 포스터 캐러셀(`poster-carousel`, `.home-grp-row`)이 PC에서 마우스 드래그 스와이프가 안 되던 버그 수정.** 원인은 카드 속 `<img>`를 마우스로 눌러 끌면 브라우저가 이미지 네이티브 드래그(ghost drag)를 시작해 `pointermove` 기반 드래그 스크롤이 끊긴 것(터치 기기는 원래도 정상). `bindHomeCarouselDrag()`의 `pointerdown`(pointerType==='mouse')에서 `e.preventDefault()`로 기본 드래그/선택을 막고(click 이벤트는 그대로 발생해 카드 클릭 유지), `style.css` `.home-grp-row`에 `user-select:none`·자식 `img`에 `-webkit-user-drag:none` 추가. 정적자산 5곳 `?v=1.2.0→1.2.1` 동기화 |
 | 2026-07-18 | v1.2.0 | **몰입테스트/MBTI존 상단을 "인기 TOP 3 + NEW 3" 리더보드 박스 2개로 교체.** 기존 대표 히어로 카드(`psy-hero`, 인기 1위만 와이드 배너로 노출)를 홈 화면 "이번주 인기 TOP"과 동일한 디자인(`home-lb-*` 클래스)의 박스 2개로 교체 — `app.js`에 신규 `psychLbBoxHTML()` 헬퍼 추가, `externalTestsFeedHTML(list, newItems)`가 인기순 TOP 3와 newItems(NEW 후보)를 각각 렌더링. 몰입테스트 NEW 3은 최근 인터랙션이 개편된 5개(#21 타이머/#25 채팅UI/#30 분기트리/#33 럭키비키/#39 결정장애) 중 아직 `externalTests`에 연동되지 않은 #33/#39를 제외한 3개(#21/#25/#30)를 고정 노출(신규 `IMMERSIVE_NEW_HIGHLIGHT_IDS`+`immersiveNewHighlightTests()`) — #33/#39가 연동되면 5개 중 랜덤 3개 순환으로 확장 예정(사용자 확정). MBTI존은 아직 수정된 콘텐츠가 없어 `addedAt` 최신순 3개를 NEW로 노출, 향후 콘텐츠 20개 추가 시 몰입테스트와 동일한 큐레이션 기준으로 전환 예정(사용자 확정). 더 이상 안 쓰는 `style.css`의 `.psy-hero*` 규칙 제거. 정적자산 5곳 `?v=1.1.9→1.2.0` 동기화 |
 | 2026-07-18 | v1.1.9 | **심리테스트존 "캐릭터 테스트"/"성향 테스트"/"취향 테스트" 3개 메뉴 완성 — 카테고리당 잠금(준비중) 2개씩, 총 6개를 전부 실콘텐츠로 전환.** 기존 `app.js`의 `PSYCHTEST_LOCKED`에 제목만 있던 항목(사극빙의/빌런각성/T공감능력/관태기/편의점소비/OTT정주행)을 `data.js`의 `AppData.psychTests`에 5문항+4등급(A~D) 결과 구조로 실제 작성해 추가, `PSYCHTEST_LOCKED`의 해당 카테고리 3곳을 빈 배열로 정리(각 카테고리 정원 3개=오픈 1+잠금 2 → 오픈 3+잠금 0 완주). `national`은 기존과 동일하게 오픈 3개 유지. |
 | 2026-07-17 | v1.1.8 | **몰입테스트 #21~30 신규 10개 사이트 연동 완료.** `test-engine/` 콘텐츠 제작(문항/이미지/신규 테마 10종: arcade/camcorder/tarot/streamcard/stickynote/tapestry/diorama/tradefloor/manual/stencil)은 별도 세션에서 완료된 상태였고, 이번엔 `data.js`의 `externalTests`에 10개 항목 추가(각 `baseCount`/`engagementKey`/`theme`이 해당 `config.json`의 `seed_count`/`engagement_key`/`theme`과 정확히 일치하는지 Node 스크립트로 기계 검증), `app.js`의 `THEME_TITLE_FONTS`에 신규 테마 10종 폰트 등록, `sections.json`의 poster-carousel 3개 그룹(psych-2/3/4)에 성격에 맞게 분배(psych-1엔 이번엔 해당 없음), `sitemap.xml`+`sitemap-main.xml`(실제 GSC에 등재된 쪽)에 10개 URL 추가, `llms.txt`/`llms-full.txt`를 "21종→31종"으로 갱신. 정적자산 5곳(`style.css`/`data.js`/`supabase-client.js`/`kakao-share.js`/`app.js`) `?v=1.1.6→1.1.8` 일괄 동기화, 푸터 "마지막 업데이트" 2026-07-17로 갱신. **검증**: `node --check`(data.js/app.js), `python3 json.load`(sections.json), XML 파싱(sitemap 2종) 전부 통과, Node 스크립트로 10개 테스트 전부 `externalTests`/`sections.json`에 정확히 등재됐는지 교차 확인 |

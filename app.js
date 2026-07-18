@@ -1026,6 +1026,11 @@ function bindHomeCarouselDrag() {
   document.querySelectorAll('.home-grp-row').forEach(row => {
     row.addEventListener('pointerdown', (e) => {
       if (e.pointerType !== 'mouse') return;
+      // 2026-07-18: PC에서 드래그가 전혀 안 된다는 제보 — 포스터 카드 속 <img>를 마우스로
+      // 누르고 끌면 브라우저가 "이미지 네이티브 드래그(ghost drag)"를 시작해버려 pointermove가
+      // 끊기는 게 원인이었다. pointerdown에서 기본동작(드래그 시작·선택)을 막아 스크롤 드래그로만
+      // 동작하게 한다. preventDefault는 뒤이어 오는 click 이벤트는 막지 않으므로 카드 클릭은 유지.
+      e.preventDefault();
       row._homeJustDragged = false;
       _homeDragState = { row, startX: e.clientX, startScroll: row.scrollLeft };
     });

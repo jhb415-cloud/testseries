@@ -1229,7 +1229,9 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
 .home-grp-row {
   display: grid; grid-auto-flow: column; grid-auto-columns: 134px; gap: 10px; overflow-x: auto; padding-bottom: 4px;
   scroll-snap-type: x proximity; scroll-behavior: smooth; cursor: grab; touch-action: pan-x pan-y;
+  user-select: none; -webkit-user-select: none;
 }
+.home-grp-row img { -webkit-user-drag: none; user-drag: none; }
 .home-grp-row:active { cursor: grabbing; scroll-behavior: auto; }
 .home-poster {
   border: 2px solid rgb(var(--ink)); border-radius: 0.7rem; overflow: hidden; display: block;
