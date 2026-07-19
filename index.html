@@ -1,4 +1,4 @@
-<!-- v1.2.5 | 5-in-1 Dashboard SPA -->
+<!-- v1.2.6 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -105,7 +105,7 @@
        ~7KB)로 교체. 재생성 방법·주의사항은 tailwind.config.js 상단 주석 참고. 인라인 tailwind.config
        (slate 등 팔레트를 style.css CSS 변수로 remap하던 것)도 통째로 tailwind.config.js로 이사 —
        rgb(var(--x) / <alpha-value>) remap과 bg-slate-800/60 같은 opacity modifier 동작은 동일. -->
-  <link rel="stylesheet" href="tailwind.css?v=1.2.5"/>
+  <link rel="stylesheet" href="tailwind.css?v=1.2.6"/>
   <!-- SEO 체크업 도구 지적사항 반영(v0.5.3~): 아래 두 개(Supabase/Kakao)는 body 끝 스크립트들이
        실제로 쓰기 전까지 즉시 실행될 필요가 없어 defer로 전환해 렌더 블로킹만 줄임(body 끝 4개 스크립트도
        함께 defer로 바꿔 실행 순서를 그대로 유지 — defer는 문서 순서대로 실행되므로 안전) -->
@@ -132,7 +132,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap"
     rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="style.css?v=1.2.5"/>
+  <link rel="stylesheet" href="style.css?v=1.2.6"/>
   <!-- 페이지속도 개선 (v1.2.4): LCP 요소(첫 포스터 캐러셀 커버)는 data.js+app.js 실행 후에야
        발견돼 다운로드가 늦게 시작됨 — 첫 캐러셀의 처음 4장(첫 화면 노출분)을 미리 받아둔다.
        ⚠️ sections.json 첫 poster-carousel 그룹의 처음 4개 test_ids와 반드시 동기화할 것
@@ -308,7 +308,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4 border-t border-slate-800">
-    <p class="text-slate-600 text-xs">v1.2.5 · 2026-07-18</p>
+    <p class="text-slate-600 text-xs">v1.2.6 · 2026-07-19</p>
   </div>
 </aside>
 
@@ -667,7 +667,7 @@
       </div>
       <p class="text-slate-300 mb-4">재미로 시작했다가 뼈 맞고 공유하는 종합 테스트 모음 — 본 플랫폼의 모든 테스트 결과는 오락 목적이며 전문 진단을 대체하지 않습니다.</p>
       <!-- 콘텐츠 최신화 신호 (v0.5.7~, GEO 5단계): 크롤러가 읽을 수 있는 위치에 갱신 시점을 명시 -->
-      <p class="text-slate-400 mb-4">마지막 업데이트: 2026-07-18</p>
+      <p class="text-slate-400 mb-4">마지막 업데이트: 2026-07-19</p>
       <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
         <span>© 2026 과몰입 연구소. All rights reserved.</span>
         <div class="flex items-center gap-4">
@@ -742,9 +742,9 @@
          transition-opacity duration-500 opacity-0 pointer-events-none">
 </div>
 
-<script defer src="data.js?v=1.2.5"></script>
-<script defer src="supabase-client.js?v=1.2.5"></script>
-<script defer src="kakao-share.js?v=1.2.5"></script>
-<script defer src="app.js?v=1.2.5"></script>
+<script defer src="data.js?v=1.2.6"></script>
+<script defer src="supabase-client.js?v=1.2.6"></script>
+<script defer src="kakao-share.js?v=1.2.6"></script>
+<script defer src="app.js?v=1.2.6"></script>
 </body>
 </html>
