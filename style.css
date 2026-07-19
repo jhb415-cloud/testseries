@@ -6,6 +6,22 @@
 /* Tailwind CDN 로드 실패 대비: .hidden은 반드시 숨겨야 함 */
 .hidden { display: none !important; }
 
+/* 페이지속도 개선 (v1.2.7): PSI가 CLS 0.348을 전부 footer 하나에 귀속시킴 — 원인은 Noto Sans KR이
+   비동기(swap)로 늦게 로드되며 대체 폰트와 줄 높이(ascent/descent)가 달라 여러 줄짜리 footer 문단이
+   리플로우되는 것. 폰트 자체를 optional로 바꾸는 대신, 대체 폰트에 Noto Sans KR과 동일한 줄 상자
+   크기를 강제하는 "메트릭 매칭" 폰트를 별도로 선언해 스왑 전후 레이아웃이 동일하게 만듦(스왑 자체는
+   유지되므로 최초 방문자도 결국 실제 웹폰트를 보게 됨). 수치는 실제 배포 폰트 파일
+   (fonts.gstatic.com/.../PbyxFmXiEBPT4ITbgNA5Cgms3VYcOA-vvnIzzuoyeLGC5nwuDo-KBTUm6CryotyJROlrnQ.0.woff2,
+   weight 400)을 fontTools로 직접 파싱해 산출: unitsPerEm 1000 / hhea ascent 1160 / descent -288 /
+   lineGap 0 → 116% / 28.8% / 0%. */
+@font-face {
+  font-family: "Noto Sans KR Fallback";
+  src: local("Apple SD Gothic Neo"), local("Malgun Gothic"), local("Noto Sans CJK KR"), local("sans-serif");
+  ascent-override: 116%;
+  descent-override: 28.8%;
+  line-gap-override: 0%;
+}
+
 /* ══════════════════════════════════════════════════
    🎨 "Kinetic Logic" 단일 테마 변수 (v0.8.0~)
    - 다크/라이트 토글은 제거됨. 아래는 DESIGN1.md 팔레트를 기존 slate/accent 변수 인프라에

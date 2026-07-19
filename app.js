@@ -7003,7 +7003,7 @@ function openLoginModal() {
   div.setAttribute('onclick', "if(event.target===this)closeLoginModal()");
   div.innerHTML = `
     <div class="login-modal">
-      <div class="login-modal-logo"><img src="assets/brand/logo-icon-96.png" alt=""/></div>
+      <div class="login-modal-logo"><img src="assets/brand/logo-icon-64.png" alt=""/></div>
       <h3>로그인하고 기록 지키기</h3>
       <p class="sub">로그인하면 레벨·XP가 계정에 저장돼서 기기를 바꿔도 안 사라져요. 댓글에도 내 레벨이 표시되고, 프로필 사진도 바꿀 수 있어요.</p>
       <button onclick="loginWithKakao()" class="login-btn kakao"><span class="login-btn-icon-kakao"></span>카카오로 3초 로그인</button>

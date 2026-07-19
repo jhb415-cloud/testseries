@@ -10,9 +10,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Noto Sans KR"', '-apple-system', 'BlinkMacSystemFont', '"Malgun Gothic"', '"Apple SD Gothic Neo"', 'sans-serif'],
-        display: ['"Noto Sans KR"', '-apple-system', '"Malgun Gothic"', 'sans-serif'],
-        label: ['"Noto Sans KR"', '-apple-system', '"Malgun Gothic"', 'sans-serif'],
+        sans: ['"Noto Sans KR"', '"Noto Sans KR Fallback"', '-apple-system', 'BlinkMacSystemFont', '"Malgun Gothic"', '"Apple SD Gothic Neo"', 'sans-serif'],
+        display: ['"Noto Sans KR"', '"Noto Sans KR Fallback"', '-apple-system', '"Malgun Gothic"', 'sans-serif'],
+        label: ['"Noto Sans KR"', '"Noto Sans KR Fallback"', '-apple-system', '"Malgun Gothic"', 'sans-serif'],
       },
       colors: {
         slate: {
