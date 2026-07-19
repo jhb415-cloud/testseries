@@ -19,6 +19,7 @@
 .te-result-body,
 .te-loading-box {
   background: #f4e9c9;
+  color: #0b1f4d;
   border: 3px solid #0b1f4d;
   border-radius: 4px;
   box-shadow:
