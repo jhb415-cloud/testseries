@@ -320,6 +320,16 @@ button, a[class*="rounded"], .nav-item, .service-card, .option-btn, .cat-tab-btn
   color: rgb(var(--slate-50));
 }
 
+/* v1.2.9~: 심리테스트존 서브 메인 페이지(개요)를 보고 있을 때 그룹 헤더 자체를 강조 —
+   .nav-item.active와 동일한 시각 언어 재사용 */
+.nav-group-header.active {
+  background: rgb(var(--primary-container));
+  color: rgb(var(--ink));
+  font-weight: 800;
+  border: 2px solid rgb(var(--ink));
+  box-shadow: 3px 3px 0 0 rgb(var(--ink));
+}
+
 .nav-group-chevron {
   margin-left: auto;
   font-size: 1.1rem;
@@ -404,6 +414,17 @@ button, a[class*="rounded"], .nav-item, .service-card, .option-btn, .cat-tab-btn
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
+
+/* 초기 로딩 오버레이 (v1.2.8~) — 사이드바를 가릴 필요는 없지만(레이아웃 자체는 즉시 안정적으로
+   보여도 무방) 메인 콘텐츠가 채워지기 전 빈 화면 노출을 막는 게 목적이라 화면 전체를 덮는다.
+   opacity 트랜지션으로 페이드아웃 후 app.js가 display:none 처리(hideInitialLoadingOverlay). */
+#initial-loading-overlay {
+  position: fixed; inset: 0; z-index: 100000;
+  display: flex; align-items: center; justify-content: center;
+  background: rgb(var(--surface));
+  opacity: 1; transition: opacity 0.35s ease;
+}
+#initial-loading-overlay.fade-out { opacity: 0; pointer-events: none; }
 
 /* ── 꿈 해몽 팝업 ── */
 #dream-modal {
@@ -1278,8 +1299,19 @@ button.option-btn:nth-of-type(4n+4) { background: rgb(var(--surface-container));
   position: absolute; right: 0; top: 0; bottom: 8px; width: 46px;
   display: flex; align-items: center; justify-content: flex-end; padding-right: 2px;
   background: linear-gradient(to right, rgb(var(--surface) / 0), rgb(var(--surface)) 70%);
-  pointer-events: none; font-size: 1.2rem; font-weight: 900; color: rgb(var(--ink));
+  pointer-events: none;
 }
+/* 2026-07-20: 화살표가 클릭이 안 먹고(장식용 그라데이션, pointer-events:none) 뒤에 깔린 카드가
+   대신 클릭되던 문제 수정 — 그라데이션은 그대로 "더 있음" 힌트로 남기고, 그 안에 실제
+   클릭 가능한 원형 버튼만 pointer-events:auto로 얹는다(homeCarouselScrollNext, app.js). */
+.home-grp-arrow-btn {
+  pointer-events: auto; width: 32px; height: 32px; border-radius: 999px; border: 2px solid rgb(var(--ink));
+  background: rgb(var(--surface-lowest)); display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; font-weight: 900; color: rgb(var(--ink)); cursor: pointer;
+  box-shadow: 2px 2px 0 0 rgb(var(--ink)); transition: transform 0.12s ease;
+}
+.home-grp-arrow-btn:hover { transform: translateX(2px); }
+.home-grp-arrow-btn:active { transform: translateX(1px) scale(0.94); }
 
 .home-challenge {
   background: rgb(var(--secondary-container) / 0.22); border: 2.5px solid rgb(var(--ink)); border-radius: 0.9rem;

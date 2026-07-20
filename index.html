@@ -1,4 +1,4 @@
-<!-- v1.2.7 | 5-in-1 Dashboard SPA -->
+<!-- v1.2.8 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -105,7 +105,7 @@
        ~7KB)로 교체. 재생성 방법·주의사항은 tailwind.config.js 상단 주석 참고. 인라인 tailwind.config
        (slate 등 팔레트를 style.css CSS 변수로 remap하던 것)도 통째로 tailwind.config.js로 이사 —
        rgb(var(--x) / <alpha-value>) remap과 bg-slate-800/60 같은 opacity modifier 동작은 동일. -->
-  <link rel="stylesheet" href="tailwind.css?v=1.2.7"/>
+  <link rel="stylesheet" href="tailwind.css?v=1.2.8"/>
   <!-- SEO 체크업 도구 지적사항 반영(v0.5.3~): 아래 두 개(Supabase/Kakao)는 body 끝 스크립트들이
        실제로 쓰기 전까지 즉시 실행될 필요가 없어 defer로 전환해 렌더 블로킹만 줄임(body 끝 4개 스크립트도
        함께 defer로 바꿔 실행 순서를 그대로 유지 — defer는 문서 순서대로 실행되므로 안전) -->
@@ -132,7 +132,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap"
     rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="style.css?v=1.2.7"/>
+  <link rel="stylesheet" href="style.css?v=1.2.8"/>
   <!-- 페이지속도 개선 (v1.2.4): LCP 요소(첫 포스터 캐러셀 커버)는 data.js+app.js 실행 후에야
        발견돼 다운로드가 늦게 시작됨 — 첫 캐러셀의 처음 4장(첫 화면 노출분)을 미리 받아둔다.
        ⚠️ sections.json 첫 poster-carousel 그룹의 처음 4개 test_ids와 반드시 동기화할 것
@@ -146,6 +146,27 @@
 </head>
 
 <body class="bg-slate-900 text-slate-100 min-h-screen flex">
+
+<!-- ════════════════════════════════════════════════
+     초기 로딩 오버레이 (v1.2.8~)
+     모든 #section-*가 정적 HTML에서 hidden으로 시작해 app.js(defer)가 로드되고
+     Supabase 초기 세션 처리(sb-ready, 최대 1.5초 세이프가드)까지 끝나야 첫 화면이
+     채워지는데, 그 사이 사이드바만 보이고 메인 영역은 완전히 빈 채로 노출되던 렉 현상을
+     가리기 위한 순수 HTML/CSS 오버레이 — JS 실행 전에도 이미 화면에 그려져 있음.
+     app.js의 runInitialHashRouting()이 첫 섹션 렌더링을 마친 직후 hideInitialLoadingOverlay()로
+     페이드아웃 제거한다. -->
+<div id="initial-loading-overlay">
+  <div class="loader-spinner"></div>
+</div>
+<script>
+  /* app.js(defer) 실행 중 어떤 이유로든 에러가 나 hideInitialLoadingOverlay()가 영영 안 불리면
+     화면이 로딩 상태로 영구히 가려지므로, app.js와 무관하게 즉시 실행되는 안전장치를 따로 둔다.
+     정상 케이스(최대 1.5초 sb-ready 대기)보다 넉넉한 6초 뒤 강제 제거. */
+  setTimeout(function () {
+    var el = document.getElementById('initial-loading-overlay');
+    if (el) { el.classList.add('fade-out'); setTimeout(function () { el.remove(); }, 400); }
+  }, 6000);
+</script>
 
 <!-- SEO 체크업 도구(seositecheckup.com) 지적사항 반영(v0.5.3~): 페이지 전체에 <h1>이 하나도 없었음.
      화면 디자인(사이드바 브랜드 워드마크)은 그대로 두고, 검색엔진용 시맨틱 H1만 시각적으로 숨겨 추가 —
@@ -233,10 +254,12 @@
 
     <!-- 심리 테스트존 그룹 (v0.2.4~: 4개 카테고리 하위메뉴로 재구성, Phase 4 로드맵 11-6) -->
     <div class="nav-group open" id="nav-group-psychtest">
+      <!-- v1.2.9~: 다른 그룹 헤더와 달리 이 헤더는 클릭하면 서브 메인 페이지(심리테스트존 개요)로
+           이동 — 펼침/접힘은 화살표 아이콘(id=nav-group-psychtest-chevron)에서만 별도로 처리 -->
       <div class="nav-group-header" id="nav-group-psychtest-toggle">
         <span class="text-lg">🃏</span> 심리 테스트존
         <span class="badge-hot-nav">🔥 HOT</span>
-        <span class="nav-group-chevron">▾</span>
+        <span class="nav-group-chevron" id="nav-group-psychtest-chevron">▾</span>
       </div>
       <div class="nav-group-items" id="nav-group-psychtest-items">
         <!-- STEP 3(2026-07-10): 몰입테스트(/test-engine/ 프로토타입존)/MBTI존 신설, 항상 최상단 -->
@@ -308,7 +331,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4 border-t border-slate-800">
-    <p class="text-slate-600 text-xs">v1.2.7 · 2026-07-19</p>
+    <p class="text-slate-600 text-xs">v1.2.8 · 2026-07-20</p>
   </div>
 </aside>
 
@@ -667,7 +690,7 @@
       </div>
       <p class="text-slate-300 mb-4">재미로 시작했다가 뼈 맞고 공유하는 종합 테스트 모음 — 본 플랫폼의 모든 테스트 결과는 오락 목적이며 전문 진단을 대체하지 않습니다.</p>
       <!-- 콘텐츠 최신화 신호 (v0.5.7~, GEO 5단계): 크롤러가 읽을 수 있는 위치에 갱신 시점을 명시 -->
-      <p class="text-slate-400 mb-4">마지막 업데이트: 2026-07-19</p>
+      <p class="text-slate-400 mb-4">마지막 업데이트: 2026-07-20</p>
       <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
         <span>© 2026 과몰입 연구소. All rights reserved.</span>
         <div class="flex items-center gap-4">
@@ -742,9 +765,9 @@
          transition-opacity duration-500 opacity-0 pointer-events-none">
 </div>
 
-<script defer src="data.js?v=1.2.7"></script>
-<script defer src="supabase-client.js?v=1.2.7"></script>
-<script defer src="kakao-share.js?v=1.2.7"></script>
-<script defer src="app.js?v=1.2.7"></script>
+<script defer src="data.js?v=1.2.8"></script>
+<script defer src="supabase-client.js?v=1.2.8"></script>
+<script defer src="kakao-share.js?v=1.2.8"></script>
+<script defer src="app.js?v=1.2.8"></script>
 </body>
 </html>

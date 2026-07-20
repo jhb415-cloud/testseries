@@ -58,11 +58,20 @@ window.App = {
     // 단순 조회는 항상 DOM상 첫 번째 항목(캐릭터 테스트)만 골라버리는 버그가 있었음 —
     // 현재 카테고리(data-psych-category)까지 같이 매칭해서 실제 선택된 항목을 찾도록 수정 (v0.2.9~)
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const psychtestHeader = document.getElementById('nav-group-psychtest-toggle');
+    if (psychtestHeader) psychtestHeader.classList.remove('active');
     let active;
     if (sectionId === 'psychtest') {
       const cat = this.state.psychtest && this.state.psychtest.category;
-      active = document.querySelector(`.nav-item[data-section="psychtest"][data-psych-category="${cat}"]`)
-            || document.querySelector(`.nav-item[data-section="psychtest"]`);
+      /* v1.2.9~: category가 'overview'(서브 메인 페이지)일 땐 특정 하위메뉴가 선택된 게 아니므로
+         엉뚱한 첫 항목(몰입테스트)을 active로 오인 표시하지 않고, 그룹 헤더 자체를 강조한다. */
+      if (cat === 'overview') {
+        if (psychtestHeader) { psychtestHeader.classList.add('active'); psychtestHeader.closest('.nav-group').classList.add('open'); }
+        active = null;
+      } else {
+        active = document.querySelector(`.nav-item[data-section="psychtest"][data-psych-category="${cat}"]`)
+              || document.querySelector(`.nav-item[data-section="psychtest"]`);
+      }
     } else {
       active = document.querySelector(`.nav-item[data-section="${sectionId}"]`);
     }
@@ -242,6 +251,19 @@ function shareKakaoButtonHTML(imageUrl, kakaoTitle, kakaoDesc, shareUrl) {
     <button onclick="shareToKakaoCard('${imageUrl}', \`${kakaoTitle}\`, \`${kakaoDesc}\`, '${shareUrl}')"
       class="w-full bg-[#FEE500] hover:brightness-95 text-[#191919] font-black text-lg py-4 rounded-2xl transition shadow-lg shadow-yellow-900/30 mb-3 flex items-center justify-center gap-2">
       <span class="text-2xl">💬</span> 카카오톡으로 공유하기
+    </button>
+    ${otherTestsButtonHTML()}`;
+}
+
+/* 결과 화면에서 뒤로가기를 누르면 홈으로 튕겨 다른 테스트를 이어서 못 하던 문제 대응(2026-07-20) —
+   카카오 버튼 바로 아래에 다른 테스트로 바로 넘어갈 수 있는 지름길을 둔다. shareKakaoButtonHTML을
+   쓰는 모든 결과 화면(MBTI/ADHD/인싸력/속담/물가/운세/꿈해몽/심리테스트/밸런스/가족오락관 등)에
+   공통으로 반영된다. */
+function otherTestsButtonHTML() {
+  return `
+    <button onclick="App.navigate('home')"
+      class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-100 font-bold text-base py-3.5 rounded-2xl transition mb-3 flex items-center justify-center gap-2">
+      <span class="text-xl">🔄</span> 다른 테스트 하러가기
     </button>`;
 }
 
@@ -955,7 +977,7 @@ async function renderHomeSections() {
         <div class="home-grp-head">${sec.title}</div>
         <div class="home-grp-wrap">
           <div class="home-grp-row">${rowsHTML}</div>
-          ${cards.length >= 3 ? '<div class="home-grp-arrow">→</div>' : ''}
+          ${cards.length >= 3 ? '<div class="home-grp-arrow"><button type="button" class="home-grp-arrow-btn" aria-label="다음 테스트 보기" onclick="homeCarouselScrollNext(this)">→</button></div>' : ''}
         </div>`;
       return;
     }
@@ -1028,8 +1050,31 @@ if (!window._homeCarouselDragInit) {
   document.addEventListener('pointerup', endHomeDrag);
   document.addEventListener('pointercancel', endHomeDrag);
 }
+/* 2026-07-20: 우측 화살표 버튼 클릭 시 카드 2개 폭만큼 부드럽게 이동 — 끝까지 도달했으면
+   처음으로 되돌아가 순환(별도 좌측 화살표 없이도 계속 옆으로 넘겨볼 수 있게). */
+function homeCarouselScrollNext(btn) {
+  const row = btn.closest('.home-grp-wrap').querySelector('.home-grp-row');
+  if (!row) return;
+  const firstCard = row.firstElementChild;
+  const cardWidth = firstCard ? firstCard.getBoundingClientRect().width : 134;
+  const amount = (cardWidth + 10) * 2;
+  const atEnd = row.scrollLeft + row.clientWidth >= row.scrollWidth - 4;
+  row.scrollTo({ left: atEnd ? 0 : row.scrollLeft + amount, behavior: 'smooth' });
+}
+
 function bindHomeCarouselDrag() {
   document.querySelectorAll('.home-grp-row').forEach(row => {
+    /* 2026-07-20: PC에서 마우스 휠(세로)로는 캐러셀이 전혀 안 움직여 "부자연스럽다"는
+       제보 — 카드가 넘칠 때만 세로 휠 델타를 가로 스크롤로 변환(가로 스와이프 제스처는
+       deltaX가 더 커 이 조건에 안 걸리므로 그대로 브라우저 기본 동작 유지).
+       CSS의 scroll-behavior:smooth 덕에 휠을 굴리는 동안 자연스럽게 이어붙어 부드럽게 보인다. */
+    row.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      if (row.scrollWidth <= row.clientWidth) return;
+      e.preventDefault();
+      row.scrollLeft += e.deltaY;
+    }, { passive: false });
+
     row.addEventListener('pointerdown', (e) => {
       if (e.pointerType !== 'mouse') return;
       // 2026-07-18: PC에서 드래그가 전혀 안 된다는 제보 — 포스터 카드 속 <img>를 마우스로
@@ -4607,15 +4652,23 @@ const PSYCHTEST_LOCKED = {
 };
 
 function initPsychtest() {
-  const category = App.state.psychtest && App.state.psychtest.category || 'trait';
+  const category = App.state.psychtest && App.state.psychtest.category || 'overview';
   App.state.psychtest = { category, testId: null, step: 0, answers: [] };
-  renderPsychtestFeed(category);
+  if (category === 'overview') renderPsychtestOverview(); else renderPsychtestFeed(category);
 }
 
-/* 사이드바 카테고리 서브메뉴 클릭 시 호출(nav 클릭 핸들러에서 연결) */
+/* 사이드바 카테고리 서브메뉴 클릭 시 호출(nav 클릭 핸들러에서 연결). 'overview'는 실제
+   카테고리가 아니라 서브 메인 페이지를 가리키는 가상 키 — 사이드바 헤더 클릭(psychtestNavHome())
+   과 renderPsychtestFeed 상단의 "← 심리테스트존 홈" 버튼이 이 값으로 호출한다. */
 function psychtestNavCategory(category) {
   App.state.psychtest = { category, testId: null, step: 0, answers: [] };
-  renderPsychtestFeed(category);
+  if (category === 'overview') renderPsychtestOverview(); else renderPsychtestFeed(category);
+}
+
+/* 사이드바 "심리 테스트존" 그룹 헤더 클릭 시 호출(펼침/접힘 화살표는 별도 처리, DOMContentLoaded 참고) */
+function psychtestNavHome() {
+  psychtestNavCategory('overview');
+  App.navigate('psychtest');
 }
 
 /* /test-engine/ 신규 테스트 노출 배너 (STEP 2). AppData.externalTests가 배열이라
@@ -4798,23 +4851,6 @@ function curatedPsychRowsHTML() {
   return rows ? `<div class="mb-5">${rows}</div>` : '';
 }
 
-/* 2026-07-18(사용자 확정): 몰입테스트 NEW 박스 후보 — 최근 새 인터랙션(타이머/채팅UI/분기트리/
-   슬라이더/실측반응시간)으로 개편된 5개(#21/#25/#30/#33/#39). #33(럭키비키)/#39(결정장애)가
-   2026-07-18 externalTests에 연동되어 5개 전부 후보로 확장 — 렌더마다 5개 중 3개를 랜덤으로
-   뽑는다(고정 3개 노출에서 전환). */
-const IMMERSIVE_NEW_HIGHLIGHT_IDS = ['balance-3sec-speed', 'katok-reply-style', 'zombie-apocalypse-survival', 'lucky-vicky-index', 'decision-time-test'];
-function immersiveNewHighlightTests() {
-  const index = {};
-  (AppData.externalTests || []).forEach(t => { index[t.id] = t; });
-  const pool = IMMERSIVE_NEW_HIGHLIGHT_IDS.map(id => index[id]).filter(Boolean);
-  const shuffled = pool.slice();
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled.slice(0, 3);
-}
-
 /* 2026-07-18: 홈 화면 "이번주 인기 TOP" 리더보드(home-lb-* 클래스, renderHomeSections 참고)와
    동일한 박스 디자인을 심리테스트존 상단에도 재사용 — 인기 TOP 3 + NEW 3을 각각 한 줄 리스트로
    보여준다. items가 비면 박스 자체를 렌더하지 않는다. */
@@ -4844,16 +4880,14 @@ function psychLbBoxHTML(title, items) {
    카테고리의 대표카드 중복 노출 관례와 동일)을 아래 3열 그리드로 다시 보여준다.
    v0.6.8: 이모지 원형+회색 배경 카드를 각 테스트가 이미 갖고 있는 cover.webp 포스터 카드로
    교체(신규 이미지 생성 없음, 기존 자산 재사용). 인기순 1~3위엔 금/은/동 순위 리본을 얹는다.
-   2026-07-18: 상단 대표 히어로 카드(psy-hero)를 인기 TOP 3 + NEW 3 리더보드 박스 2개로 교체
-   (사용자 요청 — 홈 화면 "이번주 인기 TOP" 박스와 동일한 디자인 언어로 통일). newItems는
-   호출부(renderPsychtestFeed)에서 카테고리별로 다르게 골라 전달한다. */
-function externalTestsFeedHTML(list, newItems) {
+   2026-07-20: 상단의 TOP3/NEW3 리더보드 박스는 심리테스트존 서브 메인 페이지
+   (renderPsychtestOverview, 몰입테스트·MBTI존 통합 TOP7/NEW7)로 흡수되며 카테고리 화면에서는
+   제거 — 같은 정보가 두 군데(카테고리 탭 + 개요 페이지)에 다른 개수로 중복 노출되던 것을 정리. */
+function externalTestsFeedHTML(list) {
   const tests = sortExternalTests(list || [], 'popular');
   if (!tests.length) return '';
   tests.forEach(t => ensureThemeFontLoaded(t.theme));
   return `
-    ${psychLbBoxHTML('🔥 이번 주 인기 TOP', tests.slice(0, 3))}
-    ${psychLbBoxHTML('🆕 NEW', (newItems || []).slice(0, 3))}
     <div class="grid grid-cols-3 gap-3 mb-6">
       ${tests.map((t, i) => {
         const rankClass = i === 0 ? 'psy-rank-1' : i === 1 ? 'psy-rank-2' : i === 2 ? 'psy-rank-3' : '';
@@ -4874,6 +4908,45 @@ function externalTestsFeedHTML(list, newItems) {
         <p class="psy-card-stats">▶ ${formatCount(count)}</p>
       </a>`;
       }).join('')}
+    </div>`;
+}
+
+/* 심리테스트존 서브 메인 페이지 (v1.2.9~, 2026-07-20 사용자 확정): 사이드바 "심리 테스트존"
+   그룹 헤더(펼침/접힘 화살표 제외한 글자 부분) 클릭 시, 그리고 카테고리 없이 #psychtest로
+   바로 진입할 때 보여주는 개요 화면. 몰입테스트/MBTI존 전체 풀을 통틀어 TOP7/NEW7 랭킹을
+   먼저 보여주고 그 아래 6개 카테고리 진입 카드를 둔다 — 홈 화면의 "이번주 인기 TOP"(3개)보다
+   더 상세한 버전이며, 기존에 각 카테고리 탭 안에 있던 작은 TOP3/NEW3 박스(externalTestsFeedHTML)를
+   대체해 정보 중복을 없앤다. */
+function renderPsychtestOverview() {
+  App.state.psychtest.category = 'overview';
+  const container = document.getElementById('psychtest-container');
+  const allTests = allExternalPsychTests();
+  const top7 = sortExternalTests(allTests, 'popular').slice(0, 7);
+  const new7 = sortExternalTests(allTests, 'latest').slice(0, 7);
+
+  const catCardsHTML = Object.keys(PSYCHTEST_CATEGORIES).map(key => {
+    const cat = PSYCHTEST_CATEGORIES[key];
+    const count = key === 'immersive' ? (AppData.externalTests || []).length
+      : key === 'mbtizone' ? (AppData.mbtiZoneTests || []).length
+      : AppData.psychTests.filter(x => x.category === key).length;
+    const badgeHTML = cat.badge ? `<span class="ml-1 text-[10px] font-black px-1.5 py-0.5 rounded-full align-middle" style="background:#D85A30;color:#fff;">${cat.badge}</span>` : '';
+    return `
+      <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 cursor-pointer hover:border-violet-500 transition" onclick="psychtestNavCategory('${key}')">
+        <div class="text-3xl mb-2">${cat.emoji}</div>
+        <p class="text-slate-100 font-bold text-sm mb-0.5">${cat.label}${badgeHTML}</p>
+        <p class="text-slate-500 text-xs">${count}개 테스트</p>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl font-black text-slate-100 mb-1">🃏 심리 테스트존</h2>
+      <p class="text-slate-400 mb-6">지금 뜨는 테스트부터 카테고리별 전체 목록까지 한눈에 확인하세요</p>
+
+      ${psychLbBoxHTML('🔥 오늘의 TOP', top7)}
+      ${psychLbBoxHTML('🆕 NEW', new7)}
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">${catCardsHTML}</div>
     </div>`;
 }
 
@@ -4900,12 +4973,13 @@ function renderPsychtestFeed(category) {
 
   container.innerHTML = `
     <div class="max-w-2xl mx-auto">
+      <button onclick="psychtestNavCategory('overview')" class="text-slate-400 hover:text-slate-200 text-sm mb-3">← 심리테스트존 홈</button>
       <h2 class="text-2xl font-black text-slate-100 mb-1">🃏 심리 테스트존</h2>
       <p class="text-slate-400 mb-4">요즘 뜨는 심리테스트, 카테고리별로 계속 업데이트됩니다</p>
       <div class="flex flex-wrap gap-2 mb-6">${tabsHTML}</div>
 
-      ${category === 'immersive' ? externalTestsFeedHTML(AppData.externalTests, immersiveNewHighlightTests()) : ''}
-      ${category === 'mbtizone' ? externalTestsFeedHTML(AppData.mbtiZoneTests, sortExternalTests(AppData.mbtiZoneTests, 'latest').slice(0, 3)) : ''}
+      ${category === 'immersive' ? externalTestsFeedHTML(AppData.externalTests) : ''}
+      ${category === 'mbtizone' ? externalTestsFeedHTML(AppData.mbtiZoneTests) : ''}
 
       ${real ? `
       <div class="bg-gradient-to-br from-violet-900/40 to-slate-800 border border-violet-700/40 rounded-2xl p-5 mb-6 cursor-pointer hover:border-violet-500 transition"
@@ -8179,6 +8253,14 @@ function lottodrawSaveImage() {
   showToast('📥 영수증 이미지를 저장했어요!');
 }
 
+/* 초기 로딩 오버레이 제거(v1.2.8~) — runInitialHashRouting()이 첫 섹션 렌더링까지 마친 직후 호출 */
+function hideInitialLoadingOverlay() {
+  const el = document.getElementById('initial-loading-overlay');
+  if (!el) return;
+  el.classList.add('fade-out');
+  setTimeout(() => el.remove(), 400);
+}
+
 /* ══════════════════════════════════════════════════
    앱 초기화 (DOMContentLoaded)
 ══════════════════════════════════════════════════ */
@@ -8203,10 +8285,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!group || !toggle) return;
     const storageKey = 'nav_' + groupId.replace('nav-group-', '') + '_collapsed';
     if (localStorage.getItem(storageKey) === '1') group.classList.remove('open');
-    toggle.addEventListener('click', () => {
+    const toggleOpen = () => {
       const isOpen = group.classList.toggle('open');
       localStorage.setItem(storageKey, isOpen ? '0' : '1');
-    });
+    };
+    /* v1.2.9~: "심리 테스트존" 헤더만 예외 — 클릭하면 서브 메인 페이지(심리테스트존 개요)로
+       이동, 펼침/접힘은 화살표 아이콘(chevron)에서만 별도로 처리(stopPropagation으로 헤더
+       클릭과 분리, 접힌 상태에서도 항상 개요 페이지로 갈 수 있어야 하므로). */
+    if (groupId === 'nav-group-psychtest') {
+      const chevron = document.getElementById('nav-group-psychtest-chevron');
+      if (chevron) chevron.addEventListener('click', (e) => { e.stopPropagation(); toggleOpen(); });
+      toggle.addEventListener('click', psychtestNavHome);
+    } else {
+      toggle.addEventListener('click', toggleOpen);
+    }
   });
 
   /* ── 내비게이션 클릭 이벤트 ──
@@ -8346,6 +8438,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     App.navigate(hash in sectionInits ? hash : 'home');
+    hideInitialLoadingOverlay();
   }
   (function waitForSbReadyThenRoute() {
     let routed = false;
