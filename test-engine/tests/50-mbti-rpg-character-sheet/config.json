@@ -1,5 +1,6 @@
 {
   "id": "mbti-rpg-character-sheet",
+  "psych_category": "mbtizone",
   "title": "MBTI 게임 캐릭터 스탯 시트",
   "description": "새 게임을 시작하기 전, 캐릭터 생성 화면이 뜬다. \"당신의 스탯을 확인하는 중...\" 로딩바가 채워지기 시작한다.",
   "hashtags": [

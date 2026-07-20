@@ -1,5 +1,6 @@
 {
   "id": "decision-time-test",
+  "psych_category": "immersive",
   "title": "결정장애 실측 테스트: 나의 평균 고민 시간",
   "description": "배달앱 메뉴 고르기부터 여행지 정하기까지, 가벼운 상황극으로 실제로 재보는 나의 평균 고민 속도.",
   "hashtags": [

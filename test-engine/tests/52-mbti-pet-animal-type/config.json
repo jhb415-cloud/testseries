@@ -1,5 +1,6 @@
 {
   "id": "mbti-pet-animal-type",
+  "psych_category": "mbtizone",
   "title": "MBTI 반려동물 판별기 (만약 동물이라면)",
   "description": "신비한 숲속 동물원에서, 당신과 가장 닮은 동물이 우리 밖으로 걸어나온다. 그 동물이 바로 진짜 당신의 모습이다.",
   "hashtags": [

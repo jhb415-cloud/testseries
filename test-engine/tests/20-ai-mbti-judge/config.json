@@ -1,5 +1,6 @@
 {
   "id": "ai-mbti-judge",
+  "psych_category": "mbtizone",
   "title": "AI가 판별하는 진짜 내 MBTI (과몰입 검거)",
   "description": "당신이 주장하는 그 유형, 진짜 맞을까? AI가 8문항으로 재판정합니다",
   "hashtags": [

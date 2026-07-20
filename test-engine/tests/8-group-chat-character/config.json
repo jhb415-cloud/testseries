@@ -1,5 +1,6 @@
 {
   "id": "group-chat-character",
+  "psych_category": "immersive",
   "title": "단톡방에서 나는 무슨 캐릭터?",
   "description": "알림이 뜰 때부터 방을 나갈 때까지, 8문항으로 알아보는 단톡방 부캐",
   "hashtags": [

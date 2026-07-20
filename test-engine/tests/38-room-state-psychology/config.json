@@ -1,5 +1,6 @@
 {
   "id": "room-state-psychology",
+  "psych_category": "immersive",
   "title": "내 방 상태로 보는 심리",
   "description": "방 상태 = 정신 상태 밈. 너 방 이렇지? 뜨끔하는 공간 심리학 테스트.",
   "hashtags": [

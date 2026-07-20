@@ -320,7 +320,7 @@ button, a[class*="rounded"], .nav-item, .service-card, .option-btn, .cat-tab-btn
   color: rgb(var(--slate-50));
 }
 
-/* v1.2.9~: 심리테스트존 서브 메인 페이지(개요)를 보고 있을 때 그룹 헤더 자체를 강조 —
+/* v1.2.8~: 심리테스트존 서브 메인 페이지(개요)를 보고 있을 때 그룹 헤더 자체를 강조 —
    .nav-item.active와 동일한 시각 언어 재사용 */
 .nav-group-header.active {
   background: rgb(var(--primary-container));

@@ -1,4 +1,4 @@
-/* test-engine v12 (config.awaken_meter #41 각성 게이지 추가) | engine.js — 공통 로직
+/* test-engine v13 (결과 화면 "다른 테스트 하러가기" 버튼 추가) | engine.js — 공통 로직
    (config 로드, 화면 전환, 채점, 렌더, 결과 공유카드 저장, 관련 테스트 배너, 카카오톡 공유,
    메인 사이트로 돌아가기 링크) 순수 바닐라 JS. 외부 라이브러리 없음. 기능별 함수로 분리해 유지보수.
    결과 화면의 "이미지 저장" 기능은 별도 파일 result-card.js(window.TestEngineResultCard)에 위임한다.
@@ -99,7 +99,18 @@
    awakenMeterHtml/animateAwakenMeter가 호출되지 않아 렌더링에 아무 변화가 없다(하위호환).
    매 문항 렌더 때 직전 프레임값(state.awakenPrev)에서 목표값으로 CSS width 트랜지션을 걸어
    "스르륵 차오르는" 애니메이션을 만든다. #50(스탯 시트)은 STEP 6의 {ebar}류를, #58(전생/환생)은
-   STEP 5의 intro_input을 재사용하므로 엔진 변경 없이 config만으로 처리된다. */
+   STEP 5의 intro_input을 재사용하므로 엔진 변경 없이 config만으로 처리된다.
+
+   v13(2026-07-20): 결과 화면에서 뒤로가기를 누르면 메인 사이트 홈으로 튕겨 다른 테스트를
+   이어서 못 하던 문제 대응(메인 사이트 결과 화면에 동일한 버튼을 추가한 것과 짝) —
+   "이미지 저장" 버튼 바로 아래에 "🔄 다른 테스트 하러가기" 버튼을 추가, 클릭하면 이 테스트가
+   속한 카테고리(몰입테스트/MBTI존)로 메인 사이트 심리테스트존을 열어 바로 다른 테스트를
+   고를 수 있게 한다. 카테고리는 각 config.json에 신규 추가한 `psych_category`
+   ("immersive"|"mbtizone", tests/index.json의 category 필드와 동일 매핑, 61개 config.json
+   전부 반영) 값을 그대로 `/#psychtest?category=` 쿼리로 넘긴다 — 메인 사이트(app.js)의
+   initPsychtest()가 이 쿼리를 읽어 해당 카테고리 화면으로 바로 진입하도록 별도 반영(app.js
+   쪽 변경, 이 파일과 무관). psych_category가 없는 config(이론상 없어야 하지만 방어적으로)는
+   쿼리 없이 `/#psychtest`(서브 메인 개요 페이지)로만 보낸다. */
 
 (function () {
   'use strict';
@@ -107,7 +118,7 @@
   // engine.js 자체가 바뀔 때마다 이 번호를 올리고, 위 헤더 안내대로 10개 index.html의
   // engine.js/engine.css/result-card.js ?v=도 같은 번호로 맞출 것 — themes/*.css는
   // injectThemeCSS()가 이 상수를 그대로 재사용해 자동으로 캐시버스팅된다(파일별로 안 챙겨도 됨).
-  var ENGINE_ASSET_VERSION = '12';
+  var ENGINE_ASSET_VERSION = '13';
 
   // 최상단에서 즉시 캡처해야 함 — defer 스크립트라도 동기 실행 구간에서만 currentScript가 유효함
   var ENGINE_SCRIPT = document.currentScript;
@@ -187,6 +198,14 @@
     a.href = '/';
     a.textContent = '← 메인으로';
     document.body.appendChild(a);
+  }
+
+  // 결과 화면 "다른 테스트 하러가기" 버튼 — 이 테스트가 속한 카테고리(config.psych_category:
+  // "immersive"|"mbtizone")로 메인 사이트 심리테스트존을 바로 열어준다(app.js의 initPsychtest()가
+  // ?category= 쿼리를 읽어 처리, v13 헤더 코멘트 참고). 값이 없으면 서브 메인 개요 페이지로만 이동.
+  function goToOtherTests() {
+    var category = state.config && state.config.psych_category;
+    location.href = category ? '/#psychtest?category=' + category : '/#psychtest';
   }
 
   function loadKakaoSdk() {
@@ -883,6 +902,7 @@
         '<div class="te-choices-fixed te-result-footer">' +
           '<button type="button" class="te-btn te-btn-kakao" id="te-kakao-btn">💬 카카오톡으로 공유하기</button>' +
           '<button type="button" class="te-btn te-btn-accent" id="te-save-btn">🖼️ 이미지 저장</button>' +
+          '<button type="button" class="te-btn te-btn-secondary" id="te-othertests-btn">🔄 다른 테스트 하러가기</button>' +
           '<button type="button" class="te-btn te-btn-primary" id="te-share-btn">공유하기</button>' +
           '<button type="button" class="te-btn te-btn-secondary" id="te-restart-btn">다시하기</button>' +
         '</div>' +
@@ -892,6 +912,7 @@
     qs('#te-share-btn').addEventListener('click', function () { shareResult(result); });
     qs('#te-save-btn').addEventListener('click', function () { handleSaveImageClick(result); });
     qs('#te-kakao-btn').addEventListener('click', function () { shareResultToKakao(result); });
+    qs('#te-othertests-btn').addEventListener('click', goToOtherTests);
 
     if (relatedIds.length) loadRelatedBanner(relatedIds);
   }

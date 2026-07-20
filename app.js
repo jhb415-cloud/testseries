@@ -63,7 +63,7 @@ window.App = {
     let active;
     if (sectionId === 'psychtest') {
       const cat = this.state.psychtest && this.state.psychtest.category;
-      /* v1.2.9~: category가 'overview'(서브 메인 페이지)일 땐 특정 하위메뉴가 선택된 게 아니므로
+      /* v1.2.8~: category가 'overview'(서브 메인 페이지)일 땐 특정 하위메뉴가 선택된 게 아니므로
          엉뚱한 첫 항목(몰입테스트)을 active로 오인 표시하지 않고, 그룹 헤더 자체를 강조한다. */
       if (cat === 'overview') {
         if (psychtestHeader) { psychtestHeader.classList.add('active'); psychtestHeader.closest('.nav-group').classList.add('open'); }
@@ -4652,7 +4652,15 @@ const PSYCHTEST_LOCKED = {
 };
 
 function initPsychtest() {
-  const category = App.state.psychtest && App.state.psychtest.category || 'overview';
+  /* test-engine 결과화면 "다른 테스트 하러가기" 버튼(#psychtest?category=...)이 넘긴 값이 있으면
+     최우선 사용 — 한 번 쓰고 버려야 재방문(사이드바 클릭 등) 시 계속 강제되지 않는다.
+     URL을 통해 들어온 외부 입력이라, 화면 여러 곳에서 이 값을 그대로 onclick 문자열에
+     끼워 넣고 있어(예: "← 목록으로" 버튼) 검증 없이 신뢰하면 XSS로 이어질 수 있으므로
+     PSYCHTEST_CATEGORIES에 실제로 존재하는 키인지 반드시 먼저 확인한다. */
+  const queried = App._psychtestInitialCategory;
+  App._psychtestInitialCategory = null;
+  const category = (queried && PSYCHTEST_CATEGORIES[queried]) ? queried
+    : (App.state.psychtest && App.state.psychtest.category) || 'overview';
   App.state.psychtest = { category, testId: null, step: 0, answers: [] };
   if (category === 'overview') renderPsychtestOverview(); else renderPsychtestFeed(category);
 }
@@ -4911,7 +4919,7 @@ function externalTestsFeedHTML(list) {
     </div>`;
 }
 
-/* 심리테스트존 서브 메인 페이지 (v1.2.9~, 2026-07-20 사용자 확정): 사이드바 "심리 테스트존"
+/* 심리테스트존 서브 메인 페이지 (v1.2.8~, 2026-07-20 사용자 확정): 사이드바 "심리 테스트존"
    그룹 헤더(펼침/접힘 화살표 제외한 글자 부분) 클릭 시, 그리고 카테고리 없이 #psychtest로
    바로 진입할 때 보여주는 개요 화면. 몰입테스트/MBTI존 전체 풀을 통틀어 TOP7/NEW7 랭킹을
    먼저 보여주고 그 아래 6개 카테고리 진입 카드를 둔다 — 홈 화면의 "이번주 인기 TOP"(3개)보다
@@ -8289,7 +8297,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const isOpen = group.classList.toggle('open');
       localStorage.setItem(storageKey, isOpen ? '0' : '1');
     };
-    /* v1.2.9~: "심리 테스트존" 헤더만 예외 — 클릭하면 서브 메인 페이지(심리테스트존 개요)로
+    /* v1.2.8~: "심리 테스트존" 헤더만 예외 — 클릭하면 서브 메인 페이지(심리테스트존 개요)로
        이동, 펼침/접힘은 화살표 아이콘(chevron)에서만 별도로 처리(stopPropagation으로 헤더
        클릭과 분리, 접힌 상태에서도 항상 개요 페이지로 갈 수 있어야 하므로). */
     if (groupId === 'nav-group-psychtest') {
@@ -8435,6 +8443,11 @@ document.addEventListener('DOMContentLoaded', () => {
          initWorldcup()이 이 시점에 미리 떼어둔 값을 읽어 곧바로 해당 팩 화면으로 진입시킴 */
       if (hash === 'worldcup') {
         App._worldcupInitialParams = params;
+      }
+      /* test-engine 결과화면의 "다른 테스트 하러가기" 버튼(#psychtest?category=immersive|mbtizone)이
+         쓰는 진입 경로 — initPsychtest()가 이 값을 우선 사용해 해당 카테고리로 바로 진입한다 (v1.3.0~) */
+      if (hash === 'psychtest') {
+        App._psychtestInitialCategory = params.get('category') || '';
       }
     }
     App.navigate(hash in sectionInits ? hash : 'home');

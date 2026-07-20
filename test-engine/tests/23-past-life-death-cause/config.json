@@ -1,5 +1,6 @@
 {
   "id": "past-life-death-cause",
+  "psych_category": "immersive",
   "title": "전생 사망 원인 판별기",
   "description": "현재 성격과 습관으로 역추적하는 전생 사망 원인. 결과지는 부고 기사 스타일.",
   "hashtags": [
