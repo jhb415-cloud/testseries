@@ -9,11 +9,34 @@
     "부족리더",
     "생존세계관"
   ],
-  "theme": "pending",
+  "theme": "wasteland",
   "cover_image": "assets/cover.webp",
   "seed_count": 231,
   "engagement_key": "site-mbtitribeleader-plays",
   "scoring_type": "mbti4",
+  "resource_meters": {
+    "resources": [
+      {
+        "key": "food",
+        "label": "식량",
+        "emoji": "🍖",
+        "init": 5
+      },
+      {
+        "key": "water",
+        "label": "식수",
+        "emoji": "💧",
+        "init": 5
+      },
+      {
+        "key": "morale",
+        "label": "사기",
+        "emoji": "🔥",
+        "init": 5
+      }
+    ],
+    "max": 10
+  },
   "loading": {
     "text": "MBTI 종말 후 부족 리더 판별 분석 중..",
     "duration_ms": 2000
@@ -26,19 +49,36 @@
       "choices": [
         {
           "label": "적극적으로 의견을 내며 이끈다",
-          "axis": "E"
+          "axis": "E",
+          "delta": {
+            "food": -1,
+            "morale": 2
+          }
         },
         {
           "label": "다들 모여 토론하는 걸 즐긴다",
-          "axis": "E"
+          "axis": "E",
+          "delta": {
+            "morale": 1,
+            "water": -1
+          }
         },
         {
           "label": "필요할 때만 조용히 의견을 낸다",
-          "axis": "I"
+          "axis": "I",
+          "delta": {
+            "food": 1,
+            "morale": -1
+          }
         },
         {
           "label": "혼자 생각을 정리한 뒤 말한다",
-          "axis": "I"
+          "axis": "I",
+          "delta": {
+            "food": 1,
+            "morale": -1,
+            "water": 1
+          }
         }
       ]
     },
@@ -48,19 +88,35 @@
       "choices": [
         {
           "label": "먼저 다가가 환영하고 소개한다",
-          "axis": "E"
+          "axis": "E",
+          "delta": {
+            "food": -1,
+            "morale": 2
+          }
         },
         {
           "label": "적극적으로 관계를 만들어간다",
-          "axis": "E"
+          "axis": "E",
+          "delta": {
+            "morale": 2,
+            "water": -1
+          }
         },
         {
           "label": "거리를 두고 지켜보는 편이다",
-          "axis": "I"
+          "axis": "I",
+          "delta": {
+            "food": 1,
+            "morale": -1
+          }
         },
         {
           "label": "필요한 것만 확인하고 물러난다",
-          "axis": "I"
+          "axis": "I",
+          "delta": {
+            "morale": -1,
+            "water": 1
+          }
         }
       ]
     },
@@ -70,19 +126,34 @@
       "choices": [
         {
           "label": "먼 미래의 큰 그림을 그려본다",
-          "axis": "N"
+          "axis": "N",
+          "delta": {
+            "food": -1,
+            "morale": 1
+          }
         },
         {
           "label": "새로운 가능성을 상상해본다",
-          "axis": "N"
+          "axis": "N",
+          "delta": {
+            "morale": 1,
+            "water": -1
+          }
         },
         {
           "label": "당장 필요한 것부터 해결한다",
-          "axis": "S"
+          "axis": "S",
+          "delta": {
+            "food": 2
+          }
         },
         {
           "label": "현실적으로 가능한 계획을 짠다",
-          "axis": "S"
+          "axis": "S",
+          "delta": {
+            "food": 1,
+            "water": 1
+          }
         }
       ]
     },
@@ -92,19 +163,35 @@
       "choices": [
         {
           "label": "새로운 방식으로 자원을 만들어낸다",
-          "axis": "N"
+          "axis": "N",
+          "delta": {
+            "food": 2,
+            "morale": 1,
+            "water": -1
+          }
         },
         {
           "label": "기존에 없던 발상을 시도한다",
-          "axis": "N"
+          "axis": "N",
+          "delta": {
+            "morale": -1,
+            "water": 2
+          }
         },
         {
           "label": "예전에 검증된 방법을 쓴다",
-          "axis": "S"
+          "axis": "S",
+          "delta": {
+            "food": 1,
+            "water": 1
+          }
         },
         {
           "label": "확실하게 되는 방법만 쓴다",
-          "axis": "S"
+          "axis": "S",
+          "delta": {
+            "water": 2
+          }
         }
       ]
     },
@@ -114,19 +201,36 @@
       "choices": [
         {
           "label": "냉정하게 이득과 손해를 계산한다",
-          "axis": "T"
+          "axis": "T",
+          "delta": {
+            "food": 2,
+            "morale": -1
+          }
         },
         {
           "label": "원칙에 따라 협상 조건을 정한다",
-          "axis": "T"
+          "axis": "T",
+          "delta": {
+            "food": 1,
+            "morale": -1,
+            "water": 1
+          }
         },
         {
           "label": "상대 부족의 사정을 헤아려본다",
-          "axis": "F"
+          "axis": "F",
+          "delta": {
+            "food": -1,
+            "morale": 2
+          }
         },
         {
           "label": "함께 살아갈 방법을 먼저 고민한다",
-          "axis": "F"
+          "axis": "F",
+          "delta": {
+            "morale": 2,
+            "water": -1
+          }
         }
       ]
     },
@@ -136,19 +240,34 @@
       "choices": [
         {
           "label": "논리적으로 상황을 정리한다",
-          "axis": "T"
+          "axis": "T",
+          "delta": {
+            "morale": 1
+          }
         },
         {
           "label": "규칙에 따라 공정하게 판단한다",
-          "axis": "T"
+          "axis": "T",
+          "delta": {
+            "food": 1,
+            "morale": -1
+          }
         },
         {
           "label": "감정이 상하지 않게 조율한다",
-          "axis": "F"
+          "axis": "F",
+          "delta": {
+            "food": -1,
+            "morale": 2
+          }
         },
         {
           "label": "다들 마음이 다치지 않도록 살핀다",
-          "axis": "F"
+          "axis": "F",
+          "delta": {
+            "morale": 2,
+            "water": -1
+          }
         }
       ]
     },
@@ -158,19 +277,36 @@
       "choices": [
         {
           "label": "명확한 규율을 세워 다스린다",
-          "axis": "J"
+          "axis": "J",
+          "delta": {
+            "food": 1,
+            "morale": -1
+          }
         },
         {
           "label": "체계적인 시스템을 만든다",
-          "axis": "J"
+          "axis": "J",
+          "delta": {
+            "food": 1,
+            "morale": -1,
+            "water": 1
+          }
         },
         {
           "label": "상황에 따라 유연하게 대응한다",
-          "axis": "P"
+          "axis": "P",
+          "delta": {
+            "food": -1,
+            "morale": 1
+          }
         },
         {
           "label": "그때그때 필요에 따라 정한다",
-          "axis": "P"
+          "axis": "P",
+          "delta": {
+            "morale": 1,
+            "water": -1
+          }
         }
       ]
     },
@@ -180,19 +316,36 @@
       "choices": [
         {
           "label": "역할과 시간표가 정확히 짜여 있다",
-          "axis": "J"
+          "axis": "J",
+          "delta": {
+            "food": 2,
+            "morale": -1,
+            "water": 1
+          }
         },
         {
           "label": "체계적으로 자원을 배분한다",
-          "axis": "J"
+          "axis": "J",
+          "delta": {
+            "food": 1,
+            "water": 2
+          }
         },
         {
           "label": "그날그날 필요에 맞게 움직인다",
-          "axis": "P"
+          "axis": "P",
+          "delta": {
+            "morale": 1
+          }
         },
         {
           "label": "자유롭게 각자 알아서 한다",
-          "axis": "P"
+          "axis": "P",
+          "delta": {
+            "food": -1,
+            "morale": 2,
+            "water": -1
+          }
         }
       ]
     }

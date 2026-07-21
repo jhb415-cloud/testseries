@@ -1,4 +1,4 @@
-/* test-engine v10 (novel mechanic 5종 공통 스타일 추가) | engine.css — 테마 무관 공통 레이아웃(골격)
+/* test-engine v14 (config.resource_meters #53 자원 게이지 대시보드 스타일 추가) | engine.css — 테마 무관 공통 레이아웃(골격)
    2026-07-11: ①.te-app에 font-synthesis:none 추가 — Do Hyeon/Black Han Sans/Song Myung처럼 단일
    굵기만 있는 한글 타이틀 폰트에 <h1>/<h2> 기본 bold가 걸려 브라우저가 합성 볼드로 흉내내며 글씨가
    뭉개지던 버그 수정(neon/office/vintage-collage/stained-glass 테마 영향, 실사용 제보). ②질문/답 등
@@ -309,6 +309,52 @@ body {
   opacity: 0.85;
   transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+/* config.resource_meters(#53) — 식량·식수·사기 같은 자원 게이지 생존 대시보드.
+   선택마다 width가 스르륵 오르내리고, 잔량 구간에 따라 색(위험/양호)이 바뀐다. 테마는
+   --te-resource-low/mid/high로 색을 덮어쓸 수 있다. 이 마크업은 resource_meters가 있는
+   테스트에서만 렌더돼 기존 테스트와 무관하다. */
+.te-resource {
+  margin: 4px 0 18px;
+  padding: 12px 14px 14px;
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  border-radius: 14px;
+  background: rgba(127, 127, 127, 0.06);
+}
+.te-resource-head { margin-bottom: 9px; }
+.te-resource-title { font-size: 13px; font-weight: 800; letter-spacing: 0.03em; }
+.te-resource-row {
+  display: grid;
+  grid-template-columns: 74px 1fr 28px;
+  align-items: center;
+  gap: 9px;
+  margin-top: 8px;
+}
+.te-resource-name { font-size: 12px; font-weight: 700; line-height: 1.15; white-space: nowrap; }
+.te-resource-track {
+  position: relative;
+  height: 9px;
+  background: rgba(127, 127, 127, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.te-resource-fill {
+  height: 100%;
+  width: 50%;
+  background: var(--te-resource-mid, #c9a24b);
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.4s ease;
+}
+.te-resource-fill.is-low { background: var(--te-resource-low, #d0553f); }
+.te-resource-fill.is-high { background: var(--te-resource-high, #5aa06a); }
+.te-resource-val {
+  font-size: 13px;
+  font-weight: 800;
+  text-align: right;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.te-result-stat-sub { opacity: 0.72; font-size: 13px; margin-top: -2px; }
 
 /* config.chat_ui(#25) — 상대 말풍선(좌)/내 답장 말풍선(우) */
 .te-chat-thread { display: flex; flex-direction: column; margin: 8px 0 20px; }

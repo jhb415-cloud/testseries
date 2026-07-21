@@ -4770,6 +4770,7 @@ const THEME_TITLE_FONTS = {
   lightstick:       { family: '"Righteous","Noto Sans KR",sans-serif', google: 'family=Righteous' },
   hanjiscroll:      { family: '"Nanum Brush Script","Noto Serif KR",serif', google: 'family=Nanum+Brush+Script' },
   holocard:         { family: '"Pirata One","Noto Sans KR",sans-serif', google: 'family=Pirata+One' },
+  wasteland:        { family: '"Black Ops One","Noto Sans KR",sans-serif', google: 'family=Black+Ops+One' },
 };
 const _loadedThemeFonts = new Set();
 function themeTitleFontFamily(theme) {

@@ -1,0 +1,96 @@
+/* test-engine — themes/wasteland.css — 신규 테마: 폐허 생존기지 스킨
+   engine.css의 골격 클래스를 그대로 쓰고 색상/테두리/폰트만 덮어씀.
+   mbti-post-apocalypse-tribe-leader(#53)가 1호 사용처. 녹슨 철판 + 모래먼지 + 군용 무전기
+   톤(러스트 오렌지/올리브/샌드), 각진 밀리터리 스텐실 폰트(Black Ops One)로 "무너진 문명 위에
+   세운 부족 기지" 분위기를 낸다. 같은 종말물인 stencil(#30 좀비)과 겹치지 않도록 폰트(Black Ops
+   One vs Stardos Stencil)와 팔레트(따뜻한 러스트/샌드 vs 형광 옐로/블랙)를 다르게 잡았다.
+   #53은 config.resource_meters(자원 게이지)를 쓰므로 --te-resource-* 색도 이 테마 톤에 맞춰 정의. */
+
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #17120c; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  /* 자원 게이지(#53) 색 — 잔량 위험(러스트레드)/보통(샌드골드)/양호(올리브그린) */
+  --te-resource-low: #d4553a;
+  --te-resource-mid: #d9a441;
+  --te-resource-high: #8aa24a;
+  background:
+    radial-gradient(ellipse at 25% 12%, rgba(217, 164, 65, 0.09), transparent 55%),
+    radial-gradient(ellipse at 82% 88%, rgba(212, 85, 58, 0.08), transparent 55%),
+    #17120c;
+  color: #ece4d6;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #211a11;
+  border-radius: 4px;
+  border: 1px solid #453623;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(217, 164, 65, 0.08);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Black Ops One", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  color: #e8b45a;
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #b8ac95; }
+
+.te-chip {
+  background: rgba(217, 164, 65, 0.1);
+  border: 1px solid rgba(217, 164, 65, 0.55);
+  color: #e8b45a;
+  border-radius: 3px;
+}
+
+.te-btn {
+  background: #d97b34;
+  color: #1a0f04;
+  border-radius: 3px;
+  border: none;
+  box-shadow: 0 3px 0 #a1531d, 0 6px 14px rgba(0, 0, 0, 0.4);
+  font-family: "Black Ops One", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+.te-btn-primary { background: #d97b34; }
+.te-btn-secondary { background: #2c2416; color: #ece4d6; border: 1px solid #453623; box-shadow: 0 3px 0 #16110a; }
+.te-btn-accent { background: #8aa24a; color: #141a08; box-shadow: 0 3px 0 #5e7130; }
+.te-btn-kakao { background: #FEE500; color: #191600; box-shadow: 0 3px 0 #c7b400; font-family: "Noto Sans KR", sans-serif; font-weight: 800; }
+
+.te-btn-choice {
+  background: rgba(60, 48, 30, 0.5);
+  color: #ece4d6;
+  border: 1px solid rgba(217, 164, 65, 0.28);
+  border-radius: 4px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: rgba(212, 85, 58, 0.18); border-color: #d4553a; }
+
+.te-progress-track { background: #2c2416; border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #d9a441, #d97b34); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #ece4d6;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(217, 164, 65, 0.2);
+  border-top-color: #e8b45a;
+}

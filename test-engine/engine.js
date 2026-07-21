@@ -1,4 +1,4 @@
-/* test-engine v13 (결과 화면 "다른 테스트 하러가기" 버튼 추가) | engine.js — 공통 로직
+/* test-engine v14 (config.resource_meters — 자원 게이지 생존 대시보드 추가) | engine.js — 공통 로직
    (config 로드, 화면 전환, 채점, 렌더, 결과 공유카드 저장, 관련 테스트 배너, 카카오톡 공유,
    메인 사이트로 돌아가기 링크) 순수 바닐라 JS. 외부 라이브러리 없음. 기능별 함수로 분리해 유지보수.
    결과 화면의 "이미지 저장" 기능은 별도 파일 result-card.js(window.TestEngineResultCard)에 위임한다.
@@ -110,7 +110,18 @@
    전부 반영) 값을 그대로 `/#psychtest?category=` 쿼리로 넘긴다 — 메인 사이트(app.js)의
    initPsychtest()가 이 쿼리를 읽어 해당 카테고리 화면으로 바로 진입하도록 별도 반영(app.js
    쪽 변경, 이 파일과 무관). psych_category가 없는 config(이론상 없어야 하지만 방어적으로)는
-   쿼리 없이 `/#psychtest`(서브 메인 개요 페이지)로만 보낸다. */
+   쿼리 없이 `/#psychtest`(서브 메인 개요 페이지)로만 보낸다.
+
+   v14(2026-07-20): MBTI존 52~57 게임형 개편 배치의 첫 파일럿 — `config.resource_meters`
+   (#53 종말 후 부족 리더). 문항 화면 상단에 "식량·식수·사기" 같은 자원 게이지 대시보드를 얹고,
+   각 선택지의 `choice.delta`(예: {food:+2,water:-1,morale:+1})만큼 게이지가 오르내리는 생존
+   시뮬 연출을 준다. awaken_meter(#41)와 완전히 같은 전략 — 새 scoring_type이 아니라 기존
+   mbti4 채점은 그대로 두고 게이지는 순수 렌더링/연출 레이어(applyScoring/computeResult 미변경)라
+   채점 결과에 전혀 영향이 없다. resource_meters/choice.delta가 없는 기존 60개 config는
+   resetResources/resourceMeterHtml/animateResourceMeter/applyResourceDelta가 호출되지 않아
+   렌더링·채점에 아무 변화가 없다(하위호환). 직전 프레임값(state.resourcePrev)에서 목표값
+   (state.resourceValues)으로 CSS width 트랜지션을 걸어 "스르륵" 차오르고 줄어들게 하고, 결과
+   화면에는 자원 평균 기반 "부족 생존 지수 N% + 판정"을 부가 스탯으로 노출한다. */
 
 (function () {
   'use strict';
@@ -118,7 +129,7 @@
   // engine.js 자체가 바뀔 때마다 이 번호를 올리고, 위 헤더 안내대로 10개 index.html의
   // engine.js/engine.css/result-card.js ?v=도 같은 번호로 맞출 것 — themes/*.css는
   // injectThemeCSS()가 이 상수를 그대로 재사용해 자동으로 캐시버스팅된다(파일별로 안 챙겨도 됨).
-  var ENGINE_ASSET_VERSION = '13';
+  var ENGINE_ASSET_VERSION = '14';
 
   // 최상단에서 즉시 캡처해야 함 — defer 스크립트라도 동기 실행 구간에서만 currentScript가 유효함
   var ENGINE_SCRIPT = document.currentScript;
@@ -152,7 +163,11 @@
     // "직전 프레임" 값(각 축의 앞글자 우세 %, overall=각성률 %). 다음 문항 렌더 때 이 값에서
     // 목표값으로 CSS 트랜지션을 걸어 "스르륵 차오르는" 애니메이션을 만든다. awaken_meter를 안
     // 쓰는 config는 이 값이 초기값으로만 남고 아무 로직에도 관여하지 않는다.
-    awakenPrev: { overall: 0, EI: 50, NS: 50, TF: 50, JP: 50 }
+    awakenPrev: { overall: 0, EI: 50, NS: 50, TF: 50, JP: 50 },
+    // v14: config.resource_meters(#53) — 자원 게이지 현재값/직전 프레임값. resource_meters를 안
+    // 쓰는 config는 두 값이 빈 객체로만 남고 아무 로직에도 관여하지 않는다(하위호환).
+    resourceValues: {},
+    resourcePrev: {}
   };
 
   var MBTI_PAIRS = [['E', 'I'], ['S', 'N'], ['T', 'F'], ['J', 'P']];
@@ -329,6 +344,7 @@
     state.timeoutCount = 0;
     state.reactionTimes = [];
     state.awakenPrev = { overall: 0, EI: 50, NS: 50, TF: 50, JP: 50 }; // v11(#41)
+    if (c.resource_meters) resetResources(); // v14(#53)
     state.currentNode = c.questions_tree ? c.start_node : '';
     state.pathLength = 0;
     state.questionLocked = false;
@@ -374,6 +390,9 @@
     // config.awaken_meter(#41): 각성률 + 4축 게이지 (mbti4 전용, 이미 쌓인 카운트 기준)
     var awakenHtml = c.awaken_meter ? awakenMeterHtml() : '';
 
+    // config.resource_meters(#53): 식량·식수·사기 같은 자원 게이지 생존 대시보드 (연출 전용)
+    var resourceHtml = c.resource_meters ? resourceMeterHtml() : '';
+
     var choicesHtml;
     if (c.slider_ui) {
       var mid = Math.floor((q.choices.length - 1) / 2);
@@ -407,6 +426,7 @@
         '<div class="te-question-body">' +
           '<p class="te-question-counter">' + (idx + 1) + ' / ' + total + '</p>' +
           awakenHtml +
+          resourceHtml +
           timerHtml +
           imageHtml +
           questionTextHtml +
@@ -448,6 +468,9 @@
 
     // config.awaken_meter(#41): 렌더 커밋 직후 직전 프레임값 → 이번 목표값으로 게이지를 채운다.
     if (c.awaken_meter) animateAwakenMeter(idx, total);
+
+    // config.resource_meters(#53): 직전 프레임값 → 지금까지 누적된 자원값으로 게이지를 옮긴다.
+    if (c.resource_meters) animateResourceMeter();
 
     // config.timer_sec(#21): 렌더가 끝나고 리스너까지 붙은 뒤에 카운트다운을 시작한다.
     if (c.timer_sec) {
@@ -524,6 +547,7 @@
     var choice = question.choices[choiceIndex];
     state.answers.push(choice);
     applyScoring(choice, question);
+    if (state.config.resource_meters) applyResourceDelta(choice); // v14(#53) — 채점과 무관한 연출값
     advance();
   }
 
@@ -819,6 +843,91 @@
     state.awakenPrev = t;
   }
 
+  // v14: config.resource_meters(#53 종말 후 부족 리더) — "식량·식수·사기" 같은 자원 게이지를
+  // 문항마다 choice.delta만큼 오르내리게 하는 생존 시뮬 대시보드. awaken_meter(#41)와 동일하게
+  // mbti4 채점에는 전혀 영향이 없고(순수 연출 레이어), resource_meters가 없는 config는 아래
+  // 함수들이 호출되지 않아 렌더링에 아무 변화가 없다(하위호환).
+  // config.resource_meters: { resources: [{ key, label, emoji, init }], max }
+  function resourceConfig() {
+    var rm = state.config.resource_meters || {};
+    return { list: Array.isArray(rm.resources) ? rm.resources : [], max: rm.max || 10 };
+  }
+  function clampResource(v, max) { return Math.max(0, Math.min(max, v)); }
+  function resetResources() {
+    var rc = resourceConfig();
+    state.resourceValues = {};
+    state.resourcePrev = {};
+    rc.list.forEach(function (r) {
+      var v = clampResource(typeof r.init === 'number' ? r.init : Math.round(rc.max / 2), rc.max);
+      state.resourceValues[r.key] = v;
+      state.resourcePrev[r.key] = v;
+    });
+  }
+  // 선택지의 delta({key: 증감})를 현재 자원값에 반영(0~max로 클램프). 채점과 무관한 연출값.
+  function applyResourceDelta(choice) {
+    if (!choice || !choice.delta) return;
+    var rc = resourceConfig();
+    rc.list.forEach(function (r) {
+      var d = choice.delta[r.key];
+      if (typeof d === 'number') {
+        state.resourceValues[r.key] = clampResource((state.resourceValues[r.key] || 0) + d, rc.max);
+      }
+    });
+  }
+  function resourceMeterHtml() {
+    var rc = resourceConfig();
+    var rows = rc.list.map(function (r) {
+      var prev = state.resourcePrev.hasOwnProperty(r.key) ? state.resourcePrev[r.key] : (r.init || 0);
+      var pct = rc.max ? Math.round((prev / rc.max) * 100) : 0;
+      var cls = pct <= 25 ? ' is-low' : (pct >= 75 ? ' is-high' : '');
+      return '<div class="te-resource-row">' +
+          '<span class="te-resource-name">' + (r.emoji ? escapeHtml(r.emoji) + ' ' : '') + escapeHtml(r.label || r.key) + '</span>' +
+          '<div class="te-resource-track"><div class="te-resource-fill' + cls + '" data-res="' + escapeAttr(r.key) + '" style="width:' + pct + '%"></div></div>' +
+          '<span class="te-resource-val" data-res-val="' + escapeAttr(r.key) + '">' + prev + '</span>' +
+        '</div>';
+    }).join('');
+    return '<div class="te-resource" id="te-resource">' +
+        '<div class="te-resource-head"><span class="te-resource-title">🏕️ 부족 생존 지표</span></div>' +
+        rows +
+      '</div>';
+  }
+  // 렌더 커밋 직후 현재 누적 자원값으로 폭을 옮겨(트랜지션 발동) 다음 프레임 시작값으로 저장.
+  function animateResourceMeter() {
+    var rc = resourceConfig();
+    requestAnimationFrame(function () {
+      rc.list.forEach(function (r) {
+        var val = state.resourceValues[r.key] || 0;
+        var pct = rc.max ? Math.round((val / rc.max) * 100) : 0;
+        var fill = qs('#te-resource .te-resource-fill[data-res="' + r.key + '"]');
+        var valEl = qs('#te-resource .te-resource-val[data-res-val="' + r.key + '"]');
+        if (fill) {
+          fill.style.width = pct + '%';
+          fill.classList.remove('is-low', 'is-high');
+          if (pct <= 25) fill.classList.add('is-low');
+          else if (pct >= 75) fill.classList.add('is-high');
+        }
+        if (valEl) valEl.textContent = val;
+      });
+    });
+    var snapshot = {};
+    rc.list.forEach(function (r) { snapshot[r.key] = state.resourceValues[r.key] || 0; });
+    state.resourcePrev = snapshot;
+  }
+  // 결과 화면용 — 자원 평균 비율(0~100%)과 요약 문자열, 상태 판정을 만든다.
+  function computeSurvivalIndex() {
+    var rc = resourceConfig();
+    if (!rc.list.length) return { pct: 0, parts: '', verdict: '' };
+    var ratioSum = 0;
+    var parts = rc.list.map(function (r) {
+      var v = state.resourceValues[r.key] || 0;
+      ratioSum += rc.max ? (v / rc.max) : 0;
+      return (r.emoji ? r.emoji + ' ' : '') + (r.label || r.key) + ' ' + v;
+    }).join(' · ');
+    var pct = Math.round((ratioSum / rc.list.length) * 100);
+    var verdict = pct >= 80 ? '풍요로운 부족' : pct >= 55 ? '버틸 만한 부족' : pct >= 30 ? '위태로운 부족' : '멸망 직전의 부족';
+    return { pct: pct, parts: parts, verdict: verdict };
+  }
+
   function computeMbti4Result(c) {
     var r = codeFromCounts(state.mbtiCounts);
     var eVal = 100 - r.ratios.EI, nVal = r.ratios.SN, fVal = r.ratios.TF, jVal = 100 - r.ratios.JP;
@@ -887,6 +996,15 @@
       ? '<p class="te-result-stat">⏱ 3초 안에 답하지 못한 문항: ' + state.timeoutCount + '개</p>'
       : '';
 
+    // config.resource_meters(#53) 테스트에서만 노출되는 부가 스탯 — 없는 테스트는 이 줄 자체가 렌더되지 않는다.
+    var survivalStatHtml = '';
+    if (state.config.resource_meters) {
+      var si = computeSurvivalIndex();
+      survivalStatHtml =
+        '<p class="te-result-stat">🏕️ 부족 생존 지수 ' + si.pct + '% · ' + escapeHtml(si.verdict) + '</p>' +
+        '<p class="te-result-stat te-result-stat-sub">' + escapeHtml(si.parts) + '</p>';
+    }
+
     rootEl.innerHTML =
       '<div class="te-app te-screen-result te-has-fixed-footer">' +
         '<div class="te-result-body">' +
@@ -896,6 +1014,7 @@
           '<ul class="te-result-traits">' + traits + '</ul>' +
           '<p class="te-result-tip">' + escapeHtml(applyTagTemplate(result.tip || '', result.tag)) + '</p>' +
           timeoutStatHtml +
+          survivalStatHtml +
           '<p class="te-save-hint">📸 이미지를 꾹 눌러 저장해보세요</p>' +
           relatedHtml +
         '</div>' +
