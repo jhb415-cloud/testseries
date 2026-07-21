@@ -84,6 +84,7 @@
 - K팝 콘서트 응원봉 무대(마젠타/시안 네온) — mbti-idol-debut-position(#48)
 - 한지 두루마리 먹서예(붉은 인장) — mbti-joseon-government-post(#49)
 - 홀로그램 TCG 스탯 카드(무지개 홀로포일) — mbti-rpg-character-sheet(#50)
+- 실사 손조각 나무 토템 조각상 매크로 사진(폐허 도시 보케 배경, 세피아) — mbti-post-apocalypse-tribe-leader(#53)
 
 ## 테스트별 사용 톤·컨셉 기록 (매번 추가)
 - mental-age: 병맛(장르 미스매치) — "정신연령 측정을 국가 공인 신체검사처럼 근엄하게"

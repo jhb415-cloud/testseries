@@ -202,6 +202,35 @@ engine.js를 조사해 확인(선택 로직이 렌더링과 분리돼 있어 기
 버튼바-본문 겹침 0). 문항 이미지는 전부 4지선다라 4-4-1 규칙상 대상 제외. 사이트 연동(data.js/
 app.js/sections.json/sitemap.xml/llms.txt)까지 같은 세션에서 이어서 진행, push 완료.
 
+## MBTI존 게임형 개편 — #53 파일럿 (2026-07-21)
+사용자가 "52~57을 게임처럼 즐길 수 있는, 처음 보는 인터랙션으로 바꾸자"고 요청(59 제외, 이미
+쓰인 슬라이더/분기트리/인트로입력/타이머/채팅UI/각성게이지/반응속도와 중복 금지). 5개 메커니즘을
+확정하고, 엔진 전역 영향·속도 리스크 때문에 **#53 하나만 파일럿**으로 먼저 완주하기로 결정.
+
+**확정 로드맵(나머지 4개는 파일럿 속도 검증 통과 후 착수)**: 52 `image_choices`(그림카드 탭) /
+**53 `resource_meters`(자원 3게이지 생존 대시보드 ← 이번)** / 54 `affinity_meter`(♥호감도 데이팅) /
+55 `point_budget`(스탯 포인트 분배 RPG 빌드) / 57 `multi_select`(장바구니 담기 수집).
+
+- [x] #53 mbti-post-apocalypse-tribe-leader — **신규 엔진 `resource_meters`**(engine v13→v14):
+  문항 상단에 식량🍖·식수💧·사기🔥 3개 게이지를 띄우고, 각 선택지의 `choice.delta`
+  (예: `{food:+2,water:-1,morale:+1}`)만큼 실시간으로 오르내리는 생존 시뮬 대시보드. 결과 화면엔
+  자원 평균 기반 "🏕️ 부족 생존 지수 N% + 판정(풍요로운/버틸 만한/위태로운/멸망 직전 부족)" +
+  최종 자원 요약을 부가 스탯으로 노출. **awaken_meter(#41)와 동일하게 순수 연출 레이어라 mbti4
+  채점 로직(applyScoring/computeResult) 무변경** — `resource_meters`/`delta`가 없는 나머지 60개
+  config는 렌더·채점 완전 동일(하위호환). engine.js: `resetResources`/`applyResourceDelta`/
+  `resourceMeterHtml`/`animateResourceMeter`(직전 프레임→목표값 CSS width 트랜지션)/
+  `computeSurvivalIndex`, engine.css: `.te-resource-*` + `.te-result-stat-sub`.
+  **ENGINE_ASSET_VERSION 13→14, 61개 index.html의 engine.js/engine.css `?v=13→14` 일괄 동기화**
+  (result-card.js는 무변경 v2). 커밋 `0535c24`(엔진+config) → 이미지·QA는 후속 커밋.
+  - 이미지: 신규 테마 `themes/wasteland.css`(폐허 생존기지, Black Ops One — app.js
+    `THEME_TITLE_FONTS` 등록 완료). 매체는 **실사 손조각 나무 토템 조각상 매크로 사진(폐허 도시
+    보케 배경, 세피아)** — 사용자 제공 레퍼런스 기반 `images/edits`로 커버+결과 8종 = 9/9 생성
+    완료(실패 0), `cover-home.webp` 썸네일 포함.
+  - QA: 자원 게이지가 문항마다 실제로 증감하는지 Playwright로 전 문항 추적 검증(5/5/5 시작 →
+    선택별 변동 → 결과 "생존 지수 73% · 버틸 만한 부족"), 콘솔 에러 0/깨진 이미지 0.
+  - **미완**: 사이트 연동(data.js/sections.json/sitemap/llms.txt) — #51~60 전체가 아직 미연동
+    상태라 #53만 단독 노출하면 어긋나서 배치 단위로 함께 진행 예정. 현재는 직접 URL로만 접근.
+
 ## 다음 배치 후보
 #21~50 완료(novel mechanic 포함). #51~60(2026-07-16 스켈레톤 생성분)이 다음 배치 후보 — 이 중
 **novel mechanic 나머지(51/56/58/60)는 엔진 필드·config 구조까지 정리됨**, 나머지는 문항·결과
