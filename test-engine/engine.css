@@ -1,4 +1,4 @@
-/* test-engine v14 (config.resource_meters #53 자원 게이지 대시보드 스타일 추가) | engine.css — 테마 무관 공통 레이아웃(골격)
+/* test-engine v15 (config.image_choices/affinity_meter/point_budget 스타일 추가) | engine.css — 테마 무관 공통 레이아웃(골격)
    2026-07-11: ①.te-app에 font-synthesis:none 추가 — Do Hyeon/Black Han Sans/Song Myung처럼 단일
    굵기만 있는 한글 타이틀 폰트에 <h1>/<h2> 기본 bold가 걸려 브라우저가 합성 볼드로 흉내내며 글씨가
    뭉개지던 버그 수정(neon/office/vintage-collage/stained-glass 테마 영향, 실사용 제보). ②질문/답 등
@@ -355,6 +355,106 @@ body {
   font-variant-numeric: tabular-nums;
 }
 .te-result-stat-sub { opacity: 0.72; font-size: 13px; margin-top: -2px; }
+
+/* config.image_choices(#52) — 아이콘+텍스트 선택지 카드 + 답할 때마다 쌓이는 수집 스티커판 */
+.te-btn-choice-img {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+}
+.te-choice-icon { font-size: 28px; line-height: 1; flex-shrink: 0; }
+.te-choice-label { flex: 1; }
+.te-collect-strip {
+  margin: 4px 0 18px;
+  padding: 10px 14px 12px;
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  border-radius: 14px;
+  background: rgba(127, 127, 127, 0.06);
+}
+.te-collect-title { font-size: 13px; font-weight: 800; letter-spacing: 0.03em; }
+.te-collect-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.te-collect-stamp {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background: rgba(127, 127, 127, 0.12);
+}
+.te-collect-stamp.is-stamped { background: rgba(127, 127, 127, 0.2); animation: te-stamp-pop 0.3s ease; }
+.te-collect-stamp.is-empty { opacity: 0.35; }
+@keyframes te-stamp-pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  70% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* config.affinity_meter(#54) — 단일 호감도 게이지(resource_meters의 1개짜리 버전) + 반응 문구 */
+.te-affinity {
+  margin: 4px 0 18px;
+  padding: 12px 14px 14px;
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  border-radius: 14px;
+  background: rgba(127, 127, 127, 0.06);
+}
+.te-affinity-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 7px; }
+.te-affinity-label { font-size: 13px; font-weight: 800; letter-spacing: 0.04em; }
+.te-affinity-pct { font-size: 20px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.te-affinity-track {
+  height: 10px;
+  background: rgba(127, 127, 127, 0.18);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.te-affinity-fill {
+  height: 100%;
+  width: 50%;
+  background: var(--te-affinity-fill, #e0608a);
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.te-affinity-reaction { margin: 8px 0 0; font-size: 13px; opacity: 0.85; font-style: italic; }
+
+/* config.point_budget(#55) — 인트로 뒤/문항 시작 전 스탯 포인트 배분 화면 */
+.te-budget-body { padding: 20px; flex: 1; }
+.te-budget-remaining { font-size: 14px; margin: 6px 0 18px; opacity: 0.85; }
+.te-budget-remaining strong { font-size: 18px; }
+.te-budget-row {
+  display: grid;
+  grid-template-columns: 62px 34px 1fr 28px 34px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.te-budget-label { font-size: 13px; font-weight: 700; }
+.te-budget-btn {
+  min-height: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(127, 127, 127, 0.2);
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  color: inherit;
+}
+.te-budget-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.te-budget-track {
+  height: 9px;
+  background: rgba(127, 127, 127, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.te-budget-fill {
+  height: 100%;
+  background: currentColor;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+.te-budget-val { font-size: 13px; font-weight: 800; text-align: center; font-variant-numeric: tabular-nums; }
 
 /* config.chat_ui(#25) — 상대 말풍선(좌)/내 답장 말풍선(우) */
 .te-chat-thread { display: flex; flex-direction: column; margin: 8px 0 20px; }

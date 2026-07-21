@@ -5784,6 +5784,41 @@ window.AppData = {
       engagementKey: 'site-mbtirpgstat-plays', baseCount: 255,
       addedAt: '2026-07-18', isNew: true, theme: 'holocard',
     },
+    {
+      id: 'mbti-drinking-party-character', title: 'MBTI 술자리 캐릭터 + 다음날 후기', emoji: '🍻',
+      hook: '잔이 채워지는 순간 깨어나는 진짜 얼굴, 텐션 게이지 슬라이더로 확인하는 오늘 밤의 부캐',
+      url: '/test-engine/tests/51-mbti-drinking-party-character/index.html',
+      engagementKey: 'site-mbtidrinking-plays', baseCount: 269,
+      addedAt: '2026-07-21', isNew: true, theme: 'receipt',
+    },
+    {
+      id: 'mbti-pet-animal-type', title: 'MBTI 반려동물 판별기 (만약 동물이라면)', emoji: '🐾',
+      hook: '동물원 문이 열리는 순간, 나와 가장 닮은 동물이 우리 밖으로 걸어나온다',
+      url: '/test-engine/tests/52-mbti-pet-animal-type/index.html',
+      engagementKey: 'site-mbtipet-plays', baseCount: 288,
+      addedAt: '2026-07-21', isNew: true, theme: 'vetclip',
+    },
+    {
+      id: 'mbti-post-apocalypse-tribe-leader', title: 'MBTI 종말 후 부족 리더 판별', emoji: '🏕️',
+      hook: '문명이 무너진 지 10년, 살아남은 부족 안에서 당신이 맡게 될 역할은?',
+      url: '/test-engine/tests/53-mbti-post-apocalypse-tribe-leader/index.html',
+      engagementKey: 'site-mbtitribeleader-plays', baseCount: 231,
+      addedAt: '2026-07-21', isNew: true, theme: 'wasteland',
+    },
+    {
+      id: 'mbti-webtoon-romance-lead', title: 'MBTI 로맨스 웹툰 남녀주인공 유형', emoji: '📖',
+      hook: '1화 첫 페이지가 열리는 순간, 그 웹툰의 주인공은 바로 당신이다',
+      url: '/test-engine/tests/54-mbti-webtoon-romance-lead/index.html',
+      engagementKey: 'site-mbtiwebtoon-plays', baseCount: 274,
+      addedAt: '2026-07-21', isNew: true, theme: 'webtoon',
+    },
+    {
+      id: 'mbti-fantasy-weapon', title: 'MBTI 판타지 무기 판별기', emoji: '⚔️',
+      hook: '전설 속 대장간, 오직 자격을 가진 자에게만 무기가 스스로 손을 내민다',
+      url: '/test-engine/tests/55-mbti-fantasy-weapon/index.html',
+      engagementKey: 'site-mbtiweapon-plays', baseCount: 224,
+      addedAt: '2026-07-21', isNew: true, theme: 'rpginventory',
+    },
   ],
 
   /* 몰입테스트/MBTI존 21개 전량을 무드별로 묶은 가로 스크롤 큐레이션 (v0.8.9~).

@@ -1,0 +1,96 @@
+/* test-engine — themes/vetclip.css — 신규 테마: 빈티지 수의사 클립보드 가죽스티커 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   mbti-pet-animal-type(#52)가 1호 사용처. 나무 책상 위 빈티지 클립보드 + 바랜 종이 +
+   가죽 느낌 동물 스티커 + 발자국 도장. 손글씨체 Patrick Hand(기존 테마 미사용). */
+
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #6b4a30; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.05) 0px, transparent 2px, transparent 46px),
+    #6b4a30;
+  color: #3a2a1c;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #f2e6cc;
+  border-radius: 6px;
+  border: 1px solid rgba(90, 62, 38, 0.4);
+  box-shadow: 0 16px 34px rgba(30, 18, 8, 0.4);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Patrick Hand", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  color: #4a3018;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #6b4e30; }
+
+.te-chip {
+  background: rgba(107, 74, 48, 0.12);
+  border: 1px solid #8a5a34;
+  color: #5a3e26;
+  font-family: "Patrick Hand", sans-serif;
+  border-radius: 999px;
+}
+
+.te-btn {
+  background: #8a5a34;
+  color: #f2e6cc;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 4px 0 #5a3e26;
+  font-family: "Patrick Hand", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+.te-btn-primary { background: #8a5a34; box-shadow: 0 4px 0 #5a3e26; }
+.te-btn-secondary { background: #d9c39f; color: #4a3018; border: 1px solid #8a5a34; box-shadow: none; }
+.te-btn-accent { background: #a6522f; color: #fdf3e2; box-shadow: 0 4px 0 #6e3520; }
+.te-btn-kakao { background: #FEE500; color: #191600; border: none; box-shadow: 0 4px 0 #cbb400; }
+
+.te-btn-choice {
+  background: #fdf3e2;
+  color: #4a3018;
+  border: 1px solid rgba(90, 62, 38, 0.35);
+  border-radius: 10px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: rgba(138, 90, 52, 0.15); }
+
+/* config.image_choices(#52 실사용) — 아이콘 카드 + 수집 스티커판을 클립보드 톤에 맞춤 */
+.te-btn-choice-img { border-radius: 12px; }
+.te-collect-strip {
+  background: rgba(138, 90, 52, 0.1);
+  border-color: rgba(90, 62, 38, 0.35);
+}
+.te-collect-title { color: #4a3018; }
+.te-collect-stamp { background: rgba(138, 90, 52, 0.16); }
+.te-collect-stamp.is-stamped { background: rgba(138, 90, 52, 0.32); }
+
+.te-progress-track { background: rgba(90, 62, 38, 0.18); }
+.te-progress-fill { background: #8a5a34; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #4a3018;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(90, 62, 38, 0.2);
+  border-top-color: #8a5a34;
+}

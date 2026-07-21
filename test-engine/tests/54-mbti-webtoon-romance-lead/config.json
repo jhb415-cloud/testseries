@@ -9,7 +9,7 @@
     "남주여주",
     "로맨스밈"
   ],
-  "theme": "pending",
+  "theme": "webtoon",
   "cover_image": "assets/cover.webp",
   "seed_count": 274,
   "engagement_key": "site-mbtiwebtoon-plays",
@@ -26,19 +26,27 @@
       "choices": [
         {
           "label": "화려하게 등장해 시선을 끈다",
-          "axis": "E"
+          "axis": "E",
+          "delta": 3,
+          "reaction": "주변 시선이 온통 당신에게 쏠렸다"
         },
         {
           "label": "주변 사람들과 활발하게 어울린다",
-          "axis": "E"
+          "axis": "E",
+          "delta": 2,
+          "reaction": "상대가 슬쩍 곁눈질로 쳐다봤다"
         },
         {
           "label": "조용히 등장해 존재감을 숨긴다",
-          "axis": "I"
+          "axis": "I",
+          "delta": 1,
+          "reaction": "상대가 문득 뒤돌아봤다"
         },
         {
           "label": "혼자 있는 장면으로 시작된다",
-          "axis": "I"
+          "axis": "I",
+          "delta": 0,
+          "reaction": "상대는 아직 당신을 알아채지 못했다"
         }
       ]
     },
@@ -48,19 +56,27 @@
       "choices": [
         {
           "label": "적극적으로 말을 걸며 다가간다",
-          "axis": "E"
+          "axis": "E",
+          "delta": 3,
+          "reaction": "상대가 살짝 당황하며 웃었다"
         },
         {
           "label": "먼저 다가가는 쪽이다",
-          "axis": "E"
+          "axis": "E",
+          "delta": 2,
+          "reaction": "상대의 볼이 살짝 붉어졌다"
         },
         {
           "label": "우연히 부딪히며 어색하게 만난다",
-          "axis": "I"
+          "axis": "I",
+          "delta": 2,
+          "reaction": "두 사람 사이에 어색한 정적이 흘렀다"
         },
         {
           "label": "말없이 눈빛만 교환한다",
-          "axis": "I"
+          "axis": "I",
+          "delta": 1,
+          "reaction": "잠깐의 침묵이 묘하게 길게 느껴졌다"
         }
       ]
     },
@@ -70,19 +86,27 @@
       "choices": [
         {
           "label": "운명적이고 극적인 사건으로 얽힌다",
-          "axis": "N"
+          "axis": "N",
+          "delta": 2,
+          "reaction": "작가가 두 사람 위로 벚꽃 컷을 얹었다"
         },
         {
           "label": "예상 못한 반전이 계속 일어난다",
-          "axis": "N"
+          "axis": "N",
+          "delta": 1,
+          "reaction": "다음 화 예고편이 심상치 않다"
         },
         {
           "label": "현실적인 일상 속에서 가까워진다",
-          "axis": "S"
+          "axis": "S",
+          "delta": 2,
+          "reaction": "두 사람 사이 거리가 한 뼘 좁혀졌다"
         },
         {
           "label": "구체적인 사건들이 차곡차곡 쌓인다",
-          "axis": "S"
+          "axis": "S",
+          "delta": 1,
+          "reaction": "댓글창에 '설렌다'는 반응이 달렸다"
         }
       ]
     },
@@ -92,19 +116,27 @@
       "choices": [
         {
           "label": "운명 같은 새로운 갈등이 시작된다",
-          "axis": "N"
+          "axis": "N",
+          "delta": -1,
+          "reaction": "독자들이 '삼각관계 클리셰'라며 술렁였다"
         },
         {
           "label": "예상 밖의 전개로 이야기가 꼬인다",
-          "axis": "N"
+          "axis": "N",
+          "delta": -2,
+          "reaction": "상대의 표정이 복잡해졌다"
         },
         {
           "label": "현실적인 조건 비교가 시작된다",
-          "axis": "S"
+          "axis": "S",
+          "delta": -2,
+          "reaction": "상대가 말없이 시선을 피했다"
         },
         {
           "label": "구체적인 상황들로 갈등이 쌓인다",
-          "axis": "S"
+          "axis": "S",
+          "delta": -1,
+          "reaction": "분위기가 조금씩 서먹해졌다"
         }
       ]
     },
@@ -114,19 +146,27 @@
       "choices": [
         {
           "label": "논리적으로 오해를 풀어나간다",
-          "axis": "T"
+          "axis": "T",
+          "delta": 2,
+          "reaction": "상대가 안도한 듯 숨을 내쉬었다"
         },
         {
           "label": "냉정하게 관계를 정리하려 한다",
-          "axis": "T"
+          "axis": "T",
+          "delta": -3,
+          "reaction": "상대의 눈빛이 순간 얼어붙었다"
         },
         {
           "label": "감정이 북받쳐 눈물을 흘린다",
-          "axis": "F"
+          "axis": "F",
+          "delta": 1,
+          "reaction": "상대가 손을 슬며시 잡아주었다"
         },
         {
           "label": "마음이 아파 아무 말도 못한다",
-          "axis": "F"
+          "axis": "F",
+          "delta": -1,
+          "reaction": "정적만 흘렀다"
         }
       ]
     },
@@ -136,19 +176,27 @@
       "choices": [
         {
           "label": "차분하게 사실을 설명한다",
-          "axis": "T"
+          "axis": "T",
+          "delta": 2,
+          "reaction": "상대가 고개를 끄덕이며 웃었다"
         },
         {
           "label": "논리적으로 오해를 풀어준다",
-          "axis": "T"
+          "axis": "T",
+          "delta": 2,
+          "reaction": "오해가 스르륵 풀렸다"
         },
         {
           "label": "속상해서 눈물부터 난다",
-          "axis": "F"
+          "axis": "F",
+          "delta": 0,
+          "reaction": "상대가 다급히 다가와 달랬다"
         },
         {
           "label": "마음이 아파서 아무 말도 못한다",
-          "axis": "F"
+          "axis": "F",
+          "delta": -2,
+          "reaction": "어색한 거리가 그대로 남았다"
         }
       ]
     },
@@ -158,19 +206,27 @@
       "choices": [
         {
           "label": "계획적으로 고백 타이밍을 잰다",
-          "axis": "J"
+          "axis": "J",
+          "delta": 2,
+          "reaction": "심장 소리가 화면 밖까지 들리는 듯했다"
         },
         {
           "label": "완벽한 이벤트를 준비한다",
-          "axis": "J"
+          "axis": "J",
+          "delta": 3,
+          "reaction": "배경에 조명이 화려하게 터졌다"
         },
         {
           "label": "그 순간 감정에 따라 고백한다",
-          "axis": "P"
+          "axis": "P",
+          "delta": 3,
+          "reaction": "예상 못한 타이밍에 독자들도 놀랐다"
         },
         {
           "label": "즉흥적으로 마음을 표현한다",
-          "axis": "P"
+          "axis": "P",
+          "delta": 2,
+          "reaction": "상대의 눈이 커졌다"
         }
       ]
     },
@@ -180,19 +236,27 @@
       "choices": [
         {
           "label": "예정된 해피엔딩으로 정리된다",
-          "axis": "J"
+          "axis": "J",
+          "delta": 3,
+          "reaction": "마지막 컷에 두 사람이 함께 웃고 있다"
         },
         {
           "label": "계획대로 착실히 완결난다",
-          "axis": "J"
+          "axis": "J",
+          "delta": 2,
+          "reaction": "예정된 결말에 독자들도 만족했다"
         },
         {
           "label": "예상 밖의 결말로 마무리된다",
-          "axis": "P"
+          "axis": "P",
+          "delta": 1,
+          "reaction": "떡밥이 하나 남은 채 완결됐다"
         },
         {
           "label": "즉흥적인 전개로 완결난다",
-          "axis": "P"
+          "axis": "P",
+          "delta": 1,
+          "reaction": "마지막 컷까지 예측불가였다"
         }
       ]
     }
@@ -382,5 +446,9 @@
       ],
       "tip": "명대사 기억 안 나? 우리 옛날에 · 첫사랑 감성 甲"
     }
-  ]
+  ],
+  "affinity_meter": {
+    "init": 50,
+    "max": 100
+  }
 }

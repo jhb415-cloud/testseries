@@ -1,4 +1,4 @@
-/* test-engine v14 (config.resource_meters — 자원 게이지 생존 대시보드 추가) | engine.js — 공통 로직
+/* test-engine v15 (config.image_choices/affinity_meter/point_budget — 게임형 개편 2차 배치 추가) | engine.js — 공통 로직
    (config 로드, 화면 전환, 채점, 렌더, 결과 공유카드 저장, 관련 테스트 배너, 카카오톡 공유,
    메인 사이트로 돌아가기 링크) 순수 바닐라 JS. 외부 라이브러리 없음. 기능별 함수로 분리해 유지보수.
    결과 화면의 "이미지 저장" 기능은 별도 파일 result-card.js(window.TestEngineResultCard)에 위임한다.
@@ -121,7 +121,26 @@
    resetResources/resourceMeterHtml/animateResourceMeter/applyResourceDelta가 호출되지 않아
    렌더링·채점에 아무 변화가 없다(하위호환). 직전 프레임값(state.resourcePrev)에서 목표값
    (state.resourceValues)으로 CSS width 트랜지션을 걸어 "스르륵" 차오르고 줄어들게 하고, 결과
-   화면에는 자원 평균 기반 "부족 생존 지수 N% + 판정"을 부가 스탯으로 노출한다. */
+   화면에는 자원 평균 기반 "부족 생존 지수 N% + 판정"을 부가 스탯으로 노출한다.
+
+   v15(2026-07-21): MBTI존 52~57 게임형 개편 2차 배치 — 나머지 3개 신규 메커니즘.
+   이전 v11/v14와 동일 원칙(새 scoring_type이 아니라 mbti4 위에 얹는 순수 opt-in 연출/보조
+   레이어, applyScoring/computeResult의 mbti4 채점 자체는 무변경, 필드가 없는 기존 config는
+   아래 함수들이 전혀 호출되지 않아 렌더링에 무변화)을 그대로 따른다.
+   ① `config.image_choices`(#52 반려동물 판별기): `{ icons: {E:'🐾', I:'😼', ...} }` — 문항
+      선택지 버튼을 아이콘+텍스트 카드로 렌더하고, 답할 때마다 고른 축의 아이콘이 상단
+      "수집 스티커판"에 하나씩 쌓인다(state.answers를 그대로 훑어 렌더만 하는 파생값이라
+      별도 상태 저장 불필요). 결과 화면엔 완성된 8개 스티커 줄을 부가 스탯으로 노출.
+   ② `config.affinity_meter`(#54 로맨스 웹툰): `{ init, max }` — 자원게이지(#53)의 단일 값
+      버전. 선택지의 숫자 `choice.delta`만큼 호감도가 오르내리고, 선택지에 `choice.reaction`
+      문구가 있으면 다음 문항 상단에 "상대가 살짝 웃었다" 식 반응 한 줄이 함께 뜬다. 결과
+      화면엔 최종 호감도%+엔딩 등급(운명적 로맨스/썸/다음 화 기약)을 부가 스탯으로 노출.
+   ③ `config.point_budget`(#55 판타지 무기): `{ pool, stats:[{key,label}] }` — 인트로의
+      "테스트 시작" 클릭 직후, 8문항을 시작하기 전에 고정 포인트를 스탯 4종에 직접 배분하는
+      화면을 하나 끼워 넣는다(`renderPointBudgetScreen`, +/- 스테퍼, 포인트 전부 소진해야
+      "시작하기" 활성화). 이 배분은 mbti4 8문항 채점과 완전히 무관한 별도 상태(state.pointBudget)
+      라 축 코드 산출에 전혀 영향 없고, 가장 많이 투자한 스탯 라벨을 `{topstat}` 플레이스홀더로
+      결과 텍스트에 노출 + 결과 화면에 4개 스탯 막대(statBar 재사용)를 부가 스탯으로 보여준다. */
 
 (function () {
   'use strict';
@@ -129,7 +148,7 @@
   // engine.js 자체가 바뀔 때마다 이 번호를 올리고, 위 헤더 안내대로 10개 index.html의
   // engine.js/engine.css/result-card.js ?v=도 같은 번호로 맞출 것 — themes/*.css는
   // injectThemeCSS()가 이 상수를 그대로 재사용해 자동으로 캐시버스팅된다(파일별로 안 챙겨도 됨).
-  var ENGINE_ASSET_VERSION = '14';
+  var ENGINE_ASSET_VERSION = '15';
 
   // 최상단에서 즉시 캡처해야 함 — defer 스크립트라도 동기 실행 구간에서만 currentScript가 유효함
   var ENGINE_SCRIPT = document.currentScript;
@@ -167,7 +186,13 @@
     // v14: config.resource_meters(#53) — 자원 게이지 현재값/직전 프레임값. resource_meters를 안
     // 쓰는 config는 두 값이 빈 객체로만 남고 아무 로직에도 관여하지 않는다(하위호환).
     resourceValues: {},
-    resourcePrev: {}
+    resourcePrev: {},
+    // v15: config.affinity_meter(#54) — 단일 호감도 값 현재/직전 프레임. 없는 config는 무관여.
+    affinityValue: 0,
+    affinityPrev: 0,
+    // v15: config.point_budget(#55) — 스탯별 배분 포인트. mbti4 채점과 별개 상태라 없는 config는
+    // 빈 객체로만 남고 결과 계산에 전혀 관여하지 않는다.
+    pointBudget: {}
   };
 
   var MBTI_PAIRS = [['E', 'I'], ['S', 'N'], ['T', 'F'], ['J', 'P']];
@@ -325,7 +350,8 @@
     qs('#te-start-btn').addEventListener('click', function () {
       var inputEl = qs('#te-intro-input');
       state.introInputValue = inputEl ? inputEl.value : '';
-      startTest();
+      // v15: config.point_budget(#55) — 문항 시작 전에 포인트 배분 화면을 하나 끼워 넣는다.
+      if (c.point_budget) renderPointBudget(); else startTest();
     });
   }
 
@@ -345,6 +371,7 @@
     state.reactionTimes = [];
     state.awakenPrev = { overall: 0, EI: 50, NS: 50, TF: 50, JP: 50 }; // v11(#41)
     if (c.resource_meters) resetResources(); // v14(#53)
+    if (c.affinity_meter) resetAffinity(); // v15(#54)
     state.currentNode = c.questions_tree ? c.start_node : '';
     state.pathLength = 0;
     state.questionLocked = false;
@@ -393,6 +420,12 @@
     // config.resource_meters(#53): 식량·식수·사기 같은 자원 게이지 생존 대시보드 (연출 전용)
     var resourceHtml = c.resource_meters ? resourceMeterHtml() : '';
 
+    // config.affinity_meter(#54): ♥ 호감도 게이지 (연출 전용)
+    var affinityHtml = c.affinity_meter ? affinityMeterHtml() : '';
+
+    // config.image_choices(#52): 답할 때마다 쌓이는 수집 스티커판 (연출 전용)
+    var collectHtml = c.image_choices ? collectionStripHtml() : '';
+
     var choicesHtml;
     if (c.slider_ui) {
       var mid = Math.floor((q.choices.length - 1) / 2);
@@ -405,6 +438,19 @@
         .map(function (choice, i) {
           return '<button type="button" class="te-btn te-chat-bubble te-chat-bubble-me" data-choice-index="' + i + '">' +
             escapeHtml(choice.label) +
+          '</button>';
+        })
+        .join('');
+    } else if (c.image_choices) {
+      // config.image_choices(#52): 선택지를 아이콘+텍스트 카드로 렌더 — 축(choice.axis)에 매핑된
+      // 이모지를 config.image_choices.icons에서 찾아 보여준다(없으면 기본 ⭐).
+      var icIcons = imageChoiceIcons();
+      choicesHtml = q.choices
+        .map(function (choice, i) {
+          var icon = icIcons[choice.axis] || '⭐';
+          return '<button type="button" class="te-btn te-btn-choice te-btn-choice-img" data-choice-index="' + i + '">' +
+            '<span class="te-choice-icon">' + escapeHtml(icon) + '</span>' +
+            '<span class="te-choice-label">' + escapeHtml(choice.label) + '</span>' +
           '</button>';
         })
         .join('');
@@ -427,6 +473,8 @@
           '<p class="te-question-counter">' + (idx + 1) + ' / ' + total + '</p>' +
           awakenHtml +
           resourceHtml +
+          affinityHtml +
+          collectHtml +
           timerHtml +
           imageHtml +
           questionTextHtml +
@@ -471,6 +519,9 @@
 
     // config.resource_meters(#53): 직전 프레임값 → 지금까지 누적된 자원값으로 게이지를 옮긴다.
     if (c.resource_meters) animateResourceMeter();
+
+    // config.affinity_meter(#54): 직전 프레임값 → 지금까지 누적된 호감도로 게이지를 옮긴다.
+    if (c.affinity_meter) animateAffinityMeter();
 
     // config.timer_sec(#21): 렌더가 끝나고 리스너까지 붙은 뒤에 카운트다운을 시작한다.
     if (c.timer_sec) {
@@ -548,6 +599,7 @@
     state.answers.push(choice);
     applyScoring(choice, question);
     if (state.config.resource_meters) applyResourceDelta(choice); // v14(#53) — 채점과 무관한 연출값
+    if (state.config.affinity_meter) applyAffinityDelta(choice); // v15(#54) — 채점과 무관한 연출값
     advance();
   }
 
@@ -928,6 +980,149 @@
     return { pct: pct, parts: parts, verdict: verdict };
   }
 
+  // v15: config.image_choices(#52 반려동물 판별기) — 선택지 버튼을 아이콘+텍스트 카드로 렌더하고,
+  // 답한 만큼 상단에 스티커가 쌓이는 수집판을 보여준다. 새 상태 없이 기존 state.answers(이미
+  // 매 선택마다 쌓이던 배열)를 그대로 훑어 렌더만 하는 파생값이라 채점과 완전히 무관하다.
+  function imageChoiceIcons() {
+    var ic = state.config.image_choices;
+    return (ic && ic.icons) || {};
+  }
+  function collectionStripHtml() {
+    var icons = imageChoiceIcons();
+    var total = state.config.questions.length;
+    var stamps = state.answers.map(function (a) {
+      var icon = (a && a.axis && icons[a.axis]) || '⭐';
+      return '<span class="te-collect-stamp is-stamped">' + escapeHtml(icon) + '</span>';
+    }).join('');
+    var empty = '';
+    for (var i = state.answers.length; i < total; i++) {
+      empty += '<span class="te-collect-stamp is-empty">?</span>';
+    }
+    return '<div class="te-collect-strip" id="te-collect-strip">' +
+        '<span class="te-collect-title">🐾 수집판</span>' +
+        '<div class="te-collect-row">' + stamps + empty + '</div>' +
+      '</div>';
+  }
+
+  // v15: config.affinity_meter(#54 로맨스 웹툰) — resource_meters(#53)의 단일 값 버전. 선택지의
+  // 숫자 choice.delta만큼 호감도가 오르내리고, choice.reaction이 있으면 다음 문항 상단에 짧은
+  // 반응 문구가 함께 뜬다. affinity_meter가 없는 config는 아래 함수들이 호출되지 않는다.
+  function affinityConfig() {
+    var am = state.config.affinity_meter || {};
+    return { init: typeof am.init === 'number' ? am.init : 50, max: am.max || 100 };
+  }
+  function resetAffinity() {
+    var ac = affinityConfig();
+    state.affinityValue = ac.init;
+    state.affinityPrev = ac.init;
+  }
+  function applyAffinityDelta(choice) {
+    if (!choice || typeof choice.delta !== 'number') return;
+    var ac = affinityConfig();
+    state.affinityValue = Math.max(0, Math.min(ac.max, state.affinityValue + choice.delta));
+  }
+  function affinityMeterHtml() {
+    var ac = affinityConfig();
+    var pct = ac.max ? Math.round((state.affinityPrev / ac.max) * 100) : 0;
+    var lastChoice = state.answers[state.answers.length - 1];
+    var reactionHtml = (lastChoice && lastChoice.reaction)
+      ? '<p class="te-affinity-reaction">' + escapeHtml(lastChoice.reaction) + '</p>'
+      : '';
+    return '<div class="te-affinity" id="te-affinity">' +
+        '<div class="te-affinity-head">' +
+          '<span class="te-affinity-label">💕 호감도</span>' +
+          '<span class="te-affinity-pct" id="te-affinity-pct">' + pct + '%</span>' +
+        '</div>' +
+        '<div class="te-affinity-track"><div class="te-affinity-fill" id="te-affinity-fill" style="width:' + pct + '%"></div></div>' +
+        reactionHtml +
+      '</div>';
+  }
+  function animateAffinityMeter() {
+    var ac = affinityConfig();
+    requestAnimationFrame(function () {
+      var pct = ac.max ? Math.round((state.affinityValue / ac.max) * 100) : 0;
+      var pctEl = qs('#te-affinity-pct');
+      var fillEl = qs('#te-affinity-fill');
+      if (pctEl) pctEl.textContent = pct + '%';
+      if (fillEl) fillEl.style.width = pct + '%';
+    });
+    state.affinityPrev = state.affinityValue;
+  }
+  // 결과 화면용 — 최종 호감도%와 엔딩 등급 판정.
+  function computeAffinityResult() {
+    var ac = affinityConfig();
+    var pct = ac.max ? Math.round((state.affinityValue / ac.max) * 100) : 0;
+    var verdict = pct >= 80 ? '운명적 로맨스 엔딩' : pct >= 55 ? '설레는 썸 엔딩' : pct >= 30 ? '어색한 친구 엔딩' : '다음 화를 기약하는 엔딩';
+    return { pct: pct, verdict: verdict };
+  }
+
+  // v15: config.point_budget(#55 판타지 무기) — 인트로 "테스트 시작" 클릭 직후, 8문항을 시작하기
+  // 전에 고정 포인트를 스탯 4종에 배분하는 화면을 하나 끼워 넣는다. mbti4 8문항 채점과는 완전히
+  // 별개 상태(state.pointBudget)라 축 코드 산출에 전혀 영향이 없고, 가장 많이 투자한 스탯만
+  // {topstat} 플레이스홀더로 결과 텍스트에 노출한다(순수 플레이버). point_budget이 없는 config는
+  // renderIntro의 시작 버튼이 곧장 startTest()로 가므로 이 화면 자체가 존재하지 않는다.
+  function pointBudgetRemaining() {
+    var pb = state.config.point_budget;
+    var used = Object.keys(state.pointBudget).reduce(function (sum, k) { return sum + state.pointBudget[k]; }, 0);
+    return pb.pool - used;
+  }
+  function renderPointBudget() {
+    var pb = state.config.point_budget;
+    state.pointBudget = {};
+    pb.stats.forEach(function (s) { state.pointBudget[s.key] = 0; });
+    renderPointBudgetScreen();
+  }
+  function renderPointBudgetScreen() {
+    var pb = state.config.point_budget;
+    var remaining = pointBudgetRemaining();
+    var rows = pb.stats.map(function (s) {
+      var val = state.pointBudget[s.key];
+      var pct = pb.pool ? Math.round((val / pb.pool) * 100) : 0;
+      return '<div class="te-budget-row">' +
+          '<span class="te-budget-label">' + escapeHtml(s.label) + '</span>' +
+          '<button type="button" class="te-budget-btn" data-budget-dec="' + escapeAttr(s.key) + '"' + (val <= 0 ? ' disabled' : '') + '>−</button>' +
+          '<div class="te-budget-track"><div class="te-budget-fill" style="width:' + pct + '%"></div></div>' +
+          '<span class="te-budget-val">' + val + '</span>' +
+          '<button type="button" class="te-budget-btn" data-budget-inc="' + escapeAttr(s.key) + '"' + (remaining <= 0 ? ' disabled' : '') + '>+</button>' +
+        '</div>';
+    }).join('');
+    rootEl.innerHTML =
+      '<div class="te-app te-screen-budget te-has-fixed-footer">' +
+        '<div class="te-budget-body">' +
+          '<h2 class="te-question-text">' + escapeHtml(pb.intro_text || '포인트를 스탯에 배분하세요') + '</h2>' +
+          '<p class="te-budget-remaining">남은 포인트 <strong id="te-budget-remaining">' + remaining + '</strong></p>' +
+          rows +
+        '</div>' +
+        '<div class="te-choices-fixed te-question-footer">' +
+          '<button type="button" class="te-btn te-btn-primary" id="te-budget-confirm"' + (remaining > 0 ? ' disabled' : '') + '>시작하기</button>' +
+        '</div>' +
+      '</div>';
+    qsa('[data-budget-inc]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var k = btn.dataset.budgetInc;
+        if (pointBudgetRemaining() > 0) { state.pointBudget[k] += 1; renderPointBudgetScreen(); }
+      });
+    });
+    qsa('[data-budget-dec]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var k = btn.dataset.budgetDec;
+        if (state.pointBudget[k] > 0) { state.pointBudget[k] -= 1; renderPointBudgetScreen(); }
+      });
+    });
+    qs('#te-budget-confirm').addEventListener('click', function () {
+      if (pointBudgetRemaining() === 0) startTest();
+    });
+  }
+  // 결과 화면용 — 가장 많이 투자한 스탯의 라벨({topstat} 플레이스홀더용).
+  function topBudgetStatLabel() {
+    var pb = state.config.point_budget;
+    if (!pb) return '';
+    var top = pb.stats.reduce(function (best, s) {
+      return (state.pointBudget[s.key] || 0) > (state.pointBudget[best.key] || 0) ? s : best;
+    }, pb.stats[0]);
+    return top.label;
+  }
+
   function computeMbti4Result(c) {
     var r = codeFromCounts(state.mbtiCounts);
     var eVal = 100 - r.ratios.EI, nVal = r.ratios.SN, fVal = r.ratios.TF, jVal = 100 - r.ratios.JP;
@@ -937,7 +1132,10 @@
       // STEP 6: 이미 계산돼있던 r.ratios(I/N/F/P 비율)를 앞글자(E/N/F/J) 기준 퍼센트로 뒤집어
       // 템플릿에서 바로 쓸 수 있게 노출 — 능력치/스탯 표시류 콘텐츠에서 "{e}%"/"{ebar}" 식으로 사용.
       e: eVal, n: nVal, f: fVal, j: jVal,
-      ebar: statBar(eVal), nbar: statBar(nVal), fbar: statBar(fVal), jbar: statBar(jVal)
+      ebar: statBar(eVal), nbar: statBar(nVal), fbar: statBar(fVal), jbar: statBar(jVal),
+      // v15: config.point_budget(#55)이 있을 때만 의미 있는 값 — 없으면 빈 문자열로 남아
+      // resultTemplate에 "{topstat}"이 없는 기존 config는 완전히 무관하다.
+      topstat: c.point_budget ? topBudgetStatLabel() : ''
     };
     var matched = (c.results || []).filter(function (res) { return res.code === r.code; })[0];
     var merged = fillVarsTemplate(matched || c.resultTemplate || {}, vars);
@@ -1005,6 +1203,34 @@
         '<p class="te-result-stat te-result-stat-sub">' + escapeHtml(si.parts) + '</p>';
     }
 
+    // config.affinity_meter(#54) 테스트에서만 노출되는 부가 스탯.
+    var affinityStatHtml = '';
+    if (state.config.affinity_meter) {
+      var ar = computeAffinityResult();
+      affinityStatHtml = '<p class="te-result-stat">💕 최종 호감도 ' + ar.pct + '% · ' + escapeHtml(ar.verdict) + '</p>';
+    }
+
+    // config.image_choices(#52) 테스트에서만 노출되는 부가 스탯 — 완성된 스티커판 재노출.
+    var collectionStatHtml = '';
+    if (state.config.image_choices) {
+      var icIcons = imageChoiceIcons();
+      var stampRow = state.answers.map(function (a) {
+        return (a && a.axis && icIcons[a.axis]) || '⭐';
+      }).join(' ');
+      collectionStatHtml = '<p class="te-result-stat">🐾 완성된 스티커판 ' + escapeHtml(stampRow) + '</p>';
+    }
+
+    // config.point_budget(#55) 테스트에서만 노출되는 부가 스탯 — 배분한 스탯 4종 막대.
+    var budgetStatHtml = '';
+    if (state.config.point_budget) {
+      var pb = state.config.point_budget;
+      var budgetRows = pb.stats.map(function (s) {
+        var pct = pb.pool ? Math.round(((state.pointBudget[s.key] || 0) / pb.pool) * 100) : 0;
+        return escapeHtml(s.label) + ' ' + statBar(pct) + ' ' + (state.pointBudget[s.key] || 0);
+      }).join('<br>');
+      budgetStatHtml = '<p class="te-result-stat">⚔️ 능력치 배분<br>' + budgetRows + '</p>';
+    }
+
     rootEl.innerHTML =
       '<div class="te-app te-screen-result te-has-fixed-footer">' +
         '<div class="te-result-body">' +
@@ -1015,6 +1241,9 @@
           '<p class="te-result-tip">' + escapeHtml(applyTagTemplate(result.tip || '', result.tag)) + '</p>' +
           timeoutStatHtml +
           survivalStatHtml +
+          affinityStatHtml +
+          collectionStatHtml +
+          budgetStatHtml +
           '<p class="te-save-hint">📸 이미지를 꾹 눌러 저장해보세요</p>' +
           relatedHtml +
         '</div>' +

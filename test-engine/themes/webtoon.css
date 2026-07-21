@@ -1,0 +1,90 @@
+/* test-engine — themes/webtoon.css — 신규 테마: 로맨스 웹툰 뷰어 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   mbti-webtoon-romance-lead(#54)가 1호 사용처. 실제 웹툰 뷰어 앱처럼 저녁 노을~네이비
+   그라데이션 배경 + 화이트 카드 + 핑크 포인트. 둥근 손글씨풍 산세리프 Gowun Dodum(기존
+   테마 미사용). */
+
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #2b2250; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background: linear-gradient(180deg, #ffb6a3 0%, #f288a3 22%, #a55fb0 52%, #4c3a8f 78%, #2b2250 100%);
+  color: #2b2250;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background: #fffaf9;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 0 18px 40px rgba(43, 34, 80, 0.35);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Gowun Dodum", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  color: #d13d72;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #6b5a8a; }
+
+.te-chip {
+  background: #fdeaf1;
+  border: 1px solid #f2a6c4;
+  color: #d13d72;
+  font-family: "Gowun Dodum", sans-serif;
+  border-radius: 999px;
+}
+
+.te-btn {
+  background: linear-gradient(135deg, #ff8aa8, #d13d72);
+  color: #fff;
+  border-radius: 999px;
+  border: none;
+  box-shadow: 0 8px 18px rgba(209, 61, 114, 0.4);
+  font-family: "Gowun Dodum", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+.te-btn-primary { background: linear-gradient(135deg, #ff8aa8, #d13d72); }
+.te-btn-secondary { background: #f4eefc; color: #4c3a8f; border: none; box-shadow: none; }
+.te-btn-accent { background: linear-gradient(135deg, #7d6ad6, #4c3a8f); color: #fff; box-shadow: 0 8px 18px rgba(76, 58, 143, 0.4); }
+.te-btn-kakao { background: #FEE500; color: #191600; border: none; box-shadow: none; }
+
+.te-btn-choice {
+  background: #fdf6f7;
+  color: #4c3a5f;
+  border: 1px solid #fbdce7;
+  border-radius: 16px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: #fdeaf1; }
+
+/* config.affinity_meter(#54 실사용) — 핑크 하트 게이지 톤으로 덮어씀 */
+.te-affinity-fill { background: linear-gradient(90deg, #ff8aa8, #d13d72); }
+.te-affinity { background: #fdeaf1; border-color: #fbdce7; }
+.te-affinity-reaction { color: #a5548f; }
+
+.te-progress-track { background: #fbdce7; border-radius: 999px; }
+.te-progress-fill { background: linear-gradient(90deg, #ff8aa8, #d13d72); border-radius: 999px; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #4c3a5f;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: #fbdce7;
+  border-top-color: #d13d72;
+}

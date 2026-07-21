@@ -4771,6 +4771,10 @@ const THEME_TITLE_FONTS = {
   hanjiscroll:      { family: '"Nanum Brush Script","Noto Serif KR",serif', google: 'family=Nanum+Brush+Script' },
   holocard:         { family: '"Pirata One","Noto Sans KR",sans-serif', google: 'family=Pirata+One' },
   wasteland:        { family: '"Black Ops One","Noto Sans KR",sans-serif', google: 'family=Black+Ops+One' },
+  receipt:          { family: '"VT323","Noto Sans KR",monospace', google: 'family=VT323' },
+  vetclip:          { family: '"Patrick Hand","Noto Sans KR",sans-serif', google: 'family=Patrick+Hand' },
+  webtoon:          { family: '"Gowun Dodum","Noto Sans KR",sans-serif', google: 'family=Gowun+Dodum' },
+  rpginventory:     { family: '"Rajdhani","Noto Sans KR",sans-serif', google: 'family=Rajdhani:wght@500;600;700' },
 };
 const _loadedThemeFonts = new Set();
 function themeTitleFontFamily(theme) {

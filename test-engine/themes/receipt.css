@@ -1,0 +1,100 @@
+/* test-engine — themes/receipt.css — 신규 테마: 감열지 영수증 프린트 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   mbti-drinking-party-character(#51)가 1호 사용처. 술자리 결산 영수증처럼 크림빛 감열지 위에
+   흑백 도트matrix 프린트 + 점선 절취선 + 체크박스 느낌. 폰트는 VT323(도트matrix 터미널체,
+   기존 테마 미사용). */
+
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #ece5d3; /* 고정 버튼바 배경(engine.css 참고) — 페이지 배경과 동일 톤 */
+  background: #ece5d3;
+  color: #2b2620;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background:
+    repeating-linear-gradient(180deg, rgba(43, 38, 32, 0.035) 0px, rgba(43, 38, 32, 0.035) 1px, transparent 1px, transparent 3px),
+    #f7f2e4;
+  border: 1px dashed rgba(43, 38, 32, 0.45);
+  border-radius: 2px;
+  box-shadow: 0 10px 26px rgba(43, 38, 32, 0.18);
+  margin: 18px 16px 16px;
+  position: relative;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "VT323", "Noto Sans KR", monospace;
+  font-weight: 700;
+  font-size: 1.5em;
+  letter-spacing: 0.02em;
+  color: #201c17;
+}
+
+.te-result-subtitle,
+.te-desc,
+.te-result-tip { color: #55483a; }
+
+.te-chip {
+  background: transparent;
+  border: 1px solid #2b2620;
+  color: #2b2620;
+  font-family: "VT323", monospace;
+  font-size: 15px;
+  border-radius: 0;
+}
+
+.te-btn {
+  background: #2b2620;
+  color: #f7f2e4;
+  border-radius: 2px;
+  border: none;
+  box-shadow: none;
+  font-family: "VT323", "Noto Sans KR", monospace;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.te-btn-primary { background: #2b2620; }
+.te-btn-secondary { background: transparent; color: #2b2620; border: 1px solid #2b2620; box-shadow: none; }
+.te-btn-accent { background: #9a3324; color: #fdf6e8; }
+.te-btn-kakao { background: #FEE500; color: #191600; border: none; box-shadow: none; }
+
+.te-btn-choice {
+  background: #fdf9ee;
+  color: #2b2620;
+  border: 1px solid rgba(43, 38, 32, 0.35);
+  border-radius: 2px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+}
+.te-btn-choice:active { background: rgba(43, 38, 32, 0.1); }
+
+/* config.slider_ui(#51 실사용) — 감열지 프린트 톤에 맞춘 슬라이더 */
+.te-slider-label {
+  font-family: "VT323", monospace;
+  font-size: 22px;
+  text-align: center;
+  color: #2b2620;
+}
+.te-slider-input { accent-color: #9a3324; }
+
+.te-progress-track { background: rgba(43, 38, 32, 0.12); border-radius: 0; }
+.te-progress-fill { background: #9a3324; border-radius: 0; }
+
+.te-result-traits {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #2b2620;
+  font-weight: 600;
+}
+
+.te-loading-box .te-spinner {
+  border-color: rgba(43, 38, 32, 0.18);
+  border-top-color: #9a3324;
+}

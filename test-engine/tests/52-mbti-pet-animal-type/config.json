@@ -9,7 +9,7 @@
     "동물판별",
     "귀여운밈"
   ],
-  "theme": "pending",
+  "theme": "vetclip",
   "cover_image": "assets/cover.webp",
   "seed_count": 288,
   "engagement_key": "site-mbtipet-plays",
@@ -386,5 +386,17 @@
       ],
       "tip": "키우기 난이도 중, 근데 안겨있는 모습이 힐링 그 자체"
     }
-  ]
+  ],
+  "image_choices": {
+    "icons": {
+      "E": "🐕",
+      "I": "🐈",
+      "S": "🐿️",
+      "N": "🦄",
+      "T": "🦉",
+      "F": "🐰",
+      "J": "🐝",
+      "P": "🦋"
+    }
+  }
 }

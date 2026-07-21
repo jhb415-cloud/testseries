@@ -231,6 +231,47 @@ app.js/sections.json/sitemap.xml/llms.txt)까지 같은 세션에서 이어서 �
   - **미완**: 사이트 연동(data.js/sections.json/sitemap/llms.txt) — #51~60 전체가 아직 미연동
     상태라 #53만 단독 노출하면 어긋나서 배치 단위로 함께 진행 예정. 현재는 직접 URL로만 접근.
 
+## MBTI존 게임형 개편 2차 배치 — #51/52/54/55 (2026-07-21)
+사용자가 "성능이 좀 떨어지긴 했다, 나중에 손보면 된다 치고 51/52/54/55번 제작해줘"로 파일럿
+속도 검증 게이트를 건너뛰고 진행 승인. 레퍼런스(`assets/reference/`)와 문항·결과 텍스트
+(`mbti41~60.md`)는 이미 준비돼 있어 바로 엔진 설계→구현→이미지 생성으로 진행.
+
+- **engine v14→v15**: 신규 opt-in 메커니즘 3종 추가(전부 `awaken_meter`/`resource_meters`와
+  동일 원칙 — mbti4 채점 위의 순수 연출/보조 레이어, 필드 없는 config는 무변화).
+  - `image_choices`(#52): 선택지를 축(E/I/S/N/T/F/J/P)별 이모지 카드로 렌더 + 답할 때마다
+    쌓이는 수집 스티커판(`collectionStripHtml`). 새 상태 없이 기존 `state.answers`를 그대로
+    훑어 렌더만 하는 파생값.
+  - `affinity_meter`(#54): `resource_meters`의 단일 값 버전(♥호감도) + 선택지 `reaction`
+    문구. `resetAffinity`/`applyAffinityDelta`/`affinityMeterHtml`/`animateAffinityMeter`/
+    `computeAffinityResult`.
+  - `point_budget`(#55): 인트로 "테스트 시작" 클릭 직후 문항 시작 전에 끼워 넣는 신규 화면
+    (`renderPointBudgetScreen`, +/- 스테퍼로 고정 포인트를 스탯 4종에 배분, 전부 소진해야
+    진행). mbti4 채점과 완전 별개 상태(`state.pointBudget`)라 축 코드 산출 무관, 최다 투자
+    스탯만 `{topstat}` 플레이스홀더로 결과 traits에 노출.
+  - **ENGINE_ASSET_VERSION 14→15, 61개 index.html의 engine.js/engine.css `?v=14→15` 일괄
+    동기화**(result-card.js는 무변경 v2).
+- [x] #51 mbti-drinking-party-character — 기존 `slider_ui`(텐션게이지) 그대로 유지, 테마·이미지만
+  신규: `themes/receipt.css`(VT323, 감열지 영수증 체크리스트). 레퍼런스가 이 테스트의 ENTJ
+  예시 그 자체(체크리스트+스탬프 픽토그램)라 images/edits로 그대로 전이, 9/9 생성 성공.
+- [x] #52 mbti-pet-animal-type — `image_choices` 적용(축별 이모지 🐕🐈🐿️🦄🦉🐰🐝🦋), 신규
+  `themes/vetclip.css`(Patrick Hand, 빈티지 수의사 클립보드+가죽 스티커 동물 실루엣), 9/9 생성 성공.
+- [x] #54 mbti-webtoon-romance-lead — `affinity_meter` 적용(호감도 50→최종 66% 예시 확인,
+  32개 선택지 전부에 `delta`+`reaction` 문구 수록), 신규 `themes/webtoon.css`(Gowun Dodum,
+  노을~네이비 그라데이션), 9/9 생성 성공.
+- [x] #55 mbti-fantasy-weapon — `point_budget` 적용(힘/민첩/지혜/의지 10포인트 배분), 신규
+  `themes/rpginventory.css`(Rajdhani, 다크 게임 인벤토리+시안/골드 네온), 9/9 생성 성공.
+  결과 traits 마지막 줄 "이번 대장간에서 가장 많은 힘을 쏟은 능력치는 {topstat} 쪽이었다" —
+  받침 유무와 무관하게 항상 자연스럽도록 "쪽이었다"로 문법 이슈 회피(1차 작성 시 "{topstat}였다"
+  로 썼다가 힘/민첩처럼 받침 있는 스탯이 뽑히면 "힘였다"처럼 어색해지는 걸 QA 스크린샷에서
+  발견해 수정).
+- **QA**: 4개 전부 Playwright로 실제 완주(#51은 슬라이더 확인 버튼 루프, #55는 포인트 배분
+  화면에서 +버튼 10회 클릭 후 확인, #52/#54는 일반 선택지 클릭 루프) — 콘솔 에러 0/깨진 이미지
+  0/플레이스홀더 미치환 잔존 0, 4/4 통과. `cover-home.webp` 썸네일 4개 전부 생성,
+  `tests/index.json` 상태 갱신.
+- **미완**: 사이트 연동(data.js/sections.json/sitemap.xml/llms.txt) — #51~60 배치 연동 범위
+  결정(todo.md "51~60 연동 범위" 참고)이 아직이라 이번에도 보류, 직접 URL로만 접근 가능.
+  나머지 로드맵 `multi_select`(#57)도 미착수.
+
 ## 다음 배치 후보
 #21~50 완료(novel mechanic 포함). #51~60(2026-07-16 스켈레톤 생성분)이 다음 배치 후보 — 이 중
 **novel mechanic 나머지(51/56/58/60)는 엔진 필드·config 구조까지 정리됨**, 나머지는 문항·결과
