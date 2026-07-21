@@ -27,10 +27,42 @@ async function qaOne(browser, folder) {
   await startBtn.click({ timeout: 5000 }).catch(() => {});
   await page.waitForTimeout(400);
 
-  // 문항 반복 진행 (최대 20문항 안전장치)
-  for (let i = 0; i < 20; i++) {
+  // 문항 반복 진행 (최대 30스텝 안전장치)
+  // 일반 선택지 외에 특수 화면도 넘길 수 있어야 61개 전체가 결과까지 도달한다:
+  //  - config.interstitials(#56~60): 풀스크린 컷신 → #te-inter-next
+  //  - config.point_budget(#55): 포인트 배분 화면 → +버튼을 다 소진 후 #te-budget-confirm
+  //  - config.slider_ui(#51,#33): 슬라이더 확인 버튼 → .te-slider-confirm
+  for (let i = 0; i < 30; i++) {
     const resultVisible = await page.locator('.te-result-title').first().isVisible().catch(() => false);
     if (resultVisible) break;
+
+    const interBtn = page.locator('#te-inter-next');
+    if (await interBtn.isVisible().catch(() => false)) {
+      await interBtn.click({ timeout: 5000 }).catch(() => {});
+      await page.waitForTimeout(250);
+      continue;
+    }
+
+    const budgetConfirm = page.locator('#te-budget-confirm');
+    if (await budgetConfirm.isVisible().catch(() => false)) {
+      for (let k = 0; k < 40; k++) {
+        if (await budgetConfirm.isEnabled().catch(() => false)) break;
+        const inc = page.locator('[data-budget-inc]').first();
+        if (!(await inc.isVisible().catch(() => false))) break;
+        await inc.click({ timeout: 3000 }).catch(() => {});
+      }
+      await budgetConfirm.click({ timeout: 5000 }).catch(() => {});
+      await page.waitForTimeout(250);
+      continue;
+    }
+
+    const sliderConfirm = page.locator('.te-slider-confirm').first();
+    if (await sliderConfirm.isVisible().catch(() => false)) {
+      await sliderConfirm.click({ timeout: 5000 }).catch(() => {});
+      await page.waitForTimeout(250);
+      continue;
+    }
+
     const choiceBtn = page.locator('.te-btn-choice').first();
     const visible = await choiceBtn.isVisible().catch(() => false);
     if (!visible) { await page.waitForTimeout(400); continue; }
@@ -49,8 +81,10 @@ async function qaOne(browser, folder) {
     Array.from(document.images).filter((img) => !img.complete || img.naturalWidth === 0).map((img) => img.src)
   );
 
+  const reachedResult = await page.locator('.te-result-title').first().isVisible().catch(() => false);
+
   await page.close();
-  return { folder, errors, brokenImages };
+  return { folder, errors, brokenImages, reachedResult };
 }
 
 async function main() {
@@ -63,10 +97,11 @@ async function main() {
     results.push(r);
     if (r.errors.length) console.log(`  ⚠️ 콘솔 에러 ${r.errors.length}건:`, r.errors.slice(0, 3));
     if (r.brokenImages.length) console.log(`  ⚠️ 깨진 이미지 ${r.brokenImages.length}건:`, r.brokenImages);
-    if (!r.errors.length && !r.brokenImages.length) console.log(`  ✅ 통과`);
+    if (!r.reachedResult) console.log(`  ⚠️ 결과 화면까지 도달하지 못함`);
+    if (!r.errors.length && !r.brokenImages.length && r.reachedResult) console.log(`  ✅ 통과`);
   }
   await browser.close();
-  const failCount = results.filter((r) => r.errors.length || r.brokenImages.length).length;
+  const failCount = results.filter((r) => r.errors.length || r.brokenImages.length || !r.reachedResult).length;
   console.log(`\n총 ${results.length}개 중 ${results.length - failCount}개 통과`);
   process.exit(failCount ? 1 : 0);
 }

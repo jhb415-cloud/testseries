@@ -566,9 +566,9 @@
       "title": "MBTI가 사이버펑크 세계라면",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(questions_tree 분기 시나리오, 노드 9개) 완료 — 이미지 없음, 폴더 56-mbti-cyberpunk-world, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
-      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
+      "status": "완료(콘텐츠 제작) — circuitboard 테마+이미지 9장(cover+8) 완성, 신규 엔진 success_meter(잠입 성공률 게이지, questions_tree 위에 적용) 적용, 문항 텍스트 md 원문 기준 재작성, 사이트 연동 완료",
+      "concept_style": "회로기판(PCB) 매크로 사진 — 다크 네이비 기판 위 시안/마젠타 네온 트레이스 라인아트",
+      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유. 오프닝/중반 이벤트는 신규 범용 interstitials(풀스크린 컷신)로 구현."
     },
     {
       "number": 57,
@@ -576,9 +576,9 @@
       "title": "MBTI 편의점 음식 판별기",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 57-mbti-convenience-store-food, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
-      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
+      "status": "완료(콘텐츠 제작) — konbini 테마+이미지 9장(cover+8) 완성, 신규 엔진 cart_ui(장바구니+영수증) 적용, 문항 텍스트 md 원문 기준 재작성, 사이트 연동 완료",
+      "concept_style": "편의점 냉장 매대 형광등 조명 — 반투명 비닐 포장 목업",
+      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유. 오프닝/중반 이벤트는 신규 범용 interstitials(풀스크린 컷신)로 구현."
     },
     {
       "number": 58,
@@ -586,9 +586,9 @@
       "title": "MBTI 전생 + 환생 예고 (윤회 세계관)",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 58-mbti-past-future-life, novel mechanic 엔진필드 적용됨(engine v12) — 이미지 없음, 사이트 연동 전",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
-      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현. || novel mechanic: intro_input(띠 선택 드롭다운) 추가 — 결과 traits에 `{claimed}` 개인화(전생·환생 예고에 내 띠 반영), STEP5 재사용. 채점 불변."
+      "status": "완료(콘텐츠 제작) — mandala 테마+이미지 9장(cover+8) 완성, 신규 범용 interstitials(전생→기시감→내생 3막 컷신) 적용, 기존 intro_input(띠 선택) 유지, 문항 텍스트 md 원문 기준 재작성, 사이트 연동 완료",
+      "concept_style": "빛바랜 종이 위 윤회 만다라 채색 문양 — 네이비·청록·테라코타·금",
+      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유. novel mechanic: intro_input(띠 선택 드롭다운) — 결과 traits에 `{claimed}` 개인화. 채점 불변."
     },
     {
       "number": 59,
@@ -596,9 +596,9 @@
       "title": "MBTI 밈 캐릭터 판별기 (2026 밈 세계관)",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(문항·결과 텍스트) 완료 — 이미지 없음, 폴더 59-mbti-meme-character, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
-      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
+      "status": "완료(콘텐츠 제작) — memewall 테마+이미지 9장(cover+8) 완성, 신규 엔진 feed_ui+viral_meter(SNS 카드+바이럴 카운터) 적용, 문항 텍스트 md 원문 기준 재작성, 사이트 연동 완료",
+      "concept_style": "로우폴리 플랫 캐릭터 밈짤 — 흰 폴라로이드 프레임 콜라주",
+      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유. 오프닝/중반 이벤트는 신규 범용 interstitials(풀스크린 컷신)로 구현."
     },
     {
       "number": 60,
@@ -606,9 +606,9 @@
       "title": "MBTI 회사에서의 나 + 퇴사 시나리오",
       "category": "MBTI존",
       "scoring_type": "mbti4",
-      "status": "뼈대(timer_sec:7 즉답 압박, 8문항) 완료 — 이미지 없음, 폴더 60-mbti-office-resignation, 사이트 연동 전(승인 대기)",
-      "concept_style": "(미정 — Gemini 레퍼런스 확보 후 4-4 절차로 확정 예정)",
-      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유 예정. 원안의 오프닝 내레이션/중반 이벤트는 Q5 문항 텍스트 앞에 괄호로 포함시켜 엔진 확장 없이 구현."
+      "status": "완료(콘텐츠 제작) — resignform 테마+이미지 9장(cover+8) 완성, 신규 엔진 quit_meter(퇴사 욕구 게이지, timer_sec 7초 타임아웃과 연동) 적용, 문항 텍스트 md 원문 기준 재작성, 사이트 연동 완료",
+      "concept_style": "괘선 결재 서식 문서 — 차가운 회청색 배경 + 붉은 인장",
+      "note": "MBTI 8그룹(ENT_/ENF_/EST_/ESF_/INT_/INF_/IST_/ISF_) × J/P 세분화로 16종 결과 자동 생성, 이미지는 그룹당 1장(8장) 공유. 오프닝/중반 이벤트는 신규 범용 interstitials(풀스크린 컷신)로 구현."
     }
   ],
   "_source_41_60": "No.41~60(MBTI존)의 기획 정본은 test-engine/mbti41~60.md 이다(사용자가 gwamol_test_ideas_2026_v0.0.6.md에서 MBTI존만 분리·저장). 41~60 문항/결과/오프닝·중반이벤트는 이 파일을 기준으로 제작한다."

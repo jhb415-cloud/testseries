@@ -1,0 +1,89 @@
+/* test-engine — themes/mandala.css — 신규 테마: 윤회 만다라 채색 문양 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   mbti-past-future-life(#58)가 1호 사용처. 레퍼런스가 낡은 종이 위 원형 만다라(네이비·틸·테라코타·금)라
+   UI도 "빛바랜 종이 + 금선 테두리 + 남색 잉크" 톤. minhwa/hanjiscroll(전통 한국)과는 팔레트·문양
+   계열이 다르고, 폰트도 Gowun Batang(기존 테마 미사용)으로 구분. */
+
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;600;700&display=swap');
+
+.te-app {
+  --te-footer-bg: #ede0c4; /* 고정 버튼바 배경(engine.css 참고) */
+  --te-meter-fill: #c9702f;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(201, 112, 47, 0.12), transparent 55%),
+    #ede0c4;
+  color: #2b3a52;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background:
+    repeating-linear-gradient(45deg, rgba(43, 58, 82, 0.03) 0px, rgba(43, 58, 82, 0.03) 2px, transparent 2px, transparent 9px),
+    #f6ecd6;
+  border: 2px solid rgba(184, 140, 62, 0.6);
+  outline: 1px solid rgba(184, 140, 62, 0.35);
+  outline-offset: 4px;
+  border-radius: 10px;
+  box-shadow: 0 10px 26px rgba(43, 58, 82, 0.16);
+  margin: 20px 18px 16px;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Gowun Batang", "Noto Sans KR", serif;
+  font-weight: 700;
+  font-size: 1.45em;
+  letter-spacing: 0.01em;
+  color: #1f2c42;
+}
+
+.te-result-subtitle, .te-desc, .te-result-tip { color: #4d5f78; }
+
+.te-chip {
+  background: rgba(184, 140, 62, 0.14);
+  border: 1px solid rgba(184, 140, 62, 0.55);
+  color: #7a5a1f;
+  border-radius: 999px;
+}
+
+.te-btn {
+  background: #2b3a52;
+  color: #f6ecd6;
+  border: 1px solid rgba(184, 140, 62, 0.5);
+  border-radius: 8px;
+  box-shadow: none;
+  font-family: "Gowun Batang", "Noto Sans KR", serif;
+  font-weight: 700;
+}
+.te-btn-primary { background: #2b3a52; }
+.te-btn-secondary { background: transparent; color: #2b3a52; border-color: rgba(43, 58, 82, 0.4); }
+.te-btn-accent { background: #c9702f; border-color: #a2551f; color: #fff6e6; }
+.te-btn-kakao { background: #FEE500; color: #191600; border: none; }
+
+.te-btn-choice {
+  background: #fdf6e5;
+  color: #2b3a52;
+  border: 1px solid rgba(184, 140, 62, 0.4);
+  border-radius: 8px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  text-align: left;
+}
+.te-btn-choice:active { background: rgba(184, 140, 62, 0.16); }
+
+.te-progress-track { background: rgba(43, 58, 82, 0.14); }
+.te-progress-fill { background: linear-gradient(90deg, #2f7d7a, #c9702f); }
+
+.te-result-traits { color: #2b3a52; font-weight: 600; }
+
+/* config.interstitials(#58) — 전생/현생/내생 3막 컷신 */
+.te-inter-badge { color: #a2551f; letter-spacing: 0.22em; }
+.te-inter-title { font-family: "Gowun Batang", serif; color: #1f2c42; }
+.te-inter-text { color: #4d5f78; }
+
+.te-loading-box .te-spinner { border-color: rgba(43, 58, 82, 0.16); border-top-color: #c9702f; }

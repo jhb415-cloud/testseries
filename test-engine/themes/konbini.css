@@ -1,0 +1,90 @@
+/* test-engine — themes/konbini.css — 신규 테마: 자정 편의점 냉장 매대 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   mbti-convenience-store-food(#57)가 1호 사용처. 레퍼런스가 형광등 아래 투명 비닐 포장 목업이라
+   UI도 "차가운 형광등 화이트 + 반투명 비닐 광택 + 빨간 개봉 화살표" 톤으로 맞췄다.
+   폰트는 Jua(둥근 한글 팝체, 기존 테마 미사용). */
+
+@import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #eef3f6; /* 고정 버튼바 배경(engine.css 참고) */
+  --te-meter-fill: #e3342f;
+  background: linear-gradient(180deg, #f7fafc 0%, #e6eef3 100%);
+  color: #22303a;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.9) 0%, rgba(226, 240, 246, 0.75) 42%, rgba(255, 255, 255, 0.95) 100%);
+  border: 1px solid rgba(34, 48, 58, 0.14);
+  border-radius: 14px;
+  box-shadow: 0 12px 28px rgba(34, 48, 58, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  margin: 18px 16px 16px;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Jua", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  font-size: 1.5em;
+  letter-spacing: -0.01em;
+  color: #16222b;
+}
+
+.te-result-subtitle, .te-desc, .te-result-tip { color: #52646f; }
+
+.te-chip {
+  background: #ffffff;
+  border: 1px dashed rgba(34, 48, 58, 0.3);
+  color: #3d5563;
+  border-radius: 999px;
+}
+
+.te-btn {
+  background: #22303a;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 3px 0 rgba(34, 48, 58, 0.25);
+  font-family: "Jua", "Noto Sans KR", sans-serif;
+}
+.te-btn-primary { background: #e3342f; box-shadow: 0 3px 0 #a81f1b; }
+.te-btn-secondary { background: #ffffff; color: #22303a; border: 1px solid rgba(34, 48, 58, 0.25); box-shadow: none; }
+.te-btn-accent { background: #1f8fb8; box-shadow: 0 3px 0 #14657f; }
+.te-btn-kakao { background: #FEE500; color: #191600; box-shadow: 0 3px 0 #c9b500; }
+
+.te-btn-choice {
+  background: rgba(255, 255, 255, 0.92);
+  color: #22303a;
+  border: 1px solid rgba(34, 48, 58, 0.16);
+  border-radius: 12px;
+  box-shadow: 0 2px 0 rgba(34, 48, 58, 0.1);
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  text-align: left;
+}
+.te-btn-choice:active { background: #e9f3f8; }
+
+.te-progress-track { background: rgba(34, 48, 58, 0.12); }
+.te-progress-fill { background: #e3342f; }
+
+.te-result-traits { color: #22303a; font-weight: 600; }
+
+/* config.cart_ui(#57) — 장바구니 바 + 결과 영수증 */
+.te-cart { border-color: rgba(34, 48, 58, 0.16); background: rgba(255, 255, 255, 0.85); }
+.te-cart-title { color: #3d5563; }
+.te-cart-total { color: #e3342f; font-family: "Jua", sans-serif; }
+.te-cart-chip { background: #eef4f8; color: #22303a; }
+.te-receipt { background: #fffdf7; border-color: rgba(34, 48, 58, 0.35); color: #22303a; }
+.te-receipt-head { font-family: "Jua", sans-serif; }
+
+/* config.interstitials(#57) — 편의점 컷신 */
+.te-inter-badge { color: #e3342f; }
+.te-inter-title { font-family: "Jua", "Noto Sans KR", sans-serif; color: #16222b; }
+
+.te-loading-box .te-spinner { border-color: rgba(34, 48, 58, 0.15); border-top-color: #e3342f; }

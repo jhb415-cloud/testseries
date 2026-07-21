@@ -438,3 +438,34 @@ mbti4 채점 위의 순수 연출/보조 레이어, 하위호환 원칙 유지).
   결과 8장) 성공, 레퍼런스 스타일 전이 품질 육안 확인 완료. **사이트 연동(data.js/sections.json/
   sitemap.xml)은 51~60 전체가 아직 배치 결정 전이라 이번에도 보류** — todo.md의 "51~60 연동
   범위" 결정 이후 진행.
+
+## MBTI존 게임형 개편 3차 배치 — #56~60 (2026-07-21)
+사용자가 "56~60도 51~55처럼 재미있게, 안 써본 메커니즘으로" 요청. `mbti_prompt41-60.md`(구
+`mbti41~60.md`)의 오프닝/중반 이벤트/8문항/16종 결과 원문을 기준으로 questions[].text를
+전면 재작성(이전 세션엔 결과 텍스트만 md가 반영되고 질문은 옛 단답형 스켈레톤이 남아있던 채로
+5개가 이미 만들어져 있었음 — 51~55와 동일한 문제였음 → 함께 발견해 수정). engine v15→v16,
+신규 opt-in 메커니즘 4종 추가(전부 mbti4 채점 위의 순수 연출 레이어, 하위호환 원칙 유지) +
+그동안 각 문항 텍스트 앞에 괄호로 욱여넣던 "오프닝/중반 이벤트"를 **범용 `interstitials`**
+(풀스크린 컷신)로 정식 승격 — 41~60 어디서든 재사용 가능.
+- **mbti-convenience-store-food(#57)**: 신규 `cart_ui` — 답할 때마다 그 선택지의 상품
+  (`choice.item`)이 상단 장바구니 바에 담기고 누적 금액이 오른다. 결과 화면엔 품목+합계
+  영수증 블록. 신규 `themes/konbini.css`(Jua, 형광등 냉장매대+투명 비닐 포장 목업).
+- **mbti-past-future-life(#58)**: `interstitials` 3막 구성(전생→기시감→내생 예고)이 실사용
+  1호. 기존 `intro_input`(띠 드롭다운)은 그대로 유지. 신규 `themes/mandala.css`(Gowun Batang,
+  빛바랜 종이 위 윤회 만다라 채색화).
+- **mbti-meme-character(#59)**: 신규 `feed_ui`+`viral_meter` — 문항을 SNS 게시물 카드로
+  렌더하고, 선택지의 배수(`choice.viral`)만큼 좋아요·리트윗·조회수가 곱해지며 롤링
+  카운트업. 결과엔 최종 도달수+바이럴 등급. 신규 `themes/memewall.css`(Black Han Sans,
+  로우폴리 밈짤 폴라로이드 콜라주 — 굵은 화이트 프레임+플랫 컬러 블록).
+- **mbti-office-resignation(#60)**: 기존 `timer_sec:7`에 신규 `quit_meter`를 연결 —
+  선택마다 퇴사 욕구가 오르내리고, **7초 안에 못 고르면 timeout_delta만큼 크게 급등**한다
+  (타이머가 처음으로 결과 연출과 직접 이어지는 사례). 신규 `themes/resignform.css`
+  (Nanum Myeongjo, 괘선 결재 서식 문서+붉은 인장).
+- **mbti-cyberpunk-world(#56)**: 기존 `questions_tree`(잠입 분기 시나리오, 노드 9개)에
+  신규 `success_meter`(범용 단일 게이지 — affinity_meter를 라벨/판정문구까지 config에서
+  받도록 일반화한 버전)를 얹어 "잠입 성공률"로 시각화. 신규 `themes/circuitboard.css`
+  (Share Tech Mono, 다크 PCB 매크로 사진 위 시안/마젠타 트레이스 라인아트).
+- 이미지: 5개 전부 `assets/reference/`에 이미 있던 Gemini 레퍼런스로 커버 1장 샘플 승인 후
+  `images/edits`로 결과 8종까지 일괄 생성(총 45장, 실패 0). `cover-home.webp` 5개 동반 생성.
+- **ENGINE_ASSET_VERSION 15→16, 61개 index.html의 engine.js/engine.css/result-card.js
+  `?v=15→16` 일괄 동기화.**

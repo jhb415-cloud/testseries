@@ -9,11 +9,37 @@
     "밈세계관",
     "인터넷밈"
   ],
-  "theme": "pending",
+  "theme": "memewall",
   "cover_image": "assets/cover.webp",
   "seed_count": 293,
   "engagement_key": "site-mbtimeme-plays",
   "scoring_type": "mbti4",
+  "feed_ui": {
+    "author": "나",
+    "handle": "@today_me",
+    "avatar": "🫠"
+  },
+  "viral_meter": {
+    "likes": 42,
+    "retweets": 7,
+    "views": 310
+  },
+  "interstitials": [
+    {
+      "after": 0,
+      "badge": "타임라인 · 실시간",
+      "title": "프롤로그",
+      "text": "인터넷 어딘가, 당신의 성격을 그대로 닮은 밈이 이미 떠돌고 있다. 오늘, 그 밈이 당신 앞에 정체를 드러낸다.",
+      "cta": "시작한다"
+    },
+    {
+      "after": 3,
+      "badge": "알림 999+",
+      "title": "중반 이벤트",
+      "text": "밈 판별 절반 완료. 갑자기 타임라인에 당신과 똑 닮은 짤이 올라온다.",
+      "cta": "계속한다"
+    }
+  ],
   "loading": {
     "text": "MBTI 밈 캐릭터 판별기 (2026 밈 세계관) 분석 중..",
     "duration_ms": 2000
@@ -21,178 +47,210 @@
   "related": [],
   "questions": [
     {
-      "text": "SNS에 글을 올릴 때 당신은?",
+      "text": "SNS에 새 글을 올리려고 화면을 켰다. 이 순간 당신이 자연스럽게 취하는 태도는?",
       "image": null,
       "choices": [
         {
           "label": "적극적으로 반응을 유도하는 글을 쓴다",
-          "axis": "E"
+          "axis": "E",
+          "viral": 2.1
         },
         {
           "label": "댓글 소통을 즐기며 활발히 올린다",
-          "axis": "E"
+          "axis": "E",
+          "viral": 1.9
         },
         {
           "label": "조용히 올리고 반응은 신경 안 쓴다",
-          "axis": "I"
+          "axis": "I",
+          "viral": 1.2
         },
         {
           "label": "거의 안 올리고 눈팅만 한다",
-          "axis": "I"
+          "axis": "I",
+          "viral": 1.05
         }
       ]
     },
     {
-      "text": "단톡방이나 커뮤니티에서",
+      "text": "단톡방이나 커뮤니티 알림이 쉴 새 없이 울린다. 그 안에서 당신은 보통 어떻게 움직일까?",
       "image": null,
       "choices": [
         {
           "label": "먼저 드립을 치며 분위기를 만든다",
-          "axis": "E"
+          "axis": "E",
+          "viral": 2.0
         },
         {
           "label": "적극적으로 댓글을 단다",
-          "axis": "E"
+          "axis": "E",
+          "viral": 1.7
         },
         {
           "label": "필요할 때만 짧게 반응한다",
-          "axis": "I"
+          "axis": "I",
+          "viral": 1.25
         },
         {
           "label": "읽기만 하고 반응은 잘 안 한다",
-          "axis": "I"
+          "axis": "I",
+          "viral": 1.1
         }
       ]
     },
     {
-      "text": "밈을 만들거나 공유할 때",
+      "text": "방금 웃긴 상황을 마주쳤다. 이걸 밈으로 만들거나 공유하려는 순간 당신의 방식은?",
       "image": null,
       "choices": [
         {
           "label": "새로운 드립을 창작해서 만든다",
-          "axis": "N"
+          "axis": "N",
+          "viral": 2.2
         },
         {
           "label": "아무도 안 해본 조합을 시도한다",
-          "axis": "N"
+          "axis": "N",
+          "viral": 2.0
         },
         {
           "label": "이미 유행하는 밈을 그대로 쓴다",
-          "axis": "S"
+          "axis": "S",
+          "viral": 1.4
         },
         {
           "label": "검증된 짤만 골라서 쓴다",
-          "axis": "S"
+          "axis": "S",
+          "viral": 1.2
         }
       ]
     },
     {
-      "text": "(똑 닮은 짤이 올라온다) 유행어를 접하면",
+      "text": "요즘 유행하는 그 유행어를 마주치면 당신은 보통 어떻게 쓸까?",
       "image": null,
       "choices": [
         {
           "label": "새로운 의미로 재해석해서 쓴다",
-          "axis": "N"
+          "axis": "N",
+          "viral": 1.9
         },
         {
           "label": "다르게 비틀어서 활용해본다",
-          "axis": "N"
+          "axis": "N",
+          "viral": 1.8
         },
         {
           "label": "원래 뜻 그대로 정확히 사용한다",
-          "axis": "S"
+          "axis": "S",
+          "viral": 1.3
         },
         {
           "label": "유행하는 그대로 따라 쓴다",
-          "axis": "S"
+          "axis": "S",
+          "viral": 1.45
         }
       ]
     },
     {
-      "text": "(밈 판별 절반 완료. 갑자기 타임라인에 당신과 똑 닮은 짤이 올라온다.) 댓글에서 논쟁이 붙으면",
+      "text": "댓글창에서 갑자기 논쟁이 붙었다. 그 한복판에서 당신의 반응은?",
       "image": null,
       "choices": [
         {
           "label": "팩트로 조목조목 반박한다",
-          "axis": "T"
+          "axis": "T",
+          "viral": 1.8
         },
         {
           "label": "논리적으로 근거를 든다",
-          "axis": "T"
+          "axis": "T",
+          "viral": 1.6
         },
         {
           "label": "분위기 상할까 봐 조용히 빠진다",
-          "axis": "F"
+          "axis": "F",
+          "viral": 1.15
         },
         {
           "label": "마음이 상해서 신경 쓰인다",
-          "axis": "F"
+          "axis": "F",
+          "viral": 1.1
         }
       ]
     },
     {
-      "text": "남의 게시물에 반응할 때",
+      "text": "타임라인에 올라온 남의 게시물, 그 밑에 반응을 남길 때 당신의 스타일은?",
       "image": null,
       "choices": [
         {
           "label": "정확한 지적이나 피드백을 남긴다",
-          "axis": "T"
+          "axis": "T",
+          "viral": 1.5
         },
         {
           "label": "냉정하게 팩트만 짚는다",
-          "axis": "T"
+          "axis": "T",
+          "viral": 1.45
         },
         {
           "label": "공감하는 댓글을 먼저 남긴다",
-          "axis": "F"
+          "axis": "F",
+          "viral": 1.7
         },
         {
           "label": "따뜻한 리액션을 남긴다",
-          "axis": "F"
+          "axis": "F",
+          "viral": 1.6
         }
       ]
     },
     {
-      "text": "SNS 활동 패턴은?",
+      "text": "지난 한 달의 SNS 활동을 돌아보면, 당신의 활동 패턴은 대체로 어땠을까?",
       "image": null,
       "choices": [
         {
           "label": "정해진 시간에 규칙적으로 활동한다",
-          "axis": "J"
+          "axis": "J",
+          "viral": 1.4
         },
         {
           "label": "계획적으로 콘텐츠를 올린다",
-          "axis": "J"
+          "axis": "J",
+          "viral": 1.5
         },
         {
           "label": "그때그때 내키는 대로 활동한다",
-          "axis": "P"
+          "axis": "P",
+          "viral": 1.6
         },
         {
           "label": "불규칙하게 몰아서 활동한다",
-          "axis": "P"
+          "axis": "P",
+          "viral": 1.75
         }
       ]
     },
     {
-      "text": "저장해둔 짤·밈 정리 상태는?",
+      "text": "오랜만에 저장해둔 짤·밈 폴더를 열어봤다. 그 안의 정리 상태는?",
       "image": null,
       "choices": [
         {
           "label": "폴더별로 체계적으로 정리돼 있다",
-          "axis": "J"
+          "axis": "J",
+          "viral": 1.3
         },
         {
           "label": "필요할 때 바로 찾을 수 있게 해둔다",
-          "axis": "J"
+          "axis": "J",
+          "viral": 1.35
         },
         {
           "label": "그냥 카메라롤에 뒤죽박죽 쌓여 있다",
-          "axis": "P"
+          "axis": "P",
+          "viral": 1.55
         },
         {
           "label": "저장은 하는데 다시 안 본다",
-          "axis": "P"
+          "axis": "P",
+          "viral": 1.2
         }
       ]
     }

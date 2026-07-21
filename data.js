@@ -5819,6 +5819,41 @@ window.AppData = {
       engagementKey: 'site-mbtiweapon-plays', baseCount: 224,
       addedAt: '2026-07-21', isNew: true, theme: 'rpginventory',
     },
+    {
+      id: 'mbti-cyberpunk-world', title: 'MBTI가 사이버펑크 세계라면', emoji: '🌆',
+      hook: '빗물 젖은 골목, 이식된 사이버웨어가 가동을 시작한다 — 분기 시나리오로 갈리는 잠입 루트',
+      url: '/test-engine/tests/56-mbti-cyberpunk-world/index.html',
+      engagementKey: 'site-mbticyberpunk-plays', baseCount: 249,
+      addedAt: '2026-07-21', isNew: true, theme: 'circuitboard',
+    },
+    {
+      id: 'mbti-convenience-store-food', title: 'MBTI 편의점 음식 판별기', emoji: '🏪',
+      hook: '자정 넘은 편의점, 손이 자연스레 향하는 그 조합 — 고를 때마다 채워지는 장바구니',
+      url: '/test-engine/tests/57-mbti-convenience-store-food/index.html',
+      engagementKey: 'site-mbticonvenience-plays', baseCount: 239,
+      addedAt: '2026-07-21', isNew: true, theme: 'konbini',
+    },
+    {
+      id: 'mbti-past-future-life', title: 'MBTI 전생 + 환생 예고', emoji: '🔮',
+      hook: '눈을 감으면 보이는 전생의 조각들, 그리고 아직 오지 않은 다음 생의 기운',
+      url: '/test-engine/tests/58-mbti-past-future-life/index.html',
+      engagementKey: 'site-mbtipastfuture-plays', baseCount: 227,
+      addedAt: '2026-07-21', isNew: true, theme: 'mandala',
+    },
+    {
+      id: 'mbti-meme-character', title: 'MBTI 밈 캐릭터 판별기', emoji: '📱',
+      hook: '인터넷 어딘가 나를 닮은 밈이 떠돈다 — 답할 때마다 폭증하는 좋아요·리트윗·조회수',
+      url: '/test-engine/tests/59-mbti-meme-character/index.html',
+      engagementKey: 'site-mbtimeme-plays', baseCount: 293,
+      addedAt: '2026-07-21', isNew: true, theme: 'memewall',
+    },
+    {
+      id: 'mbti-office-resignation', title: 'MBTI 회사에서의 나 + 퇴사 시나리오', emoji: '🧑‍💼',
+      hook: '"이번엔 오래 다녀야지" — 7초 안에 답 못 하면 급등하는 퇴사 욕구 게이지',
+      url: '/test-engine/tests/60-mbti-office-resignation/index.html',
+      engagementKey: 'site-mbtioffice-plays', baseCount: 266,
+      addedAt: '2026-07-21', isNew: true, theme: 'resignform',
+    },
   ],
 
   /* 몰입테스트/MBTI존 21개 전량을 무드별로 묶은 가로 스크롤 큐레이션 (v0.8.9~).

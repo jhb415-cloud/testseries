@@ -613,3 +613,130 @@ body {
   flex-direction: column;
   gap: 8px;
 }
+
+/* ===== v16(#56~60) 게임형 개편 3차 배치 — 전부 opt-in 연출 레이어 ===== */
+
+/* config.cart_ui(#57) — 답할 때마다 상품이 담기는 장바구니 바 + 결과 화면 영수증 */
+.te-cart {
+  margin: 4px 0 18px;
+  padding: 11px 14px 12px;
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  border-radius: 14px;
+  background: rgba(127, 127, 127, 0.06);
+}
+.te-cart-head { display: flex; align-items: baseline; justify-content: space-between; }
+.te-cart-title { font-size: 13px; font-weight: 800; letter-spacing: 0.03em; }
+.te-cart-total { font-size: 17px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.te-cart-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; min-height: 24px; }
+.te-cart-chip {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(127, 127, 127, 0.16);
+}
+.te-cart-chip.is-new { animation: te-stamp-pop 0.32s ease; }
+.te-cart-chip-more { opacity: 0.6; }
+.te-cart-empty { font-size: 12px; opacity: 0.55; }
+.te-receipt {
+  margin: 16px 0 4px;
+  padding: 14px 16px 16px;
+  border: 1px dashed rgba(127, 127, 127, 0.5);
+  border-radius: 4px;
+  background: rgba(127, 127, 127, 0.06);
+  font-variant-numeric: tabular-nums;
+}
+.te-receipt-head { margin: 0 0 10px; font-size: 13px; font-weight: 800; text-align: center; letter-spacing: 0.06em; }
+.te-receipt-line { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 3px 0; }
+.te-receipt-sum {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(127, 127, 127, 0.5);
+  font-weight: 800;
+}
+
+/* config.interstitials(#58) — 문항 사이에 끼워 넣는 풀스크린 컷신 */
+.te-inter-body {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  gap: 14px;
+  animation: te-inter-in 0.5s ease;
+}
+@keyframes te-inter-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.te-inter-badge {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  opacity: 0.7;
+}
+.te-inter-title { margin: 0; font-size: 24px; line-height: 1.35; font-weight: 800; }
+.te-inter-text { margin: 0; font-size: 15px; line-height: 1.75; opacity: 0.88; }
+
+/* config.feed_ui + config.viral_meter(#59) — SNS 게시물 카드 + 바이럴 카운터 */
+.te-feed-card {
+  border: 1px solid rgba(127, 127, 127, 0.3);
+  border-radius: 16px;
+  padding: 14px 16px 16px;
+  background: rgba(127, 127, 127, 0.06);
+}
+.te-feed-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.te-feed-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  background: rgba(127, 127, 127, 0.18);
+  flex-shrink: 0;
+}
+.te-feed-names { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.te-feed-author { font-size: 13px; font-weight: 800; }
+.te-feed-handle { font-size: 12px; opacity: 0.6; }
+.te-feed-text { margin: 0; font-size: 17px; line-height: 1.6; font-weight: 700; }
+.te-viral {
+  display: flex;
+  gap: 16px;
+  margin: 4px 0 18px;
+  padding: 10px 14px;
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  border-radius: 14px;
+  background: rgba(127, 127, 127, 0.06);
+}
+.te-viral-cell { display: flex; align-items: center; gap: 5px; }
+.te-viral-icon { font-size: 14px; }
+.te-viral-num { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+/* config.success_meter(#56) / config.quit_meter(#60) — 범용 단일 게이지 */
+.te-meter {
+  margin: 4px 0 18px;
+  padding: 12px 14px 14px;
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  border-radius: 14px;
+  background: rgba(127, 127, 127, 0.06);
+}
+.te-meter-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 7px; }
+.te-meter-label { font-size: 13px; font-weight: 800; letter-spacing: 0.04em; }
+.te-meter-pct { font-size: 20px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.te-meter-track {
+  height: 10px;
+  background: rgba(127, 127, 127, 0.18);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.te-meter-fill {
+  height: 100%;
+  width: 50%;
+  background: var(--te-meter-fill, #4aa8c8);
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}

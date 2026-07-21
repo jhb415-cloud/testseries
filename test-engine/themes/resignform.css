@@ -1,0 +1,96 @@
+/* test-engine — themes/resignform.css — 신규 테마: 결재 서식 문서(사직서) 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   mbti-office-resignation(#60)가 1호 사용처. 레퍼런스가 차가운 회청색 배경 위 표 괘선 서식 문서 +
+   붉은 인장이라, UI도 "괘선 그리드 문서 + 결재란 + 붉은 도장" 톤. 기존 office.css(#17 이중노출)와는
+   전혀 다른 접근(사진 톤이 아니라 관공서 서식 그 자체). 폰트는 Nanum Myeongjo(기존 테마 미사용). */
+
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@400;600;700&display=swap');
+
+.te-app {
+  --te-footer-bg: #dfe6ec; /* 고정 버튼바 배경(engine.css 참고) */
+  --te-meter-fill: #b3261e;
+  background: linear-gradient(180deg, #e8eef3 0%, #d6dfe7 100%);
+  color: #232b33;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background:
+    repeating-linear-gradient(0deg, rgba(35, 43, 51, 0.06) 0px, rgba(35, 43, 51, 0.06) 1px, transparent 1px, transparent 32px),
+    #fbfcfd;
+  border: 1px solid rgba(35, 43, 51, 0.55);
+  border-radius: 2px;
+  box-shadow: 0 14px 30px rgba(35, 43, 51, 0.2);
+  margin: 18px 16px 16px;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Nanum Myeongjo", "Noto Sans KR", serif;
+  font-weight: 800;
+  font-size: 1.4em;
+  letter-spacing: 0.01em;
+  color: #161c22;
+}
+
+.te-result-subtitle, .te-desc, .te-result-tip { color: #4a5560; }
+
+.te-chip {
+  background: transparent;
+  border: 1px solid rgba(35, 43, 51, 0.5);
+  color: #3c4854;
+  border-radius: 0;
+  font-family: "Nanum Myeongjo", serif;
+}
+
+.te-btn {
+  background: #232b33;
+  color: #f5f8fa;
+  border: 1px solid #232b33;
+  border-radius: 2px;
+  box-shadow: none;
+  font-family: "Nanum Myeongjo", "Noto Sans KR", serif;
+  font-weight: 700;
+}
+.te-btn-primary { background: #b3261e; border-color: #8c1c16; }
+.te-btn-secondary { background: transparent; color: #232b33; }
+.te-btn-accent { background: #2f5d7c; border-color: #24485f; }
+.te-btn-kakao { background: #FEE500; color: #191600; border: none; }
+
+.te-btn-choice {
+  background: #ffffff;
+  color: #232b33;
+  border: 1px solid rgba(35, 43, 51, 0.4);
+  border-radius: 2px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  text-align: left;
+}
+.te-btn-choice:active { background: #eef2f5; }
+
+.te-progress-track { background: rgba(35, 43, 51, 0.14); border-radius: 0; }
+.te-progress-fill { background: #b3261e; border-radius: 0; }
+
+.te-result-traits { color: #232b33; font-weight: 600; }
+
+/* config.timer_sec(#60) — 7초 제한시간 */
+.te-timer-count { font-family: "Nanum Myeongjo", serif; color: #b3261e; }
+.te-timer-bar-fill { background: #b3261e; }
+
+/* config.quit_meter(#60) — 퇴사 욕구 게이지 */
+.te-meter { border-color: rgba(35, 43, 51, 0.35); background: rgba(179, 38, 30, 0.05); border-radius: 2px; }
+.te-meter-label { color: #4a5560; font-family: "Nanum Myeongjo", serif; }
+.te-meter-pct { color: #b3261e; font-family: "Nanum Myeongjo", serif; }
+.te-meter-track { border-radius: 0; }
+.te-meter-fill { border-radius: 0; }
+
+/* config.interstitials(#60) — 입사/6개월차 컷신 */
+.te-inter-badge { color: #b3261e; font-family: "Nanum Myeongjo", serif; }
+.te-inter-title { font-family: "Nanum Myeongjo", serif; color: #161c22; }
+
+.te-loading-box .te-spinner { border-color: rgba(35, 43, 51, 0.15); border-top-color: #b3261e; }

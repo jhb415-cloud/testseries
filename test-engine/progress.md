@@ -268,6 +268,60 @@ app.js/sections.json/sitemap.xml/llms.txt)까지 같은 세션에서 이어서 �
   화면에서 +버튼 10회 클릭 후 확인, #52/#54는 일반 선택지 클릭 루프) — 콘솔 에러 0/깨진 이미지
   0/플레이스홀더 미치환 잔존 0, 4/4 통과. `cover-home.webp` 썸네일 4개 전부 생성,
   `tests/index.json` 상태 갱신.
+
+## MBTI존 #51~55 문항 텍스트 md 기준 복구 (2026-07-21, v1.3.4)
+사용자가 "51~55 제작은 잘됐는데 안에 문구가 내가 말한 md파일로 처리되지 않은 것 같다. 질문과
+답이 너무 단조롭다"고 지적 → 확인 결과 **결과 16종 텍스트는 md대로 잘 들어갔는데
+`questions[].text`만 md 이전의 단답형 스켈레톤이 그대로 남아 있었음**(예: #53 Q1이
+"부족 회의에서 당신은?"). `test-engine/CLAUDE.md` 4-1("상황을 풀어 쓴 완결 문장, 단답형 금지")
+위반이었고, #50은 md대로 들어가 있어 대조가 뚜렷했다. 추가로 #51은 2차 이벤트 문구가 Q4·Q5에
+중복, #52/54/55는 Q5에 중반 이벤트가 두 번 붙어 있었음.
+- 5개 × 8문항 = 40문항의 `text`만 `mbti_prompt41-60.md` 원문으로 교체. **채점 필드(`axis`)·
+  선택지(`label`)·게임형 필드는 일절 무변경**(git diff로 text 라인만 바뀐 것 확인).
+- `generate-seo-content.js` 재실행으로 정적 프리렌더 `te-seo` 블록 갱신(61개 중 5개만 변경).
+- QA: `qa-batch-5157.js` 5/5 결과 도달·에러 0. 커밋 `3a51919` + push 완료.
+
+## MBTI존 게임형 개편 3차 배치 — #56~60 (2026-07-21, v1.3.5, engine v16)
+사용자가 "56~60도 51~55처럼 재미있게, 한 번도 안 써본 메커니즘으로. 이미 2개는 다른 엔진 쓰는
+거 알고 있고 나머지도 다시 기획해줘"라고 요청. 문항은 51~55와 **동일한 단답형 문제**가 있어
+`mbti_prompt41-60.md` 원문 기준으로 전면 재작성(사용자가 작업 중 재차 "56~60도 단답형으로
+하지 말고 md 참고해서 제대로 만들어" 확인).
+
+- **engine v15→v16**: 신규 opt-in 메커니즘 4종 + 범용 컷신(전부 mbti4 채점 위의 순수 연출
+  레이어라 `applyScoring`/`computeResult` 무변경, 필드 없는 기존 config는 무영향).
+  - `cart_ui`(#57): `choice.item{emoji,name,price}`이 답할 때마다 상단 장바구니 바에 담기고
+    누적 금액이 오름. 결과 화면엔 품목+합계 영수증 블록, `{cartTotal}` 플레이스홀더.
+  - `interstitials`(범용, #56~60 전부 사용): `[{after,badge,title,text,cta}]` — `after`는
+    "이만큼 답한 뒤"(0이면 첫 문항 전). 그동안 각 문항 텍스트 앞에 괄호로 욱여넣던
+    "오프닝 내레이션/중반 이벤트"를 풀스크린 컷신으로 정식 승격(기획 md가 원래 권장하던 방식).
+    #58은 전생→기시감→내생 3막 구성이 실사용 1호.
+  - `feed_ui`+`viral_meter`(#59): 문항을 SNS 게시물 카드로 렌더, `choice.viral` 배수만큼
+    좋아요·리트윗·조회수가 롤링 카운트업. 결과엔 최종 도달수+바이럴 등급.
+  - `success_meter`(#56)/`quit_meter`(#60): affinity_meter를 라벨·아이콘·판정문구까지
+    config에서 받도록 일반화한 **범용 단일 게이지**. #56은 분기 트리 화면에 얹어 "잠입
+    성공률", #60은 `timer_sec:7`과 엮어 **시간 초과 시 `timeout_delta`만큼 퇴사 욕구 급등**
+    (타이머가 처음으로 결과 연출과 직접 이어지는 사례).
+  - **QA에서 발견해 고친 버그 2건**: ① `selectTreeChoice`가 `advance()`를 거치지 않아
+    `questions_tree`(#56)에서 중반 컷신이 아예 안 뜨던 문제 → 트리 경로에도
+    `maybeInterstitial` 연결. ② 화면 전환 시 스크롤이 맨 위로 안 돌아가 다음 문항이 화면
+    밖으로 밀려 보이던 문제(te-seo 정적 섹션 때문에 문서가 길어서 발생, 61개 전부에 있던
+    기존 버그) → 신규 `resetScroll()`을 인트로/문항/트리문항/컷신/로딩/결과 렌더에 연결.
+  - **ENGINE_ASSET_VERSION 15→16, 61개 index.html의 `?v=15→16` 일괄 동기화.**
+- [x] #56 mbti-cyberpunk-world — 완료 (theme: circuitboard, questions_tree + success_meter)
+- [x] #57 mbti-convenience-store-food — 완료 (theme: konbini, cart_ui)
+- [x] #58 mbti-past-future-life — 완료 (theme: mandala, interstitials 3막 + 기존 intro_input)
+- [x] #59 mbti-meme-character — 완료 (theme: memewall, feed_ui + viral_meter)
+- [x] #60 mbti-office-resignation — 완료 (theme: resignform, timer_sec + quit_meter)
+- 이미지: 5개 전부 기존 `assets/reference/` 기반. **4-4 절차대로 커버 5장만 먼저 생성해 확인한
+  뒤** 결과 8종까지 일괄 생성 — 45/45 성공(실패 0), `cover-home.webp` 5개 동반 생성.
+- QA: 신규 `scripts/qa-batch-5660.js`로 5/5 통과(콘솔 에러 0, 깨진 이미지 0, 플레이스홀더 0,
+  컷신 노출 정상, #60은 일부러 7초 타임아웃을 유도해 퇴사 욕구 급등·"제한시간 초과 1회" 표기
+  확인). `qa-batch-5157.js`로 51~55 회귀 4/4 통과. 공용 `qa-playwright.js`도 컷신/포인트배분/
+  슬라이더 화면을 넘길 수 있도록 보완 + "결과 화면 도달" 검증 추가 후 61개 전수 실행.
+- **사이트 연동 완료**: `data.js`(mbtiZoneTests 5개 추가, 30종), `app.js`(THEME_TITLE_FONTS
+  신규 테마 5종), `sections.json`(psych-1/3/4에 분배, 61개 전량 그룹 소속 확인),
+  `sitemap-main.xml`(5개 URL, 총 61개), `llms.txt`/`llms-full.txt`(56종→61종, 신규 매체·
+  인터랙션 반영), `generate-seo-content.js` 재실행.
 - **미완**: 사이트 연동(data.js/sections.json/sitemap.xml/llms.txt) — #51~60 배치 연동 범위
   결정(todo.md "51~60 연동 범위" 참고)이 아직이라 이번에도 보류, 직접 URL로만 접근 가능.
   나머지 로드맵 `multi_select`(#57)도 미착수.

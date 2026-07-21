@@ -1,0 +1,94 @@
+/* test-engine — themes/circuitboard.css — 신규 테마: 회로기판(PCB) 매크로 스킨
+   engine.css의 골격 클래스를 그대로 사용하고 색상/테두리/폰트만 덮어씀.
+   mbti-cyberpunk-world(#56)가 1호 사용처. 레퍼런스가 다크 네이비 기판 위 시안/마젠타 트레이스
+   라인아트라 그 톤을 UI에 그대로 옮겼다 — 카드는 기판, 구분선은 구리 트레이스, 강조는 네온 시안.
+   폰트는 Share Tech Mono(기존 테마 미사용, glitch-crt의 VT323/arcade의 Press Start 2P와 구분). */
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+.te-app {
+  --te-footer-bg: #071122; /* 고정 버튼바 배경(engine.css 참고) */
+  --te-meter-fill: #22d3ee;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(34, 211, 238, 0.1), transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(232, 74, 178, 0.1), transparent 45%),
+    #071122;
+  color: #d8e6f2;
+  font-family: "Noto Sans KR", -apple-system, sans-serif;
+}
+
+.te-intro-body,
+.te-question-body,
+.te-result-body,
+.te-loading-box {
+  background:
+    repeating-linear-gradient(90deg, rgba(196, 122, 74, 0.09) 0px, rgba(196, 122, 74, 0.09) 1px, transparent 1px, transparent 26px),
+    repeating-linear-gradient(0deg, rgba(196, 122, 74, 0.07) 0px, rgba(196, 122, 74, 0.07) 1px, transparent 1px, transparent 26px),
+    #0b1a30;
+  border: 1px solid rgba(34, 211, 238, 0.32);
+  border-radius: 6px;
+  box-shadow: 0 0 24px rgba(34, 211, 238, 0.14), inset 0 0 40px rgba(3, 10, 22, 0.6);
+  margin: 18px 16px 16px;
+}
+
+.te-title,
+.te-question-text,
+.te-result-title {
+  font-family: "Share Tech Mono", "Noto Sans KR", monospace;
+  font-weight: 400;
+  font-size: 1.45em;
+  letter-spacing: 0.03em;
+  color: #eafcff;
+  text-shadow: 0 0 12px rgba(34, 211, 238, 0.45);
+}
+
+.te-result-subtitle, .te-desc, .te-result-tip { color: #9fb6cc; }
+
+.te-chip {
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.45);
+  color: #7fe6f6;
+  font-family: "Share Tech Mono", monospace;
+  border-radius: 3px;
+}
+
+.te-btn {
+  background: #12324f;
+  color: #eafcff;
+  border: 1px solid rgba(34, 211, 238, 0.5);
+  border-radius: 4px;
+  box-shadow: none;
+  font-family: "Share Tech Mono", "Noto Sans KR", monospace;
+  letter-spacing: 0.04em;
+}
+.te-btn-primary { background: #0e7490; border-color: #22d3ee; }
+.te-btn-secondary { background: transparent; color: #9fb6cc; border-color: rgba(159, 182, 204, 0.4); }
+.te-btn-accent { background: #a21a72; border-color: #e84ab2; color: #ffe9f8; }
+.te-btn-kakao { background: #FEE500; color: #191600; border: none; }
+
+.te-btn-choice {
+  background: rgba(18, 50, 79, 0.65);
+  color: #d8e6f2;
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  border-radius: 4px;
+  box-shadow: none;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  text-align: left;
+}
+.te-btn-choice:active { background: rgba(34, 211, 238, 0.2); }
+
+.te-progress-track { background: rgba(216, 230, 242, 0.14); }
+.te-progress-fill { background: linear-gradient(90deg, #22d3ee, #e84ab2); }
+
+.te-result-traits { color: #d8e6f2; font-weight: 600; }
+
+/* config.success_meter(#56) — 잠입 성공률 게이지 */
+.te-meter { border-color: rgba(34, 211, 238, 0.35); background: rgba(34, 211, 238, 0.07); }
+.te-meter-label, .te-meter-pct { color: #7fe6f6; font-family: "Share Tech Mono", monospace; }
+
+/* config.interstitials(#56) — 잠입 로그 컷신 */
+.te-inter-badge { color: #e84ab2; font-family: "Share Tech Mono", monospace; }
+.te-inter-title { font-family: "Share Tech Mono", "Noto Sans KR", monospace; color: #eafcff; text-shadow: 0 0 14px rgba(34, 211, 238, 0.5); }
+
+.te-loading-box .te-spinner { border-color: rgba(216, 230, 242, 0.18); border-top-color: #22d3ee; }

@@ -4775,6 +4775,11 @@ const THEME_TITLE_FONTS = {
   vetclip:          { family: '"Patrick Hand","Noto Sans KR",sans-serif', google: 'family=Patrick+Hand' },
   webtoon:          { family: '"Gowun Dodum","Noto Sans KR",sans-serif', google: 'family=Gowun+Dodum' },
   rpginventory:     { family: '"Rajdhani","Noto Sans KR",sans-serif', google: 'family=Rajdhani:wght@500;600;700' },
+  circuitboard:     { family: '"Share Tech Mono","Noto Sans KR",monospace', google: 'family=Share+Tech+Mono' },
+  konbini:          { family: '"Jua","Noto Sans KR",sans-serif', google: 'family=Jua' },
+  mandala:          { family: '"Gowun Batang","Noto Sans KR",serif', google: 'family=Gowun+Batang:wght@400;700' },
+  memewall:         { family: '"Black Han Sans","Noto Sans KR",sans-serif', google: 'family=Black+Han+Sans' },
+  resignform:       { family: '"Nanum Myeongjo","Noto Sans KR",serif', google: 'family=Nanum+Myeongjo:wght@400;700;800' },
 };
 const _loadedThemeFonts = new Set();
 function themeTitleFontFamily(theme) {

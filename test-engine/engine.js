@@ -1,4 +1,4 @@
-/* test-engine v15 (config.image_choices/affinity_meter/point_budget — 게임형 개편 2차 배치 추가) | engine.js — 공통 로직
+/* test-engine v16 (config.cart_ui/interstitials/feed_ui+viral_meter/success_meter/quit_meter — 게임형 개편 3차 배치) | engine.js — 공통 로직
    (config 로드, 화면 전환, 채점, 렌더, 결과 공유카드 저장, 관련 테스트 배너, 카카오톡 공유,
    메인 사이트로 돌아가기 링크) 순수 바닐라 JS. 외부 라이브러리 없음. 기능별 함수로 분리해 유지보수.
    결과 화면의 "이미지 저장" 기능은 별도 파일 result-card.js(window.TestEngineResultCard)에 위임한다.
@@ -140,7 +140,30 @@
       화면을 하나 끼워 넣는다(`renderPointBudgetScreen`, +/- 스테퍼, 포인트 전부 소진해야
       "시작하기" 활성화). 이 배분은 mbti4 8문항 채점과 완전히 무관한 별도 상태(state.pointBudget)
       라 축 코드 산출에 전혀 영향 없고, 가장 많이 투자한 스탯 라벨을 `{topstat}` 플레이스홀더로
-      결과 텍스트에 노출 + 결과 화면에 4개 스탯 막대(statBar 재사용)를 부가 스탯으로 보여준다. */
+      결과 텍스트에 노출 + 결과 화면에 4개 스탯 막대(statBar 재사용)를 부가 스탯으로 보여준다.
+
+   v16(2026-07-21): MBTI존 게임형 개편 3차 배치(#56~60). 이전 v11/v14/v15와 동일 원칙 —
+   전부 mbti4 위에 얹는 opt-in 연출/보조 레이어라 applyScoring/computeResult(채점)는 무변경이고,
+   아래 필드를 안 쓰는 기존 config는 해당 함수가 아예 호출되지 않아 렌더링에 변화가 없다.
+   ① `config.cart_ui`(#57 편의점 음식): `{ currency, title }` + 선택지의 `choice.item`
+      `{emoji,name,price}` — 답할 때마다 고른 선택지의 상품이 상단 "장바구니 바"에 담기고
+      누적 금액이 오른다(state.cartItems). 결과 화면엔 품목·합계가 찍힌 영수증 블록을 노출하고
+      결과 텍스트에서 `{cartTotal}` 플레이스홀더로 총액을 쓸 수 있다.
+   ② `config.interstitials`(#58 전생·환생, 범용): `[{ after, title, text, badge }]` — `after`는
+      "이만큼 답한 뒤"(0이면 첫 문항 전)를 뜻하고, 그 시점에 풀스크린 컷신 화면을 한 장 끼워
+      넣는다(탭하면 진행). 기획 md 전체가 요구했지만 여태 각 문항 텍스트 앞에 괄호로 욱여넣던
+      "오프닝 내레이션 / 중반 이벤트"의 정식 구현이라 41~60 어느 콘텐츠에서도 재사용 가능하다.
+      진행 상태는 state.shownInterstitials로만 관리해 같은 컷신이 두 번 뜨지 않는다.
+   ③ `config.feed_ui` + `config.viral_meter`(#59 밈 캐릭터): 문항을 SNS 게시물 카드로 렌더하고
+      (`feed_ui: {author, handle, avatar}`), 선택지의 `choice.viral`(배수, 예 1.7)만큼 좋아요·
+      리트윗·조회수가 곱해지며 숫자가 롤링 카운트업한다. 결과엔 최종 도달수와 바이럴 등급.
+   ④ `config.success_meter`(#56 사이버펑크) / `config.quit_meter`(#60 퇴사): v15 affinity_meter와
+      같은 단일값 게이지지만, 라벨·아이콘·판정 문구를 config에서 받는 **범용** 버전
+      (`{ init, max, label, icon, verdicts:[{min,text}] }` + `choice.delta`). #56은 분기 트리
+      화면(renderTreeQuestion)에도 게이지를 얹어 "잠입 성공률"로, #60은 timer_sec과 엮어
+      **시간 초과 시 `quit_meter.timeout_delta`만큼 퇴사 욕구가 급등**하도록 연결했다(타이머가
+      처음으로 결과 연출과 이어지는 지점). affinity_meter(#54)는 반응 문구 등 전용 동작이 있어
+      기존 코드를 그대로 두고 건드리지 않았다(회귀 방지). */
 
 (function () {
   'use strict';
@@ -148,7 +171,7 @@
   // engine.js 자체가 바뀔 때마다 이 번호를 올리고, 위 헤더 안내대로 10개 index.html의
   // engine.js/engine.css/result-card.js ?v=도 같은 번호로 맞출 것 — themes/*.css는
   // injectThemeCSS()가 이 상수를 그대로 재사용해 자동으로 캐시버스팅된다(파일별로 안 챙겨도 됨).
-  var ENGINE_ASSET_VERSION = '15';
+  var ENGINE_ASSET_VERSION = '16';
 
   // 최상단에서 즉시 캡처해야 함 — defer 스크립트라도 동기 실행 구간에서만 currentScript가 유효함
   var ENGINE_SCRIPT = document.currentScript;
@@ -192,7 +215,18 @@
     affinityPrev: 0,
     // v15: config.point_budget(#55) — 스탯별 배분 포인트. mbti4 채점과 별개 상태라 없는 config는
     // 빈 객체로만 남고 결과 계산에 전혀 관여하지 않는다.
-    pointBudget: {}
+    pointBudget: {},
+    // v16: config.cart_ui(#57) — 담긴 상품 목록. cart_ui가 없는 config는 항상 빈 배열.
+    cartItems: [],
+    // v16: config.interstitials(#58) — 이미 보여준 컷신의 after 값 목록(중복 노출 방지).
+    shownInterstitials: [],
+    // v16: config.viral_meter(#59) — 좋아요/리트윗/조회수 현재값·직전 프레임값(카운트업 연출용).
+    viralValues: {},
+    viralPrev: {},
+    // v16: config.success_meter(#56)/config.quit_meter(#60) — 범용 단일 게이지 현재/직전 프레임값.
+    // 키는 'success_meter'|'quit_meter'. 둘 다 없는 config는 빈 객체로만 남는다.
+    meterValues: {},
+    meterPrev: {}
   };
 
   var MBTI_PAIRS = [['E', 'I'], ['S', 'N'], ['T', 'F'], ['J', 'P']];
@@ -313,6 +347,7 @@
 
   // ---------- 화면: 인트로 ----------
   function renderIntro() {
+    resetScroll();
     var c = state.config;
     var hashtags = (c.hashtags || [])
       .map(function (h) { return '<span class="te-chip">#' + escapeHtml(h) + '</span>'; })
@@ -372,15 +407,21 @@
     state.awakenPrev = { overall: 0, EI: 50, NS: 50, TF: 50, JP: 50 }; // v11(#41)
     if (c.resource_meters) resetResources(); // v14(#53)
     if (c.affinity_meter) resetAffinity(); // v15(#54)
+    state.cartItems = [];              // v16(#57)
+    state.shownInterstitials = [];     // v16(#58)
+    if (c.viral_meter) resetViral();   // v16(#59)
+    resetMeters();                     // v16(#56/#60) — 해당 필드가 없으면 아무것도 안 함
     state.currentNode = c.questions_tree ? c.start_node : '';
     state.pathLength = 0;
     state.questionLocked = false;
     clearActiveTimer();
-    renderQuestion();
+    // v16(#58): config.interstitials에 after:0 컷신이 있으면 첫 문항 전에 오프닝을 한 장 띄운다.
+    maybeInterstitial(0, renderQuestion);
   }
 
   // ---------- 화면: 질문 (루프) ----------
   function renderQuestion() {
+    resetScroll();
     var c = state.config;
     state.questionLocked = false;
 
@@ -400,7 +441,10 @@
       ? '<img src="' + escapeAttr(q.image) + '" alt="" class="te-question-img" />'
       : '';
 
-    var questionTextHtml = c.chat_ui
+    // v16: config.feed_ui(#59) — 질문을 SNS 게시물 카드 형태로 렌더(스코어링 무관, 렌더 전용).
+    var questionTextHtml = c.feed_ui
+      ? feedCardHtml(q.text)
+      : c.chat_ui
       ? '<div class="te-chat-thread">' +
           '<div class="te-chat-bubble te-chat-bubble-them te-chat-typing" id="te-chat-typing"><span></span><span></span><span></span></div>' +
           '<div class="te-chat-bubble te-chat-bubble-them" id="te-chat-message" style="display:none;">' + escapeHtml(q.text) + '</div>' +
@@ -425,6 +469,15 @@
 
     // config.image_choices(#52): 답할 때마다 쌓이는 수집 스티커판 (연출 전용)
     var collectHtml = c.image_choices ? collectionStripHtml() : '';
+
+    // v16 config.cart_ui(#57): 담긴 상품 + 누적 금액 장바구니 바 (연출 전용)
+    var cartHtml = c.cart_ui ? cartBarHtml() : '';
+
+    // v16 config.viral_meter(#59): 좋아요·리트윗·조회수 카운터 (연출 전용)
+    var viralHtml = c.viral_meter ? viralMeterHtml() : '';
+
+    // v16 config.quit_meter(#60): 퇴사 욕구 게이지 (연출 전용, 타임아웃 시 급등)
+    var quitHtml = c.quit_meter ? meterHtml('quit_meter') : '';
 
     var choicesHtml;
     if (c.slider_ui) {
@@ -475,6 +528,9 @@
           resourceHtml +
           affinityHtml +
           collectHtml +
+          cartHtml +
+          viralHtml +
+          quitHtml +
           timerHtml +
           imageHtml +
           questionTextHtml +
@@ -523,6 +579,11 @@
     // config.affinity_meter(#54): 직전 프레임값 → 지금까지 누적된 호감도로 게이지를 옮긴다.
     if (c.affinity_meter) animateAffinityMeter();
 
+    // v16: 장바구니(#57)/바이럴 카운터(#59)/퇴사 욕구(#60)도 같은 방식으로 직전값 → 현재값 연출.
+    if (c.cart_ui) animateCartBar();
+    if (c.viral_meter) animateViralMeter();
+    if (c.quit_meter) animateMeter('quit_meter');
+
     // config.timer_sec(#21): 렌더가 끝나고 리스너까지 붙은 뒤에 카운트다운을 시작한다.
     if (c.timer_sec) {
       startCountdown(c.timer_sec, function (remainingMs) {
@@ -541,6 +602,7 @@
   // config.start_node: 시작 노드 id. choice.next가 없으면 그 선택으로 시나리오가 종료되고
   // 결과 화면으로 진행한다(예: 초반 선택으로 조기 사망하는 경로).
   function renderTreeQuestion() {
+    resetScroll();
     var c = state.config;
     var node = c.questions_tree[state.currentNode];
     state.pathLength += 1;
@@ -557,10 +619,14 @@
       })
       .join('');
 
+    // v16 config.success_meter(#56): 분기 시나리오 위에 얹는 잠입 성공률 게이지 (연출 전용)
+    var successHtml = c.success_meter ? meterHtml('success_meter') : '';
+
     rootEl.innerHTML =
       '<div class="te-app te-screen-question te-has-fixed-footer">' +
         '<div class="te-question-body">' +
           '<p class="te-question-counter">' + state.pathLength + '번째 선택</p>' +
+          successHtml +
           imageHtml +
           '<h2 class="te-question-text">' + escapeHtml(node.text) + '</h2>' +
         '</div>' +
@@ -575,6 +641,8 @@
         selectTreeChoice(node, choiceIndex);
       });
     });
+
+    if (c.success_meter) animateMeter('success_meter');
   }
 
   function selectTreeChoice(node, choiceIndex) {
@@ -583,12 +651,18 @@
     var choice = node.choices[choiceIndex];
     state.answers.push(choice);
     applyScoring(choice, node);
-    if (choice.next) {
-      state.currentNode = choice.next;
-      renderQuestion();
-    } else {
-      renderLoading();
-    }
+    if (state.config.success_meter) applyMeterDelta('success_meter', choice.delta); // v16(#56)
+    // v16(#58): 분기 트리도 advance()와 동일하게 interstitials 타이밍을 확인한다 — 이전엔
+    // selectTreeChoice가 advance()를 거치지 않아 questions_tree(#56) 콘텐츠에서 중반 컷신이
+    // 전혀 뜨지 않던 버그(QA에서 발견, 인터스티셜 카운트가 오프닝 1회뿐이었음).
+    maybeInterstitial(state.answers.length, function () {
+      if (choice.next) {
+        state.currentNode = choice.next;
+        renderQuestion();
+      } else {
+        renderLoading();
+      }
+    });
   }
 
   function selectChoice(question, choiceIndex) {
@@ -600,6 +674,10 @@
     applyScoring(choice, question);
     if (state.config.resource_meters) applyResourceDelta(choice); // v14(#53) — 채점과 무관한 연출값
     if (state.config.affinity_meter) applyAffinityDelta(choice); // v15(#54) — 채점과 무관한 연출값
+    // v16 — 전부 채점과 무관한 연출값
+    if (state.config.cart_ui) applyCartItem(choice);              // (#57)
+    if (state.config.viral_meter) applyViralDelta(choice);        // (#59)
+    if (state.config.quit_meter) applyMeterDelta('quit_meter', choice.delta); // (#60)
     advance();
   }
 
@@ -609,17 +687,28 @@
     state.questionLocked = true;
     state.timeoutCount += 1;
     state.answers.push(null);
+    // v16(#60): 제한시간 안에 결정을 못 내린 것 자체가 "이 회사 다니기 싫다"는 신호 — 퇴사 욕구를
+    // 크게 올린다(config.quit_meter.timeout_delta, 없으면 기본 +12). timer_sec만 쓰고 quit_meter가
+    // 없는 #21 등은 이 줄을 타지 않는다.
+    if (state.config.quit_meter) {
+      var td = state.config.quit_meter.timeout_delta;
+      applyMeterDelta('quit_meter', typeof td === 'number' ? td : 12);
+    }
     advance();
   }
 
   // selectChoice/handleTimeout 공통 진행부 — "다음 문항으로" 또는 "로딩(결과 계산)으로".
+  // v16(#58): 진행 직전에 config.interstitials의 컷신 타이밍(after = 지금까지 답한 개수)을
+  // 확인해, 해당하는 컷신이 있으면 풀스크린 한 장을 먼저 띄우고 탭하면 이어서 진행한다.
   function advance() {
-    if (state.questionIndex < state.config.questions.length - 1) {
-      state.questionIndex += 1;
-      renderQuestion();
-    } else {
-      renderLoading();
-    }
+    maybeInterstitial(state.answers.length, function () {
+      if (state.questionIndex < state.config.questions.length - 1) {
+        state.questionIndex += 1;
+        renderQuestion();
+      } else {
+        renderLoading();
+      }
+    });
   }
 
   // config.timer_sec(#21) 전용 카운트다운 — Date.now() 기준 deadline과의 차이로 매 tick을
@@ -695,6 +784,7 @@
 
   // ---------- 화면: 로딩 연출 ----------
   function renderLoading() {
+    resetScroll();
     var c = state.config;
     var loadingText = (c.loading && c.loading.text) || '결과 분석 중..';
     var duration = (c.loading && c.loading.duration_ms) || 2000;
@@ -1123,6 +1213,239 @@
     return top.label;
   }
 
+  // ===== v16 신규 메커니즘 (#56~60) — 전부 연출 전용, 채점(applyScoring)과 무관 =====
+
+  // --- v16 ① config.cart_ui(#57 편의점 음식): 답할 때마다 상품이 담기는 장바구니 + 영수증 ---
+  function cartTotal() {
+    return state.cartItems.reduce(function (sum, it) { return sum + (Number(it.price) || 0); }, 0);
+  }
+  function formatMoney(n) {
+    return Number(n || 0).toLocaleString('ko-KR') + (state.config.cart_ui && state.config.cart_ui.currency ? state.config.cart_ui.currency : '원');
+  }
+  function applyCartItem(choice) {
+    if (!choice || !choice.item) return;
+    state.cartItems.push(choice.item);
+  }
+  function cartBarHtml() {
+    var cu = state.config.cart_ui || {};
+    // 마지막에 담긴 것부터 최대 4개까지만 칩으로 보여준다(그 이상은 "+N").
+    var recent = state.cartItems.slice(-4);
+    var chips = recent.map(function (it) {
+      return '<span class="te-cart-chip">' + escapeHtml(it.emoji || '🛍️') + ' ' + escapeHtml(it.name || '') + '</span>';
+    }).join('');
+    var moreCount = state.cartItems.length - recent.length;
+    var more = moreCount > 0 ? '<span class="te-cart-chip te-cart-chip-more">+' + moreCount + '</span>' : '';
+    var empty = state.cartItems.length ? '' : '<span class="te-cart-empty">아직 아무것도 안 담았어요</span>';
+    return '<div class="te-cart" id="te-cart">' +
+        '<div class="te-cart-head">' +
+          '<span class="te-cart-title">' + escapeHtml(cu.title || '🛒 장바구니') + '</span>' +
+          '<span class="te-cart-total" id="te-cart-total">' + escapeHtml(formatMoney(cartTotal())) + '</span>' +
+        '</div>' +
+        '<div class="te-cart-row" id="te-cart-row">' + chips + more + empty + '</div>' +
+      '</div>';
+  }
+  function animateCartBar() {
+    // 마지막으로 담긴 칩만 "톡" 튀어나오게 — 렌더 커밋 후 클래스를 붙인다.
+    requestAnimationFrame(function () {
+      var row = qs('#te-cart-row');
+      if (!row) return;
+      var chips = row.querySelectorAll('.te-cart-chip');
+      var last = chips[chips.length - 1];
+      if (last) last.classList.add('is-new');
+    });
+  }
+  function cartReceiptHtml() {
+    var lines = state.cartItems.map(function (it) {
+      return '<span class="te-receipt-line">' +
+          '<span>' + escapeHtml((it.emoji || '') + ' ' + (it.name || '')) + '</span>' +
+          '<span>' + escapeHtml(formatMoney(it.price)) + '</span>' +
+        '</span>';
+    }).join('');
+    return '<div class="te-receipt">' +
+        '<p class="te-receipt-head">🧾 오늘의 편의점 영수증</p>' +
+        lines +
+        '<span class="te-receipt-line te-receipt-sum"><span>합계</span><span>' + escapeHtml(formatMoney(cartTotal())) + '</span></span>' +
+      '</div>';
+  }
+
+  // --- v16 ② config.interstitials(#58 전생·환생, 범용 컷신) ---
+  // after: "이만큼 답한 뒤"(0 = 첫 문항 전). 같은 컷신이 두 번 뜨지 않도록 state.shownInterstitials로
+  // 관리하고, 해당 타이밍의 컷신이 없으면 곧장 next()를 호출해 기존 흐름을 그대로 이어간다.
+  function maybeInterstitial(answeredCount, next) {
+    var list = state.config.interstitials;
+    if (!list || !list.length) { next(); return; }
+    var item = null;
+    for (var i = 0; i < list.length; i++) {
+      if (Number(list[i].after) === answeredCount && state.shownInterstitials.indexOf(i) === -1) {
+        item = list[i];
+        state.shownInterstitials.push(i);
+        break;
+      }
+    }
+    if (!item) { next(); return; }
+    renderInterstitial(item, next);
+  }
+  function renderInterstitial(item, next) {
+    resetScroll();
+    rootEl.innerHTML =
+      '<div class="te-app te-screen-interstitial te-has-fixed-footer">' +
+        '<div class="te-inter-body">' +
+          (item.badge ? '<p class="te-inter-badge">' + escapeHtml(item.badge) + '</p>' : '') +
+          '<h2 class="te-inter-title">' + escapeHtml(item.title || '') + '</h2>' +
+          '<p class="te-inter-text">' + escapeHtml(item.text || '') + '</p>' +
+        '</div>' +
+        '<div class="te-choices-fixed te-question-footer">' +
+          '<button type="button" class="te-btn te-btn-primary" id="te-inter-next">' + escapeHtml(item.cta || '계속하기') + '</button>' +
+        '</div>' +
+      '</div>';
+    qs('#te-inter-next').addEventListener('click', function () { next(); });
+  }
+
+  // --- v16 ③ config.feed_ui + config.viral_meter(#59 밈 캐릭터) ---
+  var VIRAL_KEYS = [
+    { key: 'likes', icon: '❤️' },
+    { key: 'retweets', icon: '🔁' },
+    { key: 'views', icon: '👁' }
+  ];
+  function feedCardHtml(text) {
+    var fu = state.config.feed_ui || {};
+    return '<div class="te-feed-card">' +
+        '<div class="te-feed-head">' +
+          '<span class="te-feed-avatar">' + escapeHtml(fu.avatar || '🙂') + '</span>' +
+          '<span class="te-feed-names">' +
+            '<span class="te-feed-author">' + escapeHtml(fu.author || '나') + '</span>' +
+            '<span class="te-feed-handle">' + escapeHtml(fu.handle || '@me') + '</span>' +
+          '</span>' +
+        '</div>' +
+        '<p class="te-feed-text">' + escapeHtml(text) + '</p>' +
+      '</div>';
+  }
+  function resetViral() {
+    var vm = state.config.viral_meter || {};
+    state.viralValues = {};
+    state.viralPrev = {};
+    VIRAL_KEYS.forEach(function (v) {
+      var init = typeof vm[v.key] === 'number' ? vm[v.key] : 100;
+      state.viralValues[v.key] = init;
+      state.viralPrev[v.key] = init;
+    });
+  }
+  function applyViralDelta(choice) {
+    // choice.viral은 배수(예: 1.7). 없으면 1.25배로 완만히 오른다 — 어떤 선택을 해도 "퍼지는" 연출.
+    var mult = (choice && typeof choice.viral === 'number') ? choice.viral : 1.25;
+    VIRAL_KEYS.forEach(function (v) {
+      state.viralValues[v.key] = Math.round((state.viralValues[v.key] || 0) * mult);
+    });
+  }
+  function formatViral(n) {
+    if (n >= 100000000) return (n / 100000000).toFixed(1).replace(/\.0$/, '') + '억';
+    if (n >= 10000) return (n / 10000).toFixed(1).replace(/\.0$/, '') + '만';
+    if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + '천';
+    return String(n);
+  }
+  function viralMeterHtml() {
+    var cells = VIRAL_KEYS.map(function (v) {
+      return '<span class="te-viral-cell">' +
+          '<span class="te-viral-icon">' + v.icon + '</span>' +
+          '<span class="te-viral-num" id="te-viral-' + v.key + '">' + escapeHtml(formatViral(state.viralPrev[v.key] || 0)) + '</span>' +
+        '</span>';
+    }).join('');
+    return '<div class="te-viral" id="te-viral">' + cells + '</div>';
+  }
+  function animateViralMeter() {
+    // 직전 프레임값 → 현재값으로 숫자를 롤링 카운트업(약 600ms).
+    var from = {}, to = {};
+    VIRAL_KEYS.forEach(function (v) { from[v.key] = state.viralPrev[v.key] || 0; to[v.key] = state.viralValues[v.key] || 0; });
+    var start = 0;
+    var DURATION = 600;
+    function step(ts) {
+      if (!start) start = ts;
+      var t = Math.min(1, (ts - start) / DURATION);
+      var eased = 1 - Math.pow(1 - t, 3);
+      var alive = false;
+      VIRAL_KEYS.forEach(function (v) {
+        var el = qs('#te-viral-' + v.key);
+        if (!el) return;
+        alive = true;
+        el.textContent = formatViral(Math.round(from[v.key] + (to[v.key] - from[v.key]) * eased));
+      });
+      if (alive && t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+    VIRAL_KEYS.forEach(function (v) { state.viralPrev[v.key] = state.viralValues[v.key]; });
+  }
+  function computeViralResult() {
+    var views = state.viralValues.views || 0;
+    var grade = views >= 5000000 ? '전국구 밈 (알고리즘 점령)'
+      : views >= 500000 ? '타임라인 점령 밈'
+      : views >= 50000 ? '커뮤니티 인기 짤'
+      : '아는 사람만 아는 밈';
+    return { views: formatViral(views), likes: formatViral(state.viralValues.likes || 0), grade: grade };
+  }
+
+  // --- v16 ④ config.success_meter(#56) / config.quit_meter(#60): 범용 단일 게이지 ---
+  // affinity_meter(#54)의 단일값 게이지를 라벨·아이콘·판정문구까지 config에서 받도록 일반화한 버전.
+  // key는 'success_meter' | 'quit_meter'이고, 두 필드가 다 없는 config는 아래 함수가 호출되지 않는다.
+  function meterConfigOf(key) {
+    var m = state.config[key] || {};
+    return {
+      init: typeof m.init === 'number' ? m.init : 50,
+      max: m.max || 100,
+      label: m.label || '게이지',
+      icon: m.icon || '📊',
+      verdicts: m.verdicts || []
+    };
+  }
+  function resetMeters() {
+    ['success_meter', 'quit_meter'].forEach(function (key) {
+      if (!state.config[key]) return;
+      var mc = meterConfigOf(key);
+      state.meterValues[key] = mc.init;
+      state.meterPrev[key] = mc.init;
+    });
+  }
+  function applyMeterDelta(key, delta) {
+    if (typeof delta !== 'number') return;
+    var mc = meterConfigOf(key);
+    state.meterValues[key] = Math.max(0, Math.min(mc.max, (state.meterValues[key] || mc.init) + delta));
+  }
+  function meterPct(key) {
+    var mc = meterConfigOf(key);
+    return mc.max ? Math.round(((state.meterValues[key] || 0) / mc.max) * 100) : 0;
+  }
+  function meterHtml(key) {
+    var mc = meterConfigOf(key);
+    var prevPct = mc.max ? Math.round(((state.meterPrev[key] || 0) / mc.max) * 100) : 0;
+    return '<div class="te-meter" id="te-meter-' + key + '">' +
+        '<div class="te-meter-head">' +
+          '<span class="te-meter-label">' + escapeHtml(mc.icon + ' ' + mc.label) + '</span>' +
+          '<span class="te-meter-pct" id="te-meter-pct-' + key + '">' + prevPct + '%</span>' +
+        '</div>' +
+        '<div class="te-meter-track"><div class="te-meter-fill" id="te-meter-fill-' + key + '" style="width:' + prevPct + '%"></div></div>' +
+      '</div>';
+  }
+  function animateMeter(key) {
+    requestAnimationFrame(function () {
+      var pct = meterPct(key);
+      var pctEl = qs('#te-meter-pct-' + key);
+      var fillEl = qs('#te-meter-fill-' + key);
+      if (pctEl) pctEl.textContent = pct + '%';
+      if (fillEl) fillEl.style.width = pct + '%';
+    });
+    state.meterPrev[key] = state.meterValues[key];
+  }
+  // 결과 화면용 — 최종 % + config.verdicts([{min,text}], 큰 min부터 매칭) 판정.
+  function computeMeterResult(key) {
+    var mc = meterConfigOf(key);
+    var pct = meterPct(key);
+    var verdict = '';
+    mc.verdicts.slice().sort(function (a, b) { return b.min - a.min; }).some(function (v) {
+      if (pct >= v.min) { verdict = v.text; return true; }
+      return false;
+    });
+    return { pct: pct, verdict: verdict, label: mc.label, icon: mc.icon };
+  }
+
   function computeMbti4Result(c) {
     var r = codeFromCounts(state.mbtiCounts);
     var eVal = 100 - r.ratios.EI, nVal = r.ratios.SN, fVal = r.ratios.TF, jVal = 100 - r.ratios.JP;
@@ -1135,7 +1458,9 @@
       ebar: statBar(eVal), nbar: statBar(nVal), fbar: statBar(fVal), jbar: statBar(jVal),
       // v15: config.point_budget(#55)이 있을 때만 의미 있는 값 — 없으면 빈 문자열로 남아
       // resultTemplate에 "{topstat}"이 없는 기존 config는 완전히 무관하다.
-      topstat: c.point_budget ? topBudgetStatLabel() : ''
+      topstat: c.point_budget ? topBudgetStatLabel() : '',
+      // v16: config.cart_ui(#57)가 있을 때만 의미 있는 값 — 없으면 빈 문자열.
+      cartTotal: c.cart_ui ? formatMoney(cartTotal()) : ''
     };
     var matched = (c.results || []).filter(function (res) { return res.code === r.code; })[0];
     var merged = fillVarsTemplate(matched || c.resultTemplate || {}, vars);
@@ -1182,6 +1507,7 @@
 
   // ---------- 화면: 결과 ----------
   function renderResult(result) {
+    resetScroll();
     var traits = (result.traits || [])
       .map(function (t) { return '<li>' + escapeHtml(applyTagTemplate(t, result.tag)) + '</li>'; })
       .join('');
@@ -1190,8 +1516,11 @@
     var relatedHtml = relatedIds.length ? '<div id="te-related-container" class="te-related"></div>' : '';
 
     // config.timer_sec(#21) 테스트에서만 노출되는 부가 스탯 — 없는 24개 테스트는 이 줄 자체가 렌더되지 않는다.
-    var timeoutStatHtml = state.config.timer_sec
-      ? '<p class="te-result-stat">⏱ 3초 안에 답하지 못한 문항: ' + state.timeoutCount + '개</p>'
+    // (v16) 초 수를 config.timer_sec에서 그대로 읽는다 — 예전엔 "3초"가 문자열로 박혀 있어
+    // 다른 제한시간을 쓰는 테스트(#60은 7초)에서 잘못된 숫자가 보였다. quit_meter(#60)를 쓰는
+    // 테스트는 아래 meterStatHtml이 초과 횟수를 함께 보여주므로 이 줄은 생략한다.
+    var timeoutStatHtml = (state.config.timer_sec && !state.config.quit_meter)
+      ? '<p class="te-result-stat">⏱ ' + state.config.timer_sec + '초 안에 답하지 못한 문항: ' + state.timeoutCount + '개</p>'
       : '';
 
     // config.resource_meters(#53) 테스트에서만 노출되는 부가 스탯 — 없는 테스트는 이 줄 자체가 렌더되지 않는다.
@@ -1231,6 +1560,28 @@
       budgetStatHtml = '<p class="te-result-stat">⚔️ 능력치 배분<br>' + budgetRows + '</p>';
     }
 
+    // v16 config.cart_ui(#57): 담은 품목이 그대로 찍힌 영수증 블록.
+    var cartStatHtml = state.config.cart_ui ? cartReceiptHtml() : '';
+
+    // v16 config.viral_meter(#59): 최종 도달수 + 바이럴 등급.
+    var viralStatHtml = '';
+    if (state.config.viral_meter) {
+      var vr = computeViralResult();
+      viralStatHtml = '<p class="te-result-stat">🔥 최종 도달 ' + escapeHtml(vr.views) + '회 · ❤️ ' + escapeHtml(vr.likes) + ' · ' + escapeHtml(vr.grade) + '</p>';
+    }
+
+    // v16 config.success_meter(#56)/quit_meter(#60): 범용 단일 게이지의 최종 수치 + 판정.
+    var meterStatHtml = ['success_meter', 'quit_meter'].map(function (key) {
+      if (!state.config[key]) return '';
+      var mr = computeMeterResult(key);
+      // #60은 타임아웃(제한시간 초과)이 퇴사 욕구를 밀어올린 만큼, 몇 번 놓쳤는지도 함께 보여준다.
+      var sub = (key === 'quit_meter' && state.config.timer_sec)
+        ? ' · 제한시간 초과 ' + state.timeoutCount + '회'
+        : '';
+      return '<p class="te-result-stat">' + escapeHtml(mr.icon + ' 최종 ' + mr.label) + ' ' + mr.pct + '%' +
+        (mr.verdict ? ' · ' + escapeHtml(mr.verdict) : '') + escapeHtml(sub) + '</p>';
+    }).join('');
+
     rootEl.innerHTML =
       '<div class="te-app te-screen-result te-has-fixed-footer">' +
         '<div class="te-result-body">' +
@@ -1244,6 +1595,9 @@
           affinityStatHtml +
           collectionStatHtml +
           budgetStatHtml +
+          viralStatHtml +
+          meterStatHtml +
+          cartStatHtml +
           '<p class="te-save-hint">📸 이미지를 꾹 눌러 저장해보세요</p>' +
           relatedHtml +
         '</div>' +
@@ -1391,6 +1745,15 @@
   }
 
   // ---------- 유틸 ----------
+  // v16: 화면(인트로/문항/컷신/로딩/결과)이 바뀔 때 스크롤을 항상 맨 위로 되돌린다 — 각
+  // 페이지 아래에 SEO 정적 섹션(te-seo, v1.1.6~)이 붙어 있어 문서가 길기 때문에, 이전 화면에서
+  // 내려가 있던 스크롤 위치가 그대로 유지되면 다음 문항이 화면 밖으로 밀려 보인다(QA에서
+  // #58 문항 화면이 선택지만 보이고 질문이 위로 잘린 채 캡처돼 발견). 인터스티셜 도입으로
+  // 화면 전환이 늘면서 더 눈에 띄게 됐지만, 원래 61개 전부에 있던 문제라 공통 함수로 처리.
+  function resetScroll() {
+    if (typeof window !== 'undefined' && window.scrollTo) window.scrollTo(0, 0);
+  }
+
   function qs(sel) { return rootEl.querySelector(sel); }
   function qsa(sel) { return Array.prototype.slice.call(rootEl.querySelectorAll(sel)); }
 

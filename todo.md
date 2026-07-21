@@ -1,82 +1,58 @@
 # TODO — 2026-07-21(월) 이어서 작업
 
-> 오전 세션: **MBTI존 게임형 개편 #53 파일럿** 완주해 푸시(커밋 `0535c24` 엔진 + `e3738e3` 이미지).
-> 이어서 이번 세션: 사용자가 "성능 저하는 나중에 손본다 치고 51/52/54/55번 제작해줘"로 속도 게이트를
-> 건너뛰고 진행 승인 → **#51/52/54/55 콘텐츠 제작 완료**(엔진 v14→v15). 상세 이력은
-> `test-engine/progress.md` "MBTI존 게임형 개편 2차 배치 — #51/52/54/55" 절 참고. 아직 커밋 전.
+> MBTI존 게임형 개편 배치: #53 파일럿(오전) → #51/52/54/55 제작+연동(v1.3.3, `80c88c8`) →
+> **#51~55 문항 텍스트 md 기준 복구(v1.3.4, `3a51919`)** → **#56~60 제작+연동(v1.3.5, engine v16)**
+> 까지 완료. **이로써 51~60 MBTI존 게임형 개편 배치 전체 종료.**
+> 상세 이력은 `test-engine/progress.md`의 "게임형 개편 2차/3차 배치" 절 참고.
 
 ---
 
-## 0. 배경 — 무엇을 하려는 건가
-51~60 MBTI존이 대부분 평범한 카드형 Q&A라, **"읽는 테스트 → 가지고 노는 테스트"** 로 바꾸는 작업.
-이미 쓰인 인터랙션(슬라이더51 / 분기트리56 / 인트로입력58 / 타이머60 / 채팅UI48 / 각성게이지41 /
-반응속도39)과 **중복되지 않는** 새 메커니즘을 테스트마다 하나씩 얹는다.
+## 51~60 최종 상태 (전부 완료)
+| # | 테스트 | 메커니즘 | 상태 |
+|---|--------|----------|------|
+| 51 | 술자리 캐릭터 | `slider_ui`(기존 재사용) | ✅ 라이브 |
+| 52 | 반려동물 판별기 | `image_choices`(이모지 카드+수집 스티커판) | ✅ 라이브 |
+| 53 | 종말 후 부족 리더 | `resource_meters`(식량·식수·사기 3게이지) | ✅ 라이브 |
+| 54 | 로맨스 웹툰 주인공 | `affinity_meter`(♥호감도+반응 문구) | ✅ 라이브 |
+| 55 | 판타지 무기 판별기 | `point_budget`(스탯 포인트 분배) | ✅ 라이브 |
+| 56 | 사이버펑크 세계 | `questions_tree` + **신규 `success_meter`**(잠입 성공률) | ✅ v1.3.5 |
+| 57 | 편의점 음식 판별기 | **신규 `cart_ui`**(장바구니+결과 영수증) | ✅ v1.3.5 |
+| 58 | 전생+환생 예고 | `intro_input` + **신규 `interstitials`**(전생→기시감→내생 3막 컷신) | ✅ v1.3.5 |
+| 59 | 밈 캐릭터 판별기 | **신규 `feed_ui`+`viral_meter`**(SNS 카드+바이럴 카운터) | ✅ v1.3.5 |
+| 60 | 회사에서의 나+퇴사 | `timer_sec:7` + **신규 `quit_meter`**(초과 시 퇴사 욕구 급등) | ✅ v1.3.5 |
 
-### 확정 5개 메커니즘 로드맵
-| # | 테스트 | config 키 | 게임 컨셉 | 상태 |
-|---|--------|----------|----------|------|
-| 52 | 반려동물 판별기 | `image_choices` | 축별 이모지 카드 탭 + 수집 스티커판 | **✅ 완료** |
-| 53 | 종말 후 부족 리더 | `resource_meters` | 식량·식수·사기 3게이지 생존 대시보드 | **✅ 완료** |
-| 54 | 로맨스 웹툰 주인공 | `affinity_meter` | ♥호감도 게이지 + 상대 반응 문구 | **✅ 완료** |
-| 55 | 판타지 무기 판별기 | `point_budget` | 힘/민첩/지혜/의지 포인트 분배 미니게임 | **✅ 완료** |
-| 57 | 편의점 음식 판별기 | `multi_select` | 매대 돌며 장바구니 담기 수집 게임 | 대기 |
-
-(51은 로드맵 5개엔 없었지만 기존 `slider_ui` 재사용 + 테마·이미지 신규 제작으로 이번에 같이 완료.
-59는 사용자가 제외. 56/58은 이미 특수엔진이라 대상 아님.)
-
----
-
-## 1. ⭐ 다음에 결정할 것 — 사이트 연동 범위 (그대로 미결)
-**51~60이 통째로 사이트에 미연동 상태**다(`data.js`의 `mbtiZoneTests`는 #50까지만, `sections.json`
-큐레이션·`sitemap`도 없음). 완성된 #51/52/53/54는 아직 홈에 안 뜨고 직접 URL로만 접근된다:
-```
-/test-engine/tests/51-mbti-drinking-party-character/index.html
-/test-engine/tests/52-mbti-pet-animal-type/index.html
-/test-engine/tests/53-mbti-post-apocalypse-tribe-leader/index.html
-/test-engine/tests/54-mbti-webtoon-romance-lead/index.html
-/test-engine/tests/55-mbti-fantasy-weapon/index.html
-```
-- [ ] **결정**: 지금까지 완료된 5개(51/52/53/54/55)만 먼저 배치로 묶어 연동할지 / #57까지 마저
-  만들고 51~60 전체를 한 번에 연동할지
-- 연동 시 필요한 것(5개 전부): `data.js` mbtiZoneTests 항목 추가(`theme`/`engagementKey`/
-  `baseCount`= config.json의 seed_count와 반드시 일치), `sections.json` 큐레이션 4그룹 중 하나에
-  배치(50개 넘기 전엔 새 그룹 금지), `sitemap.xml` + `llms.txt`/`llms-full.txt` 갱신, `index.html`
-  하단 "콘텐츠 최근 업데이트" 날짜 bump — **이 파일들 수정 전엔 항상 먼저 보여주고 승인받을 것**
-  (test-engine/CLAUDE.md 4-5).
-
-## 2. 라이브 속도 게이트 — 이번엔 건너뜀
-사용자가 "성능이 떨어지긴 했다, 나중에 손본다 치고 진행해줘"로 명시적으로 게이트를 건너뛰고
-51/52/54/55 제작을 승인함. **PSI 등 실측정은 여전히 안 한 상태** — 언젠가 사용자가 "이제 성능
-손보자"고 하면 그때 대응(dreamData 지연 로드 등, `project_pagespeed_followup` 메모리 참고).
-엔진은 v15까지 올라 61개 테스트 전체에 배포된 상태.
-
-## 3. 이미지 — 51/52/54/55는 완료, 57만 남음
-- [x] #51/52/54/55: 각 9/9(cover+결과8) 생성 완료, `cover-home.webp` 썸네일도 전부 생성함
-- [ ] #57(편의점 음식 판별기)만 레퍼런스 확보(`assets/reference/`) → 4-4 절차로 진행 필요
-
-## 4. 나머지 1개 메커니즘 구현 — `multi_select`(#57)
-51/52/54/55와 동일한 패턴으로 진행하면 된다. **엔진 확장 시 반드시 지킬 것**:
-- 새 config 키로만 켜지는 **옵트인**, 그 키가 없는 config는 렌더·채점 완전 동일(하위호환)
-- 채점 switch(`applyScoring`/`computeResult`)는 가능하면 건드리지 말고 **연출 레이어**로 처리
-- `engine.js` 헤더 vN + `ENGINE_ASSET_VERSION` 올리고 → **61개 index.html의 `?v=` 일괄 sed 치환**
-  (`result-card.js`는 안 건드렸으면 v2 그대로)
-- 새 테마는 `themes/{name}.css` 신규 파일 + `app.js`의 `THEME_TITLE_FONTS` 등록 +
-  `.te-app`에 `--te-footer-bg` 정의 + `.te-choices-fixed`에 position/margin-top 덮어쓰기 금지
-- 끝나면 Playwright 전수 QA
+> 원래 로드맵의 #57 `multi_select`는 실제로는 **`cart_ui`**(누적 장바구니+영수증)로 구현했다 —
+> "여러 개 고르기"보다 "답할 때마다 자동으로 담기고 마지막에 영수증"이 편의점 컨셉에 더 맞아서.
 
 ---
 
-## 참고 — 이번 세션에 끝낸 것 (다시 하지 말 것)
-- `engine.js`/`engine.css` v14→v15: `image_choices`(#52)/`affinity_meter`(#54)/`point_budget`(#55)
-  옵트인 3종 추가 — 전부 mbti4 채점 위 순수 연출/보조 레이어, 하위호환
-- 61개 index.html `?v=14→15` 일괄 교체
-- `themes/receipt.css`(#51, VT323) / `themes/vetclip.css`(#52, Patrick Hand) /
-  `themes/webtoon.css`(#54, Gowun Dodum) / `themes/rpginventory.css`(#55, Rajdhani) 신규 +
-  `app.js` THEME_TITLE_FONTS 4건 등록
-- #51/52/54/55 config.json 4개 전부: theme 반영 + 신규 메커니즘 필드/선택지 delta·reaction 작성
-- #51/52/54/55 이미지 9/9×4 = 36장 생성(실패 0) + `cover-home.webp` 4개
-- #55 결과 traits에 `{topstat}` 문법 버그 발견·수정("{topstat}였다" → "{topstat} 쪽이었다",
-  받침 유무 무관하게 항상 자연스럽도록)
-- Playwright QA 4/4 통과(콘솔 에러 0/깨진 이미지 0/플레이스홀더 미치환 0)
-- `test-engine/tests/index.json`, `style-guide.md`, `progress.md` 갱신
-- **아직 안 한 것**: 사이트 연동(1번), git 커밋/푸시 — 사용자 확인 후 진행
+## 다음에 할 것
+- **라이브 검증**: v1.3.5 배포 후 #56~60 다섯 개 URL을 실제 사이트에서 완주 재검증
+  (로컬 QA는 통과했지만 이 프로젝트는 push=즉시 자동배포라 라이브 확인이 별도 단계).
+- **서치콘솔**: 신규 5개 URL 개별 색인 요청은 사용자 몫(사이트맵 재제출은 불필요).
+- **페이지 속도**: 게임형 개편 내내 "성능은 나중에" 치고 미뤄둠 — PSI 재측정 안 한 상태.
+  손볼 때 `project_pagespeed_followup` 메모리의 남은 레버(dreamData 지연 로드 등)부터.
+- **#61~ 신규 콘텐츠**: 기획 md가 아직 없음. 착수하려면 새 기획안부터.
+
+---
+
+## 참고 — v1.3.4/v1.3.5에서 끝낸 것 (다시 하지 말 것)
+### v1.3.4 — #51~55 문항 텍스트 복구
+- 결과 16종은 md대로 잘 들어갔는데 **질문만 단답형 스켈레톤이 남아 있던 것**을 발견해 40문항
+  전부 `mbti_prompt41-60.md` 원문으로 교체(채점 `axis`/선택지 `label`은 무변경).
+- #51 Q4·Q5, #52/54/55 Q5의 중반 이벤트 문구 중복도 함께 정리.
+
+### v1.3.5 — #56~60 제작 + engine v16
+- 신규 opt-in 메커니즘 4종(`cart_ui`/`interstitials`/`feed_ui`+`viral_meter`/범용 단일 게이지
+  `success_meter`·`quit_meter`) — 전부 mbti4 채점 위 순수 연출 레이어, 하위호환.
+- **범용 `interstitials`**가 이번의 핵심 — 그동안 문항 텍스트 앞에 괄호로 욱여넣던
+  "오프닝 내레이션/중반 이벤트"를 풀스크린 컷신으로 정식 승격. 41~60 어디서든 재사용 가능.
+- QA에서 잡은 버그 2건: ① `selectTreeChoice`가 `advance()`를 안 거쳐 #56에서 중반 컷신이 아예
+  안 뜨던 문제 ② 화면 전환 시 스크롤이 위로 안 돌아가 문항이 화면 밖으로 밀리던 문제
+  (61개 전부에 있던 기존 버그 → 신규 `resetScroll()`).
+- 신규 테마 5종: `circuitboard`(#56) / `konbini`(#57) / `mandala`(#58) / `memewall`(#59) /
+  `resignform`(#60) + `app.js` THEME_TITLE_FONTS 5건 등록.
+- 이미지 45장(커버 5 + 결과 40) 레퍼런스 기반 생성, 실패 0. `cover-home.webp` 5개 동반.
+- `ENGINE_ASSET_VERSION 15→16` + 61개 index.html `?v=` 일괄 동기화.
+- 연동: `data.js`(MBTI존 30종) / `sections.json`(61개 전량 그룹 소속) / `sitemap-main.xml`(61 URL) /
+  `llms.txt`·`llms-full.txt`(61종) / `index.html` v1.3.5 + 정적자산 6곳 `?v=` 동기화.

@@ -9,11 +9,31 @@
     "편의점음식",
     "일상밀착밈"
   ],
-  "theme": "pending",
+  "theme": "konbini",
   "cover_image": "assets/cover.webp",
   "seed_count": 239,
   "engagement_key": "site-mbticonvenience-plays",
   "scoring_type": "mbti4",
+  "cart_ui": {
+    "title": "🛒 오늘의 장바구니",
+    "currency": "원"
+  },
+  "interstitials": [
+    {
+      "after": 0,
+      "badge": "자정 00:14 · 편의점",
+      "title": "프롤로그",
+      "text": "자정 넘은 편의점, 형광등 아래 진열된 수많은 선택지들. 그중 당신의 손이 자연스럽게 향하는 그 음식이, 바로 당신이다.",
+      "cta": "시작한다"
+    },
+    {
+      "after": 3,
+      "badge": "계산대 앞",
+      "title": "중반 이벤트",
+      "text": "선택의 절반을 마쳤다. 알바생이 묻는다. '이거 데워드릴까요, 그냥 드릴까요?'",
+      "cta": "계속한다"
+    }
+  ],
   "loading": {
     "text": "MBTI 편의점 음식 판별기 분석 중..",
     "duration_ms": 2000
@@ -21,178 +41,338 @@
   "related": [],
   "questions": [
     {
-      "text": "편의점에 들어서면 당신은?",
+      "text": "자정 넘은 편의점, 문을 열고 들어서는 순간 딸랑 종소리가 울린다. 이때 당신이 자연스럽게 보이는 행동은?",
       "image": null,
       "choices": [
         {
           "label": "알바생과 가볍게 인사를 나눈다",
-          "axis": "E"
+          "axis": "E",
+          "item": {
+            "emoji": "☕",
+            "name": "따뜻한 캔커피",
+            "price": 1500
+          }
         },
         {
           "label": "먹고 싶은 걸 바로 정하고 담는다",
-          "axis": "E"
+          "axis": "E",
+          "item": {
+            "emoji": "🥤",
+            "name": "이온음료",
+            "price": 1800
+          }
         },
         {
           "label": "천천히 매대를 둘러보며 고민한다",
-          "axis": "I"
+          "axis": "I",
+          "item": {
+            "emoji": "🍫",
+            "name": "초코바",
+            "price": 1200
+          }
         },
         {
           "label": "혼자 조용히 원하는 걸 찾는다",
-          "axis": "I"
+          "axis": "I",
+          "item": {
+            "emoji": "🍙",
+            "name": "삼각김밥 참치마요",
+            "price": 1300
+          }
         }
       ]
     },
     {
-      "text": "편의점에서 먹을 때",
+      "text": "계산을 마치고 봉지를 들었다. 편의점 테이블에 자리를 잡을지 말지 고민되는 순간, 당신이 먹는 방식은?",
       "image": null,
       "choices": [
         {
           "label": "테이블에서 사람들과 어울려 먹는다",
-          "axis": "E"
+          "axis": "E",
+          "item": {
+            "emoji": "🍜",
+            "name": "컵라면 큰컵",
+            "price": 1600
+          }
         },
         {
           "label": "누구랑 같이 먹는 걸 좋아한다",
-          "axis": "E"
+          "axis": "E",
+          "item": {
+            "emoji": "🍗",
+            "name": "조각치킨",
+            "price": 2500
+          }
         },
         {
           "label": "혼자 조용히 먹는 걸 선호한다",
-          "axis": "I"
+          "axis": "I",
+          "item": {
+            "emoji": "🥪",
+            "name": "샌드위치",
+            "price": 3200
+          }
         },
         {
           "label": "집에 가져가서 혼자 먹는다",
-          "axis": "I"
+          "axis": "I",
+          "item": {
+            "emoji": "🛍️",
+            "name": "비닐봉투",
+            "price": 100
+          }
         }
       ]
     },
     {
-      "text": "신상 메뉴가 나오면",
+      "text": "냉장고 매대 한쪽에 처음 보는 신상 메뉴가 떡하니 자리를 차지하고 있다. 그 앞에 멈춰 선 순간, 당신 머릿속을 스치는 생각은?",
       "image": null,
       "choices": [
         {
           "label": "어떤 맛일지 상상하며 궁금해한다",
-          "axis": "N"
+          "axis": "N",
+          "item": {
+            "emoji": "🧃",
+            "name": "신상 스파클링",
+            "price": 2200
+          }
         },
         {
           "label": "새로운 조합이 기대돼서 끌린다",
-          "axis": "N"
+          "axis": "N",
+          "item": {
+            "emoji": "🍨",
+            "name": "신상 아이스크림",
+            "price": 2000
+          }
         },
         {
           "label": "리뷰나 후기부터 찾아본다",
-          "axis": "S"
+          "axis": "S",
+          "item": {
+            "emoji": "🍪",
+            "name": "스테디셀러 쿠키",
+            "price": 1700
+          }
         },
         {
           "label": "익숙한 메뉴가 안전하다고 생각한다",
-          "axis": "S"
+          "axis": "S",
+          "item": {
+            "emoji": "🥛",
+            "name": "초코우유",
+            "price": 1400
+          }
         }
       ]
     },
     {
-      "text": "(알바생이 묻는다) 조합을 고를 때",
+      "text": "대답하면서도 머릿속으로는 오늘 먹을 조합을 고민 중이다. 이때 당신이 궁합을 맞추는 방식은?",
       "image": null,
       "choices": [
         {
           "label": "아무도 안 해본 조합을 시도해본다",
-          "axis": "N"
+          "axis": "N",
+          "item": {
+            "emoji": "🌶️",
+            "name": "불닭소스",
+            "price": 1900
+          }
         },
         {
           "label": "새로운 궁합을 상상해서 만든다",
-          "axis": "N"
+          "axis": "N",
+          "item": {
+            "emoji": "🧀",
+            "name": "슬라이스 치즈",
+            "price": 2300
+          }
         },
         {
           "label": "검증된 조합만 믿고 산다",
-          "axis": "S"
+          "axis": "S",
+          "item": {
+            "emoji": "🍜",
+            "name": "신라면 컵",
+            "price": 1500
+          }
         },
         {
           "label": "늘 먹던 조합을 고수한다",
-          "axis": "S"
+          "axis": "S",
+          "item": {
+            "emoji": "🥚",
+            "name": "반숙란 2개",
+            "price": 1800
+          }
         }
       ]
     },
     {
-      "text": "(선택의 절반을 마쳤다. 알바생이 묻는다. \"이거 데워드릴까요, 그냥 드릴까요?\") 배고픈데 뭘 먹을지 고민될 때",
+      "text": "지갑 사정과 배고픔이 동시에 밀려오는 순간, 뭘 먹을지 고민하게 됐다. 이때 당신이 메뉴를 정하는 기준은?",
       "image": null,
       "choices": [
         {
           "label": "가성비를 계산해서 정한다",
-          "axis": "T"
+          "axis": "T",
+          "item": {
+            "emoji": "🍱",
+            "name": "1+1 도시락",
+            "price": 4500
+          }
         },
         {
           "label": "효율적으로 빠르게 결정한다",
-          "axis": "T"
+          "axis": "T",
+          "item": {
+            "emoji": "🍞",
+            "name": "단팥빵",
+            "price": 1300
+          }
         },
         {
           "label": "그날 기분에 맞는 걸 고른다",
-          "axis": "F"
+          "axis": "F",
+          "item": {
+            "emoji": "🍮",
+            "name": "푸딩",
+            "price": 2400
+          }
         },
         {
           "label": "위로가 되는 맛을 찾는다",
-          "axis": "F"
+          "axis": "F",
+          "item": {
+            "emoji": "🍦",
+            "name": "월드콘",
+            "price": 2000
+          }
         }
       ]
     },
     {
-      "text": "같이 먹을 사람의 취향을 고려할 때",
+      "text": "혼자가 아니라 옆에 같이 먹을 사람이 있다. 그 사람 몫까지 골라야 하는 순간, 당신이 먼저 떠올리는 생각은?",
       "image": null,
       "choices": [
         {
           "label": "합리적으로 다 같이 만족할 걸 고른다",
-          "axis": "T"
+          "axis": "T",
+          "item": {
+            "emoji": "🍕",
+            "name": "냉동 피자",
+            "price": 5900
+          }
         },
         {
           "label": "가격 대비 만족도를 계산한다",
-          "axis": "T"
+          "axis": "T",
+          "item": {
+            "emoji": "🥤",
+            "name": "2L 콜라",
+            "price": 3300
+          }
         },
         {
           "label": "상대가 좋아할 걸 먼저 생각한다",
-          "axis": "F"
+          "axis": "F",
+          "item": {
+            "emoji": "🍰",
+            "name": "조각케이크",
+            "price": 4200
+          }
         },
         {
           "label": "다 같이 행복할 조합을 고민한다",
-          "axis": "F"
+          "axis": "F",
+          "item": {
+            "emoji": "🍢",
+            "name": "어묵바",
+            "price": 2600
+          }
         }
       ]
     },
     {
-      "text": "편의점 방문 패턴은?",
+      "text": "일주일을 돌아보면 편의점에 들르는 타이밍에도 나름의 패턴이 있다. 당신의 평소 방문 습관은?",
       "image": null,
       "choices": [
         {
           "label": "정해진 시간에 정해진 걸 산다",
-          "axis": "J"
+          "axis": "J",
+          "item": {
+            "emoji": "🥛",
+            "name": "흰우유",
+            "price": 1700
+          }
         },
         {
           "label": "필요한 것만 계획해서 산다",
-          "axis": "J"
+          "axis": "J",
+          "item": {
+            "emoji": "🧻",
+            "name": "물티슈",
+            "price": 2100
+          }
         },
         {
           "label": "그때그때 끌리는 대로 산다",
-          "axis": "P"
+          "axis": "P",
+          "item": {
+            "emoji": "🍬",
+            "name": "젤리",
+            "price": 2000
+          }
         },
         {
           "label": "즉흥적으로 편의점에 들른다",
-          "axis": "P"
+          "axis": "P",
+          "item": {
+            "emoji": "🎰",
+            "name": "즉석복권",
+            "price": 1000
+          }
         }
       ]
     },
     {
-      "text": "편의점 음식 취향은?",
+      "text": "냉장고 앞에서 손이 가는 메뉴를 떠올려보면, 그 취향에도 일정한 흐름이 있다. 당신의 편의점 음식 취향은?",
       "image": null,
       "choices": [
         {
           "label": "늘 먹던 메뉴만 고수한다",
-          "axis": "J"
+          "axis": "J",
+          "item": {
+            "emoji": "🍙",
+            "name": "삼각김밥 전주비빔",
+            "price": 1300
+          }
         },
         {
           "label": "정해진 루틴대로 먹는다",
-          "axis": "J"
+          "axis": "J",
+          "item": {
+            "emoji": "☕",
+            "name": "아메리카노",
+            "price": 1800
+          }
         },
         {
           "label": "그날 기분따라 매번 다르다",
-          "axis": "P"
+          "axis": "P",
+          "item": {
+            "emoji": "🍡",
+            "name": "신상 디저트",
+            "price": 3000
+          }
         },
         {
           "label": "새로운 걸 즉흥적으로 시도한다",
-          "axis": "P"
+          "axis": "P",
+          "item": {
+            "emoji": "🧋",
+            "name": "컵과일",
+            "price": 3500
+          }
         }
       ]
     }
