@@ -1482,9 +1482,11 @@ function dreamRenderAiModal(query, data) {
     const safeTitle = sanitizeForJsTemplate(data.title);
     const safeSummary = sanitizeForJsTemplate(data.summary);
     const shareText = `나 어제 이런 꿈 꿨어! ${safeTitle} — ${safeSummary} 너도 무슨 꿈인지 확인해봐 👉`;
-    /* v0.1.8~: 정적 해몽과 동일하게 범용 티저 카드+고정 문구로 통일 (dream-0.jpg 오표시 버그 해결) */
+    /* v0.1.8~: 정적 해몽과 동일하게 범용 티저 카드+고정 문구로 통일 (dream-0.jpg 오표시 버그 해결)
+       2026-07-23: dreamDetail/dreamAction(자유 텍스트, 가장 길어지는 두 항목)은 카카오 공유 URL에서
+       제외 — 아래 "카카오 공유 URL 길이" 주석 참고, 4002(패킷 크기 초과) 에러 수정 */
     const shareRow = renderIdentityShareRow('dream',
-      { dreamAi: 1, dreamTitle: data.title, dreamSummary: data.summary, dreamDetail: data.detail, dreamLucky: data.lucky, dreamLuckyNum: data.luckyNum, dreamAction: data.action, nickname: getNickname() || '나' },
+      { dreamAi: 1, dreamTitle: data.title, dreamSummary: data.summary, dreamLucky: data.lucky, dreamLuckyNum: data.luckyNum, nickname: getNickname() || '나' },
       `${location.origin}/share-cards/dream-share.jpg`, '나 이런 꿈 꿨어', '너도 꿈 꾼거 있으면 찾아볼래?', shareText);
 
     modalInner.innerHTML = `
@@ -1545,13 +1547,16 @@ function dreamRenderModal(tIdx, vIdx) {
 
   const hasVariants = d.variants && d.variants.length > 0;
   const shareText = `나 어제 이런 꿈 꿨어! ${title} — ${summary} 너도 무슨 꿈인지 확인해봐 👉`;
-  /* v0.1.5~: 공유 링크를 연 사람이 검색 없이도 나와 똑같은 해몽 카드를 그대로 보게끔
-     제목/요약뿐 아니라 본문·행운색·행운숫자·오늘의 행동까지 전부 landingParams로 전달
-     (functions/share/[section].js가 이걸 그대로 shared-preview 화면의 extra로 넘김)
+  /* v0.1.5~: 공유 링크를 연 사람이 검색 없이도 나와 똑같은 해몽 카드를 그대로 보게끔 인덱스만 전달.
      v0.1.8~: 카카오 카드(이미지+제목+설명)는 꿈마다 달라 매번 이미지를 새로 만들 수 없으므로
-     범용 티저 카드 1장(dream-share.jpg)+고정 문구로 통일, 실제 내용은 클릭 후 화면에서 재현 */
+     범용 티저 카드 1장(dream-share.jpg)+고정 문구로 통일, 실제 내용은 클릭 후 화면에서 재현.
+     2026-07-23: 예전엔 본문/행운색/행운숫자/오늘의 행동까지 텍스트 전체를 URL에 실어 보냈는데,
+     그 URL이 카카오 피드 템플릿(카드 링크+버튼 링크로 총 4회 중복 포함)에 들어가면서 패킷 크기
+     제한(10K)을 넘겨 "잘못된 요청"(4002) 에러가 발생 — 링크를 여는 쪽에도 AppData.dreamData가
+     이미 로드돼 있으므로 dreamIdx/dreamVIdx만 보내고 나머지는 그쪽에서 직접 복원하도록 수정
+     (functions/share/[section].js dream 분기 + sharedPreviewDreamCardHTML 참고) */
   const shareRow = renderIdentityShareRow('dream',
-    { dreamIdx: tIdx, dreamTitle: title, dreamSummary: summary, dreamDetail: detail, dreamLucky: lucky, dreamLuckyNum: luckyNum, dreamAction: action, nickname: getNickname() || '나' },
+    { dreamIdx: tIdx, dreamVIdx: isVariant ? vIdx : '', nickname: getNickname() || '나' },
     `${location.origin}/share-cards/dream-share.jpg`, '나 이런 꿈 꿨어', '너도 꿈 꾼거 있으면 찾아볼래?', shareText);
   const modalInner = document.getElementById('dream-modal-inner');
 
@@ -7620,8 +7625,24 @@ function sharedPreviewLottoBallsHTML(section, raw) {
 
 /* 프리뷰 화면용: 꿈해몽 공유는 범용 이미지 대신 공유자가 실제로 본 해몽 카드 전체(모달과 동일한 레이아웃)를
    그대로 재현 — 로또의 "실제 뽑은 번호 표시"와 동일한 접근(v0.1.5~). AI 생성 해몽도 같은 extra 구조 재사용 */
+/* 2026-07-23: 정적 해몽(ai:false)은 URL에 idx/vIdx만 실려 오므로 여기서 AppData.dreamData를
+   직접 조회해 복원 — dreamRenderModal의 변형 병합 로직과 동일 규칙(변형에 없는 필드는 원본으로 폴백) */
 function sharedPreviewDreamCardHTML(dream) {
   if (!dream) return '';
+  if (!dream.ai && dream.idx !== undefined) {
+    const d = AppData.dreamData[dream.idx];
+    if (!d) return '';
+    const v = (dream.vIdx !== null && dream.vIdx !== undefined && d.variants && d.variants[dream.vIdx]) ? d.variants[dream.vIdx] : null;
+    dream = {
+      title: v ? v.title : d.title,
+      summary: v ? (v.summary || d.summary) : d.summary,
+      detail: v ? v.detail : d.detail,
+      lucky: v ? (v.lucky || d.lucky) : d.lucky,
+      luckyNum: v ? (v.luckyNum || d.luckyNum) : d.luckyNum,
+      action: v ? (v.action || d.action) : d.action,
+      ai: false,
+    };
+  }
   return `
     <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 mb-6 text-left shadow-xl">
       <h2 class="text-slate-100 font-bold text-xl mb-3">${escapeHtml(dream.title)}</h2>
@@ -7629,7 +7650,7 @@ function sharedPreviewDreamCardHTML(dream) {
       <div class="bg-blue-900/30 border border-blue-700/40 rounded-xl p-3 mb-4">
         <span class="text-blue-300 font-semibold">✦ ${escapeHtml(dream.summary)}</span>
       </div>
-      <p class="text-slate-300 leading-relaxed mb-5 text-sm">${escapeHtml(dream.detail)}</p>
+      ${dream.detail ? `<p class="text-slate-300 leading-relaxed mb-5 text-sm">${escapeHtml(dream.detail)}</p>` : ''}
       <div class="grid grid-cols-2 gap-3 mb-4">
         <div class="bg-slate-700 rounded-lg p-3 text-center">
           <div class="text-xs text-slate-400 mb-1">행운의 색</div>
@@ -7640,10 +7661,10 @@ function sharedPreviewDreamCardHTML(dream) {
           <div class="text-slate-100 font-semibold text-sm">${escapeHtml(dream.luckyNum)}</div>
         </div>
       </div>
-      <div class="bg-indigo-900/30 border border-indigo-700/40 rounded-xl p-3">
+      ${dream.action ? `<div class="bg-indigo-900/30 border border-indigo-700/40 rounded-xl p-3">
         <div class="text-indigo-300 text-xs font-semibold mb-1">오늘의 행동</div>
         <p class="text-indigo-200 text-sm">${escapeHtml(dream.action)}</p>
-      </div>
+      </div>` : ''}
     </div>`;
 }
 

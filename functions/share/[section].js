@@ -100,8 +100,6 @@ export async function onRequestGet(context) {
     imageUrl = `${origin}/share-cards/fortune-${zodiacSlug}.jpg`;
   } else if (section === 'dream') {
     const isAiDream = url.searchParams.get('dreamAi') === '1';
-    const dreamTitle = url.searchParams.get('dreamTitle') || '꿈 해몽';
-    const dreamSummary = url.searchParams.get('dreamSummary') || '';
     /* v0.1.8~: 테마별 174장 이미지(dream-N.jpg)는 AI 해몽(테마 인덱스 없음)에서 항상 dream-0.jpg
        ("하늘을 나는 꿈")로 나와 "무슨 꿈이든 같은 그림"으로 보이는 문제가 있었음. 꿈 내용은 계속
        바뀌어 매번 이미지를 맞출 수 없으므로, 정적/AI 해몽 구분 없이 범용 티저 카드 1장(dream-share.jpg)
@@ -109,18 +107,31 @@ export async function onRequestGet(context) {
     rawTitle = '나 이런 꿈 꿨어';
     rawDescription = '너도 꿈 꾼거 있으면 찾아볼래?';
     imageUrl = `${origin}/share-cards/dream-share.jpg`;
-    /* v0.1.5~: 공유자가 본 해몽 카드 전체(본문/행운색/행운숫자/오늘의 행동)를 그대로 프리뷰 화면까지
-       전달해, 링크를 연 사람이 검색 없이도 공유자와 똑같은 결과를 보게 함(로또의 실제 뽑은 번호
-       전달 방식과 동일한 접근 — extra 파라미터 재사용) */
-    extra = JSON.stringify({
-      title: dreamTitle,
-      summary: dreamSummary,
-      detail: url.searchParams.get('dreamDetail') || '',
-      lucky: url.searchParams.get('dreamLucky') || '',
-      luckyNum: url.searchParams.get('dreamLuckyNum') || '',
-      action: url.searchParams.get('dreamAction') || '',
-      ai: isAiDream,
-    });
+    /* v0.1.5~: 공유자가 본 해몽 카드를 그대로 프리뷰 화면까지 전달해, 링크를 연 사람이 검색 없이도
+       공유자와 똑같은 결과를 보게 함.
+       2026-07-23: 예전엔 본문(detail)/행운색/행운숫자/오늘의 행동까지 텍스트 전체를 이 URL의 쿼리로
+       실어 보냈는데, 그 URL이 카카오 피드 템플릿(카드 링크+버튼 링크로 총 4회 중복 포함)에 들어가며
+       패킷 크기 제한(10K)을 넘겨 카카오톡 공유가 "잘못된 요청"(4002)으로 실패하는 버그가 있었음.
+       정적 해몽은 idx/vIdx만 받아 클라이언트가 AppData.dreamData에서 직접 복원(sharedPreviewDreamCardHTML
+       참고, 어차피 같은 데이터가 이미 로드돼 있음)하도록 바꿔 URL을 짧게 유지. AI 해몽은 서버에 원본이
+       없어 텍스트를 실어 보내야 하지만, 가장 길어지는 두 항목(detail/action)은 제외하고 짧은 항목
+       (title/summary/lucky/luckyNum)만 전달 — 미리보기에서 그 두 항목만 생략됨. */
+    if (isAiDream) {
+      extra = JSON.stringify({
+        ai: true,
+        title: url.searchParams.get('dreamTitle') || '꿈 해몽',
+        summary: url.searchParams.get('dreamSummary') || '',
+        lucky: url.searchParams.get('dreamLucky') || '',
+        luckyNum: url.searchParams.get('dreamLuckyNum') || '',
+      });
+    } else {
+      const rawVIdx = url.searchParams.get('dreamVIdx');
+      extra = JSON.stringify({
+        ai: false,
+        idx: parseInt(url.searchParams.get('dreamIdx'), 10) || 0,
+        vIdx: (rawVIdx && rawVIdx !== '') ? parseInt(rawVIdx, 10) : null,
+      });
+    }
   } else if (section === 'lotto') {
     /* 로또 조합기(완전랜덤/직접지정/운세연동/통계기반) 공용 홍보 링크 — og:image는 범용 홍보 이미지지만,
        실제 뽑은 번호(drawn)를 extra로 프리뷰 화면까지 전달해 링크를 연 사람에겐 진짜 번호를 공 UI로 보여줌 */
