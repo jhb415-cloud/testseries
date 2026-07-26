@@ -36,11 +36,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/13-drunk-mbti/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/4-spending-type/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -262,11 +257,6 @@
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/50-mbti-rpg-character-sheet/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/51-mbti-drinking-party-character/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>

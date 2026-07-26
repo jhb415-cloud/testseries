@@ -157,7 +157,7 @@ function main() {
   const all = folders.map(function (f) {
     const cfg = JSON.parse(fs.readFileSync(path.join(TESTS_DIR, f, 'config.json'), 'utf8'));
     return { folder: f, cfg: cfg, title: cfg.title, description: cfg.description };
-  });
+  }).filter(function (item) { return !item.cfg.private; });
 
   let ok = 0;
   all.forEach(function (item, i) {

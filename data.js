@@ -3713,7 +3713,7 @@ window.AppData = {
   },
 
   /* ══════════════════════════════════════
-     ⚡ ADHD 10문항 프로 미루러 진단
+     ⚡ 집중·미루기 습관 10문항
   ══════════════════════════════════════ */
   adhdQuestions: [
     { q: "해야 할 일이 있는데 막상 시작하기 직전에 다른 걸 먼저 하게 된다." },
@@ -3729,7 +3729,7 @@ window.AppData = {
   ],
 
   /* 정밀 모드(v0.0.28~) 전용 20문항 — 부주의/과잉행동-충동성 2개 하위영역(각 10문항)으로 분리.
-     DSM-5의 ADHD 진단 기준 구조를 참고해 설계했으나, 임상 진단 도구가 아닌 자가 체크 콘텐츠임(결과 화면 안내문구 계속 유지) */
+     일상 속 집중과 미루기 습관을 가볍게 돌아보는 확장 문항. 의료적 진단 도구가 아님. */
   adhdQuestionsPrecise: [
     { q: "세부적인 것에 실수가 잦고, 꼼꼼히 확인하지 않는다.", domain: "inattention" },
     { q: "대화나 활동 중 지속적으로 집중을 유지하기 어렵다.", domain: "inattention" },
@@ -3785,10 +3785,10 @@ window.AppData = {
       range: [8, 10],
       grade: "D",
       emoji: "🌪️",
-      title: "프로 미루러 (ADHD 성향 주의)",
-      desc: "집중력 분산이 심각하게 일상생활을 방해하고 있습니다. 전문가 상담을 고려해볼 수 있습니다.",
-      detail: "8개 이상은 ADHD 성향이 강하게 나타나는 패턴입니다. 하지만 ADHD는 결핍이 아닌 '다르게 작동하는 뇌'입니다. 많은 CEO, 예술가, 운동선수들이 ADHD를 가지고 있으며 오히려 이를 강점으로 활용합니다. 전문적인 평가와 지원을 통해 완전히 다른 삶이 가능합니다.",
-      tips: ["정신건강의학과 또는 심리상담을 받아보세요 (낙인이 아닌 의료적 지원입니다)", "약물 + 행동 치료를 병행하면 효과적입니다", "바디 더블링(같이 일하는 사람 두기)을 활용해보세요", "디지털 플래너나 알람 시스템을 철저히 활용하세요", "운동을 일과에 포함시키세요 — 집중력에 강력한 효과가 있습니다"]
+      title: "마감 직전 집중형",
+      desc: "미루기와 주의 분산을 자주 경험하는 편이에요. 일상의 환경과 루틴을 조금씩 조정해 보세요.",
+      detail: "높은 점수는 최근 일상에서 집중이 흐트러지거나 일을 미루는 경험이 많았다는 뜻일 뿐, 어떤 질환이나 상태를 판단하지 않습니다. 작은 일부터 시작하는 방식으로 내게 맞는 리듬을 찾아보세요.",
+      tips: ["가장 중요한 일을 하루 중 가장 맑은 시간에 배치해 보세요", "알림·TV처럼 집중을 방해하는 요소를 잠시 꺼두세요", "할 일을 작게 나누고 하나씩 완료 표시해 보세요", "디지털 플래너나 알람을 활용해 보세요", "짧은 산책이나 스트레칭으로 리듬을 전환해 보세요"]
     }
   ],
 
@@ -5659,13 +5659,6 @@ window.AppData = {
       addedAt: '2026-07-10', isNew: true, theme: 'papercut',
     },
     {
-      id: 'drunk-mbti', title: '취중 MBTI 테스트', emoji: '🍺',
-      hook: '술 들어가면 튀어나오는 인격, 우는 술 · 시비 술 · 잠수 술 중 나는?',
-      url: '/test-engine/tests/13-drunk-mbti/index.html',
-      engagementKey: 'site-drunkmbti-plays', baseCount: 275,
-      addedAt: '2026-07-10', isNew: true, theme: 'neon',
-    },
-    {
       id: 'villain-mbti', title: '내 안의 빌런 MBTI', emoji: '🦹',
       hook: '빡치는 순간 튀어나오는 진짜 인격, 화나면 나오는 내 안의 MBTI 빌런은?',
       url: '/test-engine/tests/14-villain-mbti/index.html',
@@ -5785,13 +5778,6 @@ window.AppData = {
       addedAt: '2026-07-18', isNew: true, theme: 'holocard',
     },
     {
-      id: 'mbti-drinking-party-character', title: 'MBTI 술자리 캐릭터 + 다음날 후기', emoji: '🍻',
-      hook: '잔이 채워지는 순간 깨어나는 진짜 얼굴, 텐션 게이지 슬라이더로 확인하는 오늘 밤의 부캐',
-      url: '/test-engine/tests/51-mbti-drinking-party-character/index.html',
-      engagementKey: 'site-mbtidrinking-plays', baseCount: 269,
-      addedAt: '2026-07-21', isNew: true, theme: 'receipt',
-    },
-    {
       id: 'mbti-pet-animal-type', title: 'MBTI 반려동물 판별기 (만약 동물이라면)', emoji: '🐾',
       hook: '동물원 문이 열리는 순간, 나와 가장 닮은 동물이 우리 밖으로 걸어나온다',
       url: '/test-engine/tests/52-mbti-pet-animal-type/index.html',
@@ -5864,8 +5850,8 @@ window.AppData = {
      21개 id 전부 정확히 한 그룹에만 속하도록 관리할 것(중복/누락 없음, 2026-07-12 최초 구성 시점 기준). */
   psychtestCurations: [
     {
-      title: '🍺 못 숨기는 또 다른 나', hook: '술기운·스트레스가 훅 밀어올리는 인격',
-      testIds: ['drunk-mbti', 'villain-mbti', 'shadow-mbti', 'villain-index'],
+      title: '😏 못 숨기는 또 다른 나', hook: '스트레스가 훅 밀어올리는 인격',
+      testIds: ['villain-mbti', 'shadow-mbti', 'villain-index'],
     },
     {
       title: '💘 연애만 하면 딴사람 되는 유형', hook: '평소랑 다르게 튀어나오는 연애 모드',
@@ -5889,4 +5875,3 @@ window.AppData = {
     },
   ],
 };
-

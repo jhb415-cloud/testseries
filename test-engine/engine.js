@@ -253,6 +253,10 @@
       .then(function (config) {
         state.config = config;
         state.testId = state.testId || config.id;
+        if (config.private) {
+          renderPrivateNotice();
+          return;
+        }
         injectThemeCSS(config.theme);
         renderIntro();
       })
@@ -272,6 +276,10 @@
     a.href = '/';
     a.textContent = '← 메인으로';
     document.body.appendChild(a);
+  }
+
+  function renderPrivateNotice() {
+    rootEl.innerHTML = '<main class="te-app te-screen-intro" style="min-height:100vh;display:grid;place-items:center;padding:24px;text-align:center"><div><h1 class="te-title">현재 공개되지 않은 테스트입니다</h1><p class="te-desc">이 콘텐츠는 현재 사이트 내에서 제공하지 않습니다.</p><a class="te-btn te-btn-primary" href="/">메인으로 돌아가기</a></div></main>';
   }
 
   // 결과 화면 "다른 테스트 하러가기" 버튼 — 이 테스트가 속한 카테고리(config.psych_category:

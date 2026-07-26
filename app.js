@@ -740,7 +740,7 @@ function closeMobileSidebar() {
 const CORE_TEST_CARDS = [
   { section: 'mbti',        emoji: '🧠',  title: '성격 파탄(MBTI)',   desc: '친구랑 같이 하면 더 재밌는 팩폭 성격 테스트', key: 'site-mbti-plays', base: 980, run: () => App.navigate('mbti') },
   { section: 'brain',       emoji: '⚡',  title: '두뇌 나이 측정기',   desc: '요즘 머리 굳은 것 같을 때 해보는 뇌 나이 체크', key: 'site-brain-plays', base: 740, run: () => App.navigate('brain') },
-  { section: 'adhd',        emoji: '🌪️', title: '프로 미루러',        desc: '나만 그런가 싶을 때 해보는 자가진단', key: 'site-adhd-plays', base: 650, run: () => App.navigate('adhd') },
+  { section: 'adhd',        emoji: '🌪️', title: '미루기 습관 테스트', desc: '나만 그런가 싶을 때 해보는 집중 습관 테스트', key: 'site-adhd-plays', base: 650, run: () => App.navigate('adhd') },
   { section: 'reaction',    emoji: '💨',  title: '반응속도 테스트',    desc: '게임할 때 내 반응속도 진짜 빠른지 궁금할 때', key: 'site-reaction-plays', base: 590, run: () => App.navigate('reaction') },
   { section: 'shortfocus',  emoji: '📱',  title: '숏폼 집중력 테스트', desc: '숏폼 보다가 집중력 떨어진 것 같을 때', key: 'site-shortfocus-plays', base: 410, run: () => App.navigate('shortfocus') },
   { section: 'insa',        emoji: '🎉',  title: '인싸력 테스트',      desc: '나 인싸야 아싸야? 10문항으로 바로 확인', key: 'site-insa-plays', base: 510, run: () => App.navigate('insa') },
@@ -2051,8 +2051,8 @@ function renderAdhdView(view) {
     container.innerHTML = `
       <div class="max-w-md mx-auto text-center">
         <div class="text-6xl mb-4">⚡</div>
-        <h2 class="text-2xl font-bold text-slate-100 mb-2">프로 미루러 (ADHD 성향 진단)</h2>
-        <p class="text-slate-400 mb-6">집중력 결핍 성향 자가 체크<br>결과는 전문 진단이 아닌 참고용입니다.</p>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">미루기 습관 테스트</h2>
+        <p class="text-slate-400 mb-6">일상 속 집중과 미루기 습관을 재미로 살펴봐요.<br>의료적 진단이나 판단을 제공하지 않습니다.</p>
         <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
           <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
         </div>
@@ -2101,7 +2101,7 @@ function renderAdhdView(view) {
     const gradeScore = state.mode === 'precise' ? Math.round(score / 3) : score;
     const result = adhdResults.find(r => gradeScore >= r.range[0] && gradeScore <= r.range[1]) || adhdResults[adhdResults.length-1];
     const maxScore = state.mode === 'precise' ? 60 : 20;
-    const shareText = `나 ADHD 성향 테스트 해봤는데 ${result.grade}등급 나왔어! 「${result.title}」 ㅋㅋ 너도 궁금하지 않아? 👉`;
+    const shareText = `나 미루기 습관 테스트 해봤는데 ${result.grade}등급 나왔어! 「${result.title}」 ㅋㅋ 너도 궁금하지 않아? 👉`;
 
     // 정밀 모드 전용: 부주의 / 과잉행동-충동성 영역별 점수 바
     let domainBarsHtml = '';
@@ -2136,7 +2136,7 @@ function renderAdhdView(view) {
           <div class="text-5xl mb-3">${result.emoji}</div>
           <div class="text-4xl font-black text-slate-100 mb-1">등급 ${result.grade}</div>
           <div class="text-rose-400 font-bold text-xl mb-2">${result.title}</div>
-          <p class="text-slate-400">${state.nickname} 님의 진단 점수: <strong class="text-slate-100">${score}점</strong> / ${maxScore}점</p>
+          <p class="text-slate-400">${state.nickname} 님의 습관 점수: <strong class="text-slate-100">${score}점</strong> / ${maxScore}점</p>
         </div>
 
         ${domainBarsHtml}
@@ -2158,15 +2158,15 @@ function renderAdhdView(view) {
           </ul>
         </div>
 
-        ${renderIdentityShareRow('adhd', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/adhd-${result.grade}.jpg`, `${state.nickname} 님의 ADHD 성향 진단 결과`, `${result.grade}등급 - ${result.title}`, shareText)}
+        ${renderIdentityShareRow('adhd', { grade: result.grade, nickname: state.nickname, result: `${result.grade}등급 - ${result.title}` }, `${location.origin}/share-cards/adhd-${result.grade}.jpg`, `${state.nickname} 님의 미루기 습관 테스트 결과`, `${result.grade}등급 - ${result.title}`, shareText)}
 
         ${renderPlaceholderUI('adhd', result.grade)}
 
         <div class="bg-yellow-900/20 border border-yellow-700/30 rounded-xl p-3 mt-4 text-yellow-200/60 text-xs leading-relaxed">
-          ⚠️ 본 결과는 오락 및 자기 이해 목적의 자가 체크리스트이며 전문 의학 진단을 대체하지 않습니다. ADHD가 의심되면 정신건강의학과 전문의와 상담하세요.
+          ⚠️ 이 테스트는 일상 속 미루기와 집중 습관을 재미로 살펴보는 오락용 콘텐츠입니다. ADHD 여부를 판단하거나 의료적 진단을 제공하지 않습니다.
         </div>
         <button onclick="initAdhd()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3 rounded-xl transition">
-          다시 진단하기
+          다시 해보기
         </button>
       </div>`;
 
@@ -5024,17 +5024,6 @@ function renderPsychtestFeed(category) {
           <p class="text-slate-100 font-semibold text-sm mb-1">${t.title}</p>
           <p class="text-slate-500 text-xs">▷ ${engagementCount('psychtest-' + t.id + '-plays', 128)}</p>
         </div>`).join('')}
-        ${locked.map(c => `
-          <div class="cursor-pointer" onclick="showToast('곧 만나요! 준비중인 콘텐츠예요 🙏')">
-            <div class="psy-locked-tile">
-              <span class="psy-locked-watermark">${c.emoji}</span>
-              <div class="psy-locked-overlay">
-                <span class="text-xl">🔒</span>
-                <span class="text-slate-400 text-xs font-bold">준비중</span>
-              </div>
-            </div>
-            <p class="text-slate-300 font-semibold text-sm text-center mt-2">${c.title}</p>
-          </div>`).join('')}
       </div>
     </div>`;
 }
@@ -5523,7 +5512,7 @@ function renderBalanceSpResult() {
 
       ${shareRow}
 
-      <p class="text-slate-600 text-xs text-center my-4">지금까지 ▷ ${engagementCount('balance-sp-' + g.id + '-plays', 180)}명이 플레이했어요 <span class="text-slate-700">(추후 실데이터 연동 예정)</span></p>
+      <p class="text-slate-600 text-xs text-center my-4">지금까지 ▷ ${engagementCount('balance-sp-' + g.id + '-plays', 180)}명이 플레이했어요</p>
 
       <div class="mb-4">${commentSectionHTML('balance', g.id)}</div>
 
@@ -5595,19 +5584,6 @@ function initFamily() {
         </div>`).join('')}
       </div>
 
-      <div class="space-y-2">
-        ${FAMILY_GAMES.map(g => `
-          <div class="flex items-center gap-3 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 opacity-70 cursor-pointer hover:border-violet-500 transition"
-            onclick="showToast('이 게임은 준비 중이에요 — 곧 만나요! 🙏')">
-            <div class="text-2xl w-9 text-center">${g.emoji}</div>
-            <div class="flex-1">
-              <p class="text-slate-100 font-semibold text-sm">${g.name}</p>
-              <p class="text-slate-500 text-xs">${g.desc}</p>
-            </div>
-            <span class="text-xs font-bold px-3 py-1 rounded-full bg-slate-700/60 text-slate-400 whitespace-nowrap">🔒 준비중</span>
-          </div>`).join('')}
-      </div>
-      <p class="text-slate-600 text-xs mt-4">※ 나머지 게임도 순차적으로 오픈할 예정이에요.</p>
     </div>`;
 }
 
@@ -6958,7 +6934,7 @@ async function reportComment(commentId, section, itemId) {
 ══════════════════════════════════════════════════ */
 const DAILY_CHALLENGE_POOL = ['mbti', 'brain', 'adhd', 'reaction', 'memdigit', 'seqmem', 'colorvision', 'logic', 'impulse', 'shortfocus', 'insa', 'proverb', 'pricequiz'];
 const DAILY_CHALLENGE_META = {
-  mbti: { emoji: '🧠', label: '성격 파탄(MBTI)' }, brain: { emoji: '⚡', label: '두뇌 나이' }, adhd: { emoji: '🌪️', label: '프로 미루러' },
+  mbti: { emoji: '🧠', label: '성격 파탄(MBTI)' }, brain: { emoji: '⚡', label: '두뇌 나이' }, adhd: { emoji: '🌪️', label: '미루기 습관' },
   reaction: { emoji: '💨', label: '반응속도' }, memdigit: { emoji: '🔢', label: '숫자 기억력' }, seqmem: { emoji: '🧩', label: '순서 기억력' },
   colorvision: { emoji: '🎨', label: '색각' }, logic: { emoji: '📊', label: '논리력' }, impulse: { emoji: '🚦', label: '충동억제' },
   shortfocus: { emoji: '📱', label: '숏폼 집중력' }, insa: { emoji: '🎉', label: '인싸력' }, proverb: { emoji: '📜', label: '속담 완성' }, pricequiz: { emoji: '🧾', label: '그 시절 물가' },

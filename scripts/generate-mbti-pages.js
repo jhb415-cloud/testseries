@@ -244,7 +244,6 @@ CODES.forEach(code => {
     <h2>MBTI 과몰입러를 위한 심화 테스트</h2>
     <div class="grid-wide">
       <a class="card" href="/test-engine/tests/11-real-vs-fake-mbti/"><div class="t">🎭 찐 MBTI vs 겉 MBTI</div><div class="s">겉으로 보이는 나와 속마음의 유형이 같을까?</div></a>
-      <a class="card" href="/test-engine/tests/13-drunk-mbti/"><div class="t">🍺 취중 MBTI</div><div class="s">취하면 튀어나오는 두 번째 인격 확인하기</div></a>
       <a class="card" href="/test-engine/tests/19-mbti-stat-window/"><div class="t">🎮 MBTI 스탯창</div><div class="s">내 성격을 게임 캐릭터 능력치로 시각화</div></a>
       <a class="card" href="/test-engine/tests/6-mbti-addiction-level/"><div class="t">🔎 MBTI 과몰입 등급 판정</div><div class="s">나 혹시 MBTI 얘기 너무 많이 하나?</div></a>
     </div>

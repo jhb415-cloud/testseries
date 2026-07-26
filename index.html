@@ -61,8 +61,8 @@
       },
       {
         "@type": "Question",
-        "name": "MBTI나 ADHD 성향 테스트는 정식 진단인가요?",
-        "acceptedAnswer": { "@type": "Answer", "text": "아니요. 모든 테스트 결과는 오락 목적의 자가 진단 콘텐츠이며, 전문적인 심리·의학 진단을 대체하지 않아요." }
+        "name": "MBTI나 집중 습관 테스트는 정식 진단인가요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "아니요. 모든 테스트 결과는 오락과 자기이해를 위한 콘텐츠이며, 전문적인 심리·의학 진단을 대체하지 않아요." }
       },
       {
         "@type": "Question",
@@ -145,8 +145,7 @@
        발견돼 다운로드가 늦게 시작됨 — 첫 캐러셀의 처음 4장(첫 화면 노출분)을 미리 받아둔다.
        ⚠️ sections.json 첫 poster-carousel 그룹의 처음 4개 test_ids와 반드시 동기화할 것
        (어긋나도 에러는 없고 preload 효과만 사라짐 — PSI '사용 안 된 preload' 경고로 확인 가능) -->
-  <link rel="preload" as="image" href="/test-engine/tests/13-drunk-mbti/assets/cover-home.webp" fetchpriority="high"/>
-  <link rel="preload" as="image" href="/test-engine/tests/14-villain-mbti/assets/cover-home.webp"/>
+  <link rel="preload" as="image" href="/test-engine/tests/14-villain-mbti/assets/cover-home.webp" fetchpriority="high"/>
   <link rel="preload" as="image" href="/test-engine/tests/18-shadow-mbti/assets/cover-home.webp"/>
   <link rel="preload" as="image" href="/test-engine/tests/5-villain-index/assets/cover-home.webp"/>
   <!-- SEO 체크업 도구 지적사항 반영(v0.5.4~): 기존 39자는 권장 범위(150~220자) 대비 너무 짧았음 -->
@@ -225,7 +224,7 @@
           <span class="text-lg">⚡</span> 두뇌 나이 측정기
         </div>
         <div class="nav-item nav-subitem" data-section="adhd">
-          <span class="text-lg">🌪️</span> 프로 미루러 (ADHD)
+          <span class="text-lg">🌪️</span> 미루기 습관 테스트
         </div>
         <div class="nav-item nav-subitem" data-section="reaction">
           <span class="text-lg">💨</span> 반응속도 테스트
@@ -321,10 +320,6 @@
         <div class="nav-item nav-subitem" data-section="dream">
           <span class="text-lg">🌙</span> 꿈 해몽 검색
         </div>
-        <!-- 애드센스 심사 임시 숨김(v0.2.8~, 승인 후 hidden 제거) -->
-        <div class="nav-item nav-subitem hidden" data-section="fortuneext">
-          <span class="text-lg">🔯</span> 사주/타로/궁합 <span class="badge-soon-nav">준비중</span>
-        </div>
       </div>
     </div>
 
@@ -387,7 +382,7 @@
              하나로 관리, JS(renderHomeSections())가 이 컨테이너 하나에 이번주 인기 TOP(리더보드)→
              심리테스트 3그룹(포스터 캐러셀)→오늘의 챌린지(세로형)→도구 모음을 전부 채워 넣는다. -->
         <div id="home-sections-container"></div>
-        <p class="text-slate-400 text-xs mt-3">※ 인기 순위는 이 홈 화면에서의 클릭 수 기준 추정치예요 — 추후 실데이터 연동 예정. 전체 테스트 목록은 사이드바에서 확인하세요.</p>
+        <p class="text-slate-400 text-xs mt-3">※ 인기 순위는 이 홈 화면에서의 클릭 수를 기준으로 표시됩니다. 전체 테스트 목록은 사이드바에서 확인하세요.</p>
 
         <!-- 사이트 안내 (v1.1.6~, 애드센스 "가치가 별로 없는 콘텐츠" 거절 대응): 크롤러와 방문자
              모두에게 보이는 정적 소개 글. 홈 화면이 카드 나열뿐이라 사이트의 주제·구성을 파악할
@@ -401,7 +396,7 @@
           </div>
           <div>
             <h3 class="font-bold text-slate-100 mb-1">🃏 심리 테스트존 — 못 숨기는 또 다른 나</h3>
-            <p><a href="/test-engine/tests/mental-age/" class="text-indigo-300 font-semibold">진짜 정신연령 테스트</a>, <a href="/test-engine/tests/5-villain-index/" class="text-indigo-300 font-semibold">내 안의 빌런지수</a>, <a href="/test-engine/tests/13-drunk-mbti/" class="text-indigo-300 font-semibold">취중 MBTI</a>, <a href="/test-engine/tests/11-real-vs-fake-mbti/" class="text-indigo-300 font-semibold">찐 MBTI vs 겉 MBTI</a> 등 20가지가 넘는 몰입형 심리테스트가 있어요. 테스트마다 전용 일러스트와 테마 디자인, 8~16가지 결과 유형 해설을 직접 만들었고, 결과는 카드 이미지로 저장해 카카오톡으로 바로 자랑할 수 있어요. <a href="#psychtest" class="text-indigo-300 font-semibold">전체 목록 보기 →</a></p>
+            <p><a href="/test-engine/tests/mental-age/" class="text-indigo-300 font-semibold">진짜 정신연령 테스트</a>, <a href="/test-engine/tests/5-villain-index/" class="text-indigo-300 font-semibold">내 안의 빌런지수</a>, <a href="/test-engine/tests/11-real-vs-fake-mbti/" class="text-indigo-300 font-semibold">찐 MBTI vs 겉 MBTI</a> 등 20가지가 넘는 몰입형 심리테스트가 있어요. 테스트마다 전용 일러스트와 테마 디자인, 8~16가지 결과 유형 해설을 직접 만들었고, 결과는 카드 이미지로 저장해 카카오톡으로 바로 자랑할 수 있어요. <a href="#psychtest" class="text-indigo-300 font-semibold">전체 목록 보기 →</a></p>
           </div>
           <div>
             <h3 class="font-bold text-slate-100 mb-1">🗳️ 과몰입 투표소 — 오늘도 댓글창이 뜨겁다</h3>
@@ -432,8 +427,8 @@
             <p class="text-slate-400 text-sm mt-2">네, 이 기기(브라우저)에 자동 저장되어 홈 화면의 완주 현황과 최근 기록에서 다시 확인할 수 있어요. 다른 기기·브라우저에서는 보이지 않아요.</p>
           </details>
           <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
-            <summary class="cursor-pointer font-semibold text-slate-100 text-sm block w-full">MBTI나 ADHD 성향 테스트는 정식 진단인가요?</summary>
-            <p class="text-slate-400 text-sm mt-2">아니요. 모든 테스트 결과는 오락 목적의 자가 진단 콘텐츠이며, 전문적인 심리·의학 진단을 대체하지 않아요.</p>
+            <summary class="cursor-pointer font-semibold text-slate-100 text-sm block w-full">MBTI나 집중 습관 테스트는 정식 진단인가요?</summary>
+            <p class="text-slate-400 text-sm mt-2">아니요. 모든 테스트 결과는 오락과 자기이해를 위한 콘텐츠이며, 전문적인 심리·의학 진단을 대체하지 않아요.</p>
           </details>
           <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
             <summary class="cursor-pointer font-semibold text-slate-100 text-sm block w-full">결과를 카카오톡이나 친구에게 공유할 수 있나요?</summary>
@@ -640,7 +635,6 @@
         <h3 class="text-slate-100 font-bold text-lg mt-6">9. 부칙</h3>
         <p>본 방침은 2026년 7월 5일부터 시행됩니다. 법령 및 서비스 변경에 따라 내용이 수정될 수 있으며, 중요한 변경 사항은 본 페이지를 통해 공지합니다.</p>
 
-        <p class="text-slate-600 text-xs mt-8">※ 본 문서는 일반적인 웹 서비스 운영 형태를 기준으로 작성된 초안입니다. 실제 서비스 운영 방식(사업자 등록 여부, 신규 기능 추가 등)에 따라 내용을 검토·수정해 사용하시기 바랍니다.</p>
       </div>
     </div>
 
@@ -653,7 +647,7 @@
         <p>본 약관은 과몰입 연구소(이하 "본 서비스")가 제공하는 각종 테스트·콘텐츠 서비스의 이용과 관련하여 서비스 제공자와 이용자 간의 권리·의무 및 책임사항을 정함을 목적으로 합니다.</p>
 
         <h3 class="text-slate-100 font-bold text-lg mt-6">제2조 (서비스의 내용)</h3>
-        <p>본 서비스는 MBTI, 두뇌 나이, ADHD 성향 진단, 꿈 해몽, 오늘의 운세, 로또 번호 조합기 등 오락 목적의 각종 테스트 및 콘텐츠를 제공합니다. <b class="text-slate-100">본 서비스의 모든 테스트 결과는 재미를 위한 참고 자료이며, 의학적·심리학적 진단이나 전문가의 상담을 대체하지 않습니다.</b></p>
+        <p>본 서비스는 MBTI, 두뇌 나이, 집중 습관, 꿈 해몽, 오늘의 운세, 로또 번호 조합기 등 오락 목적의 각종 테스트 및 콘텐츠를 제공합니다. <b class="text-slate-100">본 서비스의 모든 테스트 결과는 재미를 위한 참고 자료이며, 의학적·심리학적 진단이나 전문가의 상담을 대체하지 않습니다.</b></p>
 
         <h3 class="text-slate-100 font-bold text-lg mt-6">제3조 (이용자의 의무)</h3>
         <ul class="list-disc pl-5 space-y-1">
@@ -683,7 +677,6 @@
         <h3 class="text-slate-100 font-bold text-lg mt-6">문의처</h3>
         <p>이메일: <a href="mailto:contact@gwamol-lab.xyz" class="text-violet-400 underline">contact@gwamol-lab.xyz</a></p>
 
-        <p class="text-slate-600 text-xs mt-8">※ 본 문서는 일반적인 웹 서비스 운영 형태를 기준으로 작성된 초안입니다. 실제 서비스 운영 방식에 따라 내용을 검토·수정해 사용하시기 바랍니다.</p>
       </div>
     </div>
 
@@ -696,16 +689,15 @@
         <img src="assets/brand/logo-icon-64.png" alt="과몰입 연구소" width="24" height="24" class="w-6 h-6 shrink-0"/>
         <span class="text-slate-100 font-black text-base">과몰입 연구소</span>
       </div>
-      <p class="text-slate-300 mb-4">재미로 시작했다가 뼈 맞고 공유하는 종합 테스트 모음 — 본 플랫폼의 모든 테스트 결과는 오락 목적이며 전문 진단을 대체하지 않습니다.</p>
+      <p class="text-slate-300 mb-4">본 사이트의 테스트는 오락 및 자기이해를 위한 콘텐츠이며, 의학적·심리학적 진단이나 전문가의 상담을 대체하지 않습니다.</p>
       <!-- 콘텐츠 최신화 신호 (v0.5.7~, GEO 5단계): 크롤러가 읽을 수 있는 위치에 갱신 시점을 명시 -->
       <p class="text-slate-400 mb-4">마지막 업데이트: 2026-07-22</p>
       <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
         <span>© 2026 과몰입 연구소. All rights reserved.</span>
         <div class="flex items-center gap-4">
-          <span class="hover:text-slate-300 cursor-pointer transition" onclick="App.navigate('privacy')">개인정보처리방침</span>
-          <span class="hover:text-slate-300 cursor-pointer transition" onclick="App.navigate('terms')">서비스 이용약관</span>
-          <span class="hover:text-slate-300 cursor-pointer transition" onclick="openPartnershipModal()">제휴문의</span>
-          <span class="hover:text-slate-300 cursor-pointer transition" onclick="openFeedbackModal()">의견 보내기</span>
+          <a href="/privacy/" class="hover:text-slate-300 transition">개인정보처리방침</a>
+          <a href="/terms/" class="hover:text-slate-300 transition">서비스 이용약관</a>
+          <a href="/contact/" class="hover:text-slate-300 transition">문의</a>
           <a href="/all/" class="hover:text-slate-300 transition">전체 테스트 목록</a>
           <a href="/kkum/" class="hover:text-slate-300 transition">꿈해몽 사전</a>
           <a href="/mbti/" class="hover:text-slate-300 transition">MBTI 유형 사전</a>

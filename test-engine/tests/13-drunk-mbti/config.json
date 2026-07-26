@@ -1,5 +1,6 @@
 {
   "id": "drunk-mbti",
+  "private": true,
   "psych_category": "mbtizone",
   "title": "취중 MBTI 테스트",
   "description": "술 들어가면 튀어나오는 인격, 우는 술 · 시비 술 · 잠수 술 중 나는?",
