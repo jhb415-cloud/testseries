@@ -112,8 +112,9 @@ function buildSection(cfg, folder, siblings) {
     siblings.forEach(function (s) {
       html += '<li><a href="' + SITE_ORIGIN + '/test-engine/tests/' + s.folder + '/">' + esc(s.title) + '</a> — ' + esc(s.description) + '</li>\n';
     });
-    html += '<li><a href="' + SITE_ORIGIN + '/">과몰입 연구소 홈</a> — MBTI·두뇌 나이·오늘의 운세·꿈해몽 등 전체 테스트 모음</li>\n';
-    html += '<li><a href="' + SITE_ORIGIN + '/kkum/">꿈해몽 사전</a> — 174가지 꿈 풀이 전체 보기</li>\n';
+    html += '<li><a href="' + SITE_ORIGIN + '/">과몰입 연구소 홈</a> — 심리테스트·MBTI·두뇌 인지 테스트 전체 모음</li>\n';
+    // [adsense-prep v0.0.1] 꿈해몽 사전 링크 제거 — 색인 거부된 174개로 크롤러가
+    // 흘러들어가는 유일한 경로였음. 애드센스 승인 후 복구 예정.
     html += '</ul>\n';
   }
 

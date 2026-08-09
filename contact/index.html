@@ -3,18 +3,116 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>문의 | 과몰입 연구소</title>
+  <title>문의하기 | 과몰입 연구소</title>
+  <meta name="description" content="과몰입 연구소에 오류 제보, 콘텐츠 제안, 제휴 문의를 보내주세요. 보통 2~3일 안에 답변드립니다.">
   <link rel="canonical" href="https://gwamol-lab.xyz/contact/">
   <link rel="stylesheet" href="/tailwind.css?v=1.3.6">
   <link rel="stylesheet" href="/style.css?v=1.3.6">
+  <meta name="google-adsense-account" content="ca-pub-4825324689294427">
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen">
-  <main class="max-w-3xl mx-auto px-6 py-12 text-slate-300 text-sm leading-relaxed space-y-5">
+  <main class="max-w-2xl mx-auto px-6 py-12 text-slate-300 text-sm leading-relaxed space-y-5">
     <a href="/" class="text-violet-400">← 과몰입 연구소</a>
-    <h1 class="text-3xl font-black text-slate-100">문의</h1>
-    <p>서비스 이용, 콘텐츠, 개인정보 관련 문의는 아래 이메일로 보내 주세요.</p>
-    <p class="text-lg"><a class="text-violet-400 underline" href="mailto:contact@gwamol-lab.xyz">contact@gwamol-lab.xyz</a></p>
-    <p>본 사이트의 테스트는 오락 및 자기이해를 위한 콘텐츠이며, 의학적·심리학적 진단이나 전문가의 상담을 대체하지 않습니다.</p>
+    <h1 class="text-3xl font-black text-slate-100">문의하기</h1>
+
+    <p>과몰입 연구소는 1인이 운영합니다. 보내주신 내용은 운영자가 직접 읽고 보통 <strong class="text-slate-100">2~3일 안에</strong> 답변드립니다.</p>
+
+    <h2 class="text-lg font-bold text-slate-100 pt-2">이런 문의를 환영합니다</h2>
+    <ul class="list-disc pl-6 space-y-1">
+      <li><strong class="text-slate-100">오류 제보</strong> — 결과가 이상하게 나오거나, 화면이 깨지거나, 링크가 동작하지 않는 경우. 가장 감사한 제보입니다.</li>
+      <li><strong class="text-slate-100">콘텐츠 제안</strong> — 만들어줬으면 하는 테스트 주제</li>
+      <li><strong class="text-slate-100">내용 정정 요청</strong> — 부정확하거나 불쾌한 표현을 발견하신 경우</li>
+      <li><strong class="text-slate-100">제휴 · 광고 문의</strong></li>
+      <li><strong class="text-slate-100">개인정보 관련 요청</strong> — 열람, 정정, 삭제, 처리 정지</li>
+    </ul>
+
+    <form id="contact-form" class="space-y-4 pt-4">
+      <div>
+        <label for="cf-name" class="block mb-1 text-slate-200">이름 또는 닉네임 <span class="text-slate-500">(선택)</span></label>
+        <input id="cf-name" name="name" type="text" maxlength="40" autocomplete="name"
+               class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100">
+      </div>
+      <div>
+        <label for="cf-email" class="block mb-1 text-slate-200">답변받을 이메일 <span class="text-rose-400">*</span></label>
+        <input id="cf-email" name="email" type="email" required maxlength="120" autocomplete="email"
+               class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100">
+      </div>
+      <div>
+        <label for="cf-category" class="block mb-1 text-slate-200">문의 유형 <span class="text-rose-400">*</span></label>
+        <select id="cf-category" name="category" required
+                class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100">
+          <option value="bug">오류 제보</option>
+          <option value="idea">콘텐츠 제안</option>
+          <option value="correction">내용 정정 요청</option>
+          <option value="partnership">제휴 · 광고 문의</option>
+          <option value="privacy">개인정보 관련 요청</option>
+          <option value="etc">기타</option>
+        </select>
+      </div>
+      <div>
+        <label for="cf-message" class="block mb-1 text-slate-200">내용 <span class="text-rose-400">*</span></label>
+        <textarea id="cf-message" name="message" required rows="7" minlength="10" maxlength="2000"
+                  placeholder="오류 제보라면 어떤 테스트에서, 어떤 상황에 발생했는지 적어주시면 훨씬 빨리 고칠 수 있어요."
+                  class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100"></textarea>
+      </div>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"
+             style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+      <button type="submit" id="cf-submit"
+              class="w-full rounded-lg bg-violet-600 hover:bg-violet-500 disabled:opacity-50 text-white font-bold py-3">
+        보내기
+      </button>
+      <p id="cf-status" role="status" aria-live="polite" class="text-center"></p>
+    </form>
+
+    <p class="text-slate-500 pt-2">
+      폼이 동작하지 않으면 <a class="text-violet-400 underline" href="mailto:contact@gwamol-lab.xyz">contact@gwamol-lab.xyz</a>로 직접 보내주셔도 됩니다.
+      입력하신 이메일은 답변 목적으로만 사용하며, 처리 후 파기합니다. 자세한 내용은
+      <a class="text-violet-400 underline" href="/privacy/">개인정보처리방침</a>을 참고해주세요.
+    </p>
+    <p class="text-slate-500">
+      본 사이트의 테스트는 오락 및 자기이해를 위한 콘텐츠이며, 의학적·심리학적 진단이나 전문가 상담을 대체하지 않습니다.
+    </p>
+
+    <nav class="pt-8 border-t border-slate-800 text-sm space-x-4">
+      <a href="/" class="text-slate-400 hover:text-slate-200">홈</a>
+      <a href="/about/" class="text-slate-400 hover:text-slate-200">소개</a>
+      <a href="/privacy/" class="text-slate-400 hover:text-slate-200">개인정보처리방침</a>
+      <a href="/terms/" class="text-slate-400 hover:text-slate-200">이용약관</a>
+    </nav>
   </main>
+
+<script>
+document.getElementById('contact-form').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  var btn = document.getElementById('cf-submit');
+  var status = document.getElementById('cf-status');
+  var data = Object.fromEntries(new FormData(e.target).entries());
+
+  btn.disabled = true;
+  status.textContent = '보내는 중…';
+  status.className = 'text-center text-slate-400';
+
+  try {
+    var res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    var json = await res.json();
+    if (res.ok && json.ok) {
+      e.target.reset();
+      status.textContent = '접수됐습니다. 2~3일 안에 답변드릴게요.';
+      status.className = 'text-center text-emerald-400';
+    } else {
+      throw new Error(json.error || '전송에 실패했습니다.');
+    }
+  } catch (err) {
+    status.textContent = err.message + ' contact@gwamol-lab.xyz 로 직접 보내주셔도 됩니다.';
+    status.className = 'text-center text-rose-400';
+  } finally {
+    btn.disabled = false;
+  }
+});
+</script>
 </body>
 </html>

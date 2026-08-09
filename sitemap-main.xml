@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://gwamol-lab.xyz/</loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
@@ -11,298 +11,318 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/mental-age/</loc>
+    <loc>https://gwamol-lab.xyz/about/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/privacy/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/terms/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/contact/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/1-k-office-type/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/2-desert-island-type/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/11-real-vs-fake-mbti/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/12-love-mode-mbti/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/4-spending-type/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/5-villain-index/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/6-mbti-addiction-level/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/14-villain-mbti/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/15-crush-mode-mbti/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/16-brain-structure-report/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/3-text-reply-love-type/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/7-idol-position-type/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/8-group-chat-character/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://gwamol-lab.xyz/test-engine/tests/9-dopamine-addiction-level/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/10-joseon-past-life-type/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/11-real-vs-fake-mbti/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/12-love-mode-mbti/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/14-villain-mbti/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/15-crush-mode-mbti/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/16-brain-structure-report/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/17-office-mask-mbti/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/18-shadow-mbti/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/19-mbti-stat-window/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/2-desert-island-type/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/20-ai-mbti-judge/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/21-balance-3sec-speed/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/22-ai-daily-documentary/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/23-past-life-death-cause/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/24-life-drama-genre/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/25-katok-reply-style/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/26-medieval-job-past-life/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/27-village-animal-neighbor/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/28-hold-or-sell-index/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/29-dopamine-source-type/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/3-text-reply-love-type/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/30-zombie-apocalypse-survival/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/31-romance-webtoon-genre/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/32-office-slacker-skilltree/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/33-lucky-vicky-index/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/34-t-factor-index/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/35-caffeine-addiction-type/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/36-friend-group-position/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/37-godsaeng-fail-type/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/38-room-state-psychology/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/39-decision-time-test/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/4-spending-type/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/40-ai-black-history-type/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/41-mbti-hero-awakening/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/42-mbti-fantasy-race/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/43-mbti-villain-story/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/44-mbti-zombie-survival-class/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/45-mbti-mythology-god/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/46-mbti-cafe-drink/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/47-mbti-magic-school-house/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/48-mbti-idol-debut-position/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/49-mbti-joseon-government-post/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/5-villain-index/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/50-mbti-rpg-character-sheet/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/52-mbti-pet-animal-type/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/53-mbti-post-apocalypse-tribe-leader/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/54-mbti-webtoon-romance-lead/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/55-mbti-fantasy-weapon/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/56-mbti-cyberpunk-world/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/57-mbti-convenience-store-food/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/58-mbti-past-future-life/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/59-mbti-meme-character/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/6-mbti-addiction-level/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gwamol-lab.xyz/test-engine/tests/60-mbti-office-resignation/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/7-idol-position-type/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/8-group-chat-character/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/9-dopamine-addiction-level/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gwamol-lab.xyz/test-engine/tests/mental-age/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
