@@ -157,13 +157,13 @@ ${cards(g.key)}
 
     <h2>사전 · 아카이브</h2>
     <div class="hub">
-      <a class="card" href="/mbti/"><div class="t">🧠 MBTI 16유형 사전</div><div class="s">16가지 유형별 성격 특징, 연애 스타일, 직장 생활, 궁합을 유형별 페이지로 정리했어요.</div></a>
-      <a class="card" href="/kkum/"><div class="t">🌙 꿈해몽 사전</div><div class="s">174가지 꿈 테마와 546가지 세부 풀이를 직접 집필해 담은 꿈 해몽 아카이브예요.</div></a>
+      <!-- [adsense-prep v0.0.2] MBTI 사전·꿈해몽 사전 카드 제거 — 색인 대상 /all/ 에서
+           비색인 저품질군으로 가는 크롤 경로였음. 승인 후 이 주석을 풀어 복구. -->
     </div>
 
     <footer class="site">
       <p>ⓒ 과몰입 연구소 · 본 콘텐츠는 오락 목적이며 전문적인 심리 검사를 대체하지 않습니다.</p>
-      <p><a href="/">홈</a> · <a href="/mbti/">MBTI 유형 사전</a> · <a href="/kkum/">꿈해몽 사전</a></p>
+      <p><a href="/">홈</a> · <a href="/about/">과몰입 연구소 소개</a></p>
     </footer>
   </div>
 </body>

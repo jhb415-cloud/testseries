@@ -1306,9 +1306,8 @@ function renderDreamSearch() {
             </button>`).join('')}
         </div>
       </div>
-      <div class="text-center mt-6">
-        <a href="/kkum/" class="inline-block bg-violet-800/50 hover:bg-violet-700/70 border border-violet-600 text-violet-300 font-bold px-6 py-3 rounded-xl transition">📖 꿈해몽 전체 목록 보기</a>
-      </div>
+      <!-- [adsense-prep v0.0.2] 꿈해몽 전체 목록 링크 제거 (renderDreamSearch 내부).
+           검색 기능(dreamSearch/dreamSearchBy)은 그대로 동작 — 진입 링크만 제거. -->
     </div>`;
 
   document.getElementById('dream-search-input').addEventListener('keydown', e => {
