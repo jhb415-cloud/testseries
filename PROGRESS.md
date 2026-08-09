@@ -19,6 +19,10 @@ Tailwind CSS(사전 컴파일 정적 `tailwind.css`, v1.2.4~) + 순수 Vanilla J
 
 ## 2. 기능 현황
 
+> **모든 작업 기록은 이 표 하나에만 남긴다(2026-08-09 확정).** 아래 "4. 변경 이력" 표는
+> v1.3.3(2026-07-21)까지만 채워진 뒤 사실상 이 표로 대체돼 있었음을 발견해 공식 폐기 —
+> 과거 기록 보존용으로만 남기고 더 이상 갱신하지 않는다. 새 항목은 항상 표 맨 위(최신순)에 추가.
+
 | 기능 | 상태 | 버전 | 비고 |
 |---|---|---|---|
 | 2026-08-09 | v1.3.7 | **애드센스 3차 승인 준비 — 저품질 200페이지(꿈해몽174+MBTI사전17) 색인 제외 + 색인된 62개 페이지의 크롤 경로 차단 + 로또/도박 인접 신호 제거 + about/개인정보처리방침/문의폼 신설.** 2회 거절 사유는 둘 다 "가치가 별로 없는 콘텐츠" — GSC 색인 62 vs 미색인 204(꿈해몽183+MBTI17≈200) 수치 교차 확인 결과, 구글이 꿈해몽/MBTI사전 페이지군을 전량 색인 거부하고 있었고 테스트 페이지 61/61이 전부 `/kkum/` 링크를 갖고 있어 심사 크롤러가 색인 통과한 62개에서도 저품질군으로 흘러들어가는 구조였음(사이트맵만 손보면 이 크롤 경로가 살아있어 무의미 — 사용자 제공 지시서 `scripts/adsense/작업지시서-v0.0.1.md` 기준 Task 1~9 순서대로 진행, `adsense-v0.0.1` 브랜치에서 작업 후 병합). **처리**: ①`kkum/`183+`mbti/`17 총 200개 `noindex,follow` 삽입(삭제 아님, 승인 후 `--revert`로 복구 예정) ②`index.html`+테스트 61개+생성소스(`generate-seo-content.js`)+`all/index.html`(제공 스크립트에 누락돼 있던 걸 발견해 추가 처리)에서 `/kkum/`·`/mbti/` 링크 전부 제거 ③사이드바 로또 조합기 항목 숨김+FAQ/JSON-LD/메타에서 "당첨 통계 기반" 등 도박 인접 문구 제거(기능 코드는 유지, 심사 기간 한정 조치) ④`about/index.html`(운영자 정체성 E-E-A-T) 신규, `privacy/index.html` 394자→2,054자로 전면 확장(DART 쿠키/광고 opt-out 2종/보유기간/책임자/만14세 조항), `contact/index.html`+`functions/api/contact.js` 신규(honeypot 봇차단, 기존 `partnership-inquiry.js`와 동일 패턴, 에러 메시지만 한국어로 통일) ⑤`sitemap-main.xml` 61→65 URL 재생성+`robots.txt`에서 sitemap-kkum/mbti 참조 제거. 재사용 가능한 `scripts/adsense/01~04-*.js`(멱등, `--revert` 지원) 4개는 저장소에 유지. **검증**: 크롤 경로 잔여 링크 0(주석 처리 마커 제외), noindex 오적용 0(test-engine의 기존 2건은 `config.json private:true` 알코올 테스트로 이번 작업과 무관 — git blame으로 확인), JSON-LD 유효, 필수 페이지 5종(about/privacy/terms/contact/all) 정상 응답. 브라우저 실클릭·문의폼 실전송(Cloudflare Functions)은 로컬 환경 제약으로 코드 분석+단위 테스트로 대체, 배포 후 재확인 필요. **남은 작업(Task 10~11, 사용자 수동)**: GSC에서 sitemap-kkum.xml·sitemap-mbti.xml 삭제 + sitemap-main.xml 재제출 + `/about/`·`/privacy/`·`/contact/`·`/all/` 색인 생성 요청, 네이버 서치어드바이저 등록, 배포 후 최소 2주 + "발견됨-색인안됨" 50개 미만 확인 후 3차 재신청. |
@@ -120,7 +124,11 @@ Tailwind CSS(사전 컴파일 정적 `tailwind.css`, v1.2.4~) + 순수 Vanilla J
 
 ---
 
-## 4. 변경 이력 (요약)
+## 4. 변경 이력 (요약, 폐기됨 — v1.3.3까지만 보존)
+
+> **2026-08-09부로 폐기.** v1.3.3(2026-07-21) 이후 갱신되지 않은 채 "2. 기능 현황" 표로
+> 실질 대체돼 있었음 — 과거 기록만 그대로 남기고 새 항목은 여기 추가하지 않는다.
+
 | 일자 | 버전 | 내용 |
 |---|---|---|
 | 2026-07-21 | v1.3.3 | **MBTI존 게임형 개편 2차 배치(#51/52/54/55) 사이트 연동.** 이전 두 커밋(테스트 엔진 내부에서만 "v1.3.1"/"v1.3.2"로 언급됐지만 실제로 이 루트 사이트 버전·정적자산 캐시버스팅은 건드리지 않았던 상태 — index.html이 계속 v1.3.0으로 남아있던 걸 확인, 혼선 방지 위해 이번엔 실제 파일 버전을 v1.3.3으로 올려 정합성을 맞춤)에서 콘텐츠 제작이 끝난 `mbti-drinking-party-character`(#51)/`mbti-pet-animal-type`(#52)/`mbti-post-apocalypse-tribe-leader`(#53, 아침 세션 파일럿)/`mbti-webtoon-romance-lead`(#54)/`mbti-fantasy-weapon`(#55) 5개를 처음으로 홈 화면·심리테스트존에 노출. `data.js`의 `mbtiZoneTests`에 5개 항목 추가(각 `theme`/`engagementKey`/`baseCount`를 해당 `config.json`의 `theme`/`engagement_key`/`seed_count`와 정확히 일치시킴 — 어긋나면 카드 숫자와 테스트 화면 자체 숫자가 다르게 보이는 회귀가 있었던 전례). `sections.json`의 poster-carousel 4그룹 중 주제가 맞는 곳에 배치(술자리 캐릭터→"못 숨기는 또 다른 나", 로맨스 웹툰→"연애만 하면 딴사람", 반려동물/부족 리더/판타지 무기→"다른 세계관 속의 나" — 전부 "내가 다른 존재/세계라면" 계열이라 기존 그룹과 톤이 맞음). `sitemap-main.xml`에 5개 URL 추가, `llms.txt`/`llms-full.txt`의 MBTI존 개수(20종→25종, 총 51개→56개 테스트)와 신규 매체·미니게임 인터랙션 설명 갱신 + "마지막 업데이트" 2026-07-21. `index.html`: 버전 코멘트/사이드바 표시 v1.3.0→v1.3.3, 정적자산 6곳(`tailwind.css`/`style.css`/`data.js`/`supabase-client.js`/`kakao-share.js`/`app.js`) `?v=1.3.0→1.3.3` 동기화, 푸터 "콘텐츠 최근 업데이트" 2026-07-21 갱신. **검증**: `python3 -m json.tool`로 `data.js`/`sections.json` 관련 JSON 유효성 확인(중복 test_id 없음, 56개 unique), Playwright로 홈 화면 4그룹 캐러셀에 5개 신규 카드가 정확한 테마/이미지로 노출되는지 재확인. 상세 콘텐츠 제작 내역(엔진 v14→v15 3종 신규 메커니즘, 이미지 9장×4테스트, QA)은 `test-engine/progress.md` "MBTI존 게임형 개편 2차 배치" 절 참고. |

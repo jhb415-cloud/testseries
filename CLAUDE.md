@@ -4,9 +4,10 @@
 런타임 빌드 도구 없음. **새 Tailwind 클래스를 처음 쓰면 `tailwind.css` 재생성 필수**
 (`tailwind.config.js` 상단 주석의 npx 한 줄 — 안 하면 그 클래스만 스타일이 안 먹음).
 
-**작업 전 항상 이 순서로 읽기**: `PRD.md`(목적/제약) → `PROGRESS.md`(기능 현황·변경 이력·
-결정사항 로그, 실행 기준) → `HISTORIC_LOG.md`(최근 세션 맥락). `test-engine/`은 별도
-`test-engine/CLAUDE.md` 규칙을 따른다.
+**작업 전 항상 이 순서로 읽기**: `PRD.md`(목적/제약) → `PROGRESS.md`(기능 현황·결정사항 로그,
+실행 기준 — 유일한 변경 이력 문서). `HISTORIC_LOG.md`는 2026-08-09부로 폐기(2026-07-09 세션
+#19 이후 갱신 안 됨, PROGRESS.md로 완전히 대체) — 더 이상 읽거나 쓰지 않는다. `test-engine/`은
+별도 `test-engine/CLAUDE.md` 규칙을 따른다.
 
 ## 핵심 규칙
 - 섹션: `#section-{id}` + `.section.hidden`, `App.navigate(id)`로 전환.
