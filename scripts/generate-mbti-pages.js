@@ -13,6 +13,20 @@ const path = require('path');
 
 const ORIGIN = 'https://gwamol-lab.xyz';
 
+// [adsense-prep v0.0.2] 발행 모드 신규 도입 — 이 파일엔 원래 이런 개념이 없어서
+// 실행할 때마다 무조건 noindex 없이 sitemap-mbti.xml 을 새로 썼다. content-pages.js와
+// 동일한 안전장치를 심는다. --confirm-mbti-publish 로 confirm 플래그 이름을 분리한
+// 이유: kkum과 mbti를 한 명령으로 착각해 같이 공개해버리는 사고를 막기 위함.
+const _args = process.argv.slice(2);
+const _modeArg = _args.find(a => a.startsWith('--mode='));
+const _requestedMode = _modeArg ? _modeArg.split('=')[1] : 'review';
+const _hasConfirm = _args.includes('--confirm-mbti-publish');
+const MODE = (_requestedMode === 'public' && _hasConfirm) ? 'public' : 'review';
+if (_requestedMode === 'public' && !_hasConfirm) {
+  console.warn('[안전장치] --mode=public 이지만 --confirm-mbti-publish 가 없어 review 모드로 강제 전환합니다.');
+}
+const PUBLISH = MODE === 'public';
+
 global.window = {};
 eval(fs.readFileSync(path.join(__dirname, '..', 'data.js'), 'utf8'));
 const RESULTS = global.window.AppData.mbtiResults;
@@ -161,6 +175,8 @@ const STYLE = `
 `;
 
 function pageShell({ title, description, canonicalPath, body }) {
+  // [adsense-prep v0.0.2] review 모드일 때만 noindex 삽입
+  const robots = PUBLISH ? '' : '\n  <meta name="robots" content="noindex"/>';
   return `<!doctype html>
 <html lang="ko">
 <head>
@@ -181,7 +197,7 @@ function pageShell({ title, description, canonicalPath, body }) {
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4825324689294427" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-W05KHWP4WY"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-W05KHWP4WY');</script>
-  <style>${STYLE}</style>
+  <style>${STYLE}</style>${robots}
 </head>
 <body>
   <div class="wrap">
@@ -192,7 +208,7 @@ function pageShell({ title, description, canonicalPath, body }) {
 ${body}
     <footer class="site">
       <p>ⓒ 과몰입 연구소 · 본 콘텐츠는 오락 목적이며 전문적인 심리 검사를 대체하지 않습니다.</p>
-      <p><a href="/">홈</a> · <a href="/#mbti">MBTI 테스트 하러 가기</a> · <a href="/kkum/">꿈해몽 사전</a></p>
+      <p><a href="/">홈</a> · <a href="/#mbti">MBTI 테스트 하러 가기</a></p>
     </footer>
   </div>
 </body>
@@ -281,11 +297,35 @@ fs.writeFileSync(path.join(outRoot, 'index.html'), pageShell({
   body: listBody
 }));
 
-// ── sitemap-mbti.xml ──
-const urls = ['/mbti/'].concat(CODES.map(c => `/mbti/${c.toLowerCase()}/`));
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-  urls.map(u => `  <url>\n    <loc>${ORIGIN}${u}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>`).join('\n') +
-  '\n</urlset>\n';
-fs.writeFileSync(path.join(__dirname, '..', 'sitemap-mbti.xml'), sitemap);
+// ── sitemap-mbti.xml ── [adsense-prep v0.0.2] PUBLISH 조건부로 변경
+if (PUBLISH) {
+  const urls = ['/mbti/'].concat(CODES.map(c => `/mbti/${c.toLowerCase()}/`));
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+    urls.map(u => `  <url>\n    <loc>${ORIGIN}${u}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>`).join('\n') +
+    '\n</urlset>\n';
+  fs.writeFileSync(path.join(__dirname, '..', 'sitemap-mbti.xml'), sitemap);
+  console.log('생성 완료: /mbti/ 목록 1 + 상세 ' + CODES.length + ' + sitemap-mbti.xml (' + urls.length + ' URLs)');
+} else {
+  const emptySitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>\n';
+  fs.writeFileSync(path.join(__dirname, '..', 'sitemap-mbti.xml'), emptySitemap);
+  console.log('[review 모드] sitemap-mbti.xml 을 빈 사이트맵으로 교체했습니다 (URL 0개).');
+}
 
-console.log('생성 완료: /mbti/ 목록 1 + 상세 ' + CODES.length + ' + sitemap-mbti.xml (' + urls.length + ' URLs)');
+// [adsense-prep v0.0.2] 발행 후 검증
+if (!PUBLISH) {
+  const fails = [];
+  const badCode = CODES.find(c => {
+    const html = fs.readFileSync(path.join(outRoot, c.toLowerCase(), 'index.html'), 'utf8');
+    return !html.includes('<meta name="robots" content="noindex"/>');
+  });
+  if (badCode) fails.push('상세 페이지 중 noindex 누락: ' + badCode);
+  const listHtml = fs.readFileSync(path.join(outRoot, 'index.html'), 'utf8');
+  if (!listHtml.includes('<meta name="robots" content="noindex"/>')) fails.push('/mbti/ 목록 페이지 noindex 누락');
+  const sitemapCheck = fs.readFileSync(path.join(__dirname, '..', 'sitemap-mbti.xml'), 'utf8');
+  if (sitemapCheck.includes('<loc>')) fails.push('sitemap-mbti.xml 에 URL이 남아있음');
+  if (fails.length) {
+    console.error('\n[검증 실패 — review 모드 정책 위반]\n- ' + fails.join('\n- '));
+    process.exit(1);
+  }
+  console.log('[검증 통과] review 모드 정책 정상 적용 (noindex 전수 확인 + sitemap 0 URL)');
+}

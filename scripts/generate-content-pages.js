@@ -22,7 +22,19 @@
 const fs = require('fs');
 const path = require('path');
 
-const PUBLISH = true;    // v0.5.9~ 정식 공개 확정(사용자 승인) — noindex 해제 + sitemap-kkum.xml 생성
+// [adsense-prep v0.0.2] 발행 모드 — 기본값은 review(fail-safe).
+// public 은 --mode=public 과 --confirm-kkum-publish 를 "동시에" 줘야만 발동한다.
+// 하나라도 빠지면 review 로 강제 전환하고 경고를 찍는다 — PUBLISH 상수를 손으로
+// 바꾸는 실수(과거 v0.5.9 방식)를 원천 차단하기 위함.
+const _args = process.argv.slice(2);
+const _modeArg = _args.find(a => a.startsWith('--mode='));
+const _requestedMode = _modeArg ? _modeArg.split('=')[1] : 'review';
+const _hasConfirm = _args.includes('--confirm-kkum-publish');
+const MODE = (_requestedMode === 'public' && _hasConfirm) ? 'public' : 'review';
+if (_requestedMode === 'public' && !_hasConfirm) {
+  console.warn('[안전장치] --mode=public 이지만 --confirm-kkum-publish 가 없어 review 모드로 강제 전환합니다.');
+}
+const PUBLISH = MODE === 'public';
 const LIMIT = null;      // null=전체, 숫자=앞에서 N개만
 const PER_PAGE = 20;
 const ORIGIN = 'https://gwamol-lab.xyz';
@@ -269,6 +281,29 @@ if (PUBLISH) {
   const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlEntries.join('\n')}\n</urlset>\n`;
   fs.writeFileSync(path.join(__dirname, '..', 'sitemap-kkum.xml'), sitemapXml);
   console.log(`sitemap-kkum.xml 생성 완료 (${urlEntries.length}개 URL)`);
+} else {
+  // [adsense-prep v0.0.2] review 모드: 과거 public 실행으로 남아있을 수 있는
+  // sitemap-kkum.xml을 URL 0개짜리 빈 사이트맵으로 즉시 교체한다.
+  const emptySitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>\n';
+  fs.writeFileSync(path.join(__dirname, '..', 'sitemap-kkum.xml'), emptySitemap);
+  console.log('[review 모드] sitemap-kkum.xml 을 빈 사이트맵으로 교체했습니다 (URL 0개).');
+}
+
+// [adsense-prep v0.0.2] 발행 후 검증 — review 모드인데 정책이 어긋나면 즉시 실패시킨다.
+if (!PUBLISH) {
+  const fails = [];
+  const badPage = dreams.find(t => {
+    const html = fs.readFileSync(path.join(outRoot, t._slug, 'index.html'), 'utf8');
+    return !html.includes('<meta name="robots" content="noindex"/>');
+  });
+  if (badPage) fails.push('상세 페이지 중 noindex 누락: ' + badPage._slug);
+  const sitemapCheck = fs.readFileSync(path.join(__dirname, '..', 'sitemap-kkum.xml'), 'utf8');
+  if (sitemapCheck.includes('<loc>')) fails.push('sitemap-kkum.xml 에 URL이 남아있음');
+  if (fails.length) {
+    console.error('\n[검증 실패 — review 모드 정책 위반]\n- ' + fails.join('\n- '));
+    process.exit(1);
+  }
+  console.log('[검증 통과] review 모드 정책 정상 적용 (noindex 전수 확인 + sitemap 0 URL)');
 }
 
 console.log(`생성 완료: 상세 ${dreams.length}개 + 목록 ${totalPages}페이지 (PUBLISH=${PUBLISH}, PER_PAGE=${PER_PAGE})`);
