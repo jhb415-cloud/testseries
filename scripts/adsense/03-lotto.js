@@ -35,6 +35,7 @@ const RULES = [
   /* ── 1. 사이드바 nav 항목 숨김 ─────────────────────────────── */
   {
     label: 'nav 로또 항목 숨김',
+    marker: '[adsense-prep v0.0.1] 애드센스 심사 기간 동안 로또 항목 숨김.',
     from: '    <div class="nav-item" data-section="lotto">\n      <span class="text-lg">🎱</span> 로또 번호 조합기\n    </div>\n',
     to: '    <!-- [adsense-prep v0.0.1] 애드센스 심사 기간 동안 로또 항목 숨김.\n' +
         '         복권은 게시자 정책상 제한 콘텐츠 — 승인 후 이 주석을 풀어 복구.\n' +
@@ -114,7 +115,18 @@ const RULES = [
 
 let s = fs.readFileSync(FILE, 'utf8');
 let n = 0;
+let failed = 0;
 for (const r of RULES) {
+  if (!REVERT && r.marker && s.includes(r.marker)) {
+    const markerCount = s.split(r.marker).length - 1;
+    if (markerCount !== 1 || !s.includes(r.to)) {
+      console.error(`  ! 적용 마커 상태가 불완전함(${markerCount}개):`, r.label);
+      failed++;
+      continue;
+    }
+    console.log('  · 건너뜀(이미 처리):', r.label);
+    continue;
+  }
   const from = REVERT ? r.to : r.from;
   const to = REVERT ? r.from : r.to;
   if (!s.includes(from)) {
@@ -125,6 +137,12 @@ for (const r of RULES) {
   console.log('  ✓', r.label);
   n++;
 }
+
+if (failed) {
+  console.error(`\n[03-lotto] 실패 — ${failed}건의 규칙 상태가 불완전합니다.`);
+  process.exit(1);
+}
+
 fs.writeFileSync(FILE, s);
 
 const remaining = (s.match(/로또/g) || []).length;
