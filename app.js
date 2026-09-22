@@ -765,7 +765,7 @@ const HOME_TOOL_CARDS = [
 function buildPsychTrendingCandidates() {
   return [...(AppData.externalTests || []), ...(AppData.mbtiZoneTests || [])].map(t => ({
     id: t.id, emoji: t.emoji, title: t.title, desc: t.hook,
-    image: psyCoverThumb(t), key: t.engagementKey, base: t.baseCount,
+    url: t.url, image: psyCoverThumb(t), key: t.engagementKey, base: t.baseCount,
     run: () => { bumpEngagement(t.engagementKey); location.href = t.url; },
   }));
 }
@@ -890,11 +890,11 @@ async function renderHomeSections() {
         const bindId = 'home-card-bind-' + (bindSeq++);
         bindings.push({ id: bindId, run: () => App.navigate(s) });
         return `
-          <div id="${bindId}" class="home-ch-row">
+          <a href="#${s}" id="${bindId}" class="home-ch-row">
             <span class="ic">${meta.emoji}</span>
             <span class="lbl">${meta.label}</span>
             <span class="go ${done ? 'done' : ''}">${done ? '✅ 완료' : '도전하기 →'}</span>
-          </div>`;
+          </a>`;
       }).join('');
       html += `
         <div class="home-challenge" style="margin-top:20px;">
@@ -908,15 +908,11 @@ async function renderHomeSections() {
     let cards;
     if (sec.dynamic === 'popularity') {
       cards = buildPopularCandidates()
-        .map(c => ({ ...c, score: engagementCount(c.key, c.base) }))
-        .sort((a, b) => b.score - a.score)
         .slice(0, sec.limit || 6);
     } else if (sec.dynamic === 'psych-trending') {
       /* v0.8.0~: 몰입테스트+MBTI존을 별도 섹션 2개로 나눴던 걸 사용자 요청으로 통합 —
          두 목록을 합쳐 인기순으로 상위 N개만 노출(실제 test-engine 커버 이미지 포함) */
       cards = buildPsychTrendingCandidates()
-        .map(c => ({ ...c, score: engagementCount(c.key, c.base) }))
-        .sort((a, b) => b.score - a.score)
         .slice(0, sec.limit || 3);
     } else {
       cards = (sec.test_ids || []).map(id => index[id]).filter(Boolean);
@@ -944,12 +940,11 @@ async function renderHomeSections() {
         bindings.push({ id: bindId, run: c.run || (() => App.navigate(c.section)) });
         const thumb = c.image ? `<img src="${c.image}" alt="" decoding="async" onerror="wcImgFallback(this)">` : (c.emoji || '🔥');
         return `
-          <div id="${bindId}" class="home-lb-row">
-            <span class="home-lb-rank ${i === 0 ? 'first' : ''}">${i + 1}</span>
+          <a href="${c.url || '#' + c.section}" id="${bindId}" class="home-lb-row">
+            <span class="home-lb-rank">→</span>
             <span class="home-lb-thumb">${thumb}</span>
             <span class="home-lb-title">${c.title}</span>
-            <span class="home-lb-count">▶ ${formatCount(c.score)}</span>
-          </div>`;
+            </a>`;
       }).join('');
       html += `
         <div class="home-lb-card" style="margin-top:20px;">
@@ -971,7 +966,7 @@ async function renderHomeSections() {
         bindings.push({ id: bindId, run: c.run || (() => App.navigate(c.section)) });
         const imgAttr = (isFirstPosterGrp && ci < 4) ? 'fetchpriority="high" decoding="async"' : 'loading="lazy" decoding="async"';
         const art = c.image ? `<img src="${c.image}" alt="" ${imgAttr} onerror="wcImgFallback(this)">` : `<span>${c.emoji || '🧠'}</span>`;
-        return `<div id="${bindId}" class="home-poster"><div class="art">${art}</div><div class="cap">${c.title}</div></div>`;
+        return `<a href="${c.url || '#' + c.section}" id="${bindId}" class="home-poster"><div class="art">${art}</div><div class="cap">${c.title}</div></a>`;
       }).join('');
       html += `
         <div class="home-grp-head">${sec.title}</div>
@@ -988,11 +983,11 @@ async function renderHomeSections() {
         const bindId = 'home-card-bind-' + (bindSeq++);
         bindings.push({ id: bindId, run: c.run || (() => App.navigate(c.section)) });
         return `
-          <div id="${bindId}" class="home-tool-row">
+          <a href="${c.url || '#' + c.section}" id="${bindId}" class="home-tool-row">
             <span class="ic" style="background:rgb(var(--tertiary-container) / 0.5);">${c.emoji}</span>
             <div class="body"><div class="ti">${c.title}</div><div class="de">${c.desc}</div></div>
             <span class="go">시작하기 →</span>
-          </div>`;
+          </a>`;
       }).join('');
       html += `
         <div class="home-grp-head" style="margin-top:20px;">${sec.title}</div>
@@ -1014,7 +1009,11 @@ async function renderHomeSections() {
   container.innerHTML = html;
   bindings.forEach(b => {
     const el = document.getElementById(b.id);
-    if (el) el.onclick = b.run;
+    if (el) el.onclick = event => {
+      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      b.run();
+    };
   });
   bindHomeCarouselDrag();
 }
@@ -1819,6 +1818,11 @@ function renderBrainView(view) {
         ${guideCardHTML(
           ['화면에 색깔 글자가 나타나요 (예: 파란색으로 쓰인 "빨강")', '글자의 뜻이 아니라 실제 색상에 해당하는 버튼을 누르세요', '제한시간 안에 최대한 정확하고 빠르게 답할수록 좋아요']
         )}
+        <details class="text-left text-sm text-slate-300 mb-4">
+          <summary class="cursor-pointer font-bold">결과는 어떻게 정해지나요?</summary>
+          <p class="mt-2">글자의 뜻과 색이 다를 때 색을 골라 보는 스트룹 방식의 게임입니다. 정답 비율과 평균 응답 시간으로 게임 등급을 정합니다. 쉬움 15문항, 보통 20문항, 어려움 25문항, HELL 35문항이며 난이도별 시간 제한과 색상 수가 다릅니다.</p>
+          <p class="mt-2">‘두뇌 나이’는 등급별 범위 안에서 무작위로 붙이는 재미용 숫자입니다. 실제 뇌의 나이·IQ·인지 건강을 측정하지 않습니다. 기기, 터치 지연, 연습에 따라 기록이 달라지므로 같은 환경의 이전 기록과 비교해 보세요.</p>
+        </details>
         ${renderChallengeBanner(state.challenge)}
         <div class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 mb-4 text-center">
           <span class="text-slate-500 text-sm">🙍 </span><span class="nickname-display-value text-slate-100 font-bold text-sm">${escapeHtml(getEffectiveNickname())}</span><span class="text-slate-500 text-xs"> (으)로 기록돼요</span>
@@ -1907,21 +1911,22 @@ function renderBrainView(view) {
     else { brainAge = Math.floor(Math.random() * 10) + 50; tier = 'D'; tierColor = 'text-rose-300'; tierBg = 'bg-rose-900/40 border-rose-600'; }
 
     const tierMsgBank = {
-      S: ['초인급 두뇌! 신호등 대왕', '뇌 나이가 아니라 뇌 IQ 아니야? 압도적인 처리속도!', '이 정도면 뇌를 국가대표로 등록해야 하는 거 아닐까?'],
-      A: ['날카로운 집중력의 소유자', '또래보다 훨씬 젊은 뇌! 이 컨디션 계속 유지해봐', '순발력 甲! 색깔 함정에 거의 안 걸리네'],
-      B: ['평균 이상의 반응속도', '무난하게 잘 하고 있어, 딱 평균 뇌 나이', '나쁘지 않은데? 조금만 더 집중하면 등급 업 가능'],
+      S: ['초인급 두뇌! 신호등 대왕', '이번 판은 빠르고 정확했어요!', '이 정도면 뇌를 국가대표로 등록해야 하는 거 아닐까?'],
+      A: ['날카로운 집중력의 소유자', '색깔을 빠르게 골랐어요! 다음 기록에도 도전해봐', '순발력 甲! 색깔 함정에 거의 안 걸리네'],
+      B: ['이번 판은 B 등급!', '색상과 글자를 구분하는 데 점점 익숙해지고 있어', '나쁘지 않은데? 조금만 더 집중하면 등급 업 가능'],
       C: ['약간 느린 처리 속도, 충분히 개선 가능!', '오늘따라 살짝 헷갈렸나봐, 다음엔 색깔에 더 집중해보자', '생각보다 함정에 잘 걸리는 편이네, 연습하면 금방 는다'],
       D: ['오늘 컨디션이 안 좋은 날? 다시 도전해보세요!', '괜찮아, 뇌도 워밍업이 필요해! 몇 판 더 해보자', '오늘은 컨디션 난이도가 좀 셌나봐, 낮은 난이도부터 다시 가보자']
     };
     const tierMsg = pickOne(tierMsgBank[tier]);
     const animalCard = pickAnimalCard('brain', tier);
-    const shareText = `🐾 나는 ${animalCard.title}! 나의 두뇌 나이는 ${brainAge}세, 정확도 ${accuracy.toFixed(0)}%, 평균 반응속도 ${(avgMs/1000).toFixed(2)}초. 티어: ${tier} - ${tierMsg}`;
+    const shareText = `🐾 나는 ${animalCard.title}! 재미로 보는 두뇌 나이는 ${brainAge}세, 정확도 ${accuracy.toFixed(0)}%, 평균 반응속도 ${(avgMs/1000).toFixed(2)}초. 티어: ${tier} - ${tierMsg}`;
 
     container.innerHTML = `
       <div class="max-w-2xl mx-auto">
         <div class="text-center mb-6">
           <div class="text-5xl mb-3">🧠</div>
-          <h2 class="text-2xl font-bold text-slate-100 mb-1">${state.nickname} 님의 두뇌 나이</h2>
+          <h2 class="text-2xl font-bold text-slate-100 mb-1">${state.nickname} 님의 재미로 보는 두뇌 나이</h2>
+          <p class="text-slate-400 text-sm">등급 범위에서 무작위로 정한 게임 숫자예요. 실제 뇌 나이나 IQ가 아닙니다.</p>
           <div class="text-7xl font-black text-slate-100 my-4">${brainAge}<span class="text-3xl text-slate-400">세</span></div>
           <div class="inline-block border-2 rounded-xl px-6 py-2 ${tierBg} mb-4">
             <span class="font-black text-2xl ${tierColor}">Tier ${tier}</span>
@@ -1949,7 +1954,7 @@ function renderBrainView(view) {
           </div>
         </div>
 
-        ${renderShareRow('brain', tier, animalCard._idx, state.nickname, brainAge + '세 (Tier ' + tier + ')', shareText, animalCard)}
+        ${renderShareRow('brain', tier, animalCard._idx, state.nickname, '재미용 ' + brainAge + '세 (Tier ' + tier + ')', shareText, animalCard)}
         ${renderChallengeButton('brain', state.nickname, brainAge + '세 (Tier ' + tier + ')', state.difficulty)}
 
         ${renderPlaceholderUI('brain', tier)}
@@ -4692,7 +4697,7 @@ function sortExternalTests(list, sortMode) {
   if (sortMode === 'popular') {
     /* v0.6.8~: baseCount(초기 조회수)를 무시하고 클릭 증분만 비교하면 baseCount가 큰
        항목이 랭킹엔 안 잡히는데 카드엔 더 큰 숫자로 보이는 모순이 생겨 baseCount도 함께 비교 */
-    return arr.sort((a, b) => engagementCount(b.engagementKey, b.baseCount || 0) - engagementCount(a.engagementKey, a.baseCount || 0));
+    return arr; // 등록된 큐레이션 순서. 참여 통계에 따른 순위가 아니다.
   }
   return arr.sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
 }
@@ -4817,21 +4822,19 @@ function weeklyPsychTopMiniListHTML(limit) {
   const top = sortExternalTests(allExternalPsychTests(), 'popular').slice(0, limit);
   if (!top.length) return '';
   const rows = top.map((t, i) => {
-    const count = engagementCount(t.engagementKey, t.baseCount || 0);
     return `
       <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="mini-top-row">
-        <span class="mini-top-rank">${i + 1}</span>
+        <span class="mini-top-rank">→</span>
         <img class="mini-top-thumb" src="${psyCoverThumb(t)}" alt="" onerror="psyThumbFallback(this)">
         <div class="mini-top-text">
           <div class="mini-top-name">${t.title}</div>
-          <div class="mini-top-count">▶ ${formatCount(count)}</div>
         </div>
       </a>`;
   }).join('');
   return `
     <div class="mini-top-wrap mb-5">
       <div class="mini-top-head">
-        <span class="mini-top-title">🔥 이번 주 인기 TOP</span>
+        <span class="mini-top-title">✨ 추천 테스트</span>
         <span class="mini-top-sub">몰입테스트 · MBTI존 통합</span>
       </div>
       ${rows}
@@ -4879,13 +4882,11 @@ function curatedPsychRowsHTML() {
 function psychLbBoxHTML(title, items) {
   if (!items || !items.length) return '';
   const rows = items.map((t, i) => {
-    const count = engagementCount(t.engagementKey, t.baseCount || 0);
     return `
       <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="home-lb-row">
-        <span class="home-lb-rank ${i === 0 ? 'first' : ''}">${i + 1}</span>
+        <span class="home-lb-rank">→</span>
         <span class="home-lb-thumb"><img src="${psyCoverThumb(t)}" alt="" onerror="psyThumbFallback(this)"></span>
         <span class="home-lb-title">${t.title}</span>
-        <span class="home-lb-count">▶ ${formatCount(count)}</span>
       </a>`;
   }).join('');
   return `
@@ -4912,8 +4913,7 @@ function externalTestsFeedHTML(list) {
   return `
     <div class="grid grid-cols-3 gap-3 mb-6">
       ${tests.map((t, i) => {
-        const rankClass = i === 0 ? 'psy-rank-1' : i === 1 ? 'psy-rank-2' : i === 2 ? 'psy-rank-3' : '';
-        const count = engagementCount(t.engagementKey, t.baseCount || 200);
+        const rankClass = ''; // 실측 순위가 없어 순위 리본은 표시하지 않는다.
         const cardFont = themeTitleFontFamily(t.theme);
         return `
       <a href="${t.url}" onclick="bumpEngagement('${t.engagementKey}')" class="psy-card block">
@@ -4927,7 +4927,6 @@ function externalTestsFeedHTML(list) {
             <div class="psy-card-hook line-clamp-2">${t.hook}</div>
           </div>
         </div>
-        <p class="psy-card-stats">▶ ${formatCount(count)}</p>
       </a>`;
       }).join('')}
     </div>`;
@@ -4963,9 +4962,9 @@ function renderPsychtestOverview() {
   container.innerHTML = `
     <div class="max-w-2xl mx-auto">
       <h2 class="text-2xl font-black text-slate-100 mb-1">🃏 심리 테스트존</h2>
-      <p class="text-slate-400 mb-6">지금 뜨는 테스트부터 카테고리별 전체 목록까지 한눈에 확인하세요</p>
+      <p class="text-slate-400 mb-6">추천 테스트와 새 테스트, 카테고리별 전체 목록을 확인하세요</p>
 
-      ${psychLbBoxHTML('🔥 오늘의 TOP', top7)}
+      ${psychLbBoxHTML('✨ 추천 테스트', top7)}
       ${psychLbBoxHTML('🆕 NEW', new7)}
 
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">${catCardsHTML}</div>
@@ -5021,7 +5020,6 @@ function renderPsychtestFeed(category) {
         <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center cursor-pointer hover:border-violet-500 transition" onclick="psychtestOpenPost('${t.id}')">
           <div class="text-3xl mb-2">${t.emoji}</div>
           <p class="text-slate-100 font-semibold text-sm mb-1">${t.title}</p>
-          <p class="text-slate-500 text-xs">▷ ${engagementCount('psychtest-' + t.id + '-plays', 128)}</p>
         </div>`).join('')}
       </div>
     </div>`;
@@ -5039,7 +5037,7 @@ function psychtestOpenPost(testId) {
         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-700/60 to-slate-800 flex items-center justify-center text-2xl shrink-0">${t.emoji}</div>
         <div>
           <h2 class="text-slate-100 font-black text-xl mb-1">${t.title}</h2>
-          <p class="text-slate-500 text-xs">과몰입 연구소 · 약 ${t.estMinutes}분 · ▷ ${engagementCount('psychtest-' + t.id + '-plays', 128)}</p>
+          <p class="text-slate-500 text-xs">과몰입 연구소 · 약 ${t.estMinutes}분</p>
         </div>
       </div>
       <p class="text-slate-300 leading-relaxed mb-4">${t.hook}</p>
@@ -5277,7 +5275,7 @@ function renderBalanceFeed() {
             <div>
               <h3 class="text-slate-100 font-bold text-lg mb-1">${g.title}</h3>
               <p class="text-slate-400 text-sm mb-1">${g.hook}</p>
-              <p class="text-slate-500 text-xs">${g.questions.length}문항 · 약 ${g.estMinutes}분 · ▷ ${engagementCount('balance-sp-' + g.id + '-plays', 180)}</p>
+              <p class="text-slate-500 text-xs">${g.questions.length}문항 · 약 ${g.estMinutes}분</p>
             </div>
           </div>
         </div>`).join('')}
@@ -5289,7 +5287,6 @@ function renderBalanceFeed() {
         <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center cursor-pointer hover:border-emerald-500 transition" onclick="balanceOpenPost('${g.id}')">
           <div class="text-3xl mb-2">${g.emoji}</div>
           <p class="text-slate-100 font-semibold text-sm mb-1">${g.title}</p>
-          <p class="text-slate-500 text-xs">▷ ${engagementCount('balance-' + g.id + '-plays', 203)}</p>
         </div>`).join('')}
       </div>
     </div>`;
@@ -5307,7 +5304,7 @@ function balanceOpenPost(gameId) {
         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-700/60 to-slate-800 flex items-center justify-center text-2xl shrink-0">${g.emoji}</div>
         <div>
           <h2 class="text-slate-100 font-black text-xl mb-1">${g.title}</h2>
-          <p class="text-slate-500 text-xs">과몰입 연구소 · 약 ${g.estMinutes}분 · ▷ ${engagementCount('balance-' + g.id + '-plays', 203)}</p>
+          <p class="text-slate-500 text-xs">과몰입 연구소 · 약 ${g.estMinutes}분</p>
         </div>
       </div>
       <p class="text-slate-300 leading-relaxed mb-4">${g.hook}</p>
@@ -5355,7 +5352,7 @@ function balancePick(gameId, choice) {
       </div>
 
       <div class="bg-slate-800 rounded-2xl p-5 mb-5">
-        <p class="text-slate-400 text-xs mb-2">다른 사람들의 선택</p>
+        <p class="text-slate-400 text-xs mb-2">예시 수치가 섞인 선택 비율</p><p class="text-slate-500 text-xs mb-2">가상 100표와 접수된 투표를 합친 연출용 비율입니다. 실제 이용자만의 통계가 아닙니다.</p>
         <div class="flex items-center gap-2 mb-1">
           <span class="text-slate-100 text-sm font-bold w-10" id="balance-bar-a">${percentA}%</span>
           <div class="flex-1 h-3 bg-slate-700 rounded-full overflow-hidden flex">
@@ -5411,7 +5408,7 @@ function balanceSpOpen(gameId) {
         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-700/60 to-slate-800 flex items-center justify-center text-2xl shrink-0">${g.emoji}</div>
         <div>
           <h2 class="text-slate-100 font-black text-xl mb-1">${g.title}</h2>
-          <p class="text-slate-500 text-xs">과몰입 연구소 · ${g.questions.length}문항 · 약 ${g.estMinutes}분 · ▷ ${engagementCount('balance-sp-' + g.id + '-plays', 180)}</p>
+          <p class="text-slate-500 text-xs">과몰입 연구소 · ${g.questions.length}문항 · 약 ${g.estMinutes}분</p>
         </div>
       </div>
       <p class="text-slate-300 leading-relaxed mb-4">${g.hook}</p>
@@ -5511,8 +5508,6 @@ function renderBalanceSpResult() {
 
       ${shareRow}
 
-      <p class="text-slate-600 text-xs text-center my-4">지금까지 ▷ ${engagementCount('balance-sp-' + g.id + '-plays', 180)}명이 플레이했어요</p>
-
       <div class="mb-4">${commentSectionHTML('balance', g.id)}</div>
 
       <div class="flex gap-2">
@@ -5579,7 +5574,6 @@ function initFamily() {
           <div class="text-4xl mb-2">${g.emoji}</div>
           <h3 class="text-slate-100 font-bold text-lg mb-1">${g.title}</h3>
           <p class="text-slate-400 text-sm mb-2">${g.desc}</p>
-          <p class="text-slate-500 text-xs">▷ ${engagementCount('family-' + id + '-plays', 95)}</p>
         </div>`).join('')}
       </div>
 
@@ -8366,6 +8360,8 @@ document.addEventListener('DOMContentLoaded', () => {
     origNavigate(sectionId);
     refreshEffectiveNickname(); // 다음 화면의 닉네임 표시/사용을 위해 미리 갱신(fire-and-forget)
     if (sectionInits[sectionId]) sectionInits[sectionId]();
+    const intro = document.getElementById('site-intro');
+    if (intro && document.getElementById('section-' + sectionId)) intro.hidden = true;
   };
 
   /* ── 햄버거 메뉴 ── */

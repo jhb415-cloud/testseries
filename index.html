@@ -1,4 +1,4 @@
-<!-- v1.3.7 | 5-in-1 Dashboard SPA -->
+<!-- v1.3.8 | 5-in-1 Dashboard SPA -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -52,7 +52,7 @@
       {
         "@type": "Question",
         "name": "이 사이트의 테스트는 전부 무료인가요?",
-        "acceptedAnswer": { "@type": "Answer", "text": "네, 회원가입 없이 모든 테스트와 콘텐츠를 무료로 이용할 수 있어요. 광고 수익으로 운영됩니다." }
+        "acceptedAnswer": { "@type": "Answer", "text": "네, 회원가입 없이 모든 테스트와 콘텐츠를 무료로 이용할 수 있어요. 광고 연동을 준비하고 있습니다." }
       },
       {
         "@type": "Question",
@@ -77,7 +77,7 @@
       {
         "@type": "Question",
         "name": "테스트는 누가 만드나요?",
-        "acceptedAnswer": { "@type": "Answer", "text": "과몰입 연구소 운영자가 문항 설계부터 결과 유형 해설, 전용 일러스트까지 직접 만듭니다. 자세한 제작 과정은 소개 페이지에서 확인할 수 있어요." }
+        "acceptedAnswer": { "@type": "Answer", "text": "과몰입 연구소 운영자가 기획·편집하며 문항, 이미지와 개발에 AI 도구를 활용합니다. 자세한 제작 과정은 소개 페이지에서 확인할 수 있어요." }
       }
     ]
   }
@@ -113,7 +113,7 @@
        ~7KB)로 교체. 재생성 방법·주의사항은 tailwind.config.js 상단 주석 참고. 인라인 tailwind.config
        (slate 등 팔레트를 style.css CSS 변수로 remap하던 것)도 통째로 tailwind.config.js로 이사 —
        rgb(var(--x) / <alpha-value>) remap과 bg-slate-800/60 같은 opacity modifier 동작은 동일. -->
-  <link rel="stylesheet" href="tailwind.css?v=1.3.7"/>
+  <link rel="stylesheet" href="tailwind.css?v=1.3.8"/>
   <!-- SEO 체크업 도구 지적사항 반영(v0.5.3~): 아래 두 개(Supabase/Kakao)는 body 끝 스크립트들이
        실제로 쓰기 전까지 즉시 실행될 필요가 없어 defer로 전환해 렌더 블로킹만 줄임(body 끝 4개 스크립트도
        함께 defer로 바꿔 실행 순서를 그대로 유지 — defer는 문서 순서대로 실행되므로 안전) -->
@@ -140,7 +140,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap"
     rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="style.css?v=1.3.7"/>
+  <link rel="stylesheet" href="style.css?v=1.3.8"/>
   <!-- 페이지속도 개선 (v1.2.4): LCP 요소(첫 포스터 캐러셀 커버)는 data.js+app.js 실행 후에야
        발견돼 다운로드가 늦게 시작됨 — 첫 캐러셀의 처음 4장(첫 화면 노출분)을 미리 받아둔다.
        ⚠️ sections.json 첫 poster-carousel 그룹의 처음 4개 test_ids와 반드시 동기화할 것
@@ -154,26 +154,7 @@
 
 <body class="bg-slate-900 text-slate-100 min-h-screen flex">
 
-<!-- ════════════════════════════════════════════════
-     초기 로딩 오버레이 (v1.2.8~)
-     모든 #section-*가 정적 HTML에서 hidden으로 시작해 app.js(defer)가 로드되고
-     Supabase 초기 세션 처리(sb-ready, 최대 1.5초 세이프가드)까지 끝나야 첫 화면이
-     채워지는데, 그 사이 사이드바만 보이고 메인 영역은 완전히 빈 채로 노출되던 렉 현상을
-     가리기 위한 순수 HTML/CSS 오버레이 — JS 실행 전에도 이미 화면에 그려져 있음.
-     app.js의 runInitialHashRouting()이 첫 섹션 렌더링을 마친 직후 hideInitialLoadingOverlay()로
-     페이드아웃 제거한다. -->
-<div id="initial-loading-overlay">
-  <div class="loader-spinner"></div>
-</div>
-<script>
-  /* app.js(defer) 실행 중 어떤 이유로든 에러가 나 hideInitialLoadingOverlay()가 영영 안 불리면
-     화면이 로딩 상태로 영구히 가려지므로, app.js와 무관하게 즉시 실행되는 안전장치를 따로 둔다.
-     정상 케이스(최대 1.5초 sb-ready 대기)보다 넉넉한 6초 뒤 강제 제거. */
-  setTimeout(function () {
-    var el = document.getElementById('initial-loading-overlay');
-    if (el) { el.classList.add('fade-out'); setTimeout(function () { el.remove(); }, 400); }
-  }, 6000);
-</script>
+<!-- 앱 초기화 전에도 아래 정적 소개와 실제 링크를 이용할 수 있습니다. -->
 
 <!-- SEO 체크업 도구(seositecheckup.com) 지적사항 반영(v0.5.3~): 페이지 전체에 <h1>이 하나도 없었음.
      화면 디자인(사이드바 브랜드 워드마크)은 그대로 두고, 검색엔진용 시맨틱 H1만 시각적으로 숨겨 추가 —
@@ -337,7 +318,7 @@
 
   <!-- 버전 -->
   <div class="px-5 py-4 border-t border-slate-800">
-    <p class="text-slate-600 text-xs">v1.3.7 · 2026-08-09</p>
+    <p class="text-slate-600 text-xs">v1.3.8 · 2026-08-09</p>
   </div>
 </aside>
 
@@ -367,6 +348,17 @@
 
   <!-- 콘텐츠 -->
   <main class="flex-1 p-4 sm:p-6 lg:p-8">
+    <section id="site-intro" class="site-intro" aria-label="과몰입 연구소 안내">
+      <h2>재미로 시작하는 나의 이야기</h2>
+      <p>과몰입 연구소는 상황 선택형 심리테스트와 두뇌 게임을 즐기는 곳입니다. 결과를 친구와 비교하거나, 선택의 이유를 이야기해 보세요. 각 테스트에서 진행 방식과 결과 해설을 함께 볼 수 있습니다.</p>
+      <p>결과는 오락을 위한 창작 콘텐츠이며 의학적·심리학적 진단이 아닙니다.</p>
+      <nav aria-label="바로 시작하기">
+        <a href="/all/">전체 테스트 보기 →</a>
+        <a href="/test-engine/tests/mental-age/">정신연령 테스트</a>
+        <a href="/test-engine/tests/11-real-vs-fake-mbti/">찐 MBTI vs 겉 MBTI</a>
+        <a href="/about/">연구소 소개</a>
+      </nav>
+    </section>
 
     <!-- ════ 🏠 홈 섹션 ════ -->
     <div id="section-home" class="section hidden">
@@ -385,29 +377,29 @@
              하나로 관리, JS(renderHomeSections())가 이 컨테이너 하나에 이번주 인기 TOP(리더보드)→
              심리테스트 3그룹(포스터 캐러셀)→오늘의 챌린지(세로형)→도구 모음을 전부 채워 넣는다. -->
         <div id="home-sections-container"></div>
-        <p class="text-slate-400 text-xs mt-3">※ 인기 순위는 이 홈 화면에서의 클릭 수를 기준으로 표시됩니다. 전체 테스트 목록은 사이드바에서 확인하세요.</p>
+        <p class="text-slate-400 text-xs mt-3">추천 목록은 서로 다른 주제와 진행 방식을 골라 구성했습니다. <a href="/all/" class="underline">전체 테스트와 설명 보기 →</a></p>
 
         <!-- 사이트 안내 (v1.1.6~, 애드센스 "가치가 별로 없는 콘텐츠" 거절 대응): 크롤러와 방문자
              모두에게 보이는 정적 소개 글. 홈 화면이 카드 나열뿐이라 사이트의 주제·구성을 파악할
              텍스트가 없다는 문제를 해소. 링크는 해시 앵커라 클릭 시 SPA 라우팅이 그대로 동작. -->
         <h2 class="text-slate-100 font-bold text-lg mt-10 mb-4">🔬 과몰입 연구소는 이런 곳이에요</h2>
         <div class="bg-slate-800 border border-slate-700 rounded-xl px-5 py-5 space-y-4 text-sm text-slate-300 leading-relaxed">
-          <p>과몰입 연구소는 <strong class="text-slate-100">"재미로 시작했다가 뼈 맞고 공유하는"</strong> 종합 테스트 모음이에요. 심리테스트·두뇌 게임·운세·꿈해몽·밸런스 게임까지, 심심할 때 하나씩 꺼내 하다 보면 나도 몰랐던 내 모습이 나오는 콘텐츠를 전부 직접 만들어 모아뒀어요. 회원가입 없이 전부 무료입니다.</p>
+          <p>과몰입 연구소는 <strong class="text-slate-100">"재미로 시작했다가 뼈 맞고 공유하는"</strong> 종합 테스트 모음이에요. 심리테스트·두뇌 게임·운세·꿈해몽·밸런스 게임까지, 심심할 때 하나씩 꺼내 하다 보면 나도 몰랐던 내 모습이 나오는 콘텐츠를 주제별로 구성해 모아뒀어요. 회원가입 없이 전부 무료입니다.</p>
           <div>
-            <h3 class="font-bold text-slate-100 mb-1">🧪 두뇌 테스트존 — 내 뇌 스펙 실측하기</h3>
-            <p><a href="#brain" class="text-indigo-300 font-semibold">두뇌 나이 측정기</a>(스트룹 검사 방식)를 비롯해 <a href="#reaction" class="text-indigo-300 font-semibold">반응속도</a>, <a href="#memdigit" class="text-indigo-300 font-semibold">숫자 기억력</a>, <a href="#seqmem" class="text-indigo-300 font-semibold">순서 기억력</a>, <a href="#colorvision" class="text-indigo-300 font-semibold">색각</a>, <a href="#logic" class="text-indigo-300 font-semibold">논리력</a>, <a href="#impulse" class="text-indigo-300 font-semibold">충동억제</a>, <a href="#shortfocus" class="text-indigo-300 font-semibold">숏폼 집중력</a>까지 13가지 인지 능력을 게임처럼 측정해요. 난이도 3단계 + 악명 높은 HELL 모드, Tier(S~D) 등급과 동물 비유 카드, 친구 대결 기능까지 있어서 "한 판만 더"가 계속 나옵니다. 12/24문항 <a href="#mbti" class="text-indigo-300 font-semibold">MBTI 테스트</a>도 여기에 있고, 유형별 자세한 해설은 결과 화면에서 바로 이어서 볼 수 있어요.</p>
+            <h3 class="font-bold text-slate-100 mb-1">🧪 두뇌 테스트존 — 색과 숫자로 즐기는 기록 도전</h3>
+            <p><a href="#brain" class="text-indigo-300 font-semibold">두뇌 나이 측정기</a>(스트룹 방식의 게임)를 비롯해 <a href="#reaction" class="text-indigo-300 font-semibold">반응속도</a>, <a href="#memdigit" class="text-indigo-300 font-semibold">숫자 기억력</a>, <a href="#seqmem" class="text-indigo-300 font-semibold">순서 기억력</a>, <a href="#colorvision" class="text-indigo-300 font-semibold">색각</a>, <a href="#logic" class="text-indigo-300 font-semibold">논리력</a>, <a href="#impulse" class="text-indigo-300 font-semibold">충동억제</a>, <a href="#shortfocus" class="text-indigo-300 font-semibold">숏폼 집중력</a>까지 여러 방식의 게임 기록에 도전해요. 난이도 3단계 + 악명 높은 HELL 모드, Tier(S~D) 등급과 동물 비유 카드, 친구 대결 기능까지 있어서 "한 판만 더"가 계속 나옵니다. 12/24문항 <a href="#mbti" class="text-indigo-300 font-semibold">MBTI 테스트</a>도 여기에 있고, 유형별 자세한 해설은 결과 화면에서 바로 이어서 볼 수 있어요.</p>
           </div>
           <div>
             <h3 class="font-bold text-slate-100 mb-1">🃏 심리 테스트존 — 못 숨기는 또 다른 나</h3>
-            <p><a href="/test-engine/tests/mental-age/" class="text-indigo-300 font-semibold">진짜 정신연령 테스트</a>, <a href="/test-engine/tests/5-villain-index/" class="text-indigo-300 font-semibold">내 안의 빌런지수</a>, <a href="/test-engine/tests/11-real-vs-fake-mbti/" class="text-indigo-300 font-semibold">찐 MBTI vs 겉 MBTI</a> 등 20가지가 넘는 몰입형 심리테스트가 있어요. 테스트마다 전용 일러스트와 테마 디자인, 8~16가지 결과 유형 해설을 직접 만들었고, 결과는 카드 이미지로 저장해 카카오톡으로 바로 자랑할 수 있어요. <a href="#psychtest" class="text-indigo-300 font-semibold">전체 목록 보기 →</a></p>
+            <p><a href="/test-engine/tests/mental-age/" class="text-indigo-300 font-semibold">진짜 정신연령 테스트</a>, <a href="/test-engine/tests/5-villain-index/" class="text-indigo-300 font-semibold">내 안의 빌런지수</a>, <a href="/test-engine/tests/11-real-vs-fake-mbti/" class="text-indigo-300 font-semibold">찐 MBTI vs 겉 MBTI</a> 등 20가지가 넘는 몰입형 심리테스트가 있어요. 테스트마다 전용 일러스트와 테마 디자인, 각기 다른 결과 유형 해설을 구성했고, 결과는 카드 이미지로 저장해 카카오톡으로 바로 자랑할 수 있어요. <a href="#psychtest" class="text-indigo-300 font-semibold">전체 목록 보기 →</a></p>
           </div>
           <div>
             <h3 class="font-bold text-slate-100 mb-1">🗳️ 과몰입 투표소 — 오늘도 댓글창이 뜨겁다</h3>
-            <p><a href="#balance" class="text-indigo-300 font-semibold">밸런스 게임</a>에서는 "전애인 SNS 차단 여부"나 "워라밸 vs 연봉" 같은 국민 논쟁 소재를 고르고 실시간 응답 비율로 내가 다수파인지 소수파인지 확인할 수 있어요. <a href="#worldcup" class="text-indigo-300 font-semibold">이상형 월드컵</a>에는 귀여운 동물 32강, 소울푸드 32강, 극한의 귀찮음 월드컵 등 6가지 팩, 160개 아이템이 준비돼 있습니다.</p>
+            <p><a href="#balance" class="text-indigo-300 font-semibold">밸런스 게임</a>에서는 "전애인 SNS 차단 여부"나 "워라밸 vs 연봉" 같은 국민 논쟁 소재를 고르고 친구와 선택의 이유를 이야기할 수 있어요. 화면의 비교 비율에는 예시 수치가 포함되어 있어요. <a href="#worldcup" class="text-indigo-300 font-semibold">이상형 월드컵</a>에는 귀여운 동물 32강, 소울푸드 32강, 극한의 귀찮음 월드컵 등 6가지 팩, 160개 아이템이 준비돼 있습니다.</p>
           </div>
           <div>
             <h3 class="font-bold text-slate-100 mb-1">🔭 운명 관측소 — 오늘의 운세와 꿈 풀이</h3>
-            <p><a href="#fortune" class="text-indigo-300 font-semibold">오늘의 운세</a>는 12간지 띠별로 총운·재물운·애정운·건강운을 매일 다른 문구로 보여줘요. <a href="#dream" class="text-indigo-300 font-semibold">꿈 해몽 검색</a>은 174가지 꿈 테마와 546가지 세부 풀이를 직접 집필해 담았고, 사전에 없는 꿈은 AI가 새로 해몽해줍니다. 174가지 꿈 테마 전체를 사이트 안에서 바로 검색할 수 있어요.</p>
+            <p><a href="#fortune" class="text-indigo-300 font-semibold">오늘의 운세</a>는 12간지 띠별로 총운·재물운·애정운·건강운을 매일 다른 문구로 보여줘요. <a href="#dream" class="text-indigo-300 font-semibold">꿈 해몽 검색</a>은 174가지 꿈 테마와 546가지 세부 풀이를 담았고, 사전에 없는 꿈은 AI가 새로 해몽해줍니다. 174가지 꿈 테마 전체를 사이트 안에서 바로 검색할 수 있어요.</p>
           </div>
           <div>
             <h3 class="font-bold text-slate-100 mb-1">🎲 가족오락관 — 모이면 켜는 도구</h3>
@@ -423,7 +415,7 @@
         <div class="space-y-2">
           <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
             <summary class="cursor-pointer font-semibold text-slate-100 text-sm block w-full">이 사이트의 테스트는 전부 무료인가요?</summary>
-            <p class="text-slate-400 text-sm mt-2">네, 회원가입 없이 모든 테스트와 콘텐츠를 무료로 이용할 수 있어요. 광고 수익으로 운영됩니다.</p>
+            <p class="text-slate-400 text-sm mt-2">네, 회원가입 없이 모든 테스트와 콘텐츠를 무료로 이용할 수 있어요. 광고 연동을 준비하고 있습니다.</p>
           </details>
           <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
             <summary class="cursor-pointer font-semibold text-slate-100 text-sm block w-full">테스트 결과가 저장되나요?</summary>
@@ -443,7 +435,7 @@
           </details>
           <details class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 group">
             <summary class="cursor-pointer font-semibold text-slate-100 text-sm block w-full">테스트는 누가 만드나요?</summary>
-            <p class="text-slate-400 text-sm mt-2">과몰입 연구소 운영자가 문항 설계부터 결과 유형 해설, 전용 일러스트까지 직접 만들어요. 자세한 제작 과정은 <a href="/about/" class="text-indigo-300">소개 페이지</a>에서 볼 수 있어요.</p>
+            <p class="text-slate-400 text-sm mt-2">과몰입 연구소 운영자가 기획·편집하며 문항, 이미지와 개발에 AI 도구를 활용해요. 자세한 제작 과정은 <a href="/about/" class="text-indigo-300">소개 페이지</a>에서 볼 수 있어요.</p>
           </details>
         </div>
 
@@ -590,54 +582,11 @@
     <!-- ════ 📄 개인정보처리방침 / 서비스 이용약관 (v0.2.2~, 애드센스 심사 전 필수 준비물) ════ -->
     <div id="section-privacy" class="section hidden">
       <div class="max-w-3xl mx-auto text-slate-300 text-sm leading-relaxed space-y-5 pb-10">
-        <h2 class="text-slate-100 font-black text-2xl mb-2">개인정보처리방침</h2>
-        <p class="text-slate-500 text-xs">시행일자: 2026년 7월 5일</p>
-        <p>과몰입 연구소(이하 "본 서비스")는 이용자의 개인정보를 소중히 다루며, 관련 법령을 준수하기 위해 다음과 같이 개인정보처리방침을 안내합니다. 본 서비스는 별도 회원가입 없이 이용 가능한 개인 운영 웹 서비스이며, 실명·연락처 등 신원 확인이 가능한 정보를 요구하지 않습니다.</p>
-
-        <h3 class="text-slate-100 font-bold text-lg mt-6">1. 수집하는 개인정보 항목 및 수집 방법</h3>
-        <ul class="list-disc pl-5 space-y-1">
-          <li><b class="text-slate-100">닉네임</b>: 이용자가 임의로 설정하는 표시용 이름으로, 실명이 아니며 필수 입력 사항이 아닙니다.</li>
-          <li><b class="text-slate-100">테스트 결과 기록</b>: 각 테스트의 점수·등급 등 결과 데이터. 본인 확인이 불가능한 형태로 저장됩니다.</li>
-          <li><b class="text-slate-100">임의 식별자(익명 ID)</b>: 재방문 시 이전 기록을 이어보기 위해 Supabase(데이터베이스 서비스)를 통해 발급되는 무작위 식별자로, 이름·연락처 등과 연결되지 않습니다.</li>
-          <li><b class="text-slate-100">자동 수집 정보</b>: 접속 로그, 쿠키, 기기·브라우저 정보, 광고 식별자 등이 서비스 이용 과정에서 자동으로 생성되어 수집될 수 있습니다.</li>
-          <li><b class="text-slate-100">브라우저 저장 정보(로컬 스토리지)</b>: 닉네임, 테마(다크/라이트) 설정, 효과음 설정, 방문 기록 등은 이용자의 브라우저에만 저장되며 서버로 전송되지 않습니다.</li>
-        </ul>
-
-        <h3 class="text-slate-100 font-bold text-lg mt-6">2. 개인정보의 수집 및 이용 목적</h3>
-        <ul class="list-disc pl-5 space-y-1">
-          <li>테스트 결과 저장 및 재방문 시 이전 기록 제공</li>
-          <li>순위·통계 등 서비스 내 랭킹 기능 제공</li>
-          <li>서비스 품질 개선 및 오류 분석</li>
-          <li>광고 게재(아래 "4. 광고 및 쿠키" 참고)</li>
-        </ul>
-
-        <h3 class="text-slate-100 font-bold text-lg mt-6">3. 개인정보의 제3자 제공 및 처리 위탁</h3>
-        <p>본 서비스는 아래 외부 서비스를 이용하며, 각 서비스의 자체 개인정보처리방침이 함께 적용될 수 있습니다.</p>
-        <ul class="list-disc pl-5 space-y-1">
-          <li><b class="text-slate-100">Supabase</b> — 테스트 결과 및 익명 식별자 저장(데이터베이스 호스팅)</li>
-          <li><b class="text-slate-100">카카오(Kakao)</b> — 카카오톡 공유하기 기능 제공</li>
-          <li><b class="text-slate-100">OpenAI</b> — 꿈 해몽 AI 검색 기능 이용 시, 이용자가 입력한 검색어가 결과 생성을 위해 전송됩니다(검색어 외 개인 식별 정보는 전송되지 않음).</li>
-          <li><b class="text-slate-100">Google AdSense</b> — 광고 게재 및 맞춤 광고 제공(아래 4번 참고)</li>
-        </ul>
-
-        <h3 class="text-slate-100 font-bold text-lg mt-6">4. 광고 및 쿠키(Cookie) 안내</h3>
-        <p>본 서비스는 Google을 포함한 제3자 광고 파트너를 통해 광고를 게재할 수 있습니다. Google 등 광고 파트너는 쿠키를 사용하여 이용자의 이전 방문 기록을 바탕으로 맞춤 광고를 제공할 수 있습니다. 이용자는 <a href="https://adssettings.google.com" target="_blank" rel="noopener" class="text-violet-400 underline">Google 광고 설정 페이지</a>에서 맞춤 광고를 거부할 수 있으며, 브라우저 설정을 통해 쿠키 저장을 차단할 수도 있습니다.</p>
-
-        <h3 class="text-slate-100 font-bold text-lg mt-6">5. 개인정보의 보유 및 이용 기간</h3>
-        <p>수집된 정보는 이용자가 브라우저 저장 데이터를 삭제하거나 별도 삭제를 요청하기 전까지 보관되며, 관련 법령에서 별도로 정한 보존 기간이 있는 경우 그에 따릅니다.</p>
-
-        <h3 class="text-slate-100 font-bold text-lg mt-6">6. 이용자의 권리</h3>
-        <p>이용자는 언제든지 브라우저의 저장된 데이터(쿠키, 로컬 스토리지)를 직접 삭제할 수 있습니다. 서버에 저장된 본인 기록의 삭제를 원하시는 경우 아래 문의처로 연락 주시면 확인 후 조치하겠습니다.</p>
-
-        <h3 class="text-slate-100 font-bold text-lg mt-6">7. 만 14세 미만 아동의 개인정보</h3>
-        <p>본 서비스는 만 14세 미만 아동으로부터 개인정보를 의도적으로 수집하지 않습니다.</p>
-
-        <h3 class="text-slate-100 font-bold text-lg mt-6">8. 개인정보 관련 문의처</h3>
-        <p>본 서비스 이용 중 개인정보와 관련해 문의사항이 있으시면 아래 이메일로 연락해 주세요.<br>이메일: <a href="mailto:contact@gwamol-lab.xyz" class="text-violet-400 underline">contact@gwamol-lab.xyz</a></p>
-
-        <h3 class="text-slate-100 font-bold text-lg mt-6">9. 부칙</h3>
-        <p>본 방침은 2026년 7월 5일부터 시행됩니다. 법령 및 서비스 변경에 따라 내용이 수정될 수 있으며, 중요한 변경 사항은 본 페이지를 통해 공지합니다.</p>
-
+        <h2 class="text-slate-100 font-black text-2xl">개인정보 안내</h2>
+        <p>브라우저에는 최근 기록과 화면 설정이 저장됩니다. 익명 이용자 식별자, 일부 테스트 결과·프로필·댓글·투표는 Supabase 서버에서도 처리됩니다. 브라우저 데이터 삭제만으로 서버 기록이 삭제되지는 않습니다.</p>
+        <p>로그인·문의·분석·광고 등 기능에 따른 처리 항목과 문의 방법은 아래 문서에서 확인하세요.</p>
+        <a class="text-violet-400 underline" href="/privacy/">개인정보처리방침 전문 보기 →</a>
+        <a class="text-violet-400 underline" href="/contact/">개인정보 관련 문의</a>
       </div>
     </div>
 
@@ -768,9 +717,9 @@
          transition-opacity duration-500 opacity-0 pointer-events-none">
 </div>
 
-<script defer src="data.js?v=1.3.7"></script>
-<script defer src="supabase-client.js?v=1.3.7"></script>
-<script defer src="kakao-share.js?v=1.3.7"></script>
-<script defer src="app.js?v=1.3.7"></script>
+<script defer src="data.js?v=1.3.8"></script>
+<script defer src="supabase-client.js?v=1.3.8"></script>
+<script defer src="kakao-share.js?v=1.3.8"></script>
+<script defer src="app.js?v=1.3.8"></script>
 </body>
 </html>

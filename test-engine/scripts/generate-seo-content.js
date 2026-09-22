@@ -35,8 +35,8 @@ function cleanText(text, result) {
   if (result && result.tagFallback) t = t.replace(/\{tag\}/g, result.tagFallback);
   t = t.replace(/\{claimed\}/g, '내가 고른 유형');
   // 제목에서 "/ 속 {inner}"처럼 미해결 플레이스홀더가 낀 구획은 통째로 제거
-  t = t.replace(/\s*[/·]\s*[^/·{}]*\{[a-z]+\}[^/·{}]*/g, '');
-  if (/\{[a-z]+\}/.test(t)) return null; // 그래도 남으면 이 문장은 정적 노출 생략
+  t = t.replace(/\s*[/·]\s*[^/·{}]*\{[A-Za-z][A-Za-z0-9_]*\}[^/·{}]*/g, '');
+  if (/\{[A-Za-z][A-Za-z0-9_]*\}/.test(t)) return null; // 그래도 남으면 이 문장은 정적 노출 생략
   return t.trim();
 }
 
@@ -45,41 +45,82 @@ const SCORING_DESC = {
   type: '문항마다 고른 답이 가리키는 유형을 집계해, 가장 많이 나온 유형이 결과로 나오는 방식이에요.',
   quiz: '정답이 있는 퀴즈 형식으로, 맞힌 개수에 따라 결과 등급이 정해져요.',
   mbti4: 'MBTI 4가지 축(E-I / S-N / T-F / J-P)을 문항 응답으로 각각 계산해, 16가지 유형 중 하나가 결과로 나와요.',
-  mbti4_dual: '겉으로 보이는 모습과 속마음을 각각 MBTI 4축으로 계산해, 두 유형을 함께 보여주는 방식이에요.'
+  mbti4_dual: '겉으로 보이는 모습과 속마음을 각각 MBTI 4축으로 계산해, 두 유형을 함께 보여주는 방식이에요.',
+  axis: '선택한 답을 두 방향의 성향 점수로 모아 결과를 보여줘요.',
+  reaction_time: '문항이 나타난 뒤 선택하기까지 걸린 시간을 모아 평균 응답 시간 구간에 맞는 결과를 보여줘요. 기기와 입력 환경에 따라 기록이 달라질 수 있어요.'
 };
 
+function questionMeta(cfg) {
+  if (!cfg.questions_tree) {
+    if (!Array.isArray(cfg.questions) || !cfg.questions.length) throw new Error(cfg.id + ': 문항이 없습니다');
+    return { min: cfg.questions.length, max: cfg.questions.length, preview: cfg.questions.slice(0, 3) };
+  }
+  const active = new Set();
+  const cache = new Map();
+  const preview = [];
+  function visit(id) {
+    if (active.has(id)) throw new Error(cfg.id + ': 문항 순환 ' + id);
+    if (cache.has(id)) return cache.get(id);
+    const node = cfg.questions_tree[id];
+    if (!node || !Array.isArray(node.choices) || !node.choices.length) throw new Error(cfg.id + ': 잘못된 문항 ' + id);
+    active.add(id);
+    if (preview.length < 3) preview.push(node);
+    const paths = node.choices.map(c => c.next ? visit(c.next) : { min: 0, max: 0 });
+    const range = { min: 1 + Math.min(...paths.map(p => p.min)), max: 1 + Math.max(...paths.map(p => p.max)) };
+    active.delete(id);
+    cache.set(id, range);
+    return range;
+  }
+  return { ...visit(cfg.start_node), preview };
+}
+
+function editorialSection(editorial) {
+  if (!editorial) return '';
+  let html = '';
+  [['purpose', '이 테스트를 즐기는 방법'], ['method', '결과는 어떻게 정해지나요?'], ['interpretation', '결과를 읽을 때 알아둘 점']].forEach(([key, title]) => {
+    if (editorial[key]) html += '<h3>' + title + '</h3>\n<p>' + esc(editorial[key]) + '</p>\n';
+  });
+  (editorial.examples || []).forEach(example => {
+    html += '<h3>' + esc(example.title || '가상 응답 사례') + '</h3>\n<p>' + esc(example.text) + '</p>\n';
+  });
+  return html;
+}
+
 function buildSection(cfg, folder, siblings) {
-  const qs = cfg.questions || [];
+  const meta = questionMeta(cfg);
   const rs = cfg.results || [];
-  const minutes = Math.max(1, Math.round(qs.length * 10 / 60));
+  const count = meta.min === meta.max ? String(meta.min) : meta.min + '~' + meta.max;
+  if (!SCORING_DESC[cfg.scoring_type]) throw new Error(cfg.id + ': 지원되지 않는 결과 방식');
   const tags = (cfg.hashtags || []).map(function (h) {
     return '<span class="te-seo-tag">' + esc(h.startsWith('#') ? h : '#' + h) + '</span>';
   }).join(' ');
 
   let html = '';
-  html += '<section class="te-seo" lang="ko">\n<div class="te-seo-card">\n';
+  html += '<section class="te-seo" id="test-guide" tabindex="-1" lang="ko">\n<div class="te-seo-card">\n';
   html += '<h2>' + esc(cfg.title) + ' — 어떤 테스트인가요?</h2>\n';
   html += '<p>' + esc(cfg.description) + '</p>\n';
   html += '<p>' + esc(SCORING_DESC[cfg.scoring_type] || '') +
-    ' 총 <strong>' + qs.length + '문항</strong>이고 약 <strong>' + minutes + '분</strong>이면 끝나요. ' +
-    '결과는 <strong>' + rs.length + '가지 유형</strong> 중 하나로 나오고, 회원가입 없이 무료로 할 수 있어요. ' +
+    ' <strong>' + count + '문항</strong>에 답하며, 읽고 선택하는 속도에 따라 소요 시간은 달라져요. ' +
+    (cfg.scoring_type === 'mbti4_dual' ? '겉과 속의 두 유형을 함께 읽어보세요. ' : '') +
+    '회원가입 없이 무료로 할 수 있어요. ' +
     '결과 화면에서는 전용 일러스트와 함께 카카오톡 공유·이미지 저장도 지원해요.</p>\n';
   if (tags) html += '<p class="te-seo-tags">' + tags + '</p>\n';
+  html += editorialSection(cfg.editorial);
 
   // 문항 미리보기 (앞 3개만 — 전체 스포일러 방지 + 페이지 고유 텍스트 확보)
-  const preview = qs.slice(0, 3).map(function (q) { return q.text; }).filter(Boolean);
+  const preview = meta.preview.map(function (q) { return q.text; }).filter(Boolean);
   if (preview.length) {
     html += '<h3>이런 질문이 나와요</h3>\n<ul>\n';
     preview.forEach(function (t) { html += '<li>&ldquo;' + esc(t) + '&rdquo;</li>\n'; });
-    html += '<li>&hellip; 외 ' + Math.max(0, qs.length - preview.length) + '문항</li>\n</ul>\n';
+    html += '</ul>\n';
+    if (cfg.questions_tree) html += '<p>선택한 경로에 따라 실제로 만나는 장면은 달라질 수 있어요.</p>\n';
   }
 
   // 결과 유형 전체 해설 — 이 페이지의 핵심 고유 콘텐츠.
-  // <details>는 기본 접힘 상태라도 텍스트가 DOM에 그대로 남아있어 크롤러(검색엔진/애드센스봇)는
-  // 전문을 다 읽지만, 화면상으로는 접혀 있어 결과 스포일러가 재미를 반감시키지 않는다.
+  // <details>의 본문은 초기 HTML에 포함된다. 심사에서 어떻게 평가되는지는 단정하지 않는다.
   // (나중에 이 블록 자체를 완전히 빼고 싶으면 <details>...</details> 통째로 지우면 됨)
   html += '<details class="te-seo-details">\n';
-  html += '<summary>결과 유형 미리보기 (총 ' + rs.length + '가지) <span class="te-seo-spoiler">— 스포 방지, 이미 완료하셨던 분만 클릭하세요</span></summary>\n';
+  html += '<summary>' + (cfg.scoring_type === 'mbti4_dual' ? '겉 유형별 해설 미리보기' : '결과 유형 미리보기') + ' <span class="te-seo-spoiler">— 스포 방지, 원하는 분만 펼쳐보세요</span></summary>\n';
   html += '<div class="te-seo-details-body">\n';
   html += '<p>어떤 답을 고르면 어떤 유형이 나오는지는 비밀! 대신 어떤 유형들이 기다리고 있는지 미리 구경해보세요.</p>\n';
   rs.forEach(function (r) {
@@ -102,6 +143,9 @@ function buildSection(cfg, folder, siblings) {
 
   // FAQ (짧게 — 페이지 간 중복 최소화를 위해 3개만)
   html += '<h3>자주 묻는 질문</h3>\n';
+  ((cfg.editorial && cfg.editorial.faq) || []).forEach(item => {
+    html += '<p><strong>Q. ' + esc(item.question) + '</strong><br>' + esc(item.answer) + '</p>\n';
+  });
   html += '<p><strong>Q. 결과가 정확한가요?</strong><br>재미로 즐기는 오락용 심리테스트예요. 전문적인 심리 검사나 진단을 대체하지 않아요.</p>\n';
   html += '<p><strong>Q. 다시 할 수 있나요?</strong><br>네, 결과 화면의 &ldquo;다시하기&rdquo; 버튼으로 몇 번이든 다시 해볼 수 있어요.</p>\n';
   html += '<p><strong>Q. 결과를 공유할 수 있나요?</strong><br>결과 화면에서 카카오톡 공유와 결과 카드 이미지 저장을 지원해요.</p>\n';
@@ -113,8 +157,8 @@ function buildSection(cfg, folder, siblings) {
       html += '<li><a href="' + SITE_ORIGIN + '/test-engine/tests/' + s.folder + '/">' + esc(s.title) + '</a> — ' + esc(s.description) + '</li>\n';
     });
     html += '<li><a href="' + SITE_ORIGIN + '/">과몰입 연구소 홈</a> — 심리테스트·MBTI·두뇌 인지 테스트 전체 모음</li>\n';
-    // [adsense-prep v0.0.1] 꿈해몽 사전 링크 제거 — 색인 거부된 174개로 크롤러가
-    // 흘러들어가는 유일한 경로였음. 애드센스 승인 후 복구 예정.
+    html += '<li><a href="/all/">전체 테스트 목록</a> · <a href="/about/">제작 안내</a> · <a href="/contact/">오류 제보</a></li>\n';
+    // 기존 공개 범위를 유지한다. noindex/링크 제외를 광고 심사 면제로 취급하지 않는다.
     html += '</ul>\n';
   }
 
@@ -172,7 +216,8 @@ function main() {
       section + '<!-- te-seo:end -->';
 
     const htmlPath = path.join(TESTS_DIR, item.folder, 'index.html');
-    let html = fs.readFileSync(htmlPath, 'utf8');
+    let html = fs.readFileSync(htmlPath, 'utf8').replace(/\r\n?/g, '\n');
+    html = html.replace(/(<meta (?:name="description"|property="og:description") content=")[^"]*("\s*\/?\s*>)/g, (_, before, after) => before + esc(item.cfg.description) + after);
     // 기존 블록 제거 (멱등)
     html = html.replace(/\n?<!-- te-seo:start[\s\S]*?<!-- te-seo:end -->/g, '');
     // canonical 추가 (없으면)

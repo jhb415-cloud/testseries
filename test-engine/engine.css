@@ -740,3 +740,5 @@ body {
   border-radius: 999px;
   transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+.te-guide-link{display:block;text-align:center;margin:12px 0;font-size:14px;line-height:1.5;color:inherit;text-decoration:underline;text-underline-offset:3px}

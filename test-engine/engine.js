@@ -1,4 +1,4 @@
-/* test-engine v16 (config.cart_ui/interstitials/feed_ui+viral_meter/success_meter/quit_meter — 게임형 개편 3차 배치) | engine.js — 공통 로직
+/* test-engine v17 (진행·결과 해설 링크 및 오류 복구; config.cart_ui/interstitials/feed_ui+viral_meter/success_meter/quit_meter — 게임형 개편 3차 배치) | engine.js — 공통 로직
    (config 로드, 화면 전환, 채점, 렌더, 결과 공유카드 저장, 관련 테스트 배너, 카카오톡 공유,
    메인 사이트로 돌아가기 링크) 순수 바닐라 JS. 외부 라이브러리 없음. 기능별 함수로 분리해 유지보수.
    결과 화면의 "이미지 저장" 기능은 별도 파일 result-card.js(window.TestEngineResultCard)에 위임한다.
@@ -171,7 +171,7 @@
   // engine.js 자체가 바뀔 때마다 이 번호를 올리고, 위 헤더 안내대로 10개 index.html의
   // engine.js/engine.css/result-card.js ?v=도 같은 번호로 맞출 것 — themes/*.css는
   // injectThemeCSS()가 이 상수를 그대로 재사용해 자동으로 캐시버스팅된다(파일별로 안 챙겨도 됨).
-  var ENGINE_ASSET_VERSION = '16';
+  var ENGINE_ASSET_VERSION = '17';
 
   // 최상단에서 즉시 캡처해야 함 — defer 스크립트라도 동기 실행 구간에서만 currentScript가 유효함
   var ENGINE_SCRIPT = document.currentScript;
@@ -262,7 +262,7 @@
       })
       .catch(function (err) {
         console.error('[test-engine] config.json 로드 실패', err);
-        rootEl.innerHTML = '<p class="te-error">테스트를 불러오지 못했습니다. 새로고침해보세요.</p>';
+        rootEl.innerHTML = '<div class="te-error"><p>테스트를 불러오지 못했습니다.</p><button type="button" class="te-btn te-btn-primary" onclick="location.reload()">다시 불러오기</button><p><a href="/all/">다른 테스트 보기</a></p></div>';
       });
   }
 
@@ -342,10 +342,8 @@
     return 'test_engine_done_' + (state.testId || state.config.id);
   }
 
-  function getSeenCount() {
-    var seed = Number(state.config.seed_count) || 0;
-    var done = Number(localStorage.getItem(getCompletionKey())) || 0;
-    return seed + done;
+  function guideLink() {
+    return document.getElementById('test-guide') ? '<a class="te-guide-link" href="#test-guide">진행 방식과 결과 해설 보기 ↓</a>' : '';
   }
 
   function bumpCompletionCount() {
@@ -386,7 +384,7 @@
         '</div>' +
         '<div class="te-choices-fixed te-intro-footer">' +
           '<button type="button" class="te-btn te-btn-primary" id="te-start-btn">테스트 시작</button>' +
-          '<p class="te-seen-count">지금까지 <strong>' + getSeenCount().toLocaleString('ko-KR') + '</strong>명이 확인했어요</p>' +
+          guideLink() +
         '</div>' +
       '</div>';
 
@@ -1615,6 +1613,7 @@
           '<button type="button" class="te-btn te-btn-secondary" id="te-othertests-btn">🔄 다른 테스트 하러가기</button>' +
           '<button type="button" class="te-btn te-btn-primary" id="te-share-btn">공유하기</button>' +
           '<button type="button" class="te-btn te-btn-secondary" id="te-restart-btn">다시하기</button>' +
+          guideLink() +
         '</div>' +
       '</div>';
 

@@ -2,10 +2,13 @@
   "sections": [
     {
       "id": "popular",
-      "title": "🔥 이번주 인기 TOP",
+      "title": "✨ 추천 테스트",
       "style": "leaderboard",
-      "dynamic": "psych-trending",
-      "limit": 3
+      "test_ids": [
+        "mental-age",
+        "real-vs-fake-mbti",
+        "mbti-cyberpunk-world"
+      ]
     },
     {
       "id": "psych-heading",
